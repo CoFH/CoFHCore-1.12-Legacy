@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import cofh.audio.SoundBase;
 import cofh.gui.GuiBaseAdv;
 import cofh.gui.GuiProps;
 import cofh.gui.GuiTextList;
@@ -178,7 +179,7 @@ public class GuiFriendsList extends GuiBaseAdv {
 
 			if (j == 28) { // enter
 
-				this.mc.getSoundHandler().playSound(new SoundGui("random.click", 1.0F, 0.7F));
+				this.mc.getSoundHandler().playSound(new SoundBase("random.click", 1.0F, 0.7F));
 			}
 		}
 		updateButtons();
