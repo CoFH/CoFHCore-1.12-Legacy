@@ -2,7 +2,6 @@ package cofh;
 
 import java.io.File;
 
-import cofh.social.SocialPacket;
 import net.minecraftforge.common.config.Configuration;
 
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +12,7 @@ import cofh.command.CommandHandler;
 import cofh.core.CoFHProps;
 import cofh.social.Proxy;
 import cofh.social.RegistryFriends;
+import cofh.social.SocialPacket;
 import cofh.util.ConfigHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;

@@ -1,10 +1,10 @@
 package cofh.hud;
 
-import cofh.network.PacketHandler;
+import java.util.EnumSet;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
-
-import java.util.EnumSet;
+import cofh.network.PacketHandler;
 
 class HUDKeyHandler extends KeyHandler {
 
@@ -12,7 +12,7 @@ class HUDKeyHandler extends KeyHandler {
 
 	public HUDKeyHandler() {
 
-		super(new KeyBinding[]{ new KeyBinding("", 0, "") }, new boolean[]{ false });
+		super(new KeyBinding[] { new KeyBinding("", 0, "") }, new boolean[] { false });
 	}
 
 	@Override
@@ -61,7 +61,7 @@ class HUDKeyHandler extends KeyHandler {
 
 	public void resetBindings() {
 
-		keyBindings = CoFHHUD.keybinds.toArray(new KeyBinding[]{ });
+		keyBindings = CoFHHUD.keybinds.toArray(new KeyBinding[] {});
 
 		// Java sucks...
 		repeatings = new boolean[CoFHHUD.keybindsRepeat.size()];

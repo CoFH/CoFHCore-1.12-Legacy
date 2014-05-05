@@ -2,9 +2,9 @@ package cofh.updater;
 
 public class ModVersion implements Comparable<ModVersion> {
 
-	private ReleaseVersion _mcVer;
-	private ReleaseVersion _modVer;
-	private String _desc;
+	private final ReleaseVersion _mcVer;
+	private final ReleaseVersion _modVer;
+	private final String _desc;
 
 	public ReleaseVersion minecraftVersion() {
 
@@ -33,9 +33,9 @@ public class ModVersion implements Comparable<ModVersion> {
 		if (s == null) {
 			return null;
 		}
-
 		String[] parts = s.split(" ", 2);
 		String desc = "";
+
 		if (parts.length > 1) {
 			desc = parts[1].trim();
 		}
@@ -60,4 +60,5 @@ public class ModVersion implements Comparable<ModVersion> {
 
 		return _mcVer.toString() + "R" + _modVer.toString();
 	}
+
 }

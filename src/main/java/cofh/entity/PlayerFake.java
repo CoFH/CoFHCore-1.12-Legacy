@@ -31,7 +31,7 @@ public class PlayerFake extends EntityPlayerMP {
 	public PlayerFake(WorldServer world) {
 
 		super(FMLCommonHandler.instance().getMinecraftServerInstance(), world, NAME, new ItemInWorldManager(world));
-		new NetServerHandlerFake(FMLCommonHandler.instance().getMinecraftServerInstance(), this);
+		// new NetServerHandlerFake(FMLCommonHandler.instance().getMinecraftServerInstance(), this);
 		this.addedToChunk = false;
 	}
 

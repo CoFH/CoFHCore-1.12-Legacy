@@ -2,11 +2,11 @@ package cofh.updater;
 
 public class ReleaseVersion implements Comparable<ReleaseVersion> {
 
-	private int _major;
-	private int _minor;
-	private int _patch;
-	private int _rc;
-	private int _beta;
+	private final int _major;
+	private final int _minor;
+	private final int _patch;
+	private final int _rc;
+	private final int _beta;
 
 	public ReleaseVersion(int major, int minor, int patch) {
 
@@ -34,17 +34,14 @@ public class ReleaseVersion implements Comparable<ReleaseVersion> {
 
 		parts = main.split("RC");
 		if (parts.length > 1) {
-
 			rc = Integer.parseInt(parts[1]);
 			main = parts[0];
 		}
 		parts = main.split("B");
 		if (parts.length > 1) {
-
 			beta = Integer.parseInt(parts[1]);
 			main = parts[0];
 		}
-
 		parts = main.split("\\.");
 		major = Integer.parseInt(parts[0]);
 		minor = Integer.parseInt(parts[1]);
@@ -140,4 +137,5 @@ public class ReleaseVersion implements Comparable<ReleaseVersion> {
 		}
 		return v;
 	}
+
 }

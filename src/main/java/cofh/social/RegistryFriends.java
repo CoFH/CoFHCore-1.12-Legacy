@@ -1,15 +1,15 @@
 package cofh.social;
 
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
+
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.common.config.Configuration;
 import cofh.CoFHCore;
 import cofh.core.CoFHProps;
 import cofh.network.PacketHandler;
 import cofh.social.SocialPacket.Type;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.common.config.Configuration;
-
-import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
 
 public class RegistryFriends {
 
@@ -57,7 +57,7 @@ public class RegistryFriends {
 		return playerName != null
 				&& ownerName != null
 				&& (playerName.toLowerCase().matches(ownerName.toLowerCase()) || friendConf.hasCategory(ownerName.toLowerCase()) ? friendConf.getCategory(
-				ownerName.toLowerCase()).containsKey(playerName.toLowerCase()) ? true : false : false);
+						ownerName.toLowerCase()).containsKey(playerName.toLowerCase()) ? true : false : false);
 	}
 
 	public static void sendFriendsToPlayer(EntityPlayerMP thePlayer) {

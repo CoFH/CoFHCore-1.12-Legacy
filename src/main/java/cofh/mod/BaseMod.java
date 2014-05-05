@@ -21,7 +21,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.helpers.Loader;
 import org.apache.logging.log4j.spi.AbstractLogger;
 
-import cofh.updater.IUpdateableMod;
+import cofh.updater.IUpdatableMod;
 
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -32,7 +32,7 @@ import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class BaseMod implements IUpdateableMod {
+public abstract class BaseMod implements IUpdatableMod {
 
 	protected File _configFolder;
 	protected final String _modid;
@@ -97,7 +97,6 @@ public abstract class BaseMod implements IUpdateableMod {
 		if (r.peek() == JsonToken.BEGIN_ARRAY) {
 			r.beginArray();
 		}
-
 		builder: while (true) {
 			switch (r.peek()) {
 			case END_ARRAY:
@@ -108,7 +107,6 @@ public abstract class BaseMod implements IUpdateableMod {
 				list.add(r.nextString());
 			}
 		}
-
 		r.close();
 
 		return list;
@@ -181,7 +179,7 @@ public abstract class BaseMod implements IUpdateableMod {
 	@SideOnly(Side.CLIENT)
 	private class LangManager implements IResourceManagerReloadListener {
 
-		private String _path;
+		private final String _path;
 
 		public LangManager(IResourceManager manager) {
 
@@ -221,4 +219,5 @@ public abstract class BaseMod implements IUpdateableMod {
 			}
 		}
 	}
+
 }

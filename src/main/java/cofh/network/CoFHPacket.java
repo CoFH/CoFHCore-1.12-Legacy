@@ -1,8 +1,14 @@
 package cofh.network;
 
-import cofh.util.FluidHelper;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,8 +16,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
-
-import java.io.*;
+import cofh.util.FluidHelper;
 
 public abstract class CoFHPacket extends BasePacket {
 
@@ -23,7 +28,7 @@ public abstract class CoFHPacket extends BasePacket {
 
 	public CoFHPacket() {
 
-		//this.subID = subID;
+		// this.subID = subID;
 		arrayout = new ByteArrayOutputStream();
 		dataout = new DataOutputStream(arrayout);
 	}
@@ -243,7 +248,7 @@ public abstract class CoFHPacket extends BasePacket {
 
 	public int[] getCoords() {
 
-		return new int[]{ getInt(), getInt(), getInt() };
+		return new int[] { getInt(), getInt(), getInt() };
 	}
 
 	private void writeItemStack(ItemStack theStack) throws IOException {

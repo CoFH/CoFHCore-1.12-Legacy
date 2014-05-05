@@ -11,20 +11,20 @@ import com.sun.istack.internal.NotNull;
 
 public class UpdateCheckThread extends Thread {
 
-	private String _releaseUrl;
-	private IUpdateableMod _mod;
+	private final String _releaseUrl;
+	private final IUpdatableMod _mod;
 
 	private boolean _checkComplete = false;
 	private boolean _newVerAvailable = false;
 	private boolean _criticalUpdate = false;
 	private ModVersion _newVer;
 
-	public UpdateCheckThread(IUpdateableMod mod) {
+	public UpdateCheckThread(IUpdatableMod mod) {
 
 		this(mod, null);
 	}
 
-	public UpdateCheckThread(@NotNull IUpdateableMod mod, String releaseUrl) {
+	public UpdateCheckThread(@NotNull IUpdatableMod mod, String releaseUrl) {
 
 		_mod = mod;
 		if (releaseUrl == null) {
@@ -55,20 +55,18 @@ public class UpdateCheckThread extends Thread {
 				if (ourVer.minecraftVersion().compareTo(newVer.minecraftVersion()) < 0) {
 					_mod.getLogger().info("This update is for Minecraft " + newVer.minecraftVersion().toString() + ".");
 				}
-
 				if (ourVer.compareTo(critVer) > 0) {
 					_criticalUpdate = Boolean.parseBoolean(critVer.description());
 				}
 			}
-
 			if (_criticalUpdate) {
 				_mod.getLogger().info("This update has been marked as CRITICAL " + "and will ignore notification suppression.");
 			}
 		} catch (Exception e) {
-
 			Level level = Level.WARN;
 			String base = _mod.getClass().getPackage().getName();
 			base = base.substring(0, base.indexOf('.'));
+
 			if (base.equals("cofh") || base.equals("powercrystals")) {
 				level = Level.ERROR;
 			}
@@ -96,4 +94,5 @@ public class UpdateCheckThread extends Thread {
 
 		return _newVer;
 	}
+
 }

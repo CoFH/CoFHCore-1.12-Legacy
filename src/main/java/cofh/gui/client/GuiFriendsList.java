@@ -3,7 +3,6 @@ package cofh.gui.client;
 import java.util.LinkedList;
 import java.util.List;
 
-import cofh.social.SocialPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPlayerInfo;
 import net.minecraft.client.gui.GuiTextField;
@@ -21,6 +20,7 @@ import cofh.gui.container.ContainerFriendsList;
 import cofh.gui.element.ElementButton;
 import cofh.gui.element.TabInfo;
 import cofh.social.RegistryFriends;
+import cofh.social.SocialPacket;
 import cofh.social.SocialPacket.Type;
 
 public class GuiFriendsList extends GuiBaseAdv {
@@ -121,11 +121,9 @@ public class GuiFriendsList extends GuiBaseAdv {
 	public void handleElementButtonClick(String buttonName, int mouseButton) {
 
 		if (buttonName.equals("SetName")) {
-			PacketUtils.sendToServer(Payload.getPayload(SocialPacket.packetID).addByte(Type.ADD_FRIEND.ordinal()).addString(tbName.getText())
-					.getPacket());
+			PacketUtils.sendToServer(Payload.getPayload(SocialPacket.packetID).addByte(Type.ADD_FRIEND.ordinal()).addString(tbName.getText()).getPacket());
 		} else if (buttonName.equals("RemoveName")) {
-			PacketUtils.sendToServer(Payload.getPayload(SocialPacket.packetID).addByte(Type.REMOVE_FRIEND.ordinal()).addString(tbName.getText())
-					.getPacket());
+			PacketUtils.sendToServer(Payload.getPayload(SocialPacket.packetID).addByte(Type.REMOVE_FRIEND.ordinal()).addString(tbName.getText()).getPacket());
 		} else if (buttonName.equals("OnlineUp")) {
 			taOnlineList.scrollDown();
 		} else if (buttonName.equals("OnlineDown")) {

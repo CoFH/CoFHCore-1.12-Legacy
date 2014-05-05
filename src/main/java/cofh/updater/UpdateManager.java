@@ -20,16 +20,16 @@ public class UpdateManager {
 	}
 
 	private boolean _notificationDisplayed;
-	private IUpdateableMod _mod;
-	private UpdateCheckThread _updateThread;
+	private final IUpdatableMod _mod;
+	private final UpdateCheckThread _updateThread;
 	private int lastPoll = 400;
 
-	public UpdateManager(IUpdateableMod mod) {
+	public UpdateManager(IUpdatableMod mod) {
 
 		this(mod, null);
 	}
 
-	public UpdateManager(IUpdateableMod mod, String releaseUrl) {
+	public UpdateManager(IUpdatableMod mod, String releaseUrl) {
 
 		_mod = mod;
 		_updateThread = new UpdateCheckThread(mod, releaseUrl);
@@ -42,7 +42,6 @@ public class UpdateManager {
 		if (evt.phase != Phase.START) {
 			return;
 		}
-
 		if (lastPoll > 0) {
 			--lastPoll;
 			return;
@@ -50,15 +49,12 @@ public class UpdateManager {
 		lastPoll = 400;
 
 		if (!_notificationDisplayed && _updateThread.checkComplete()) {
-
 			_notificationDisplayed = true;
 			FMLCommonHandler.instance().bus().unregister(this);
 			if (_updateThread.newVersionAvailable()) {
-
 				if (!CoFHProps.enableUpdateNotice && !_updateThread.isCriticalUpdate()) {
 					return;
 				}
-
 				ModVersion version = _updateThread.newVersion();
 				EntityPlayer player = evt.player;
 				player.addChatMessage(new ChatComponentText(GOLD + "[" + _mod.getModName() + "]").appendText(WHITE + " A new version is available: ")
@@ -67,4 +63,5 @@ public class UpdateManager {
 			}
 		}
 	}
+
 }

@@ -1,14 +1,14 @@
 package cofh.render;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
-
-import java.util.Arrays;
-import java.util.List;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class CoFHFontRender extends FontRenderer {
@@ -78,6 +78,7 @@ public class CoFHFontRender extends FontRenderer {
 		return Arrays.asList(this.wrapFormattedStringToWidth(par1Str, par2).split("\n"));
 	}
 
+	@Override
 	public String wrapFormattedStringToWidth(String par1Str, int par2) {
 
 		int j = this.sizeStringToWidth(par1Str, par2);
@@ -104,32 +105,32 @@ public class CoFHFontRender extends FontRenderer {
 			char c0 = par1Str.charAt(l);
 
 			switch (c0) {
-				case 10:
-					--l;
-					break;
-				case 167:
-					if (l < j - 1) {
-						++l;
-						char c1 = par1Str.charAt(l);
+			case 10:
+				--l;
+				break;
+			case 167:
+				if (l < j - 1) {
+					++l;
+					char c1 = par1Str.charAt(l);
 
-						if (c1 != 108 && c1 != 76) {
-							if (c1 == 114 || c1 == 82 || isFormatColor(c1)) {
-								flag = false;
-							}
-						} else {
-							flag = true;
+					if (c1 != 108 && c1 != 76) {
+						if (c1 == 114 || c1 == 82 || isFormatColor(c1)) {
+							flag = false;
 						}
+					} else {
+						flag = true;
 					}
+				}
 
-					break;
-				case 32:
-					i1 = l;
-				default:
-					k += this.getCharWidth(c0);
+				break;
+			case 32:
+				i1 = l;
+			default:
+				k += this.getCharWidth(c0);
 
-					if (flag) {
-						++k;
-					}
+				if (flag) {
+					++k;
+				}
 			}
 
 			if (c0 == 10) {
