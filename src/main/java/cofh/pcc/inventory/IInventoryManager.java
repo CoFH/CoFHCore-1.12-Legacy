@@ -1,4 +1,4 @@
-package cofh.inventory;
+package cofh.pcc.inventory;
 
 import java.util.Map;
 

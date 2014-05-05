@@ -1,4 +1,6 @@
-package cofh.util;
+package cofh.pcc.util;
+
+import buildcraft.api.transport.IPipeTile;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -14,8 +16,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import cofh.api.transport.IItemDuct;
-import cofh.inventory.IInventoryManager;
-import cofh.inventory.InventoryManager;
+import cofh.pcc.inventory.IInventoryManager;
+import cofh.pcc.inventory.InventoryManager;
 import cofh.util.position.BlockPosition;
 
 public abstract class UtilInventory {

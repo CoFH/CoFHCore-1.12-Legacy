@@ -1,4 +1,5 @@
-package cofh.oredict;
+package cofh.pcc.oredict;
+
 
 import java.util.HashMap;
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package cofh.random;
+package cofh.pcc.random;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;

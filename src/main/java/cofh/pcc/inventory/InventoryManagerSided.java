@@ -1,4 +1,4 @@
-package cofh.inventory;
+package cofh.pcc.inventory;
 
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;

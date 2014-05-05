@@ -1,4 +1,4 @@
-package cofh.util;
+package cofh.pcc.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
