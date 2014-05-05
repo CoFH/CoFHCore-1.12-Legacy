@@ -236,6 +236,7 @@ public class CoFHCore extends BaseMod {
 		return false;
 	}
 
+	/* BaseMod */
 	@Override
 	public String getModId() {
 

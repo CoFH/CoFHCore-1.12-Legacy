@@ -48,9 +48,16 @@ public class ItemBase extends Item {
 	public ArrayList<Integer> itemList = new ArrayList<Integer>();
 
 	public boolean hasTextures = true;
+	public String modName = "cofh";
 
 	public ItemBase() {
 
+		setHasSubtypes(true);
+	}
+
+	public ItemBase(String modName) {
+
+		this.modName = modName;
 		setHasSubtypes(true);
 	}
 
@@ -125,6 +132,7 @@ public class ItemBase extends Item {
 	@Override
 	public Item setUnlocalizedName(String name) {
 
+		name = modName + "." + name;
 		GameRegistry.registerItem(this, name);
 		return super.setUnlocalizedName(name);
 	}
@@ -137,7 +145,8 @@ public class ItemBase extends Item {
 		}
 		for (int i = 0; i < itemList.size(); i++) {
 			ItemEntry item = itemMap.get(itemList.get(i));
-			IconRegistry.addIcon(item.name, "cofh:" + getUnlocalizedName().replace("item.cofh.", "") + "/" + StringHelper.titleCase(item.name), ir);
+			IconRegistry.addIcon(item.name,
+					modName + ":" + getUnlocalizedName().replace("item." + modName + ".", "") + "/" + StringHelper.titleCase(item.name), ir);
 		}
 	}
 

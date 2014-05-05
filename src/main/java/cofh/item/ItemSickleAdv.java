@@ -1,8 +1,5 @@
 package cofh.item;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,22 +13,17 @@ import cofh.util.ServerHelper;
 
 public class ItemSickleAdv extends ItemToolAdv {
 
-	public static Set<Block> effectiveBlocks = new HashSet<Block>();
-	public static Set<Material> effectiveMaterials = new HashSet<Material>();
-
-	static {
-		effectiveMaterials.add(Material.leaves);
-		effectiveMaterials.add(Material.plants);
-		effectiveMaterials.add(Material.vine);
-		effectiveMaterials.add(Material.web);
-	}
-
 	public int radius = 3;
 
 	public ItemSickleAdv(Item.ToolMaterial toolMaterial) {
 
 		super(3.0F, toolMaterial);
 		addToolClass("sickle");
+
+		effectiveMaterials.add(Material.leaves);
+		effectiveMaterials.add(Material.plants);
+		effectiveMaterials.add(Material.vine);
+		effectiveMaterials.add(Material.web);
 	}
 
 	public ItemSickleAdv setRadius(int radius) {
@@ -41,15 +33,9 @@ public class ItemSickleAdv extends ItemToolAdv {
 	}
 
 	@Override
-	protected Set<Block> getEffectiveBlocks(ItemStack stack) {
+	public boolean canHarvestBlock(Block block, ItemStack stack) {
 
-		return effectiveBlocks;
-	}
-
-	@Override
-	protected Set<Material> getEffectiveMaterials(ItemStack stack) {
-
-		return effectiveMaterials;
+		return block == Blocks.web || block == Blocks.vine;
 	}
 
 	@Override

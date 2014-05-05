@@ -10,7 +10,7 @@ public class ItemArmorAdv extends ItemArmor {
 	public String repairIngot = "";
 	public String[] textures = new String[2];
 
-	public ItemArmorAdv(int id, ArmorMaterial material, int type) {
+	public ItemArmorAdv(ArmorMaterial material, int type) {
 
 		super(material, 0, type);
 	}

@@ -1,6 +1,8 @@
 package cofh.item;
 
-import java.util.LinkedHashSet;
+import gnu.trove.set.hash.THashSet;
+import gnu.trove.set.hash.TLinkedHashSet;
+
 import java.util.Set;
 
 import net.minecraft.block.Block;
@@ -15,12 +17,22 @@ import cofh.util.ItemHelper;
 public abstract class ItemToolAdv extends ItemTool {
 
 	public String repairIngot = "";
-	private Set<String> toolClasses = new LinkedHashSet<String>();
-	private Set<String> immutableClasses = java.util.Collections.unmodifiableSet(toolClasses);
+	private final TLinkedHashSet<String> toolClasses = new TLinkedHashSet<String>();
+	private final Set<String> immutableClasses = java.util.Collections.unmodifiableSet(toolClasses);
+
+	protected THashSet<Block> effectiveBlocks = new THashSet<Block>();
+	protected THashSet<Material> effectiveMaterials = new THashSet<Material>();
+	protected int harvestLevel = -1;
 
 	public ItemToolAdv(float baseDamage, Item.ToolMaterial toolMaterial) {
 
 		super(baseDamage, toolMaterial, null);
+	}
+
+	public ItemToolAdv(float baseDamage, Item.ToolMaterial toolMaterial, int harvestLevel) {
+
+		this(baseDamage, toolMaterial);
+		this.harvestLevel = harvestLevel;
 	}
 
 	public ItemToolAdv setRepairIngot(String repairIngot) {
@@ -34,9 +46,15 @@ public abstract class ItemToolAdv extends ItemTool {
 		toolClasses.add(string);
 	}
 
-	protected abstract Set<Block> getEffectiveBlocks(ItemStack stack);
+	protected THashSet<Block> getEffectiveBlocks(ItemStack stack) {
 
-	protected abstract Set<Material> getEffectiveMaterials(ItemStack stack);
+		return effectiveBlocks;
+	}
+
+	protected THashSet<Material> getEffectiveMaterials(ItemStack stack) {
+
+		return effectiveMaterials;
+	}
 
 	protected boolean isClassValid(String toolClass, ItemStack stack) {
 
@@ -62,13 +80,13 @@ public abstract class ItemToolAdv extends ItemTool {
 	@Override
 	public float func_150893_a(ItemStack stack, Block block) {
 
-		return (getEffectiveMaterials(stack).contains(block.getMaterial()) || getEffectiveBlocks(stack).contains(block)) ? getEfficiency(stack) : 0.75f;
+		return (getEffectiveMaterials(stack).contains(block.getMaterial()) || getEffectiveBlocks(stack).contains(block)) ? getEfficiency(stack) : 1.0F;
 	}
 
 	@Override
 	public boolean canHarvestBlock(Block block, ItemStack stack) {
 
-		return func_150893_a(stack, block) >= 1.0f;
+		return func_150893_a(stack, block) > 1.0f;
 	}
 
 	protected void harvestBlock(World world, int x, int y, int z, EntityPlayer player) {
@@ -94,11 +112,13 @@ public abstract class ItemToolAdv extends ItemTool {
 	@Override
 	public int getHarvestLevel(ItemStack stack, String toolClass) {
 
+		if (harvestLevel != -1) {
+			return harvestLevel;
+		}
 		int level = super.getHarvestLevel(stack, toolClass);
 		if (level == -1 && isClassValid(toolClass, stack) && toolClasses.contains(toolClass)) {
 			level = toolMaterial.getHarvestLevel();
 		}
-
 		return getHarvestLevel(stack, level);
 	}
 
@@ -113,6 +133,7 @@ public abstract class ItemToolAdv extends ItemTool {
 
 		for (String type : getToolClasses(stack)) {
 			int level = getHarvestLevel(stack, type);
+
 			if (type.equals(block.getHarvestTool(meta))) {
 				if (block.getHarvestLevel(meta) < level) {
 					return getEfficiency(stack);
