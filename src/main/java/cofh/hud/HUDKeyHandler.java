@@ -1,9 +1,10 @@
 package cofh.hud;
 
-import java.util.EnumSet;
-
+import cofh.network.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+
+import java.util.EnumSet;
 
 class HUDKeyHandler extends KeyHandler {
 
@@ -11,7 +12,7 @@ class HUDKeyHandler extends KeyHandler {
 
 	public HUDKeyHandler() {
 
-		super(new KeyBinding[] { new KeyBinding("", 0, "") }, new boolean[] { false });
+		super(new KeyBinding[]{ new KeyBinding("", 0, "") }, new boolean[]{ false });
 	}
 
 	@Override
@@ -32,7 +33,7 @@ class HUDKeyHandler extends KeyHandler {
 
 		if (CoFHHUD.keybindUUIDMap.containsKey(keybind.getName())) {
 			if (CoFHHUD.keybindModules.get(CoFHHUD.keybindUUIDMap.get(keybind.getName())).keyDown(keybind.getName(), tickEnd, isRepeat)) {
-				CoFHServerKeyHandler.sendKeyPacket(keybind.getName(), false, isRepeat, tickEnd);
+				PacketHandler.cofhPacketHandler.sendToServer(new CoFHServerKeyHandler().sendKeyPacket(keybind.getName(), false, isRepeat, tickEnd));
 			}
 		}
 	}
@@ -47,7 +48,7 @@ class HUDKeyHandler extends KeyHandler {
 
 		if (CoFHHUD.keybindUUIDMap.containsKey(keybind.getName())) {
 			if (CoFHHUD.keybindModules.get(CoFHHUD.keybindUUIDMap.get(keybind.getName())).keyUp(keybind.getName(), tickEnd)) {
-				CoFHServerKeyHandler.sendKeyPacket(keybind.getName(), true, false, tickEnd);
+				PacketHandler.cofhPacketHandler.sendToServer(new CoFHServerKeyHandler().sendKeyPacket(keybind.getName(), true, false, tickEnd));
 			}
 		}
 	}
@@ -60,7 +61,7 @@ class HUDKeyHandler extends KeyHandler {
 
 	public void resetBindings() {
 
-		keyBindings = CoFHHUD.keybinds.toArray(new KeyBinding[] {});
+		keyBindings = CoFHHUD.keybinds.toArray(new KeyBinding[]{ });
 
 		// Java sucks...
 		repeatings = new boolean[CoFHHUD.keybindsRepeat.size()];

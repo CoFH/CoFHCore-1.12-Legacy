@@ -1,14 +1,15 @@
 package cofh.social;
 
+import cofh.CoFHCore;
+import cofh.core.CoFHProps;
+import cofh.network.PacketHandler;
+import cofh.social.SocialPacket.Type;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.common.config.Configuration;
+
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
-
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.common.config.Configuration;
-import cofh.CoFHCore;
-import cofh.core.CoFHProps;
-import cofh.social.SocialPacketHandler.Type;
 
 public class RegistryFriends {
 
@@ -56,18 +57,18 @@ public class RegistryFriends {
 		return playerName != null
 				&& ownerName != null
 				&& (playerName.toLowerCase().matches(ownerName.toLowerCase()) || friendConf.hasCategory(ownerName.toLowerCase()) ? friendConf.getCategory(
-						ownerName.toLowerCase()).containsKey(playerName.toLowerCase()) ? true : false : false);
+				ownerName.toLowerCase()).containsKey(playerName.toLowerCase()) ? true : false : false);
 	}
 
 	public static void sendFriendsToPlayer(EntityPlayerMP thePlayer) {
 
-		Payload thePayload = Payload.getPayload(SocialPacketHandler.packetID);
-		thePayload.addByte(Type.FRIEND_LIST.ordinal());
-		thePayload.addInt(friendConf.getCategory(thePlayer.getCommandSenderName().toLowerCase()).keySet().size());
+		SocialPacket aPacket = new SocialPacket();
+		aPacket.addByte(Type.FRIEND_LIST.ordinal());
+		aPacket.addInt(friendConf.getCategory(thePlayer.getCommandSenderName().toLowerCase()).keySet().size());
 		for (String theName : friendConf.getCategory(thePlayer.getCommandSenderName().toLowerCase()).keySet()) {
-			thePayload.addString(theName);
+			aPacket.addString(theName);
 		}
-		PacketUtils.sendToPlayer(thePayload.getPacket(), thePlayer);
+		PacketHandler.cofhPacketHandler.sendTo(aPacket, thePlayer);
 	}
 
 }

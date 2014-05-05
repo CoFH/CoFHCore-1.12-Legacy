@@ -2,6 +2,7 @@ package cofh;
 
 import java.io.File;
 
+import cofh.social.SocialPacket;
 import net.minecraftforge.common.config.Configuration;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +13,6 @@ import cofh.command.CommandHandler;
 import cofh.core.CoFHProps;
 import cofh.social.Proxy;
 import cofh.social.RegistryFriends;
-import cofh.social.SocialPacketHandler;
 import cofh.util.ConfigHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -53,7 +53,7 @@ public class CoFHSocial {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 
-		SocialPacketHandler.initialize();
+		SocialPacket.initialize();
 
 		config.cleanUp(false, true);
 	}

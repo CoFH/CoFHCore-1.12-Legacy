@@ -1,27 +1,5 @@
 package cofh;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cofh.command.CommandHandler;
 import cofh.core.CoFHProps;
 import cofh.core.Proxy;
@@ -44,6 +22,26 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = "required-after:Forge@[" + CoFHProps.FORGE_REQ + ",)")
 public class CoFHCore extends BaseMod {
@@ -115,7 +113,7 @@ public class CoFHCore extends BaseMod {
 	public void initialize(FMLInitializationEvent event) {
 
 		PacketHandler.cofhPacketHandler.init();
-		NetworkRegistry.instance().registerGuiHandler(instance, guiHandler);
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
 	}
 
 	@EventHandler
@@ -205,12 +203,12 @@ public class CoFHCore extends BaseMod {
 		}
 
 		recipesToAdd
-				.add(new ShapedOreRecipe(new ItemStack(Blocks.oak_stairs, 4), new Object[] { "#  ", "## ", "###", '#', new ItemStack(Blocks.planks, 1, 0) }));
-		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(Blocks.spruce_stairs, 4), new Object[] { "#  ", "## ", "###", '#',
+				.add(new ShapedOreRecipe(new ItemStack(Blocks.oak_stairs, 4), new Object[]{ "#  ", "## ", "###", '#', new ItemStack(Blocks.planks, 1, 0) }));
+		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(Blocks.spruce_stairs, 4), new Object[]{ "#  ", "## ", "###", '#',
 				new ItemStack(Blocks.planks, 1, 1) }));
 		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(Blocks.birch_stairs, 4),
-				new Object[] { "#  ", "## ", "###", '#', new ItemStack(Blocks.planks, 1, 2) }));
-		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(Blocks.jungle_stairs, 4), new Object[] { "#  ", "## ", "###", '#',
+				new Object[]{ "#  ", "## ", "###", '#', new ItemStack(Blocks.planks, 1, 2) }));
+		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(Blocks.jungle_stairs, 4), new Object[]{ "#  ", "## ", "###", '#',
 				new ItemStack(Blocks.planks, 1, 3) }));
 
 		recipes.removeAll(recipesToRemove);

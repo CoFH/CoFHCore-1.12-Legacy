@@ -1,20 +1,20 @@
 package cofh.hud;
 
+import cofh.CoFHCore;
+import cofh.network.CoFHPacket;
+import cofh.network.PacketHandler;
+import net.minecraft.entity.player.EntityPlayer;
+
 import java.util.HashMap;
 
-import net.minecraft.entity.player.EntityPlayer;
-import cofh.CoFHCore;
-import cofh.network.PacketHandler;
-
-public class CoFHServerKeyHandler implements IGeneralPacketHandler {
+public class CoFHServerKeyHandler extends CoFHPacket {
 
 	public static final CoFHServerKeyHandler instance = new CoFHServerKeyHandler();
 	public static final HashMap<String, IKeyBinding> serverBinds = new HashMap<String, IKeyBinding>();
-	public static int packetId;
 
 	public static void initialize() {
 
-		packetId = PacketHandler.getAvailablePacketIdAndRegister(instance);
+		PacketHandler.cofhPacketHandler.registerPacket(CoFHServerKeyHandler.class);
 	}
 
 	public static boolean addServerKeyBind(IKeyBinding theBind, String keyName) {
@@ -27,31 +27,30 @@ public class CoFHServerKeyHandler implements IGeneralPacketHandler {
 	}
 
 	@Override
-	public void handlePacket(int id, Payload payload, EntityPlayer player) throws Exception {
+	public void handlePacket(EntityPlayer player) {
 
-		String bindUUID = payload.getString();
+		String bindUUID = getString();
 		if (serverBinds.containsKey(bindUUID)) {
-			if (payload.getBool()) {
-				serverBinds.get(bindUUID).keyUpServer(bindUUID, payload.getBool(), player);
+			if (getBool()) {
+				serverBinds.get(bindUUID).keyUpServer(bindUUID, getBool(), player);
 			} else {
-				serverBinds.get(bindUUID).keyDownServer(bindUUID, payload.getBool(), payload.getBool(), player);
+				serverBinds.get(bindUUID).keyDownServer(bindUUID, getBool(), getBool(), player);
 			}
 		} else {
 			CoFHCore.log.error("Invalid Key Packet! Unregistered Server Key! UUID: " + bindUUID);
 		}
 	}
 
-	public static void sendKeyPacket(String key, boolean keyUp, boolean isRepeat, boolean tickEnd) {
+	public CoFHServerKeyHandler sendKeyPacket(String key, boolean keyUp, boolean isRepeat, boolean tickEnd) {
 
-		Payload payload = Payload.getPayload(packetId);
-		payload.addString(key);
-		payload.addBool(keyUp);
-		payload.addBool(tickEnd);
+		addString(key);
+		addBool(keyUp);
+		addBool(tickEnd);
 
 		if (!keyUp) {
-			payload.addBool(isRepeat);
+			addBool(isRepeat);
 		}
-		PacketUtils.sendToServer(payload.getPacket());
+		return this;
 	}
 
 }
