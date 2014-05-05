@@ -1,0 +1,70 @@
+#de_DE
+
+#info.cofh.access
+info.cofh.accessMode=Zugriffsmodus
+info.cofh.accessPublic=Öffentlich
+info.cofh.accessRestricted=Eingeschränkt
+info.cofh.accessPrivate=Nur Besitzer
+info.cofh.all=Alles
+info.cofh.blank=Leer
+info.cofh.charge=Ladung
+info.cofh.configuration=Konfiguration
+info.cofh.contents=Inhalt
+info.cofh.controlStatus=Kontrollstatus
+info.cofh.damageAttack=Angriffsschaden
+info.cofh.damageFlux=Flux-Schaden
+info.cofh.empty=Leer
+info.cofh.energy=Energie
+info.cofh.energyConsume=Energieverbrauch
+info.cofh.energyProduce=Energie-Output
+info.cofh.energyStored=Energiespeicher
+info.cofh.fluid=Flüssigkeit
+info.cofh.frequency=Frequenz
+info.cofh.friendsList=Freundesliste
+info.cofh.information=Information
+info.cofh.infinite=Unendlich
+info.cofh.items=Items
+info.cofh.level=Level
+info.cofh.maxEnergyPerTick=Energiemaximum
+info.cofh.none=Niemand
+info.cofh.owner=Besitzer
+info.cofh.press=Drücke
+info.cofh.receive=Empfangen
+info.cofh.receiving=Empfangend
+info.cofh.redstoneControl=Redstonekontrolle
+info.cofh.redstoneControlOff=Deaktiviert
+info.cofh.redstoneControlOn=Aktiviert
+info.cofh.redstoneStateHigh=High
+info.cofh.redstoneStateIgnored=Ignorieren
+info.cofh.redstoneStateLow=Low
+info.cofh.security=Sicherheit
+info.cofh.send=Senden
+info.cofh.sending=Sendend
+info.cofh.signal=Signal
+info.cofh.signalRequired=Signal benötigt
+info.cofh.source=Quelle
+info.cofh.tutorial=Tutorial
+
+info.cofh.tutorial.fluxRequired=Benötigt Redstone-Flux zum Arbeiten.
+info.cofh.tutorial.tabConfiguration=Der Konfigurations-Tab bestimmt, wie Items dieses Gerät erreichen und verlassen.
+info.cofh.tutorial.tabConfiguration2=Der Konfigurations-Tab bestimmt die Operations-Modi dieses Gerätes.
+info.cofh.tutorial.tabRedstone=Der Redstone-Kontroll-Tab konfiguriert, wie dieses Gerät auf Redstone-Signale reagiert.
+
+info.cofh.lexicon1=Konvertiert Items in gleichwertige Formen.
+info.cofh.lexicon2=Rechtsklicke (öffne), um es zu studieren.
+info.cofh.lexicon3=Nutze, während du schleichst, um Weisheit zu bekommen!
+info.cofh.lexicon4=Rechtsklicke (öffne), um Items zu transmutieren.
+info.cofh.lexicon5=Nutze, während du schleichst, um Wissen aufzugeben.
+item.cofh.tool.lexicon.name=Forge-Lexikon
+item.cofh.tool.lexiconActive.name=Forge-Lexikon (Aktiv)
+
+item.invalid.name=Ungültiges Item (Zerstören)
+
+message.cofh.holdShift1=Halte
+message.cofh.holdShift2=Shift
+message.cofh.holdShift3=für Details
+message.cofh.secure1=Dies ist privat und gehört
+message.cofh.secure2=Du hättest deine Hand verlieren können!
+message.cofh.secureWarning=Anmerkung: Server Ops sind auf diesem Server fähig, frei auf 'sichere' Blöcke zuzugreifen.
+message.cofh.receiveConfig=Empfange Server-Konfiguration...
+message.cofh.restoreConfig=Client-Konfiguration wiederherstellen...

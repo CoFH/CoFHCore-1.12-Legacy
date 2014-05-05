@@ -1,0 +1,70 @@
+﻿#ru_RU
+
+info.cofh.access=Доступ
+info.cofh.accessMode=Режим доступа
+info.cofh.accessPublic=Публичный
+info.cofh.accessRestricted=Ограниченный
+info.cofh.accessPrivate=Приватный
+info.cofh.all=Все
+info.cofh.blank=Пусто
+info.cofh.charge=Заряд
+info.cofh.configuration=Конфигурация
+info.cofh.contents=Содержит
+info.cofh.controlStatus=Режим управления
+info.cofh.damageAttack=Урон
+info.cofh.damageFlux=Урон Flux
+info.cofh.empty=Пусто
+info.cofh.energy=Энергия
+info.cofh.energyConsume=Расход энергии
+info.cofh.energyProduce=Вывод энергии
+info.cofh.energyStored=Текущий заряд
+info.cofh.fluid=Жидкость
+info.cofh.frequency=Частота
+info.cofh.friendsList=Список друзей
+info.cofh.information=Информация
+#info.cofh.infinite
+info.cofh.items=Предметы
+info.cofh.level=Уровень
+info.cofh.maxEnergyPerTick=Макс. энергия
+info.cofh.none=Ничего
+info.cofh.owner=Владелец
+info.cofh.press=Нажать
+info.cofh.receive=Принять
+info.cofh.receiving=Приём
+info.cofh.redstoneControl=Красный контроль
+info.cofh.redstoneControlOff=Выключено
+info.cofh.redstoneControlOn=Включено
+info.cofh.redstoneStateHigh=Высоко
+info.cofh.redstoneStateIgnored=Игнорировать
+info.cofh.redstoneStateLow=Низко
+info.cofh.security=Безопастность
+info.cofh.send=Передать
+info.cofh.sending=Передача
+info.cofh.signal=Сигнал
+info.cofh.signalRequired=Нужный сигнал
+#info.cofh.source
+info.cofh.tutorial=Туториал
+
+info.cofh.tutorial.fluxRequired=Для работы необходим Redstone Flux.
+info.cofh.tutorial.tabConfiguration=Эта конфигурация определяет как предметы попадают и покидают машину.
+info.cofh.tutorial.tabConfiguration2=Вкладка конфигурации настраивает режим работы этой машины.
+info.cofh.tutorial.tabRedstone=Вкладка "Красный контроль" настраивает поведение машины на сигнал красного камня.
+
+info.cofh.lexicon1=Конвертирует предметы в их эквивалентные формы.
+info.cofh.lexicon2=ПКМ (открыть), чтобы изучить.
+info.cofh.lexicon3=Когда присядете, откройте, дабы обрести мудрость!
+info.cofh.lexicon4=ПКМ (открыть) для трансмутации предметов.
+info.cofh.lexicon5=Когда присядете, откройте, чтобы позабыть знания.
+item.cofh.tool.lexicon.name=Лексикон Forge
+item.cofh.tool.lexiconActive.name=Лексикон Forge (Активен)
+
+item.invalid.name=Неизвестный предмет (Уничтожить)
+
+message.cofh.holdShift1=Нажмите
+message.cofh.holdShift2=Shift
+message.cofh.holdShift3=для информации
+message.cofh.secure1=Это личная вещь игрока
+message.cofh.secure2=Ты мог потерять свою руку!
+message.cofh.secureWarning=Но: Операторы сервера имеют доступ к приватным блокам.
+message.cofh.receiveConfig=Прием конфигурации сервера...
+message.cofh.restoreConfig=Восстанавливание конфигурации клиента...

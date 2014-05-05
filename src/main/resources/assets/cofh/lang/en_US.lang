@@ -1,0 +1,70 @@
+#en_US
+
+info.cofh.access=Access
+info.cofh.accessMode=Access Mode
+info.cofh.accessPublic=Public Access
+info.cofh.accessRestricted=Restricted
+info.cofh.accessPrivate=Owner Only
+info.cofh.all=All
+info.cofh.blank=Blank
+info.cofh.charge=Charge
+info.cofh.configuration=Configuration
+info.cofh.contents=Contents
+info.cofh.controlStatus=Control Status
+info.cofh.damageAttack=Attack Damage
+info.cofh.damageFlux=Flux Damage
+info.cofh.empty=Empty
+info.cofh.energy=Energy
+info.cofh.energyConsume=Power Usage
+info.cofh.energyProduce=Power Output
+info.cofh.energyStored=Energy Stored
+info.cofh.fluid=Fluid
+info.cofh.frequency=Frequency
+info.cofh.friendsList=Friends List
+info.cofh.information=Information
+info.cofh.infinite=Infinite
+info.cofh.items=Items
+info.cofh.level=Level
+info.cofh.maxEnergyPerTick=Maximum Power
+info.cofh.none=None
+info.cofh.owner=Owner
+info.cofh.press=Press
+info.cofh.receive=Receive
+info.cofh.receiving=Receiving
+info.cofh.redstoneControl=Redstone Control
+info.cofh.redstoneControlOff=Disabled
+info.cofh.redstoneControlOn=Enabled
+info.cofh.redstoneStateHigh=High
+info.cofh.redstoneStateIgnored=Ignored
+info.cofh.redstoneStateLow=Low
+info.cofh.security=Security
+info.cofh.send=Send
+info.cofh.sending=Sending
+info.cofh.signal=Signal
+info.cofh.signalRequired=Signal Required
+info.cofh.source=Source
+info.cofh.tutorial=Tutorial
+
+info.cofh.tutorial.fluxRequired=Requires Redstone Flux to operate.
+info.cofh.tutorial.tabConfiguration=The Configuration tab determines how items enter and leave this device.
+info.cofh.tutorial.tabConfiguration2=The Configuration tab determines the operation modes for this device.
+info.cofh.tutorial.tabRedstone=The Redstone Control tab configures how this device reacts to redstone signals.
+
+info.cofh.lexicon1=Converts items to equivalent forms.
+info.cofh.lexicon2=Right click (open) to study.
+info.cofh.lexicon3=Use while sneaking to gain wisdom!
+info.cofh.lexicon4=Right click (open) to transmute items.
+info.cofh.lexicon5=Use while sneaking to forsake knowledge.
+item.cofh.tool.lexicon.name=Forge Lexicon
+item.cofh.tool.lexiconActive.name=Forge Lexicon (Active)
+
+item.invalid.name=Invalid Item (Destroy)
+
+message.cofh.holdShift1=Hold
+message.cofh.holdShift2=Shift
+message.cofh.holdShift3=for Details
+message.cofh.secure1=This is private and belongs to
+message.cofh.secure2=You could have lost your hand!
+message.cofh.secureWarning=Notice: Server Ops are able to freely access 'secure' blocks on this server.
+message.cofh.receiveConfig=Receiving Server Configuration...
+message.cofh.restoreConfig=Restoring Client Configuration...
