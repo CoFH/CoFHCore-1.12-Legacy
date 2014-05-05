@@ -22,12 +22,6 @@ public class ConfigHandler {
 		modVersion = version;
 	}
 
-	@Deprecated
-	public ConfigHandler(String version, int blockStart, int itemStart) {
-
-		modVersion = version;
-	}
-
 	public void setConfiguration(Configuration config) {
 
 		modConfiguration = config;
@@ -44,40 +38,9 @@ public class ConfigHandler {
 		return modVersion;
 	}
 
-	/* Blocks */
-	@Deprecated
-	public void addBlockEntry(String name) {
+	public void save() {
 
-		addBlockEntry(name, 0);
-	}
-
-	@Deprecated
-	public void addBlockEntry(String name, int level) {
-
-	}
-
-	@Deprecated
-	public int getBlockId(String name) {
-
-		return 0;
-	}
-
-	/* Items */
-	@Deprecated
-	public void addItemEntry(String name) {
-
-		addItemEntry(name, 0);
-	}
-
-	@Deprecated
-	public void addItemEntry(String name, int level) {
-
-	}
-
-	@Deprecated
-	public int getItemId(String name) {
-
-		return 0;
+		modConfiguration.save();
 	}
 
 	/* Shortcuts */
@@ -160,22 +123,6 @@ public class ConfigHandler {
 	public boolean hasKey(String category, String key) {
 
 		return modConfiguration.hasKey(category, key);
-	}
-
-	@Deprecated
-	public void init() {
-
-		initialize();
-	}
-
-	public void initialize() {
-
-		modConfiguration.save();
-	}
-
-	public void save() {
-
-		modConfiguration.save();
 	}
 
 	public boolean renameProperty(String category, String key, String newCategory, String newKey, boolean forceValue) {

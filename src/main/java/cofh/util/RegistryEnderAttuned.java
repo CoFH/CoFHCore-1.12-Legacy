@@ -1,5 +1,8 @@
 package cofh.util;
 
+import gnu.trove.map.TMap;
+import gnu.trove.map.hash.THashMap;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,13 +16,13 @@ import cofh.api.transport.IEnderAttuned;
 
 public class RegistryEnderAttuned {
 
-	public static Map<String, Map<Integer, List<IEnderAttuned>>> inputItem = new HashMap<String, Map<Integer, List<IEnderAttuned>>>();
-	public static Map<String, Map<Integer, List<IEnderAttuned>>> inputFluid = new HashMap<String, Map<Integer, List<IEnderAttuned>>>();
-	public static Map<String, Map<Integer, List<IEnderAttuned>>> inputEnergy = new HashMap<String, Map<Integer, List<IEnderAttuned>>>();
+	public static TMap<String, Map<Integer, List<IEnderAttuned>>> inputItem = new THashMap<String, Map<Integer, List<IEnderAttuned>>>();
+	public static TMap<String, Map<Integer, List<IEnderAttuned>>> inputFluid = new THashMap<String, Map<Integer, List<IEnderAttuned>>>();
+	public static TMap<String, Map<Integer, List<IEnderAttuned>>> inputEnergy = new THashMap<String, Map<Integer, List<IEnderAttuned>>>();
 
-	public static Map<String, Map<Integer, List<IEnderAttuned>>> outputItem = new HashMap<String, Map<Integer, List<IEnderAttuned>>>();
-	public static Map<String, Map<Integer, List<IEnderAttuned>>> outputFluid = new HashMap<String, Map<Integer, List<IEnderAttuned>>>();
-	public static Map<String, Map<Integer, List<IEnderAttuned>>> outputEnergy = new HashMap<String, Map<Integer, List<IEnderAttuned>>>();
+	public static TMap<String, Map<Integer, List<IEnderAttuned>>> outputItem = new THashMap<String, Map<Integer, List<IEnderAttuned>>>();
+	public static TMap<String, Map<Integer, List<IEnderAttuned>>> outputFluid = new THashMap<String, Map<Integer, List<IEnderAttuned>>>();
+	public static TMap<String, Map<Integer, List<IEnderAttuned>>> outputEnergy = new THashMap<String, Map<Integer, List<IEnderAttuned>>>();
 
 	public static Configuration linkConf;
 

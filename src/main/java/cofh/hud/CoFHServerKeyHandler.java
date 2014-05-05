@@ -1,16 +1,16 @@
 package cofh.hud;
 
+import gnu.trove.map.TMap;
+import gnu.trove.map.hash.THashMap;
+import net.minecraft.entity.player.EntityPlayer;
 import cofh.CoFHCore;
 import cofh.network.CoFHPacket;
 import cofh.network.PacketHandler;
-import net.minecraft.entity.player.EntityPlayer;
-
-import java.util.HashMap;
 
 public class CoFHServerKeyHandler extends CoFHPacket {
 
 	public static final CoFHServerKeyHandler instance = new CoFHServerKeyHandler();
-	public static final HashMap<String, IKeyBinding> serverBinds = new HashMap<String, IKeyBinding>();
+	public static final TMap<String, IKeyBinding> serverBinds = new THashMap<String, IKeyBinding>();
 
 	public static void initialize() {
 

@@ -3,9 +3,11 @@
 #################
 
 *.pydevproject
+.gradle/
 .project
 .metadata
 bin/
+eclipse/
 tmp/
 *.tmp
 *.bak
@@ -163,7 +165,14 @@ pip-log.txt
 
 ###########
 
-*.iml
 downloads
 screenshots
 techne
+
+#############
+## denoflions
+#############
+
+MFR-Forestry
+nbproject
+

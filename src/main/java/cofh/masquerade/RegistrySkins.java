@@ -1,5 +1,7 @@
 package cofh.masquerade;
 
+import gnu.trove.map.TMap;
+import gnu.trove.map.hash.THashMap;
 import ibxm.Player;
 
 import java.io.ByteArrayOutputStream;
@@ -7,7 +9,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +22,7 @@ import cofh.util.CoreUtils;
 
 public class RegistrySkins implements ISimpleRegistry {
 
-	private static HashMap<String, String> skinMap = new HashMap();
+	private static TMap<String, String> skinMap = new THashMap();
 
 	public static boolean allowPlayersUse = true;
 	public static boolean allowOpsUse = true;
@@ -102,7 +103,7 @@ public class RegistrySkins implements ISimpleRegistry {
 	public static void readJoinPacket(DataInputStream data) {
 
 		try {
-			skinMap = new HashMap();
+			skinMap = new THashMap();
 			int count = data.readByte(); // Fuck you if you can fit more then
 											// 255 people on your modded server :P
 			String name, link;

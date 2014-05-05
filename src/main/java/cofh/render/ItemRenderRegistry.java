@@ -1,15 +1,14 @@
 package cofh.render;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import gnu.trove.map.TMap;
+import gnu.trove.map.hash.THashMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 public class ItemRenderRegistry {
 
-	public static Map<Integer, IItemRenderer> itemRenders = new HashMap<Integer, IItemRenderer>();
+	public static TMap<Integer, IItemRenderer> itemRenders = new THashMap<Integer, IItemRenderer>();
 
 	public static boolean addItemRenderer(ItemStack theItem, IItemRenderer theItemRenderer) {
 

@@ -1,8 +1,7 @@
 package cofh.render;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import gnu.trove.map.TMap;
+import gnu.trove.map.hash.THashMap;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 
@@ -14,7 +13,7 @@ import net.minecraft.util.IIcon;
  */
 public class IconRegistry {
 
-	public static Map<String, IIcon> icons = new HashMap<String, IIcon>();
+	public static TMap<String, IIcon> icons = new THashMap<String, IIcon>();
 
 	public static void addIcon(String iconName, String iconLocation, IIconRegister ir) {
 

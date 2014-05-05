@@ -1,8 +1,9 @@
 package cofh.command;
 
-import java.util.HashMap;
+import gnu.trove.map.TMap;
+import gnu.trove.map.hash.THashMap;
+
 import java.util.List;
-import java.util.Map;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -16,7 +17,7 @@ public class CommandHandler extends CommandBase {
 
 	public static CommandHandler instance = new CommandHandler();
 
-	private static Map<String, ISubCommand> commands = new HashMap<String, ISubCommand>();
+	private static TMap<String, ISubCommand> commands = new THashMap<String, ISubCommand>();
 
 	static {
 		registerSubCommand(CommandHelp.instance);

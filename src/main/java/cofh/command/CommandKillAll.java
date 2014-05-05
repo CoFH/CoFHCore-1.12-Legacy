@@ -1,6 +1,7 @@
 package cofh.command;
 
-import java.util.HashMap;
+import gnu.trove.map.hash.THashMap;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class CommandKillAll implements ISubCommand {
 		if (CoreUtils.isOpOrServer(sender.getCommandSenderName())) {
 			int killCount = 0;
 			String curName;
-			HashMap<String, Integer> names = new HashMap<String, Integer>();
+			THashMap<String, Integer> names = new THashMap<String, Integer>();
 			for (WorldServer theWorld : CoFHCore.server.worldServers) {
 				for (int i = 0; i < theWorld.loadedEntityList.size(); i++) {
 					if (theWorld.loadedEntityList.get(i) != null) {

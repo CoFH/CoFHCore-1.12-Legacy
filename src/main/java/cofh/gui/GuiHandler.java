@@ -1,8 +1,9 @@
 package cofh.gui;
 
+import gnu.trove.map.TMap;
+import gnu.trove.map.hash.THashMap;
+
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
-import java.util.Map;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,10 +16,10 @@ import cpw.mods.fml.common.network.IGuiHandler;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class GuiHandler implements IGuiHandler {
 
-	private final Map guiMap = new HashMap();
-	private final Map guiTileMap = new HashMap();
-	private final Map containerMap = new HashMap();
-	private final Map containerTileMap = new HashMap();
+	private final TMap guiMap = new THashMap();
+	private final TMap guiTileMap = new THashMap();
+	private final TMap containerMap = new THashMap();
+	private final TMap containerTileMap = new THashMap();
 
 	private int guiIdCounter = 0;
 

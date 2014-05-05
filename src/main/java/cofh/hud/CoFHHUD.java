@@ -1,6 +1,8 @@
 package cofh.hud;
 
-import java.util.HashMap;
+import gnu.trove.map.TMap;
+import gnu.trove.map.hash.THashMap;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,8 +15,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class CoFHHUD {
 
 	public static List<IHUDModule> modules = new LinkedList<IHUDModule>();
-	public static HashMap<String, IKeyBinding> keybindModules = new HashMap<String, IKeyBinding>();
-	public static HashMap<String, String> keybindUUIDMap = new HashMap<String, String>();
+	public static TMap<String, IKeyBinding> keybindModules = new THashMap<String, IKeyBinding>();
+	public static TMap<String, String> keybindUUIDMap = new THashMap<String, String>();
 
 	static boolean initialized = false;
 	static boolean keyInit = false;

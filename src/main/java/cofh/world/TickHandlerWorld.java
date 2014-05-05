@@ -1,7 +1,9 @@
 package cofh.world;
 
+import gnu.trove.map.TMap;
+import gnu.trove.map.hash.THashMap;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 import net.minecraft.world.World;
@@ -15,7 +17,7 @@ public class TickHandlerWorld {
 
 	public static TickHandlerWorld instance = new TickHandlerWorld();
 
-	public static HashMap<Integer, ArrayList<ChunkCoord>> chunksToGen = new HashMap<Integer, ArrayList<ChunkCoord>>();
+	public static TMap<Integer, ArrayList<ChunkCoord>> chunksToGen = new THashMap<Integer, ArrayList<ChunkCoord>>();
 
 	@SubscribeEvent
 	public void tickEnd(WorldTickEvent evt) {
@@ -40,4 +42,5 @@ public class TickHandlerWorld {
 			chunksToGen.put(Integer.valueOf(dim), chunks);
 		}
 	}
+
 }
