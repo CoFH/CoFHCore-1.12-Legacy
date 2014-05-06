@@ -37,7 +37,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 	public static final PacketHandler cofhPacketHandler = new PacketHandler();
 
 	private EnumMap<Side, FMLEmbeddedChannel> channels;
-	private LinkedList<Class<? extends BasePacket>> packets = new LinkedList<Class<? extends BasePacket>>();
+	private final LinkedList<Class<? extends BasePacket>> packets = new LinkedList<Class<? extends BasePacket>>();
 	private boolean isPostInitialised = false;
 
 	public boolean registerPacket(Class<? extends BasePacket> packet) {
@@ -45,16 +45,13 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 		if (this.packets.size() > 256) {
 			return false;
 		}
-
 		if (this.packets.contains(packet)) {
 			return false;
 		}
-
 		if (this.isPostInitialised) {
 			// ToDo: Resort or throw error
 			return false;
 		}
-
 		this.packets.add(packet);
 		return true;
 	}
@@ -64,10 +61,10 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 
 		ByteBuf buffer = Unpooled.buffer();
 		Class<? extends BasePacket> packetClass = msg.getClass();
+
 		if (!this.packets.contains(msg.getClass())) {
 			throw new NullPointerException("No Packet Registered for: " + msg.getClass().getCanonicalName());
 		}
-
 		byte discriminator = (byte) this.packets.indexOf(packetClass);
 		buffer.writeByte(discriminator);
 		msg.encodeInto(ctx, buffer);
@@ -81,10 +78,10 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 		ByteBuf payload = msg.payload();
 		byte discriminator = payload.readByte();
 		Class<? extends BasePacket> packetClass = this.packets.get(discriminator);
+
 		if (packetClass == null) {
 			throw new NullPointerException("No packet registered for discriminator: " + discriminator);
 		}
-
 		BasePacket pkt = packetClass.newInstance();
 		pkt.decodeInto(ctx, payload.slice());
 
@@ -103,7 +100,6 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 
 		default:
 		}
-
 		out.add(pkt);
 	}
 
@@ -120,7 +116,6 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 		if (this.isPostInitialised) {
 			return;
 		}
-
 		this.isPostInitialised = true;
 		Collections.sort(this.packets, new Comparator<Class<? extends BasePacket>>() {
 
@@ -175,4 +170,5 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 		this.channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
 		this.channels.get(Side.CLIENT).writeAndFlush(message);
 	}
+
 }
