@@ -23,7 +23,7 @@ public class TabTutorial extends TabBase {
 		visible = enable;
 
 		backgroundColor = 0x5a09bb;
-		maxHeight += 4 + StringHelper.getSplitStringHeight(elementFontRenderer, infoString, maxWidth);
+		maxHeight += 4 + StringHelper.getSplitStringHeight(GuiBase.guiFontRenderer, infoString, maxWidth);
 		myInfo = infoString;
 	}
 
@@ -38,8 +38,8 @@ public class TabTutorial extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		elementFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.tutorial"), posX - currentWidth + 22, posY + 6, headerColor);
-		elementFontRenderer.drawSplitString(myInfo, posX + 8 - currentWidth, posY + 20, maxWidth - 8, textColor);
+		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.tutorial"), posX - currentWidth + 22, posY + 6, headerColor);
+		GuiBase.guiFontRenderer.drawSplitString(myInfo, posX + 8 - currentWidth, posY + 20, maxWidth - 8, textColor);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 

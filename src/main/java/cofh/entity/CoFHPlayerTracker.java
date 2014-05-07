@@ -3,8 +3,6 @@ package cofh.entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import cofh.core.CoFHProps;
-import cofh.masquerade.RegistryCapes;
-import cofh.masquerade.RegistrySkins;
 import cofh.util.ServerHelper;
 import cofh.util.StringHelper;
 import cpw.mods.fml.common.FMLCommonHandler;

@@ -54,6 +54,8 @@ public class CoFHCore extends BaseMod {
 
 	@Instance("CoFHCore")
 	public static CoFHCore instance;
+	public static final ConfigHandler config = new ConfigHandler(CoFHProps.VERSION);
+	public static Logger log = LogManager.getLogger(modId);
 
 	@SidedProxy(clientSide = "cofh.core.ProxyClient", serverSide = "cofh.core.Proxy")
 	public static Proxy proxy;
@@ -140,9 +142,7 @@ public class CoFHCore extends BaseMod {
 
 	public static MinecraftServer server;
 
-	public static Logger log = LogManager.getLogger(modId);
 	public static final GuiHandler guiHandler = new GuiHandler();
-	public static final ConfigHandler config = new ConfigHandler(CoFHProps.VERSION);
 
 	static {
 		// log.setParent(FMLLog.getLogger());

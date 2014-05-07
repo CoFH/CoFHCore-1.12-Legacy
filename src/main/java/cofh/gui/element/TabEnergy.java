@@ -48,13 +48,13 @@ public class TabEnergy extends TabBase {
 		} else {
 			powerDirection = "info.cofh.energyConsume";
 		}
-		elementFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.energy"), posX + 22, posY + 6, headerColor);
-		elementFontRenderer.drawStringWithShadow(StringHelper.localize(powerDirection) + ":", posX + 8, posY + 18, subheaderColor);
-		elementFontRenderer.drawString(myTile.getInfoEnergyPerTick() + " RF/t", posX + 16, posY + 30, textColor);
-		elementFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.maxEnergyPerTick") + ":", posX + 8, posY + 42, subheaderColor);
-		elementFontRenderer.drawString(myTile.getInfoMaxEnergyPerTick() + " RF/t", posX + 16, posY + 54, textColor);
-		elementFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.energyStored") + ":", posX + 8, posY + 66, subheaderColor);
-		elementFontRenderer.drawString(myTile.getInfoEnergy() + " RF", posX + 16, posY + 78, textColor);
+		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.energy"), posX + 22, posY + 6, headerColor);
+		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize(powerDirection) + ":", posX + 8, posY + 18, subheaderColor);
+		GuiBase.guiFontRenderer.drawString(myTile.getInfoEnergyPerTick() + " RF/t", posX + 16, posY + 30, textColor);
+		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.maxEnergyPerTick") + ":", posX + 8, posY + 42, subheaderColor);
+		GuiBase.guiFontRenderer.drawString(myTile.getInfoMaxEnergyPerTick() + " RF/t", posX + 16, posY + 54, textColor);
+		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.energyStored") + ":", posX + 8, posY + 66, subheaderColor);
+		GuiBase.guiFontRenderer.drawString(myTile.getInfoEnergy() + " RF", posX + 16, posY + 78, textColor);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 

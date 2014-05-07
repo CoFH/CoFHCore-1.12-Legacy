@@ -18,7 +18,6 @@ public class ItemBucket extends ItemBase {
 		super();
 		setMaxStackSize(1);
 		setContainerItem(container);
-		// setCreativeTab(ThermalExpansion.tabTools);
 	}
 
 	public ItemBucket(Item container) {
@@ -27,7 +26,6 @@ public class ItemBucket extends ItemBase {
 		setMaxStackSize(1);
 		this.container = container;
 		setContainerItem(container);
-		// setCreativeTab(ThermalExpansion.tabTools);
 	}
 
 	@Override

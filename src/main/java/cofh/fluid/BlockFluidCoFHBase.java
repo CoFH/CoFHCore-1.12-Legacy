@@ -1,4 +1,4 @@
-package cofh.block;
+package cofh.fluid;
 
 import java.util.Random;
 
@@ -45,9 +45,9 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 		return this;
 	}
 
-	public BlockFluidCoFHBase initialize() {
+	public boolean initialize() {
 
-		return this;
+		return true;
 	}
 
 	@Override

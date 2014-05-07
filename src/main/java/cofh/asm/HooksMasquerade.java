@@ -1,8 +1,5 @@
 package cofh.asm;
 
-import cofh.masquerade.RegistryCapes;
-import cofh.masquerade.RegistrySkins;
-
 public class HooksMasquerade {
 
 	public static String getCapeUrl(String username) {

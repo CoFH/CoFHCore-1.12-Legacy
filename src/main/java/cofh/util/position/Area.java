@@ -47,12 +47,10 @@ public class Area {
 
 		return new BlockPosition(xMax, yMax, zMax);
 	}
-	
+
 	public boolean contains(BlockPosition pos) {
-		
-		return pos.x >= xMin & pos.x <= xMax &
-				pos.y >= yMin & pos.y <= yMax &
-				pos.z >= zMin & pos.z <= zMax;
+
+		return pos.x >= xMin & pos.x <= xMax & pos.y >= yMin & pos.y <= yMax & pos.z >= zMin & pos.z <= zMax;
 	}
 
 	public List<BlockPosition> getPositionsTopFirst() {
