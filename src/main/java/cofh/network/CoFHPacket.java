@@ -312,6 +312,11 @@ public abstract class CoFHPacket extends BasePacket {
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 
 		datain = new DataInputStream(new ByteArrayInputStream(buffer.array()));
+		try {
+			datain.skipBytes(1);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
