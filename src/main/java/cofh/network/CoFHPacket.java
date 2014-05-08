@@ -24,11 +24,9 @@ public abstract class CoFHPacket extends BasePacket {
 	private DataOutputStream dataout;
 	public DataInputStream datain;
 
-	private int subID;
 
 	public CoFHPacket() {
 
-		// this.subID = subID;
 		arrayout = new ByteArrayOutputStream();
 		dataout = new DataOutputStream(arrayout);
 	}
@@ -37,11 +35,6 @@ public abstract class CoFHPacket extends BasePacket {
 
 		datain = new DataInputStream(new ByteArrayInputStream(data));
 	}
-
-	// public Packet getPacket() {
-	//
-	// return PacketDispatcher.getTinyPacket(CoFHCore.instance, (short) subID, arrayout.toByteArray());
-	// }
 
 	public CoFHPacket addString(String theString) {
 
