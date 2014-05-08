@@ -19,9 +19,7 @@ public class KeyPacket extends CoFHPacket {
 		if (CoFHKey.serverBinds.containsKey(bindUUID)) {
 			CoFHKey.serverBinds.get(bindUUID).keyPressServer(player);
 		} else {
-			CoFHCore.log
-					.error("Invalid Key Packet! Unregistered Server Key! UUID: "
-							+ bindUUID);
+			CoFHCore.log.error("Invalid Key Packet! Unregistered Server Key! UUID: " + bindUUID);
 		}
 	}
 

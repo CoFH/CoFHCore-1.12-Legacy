@@ -10,6 +10,7 @@ public class CoFHTilePacket extends CoFHPacket {
 	}
 
 	public CoFHTilePacket(TileEntity theTile) {
+
 		addInt(theTile.xCoord);
 		addInt(theTile.yCoord);
 		addInt(theTile.zCoord);
@@ -30,8 +31,7 @@ public class CoFHTilePacket extends CoFHPacket {
 
 	public void handlePacket(EntityPlayer player, boolean isServer) {
 
-		TileEntity tile = player.worldObj.getTileEntity(getInt(), getInt(),
-				getInt());
+		TileEntity tile = player.worldObj.getTileEntity(getInt(), getInt(), getInt());
 
 		if (tile instanceof ITilePacketHandler) {
 			((ITilePacketHandler) tile).handleTilePacket(this, isServer);

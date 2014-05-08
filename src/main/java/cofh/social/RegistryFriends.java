@@ -68,7 +68,7 @@ public class RegistryFriends {
 		for (String theName : friendConf.getCategory(thePlayer.getCommandSenderName().toLowerCase()).keySet()) {
 			aPacket.addString(theName);
 		}
-		PacketHandler.instance.sendTo(aPacket, thePlayer);
+		PacketHandler.sendTo(aPacket, thePlayer);
 	}
 
 }

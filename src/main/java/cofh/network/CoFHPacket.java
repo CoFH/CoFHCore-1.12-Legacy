@@ -24,7 +24,6 @@ public abstract class CoFHPacket extends BasePacket {
 	private DataOutputStream dataout;
 	public DataInputStream datain;
 
-
 	public CoFHPacket() {
 
 		arrayout = new ByteArrayOutputStream();

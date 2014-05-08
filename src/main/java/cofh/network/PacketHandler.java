@@ -30,15 +30,13 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
- * Packet pipeline class. Directs all registered packet data to be handled by
- * the packets themselves.
+ * Packet pipeline class. Directs all registered packet data to be handled by the packets themselves.
  * 
  * @author sirgingalot, cpw, Zeldo
  */
 
 @ChannelHandler.Sharable
-public class PacketHandler extends
-		MessageToMessageCodec<FMLProxyPacket, BasePacket> {
+public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePacket> {
 
 	public static final PacketHandler instance = new PacketHandler();
 
@@ -63,36 +61,30 @@ public class PacketHandler extends
 	}
 
 	@Override
-	protected void encode(ChannelHandlerContext ctx, BasePacket msg,
-			List<Object> out) throws Exception {
+	protected void encode(ChannelHandlerContext ctx, BasePacket msg, List<Object> out) throws Exception {
 
 		ByteBuf buffer = Unpooled.buffer();
 		Class<? extends BasePacket> packetClass = msg.getClass();
 
 		if (!this.packets.contains(msg.getClass())) {
-			throw new NullPointerException("No Packet Registered for: "
-					+ msg.getClass().getCanonicalName());
+			throw new NullPointerException("No Packet Registered for: " + msg.getClass().getCanonicalName());
 		}
 		byte discriminator = (byte) this.packets.indexOf(packetClass);
 		buffer.writeByte(discriminator);
 		msg.encodeInto(ctx, buffer);
-		FMLProxyPacket proxyPacket = new FMLProxyPacket(buffer.copy(), ctx
-				.channel().attr(NetworkRegistry.FML_CHANNEL).get());
+		FMLProxyPacket proxyPacket = new FMLProxyPacket(buffer.copy(), ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get());
 		out.add(proxyPacket);
 	}
 
 	@Override
-	protected void decode(ChannelHandlerContext ctx, FMLProxyPacket msg,
-			List<Object> out) throws Exception {
+	protected void decode(ChannelHandlerContext ctx, FMLProxyPacket msg, List<Object> out) throws Exception {
 
 		ByteBuf payload = msg.payload();
 		byte discriminator = payload.readByte();
-		Class<? extends BasePacket> packetClass = this.packets
-				.get(discriminator);
+		Class<? extends BasePacket> packetClass = this.packets.get(discriminator);
 
 		if (packetClass == null) {
-			throw new NullPointerException(
-					"No packet registered for discriminator: " + discriminator);
+			throw new NullPointerException("No packet registered for discriminator: " + discriminator);
 		}
 		BasePacket pkt = packetClass.newInstance();
 		pkt.decodeInto(ctx, payload.slice());
@@ -105,8 +97,7 @@ public class PacketHandler extends
 			break;
 
 		case SERVER:
-			INetHandler netHandler = ctx.channel()
-					.attr(NetworkRegistry.NET_HANDLER).get();
+			INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
 			player = ((NetHandlerPlayServer) netHandler).playerEntity;
 			pkt.handleServerSide(player);
 			break;
@@ -131,25 +122,19 @@ public class PacketHandler extends
 			return;
 		}
 		this.isPostInitialised = true;
-		Collections.sort(this.packets,
-				new Comparator<Class<? extends BasePacket>>() {
+		Collections.sort(this.packets, new Comparator<Class<? extends BasePacket>>() {
 
-					@Override
-					public int compare(
-							Class<? extends BasePacket> packetClass1,
-							Class<? extends BasePacket> packetClass2) {
+			@Override
+			public int compare(Class<? extends BasePacket> packetClass1, Class<? extends BasePacket> packetClass2) {
 
-						int com = String.CASE_INSENSITIVE_ORDER.compare(
-								packetClass1.getCanonicalName(),
-								packetClass2.getCanonicalName());
-						if (com == 0) {
-							com = packetClass1.getCanonicalName().compareTo(
-									packetClass2.getCanonicalName());
-						}
+				int com = String.CASE_INSENSITIVE_ORDER.compare(packetClass1.getCanonicalName(), packetClass2.getCanonicalName());
+				if (com == 0) {
+					com = packetClass1.getCanonicalName().compareTo(packetClass2.getCanonicalName());
+				}
 
-						return com;
-					}
-				});
+				return com;
+			}
+		});
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -160,71 +145,50 @@ public class PacketHandler extends
 
 	public static void sendToAll(BasePacket message) {
 
-		instance.channels.get(Side.SERVER)
-				.attr(FMLOutboundHandler.FML_MESSAGETARGET)
-				.set(FMLOutboundHandler.OutboundTarget.ALL);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendTo(BasePacket message, EntityPlayerMP player) {
 
-		instance.channels.get(Side.SERVER)
-				.attr(FMLOutboundHandler.FML_MESSAGETARGET)
-				.set(FMLOutboundHandler.OutboundTarget.PLAYER);
-		instance.channels.get(Side.SERVER)
-				.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
-	public static void sendToAllAround(BasePacket message,
-			NetworkRegistry.TargetPoint point) {
+	public static void sendToAllAround(BasePacket message, NetworkRegistry.TargetPoint point) {
 
-		instance.channels.get(Side.SERVER)
-				.attr(FMLOutboundHandler.FML_MESSAGETARGET)
-				.set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
-		instance.channels.get(Side.SERVER)
-				.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendToAllAround(BasePacket message, TileEntity theTile) {
 
-		instance.channels.get(Side.SERVER)
-				.attr(FMLOutboundHandler.FML_MESSAGETARGET)
-				.set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
 		instance.channels
 				.get(Side.SERVER)
 				.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
-				.set(new TargetPoint(
-						theTile.getWorldObj().provider.dimensionId,
-						theTile.xCoord, theTile.yCoord, theTile.zCoord,
-						CoFHProps.NETWORK_UPDATE_RANGE));
+				.set(new TargetPoint(theTile.getWorldObj().provider.dimensionId, theTile.xCoord, theTile.yCoord, theTile.zCoord, CoFHProps.NETWORK_UPDATE_RANGE));
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendToDimension(BasePacket message, int dimensionId) {
 
-		instance.channels.get(Side.SERVER)
-				.attr(FMLOutboundHandler.FML_MESSAGETARGET)
-				.set(FMLOutboundHandler.OutboundTarget.DIMENSION);
-		instance.channels.get(Side.SERVER)
-				.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
-				.set(dimensionId);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DIMENSION);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimensionId);
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendToServer(BasePacket message) {
 
-		instance.channels.get(Side.CLIENT)
-				.attr(FMLOutboundHandler.FML_MESSAGETARGET)
-				.set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+		instance.channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
 		instance.channels.get(Side.CLIENT).writeAndFlush(message);
 	}
 
 	public static Packet toMcPacket(BasePacket packet) {
-		return instance.channels.get(
-				FMLCommonHandler.instance().getEffectiveSide())
-				.generatePacketFrom(packet);
+
+		return instance.channels.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
 	}
 
 }

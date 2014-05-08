@@ -32,36 +32,28 @@ public class DropHandler {
 					EntityPlayer thePlayer = (EntityPlayerMP) event.entity;
 					itemSkull = new ItemStack(Items.skull, 1, 3);
 					itemSkull.stackTagCompound = new NBTTagCompound();
-					itemSkull.stackTagCompound.setString("SkullOwner",
-							thePlayer.getCommandSenderName());
+					itemSkull.stackTagCompound.setString("SkullOwner", thePlayer.getCommandSenderName());
 				}
 			}
 		} else if (event.recentlyHit || !mobPvEOnly) {
 			if (event.entity instanceof EntitySkeleton) {
 				EntitySkeleton theEntity = (EntitySkeleton) event.entity;
 
-				if (theEntity.getSkeletonType() == 0 && skeletonEnabled
-						&& randPerc < skeletonChance) {
+				if (theEntity.getSkeletonType() == 0 && skeletonEnabled && randPerc < skeletonChance) {
 					itemSkull = new ItemStack(Items.skull, 1, 0);
-				} else if (theEntity.getSkeletonType() == 1
-						&& witherSkeletonEnabled
-						&& randPerc < witherSkeletonChance) {
+				} else if (theEntity.getSkeletonType() == 1 && witherSkeletonEnabled && randPerc < witherSkeletonChance) {
 					itemSkull = new ItemStack(Items.skull, 1, 1);
 				}
-			} else if (event.entity instanceof EntityZombie && zombieEnabled
-					&& randPerc < zombieChance) {
+			} else if (event.entity instanceof EntityZombie && zombieEnabled && randPerc < zombieChance) {
 				itemSkull = new ItemStack(Items.skull, 1, 2);
-			} else if (event.entity instanceof EntityCreeper && creeperEnabled
-					&& randPerc < creeperChance) {
+			} else if (event.entity instanceof EntityCreeper && creeperEnabled && randPerc < creeperChance) {
 				itemSkull = new ItemStack(Items.skull, 1, 4);
 			}
 		}
 		if (itemSkull == null) {
 			return;
 		}
-		EntityItem theDrop = new EntityItem(event.entityLiving.worldObj,
-				event.entityLiving.posX, event.entityLiving.posY,
-				event.entityLiving.posZ, itemSkull);
+		EntityItem theDrop = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, itemSkull);
 		theDrop.delayBeforeCanPickup = 10;
 		event.drops.add(theDrop);
 	}

@@ -44,8 +44,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = "required-after:Forge@["
-		+ CoFHProps.FORGE_REQ + ",)")
+@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = "required-after:Forge@[" + CoFHProps.FORGE_REQ + ",)")
 public class CoFHCore extends BaseMod {
 
 	public static final String modId = "CoFHCore";
@@ -54,8 +53,7 @@ public class CoFHCore extends BaseMod {
 
 	@Instance("CoFHCore")
 	public static CoFHCore instance;
-	public static final ConfigHandler config = new ConfigHandler(
-			CoFHProps.VERSION);
+	public static final ConfigHandler config = new ConfigHandler(CoFHProps.VERSION);
 	public static Logger log = LogManager.getLogger(modId);
 
 	@SidedProxy(clientSide = "cofh.core.ProxyClient", serverSide = "cofh.core.Proxy")
@@ -70,50 +68,38 @@ public class CoFHCore extends BaseMod {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 
-		UpdateManager.registerUpdater(new UpdateManager(this,
-				CoFHProps.RELEASE_URL));
+		UpdateManager.registerUpdater(new UpdateManager(this, CoFHProps.RELEASE_URL));
 
 		CoFHProps.configDir = event.getModConfigurationDirectory();
 
-		config.setConfiguration(new Configuration(new File(CoFHProps.configDir,
-				"/cofh/CoFHCore.cfg")));
+		config.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/CoFHCore.cfg")));
 
 		String category = "general";
 
 		String comment = "Enable this to be informed of non-critical updates. You will still receive critical update notifications.";
-		CoFHProps.enableUpdateNotice = config.get(category,
-				"EnableUpdateNotifications", true, comment);
+		CoFHProps.enableUpdateNotice = config.get(category, "EnableUpdateNotifications", true, comment);
 
 		category = "gui";
-		CoFHProps.enableInformationTabs = config.get(category,
-				"EnableInformationTabs", true);
-		CoFHProps.enableTutorialTabs = config.get(category,
-				"EnableTutorialTabs", true);
+		CoFHProps.enableInformationTabs = config.get(category, "EnableInformationTabs", true);
+		CoFHProps.enableTutorialTabs = config.get(category, "EnableTutorialTabs", true);
 
 		category = "gui.hud";
-		CoFHProps.enableItemPickupModule = config
-				.get(category,
-						"EnableItemPickupModule",
-						true,
-						"Enable messages that notify you of item pickups. Note: You cannot disable this if your Minecraft username is \"Jadedcat\"");
+		CoFHProps.enableItemPickupModule = config.get(category, "EnableItemPickupModule", true,
+				"Enable messages that notify you of item pickups. Note: You cannot disable this if your Minecraft username is \"Jadedcat\"");
 
 		category = "gui.tooltips";
 		comment = "This adds a tooltip prompting you to press Shift for more details on various items.";
-		StringHelper.displayShiftForDetail = config.get(category,
-				"DisplayHoldShiftForDetail", true, comment);
+		StringHelper.displayShiftForDetail = config.get(category, "DisplayHoldShiftForDetail", true, comment);
 
 		comment = "This option determines if items contained in other items are displayed as a single quantity or a stack count.";
-		StringHelper.displayStackCount = config.get(category,
-				"DisplayStackCountInInventory", false, comment);
+		StringHelper.displayStackCount = config.get(category, "DisplayStackCountInInventory", false, comment);
 
 		category = "security";
 		comment = "Enable this to allow for Server Ops to access 'secure' blocks. Your players will be warned upon server connection. (Default: false)";
-		CoFHProps.enableOpSecureAccess = config.get(category,
-				"OpsCanAccessSecureBlocks", false, comment);
+		CoFHProps.enableOpSecureAccess = config.get(category, "OpsCanAccessSecureBlocks", false, comment);
 
 		comment = "Enable this to be warned about Ops having access to 'secure' blocks when connecting to a server. (Default: true)";
-		CoFHProps.enableOpSecureAccessWarning = config.get(category,
-				"OpsCanAccessSecureBlocksWarning", true, comment);
+		CoFHProps.enableOpSecureAccessWarning = config.get(category, "OpsCanAccessSecureBlocksWarning", true, comment);
 
 		config.save();
 
@@ -146,9 +132,7 @@ public class CoFHCore extends BaseMod {
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 
-		RegistryEnderAttuned.linkConf = new Configuration(new File(
-				DimensionManager.getCurrentSaveRootDirectory(),
-				"/cofh/EnderFrequencies.cfg"));
+		RegistryEnderAttuned.linkConf = new Configuration(new File(DimensionManager.getCurrentSaveRootDirectory(), "/cofh/EnderFrequencies.cfg"));
 		RegistryEnderAttuned.linkConf.load();
 		CommandHandler.initCommands(event);
 		server = event.getServer();
@@ -169,8 +153,7 @@ public class CoFHCore extends BaseMod {
 		// ItemStack(Blocks.sandstone, 1, OreDictionary.WILDCARD_VALUE));
 		// registerOreDictionaryEntry("glass", Blocks.glass);
 		// registerOreDictionaryEntry("oreCoal", Blocks.coal_ore);
-		registerOreDictionaryEntry("cloth", new ItemStack(Blocks.wool, 1,
-				OreDictionary.WILDCARD_VALUE));
+		registerOreDictionaryEntry("cloth", new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE));
 		// registerOreDictionaryEntry("blockGold", Blocks.gold_block);
 		// registerOreDictionaryEntry("blockIron", Blocks.iron_block);
 		// registerOreDictionaryEntry("blockDiamond", Blocks.diamond_block);
@@ -221,18 +204,13 @@ public class CoFHCore extends BaseMod {
 		}
 
 		recipesToAdd
-				.add(new ShapedOreRecipe(new ItemStack(Blocks.oak_stairs, 4),
-						new Object[] { "#  ", "## ", "###", '#',
-								new ItemStack(Blocks.planks, 1, 0) }));
-		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(
-				Blocks.spruce_stairs, 4), new Object[] { "#  ", "## ", "###",
-				'#', new ItemStack(Blocks.planks, 1, 1) }));
-		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(Blocks.birch_stairs,
-				4), new Object[] { "#  ", "## ", "###", '#',
-				new ItemStack(Blocks.planks, 1, 2) }));
-		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(
-				Blocks.jungle_stairs, 4), new Object[] { "#  ", "## ", "###",
-				'#', new ItemStack(Blocks.planks, 1, 3) }));
+				.add(new ShapedOreRecipe(new ItemStack(Blocks.oak_stairs, 4), new Object[] { "#  ", "## ", "###", '#', new ItemStack(Blocks.planks, 1, 0) }));
+		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(Blocks.spruce_stairs, 4), new Object[] { "#  ", "## ", "###", '#',
+				new ItemStack(Blocks.planks, 1, 1) }));
+		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(Blocks.birch_stairs, 4),
+				new Object[] { "#  ", "## ", "###", '#', new ItemStack(Blocks.planks, 1, 2) }));
+		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(Blocks.jungle_stairs, 4), new Object[] { "#  ", "## ", "###", '#',
+				new ItemStack(Blocks.planks, 1, 3) }));
 
 		recipes.removeAll(recipesToRemove);
 		recipes.addAll(recipesToAdd);

@@ -35,11 +35,8 @@ public abstract class TileCoFHBase extends TileEntity {
 		AccessMode access = ((ISecureTile) this).getAccess();
 		String owner = ((ISecureTile) this).getOwnerName();
 
-		return access.isPublic()
-				|| (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name))
-				|| owner.equals(CoFHProps.DEFAULT_OWNER) || owner.equals(name)
-				|| access.isRestricted()
-				&& RegistryFriends.playerHasAccess(name, owner);
+		return access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name)) || owner.equals(CoFHProps.DEFAULT_OWNER) || owner.equals(name)
+				|| access.isRestricted() && RegistryFriends.playerHasAccess(name, owner);
 	}
 
 	public boolean canPlayerDismantle(EntityPlayer player) {
@@ -64,8 +61,7 @@ public abstract class TileCoFHBase extends TileEntity {
 	public void callNeighborTileChange() {
 
 		if (getBlockType() != null) {
-			worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord,
-					this.getBlockType());
+			worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
 		}
 	}
 

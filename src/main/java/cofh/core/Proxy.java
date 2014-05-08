@@ -127,6 +127,7 @@ public class Proxy {
 	}
 
 	public void registerPacketInformation() {
+
 		SocialPacket.initialize();
 		KeyPacket.initialize();
 	}

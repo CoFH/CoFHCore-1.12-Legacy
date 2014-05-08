@@ -22,13 +22,9 @@ public class CoFHPlayerTracker {
 	public void onPlayerLogin(PlayerLoggedInEvent evt) {
 
 		EntityPlayer player = evt.player;
-		if (ServerHelper.isMultiPlayerServer()
-				&& CoFHProps.enableOpSecureAccess
-				&& CoFHProps.enableOpSecureAccessWarning) {
-			player.addChatMessage(new ChatComponentText(StringHelper.YELLOW
-					+ "[CoFH] " + StringHelper.WHITE
-					+ StringHelper.localize("message.cofh.secureWarning")
-					+ StringHelper.END));
+		if (ServerHelper.isMultiPlayerServer() && CoFHProps.enableOpSecureAccess && CoFHProps.enableOpSecureAccessWarning) {
+			player.addChatMessage(new ChatComponentText(StringHelper.YELLOW + "[CoFH] " + StringHelper.WHITE
+					+ StringHelper.localize("message.cofh.secureWarning") + StringHelper.END));
 		}
 	}
 
