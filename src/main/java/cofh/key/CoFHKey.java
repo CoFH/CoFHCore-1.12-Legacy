@@ -15,19 +15,19 @@ public class CoFHKey {
 	public static TMap<String, Boolean> keybindRepeat = new THashMap<String, Boolean>();
 	public static TMap<String, IKeyBinding> serverBinds = new THashMap<String, IKeyBinding>();
 
-	public static boolean addServerKeyBind(IKeyBinding theBind, String keyName) {
+	public static boolean addServerKeyBind(IKeyBinding theBind) {
 
-		if (!serverBinds.containsKey(keyName)) {
-			serverBinds.put(keyName, theBind);
+		if (!serverBinds.containsKey(theBind.getUUID())) {
+			serverBinds.put(theBind.getUUID(), theBind);
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean addKeyBind(IKeyBinding theBind, String keyName) {
+	public static boolean addKeyBind(IKeyBinding theBind) {
 
-		if (!keybindModules.containsKey(keyName)) {
-			keybindModules.put(keyName, theBind);
+		if (!keybindModules.containsKey(theBind.getUUID())) {
+			keybindModules.put(theBind.getUUID(), theBind);
 			return true;
 		}
 		return false;
@@ -40,14 +40,18 @@ public class CoFHKey {
 				if (entry.getValue().suppressRepeating()) {
 					if (keybindRepeat.get(entry.getValue().getUUID()) == false) {
 						keybindRepeat.put(entry.getValue().getUUID(), true);
-						entry.getValue().keyPress();
-						if (entry.getValue().hasServerSide()) {
+						if (entry.getValue().keyPress()
+								&& entry.getValue().hasServerSide()) {
 							new KeyPacket().sendKeyPacket(entry.getValue()
 									.getUUID());
 						}
 					}
 				} else {
-					entry.getValue().keyPress();
+					if (entry.getValue().keyPress()
+							&& entry.getValue().hasServerSide()) {
+						new KeyPacket().sendKeyPacket(entry.getValue()
+								.getUUID());
+					}
 				}
 			} else {
 				if (entry.getValue().suppressRepeating()) {
