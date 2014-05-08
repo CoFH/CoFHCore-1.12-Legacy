@@ -58,7 +58,7 @@ public class PCCASMTransformer implements IClassTransformer {
 	private byte[] writeWorld(String name, String transformedName, byte[] bytes, ClassReader cr) { // FIXME: update for 1.7
 
 		String[] names = null;
-		if (true) {
+		if (LoadingPlugin.runtimeDeobfEnabled) {
 			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F", "field_98181_L" };
 		} else {
 			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "worldLogAgent" };
@@ -122,7 +122,7 @@ public class PCCASMTransformer implements IClassTransformer {
 	private byte[] writeWorldServer(String name, String transformedName, byte[] bytes, ClassReader cr) {
 
 		String[] names = null;
-		if (true) {
+		if (LoadingPlugin.runtimeDeobfEnabled) {
 			names = new String[] { "field_73061_a", "field_73062_L", "field_73063_M", "field_85177_Q" };
 		} else {
 			names = new String[] { "mcServer", "theEntityTracker", "thePlayerManager", "worldTeleporter" };

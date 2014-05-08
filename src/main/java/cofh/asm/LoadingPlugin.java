@@ -27,6 +27,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	// Initialize SubMod transformers
 	static {
 		attemptClassLoad("cofh.asm.TransformerCore", "Failed to find Main Transformer! Critical Issue!");
+		attemptClassLoad("cofh.asm.PCCASMTransformer", "Failed to find Secondary Transformer! Critical Issue!");
 		attemptClassLoad("cofh.asm.TransformerMasquerade", "Failed to find SubCoreMod Masquerade!");
 	}
 

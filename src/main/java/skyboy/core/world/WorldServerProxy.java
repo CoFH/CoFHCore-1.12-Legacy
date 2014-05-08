@@ -22,7 +22,8 @@ public class WorldServerProxy extends WorldServer {
 	}
 	
 	public WorldServerProxy(WorldServer world) {
-		super(world.func_73046_m(), world.getSaveHandler(), getPar2String(world), world.provider, getPar4WorldSettings(world), world.theProfiler);
+		// FIXME: this needs a custom constructor, as this one will break the game
+		super(world.func_73046_m(), world.getSaveHandler(), getPar2String(world), world.provider.dimensionId, getPar4WorldSettings(world), world.theProfiler);
 		this.proxiedWorld = world;
 		//perWorldStorage = world.perWorldStorage; // final, set in super; requires reflection
 		ReflectionHelper.setPrivateValue(World.class, this, world.perWorldStorage, new String[]{"perWorldStorage"}); // forge-added, no reobf
@@ -47,7 +48,7 @@ public class WorldServerProxy extends WorldServer {
 		isRemote = world.isRemote;
 		theChunkProviderServer = world.theChunkProviderServer;
 		levelSaving = world.levelSaving;
-	    allPlayersSleeping = world.allPlayersSleeping;
+	    //allPlayersSleeping = world.allPlayersSleeping;
 		customTeleporters = world.customTeleporters;
 	}
 }
