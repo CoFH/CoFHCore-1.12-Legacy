@@ -12,7 +12,7 @@ public class SocialPacket extends CoFHPacket {
 
 	public static void initialize() {
 
-		PacketHandler.cofhPacketHandler.registerPacket(SocialPacket.class);
+		PacketHandler.instance.registerPacket(SocialPacket.class);
 	}
 
 	@Override

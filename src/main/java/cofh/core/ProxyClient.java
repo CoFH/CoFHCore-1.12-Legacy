@@ -11,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import cofh.gui.element.TabInfo;
 import cofh.gui.element.TabTutorial;
-import cofh.hud.modules.HUDModuleItemPickup;
 import cofh.render.CoFHFontRender;
 import cofh.render.IconRegistry;
 import cofh.util.TickHandlerEnderRegistry;
@@ -32,23 +31,27 @@ public class ProxyClient extends Proxy {
 		TabInfo.enable = CoFHProps.enableInformationTabs;
 		TabTutorial.enable = CoFHProps.enableTutorialTabs;
 
-		fontRenderer = new CoFHFontRender(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"),
+		fontRenderer = new CoFHFontRender(
+				Minecraft.getMinecraft().gameSettings, new ResourceLocation(
+						"textures/font/ascii.png"),
 				Minecraft.getMinecraft().renderEngine, false);
 
 		if (Minecraft.getMinecraft().gameSettings.language != null) {
-			fontRenderer.setUnicodeFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode());
-			fontRenderer.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
+			fontRenderer.setUnicodeFlag(Minecraft.getMinecraft()
+					.getLanguageManager().isCurrentLocaleUnicode());
+			fontRenderer.setBidiFlag(Minecraft.getMinecraft()
+					.getLanguageManager().isCurrentLanguageBidirectional());
 		}
 
-		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(fontRenderer);
+		((IReloadableResourceManager) Minecraft.getMinecraft()
+				.getResourceManager()).registerReloadListener(fontRenderer);
 	}
 
 	@Override
 	public void registerTickHandlers() {
 
-		HUDModuleItemPickup.initialize();
-
-		FMLCommonHandler.instance().bus().register(TickHandlerEnderRegistry.instance);
+		FMLCommonHandler.instance().bus()
+				.register(TickHandlerEnderRegistry.instance);
 	}
 
 	@Override
@@ -60,25 +63,42 @@ public class ProxyClient extends Proxy {
 
 		} else if (event.map.getTextureType() == 1) {
 
-			IconRegistry.addIcon("IconAccessFriends", "cofh:icons/Icon_Access_Friends", event.map);
-			IconRegistry.addIcon("IconAccessPrivate", "cofh:icons/Icon_Access_Private", event.map);
-			IconRegistry.addIcon("IconAccessPublic", "cofh:icons/Icon_Access_Public", event.map);
-			IconRegistry.addIcon("IconAccept", "cofh:icons/Icon_Accept", event.map);
-			IconRegistry.addIcon("IconAcceptInactive", "cofh:icons/Icon_Accept_Inactive", event.map);
-			IconRegistry.addIcon("IconButton", "cofh:icons/Icon_Button", event.map);
-			IconRegistry.addIcon("IconButtonHighlight", "cofh:icons/Icon_Button_Highlight", event.map);
-			IconRegistry.addIcon("IconButtonInactive", "cofh:icons/Icon_Button_Inactive", event.map);
-			IconRegistry.addIcon("IconCancel", "cofh:icons/Icon_Cancel", event.map);
-			IconRegistry.addIcon("IconCancelInactive", "cofh:icons/Icon_Cancel_Inactive", event.map);
-			IconRegistry.addIcon("IconEnergy", "cofh:icons/Icon_Energy", event.map);
+			IconRegistry.addIcon("IconAccessFriends",
+					"cofh:icons/Icon_Access_Friends", event.map);
+			IconRegistry.addIcon("IconAccessPrivate",
+					"cofh:icons/Icon_Access_Private", event.map);
+			IconRegistry.addIcon("IconAccessPublic",
+					"cofh:icons/Icon_Access_Public", event.map);
+			IconRegistry.addIcon("IconAccept", "cofh:icons/Icon_Accept",
+					event.map);
+			IconRegistry.addIcon("IconAcceptInactive",
+					"cofh:icons/Icon_Accept_Inactive", event.map);
+			IconRegistry.addIcon("IconButton", "cofh:icons/Icon_Button",
+					event.map);
+			IconRegistry.addIcon("IconButtonHighlight",
+					"cofh:icons/Icon_Button_Highlight", event.map);
+			IconRegistry.addIcon("IconButtonInactive",
+					"cofh:icons/Icon_Button_Inactive", event.map);
+			IconRegistry.addIcon("IconCancel", "cofh:icons/Icon_Cancel",
+					event.map);
+			IconRegistry.addIcon("IconCancelInactive",
+					"cofh:icons/Icon_Cancel_Inactive", event.map);
+			IconRegistry.addIcon("IconEnergy", "cofh:icons/Icon_Energy",
+					event.map);
 			IconRegistry.addIcon("IconNope", "cofh:icons/Icon_Nope", event.map);
-			IconRegistry.addIcon("IconInformation", "cofh:icons/Icon_Information", event.map);
-			IconRegistry.addIcon("IconTutorial", "cofh:icons/Icon_Tutorial", event.map);
+			IconRegistry.addIcon("IconInformation",
+					"cofh:icons/Icon_Information", event.map);
+			IconRegistry.addIcon("IconTutorial", "cofh:icons/Icon_Tutorial",
+					event.map);
 
-			IconRegistry.addIcon("IconGunpowder", Items.gunpowder.getIconFromDamage(0));
-			IconRegistry.addIcon("IconRedstone", Items.redstone.getIconFromDamage(0));
-			IconRegistry.addIcon("IconRSTorchOff", "cofh:icons/Icon_RSTorchOff", event.map);
-			IconRegistry.addIcon("IconRSTorchOn", "cofh:icons/Icon_RSTorchOn", event.map);
+			IconRegistry.addIcon("IconGunpowder",
+					Items.gunpowder.getIconFromDamage(0));
+			IconRegistry.addIcon("IconRedstone",
+					Items.redstone.getIconFromDamage(0));
+			IconRegistry.addIcon("IconRSTorchOff",
+					"cofh:icons/Icon_RSTorchOff", event.map);
+			IconRegistry.addIcon("IconRSTorchOn", "cofh:icons/Icon_RSTorchOn",
+					event.map);
 		}
 	}
 
@@ -112,7 +132,8 @@ public class ProxyClient extends Proxy {
 
 		for (Object a : FMLClientHandler.instance().getClient().theWorld.playerEntities) {
 			EntityPlayer player = (EntityPlayer) a;
-			if (player.getCommandSenderName().toLowerCase().equals(playerName.toLowerCase())) {
+			if (player.getCommandSenderName().toLowerCase()
+					.equals(playerName.toLowerCase())) {
 				return player;
 			}
 		}

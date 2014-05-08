@@ -19,6 +19,7 @@ import cofh.gui.GuiTextList;
 import cofh.gui.container.ContainerFriendsList;
 import cofh.gui.element.ElementButton;
 import cofh.gui.element.TabInfo;
+import cofh.network.PacketHandler;
 import cofh.social.RegistryFriends;
 import cofh.social.SocialPacket;
 import cofh.social.SocialPacket.Type;
@@ -81,14 +82,16 @@ public class GuiFriendsList extends GuiBaseAdv {
 		if (tbName != null) { // Stops GUI resize deleting text.
 			temp = tbName.getText();
 		}
-		tbName = new GuiTextField(this.fontRendererObj, tbNameX, tbNameY, 128, TB_HEIGHT);
+		tbName = new GuiTextField(this.fontRendererObj, tbNameX, tbNameY, 128,
+				TB_HEIGHT);
 		tbName.setMaxStringLength(20);
 		tbName.setText(temp);
 		tbName.setEnableBackgroundDrawing(false);
 
 		// Setup Text Area
 
-		taFriendsList = new GuiTextList(this.fontRendererObj, taflX, taflY, 128, 10);
+		taFriendsList = new GuiTextList(this.fontRendererObj, taflX, taflY,
+				128, 10);
 		taFriendsList.textLines = RegistryFriends.clientPlayerFriends;
 		taFriendsList.drawBackground = false;
 		taFriendsList.drawBorder = false;
@@ -98,13 +101,19 @@ public class GuiFriendsList extends GuiBaseAdv {
 		taOnlineList.drawBackground = false;
 		taOnlineList.drawBorder = false;
 
-		addName = new ElementButton(this, 139, 13, "SetName", 208, 128, 208, 144, 208, 160, 16, 16, TEXTURE_PATH);
-		removeName = new ElementButton(this, 155, 13, "RemoveName", 224, 128, 224, 144, 224, 160, 16, 16, TEXTURE_PATH);
+		addName = new ElementButton(this, 139, 13, "SetName", 208, 128, 208,
+				144, 208, 160, 16, 16, TEXTURE_PATH);
+		removeName = new ElementButton(this, 155, 13, "RemoveName", 224, 128,
+				224, 144, 224, 160, 16, 16, TEXTURE_PATH);
 
-		olUp = new ElementButton(this, 147, 33, "OnlineUp", 208, 64, 208, 80, 208, 96, 16, 16, TEXTURE_PATH);
-		olDown = new ElementButton(this, 147, 58, "OnlineDown", 224, 64, 224, 80, 224, 96, 16, 16, TEXTURE_PATH);
-		flUp = new ElementButton(this, 147, 87, "FriendsUp", 208, 64, 208, 80, 208, 96, 16, 16, TEXTURE_PATH);
-		flDown = new ElementButton(this, 147, 159, "FriendsDown", 224, 64, 224, 80, 224, 96, 16, 16, TEXTURE_PATH);
+		olUp = new ElementButton(this, 147, 33, "OnlineUp", 208, 64, 208, 80,
+				208, 96, 16, 16, TEXTURE_PATH);
+		olDown = new ElementButton(this, 147, 58, "OnlineDown", 224, 64, 224,
+				80, 224, 96, 16, 16, TEXTURE_PATH);
+		flUp = new ElementButton(this, 147, 87, "FriendsUp", 208, 64, 208, 80,
+				208, 96, 16, 16, TEXTURE_PATH);
+		flDown = new ElementButton(this, 147, 159, "FriendsDown", 224, 64, 224,
+				80, 224, 96, 16, 16, TEXTURE_PATH);
 
 		addElement(addName);
 		addElement(removeName);
@@ -121,9 +130,11 @@ public class GuiFriendsList extends GuiBaseAdv {
 	public void handleElementButtonClick(String buttonName, int mouseButton) {
 
 		if (buttonName.equals("SetName")) {
-			PacketUtils.sendToServer(Payload.getPayload(SocialPacket.packetID).addByte(Type.ADD_FRIEND.ordinal()).addString(tbName.getText()).getPacket());
+			PacketHandler.sendToServer(new SocialPacket().addByte(
+					Type.ADD_FRIEND.ordinal()).addString(tbName.getText()));
 		} else if (buttonName.equals("RemoveName")) {
-			PacketUtils.sendToServer(Payload.getPayload(SocialPacket.packetID).addByte(Type.REMOVE_FRIEND.ordinal()).addString(tbName.getText()).getPacket());
+			PacketHandler.sendToServer(new SocialPacket().addByte(
+					Type.REMOVE_FRIEND.ordinal()).addString(tbName.getText()));
 		} else if (buttonName.equals("OnlineUp")) {
 			taOnlineList.scrollDown();
 		} else if (buttonName.equals("OnlineDown")) {
@@ -177,7 +188,8 @@ public class GuiFriendsList extends GuiBaseAdv {
 
 			if (j == 28) { // enter
 
-				this.mc.getSoundHandler().playSound(new SoundBase("random.click", 1.0F, 0.7F));
+				this.mc.getSoundHandler().playSound(
+						new SoundBase("random.click", 1.0F, 0.7F));
 			}
 		}
 		updateButtons();
@@ -191,16 +203,25 @@ public class GuiFriendsList extends GuiBaseAdv {
 		int onlineX = taOnlineList.xPos - guiLeft;
 		int onlineY = taOnlineList.yPos - guiTop;
 
-		if (onlineX <= mouseX && mouseX < onlineX + taOnlineList.width && mouseY >= onlineY && mouseY < onlineY + taOnlineList.height) {
-			if (!taOnlineList.mouseClicked(mouseX, mouseY, mButton, onlineY).equalsIgnoreCase(tbName.getText())) {
-				tbName.setText(taOnlineList.mouseClicked(mouseX, mouseY, mButton, onlineY));
+		if (onlineX <= mouseX && mouseX < onlineX + taOnlineList.width
+				&& mouseY >= onlineY && mouseY < onlineY + taOnlineList.height) {
+			if (!taOnlineList.mouseClicked(mouseX, mouseY, mButton, onlineY)
+					.equalsIgnoreCase(tbName.getText())) {
+				tbName.setText(taOnlineList.mouseClicked(mouseX, mouseY,
+						mButton, onlineY));
 			}
-		} else if (textAreaX <= mouseX && mouseX < textAreaX + taFriendsList.width && mouseY >= textAreaY && mouseY < textAreaY + taFriendsList.height) {
-			if (!taFriendsList.mouseClicked(mouseX, mouseY, mButton, textAreaY).equalsIgnoreCase(tbName.getText())) {
-				tbName.setText(taFriendsList.mouseClicked(mouseX, mouseY, mButton, textAreaY));
+		} else if (textAreaX <= mouseX
+				&& mouseX < textAreaX + taFriendsList.width
+				&& mouseY >= textAreaY
+				&& mouseY < textAreaY + taFriendsList.height) {
+			if (!taFriendsList.mouseClicked(mouseX, mouseY, mButton, textAreaY)
+					.equalsIgnoreCase(tbName.getText())) {
+				tbName.setText(taFriendsList.mouseClicked(mouseX, mouseY,
+						mButton, textAreaY));
 			}
-		} else if (tbNameX - guiLeft <= mouseX && mouseX < tbNameX - guiLeft + tbName.getWidth() && mouseY >= tbNameY - guiTop
-				&& mouseY < tbNameY - guiTop + 12) {
+		} else if (tbNameX - guiLeft <= mouseX
+				&& mouseX < tbNameX - guiLeft + tbName.getWidth()
+				&& mouseY >= tbNameY - guiTop && mouseY < tbNameY - guiTop + 12) {
 			tbName.setFocused(true);
 
 		} else {
@@ -232,7 +253,8 @@ public class GuiFriendsList extends GuiBaseAdv {
 			olDown.setDisabled();
 		}
 
-		if (RegistryFriends.clientPlayerFriends.contains(tbName.getText().toLowerCase())) {
+		if (RegistryFriends.clientPlayerFriends.contains(tbName.getText()
+				.toLowerCase())) {
 			addName.setDisabled();
 			removeName.setActive();
 		} else {
@@ -252,7 +274,9 @@ public class GuiFriendsList extends GuiBaseAdv {
 		int onlineX = taOnlineList.xPos - guiLeft;
 		int onlineY = taOnlineList.yPos - guiTop;
 
-		if (textAreaX <= mouseX && mouseX < textAreaX + taFriendsList.width && mouseY >= textAreaY && mouseY < textAreaY + taFriendsList.height) {
+		if (textAreaX <= mouseX && mouseX < textAreaX + taFriendsList.width
+				&& mouseY >= textAreaY
+				&& mouseY < textAreaY + taFriendsList.height) {
 			int wheelDir = Mouse.getEventDWheel();
 
 			if (wheelDir < 0) {
@@ -262,7 +286,8 @@ public class GuiFriendsList extends GuiBaseAdv {
 			if (wheelDir > 0) {
 				taFriendsList.scrollDown();
 			}
-		} else if (onlineX <= mouseX && mouseX < onlineX + taOnlineList.width && mouseY >= onlineY && mouseY < onlineY + taOnlineList.height) {
+		} else if (onlineX <= mouseX && mouseX < onlineX + taOnlineList.width
+				&& mouseY >= onlineY && mouseY < onlineY + taOnlineList.height) {
 			int wheelDir = Mouse.getEventDWheel();
 
 			if (wheelDir < 0) {
@@ -283,7 +308,9 @@ public class GuiFriendsList extends GuiBaseAdv {
 
 	private boolean canScrollDownOnline() {
 
-		return taOnlineList.textLines.size() > taOnlineList.displayLines && taOnlineList.startLine < taOnlineList.textLines.size() - taOnlineList.displayLines;
+		return taOnlineList.textLines.size() > taOnlineList.displayLines
+				&& taOnlineList.startLine < taOnlineList.textLines.size()
+						- taOnlineList.displayLines;
 	}
 
 	private boolean canScrollUpFriend() {
@@ -294,7 +321,8 @@ public class GuiFriendsList extends GuiBaseAdv {
 	private boolean canScrollDownFriend() {
 
 		return taFriendsList.textLines.size() > taFriendsList.displayLines
-				&& taFriendsList.startLine < taFriendsList.textLines.size() - taFriendsList.displayLines;
+				&& taFriendsList.startLine < taFriendsList.textLines.size()
+						- taFriendsList.displayLines;
 	}
 
 	public List<String> getOnlineNames() {
