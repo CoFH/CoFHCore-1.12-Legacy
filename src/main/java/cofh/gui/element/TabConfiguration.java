@@ -43,8 +43,8 @@ public class TabConfiguration extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		elementFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), posX + 20, posY + 6, headerColor);
-		elementFontRenderer.drawString("", posX, posY, 0xffffff);
+		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), posX + 20, posY + 6, headerColor);
+		GuiBase.guiFontRenderer.drawString("", posX, posY, 0xffffff);
 		RenderHelper.setBlockTextureSheet();
 
 		GL11.glEnable(GL11.GL_BLEND);
@@ -120,20 +120,20 @@ public class TabConfiguration extends TabBase {
 		if (GuiScreen.isShiftKeyDown()) {
 			if (side == myTile.getFacing()) {
 				if (myTileSides.resetSides()) {
-					playSound("random.click", 1.0F, 0.2F);
+					GuiBase.playSound("random.click", 1.0F, 0.2F);
 				}
 			} else if (myTileSides.setSide(side, 0)) {
-				playSound("random.click", 1.0F, 0.4F);
+				GuiBase.playSound("random.click", 1.0F, 0.4F);
 			}
 			return;
 		}
 		if (mouseButton == 0) {
 			if (myTileSides.incrSide(side)) {
-				playSound("random.click", 1.0F, 0.8F);
+				GuiBase.playSound("random.click", 1.0F, 0.8F);
 			}
 		} else if (mouseButton == 1) {
 			if (myTileSides.decrSide(side)) {
-				playSound("random.click", 1.0F, 0.6F);
+				GuiBase.playSound("random.click", 1.0F, 0.6F);
 			}
 		}
 	}

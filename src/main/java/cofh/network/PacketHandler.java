@@ -17,10 +17,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.network.Packet;
+import net.minecraft.tileentity.TileEntity;
+import cofh.core.CoFHProps;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.common.network.internal.FMLProxyPacket;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -34,10 +38,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 @ChannelHandler.Sharable
 public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePacket> {
 
-	public static final PacketHandler cofhPacketHandler = new PacketHandler();
+	public static final PacketHandler instance = new PacketHandler();
 
 	private EnumMap<Side, FMLEmbeddedChannel> channels;
-	private LinkedList<Class<? extends BasePacket>> packets = new LinkedList<Class<? extends BasePacket>>();
+	private final LinkedList<Class<? extends BasePacket>> packets = new LinkedList<Class<? extends BasePacket>>();
 	private boolean isPostInitialised = false;
 
 	public boolean registerPacket(Class<? extends BasePacket> packet) {
@@ -45,16 +49,13 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 		if (this.packets.size() > 256) {
 			return false;
 		}
-
 		if (this.packets.contains(packet)) {
 			return false;
 		}
-
 		if (this.isPostInitialised) {
 			// ToDo: Resort or throw error
 			return false;
 		}
-
 		this.packets.add(packet);
 		return true;
 	}
@@ -64,10 +65,10 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 
 		ByteBuf buffer = Unpooled.buffer();
 		Class<? extends BasePacket> packetClass = msg.getClass();
+
 		if (!this.packets.contains(msg.getClass())) {
 			throw new NullPointerException("No Packet Registered for: " + msg.getClass().getCanonicalName());
 		}
-
 		byte discriminator = (byte) this.packets.indexOf(packetClass);
 		buffer.writeByte(discriminator);
 		msg.encodeInto(ctx, buffer);
@@ -81,10 +82,10 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 		ByteBuf payload = msg.payload();
 		byte discriminator = payload.readByte();
 		Class<? extends BasePacket> packetClass = this.packets.get(discriminator);
+
 		if (packetClass == null) {
 			throw new NullPointerException("No packet registered for discriminator: " + discriminator);
 		}
-
 		BasePacket pkt = packetClass.newInstance();
 		pkt.decodeInto(ctx, payload.slice());
 
@@ -103,7 +104,6 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 
 		default:
 		}
-
 		out.add(pkt);
 	}
 
@@ -114,13 +114,13 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 	}
 
 	// Method to call from FMLPostInitializationEvent
-	// Ensures that packet discriminators are common between server and client by using logical sorting
+	// Ensures that packet discriminators are common between server and client
+	// by using logical sorting
 	public void postInit() {
 
 		if (this.isPostInitialised) {
 			return;
 		}
-
 		this.isPostInitialised = true;
 		Collections.sort(this.packets, new Comparator<Class<? extends BasePacket>>() {
 
@@ -143,36 +143,52 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 		return Minecraft.getMinecraft().thePlayer;
 	}
 
-	public void sendToAll(BasePacket message) {
+	public static void sendToAll(BasePacket message) {
 
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
-		this.channels.get(Side.SERVER).writeAndFlush(message);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
+		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
-	public void sendTo(BasePacket message, EntityPlayerMP player) {
+	public static void sendTo(BasePacket message, EntityPlayerMP player) {
 
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
-		this.channels.get(Side.SERVER).writeAndFlush(message);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
+		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
-	public void sendToAllAround(BasePacket message, NetworkRegistry.TargetPoint point) {
+	public static void sendToAllAround(BasePacket message, NetworkRegistry.TargetPoint point) {
 
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
-		this.channels.get(Side.SERVER).writeAndFlush(message);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
+		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
-	public void sendToDimension(BasePacket message, int dimensionId) {
+	public static void sendToAllAround(BasePacket message, TileEntity theTile) {
 
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DIMENSION);
-		this.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimensionId);
-		this.channels.get(Side.SERVER).writeAndFlush(message);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+		instance.channels
+				.get(Side.SERVER)
+				.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
+				.set(new TargetPoint(theTile.getWorldObj().provider.dimensionId, theTile.xCoord, theTile.yCoord, theTile.zCoord, CoFHProps.NETWORK_UPDATE_RANGE));
+		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
-	public void sendToServer(BasePacket message) {
+	public static void sendToDimension(BasePacket message, int dimensionId) {
 
-		this.channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
-		this.channels.get(Side.CLIENT).writeAndFlush(message);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DIMENSION);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimensionId);
+		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
+
+	public static void sendToServer(BasePacket message) {
+
+		instance.channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+		instance.channels.get(Side.CLIENT).writeAndFlush(message);
+	}
+
+	public static Packet toMcPacket(BasePacket packet) {
+
+		return instance.channels.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
+	}
+
 }

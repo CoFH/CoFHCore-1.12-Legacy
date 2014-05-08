@@ -23,6 +23,10 @@ public class CoFHProps {
 	public static final int RF_PER_MJ = 10;
 	public static final int ENTITY_TRACKING_DISTANCE = 64;
 
+	/* Graphics */
+	public static final String PATH_GFX = "cofh:textures/";
+	public static final String PATH_ENTITY = PATH_GFX + "entity/";
+
 	/* Global Localizations */
 	public static String tutorialTabConfiguration = StringHelper.localize("info.cofh.tutorial.tabConfiguration");
 	public static String tutorialTabOperation = StringHelper.localize("info.cofh.tutorial.tabConfiguration2");

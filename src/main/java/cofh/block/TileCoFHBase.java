@@ -8,6 +8,9 @@ import net.minecraft.tileentity.TileEntity;
 import cofh.api.tileentity.ISecureTile;
 import cofh.api.tileentity.ISecureTile.AccessMode;
 import cofh.core.CoFHProps;
+import cofh.network.CoFHPacket;
+import cofh.network.CoFHTilePacket;
+import cofh.network.PacketHandler;
 import cofh.social.RegistryFriends;
 import cofh.util.CoreUtils;
 import cofh.util.ServerHelper;
@@ -99,17 +102,17 @@ public abstract class TileCoFHBase extends TileEntity {
 	@Override
 	public Packet getDescriptionPacket() {
 
-		return getDescriptionPayload().getPacket();
+		return PacketHandler.toMcPacket(getPacket());
 	}
 
-	public Payload getDescriptionPayload() {
+	public CoFHPacket getPacket() {
 
-		return Payload.getDescriptionPayload(this);
+		return new CoFHTilePacket(this);
 	}
 
 	public void sendDescPacket() {
 
-		PacketUtils.sendToPlayers(getDescriptionPacket(), this);
+		PacketHandler.sendToAllAround(getPacket(), this);
 	}
 
 	public void sendUpdatePacket(Side side) {
@@ -118,10 +121,10 @@ public abstract class TileCoFHBase extends TileEntity {
 			return;
 		}
 		if (side == Side.CLIENT && ServerHelper.isServerWorld(worldObj)) {
-			PacketUtils.sendToPlayers(getDescriptionPacket(), this);
+			PacketHandler.sendToAllAround(getPacket(), this);
 			worldObj.func_147451_t(xCoord, yCoord, zCoord); // ???
 		} else if (side == Side.SERVER && ServerHelper.isClientWorld(worldObj)) {
-			PacketUtils.sendToServer(getDescriptionPacket());
+			PacketHandler.sendToServer(getPacket());
 		}
 	}
 

@@ -132,8 +132,8 @@ public class ItemBase extends Item {
 	@Override
 	public Item setUnlocalizedName(String name) {
 
-		name = modName + "." + name;
 		GameRegistry.registerItem(this, name);
+		name = modName + "." + name;
 		return super.setUnlocalizedName(name);
 	}
 

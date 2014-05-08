@@ -27,7 +27,6 @@ import cofh.core.CoFHProps;
 import cofh.core.Proxy;
 import cofh.entity.CoFHPlayerTracker;
 import cofh.gui.GuiHandler;
-import cofh.hud.CoFHServerKeyHandler;
 import cofh.mod.BaseMod;
 import cofh.network.PacketHandler;
 import cofh.updater.UpdateManager;
@@ -54,6 +53,8 @@ public class CoFHCore extends BaseMod {
 
 	@Instance("CoFHCore")
 	public static CoFHCore instance;
+	public static final ConfigHandler config = new ConfigHandler(CoFHProps.VERSION);
+	public static Logger log = LogManager.getLogger(modId);
 
 	@SidedProxy(clientSide = "cofh.core.ProxyClient", serverSide = "cofh.core.Proxy")
 	public static Proxy proxy;
@@ -105,7 +106,6 @@ public class CoFHCore extends BaseMod {
 		MinecraftForge.EVENT_BUS.register(proxy);
 		CoFHPlayerTracker.initialize();
 		BucketHandler.initialize();
-		CoFHServerKeyHandler.initialize();
 
 		registerOreDictionaryEntries();
 		fixOreDerptionary();
@@ -114,7 +114,7 @@ public class CoFHCore extends BaseMod {
 	@EventHandler
 	public void initialize(FMLInitializationEvent event) {
 
-		PacketHandler.cofhPacketHandler.init();
+		PacketHandler.instance.init();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
 	}
 
@@ -125,7 +125,7 @@ public class CoFHCore extends BaseMod {
 		proxy.registerTickHandlers();
 		proxy.registerPacketInformation();
 
-		PacketHandler.cofhPacketHandler.postInit();
+		PacketHandler.instance.postInit();
 		config.cleanUp(false, true);
 	}
 
@@ -140,9 +140,7 @@ public class CoFHCore extends BaseMod {
 
 	public static MinecraftServer server;
 
-	public static Logger log = LogManager.getLogger(modId);
 	public static final GuiHandler guiHandler = new GuiHandler();
-	public static final ConfigHandler config = new ConfigHandler(CoFHProps.VERSION);
 
 	static {
 		// log.setParent(FMLLog.getLogger());
@@ -151,7 +149,8 @@ public class CoFHCore extends BaseMod {
 
 	public void registerOreDictionaryEntries() {
 
-		// registerOreDictionaryEntry("sandstone", new ItemStack(Blocks.sandstone, 1, OreDictionary.WILDCARD_VALUE));
+		// registerOreDictionaryEntry("sandstone", new
+		// ItemStack(Blocks.sandstone, 1, OreDictionary.WILDCARD_VALUE));
 		// registerOreDictionaryEntry("glass", Blocks.glass);
 		// registerOreDictionaryEntry("oreCoal", Blocks.coal_ore);
 		registerOreDictionaryEntry("cloth", new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE));

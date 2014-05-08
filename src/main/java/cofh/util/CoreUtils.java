@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.util.Random;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -20,7 +19,13 @@ import cofh.entity.EntityLightningBoltFake;
 
 public class CoreUtils {
 
-	public static Random rand = new Random();
+	public static int entityId = 0;
+
+	public static int getEntityId() {
+
+		entityId++;
+		return entityId;
+	}
 
 	/* PLAYER UTILS */
 	public static boolean isPlayer(EntityPlayer player) {
@@ -62,6 +67,22 @@ public class CoreUtils {
 			sourceChannel.close();
 			destChannel.close();
 		}
+	}
+
+	/* SOUND UTILS */
+	public static final String getSoundName(String soundpath) {
+
+		return getSoundName("cofh", soundpath, false);
+	}
+
+	public static final String getSoundName(String modId, String soundpath, boolean registering) {
+
+		if (registering) {
+			soundpath += ".ogg";
+		} else {
+			soundpath = soundpath.replaceAll("/", ".");
+		}
+		return String.format("%s:%s", modId, soundpath);
 	}
 
 	/* ENTITY UTILS */

@@ -5,6 +5,18 @@ import net.minecraft.tileentity.TileEntity;
 
 public class CoFHTilePacket extends CoFHPacket {
 
+	public CoFHTilePacket() {
+
+	}
+
+	public CoFHTilePacket(TileEntity theTile) {
+
+		addInt(theTile.xCoord);
+		addInt(theTile.yCoord);
+		addInt(theTile.zCoord);
+
+	}
+
 	@Override
 	public void handleClientSide(EntityPlayer player) {
 

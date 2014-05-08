@@ -10,7 +10,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import cofh.util.CoreUtils;
+import cofh.util.MathHelper;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class DropHandler {
@@ -23,7 +23,7 @@ public class DropHandler {
 		if (event.specialDropValue < 5) {
 			return;
 		}
-		int randPerc = CoreUtils.rand.nextInt(100);
+		int randPerc = MathHelper.RANDOM.nextInt(100);
 		ItemStack itemSkull = null;
 
 		if (event.entity instanceof EntityPlayerMP) {

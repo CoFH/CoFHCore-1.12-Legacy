@@ -11,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import cofh.gui.element.TabInfo;
 import cofh.gui.element.TabTutorial;
-import cofh.hud.modules.HUDModuleItemPickup;
 import cofh.render.CoFHFontRender;
 import cofh.render.IconRegistry;
 import cofh.util.TickHandlerEnderRegistry;
@@ -45,8 +44,6 @@ public class ProxyClient extends Proxy {
 
 	@Override
 	public void registerTickHandlers() {
-
-		HUDModuleItemPickup.initialize();
 
 		FMLCommonHandler.instance().bus().register(TickHandlerEnderRegistry.instance);
 	}

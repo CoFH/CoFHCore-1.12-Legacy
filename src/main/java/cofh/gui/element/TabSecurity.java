@@ -48,24 +48,24 @@ public class TabSecurity extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		elementFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.security"), posX + 20, posY + 6, headerColor);
-		elementFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.accessMode") + ":", posX + 8, posY + 42, subheaderColor);
+		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.security"), posX + 20, posY + 6, headerColor);
+		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.accessMode") + ":", posX + 8, posY + 42, subheaderColor);
 
 		if (myTile.getAccess().isPublic()) {
 			gui.drawButton("IconAccessPublic", posX + 28, posY + 20, 1, 1);
 			gui.drawButton("IconAccessFriends", posX + 48, posY + 20, 1, 0);
 			gui.drawButton("IconAccessPrivate", posX + 68, posY + 20, 1, 0);
-			elementFontRenderer.drawString(TOOLTIPS[0], posX + 16, posY + 54, textColor);
+			GuiBase.guiFontRenderer.drawString(TOOLTIPS[0], posX + 16, posY + 54, textColor);
 		} else if (myTile.getAccess().isRestricted()) {
 			gui.drawButton("IconAccessPublic", posX + 28, posY + 20, 1, 0);
 			gui.drawButton("IconAccessFriends", posX + 48, posY + 20, 1, 1);
 			gui.drawButton("IconAccessPrivate", posX + 68, posY + 20, 1, 0);
-			elementFontRenderer.drawString(TOOLTIPS[1], posX + 16, posY + 54, textColor);
+			GuiBase.guiFontRenderer.drawString(TOOLTIPS[1], posX + 16, posY + 54, textColor);
 		} else if (myTile.getAccess().isPrivate()) {
 			gui.drawButton("IconAccessPublic", posX + 28, posY + 20, 1, 0);
 			gui.drawButton("IconAccessFriends", posX + 48, posY + 20, 1, 0);
 			gui.drawButton("IconAccessPrivate", posX + 68, posY + 20, 1, 1);
-			elementFontRenderer.drawString(TOOLTIPS[2], posX + 16, posY + 54, textColor);
+			GuiBase.guiFontRenderer.drawString(TOOLTIPS[2], posX + 16, posY + 54, textColor);
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
@@ -106,17 +106,17 @@ public class TabSecurity extends TabBase {
 		if (28 <= x && x < 44 && 20 <= y && y < 36) {
 			if (!myTile.getAccess().isPublic()) {
 				myTile.setAccess(ISecureTile.AccessMode.PUBLIC);
-				playSound("random.click", 1.0F, 0.4F);
+				GuiBase.playSound("random.click", 1.0F, 0.4F);
 			}
 		} else if (48 <= x && x < 64 && 20 <= y && y < 36) {
 			if (!myTile.getAccess().isRestricted()) {
 				myTile.setAccess(ISecureTile.AccessMode.RESTRICTED);
-				playSound("random.click", 1.0F, 0.6F);
+				GuiBase.playSound("random.click", 1.0F, 0.6F);
 			}
 		} else if (68 <= x && x < 84 && 20 <= y && y < 36) {
 			if (!myTile.getAccess().isPrivate()) {
 				myTile.setAccess(ISecureTile.AccessMode.PRIVATE);
-				playSound("random.click", 1.0F, 0.8F);
+				GuiBase.playSound("random.click", 1.0F, 0.8F);
 			}
 		}
 		return true;

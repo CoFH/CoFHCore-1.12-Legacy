@@ -36,29 +36,29 @@ public class TabRedstone extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		elementFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.redstoneControl"), posX + 20, posY + 6, headerColor);
-		elementFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.controlStatus") + ":", posX + 8, posY + 42, subheaderColor);
-		elementFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", posX + 8, posY + 66, subheaderColor);
+		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.redstoneControl"), posX + 20, posY + 6, headerColor);
+		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.controlStatus") + ":", posX + 8, posY + 42, subheaderColor);
+		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", posX + 8, posY + 66, subheaderColor);
 
 		if (myTile.getControl().isDisabled()) {
 			gui.drawButton("IconGunpowder", posX + 28, posY + 20, 1, 1);
 			gui.drawButton("IconRSTorchOff", posX + 48, posY + 20, 1, 0);
 			gui.drawButton("IconRSTorchOn", posX + 68, posY + 20, 1, 0);
-			elementFontRenderer.drawString(StringHelper.localize("info.cofh.redstoneControlOff"), posX + 16, posY + 54, textColor);
-			elementFontRenderer.drawString(TOOLTIPS[0], posX + 16, posY + 78, textColor);
+			GuiBase.guiFontRenderer.drawString(StringHelper.localize("info.cofh.redstoneControlOff"), posX + 16, posY + 54, textColor);
+			GuiBase.guiFontRenderer.drawString(TOOLTIPS[0], posX + 16, posY + 78, textColor);
 		} else {
-			elementFontRenderer.drawString(StringHelper.localize("info.cofh.redstoneControlOn"), posX + 16, posY + 54, textColor);
+			GuiBase.guiFontRenderer.drawString(StringHelper.localize("info.cofh.redstoneControlOn"), posX + 16, posY + 54, textColor);
 
 			if (myTile.getControl().isLow()) {
 				gui.drawButton("IconRedstone", posX + 28, posY + 20, 1, 0);
 				gui.drawButton("IconRSTorchOff", posX + 48, posY + 20, 1, 1);
 				gui.drawButton("IconRSTorchOn", posX + 68, posY + 20, 1, 0);
-				elementFontRenderer.drawString(TOOLTIPS[1], posX + 16, posY + 78, textColor);
+				GuiBase.guiFontRenderer.drawString(TOOLTIPS[1], posX + 16, posY + 78, textColor);
 			} else {
 				gui.drawButton("IconRedstone", posX + 28, posY + 20, 1, 0);
 				gui.drawButton("IconRSTorchOff", posX + 48, posY + 20, 1, 0);
 				gui.drawButton("IconRSTorchOn", posX + 68, posY + 20, 1, 1);
-				elementFontRenderer.drawString(TOOLTIPS[2], posX + 16, posY + 78, textColor);
+				GuiBase.guiFontRenderer.drawString(TOOLTIPS[2], posX + 16, posY + 78, textColor);
 			}
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -104,17 +104,17 @@ public class TabRedstone extends TabBase {
 		if (28 <= x && x < 44 && 20 <= y && y < 36) {
 			if (!myTile.getControl().isDisabled()) {
 				myTile.setControl(IRedstoneControl.ControlMode.DISABLED);
-				playSound("random.click", 1.0F, 0.4F);
+				GuiBase.playSound("random.click", 1.0F, 0.4F);
 			}
 		} else if (48 <= x && x < 64 && 20 <= y && y < 36) {
 			if (!myTile.getControl().isLow()) {
 				myTile.setControl(IRedstoneControl.ControlMode.LOW);
-				playSound("random.click", 1.0F, 0.6F);
+				GuiBase.playSound("random.click", 1.0F, 0.6F);
 			}
 		} else if (68 <= x && x < 84 && 20 <= y && y < 36) {
 			if (!myTile.getControl().isHigh()) {
 				myTile.setControl(IRedstoneControl.ControlMode.HIGH);
-				playSound("random.click", 1.0F, 0.8F);
+				GuiBase.playSound("random.click", 1.0F, 0.8F);
 			}
 		}
 		return true;
