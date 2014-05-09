@@ -1,7 +1,5 @@
 package cofh.updater;
 
-import com.sun.istack.internal.NotNull;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -24,7 +22,7 @@ public class UpdateCheckThread extends Thread {
 		this(mod, null);
 	}
 
-	public UpdateCheckThread(@NotNull IUpdatableMod mod, String releaseUrl) {
+	public UpdateCheckThread(IUpdatableMod mod, String releaseUrl) {
 
 		_mod = mod;
 		if (releaseUrl == null) {

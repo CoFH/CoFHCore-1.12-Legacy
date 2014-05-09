@@ -3,7 +3,6 @@ package cofh.mod;
 import cofh.updater.IUpdatableMod;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
-import com.sun.istack.internal.NotNull;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -36,7 +35,7 @@ public abstract class BaseMod implements IUpdatableMod {
 	protected final String _modid;
 	protected final Logger _log;
 
-	protected BaseMod(@NotNull Logger log) {
+	protected BaseMod(Logger log) {
 
 		String name = getModId();
 		_modid = name.toLowerCase();
