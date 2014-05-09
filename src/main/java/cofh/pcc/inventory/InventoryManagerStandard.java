@@ -1,6 +1,6 @@
 package cofh.pcc.inventory;
 
-import cofh.pcc.util.UtilInventory;
+import cofh.util.ItemHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,12 +20,14 @@ public class InventoryManagerStandard implements IInventoryManager {
 		_targetSide = targetSide;
 	}
 
-	protected boolean canAddItem(ItemStack stack, int slot) {
+	@Override
+	public boolean canAddItem(ItemStack stack, int slot) {
 
 		return _inv.isItemValidForSlot(slot, stack);
 	}
 
-	protected boolean canRemoveItem(ItemStack stack, int slot) {
+	@Override
+	public boolean canRemoveItem(ItemStack stack, int slot) {
 
 		return true;
 	}
@@ -56,7 +58,7 @@ public class InventoryManagerStandard implements IInventoryManager {
 					_inv.setInventorySlotContents(i, add);
 					_inv.markDirty();
 				}
-			} else if (UtilInventory.stacksEqual(s, stack)) {
+			} else if (ItemHelper.itemsEqualWithMetadata(s, stack)) {
 				ItemStack add = stack.copy();
 				add.stackSize = Math.min(quantitytoadd, maxStackSize - s.stackSize);
 
@@ -125,7 +127,7 @@ public class InventoryManagerStandard implements IInventoryManager {
 
 		for (int i : slots) {
 			ItemStack s = getSlotContents(i);
-			if (UtilInventory.stacksEqual(s, type) && canRemoveItem(s, i)) {
+			if (ItemHelper.itemsEqualWithMetadata(s, type) && canRemoveItem(s, i)) {
 				int toRemove = Math.min(s.stackSize, maxRemove);
 				s.stackSize -= toRemove;
 				ItemStack removed = s.copy();
@@ -152,7 +154,7 @@ public class InventoryManagerStandard implements IInventoryManager {
 
 		int quantity = 0;
 		for (ItemStack s : getContents().values()) {
-			if (UtilInventory.stacksEqual(s, type)) {
+			if (ItemHelper.itemsEqualWithMetadata(s, type)) {
 				quantity += s.stackSize;
 			}
 		}
@@ -169,7 +171,7 @@ public class InventoryManagerStandard implements IInventoryManager {
 
 		for (int i : slots) {
 			ItemStack s = _inv.getStackInSlot(i);
-			if (UtilInventory.stacksEqual(s, type)) {
+			if (ItemHelper.itemsEqualWithMetadata(s, type)) {
 				return i;
 			}
 		}

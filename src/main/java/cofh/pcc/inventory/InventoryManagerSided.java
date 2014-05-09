@@ -15,13 +15,13 @@ public class InventoryManagerSided extends InventoryManagerStandard {
 	}
 
 	@Override
-	protected boolean canAddItem(ItemStack stack, int slot) {
+	public boolean canAddItem(ItemStack stack, int slot) {
 
-		return _sidedInv.canInsertItem(slot, stack, _targetSide.ordinal());
+		return super.canAddItem(stack, slot) && _sidedInv.canInsertItem(slot, stack, _targetSide.ordinal());
 	}
 
 	@Override
-	protected boolean canRemoveItem(ItemStack stack, int slot) {
+	public boolean canRemoveItem(ItemStack stack, int slot) {
 
 		return _sidedInv.canExtractItem(slot, stack, _targetSide.ordinal());
 	}

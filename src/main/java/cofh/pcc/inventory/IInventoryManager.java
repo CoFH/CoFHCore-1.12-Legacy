@@ -6,6 +6,10 @@ import net.minecraft.item.ItemStack;
 
 public interface IInventoryManager {
 
+	public boolean canAddItem(ItemStack stack, int slot);
+
+	public boolean canRemoveItem(ItemStack stack, int slot);
+	
 	public ItemStack addItem(ItemStack stack);
 
 	public ItemStack removeItem(int maxRemove);
