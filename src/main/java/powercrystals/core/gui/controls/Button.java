@@ -1,11 +1,12 @@
 package powercrystals.core.gui.controls;
 
-import cofh.gui.element.ElementBase;
-
-import org.lwjgl.opengl.GL11;
+import cofh.gui.GuiBase;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
 import powercrystals.core.gui.Control;
 import powercrystals.core.gui.GuiRender;
 
@@ -75,7 +76,7 @@ public abstract class Button extends Control
 	@Override
 	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton)
 	{
-		ElementBase.playSound("random.click", 1.0F, 1.0F);
+		GuiBase.playSound("random.click", 1.0F, 1.0F);
 		if(mouseButton == 0)
 		{
 			onClick();
