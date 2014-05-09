@@ -1,11 +1,5 @@
 package cofh.gui.element;
 
-import java.util.List;
-
-import net.minecraft.client.gui.GuiScreen;
-
-import org.lwjgl.opengl.GL11;
-
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IReconfigurableSides;
 import cofh.api.tileentity.ISidedBlockTexture;
@@ -13,6 +7,12 @@ import cofh.gui.GuiBase;
 import cofh.render.RenderHelper;
 import cofh.util.BlockHelper;
 import cofh.util.StringHelper;
+
+import java.util.List;
+
+import net.minecraft.client.gui.GuiScreen;
+
+import org.lwjgl.opengl.GL11;
 
 public class TabConfiguration extends TabBase {
 

@@ -1,9 +1,10 @@
 package cofh.item;
 
+import cofh.util.ItemHelper;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
-import cofh.util.ItemHelper;
 
 public class ItemShearsAdv extends ItemShears {
 

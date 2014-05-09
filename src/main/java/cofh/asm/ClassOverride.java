@@ -1,14 +1,14 @@
 package cofh.asm;
 
-import java.io.DataInputStream;
-import java.io.File;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
 import codechicken.lib.asm.ObfMapping;
 import cofh.CoFHCore;
 import cpw.mods.fml.common.asm.transformers.DeobfuscationTransformer;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+
+import java.io.DataInputStream;
+import java.io.File;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class ClassOverride {
 

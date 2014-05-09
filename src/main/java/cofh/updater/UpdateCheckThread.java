@@ -1,13 +1,13 @@
 package cofh.updater;
 
+import com.sun.istack.internal.NotNull;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.spi.AbstractLogger;
-
-import com.sun.istack.internal.NotNull;
 
 public class UpdateCheckThread extends Thread {
 

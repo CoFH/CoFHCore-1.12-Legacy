@@ -1,5 +1,10 @@
 package cofh.render;
 
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.render.uv.IconTransformation;
+import codechicken.lib.render.uv.UV;
+import codechicken.lib.vec.Vector3;
+
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
@@ -8,11 +13,6 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
-
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.uv.IconTransformation;
-import codechicken.lib.render.uv.UV;
-import codechicken.lib.vec.Vector3;
 
 public class RenderUtils {
 

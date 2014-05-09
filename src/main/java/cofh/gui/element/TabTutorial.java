@@ -1,11 +1,11 @@
 package cofh.gui.element;
 
+import cofh.gui.GuiBase;
+import cofh.util.StringHelper;
+
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
-
-import cofh.gui.GuiBase;
-import cofh.util.StringHelper;
 
 public class TabTutorial extends TabBase {
 

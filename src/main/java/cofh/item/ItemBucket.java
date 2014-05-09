@@ -1,5 +1,7 @@
 package cofh.item;
 
+import cofh.util.fluid.BucketHandler;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -7,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.world.World;
-import cofh.util.fluid.BucketHandler;
 
 public class ItemBucket extends ItemBase {
 
@@ -16,6 +17,13 @@ public class ItemBucket extends ItemBase {
 	public ItemBucket() {
 
 		super();
+		setMaxStackSize(1);
+		setContainerItem(container);
+	}
+
+	public ItemBucket(String modName) {
+
+		super(modName);
 		setMaxStackSize(1);
 		setContainerItem(container);
 	}

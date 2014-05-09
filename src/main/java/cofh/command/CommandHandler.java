@@ -1,5 +1,8 @@
 package cofh.command;
 
+import cofh.util.StringHelper;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
+
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
@@ -8,8 +11,6 @@ import java.util.List;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
-import cofh.util.StringHelper;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 public class CommandHandler extends CommandBase {
 

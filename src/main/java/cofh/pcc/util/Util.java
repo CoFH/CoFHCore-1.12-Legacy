@@ -1,11 +1,12 @@
 package cofh.pcc.util;
 
+import cofh.util.position.BlockPosition;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cofh.util.position.BlockPosition;
 
 public class Util {
 

@@ -1,16 +1,16 @@
 package cofh.key;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
 import java.util.Map.Entry;
 
 import org.lwjgl.input.Keyboard;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class CoFHKey {
 

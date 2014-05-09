@@ -1,5 +1,8 @@
 package cofh.entity;
 
+import cofh.util.MathHelper;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -10,8 +13,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import cofh.util.MathHelper;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class DropHandler {
 

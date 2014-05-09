@@ -1,12 +1,13 @@
 package cofh.pcc.inventory;
 
+import cofh.pcc.util.UtilInventory;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
-import cofh.pcc.util.UtilInventory;
 
 public class InventoryManagerStandard implements IInventoryManager {
 

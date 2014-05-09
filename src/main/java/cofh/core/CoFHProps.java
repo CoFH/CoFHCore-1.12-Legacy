@@ -1,8 +1,8 @@
 package cofh.core;
 
-import java.io.File;
-
 import cofh.util.StringHelper;
+
+import java.io.File;
 
 public class CoFHProps {
 

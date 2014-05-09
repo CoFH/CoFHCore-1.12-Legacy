@@ -1,5 +1,7 @@
 package cofh.asm;
 
+import cofh.CoFHCore;
+
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
@@ -8,8 +10,6 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
-
-import cofh.CoFHCore;
 
 public class TransformerCore implements IClassTransformer {
 

@@ -1,5 +1,8 @@
 package cofh.item;
 
+import cofh.util.CoreUtils;
+import cofh.util.ServerHelper;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -8,8 +11,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import cofh.util.CoreUtils;
-import cofh.util.ServerHelper;
 
 public class ItemSickleAdv extends ItemToolAdv {
 

@@ -1,17 +1,5 @@
 package cofh.gui.client;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiPlayerInfo;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-
 import cofh.audio.SoundBase;
 import cofh.gui.GuiBaseAdv;
 import cofh.gui.GuiProps;
@@ -23,6 +11,18 @@ import cofh.network.PacketHandler;
 import cofh.social.RegistryFriends;
 import cofh.social.SocialPacket;
 import cofh.social.SocialPacket.Type;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiPlayerInfo;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 public class GuiFriendsList extends GuiBaseAdv {
 

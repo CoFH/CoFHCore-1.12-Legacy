@@ -1,5 +1,9 @@
 package cofh.command;
 
+import cofh.CoFHCore;
+import cofh.util.CoreUtils;
+import cofh.util.StringHelper;
+
 import gnu.trove.map.hash.THashMap;
 
 import java.util.Iterator;
@@ -12,9 +16,6 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.WorldServer;
-import cofh.CoFHCore;
-import cofh.util.CoreUtils;
-import cofh.util.StringHelper;
 
 public class CommandKillAll implements ISubCommand {
 

@@ -25,7 +25,7 @@ public class WorldServerProxy extends WorldServer {
 	}
 
 	public WorldServerProxy(WorldServer world) {
-		
+
 		// FIXME: this needs a custom constructor, as this one will break the game
 		super(world.func_73046_m(), world.getSaveHandler(), getPar2String(world), world.provider.dimensionId, getPar4WorldSettings(world), world.theProfiler);
 		this.proxiedWorld = world;
@@ -52,7 +52,7 @@ public class WorldServerProxy extends WorldServer {
 		isRemote = world.isRemote;
 		theChunkProviderServer = world.theChunkProviderServer;
 		levelSaving = world.levelSaving;
-	    //allPlayersSleeping = world.allPlayersSleeping;
+		// allPlayersSleeping = world.allPlayersSleeping;
 		customTeleporters = world.customTeleporters;
 	}
 }

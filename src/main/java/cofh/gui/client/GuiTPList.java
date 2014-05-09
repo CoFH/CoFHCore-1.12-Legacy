@@ -1,9 +1,10 @@
 package cofh.gui.client;
 
-import net.minecraft.inventory.Container;
-import net.minecraft.util.ResourceLocation;
 import cofh.gui.GuiBaseAdv;
 import cofh.gui.GuiProps;
+
+import net.minecraft.inventory.Container;
+import net.minecraft.util.ResourceLocation;
 
 public class GuiTPList extends GuiBaseAdv {
 

@@ -1,10 +1,5 @@
 package cofh.block;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
 import cofh.api.tileentity.ISecureTile;
 import cofh.api.tileentity.ISecureTile.AccessMode;
 import cofh.core.CoFHProps;
@@ -15,6 +10,12 @@ import cofh.social.RegistryFriends;
 import cofh.util.CoreUtils;
 import cofh.util.ServerHelper;
 import cpw.mods.fml.relauncher.Side;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
+import net.minecraft.network.Packet;
+import net.minecraft.tileentity.TileEntity;
 
 public abstract class TileCoFHBase extends TileEntity {
 

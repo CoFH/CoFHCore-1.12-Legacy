@@ -1,5 +1,12 @@
 package cofh.fluid;
 
+import cofh.render.IconRegistry;
+import cofh.render.particle.EntityDropParticleFX;
+import cofh.util.StringHelper;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
@@ -11,16 +18,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
-import cofh.render.IconRegistry;
-import cofh.render.particle.EntityDropParticleFX;
-import cofh.util.StringHelper;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 
 	String name = "";
+	String modName = "cofh";
 	protected float particleRed = 1.0F;
 	protected float particleGreen = 1.0F;
 	protected float particleBlue = 1.0F;
@@ -32,7 +34,19 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 		this.name = StringHelper.titleCase(name);
 
 		setRenderPass(1);
-		setBlockName("cofh.fluid." + name);
+		setBlockName(modName + ".fluid." + name);
+		displacements.put(this, false);
+	}
+
+	public BlockFluidCoFHBase(String modName, Fluid fluid, Material material, String name) {
+
+		super(fluid, material);
+
+		this.name = StringHelper.titleCase(name);
+		this.modName = modName;
+
+		setRenderPass(1);
+		setBlockName(modName + ".fluid." + name);
 		displacements.put(this, false);
 	}
 
@@ -45,7 +59,7 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 		return this;
 	}
 
-	public boolean initialize() {
+	public boolean preInit() {
 
 		return true;
 	}
@@ -53,8 +67,8 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 	@Override
 	public void registerBlockIcons(IIconRegister ir) {
 
-		IconRegistry.addIcon("Fluid" + name, "cofh:fluid/Fluid_" + name + "_Still", ir);
-		IconRegistry.addIcon("Fluid" + name + "1", "cofh:fluid/Fluid_" + name + "_Flow", ir);
+		IconRegistry.addIcon("Fluid" + name, modName + ":fluid/Fluid_" + name + "_Still", ir);
+		IconRegistry.addIcon("Fluid" + name + "1", modName + ":fluid/Fluid_" + name + "_Flow", ir);
 	}
 
 	@Override

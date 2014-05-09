@@ -2,6 +2,7 @@ package cofh.render;
 
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;

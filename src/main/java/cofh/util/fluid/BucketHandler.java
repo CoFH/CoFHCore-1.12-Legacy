@@ -1,7 +1,14 @@
 package cofh.util.fluid;
 
+import cofh.util.BlockWrapper;
+import cofh.util.ItemWrapper;
+import cpw.mods.fml.common.eventhandler.Event.Result;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -14,11 +21,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.IFluidBlock;
-import cofh.util.BlockWrapper;
-import cofh.util.ItemWrapper;
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class BucketHandler {
 
