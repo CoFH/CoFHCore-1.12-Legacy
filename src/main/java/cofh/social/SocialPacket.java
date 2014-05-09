@@ -1,12 +1,13 @@
 package cofh.social;
 
+import cofh.CoFHSocial;
+import cofh.network.CoFHPacket;
+import cofh.network.PacketHandler;
+
 import java.util.LinkedList;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import cofh.CoFHSocial;
-import cofh.network.CoFHPacket;
-import cofh.network.PacketHandler;
 
 public class SocialPacket extends CoFHPacket {
 

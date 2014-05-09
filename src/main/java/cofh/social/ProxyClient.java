@@ -1,7 +1,8 @@
 package cofh.social;
 
-import net.minecraft.client.Minecraft;
 import cofh.gui.client.GuiFriendsList;
+
+import net.minecraft.client.Minecraft;
 
 public class ProxyClient extends Proxy {
 

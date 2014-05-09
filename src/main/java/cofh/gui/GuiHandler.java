@@ -1,5 +1,7 @@
 package cofh.gui;
 
+import cpw.mods.fml.common.network.IGuiHandler;
+
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
@@ -11,7 +13,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.IGuiHandler;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class GuiHandler implements IGuiHandler {

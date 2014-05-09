@@ -1,5 +1,19 @@
 package cofh.block;
 
+import cofh.api.block.IBlockDebug;
+import cofh.api.block.IBlockInfo;
+import cofh.api.block.IDismantleable;
+import cofh.api.core.IInitializer;
+import cofh.api.energy.IEnergyHandler;
+import cofh.api.tileentity.IReconfigurableFacing;
+import cofh.api.tileentity.ISecureTile;
+import cofh.core.CoFHProps;
+import cofh.util.CoreUtils;
+import cofh.util.MathHelper;
+import cofh.util.StringHelper;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -20,19 +34,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.ForgeDirection;
-import cofh.api.block.IBlockDebug;
-import cofh.api.block.IBlockInfo;
-import cofh.api.block.IDismantleable;
-import cofh.api.core.IInitializer;
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.tileentity.IReconfigurableFacing;
-import cofh.api.tileentity.ISecureTile;
-import cofh.core.CoFHProps;
-import cofh.util.CoreUtils;
-import cofh.util.MathHelper;
-import cofh.util.StringHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebug, IBlockInfo, IDismantleable, IInitializer {
 

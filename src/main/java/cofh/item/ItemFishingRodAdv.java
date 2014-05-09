@@ -1,5 +1,10 @@
 package cofh.item;
 
+import cofh.CoFHCore;
+import cofh.entity.EntityCoFHFishHook;
+import cofh.util.ItemHelper;
+import com.google.common.collect.Multimap;
+
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,11 +12,6 @@ import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import cofh.CoFHCore;
-import cofh.entity.EntityCoFHFishHook;
-import cofh.util.ItemHelper;
-
-import com.google.common.collect.Multimap;
 
 public class ItemFishingRodAdv extends ItemFishingRod {
 

@@ -1,5 +1,8 @@
 package cofh.asm;
 
+import cofh.asm.relauncher.Implementable;
+import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +16,6 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
-
-import cofh.asm.relauncher.Implementable;
-import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 
 public class PCCASMTransformer implements IClassTransformer {
 

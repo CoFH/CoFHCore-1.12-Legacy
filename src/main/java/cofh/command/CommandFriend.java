@@ -1,5 +1,9 @@
 package cofh.command;
 
+import cofh.CoFHCore;
+import cofh.social.RegistryFriends;
+import cofh.util.StringHelper;
+
 import java.util.List;
 
 import net.minecraft.command.CommandBase;
@@ -7,9 +11,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
-import cofh.CoFHCore;
-import cofh.social.RegistryFriends;
-import cofh.util.StringHelper;
 
 public class CommandFriend implements ISubCommand {
 

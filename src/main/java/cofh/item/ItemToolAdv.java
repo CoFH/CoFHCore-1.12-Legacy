@@ -1,5 +1,7 @@
 package cofh.item;
 
+import cofh.util.ItemHelper;
+
 import gnu.trove.set.hash.THashSet;
 import gnu.trove.set.hash.TLinkedHashSet;
 
@@ -12,7 +14,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
-import cofh.util.ItemHelper;
 
 public abstract class ItemToolAdv extends ItemTool {
 

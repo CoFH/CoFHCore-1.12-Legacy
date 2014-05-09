@@ -1,9 +1,10 @@
 package cofh.item;
 
+import cofh.util.ItemHelper;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import cofh.util.ItemHelper;
 
 public class ItemArmorAdv extends ItemArmor {
 

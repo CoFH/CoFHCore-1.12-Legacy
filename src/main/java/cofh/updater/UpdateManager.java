@@ -4,13 +4,15 @@ import static net.minecraft.util.EnumChatFormatting.AQUA;
 import static net.minecraft.util.EnumChatFormatting.GOLD;
 import static net.minecraft.util.EnumChatFormatting.GRAY;
 import static net.minecraft.util.EnumChatFormatting.WHITE;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+
 import cofh.core.CoFHProps;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
 
 public class UpdateManager {
 

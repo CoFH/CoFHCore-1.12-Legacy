@@ -1,9 +1,10 @@
 package cofh.gui;
 
+import cofh.render.IconRegistry;
+
 import net.minecraft.inventory.Container;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import cofh.render.IconRegistry;
 
 public abstract class GuiBaseAdv extends GuiBase {
 

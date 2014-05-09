@@ -1,5 +1,14 @@
 package cofh.mod;
 
+import cofh.updater.IUpdatableMod;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.sun.istack.internal.NotNull;
+import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,17 +29,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.helpers.Loader;
 import org.apache.logging.log4j.spi.AbstractLogger;
-
-import cofh.updater.IUpdatableMod;
-
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.sun.istack.internal.NotNull;
-
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.FMLLaunchHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class BaseMod implements IUpdatableMod {
 

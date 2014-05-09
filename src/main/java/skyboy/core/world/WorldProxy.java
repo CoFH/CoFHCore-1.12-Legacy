@@ -1,10 +1,11 @@
 package skyboy.core.world;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.IChunkProvider;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class WorldProxy extends World {
 

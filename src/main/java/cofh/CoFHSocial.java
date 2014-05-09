@@ -1,12 +1,5 @@
 package cofh;
 
-import java.io.File;
-
-import net.minecraftforge.common.config.Configuration;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import cofh.command.CommandFriend;
 import cofh.command.CommandHandler;
 import cofh.core.CoFHProps;
@@ -22,6 +15,13 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+
+import java.io.File;
+
+import net.minecraftforge.common.config.Configuration;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(modid = "CoFHSocial", name = "CoFH Social", version = CoFHProps.VERSION, dependencies = "required-after:CoFHCore@[" + CoFHProps.VERSION + ",)")
 public class CoFHSocial {

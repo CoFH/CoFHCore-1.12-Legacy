@@ -1,5 +1,8 @@
 package cofh.util;
 
+import cofh.CoFHCore;
+import cofh.entity.EntityLightningBoltFake;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,8 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
-import cofh.CoFHCore;
-import cofh.entity.EntityLightningBoltFake;
 
 public class CoreUtils {
 

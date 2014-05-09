@@ -1,14 +1,16 @@
 package cofh.key;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
 import java.util.Map.Entry;
 
 import org.lwjgl.input.Keyboard;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 
 public class CoFHKey {
 
@@ -34,26 +36,14 @@ public class CoFHKey {
 		return false;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void keyPress(KeyInputEvent keyInput) {
 
 		for (Entry<String, IKeyBinding> entry : keybindModules.entrySet()) {
 			if (Keyboard.isKeyDown(entry.getValue().getKey())) {
-				if (entry.getValue().suppressRepeating()) {
-					if (keybindRepeat.get(entry.getValue().getUUID()) == false) {
-						keybindRepeat.put(entry.getValue().getUUID(), true);
-						if (entry.getValue().keyPress() && entry.getValue().hasServerSide()) {
-							new KeyPacket().sendKeyPacket(entry.getValue().getUUID());
-						}
-					}
-				} else {
-					if (entry.getValue().keyPress() && entry.getValue().hasServerSide()) {
-						new KeyPacket().sendKeyPacket(entry.getValue().getUUID());
-					}
-				}
-			} else {
-				if (entry.getValue().suppressRepeating()) {
-					keybindRepeat.put(entry.getValue().getUUID(), false);
+				if (entry.getValue().keyPress() && entry.getValue().hasServerSide()) {
+					new KeyPacket().sendKeyPacket(entry.getValue().getUUID());
 				}
 			}
 		}

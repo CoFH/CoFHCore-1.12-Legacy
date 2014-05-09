@@ -1,5 +1,7 @@
 package cofh.network;
 
+import cofh.util.FluidHelper;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -16,7 +18,6 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
-import cofh.util.FluidHelper;
 
 public abstract class CoFHPacket extends BasePacket {
 
@@ -312,6 +313,11 @@ public abstract class CoFHPacket extends BasePacket {
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 
 		datain = new DataInputStream(new ByteArrayInputStream(buffer.array()));
+		try {
+			datain.skipBytes(1);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

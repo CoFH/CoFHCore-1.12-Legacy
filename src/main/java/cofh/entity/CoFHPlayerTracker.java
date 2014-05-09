@@ -1,13 +1,14 @@
 package cofh.entity;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
 import cofh.core.CoFHProps;
 import cofh.util.ServerHelper;
 import cofh.util.StringHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
 
 public class CoFHPlayerTracker {
 

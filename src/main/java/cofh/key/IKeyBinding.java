@@ -12,8 +12,6 @@ public interface IKeyBinding {
 
 	public int getKey();
 
-	public boolean suppressRepeating();
-
 	public boolean hasServerSide();
 
 }

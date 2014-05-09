@@ -1,5 +1,17 @@
 package codechicken.core.launch;
 
+import argo.jdom.JdomParser;
+import argo.jdom.JsonNode;
+import argo.jdom.JsonRootNode;
+import argo.jdom.JsonStringNode;
+import argo.saj.InvalidSyntaxException;
+
+import cpw.mods.fml.common.versioning.ComparableVersion;
+import cpw.mods.fml.relauncher.FMLInjectionData;
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
+import cpw.mods.fml.relauncher.IFMLCallHook;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+
 import java.awt.Desktop;
 import java.awt.Dialog.ModalityType;
 import java.awt.Dimension;
@@ -34,7 +46,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
 import javax.swing.Box;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
@@ -46,18 +57,9 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import net.minecraft.launchwrapper.LaunchClassLoader;
+
 import sun.misc.URLClassPath;
 import sun.net.util.URLUtil;
-import argo.jdom.JdomParser;
-import argo.jdom.JsonNode;
-import argo.jdom.JsonRootNode;
-import argo.jdom.JsonStringNode;
-import argo.saj.InvalidSyntaxException;
-import cpw.mods.fml.common.versioning.ComparableVersion;
-import cpw.mods.fml.relauncher.FMLInjectionData;
-import cpw.mods.fml.relauncher.FMLLaunchHandler;
-import cpw.mods.fml.relauncher.IFMLCallHook;
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 /**
  * For autodownloading stuff. This is really unoriginal, mostly ripped off FML, credits to cpw.

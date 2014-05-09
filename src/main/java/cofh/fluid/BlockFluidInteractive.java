@@ -1,11 +1,13 @@
 package cofh.fluid;
 
+import cofh.util.BlockWrapper;
+
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.fluids.Fluid;
-import cofh.util.BlockWrapper;
 
 public class BlockFluidInteractive extends BlockFluidCoFHBase {
 
@@ -14,6 +16,11 @@ public class BlockFluidInteractive extends BlockFluidCoFHBase {
 	public BlockFluidInteractive(Fluid fluid, Material material, String name) {
 
 		super(fluid, material, name);
+	}
+
+	public BlockFluidInteractive(String modName, Fluid fluid, Material material, String name) {
+
+		super(modName, fluid, material, name);
 	}
 
 	public boolean addInteraction(Block preBlock, Block postBlock) {

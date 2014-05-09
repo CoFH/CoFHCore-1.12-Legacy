@@ -1,5 +1,7 @@
 package cofh.util;
 
+import cofh.api.transport.IEnderAttuned;
+
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
@@ -12,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraftforge.common.config.Configuration;
-import cofh.api.transport.IEnderAttuned;
 
 public class RegistryEnderAttuned {
 

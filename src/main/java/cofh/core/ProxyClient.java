@@ -1,14 +1,5 @@
 package cofh.core;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import cofh.gui.element.TabInfo;
 import cofh.gui.element.TabTutorial;
 import cofh.render.CoFHFontRender;
@@ -19,6 +10,16 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.TextureStitchEvent;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy {

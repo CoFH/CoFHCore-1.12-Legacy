@@ -1,5 +1,7 @@
 package cofh.command;
 
+import cofh.CoFHCore;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
-import cofh.CoFHCore;
 
 public class CommandTPS implements ISubCommand {
 

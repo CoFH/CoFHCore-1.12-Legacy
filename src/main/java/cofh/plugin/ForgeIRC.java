@@ -1,13 +1,14 @@
 package cofh.plugin;
 
+import cofh.CoFHCore;
+import cofh.util.StringHelper;
+
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.world.World;
-import cofh.CoFHCore;
-import cofh.util.StringHelper;
 
 public class ForgeIRC {
 

@@ -1,12 +1,12 @@
 package cofh.gui.element;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import cofh.api.tileentity.ISecureTile;
 import cofh.gui.GuiBase;
 import cofh.util.StringHelper;
+
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
 
 public class TabSecurity extends TabBase {
 

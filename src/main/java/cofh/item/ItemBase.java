@@ -1,5 +1,10 @@
 package cofh.item;
 
+import cofh.render.IconRegistry;
+import cofh.util.ItemHelper;
+import cofh.util.StringHelper;
+import cpw.mods.fml.common.registry.GameRegistry;
+
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
@@ -12,10 +17,6 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import cofh.render.IconRegistry;
-import cofh.util.ItemHelper;
-import cofh.util.StringHelper;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemBase extends Item {
 

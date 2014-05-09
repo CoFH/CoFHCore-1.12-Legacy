@@ -1,21 +1,20 @@
 package cofh.asm;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Map;
-
-import javax.swing.JEditorPane;
-import javax.swing.JOptionPane;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-
 import codechicken.core.launch.DepLoader;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import cpw.mods.fml.common.versioning.VersionParser;
 import cpw.mods.fml.relauncher.FMLInjectionData;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+
+import java.awt.Desktop;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Map;
+import javax.swing.JEditorPane;
+import javax.swing.JOptionPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 
 @IFMLLoadingPlugin.TransformerExclusions({ "cofh.asm" })
 public class LoadingPlugin implements IFMLLoadingPlugin {
