@@ -95,6 +95,9 @@
 			target="1.6" source="1.6"
 			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false">
 			<include name="**/*.java"/>
+		      <classpath>
+				<fileset file="${download.dir}/codechickenlib.jar"/>
+		      </classpath>
 		</javac>
 		<jar destfile="${download.dir}/CoFHLib.jar" compress="true" level="9" basedir="${compile.dir}"/>
 		<delete dir="${compile.dir}" failonerror="false"/>
