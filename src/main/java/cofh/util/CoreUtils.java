@@ -55,7 +55,6 @@ public class CoreUtils {
 	}
 
 	/* FILE UTILS */
-	@SuppressWarnings("resource")
 	public static void copyFileUsingChannel(File source, File dest) throws IOException {
 
 		FileChannel sourceChannel = null;

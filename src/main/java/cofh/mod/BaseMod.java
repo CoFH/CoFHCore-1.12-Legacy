@@ -123,8 +123,6 @@ public abstract class BaseMod implements IUpdatableMod {
 		LanguageRegistry.instance().injectLanguage(lang.intern(), parsedLangFile);
 	}
 
-	@SuppressWarnings("resource")
-	// close() in a finally isn't enough for eclipse
 	protected void loadLang() {
 
 		if (FMLLaunchHandler.side() == Side.CLIENT) {

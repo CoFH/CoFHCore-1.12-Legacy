@@ -6,7 +6,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class InventoryManager {
 
-	@SuppressWarnings("deprecation")
 	public static IInventoryManager create(IInventory inventory, ForgeDirection targetSide) {
 
 		if (inventory instanceof ISidedInventory) {
