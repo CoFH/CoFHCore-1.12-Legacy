@@ -33,7 +33,7 @@ public class CoFHTileInfoPacket extends CoFHPacket {
 
 		TileEntity tile = player.worldObj.getTileEntity(getInt(), getInt(), getInt());
 
-		if (tile instanceof ITilePacketHandler) {
+		if (tile instanceof ITileInfoPacketHandler) {
 			((ITileInfoPacketHandler) tile).handleTileInfoPacket(this, isServer, player);
 		} else {
 			// TODO: Throw error, bad packet
