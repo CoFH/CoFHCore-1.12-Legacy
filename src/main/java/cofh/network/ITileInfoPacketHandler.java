@@ -1,9 +1,9 @@
 package cofh.network;
 
-import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.entity.player.EntityPlayer;
 
 public interface ITileInfoPacketHandler {
 
-	public void handleTileInfoPacket(CoFHPacket payload, ChannelHandlerContext handler);
+	public void handleTileInfoPacket(CoFHPacket payload, boolean isServer, EntityPlayer thePlayer);
 
 }
