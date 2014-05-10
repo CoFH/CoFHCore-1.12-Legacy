@@ -34,6 +34,7 @@ public class CoFHTileInfoPacket extends CoFHPacket {
 		handlePacket(player, true);
 	}
 
+	@Override
 	public void handlePacket(EntityPlayer player, boolean isServer) {
 
 		TileEntity tile = player.worldObj.getTileEntity(getInt(), getInt(), getInt());

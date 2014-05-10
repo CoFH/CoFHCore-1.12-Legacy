@@ -1,49 +1,46 @@
 package cofh.asm;
 
+import cpw.mods.fml.common.asm.transformers.AccessTransformer;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-import cpw.mods.fml.common.asm.transformers.AccessTransformer;
+public class PCCAccessTransformer extends AccessTransformer {
 
-public class PCCAccessTransformer extends AccessTransformer
-{
 	private static PCCAccessTransformer instance;
 	private static List<String> mapFileList = new LinkedList<String>();
-	
-	public PCCAccessTransformer() throws IOException
-	{
+
+	public PCCAccessTransformer() throws IOException {
+
 		super();
 		instance = this;
-		
+
 		mapFileList.add("CoFH_at.cfg");
-		
-		for(String file : mapFileList)
-		{
+
+		for (String file : mapFileList) {
 			readMapFile(file);
 		}
 	}
-	
-	public static void addTransformerMap(String mapFile)
-	{
-		if(instance == null)
+
+	public static void addTransformerMap(String mapFile) {
+
+		if (instance == null) {
 			mapFileList.add(mapFile);
-		else
+		} else {
 			instance.readMapFile(mapFile);
+		}
 	}
-	
-	private void readMapFile(String mapFile)
-	{
+
+	private void readMapFile(String mapFile) {
+
 		System.out.println("Adding Accesstransformer map: " + mapFile);
-		try
-		{
+		try {
 			Method parentMapFile = AccessTransformer.class.getDeclaredMethod("readMapFile", String.class);
 			parentMapFile.setAccessible(true);
 			parentMapFile.invoke(this, mapFile);
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}

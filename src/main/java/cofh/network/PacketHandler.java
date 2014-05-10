@@ -175,14 +175,18 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 	public static void sendToAllAround(BasePacket message, TileEntity theTile) {
 
 		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(new TargetPoint(theTile.getWorldObj().provider.dimensionId, theTile.xCoord, theTile.yCoord, theTile.zCoord, CoFHProps.NETWORK_UPDATE_RANGE));
+		instance.channels
+				.get(Side.SERVER)
+				.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
+				.set(new TargetPoint(theTile.getWorldObj().provider.dimensionId, theTile.xCoord, theTile.yCoord, theTile.zCoord, CoFHProps.NETWORK_UPDATE_RANGE));
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendToAllAround(BasePacket message, World world, int x, int y, int z) {
 
 		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(new TargetPoint(world.provider.dimensionId, x, y, z, CoFHProps.NETWORK_UPDATE_RANGE));
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
+				.set(new TargetPoint(world.provider.dimensionId, x, y, z, CoFHProps.NETWORK_UPDATE_RANGE));
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 

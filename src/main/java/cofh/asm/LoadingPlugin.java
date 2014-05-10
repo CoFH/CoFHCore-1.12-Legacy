@@ -1,6 +1,5 @@
 package cofh.asm;
 
-import codechicken.core.launch.DepLoader;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import cpw.mods.fml.common.versioning.VersionParser;
@@ -31,7 +30,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 
 	public LoadingPlugin() {
 
-		//DepLoader.load();
+		// DepLoader.load();
 	}
 
 	public static void attemptClassLoad(String className, String failMessage) {
