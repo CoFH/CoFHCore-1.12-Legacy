@@ -160,11 +160,9 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 
 	public static void sendTo(BasePacket message, EntityPlayer player) {
 
-		if (player instanceof EntityPlayerMP) {
-			instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
-			instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
-			instance.channels.get(Side.SERVER).writeAndFlush(message);
-		}
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
+		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendToAllAround(BasePacket message, NetworkRegistry.TargetPoint point) {

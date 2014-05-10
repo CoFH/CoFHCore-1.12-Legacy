@@ -34,6 +34,7 @@ public class CoFHTilePacket extends CoFHPacket {
 		handlePacket(player, true);
 	}
 
+	@Override
 	public void handlePacket(EntityPlayer player, boolean isServer) {
 
 		TileEntity tile = player.worldObj.getTileEntity(getInt(), getInt(), getInt());
@@ -43,5 +44,10 @@ public class CoFHTilePacket extends CoFHPacket {
 		} else {
 			// TODO: Throw error, bad packet
 		}
+	}
+
+	public static CoFHTilePacket newPacket(TileEntity theTile) {
+
+		return new CoFHTilePacket(theTile);
 	}
 }

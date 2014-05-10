@@ -45,7 +45,7 @@ public class CoFHTileInfoPacket extends CoFHPacket {
 		}
 	}
 
-	public static CoFHTileInfoPacket getTileInfoPacket(TileEntity theTile) {
+	public static CoFHTileInfoPacket newPacket(TileEntity theTile) {
 
 		return new CoFHTileInfoPacket(theTile);
 	}
