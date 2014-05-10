@@ -27,12 +27,11 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	static {
 		attemptClassLoad("cofh.asm.TransformerCore", "Failed to find Main Transformer! Critical Issue!");
 		attemptClassLoad("cofh.asm.PCCASMTransformer", "Failed to find Secondary Transformer! Critical Issue!");
-		attemptClassLoad("cofh.asm.TransformerMasquerade", "Failed to find SubCoreMod Masquerade!");
 	}
 
 	public LoadingPlugin() {
 
-		DepLoader.load();
+		//DepLoader.load();
 	}
 
 	public static void attemptClassLoad(String className, String failMessage) {
@@ -48,7 +47,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	@Override
 	public String getAccessTransformerClass() {
 
-		return null;
+		return "cofh.asm.PCCAccessTransformer";
 	}
 
 	public static void versionCheck(String reqVersion, String mod) {

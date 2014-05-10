@@ -25,7 +25,7 @@ public class TransformerCore implements IClassTransformer {
 			cr.accept(cn, 0);
 
 			for (FieldNode theNode : cn.fields) {
-				theNode.access &= ~3; // low 2 bits are public/private/protected/default
+				theNode.access &= ~7; // low 3 bits are public/private/protected/default
 				theNode.access |= Opcodes.ACC_PUBLIC;
 			}
 
