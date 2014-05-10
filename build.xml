@@ -124,6 +124,13 @@
 		<!-- Cleanup -->
 		<delete dir="${apiclasses.dir}"/>
 		<delete dir="${classes.dir}"/>
+		<delete>
+			<fileset dir="${dist.dir}">
+				<exclude name="${build.name}${build.full}${build.number}.jar"/>
+				<exclude name="${build.name}${build.full}dev-${build.number}.jar"/>
+				<exclude name="${build.name}-API${build.full}${build.number}.zip"/>
+			</fileset>
+		</delete>
 	</target>
 
 	<macrodef name="install-lite">
