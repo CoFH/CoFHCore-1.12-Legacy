@@ -14,7 +14,7 @@ public class KeyPacket extends CoFHPacket {
 	}
 
 	@Override
-	public void handlePacket(EntityPlayer player) {
+	public void handlePacket(EntityPlayer player, boolean isServer) {
 
 		String bindUUID = getString();
 		if (CoFHKey.serverBinds.containsKey(bindUUID)) {

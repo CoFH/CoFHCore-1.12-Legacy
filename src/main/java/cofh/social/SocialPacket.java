@@ -17,7 +17,7 @@ public class SocialPacket extends CoFHPacket {
 	}
 
 	@Override
-	public void handlePacket(EntityPlayer player) {
+	public void handlePacket(EntityPlayer player, boolean isServer) {
 
 		switch (Type.values()[getByte()]) {
 		case FRIEND_LIST:

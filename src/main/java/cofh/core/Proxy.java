@@ -2,6 +2,8 @@ package cofh.core;
 
 import cofh.CoFHCore;
 import cofh.key.KeyPacket;
+import cofh.network.CoFHTileInfoPacket;
+import cofh.network.CoFHTilePacket;
 import cofh.social.SocialPacket;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -131,6 +133,8 @@ public class Proxy {
 
 		SocialPacket.initialize();
 		KeyPacket.initialize();
+		CoFHTileInfoPacket.initialize();
+		CoFHTilePacket.initialize();
 	}
 
 }

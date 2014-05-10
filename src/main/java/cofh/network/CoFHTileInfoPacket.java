@@ -5,6 +5,11 @@ import net.minecraft.tileentity.TileEntity;
 
 public class CoFHTileInfoPacket extends CoFHPacket {
 
+	public static void initialize() {
+
+		PacketHandler.instance.registerPacket(CoFHTileInfoPacket.class);
+	}
+
 	public CoFHTileInfoPacket() {
 
 	}

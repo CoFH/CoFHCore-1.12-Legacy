@@ -26,7 +26,6 @@ public class PlayerFake extends EntityPlayerMP {
 	public ItemStack previousItem = null;
 	public String myName = "[CoFH]";
 
-	@SuppressWarnings("unused")
 	public PlayerFake(WorldServer world) {
 
 		super(FMLCommonHandler.instance().getMinecraftServerInstance(), world, NAME, new ItemInWorldManager(world));

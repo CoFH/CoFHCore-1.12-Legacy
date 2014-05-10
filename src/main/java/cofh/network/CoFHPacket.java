@@ -323,16 +323,16 @@ public abstract class CoFHPacket extends BasePacket {
 	@Override
 	public void handleClientSide(EntityPlayer player) {
 
-		handlePacket(player);
+		handlePacket(player, false);
 	}
 
 	@Override
 	public void handleServerSide(EntityPlayer player) {
 
-		handlePacket(player);
+		handlePacket(player, true);
 	}
 
-	public void handlePacket(EntityPlayer player) {
+	public void handlePacket(EntityPlayer player, boolean isServer) {
 
 	}
 
