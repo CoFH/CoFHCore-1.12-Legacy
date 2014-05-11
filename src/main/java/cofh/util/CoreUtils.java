@@ -2,6 +2,7 @@ package cofh.util;
 
 import cofh.CoFHCore;
 import cofh.entity.EntityLightningBoltFake;
+import cofh.util.position.BlockPosition;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,11 +10,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
@@ -53,8 +58,35 @@ public class CoreUtils {
 
 		return CoFHCore.proxy.isOp(senderName) || senderName.equals("Server");
 	}
+	
+	/* BLOCK UTILS */
+	public static boolean isBlockUnbreakable(World world, int x, int y, int z) {
+
+		Block b = world.getBlock(x, y, z);
+		return b instanceof BlockLiquid || b.getBlockHardness(world, x, y, z) < 0;
+	}
+
+	public static boolean isRedstonePowered(World world, int x, int y, int z) {
+
+		if (world.isBlockIndirectlyGettingPowered(x, y, z)) {
+			return true;
+		}
+		for (BlockPosition bp : new BlockPosition(x, y, z).getAdjacent(false)) {
+			Block block = world.getBlock(bp.x, bp.y, bp.z);
+			if (block.equals(Blocks.redstone_wire) && block.isProvidingStrongPower(world, bp.x, bp.y, bp.z, 1) > 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isRedstonePowered(TileEntity te) {
+
+		return isRedstonePowered(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
+	}
 
 	/* FILE UTILS */
+	@SuppressWarnings("resource")
 	public static void copyFileUsingChannel(File source, File dest) throws IOException {
 
 		FileChannel sourceChannel = null;
