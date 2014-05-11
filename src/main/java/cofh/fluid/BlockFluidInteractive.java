@@ -44,6 +44,11 @@ public class BlockFluidInteractive extends BlockFluidCoFHBase {
 		return true;
 	}
 
+	public boolean addInteraction(Block preBlock, int preMeta, Block postBlock) {
+
+		return addInteraction(preBlock, preMeta, postBlock, 0);
+	}
+
 	public boolean hasInteraction(Block preBlock, int preMeta) {
 
 		return collisionMap.containsKey(BlockWrapper.getHashCode(preBlock, preMeta)) || collisionMap.containsKey(BlockWrapper.getHashCode(preBlock, -1));

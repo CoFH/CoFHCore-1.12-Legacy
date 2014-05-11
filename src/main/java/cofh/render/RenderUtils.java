@@ -130,6 +130,7 @@ public class RenderUtils {
 	public static void renderMask(IIcon maskIcon, IIcon subIcon/* , Colour maskColor */, ItemRenderType type) {
 
 		if (maskIcon == null || subIcon == null) {
+			System.out.println("fail");
 			return;
 		}
 		// if (maskColor == null)
