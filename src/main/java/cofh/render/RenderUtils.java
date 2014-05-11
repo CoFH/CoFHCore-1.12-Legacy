@@ -121,20 +121,10 @@ public class RenderUtils {
 		CCRenderState.useNormals = true;
 	}
 
-	@Deprecated
-	// to find out where this is called (may be removed
 	public static void beforeWorldRender(IBlockAccess world, int x, int y, int z) {
 
 		CCRenderState.reset();
 		CCRenderState.setBrightness(world, x, y, z);
-		// CCRenderState.useModelColours(true);
-	}
-
-	@Deprecated
-	// to find out where this is called (may be removed)
-	public static void afterWorldRender(IBlockAccess world, int x, int y, int z) {
-
-		// CCRenderState.useModelColours(false);
 	}
 
 	public static void renderMask(IIcon maskIcon, IIcon subIcon/* , Colour maskColor */, ItemRenderType type) {
