@@ -6,6 +6,7 @@ import cofh.api.block.IDismantleable;
 import cofh.api.core.IInitializer;
 import cofh.api.core.ISecurable;
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.tileentity.IPlacedTile;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.ITileDebug;
 import cofh.api.tileentity.ITileInfo;
@@ -90,6 +91,9 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 				reconfig.setFacing(0);
 				return;
 			}
+		}
+		if (tile instanceof IPlacedTile) {
+			((IPlacedTile) tile).tilePlaced();
 		}
 	}
 
