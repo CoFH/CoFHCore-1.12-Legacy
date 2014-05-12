@@ -361,7 +361,9 @@
 	</target>
 
 	<target name="rebuild">
-		<delete file="${forge.jar}"/>
+		<delete file="${forge.jar}" failonerror="false"/>
+		<delete file="${forge.dir}"/>
+		<delete file="${download.dir}"/>
 		<antcall target="install"/>
 	</target>
 
