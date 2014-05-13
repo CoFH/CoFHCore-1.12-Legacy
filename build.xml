@@ -260,7 +260,7 @@
 					}
 					if (out.length > 0) {
 						var os = new PrintWriter(project.getProperty("classes.dir") + path + ".languages");
-						os.write(out.substring(0, out.length - 2));
+						os.write("["+out.substring(0, out.length - 2)+"]");
 						os.flush();
 						os.close();
 					}
@@ -362,8 +362,8 @@
 
 	<target name="rebuild">
 		<delete file="${forge.jar}" failonerror="false"/>
-		<delete file="${forge.dir}"/>
-		<delete file="${download.dir}"/>
+		<delete dir="${forge.dir}"/>
+		<delete dir="${download.dir}"/>
 		<antcall target="install"/>
 	</target>
 

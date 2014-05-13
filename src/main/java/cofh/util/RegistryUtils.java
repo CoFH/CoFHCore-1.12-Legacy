@@ -11,7 +11,9 @@ public class RegistryUtils {
 		
 		Object oldThing = registry.getObject(name);
 		int id = registry.getIDForObject(oldThing);
-		((BiMap)registry.registryObjects).forcePut(name, object);
+		BiMap map = ((BiMap)registry.registryObjects);
 		registry.underlyingIntegerMap.func_148746_a(object, id);
+		map.remove(name);
+		map.forcePut(name, object);
 	}
 }

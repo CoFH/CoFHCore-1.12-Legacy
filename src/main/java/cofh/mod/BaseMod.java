@@ -52,7 +52,10 @@ public abstract class BaseMod implements IUpdatableMod {
 	protected String getConfigBaseFolder() {
 
 		String base = getClass().getPackage().getName();
-		return base.substring(0, base.indexOf('.'));
+		int i = base.indexOf('.');
+		if (i >= 0)
+			return base.substring(0, base.indexOf('.'));
+		return "";
 	}
 
 	protected void setConfigFolderBase(File folder) {
@@ -123,6 +126,7 @@ public abstract class BaseMod implements IUpdatableMod {
 		LanguageRegistry.instance().injectLanguage(lang.intern(), parsedLangFile);
 	}
 
+	@SuppressWarnings("resource")
 	protected void loadLang() {
 
 		if (FMLLaunchHandler.side() == Side.CLIENT) {
@@ -157,7 +161,8 @@ public abstract class BaseMod implements IUpdatableMod {
 			_log.catching(Level.WARN, _);
 		} finally {
 			try {
-				s.close();
+				if (s != null)
+					s.close();
 			} catch (IOException _) {
 				_log.catching(Level.WARN, _);
 			}
@@ -180,14 +185,15 @@ public abstract class BaseMod implements IUpdatableMod {
 
 			_path = _modid + ":language/";
 			loadAllLanguages(manager);
+			// TODO: expand this to account for languages in all loaded resource packs
 		}
 
 		@Override
 		public void onResourceManagerReload(IResourceManager manager) {
 
-			String lang = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode();
-
 			try {
+				String lang = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode();
+
 				try {
 					loadLanguageFile(lang, manager.getResource(new ResourceLocation(_path + lang + ".lang")).getInputStream());
 				} catch (Throwable _) {

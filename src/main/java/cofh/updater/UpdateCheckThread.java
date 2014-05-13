@@ -63,7 +63,9 @@ public class UpdateCheckThread extends Thread {
 		} catch (Exception e) {
 			Level level = Level.WARN;
 			String base = _mod.getClass().getPackage().getName();
-			base = base.substring(0, base.indexOf('.'));
+			int i = base.indexOf('.');
+			if (i > 0)
+				base = base.substring(0, i);
 
 			if (base.equals("cofh") || base.equals("powercrystals")) {
 				level = Level.ERROR;
