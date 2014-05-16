@@ -162,11 +162,11 @@
 		
 		<depend srcdir="${sources.dir}" destdir="${compile.dir}"
 			cache="${forgebuild.dir}/tmp/depcache" closure="true">
-			<include name="${class.pckg}/**/*.java"/>
+			<include name="/**/*.java"/>
 		</depend>
 		<javac srcdir="${sources.dir}" destdir="${compile.dir}" target="1.6" source="1.6"
 			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false">
-			<include name="${class.pckg}/**/*.java"/>
+			<include name="/**/*.java"/>
 		</javac>
 		
 		<!-- Dev jar -->

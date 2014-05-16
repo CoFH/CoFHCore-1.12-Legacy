@@ -44,7 +44,7 @@ public class RegistryUtils {
 			texture = texture.substring(0, i) + ":textures/items/" + texture.substring(i + 1, texture.length());
 		else
 			texture = "textures/items/" + texture;
-		return textureExists(texture);
+		return textureExists(texture + ".png");
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -56,6 +56,6 @@ public class RegistryUtils {
 			texture = texture.substring(0, i) + ":textures/blocks/" + texture.substring(i + 1, texture.length());
 		else
 			texture = "textures/items/" + texture;
-		return textureExists(texture);
+		return textureExists(texture + ".png");
 	}
 }
