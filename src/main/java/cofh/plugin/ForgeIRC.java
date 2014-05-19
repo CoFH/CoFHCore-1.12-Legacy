@@ -47,9 +47,7 @@ public class ForgeIRC {
 
 	/* TPS */
 	private static DecimalFormat floatfmt = new DecimalFormat("##0.00");
-	@SuppressWarnings("unused")
 	private static final int MAX_TPS = 20;
-	@SuppressWarnings("unused")
 	private static final int MIN_TICKMS = 50;
 
 	public static List<String> commandTps(String[] arguments) {

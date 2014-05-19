@@ -58,7 +58,7 @@ public class CoreUtils {
 
 		return CoFHCore.proxy.isOp(senderName) || senderName.equals("Server");
 	}
-	
+
 	/* BLOCK UTILS */
 	public static boolean isBlockUnbreakable(World world, int x, int y, int z) {
 
@@ -86,7 +86,6 @@ public class CoreUtils {
 	}
 
 	/* FILE UTILS */
-	@SuppressWarnings("resource")
 	public static void copyFileUsingChannel(File source, File dest) throws IOException {
 
 		FileChannel sourceChannel = null;

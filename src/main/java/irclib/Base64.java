@@ -2,9 +2,7 @@ package irclib;
 
 public class Base64 {
 
-	@SuppressWarnings("unused")
 	private static final String base64code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	@SuppressWarnings("unused")
 	private static final int splitLinesAt = 76;
 
 	public static byte[] zeroPad(int length, byte[] bytes) {

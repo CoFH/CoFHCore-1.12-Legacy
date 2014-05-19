@@ -53,8 +53,9 @@ public abstract class BaseMod implements IUpdatableMod {
 
 		String base = getClass().getPackage().getName();
 		int i = base.indexOf('.');
-		if (i >= 0)
+		if (i >= 0) {
 			return base.substring(0, base.indexOf('.'));
+		}
 		return "";
 	}
 
@@ -126,7 +127,6 @@ public abstract class BaseMod implements IUpdatableMod {
 		LanguageRegistry.instance().injectLanguage(lang.intern(), parsedLangFile);
 	}
 
-	@SuppressWarnings("resource")
 	protected void loadLang() {
 
 		if (FMLLaunchHandler.side() == Side.CLIENT) {
@@ -161,8 +161,9 @@ public abstract class BaseMod implements IUpdatableMod {
 			_log.catching(Level.WARN, _);
 		} finally {
 			try {
-				if (s != null)
+				if (s != null) {
 					s.close();
+				}
 			} catch (IOException _) {
 				_log.catching(Level.WARN, _);
 			}
