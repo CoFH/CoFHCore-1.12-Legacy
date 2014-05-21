@@ -48,4 +48,5 @@ public class CoFHProps {
 	private CoFHProps() {
 
 	}
+
 }
