@@ -26,6 +26,7 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 	protected float particleRed = 1.0F;
 	protected float particleGreen = 1.0F;
 	protected float particleBlue = 1.0F;
+	protected boolean shouldDisplaceFluids = false;
 
 	public BlockFluidCoFHBase(Fluid fluid, Material material, String name) {
 
@@ -50,6 +51,11 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 		displacements.put(this, false);
 	}
 
+	public BlockFluidCoFHBase setParticleColor(int c) {
+
+		return setParticleColor(((c >> 16) & 255) / 255f, ((c >> 8) & 255) / 255f, ((c >> 0) & 255) / 255f);
+	}
+
 	public BlockFluidCoFHBase setParticleColor(float particleRed, float particleGreen, float particleBlue) {
 
 		this.particleRed = particleRed;
@@ -62,6 +68,13 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 	public boolean preInit() {
 
 		return true;
+	}
+	
+	public BlockFluidCoFHBase setDisplaceFluids(boolean a)
+	{
+
+		this.shouldDisplaceFluids = a;
+		return this;
 	}
 
 	@Override
@@ -100,7 +113,7 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 	@Override
 	public boolean canDisplace(IBlockAccess world, int x, int y, int z) {
 
-		if (world.getBlock(x, y, z).getMaterial().isLiquid()) {
+		if (!shouldDisplaceFluids && world.getBlock(x, y, z).getMaterial().isLiquid()) {
 			return false;
 		}
 		return super.canDisplace(world, x, y, z);
@@ -109,7 +122,7 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 	@Override
 	public boolean displaceIfPossible(World world, int x, int y, int z) {
 
-		if (world.getBlock(x, y, z).getMaterial().isLiquid()) {
+		if (!shouldDisplaceFluids && world.getBlock(x, y, z).getMaterial().isLiquid()) {
 			return false;
 		}
 		return super.displaceIfPossible(world, x, y, z);

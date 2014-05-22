@@ -14,11 +14,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
@@ -127,6 +129,7 @@ public abstract class BaseMod implements IUpdatableMod {
 		LanguageRegistry.instance().injectLanguage(lang.intern(), parsedLangFile);
 	}
 
+	@SuppressWarnings("resource")
 	protected void loadLang() {
 
 		if (FMLLaunchHandler.side() == Side.CLIENT) {
@@ -186,7 +189,6 @@ public abstract class BaseMod implements IUpdatableMod {
 
 			_path = _modid + ":language/";
 			loadAllLanguages(manager);
-			// TODO: expand this to account for languages in all loaded resource packs
 		}
 
 		@Override
@@ -209,7 +211,15 @@ public abstract class BaseMod implements IUpdatableMod {
 		public void loadAllLanguages(IResourceManager manager) {
 
 			try {
-				for (String lang : loadLanguageList(manager.getResource(new ResourceLocation(_path + ".languages")).getInputStream())) {
+				LinkedList<String> langs = new LinkedList<String>();
+				List<IResource> files = manager.getAllResources(new ResourceLocation(_path + ".languages"));
+				for (IResource lang : files)
+					try {
+						loadLanguageList(lang.getInputStream(), langs);
+					} catch (Throwable _) {
+						_log.warn(AbstractLogger.CATCHING_MARKER, "A resource pack's .language file is invalid.", _);
+					}
+				for (String lang : langs) {
 					try {
 						loadLanguageFile(lang, manager.getResource(new ResourceLocation(_path + lang + ".lang")).getInputStream());
 					} catch (Throwable _) {
