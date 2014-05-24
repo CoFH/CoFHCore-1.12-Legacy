@@ -17,8 +17,8 @@ public class PCCAccessTransformer extends AccessTransformer {
 		super();
 		instance = this;
 
-		mapFileList.add("cofhlib_at.cfg");
 		mapFileList.add("CoFH_at.cfg");
+		// CoFH_at.cfg must also contain all entries from cofhlib_at.cfg
 
 		for (String file : mapFileList) {
 			readMapFile(file);
