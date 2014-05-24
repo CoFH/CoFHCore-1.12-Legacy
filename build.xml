@@ -34,8 +34,9 @@
 	<property name="lib.dir" value="${forgebuild.dir}/libs"/>
 	<property name="sources.dir" value="${forgebuild.dir}/sources/minecraft"/>
 	<property name="transformers.dir" value="${forge.dir}/src/main/resources/"/>
-	<property name="forge.jar" value="${build.dir}/.gradle/caches/minecraft/net/minecraftforge/forge/${forge.version}/forgeSrc-${forge.version}.jar"/>
-	<property name="reobf.jar" value="${lib.dir}/modid-1.0.jar"/>
+	<property name="forge.stsh" value="${build.dir}/.gradle/caches/minecraft/net/minecraftforge/forge/${forge.version}"/>
+	<property name="forge.jar" value="${forge.stsh}/forgeSrc-${forge.version}.jar"/>
+	<property name="reobf.cmd" value="${download.dir}/bon.jar"/>
 	<property name="forge.url" value="http://files.minecraftforge.net/maven/net/minecraftforge/forge/${forge.version}/forge-${forge.version}-src.zip"/>
 	
 	<!-- Enforce some paths -->
@@ -64,7 +65,7 @@
 	<!-- Task skipping -->
 	<target name="properties">
 		<available property="has.api" file="${src.dir}/${class.pckg}/api"/>
-		<available property="already.compiled" file="${reobf.jar}"/>
+		<available property="bon.exists" file="${reobf.cmd}"/>
 		<available property="forge.exists" file="${download.dir}/forge-${forge.version}-src.zip"/>
 		<condition property="forge.already.installed">
 			<available file="${forge.jar}" type="file"/>
@@ -112,15 +113,13 @@
 	</target>
 	
 	<macrodef name="move-transformers"><sequential>
-		
+
 		<copy file="${resources.dir}/CoFH_at.cfg" todir="${transformers.dir}"/>
 		
 	</sequential></macrodef>
 	
 	<!-- Building process -->
 	<target name="install" depends="build">
-		<move file="${reobf.jar}" tofile="${dist.dir}/${build.name}${build.full}${build.number}.jar"/>
-		
 		<!-- Cleanup -->
 		<delete dir="${apiclasses.dir}"/>
 		<delete dir="${classes.dir}"/>
@@ -144,46 +143,45 @@
 				<fileset dir="${resources.dir}"/>
 			</copy>
 			<update-languages/>
-			<manifest file="${classes.dir}/MANIFEST.MF">
-				<attribute name="FMLCorePlugin" value="cofh.asm.LoadingPlugin"/>
-				<attribute name="FMLCorePluginContainsFMLMod" value="true"/>
-			</manifest>
 			<jar destfile="${dist.dir}/${build.name}${build.full}@{build}.jar"
-				compress="true" level="9" basedir="${classes.dir}"
-				manifest="${classes.dir}/MANIFEST.MF">
-				<exclude name="MANIFEST.MF"/>
-			</jar>
+				compress="true" level="9" basedir="${classes.dir}"/>
 		</sequential>
 	</macrodef>
 
-	<target name="build" depends="extract-dependencies,get-build-number,copy-sources" unless="already.compiled">
+	<target name="build" depends="extract-dependencies,get-build-number,copy-sources">
 		<!-- Recompile -->
+		<echo message="Compiling..."/>
 		<mkdir dir="${compile.dir}"/>
 		
 		<depend srcdir="${sources.dir}" destdir="${compile.dir}"
 			cache="${forgebuild.dir}/tmp/depcache" closure="true">
-			<include name="/**/*.java"/>
+			<include name="**/*.java"/>
 		</depend>
 		<javac srcdir="${sources.dir}" destdir="${compile.dir}" target="1.6" source="1.6"
 			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false">
-			<include name="/**/*.java"/>
+			<include name="**/*.java"/>
 		</javac>
 		
 		<!-- Dev jar -->
+		<echo message="Building jar..."/>
 		<local name="build"/><property name="build" value="dev-${build.number}"/>
 		<install-lite build="${build}"/>
 
 		<!-- Reobf -->
-		<copy file="${dist.dir}/${build.name}${build.full}${build}.jar" tofile="${reobf.jar}"/>
-		<exec executable="./gradlew" failonerror="true" dir="${forge.dir}/" vmlauncher="false">
-			<arg line="-g ../.gradle"/>
-			<arg line="reobf"/>
-			<arg line="-x compileJava"/>
-			<arg line="-x jar"/>
-		</exec>
+		<echo message="Reobfuscating..."/>
+		<java classpath="${reobf.cmd}" classname="immibis.bon.cui.MCPRemap">
+			<arg value="-to SRG"/>
+			<arg value="-from MCP"/>
+			<arg value="-mcp ${forge.stsh}/unpacked"/>
+			<arg value="-in ${dist.dir}/${build.name}${build.full}${build}.jar"/>
+			<arg value="-out ${dist.dir}/${build.name}${build.full}${build.number}.jar"/>
+			<arg value="-ref ${forge.jar}"/>
+			<arg value="-jref ${lib.dir}"/>
+			<arg value="-q"/>
+		</java>
 	</target>
 
-	<target name="copy-sources" depends="package-api" unless="already.compiled">
+	<target name="copy-sources" depends="package-api">
 		<!-- Copy source -->
 		<mkdir dir="${sources.dir}"/>
 		<sync todir="${sources.dir}">
@@ -191,7 +189,7 @@
 		</sync>
 	</target>
 
-	<target name="package-api" depends="get-version" unless="already.compiled" if="has.api">
+	<target name="package-api" depends="get-version" if="has.api">
 		<!-- Copy & package API -->
 		<copy todir="${apiclasses.dir}/${class.pckg}/api">
 			<fileset dir="${src.dir}/${class.pckg}/api"/>
@@ -233,16 +231,21 @@
 
 		<mkdir dir="${compile.dir}"/>
 		<mkdir dir="${lib.dir}"/>
-		<javac srcdir="${forge.dir}/build/tmp/recompSrc" destdir="${compile.dir}" target="1.6" source="1.6"
+		<javac srcdir="${forgebuild.dir}/tmp/recompSrc" destdir="${compile.dir}" target="1.6" source="1.6"
 			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false"/>
 		<jar destfile="${forge.jar}" compress="true" level="9" basedir="${compile.dir}"/>
 		<copy file="${forge.jar}" todir="${forgebuild.dir}/dirtyArtifacts/"/>
 		<delete dir="${compile.dir}"/>
 	</target>
 
-	<target name="download-forge" depends="download-core" unless="forge.exists">
+	<target name="download-forge" depends="setup-bon,download-core" unless="forge.exists">
 		<echo message="Downloading forge... "/>
 		<get src="${forge.url}" dest="${download.dir}/forge-${forge.version}-src.zip"/>
+	</target>
+	
+	<target name="setup-bon" depends="properties" unless="bon.exists">
+		<echo message="Downloading BON..."/>
+		<get src="https://github.com/skyboy/bearded-octo-nemesis/releases/download/1.0/BON.jar" dest="${reobf.cmd}"/>
 	</target>
 	
 	<macrodef name="update-languages">
