@@ -7,6 +7,8 @@ import cofh.api.core.IInitializer;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.ISecureTile;
+import cofh.api.tileentity.ITileDebug;
+import cofh.api.tileentity.ITileInfo;
 import cofh.core.CoFHProps;
 import cofh.util.CoreUtils;
 import cofh.util.MathHelper;

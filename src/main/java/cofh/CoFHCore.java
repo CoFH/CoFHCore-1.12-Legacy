@@ -149,25 +149,9 @@ public class CoFHCore extends BaseMod {
 
 	public void registerOreDictionaryEntries() {
 
-		// registerOreDictionaryEntry("sandstone", new
-		// ItemStack(Blocks.sandstone, 1, OreDictionary.WILDCARD_VALUE));
-		// registerOreDictionaryEntry("glass", Blocks.glass);
-		// registerOreDictionaryEntry("oreCoal", Blocks.coal_ore);
 		registerOreDictionaryEntry("cloth", new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE));
-		// registerOreDictionaryEntry("blockGold", Blocks.gold_block);
-		// registerOreDictionaryEntry("blockIron", Blocks.iron_block);
-		// registerOreDictionaryEntry("blockDiamond", Blocks.diamond_block);
-		// registerOreDictionaryEntry("blockGlowstone", Blocks.glowstone);
-		// registerOreDictionaryEntry("blockEmerald", Blocks.emerald_block);
-		// registerOreDictionaryEntry("blockRedstone", Blocks.redstone_block);
 		registerOreDictionaryEntry("coal", new ItemStack(Items.coal, 1, 0));
 		registerOreDictionaryEntry("charcoal", new ItemStack(Items.coal, 1, 1));
-		// registerOreDictionaryEntry("ingotIron", Items.iron_ingot);
-		// registerOreDictionaryEntry("ingotGold", Items.gold_ingot);
-		// registerOreDictionaryEntry("dustRedstone", Items.redstone);
-		// registerOreDictionaryEntry("slimeball", Items.slime_ball);
-		// registerOreDictionaryEntry("dustGlowstone", Items.glowstone_dust);
-		// registerOreDictionaryEntry("nuggetGold", Items.gold_nugget);
 	}
 
 	public void fixOreDerptionary() {

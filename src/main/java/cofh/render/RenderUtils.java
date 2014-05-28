@@ -1,11 +1,15 @@
 package cofh.render;
 
+import codechicken.lib.colour.Colour;
+import codechicken.lib.colour.ColourRGBA;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.uv.IconTransformation;
 import codechicken.lib.render.uv.UV;
 import codechicken.lib.vec.Vector3;
 
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -114,29 +118,43 @@ public class RenderUtils {
 		CCRenderState.setColour(0xFF | (fluid.getFluid().getColor(fluid) << 8));
 	}
 
-	public static void preRender() {
+	public static void preItemRender() {
+
+		TextureUtil.func_147950_a(false, false);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 
 		CCRenderState.reset();
 		CCRenderState.pullLightmap();
 		CCRenderState.useNormals = true;
 	}
 
-	public static void beforeWorldRender(IBlockAccess world, int x, int y, int z) {
+	public static void postItemRender() {
+
+		CCRenderState.useNormals = false;
+
+		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		TextureUtil.func_147945_b();
+	}
+
+	public static void preWorldRender(IBlockAccess world, int x, int y, int z) {
 
 		CCRenderState.reset();
+		CCRenderState.setColour(0xFFFFFFFF);
 		CCRenderState.setBrightness(world, x, y, z);
 	}
 
-	public static void renderMask(IIcon maskIcon, IIcon subIcon/* , Colour maskColor */, ItemRenderType type) {
+	public static void renderMask(IIcon maskIcon, IIcon subIcon, Colour maskColor, ItemRenderType type) {
 
 		if (maskIcon == null || subIcon == null) {
-			System.out.println("fail");
 			return;
 		}
-		// if (maskColor == null)
-		// maskColor = new ColourRGBA(0xFFFFFFFF);
-		//
-		// maskColor.glColour();
+		if (maskColor == null) {
+			maskColor = new ColourRGBA(0xFFFFFFFF);
+		}
+		maskColor.glColour();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 

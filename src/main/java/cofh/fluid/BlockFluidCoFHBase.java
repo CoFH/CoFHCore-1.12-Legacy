@@ -69,9 +69,8 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 
 		return true;
 	}
-	
-	public BlockFluidCoFHBase setDisplaceFluids(boolean a)
-	{
+
+	public BlockFluidCoFHBase setDisplaceFluids(boolean a) {
 
 		this.shouldDisplaceFluids = a;
 		return this;

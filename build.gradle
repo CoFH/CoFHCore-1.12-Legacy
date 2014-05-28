@@ -26,6 +26,12 @@ minecraft {
     assetDir = "eclipse/assets"
 }
 
+// the repository{} block is not needed because ForgeGradle adds the forge maven repo automatically.
+dependencies {
+    // adds CCL as a dependency
+    compile "codechicken:CodeChickenLib:1.7.2-1.1.0.76:dev"
+}
+
 processResources
 {
     // this will ensure that this task is redone when the versions change.

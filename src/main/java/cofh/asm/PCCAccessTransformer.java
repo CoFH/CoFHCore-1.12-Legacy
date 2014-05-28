@@ -17,8 +17,8 @@ public class PCCAccessTransformer extends AccessTransformer {
 		super();
 		instance = this;
 
-		mapFileList.add("CoFH_at.cfg");
-		// CoFH_at.cfg must also contain all entries from cofhlib_at.cfg
+		mapFileList.add("cofh_at.cfg");
+		// cofh_at.cfg must also contain all entries from cofhlib_at.cfg
 
 		for (String file : mapFileList) {
 			readMapFile(file);
@@ -45,4 +45,5 @@ public class PCCAccessTransformer extends AccessTransformer {
 			throw new RuntimeException(e);
 		}
 	}
+
 }

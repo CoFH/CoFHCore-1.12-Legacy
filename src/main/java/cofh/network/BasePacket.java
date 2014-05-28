@@ -14,4 +14,5 @@ public abstract class BasePacket {
 	public abstract void handleClientSide(EntityPlayer player);
 
 	public abstract void handleServerSide(EntityPlayer player);
+
 }

@@ -138,6 +138,13 @@ public class ItemBase extends Item {
 		return super.setUnlocalizedName(name);
 	}
 
+	public Item setUnlocalizedName(String textureName, String registrationName) {
+
+		GameRegistry.registerItem(this, registrationName);
+		textureName = modName + "." + textureName;
+		return super.setUnlocalizedName(textureName);
+	}
+
 	@Override
 	public void registerIcons(IIconRegister ir) {
 

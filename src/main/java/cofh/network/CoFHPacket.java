@@ -298,11 +298,6 @@ public abstract class CoFHPacket extends BasePacket {
 		}
 	}
 
-	// public static Packet getPacket(int packetId, ByteArrayOutputStream data) {
-	//
-	// return PacketDispatcher.getTinyPacket(CoFHCore.instance, (short) packetId, data.toByteArray());
-	// }
-
 	@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 

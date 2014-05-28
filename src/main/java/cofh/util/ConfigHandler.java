@@ -22,10 +22,12 @@ public class ConfigHandler {
 		modVersion = version;
 	}
 
-	public void setConfiguration(Configuration config) {
+	public ConfigHandler setConfiguration(Configuration config) {
 
 		modConfiguration = config;
 		modConfiguration.load();
+
+		return this;
 	}
 
 	public Configuration getConfiguration() {

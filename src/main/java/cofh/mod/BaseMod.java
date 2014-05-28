@@ -213,12 +213,13 @@ public abstract class BaseMod implements IUpdatableMod {
 			try {
 				LinkedList<String> langs = new LinkedList<String>();
 				List<IResource> files = manager.getAllResources(new ResourceLocation(_path + ".languages"));
-				for (IResource lang : files)
+				for (IResource lang : files) {
 					try {
 						loadLanguageList(lang.getInputStream(), langs);
 					} catch (Throwable _) {
 						_log.warn(AbstractLogger.CATCHING_MARKER, "A resource pack's .language file is invalid.", _);
 					}
+				}
 				for (String lang : langs) {
 					try {
 						loadLanguageFile(lang, manager.getResource(new ResourceLocation(_path + lang + ".lang")).getInputStream());
