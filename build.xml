@@ -19,7 +19,7 @@
 	<property name="forge.major" value="10"/>
 	<property name="forge.minor" value="12"/>
 	<property name="forge.patch" value="1"/>
-	<property name="forge.build" value="1074"/>
+	<property name="forge.build" value="1080"/>
 	
 	<!-- Packaging -->
 	<property name="dist.dir" value="${build.dir}/dist"/>
@@ -117,6 +117,39 @@
 		<copy file="${resources.dir}/CoFH_at.cfg" todir="${transformers.dir}"/>
 		
 	</sequential></macrodef>
+	
+	<macrodef name="install-constructor">
+		<attribute name="path"/>
+		<sequential>
+			<local name="t"/><property name="t" value="@{path}/net/minecraft/world/WorldServer.java"/>
+			<script language="javascript"><![CDATA[
+				importPackage(java.io);
+				importClass(java.util.Scanner);
+				
+				var mainClass = new File(project.getProperty("t"));
+				mainClass = new Scanner(mainClass, "UTF-8").useDelimiter("\\Z");
+				var text = mainClass.next() + "";
+				mainClass.close();
+				
+				text = text.replace(/public WorldServer/, 'public WorldServer(MinecraftServer minecraftServer, ISaveHandler saveHandler, String par2String, WorldProvider provider, WorldSettings par4WorldSettings, Profiler theProfiler)\n\t{\n\t\tsuper(saveHandler, par2String, provider, par4WorldSettings, theProfiler);\n\t\tthis.mcServer = minecraftServer;\n\t\tthis.theEntityTracker = null;\n\t\tthis.thePlayerManager = null;\n\t\tthis.worldTeleporter = null;\n\t}\n\n\tpublic WorldServer');
+				
+				var os = new PrintWriter(project.getProperty("t"));
+				os.write(text);
+				os.flush();
+				os.close();
+			]]></script>
+		<!--
+    public WorldServer(MinecraftServer minecraftServer, ISaveHandler saveHandler, String par2String, WorldProvider provider, WorldSettings par4WorldSettings, Profiler theProfiler)
+	{
+		super(saveHandler, par2String, provider, par4WorldSettings, theProfiler);
+		this.mcServer = minecraftServer;
+		this.theEntityTracker = null;
+		this.thePlayerManager = null;
+		this.worldTeleporter = null;
+	}
+		-->
+		</sequential>
+	</macrodef>
 	
 	<!-- Building process -->
 	<target name="install" depends="build">
@@ -238,6 +271,7 @@
 
 		<mkdir dir="${compile.dir}"/>
 		<mkdir dir="${lib.dir}"/>
+		<install-constructor path="${forgebuild.dir}/tmp/recompSrc"/>
 		<javac srcdir="${forgebuild.dir}/tmp/recompSrc" destdir="${compile.dir}" target="1.6" source="1.6"
 			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false"/>
 		<jar destfile="${forge.jar}" compress="true" level="9" basedir="${compile.dir}"/>

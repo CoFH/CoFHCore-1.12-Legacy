@@ -17,8 +17,9 @@ public class PCCAccessTransformer extends AccessTransformer {
 		super();
 		instance = this;
 
-		mapFileList.add("cofh_at.cfg");
-		// cofh_at.cfg must also contain all entries from cofhlib_at.cfg
+		// file names are case sensitive. do not alter.
+		mapFileList.add("CoFH_at.cfg");
+		// CoFH_at.cfg must also contain all entries from cofhlib_at.cfg
 
 		for (String file : mapFileList) {
 			readMapFile(file);

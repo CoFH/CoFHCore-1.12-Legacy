@@ -6,13 +6,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 
-public class WorldServerProxy extends WorldServer {
+public abstract class WorldServerProxy extends WorldServer {
 
 	protected WorldServer proxiedWorld;
-
-	/*
-	 * TODO: override all methods of super using an ASM transformer instead of keeping it updated from version to version
-	 */
 
 	private static String getPar2String(World world) {
 
@@ -26,8 +22,7 @@ public class WorldServerProxy extends WorldServer {
 
 	public WorldServerProxy(WorldServer world) {
 
-		// FIXME: this needs a custom constructor, as this one will break the game
-		super(world.func_73046_m(), world.getSaveHandler(), getPar2String(world), world.provider.dimensionId, getPar4WorldSettings(world), world.theProfiler);
+		super(world.func_73046_m(), world.getSaveHandler(), getPar2String(world), world.provider, getPar4WorldSettings(world), world.theProfiler);
 		this.proxiedWorld = world;
 		// perWorldStorage = world.perWorldStorage; // final, set in super; requires reflection
 		ReflectionHelper.setPrivateValue(World.class, this, world.perWorldStorage, new String[] { "perWorldStorage" }); // forge-added, no reobf

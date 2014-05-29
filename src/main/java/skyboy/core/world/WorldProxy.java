@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.IChunkProvider;
 
-public class WorldProxy extends World {
+public abstract class WorldProxy extends World {
 
 	protected World proxiedWorld;
 
@@ -50,13 +50,12 @@ public class WorldProxy extends World {
 
 	@Override
 	protected IChunkProvider createChunkProvider() {
-
 		return null;
 	}
 
 	@Override
 	public Entity getEntityByID(int var1) {
-
 		return null;
 	}
+
 }
