@@ -50,11 +50,13 @@ public abstract class WorldProxy extends World {
 
 	@Override
 	protected IChunkProvider createChunkProvider() {
+
 		return null;
 	}
 
 	@Override
 	public Entity getEntityByID(int var1) {
+
 		return null;
 	}
 

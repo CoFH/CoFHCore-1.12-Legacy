@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE })
 public @interface Implementable {
 
-	public String value();
+	public String[] value();
 }

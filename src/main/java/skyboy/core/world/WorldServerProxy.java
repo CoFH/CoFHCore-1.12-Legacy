@@ -6,7 +6,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldSettings;
 
-public abstract class WorldServerProxy extends WorldServer {
+public abstract class WorldServerProxy extends WorldServerShim {
 
 	protected WorldServer proxiedWorld;
 

@@ -17,8 +17,11 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.RemappingClassAdapter;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 public class PCCASMTransformer implements IClassTransformer {
@@ -242,10 +245,7 @@ public class PCCASMTransformer implements IClassTransformer {
 							i.remove();
 					}
 				}
-				int a = m.access;
-				a &= ~(ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED | ACC_FINAL | ACC_BRIDGE | ACC_ABSTRACT | ACC_STRICT);
-				a |= ACC_PUBLIC | ACC_SYNTHETIC;
-				MethodVisitor mv = cn.visitMethod(a, m.name, m.desc, m.signature, m.exceptions.toArray(new String[0]));
+				MethodVisitor mv = cn.visitMethod(getAccess(m), m.name, m.desc, m.signature, m.exceptions.toArray(new String[0]));
 				mv.visitCode();
 				mv.visitVarInsn(ALOAD, 0);
 				mv.visitFieldInsn(GETFIELD, "skyboy/core/world/WorldProxy", "proxiedWorld", "Lnet/minecraft/world/World;");
@@ -278,6 +278,24 @@ public class PCCASMTransformer implements IClassTransformer {
 		ClassNode cn = new ClassNode(ASM4);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
+		cn.superName = "net/minecraft/world/WorldServer";
+		for (MethodNode m : cn.methods) {
+			if ("<init>".equals(m.name)) {
+				InsnList l = m.instructions;
+				for (int i = 0, e = l.size(); i < e; ++i) {
+					AbstractInsnNode n = l.get(i);
+					if (n instanceof MethodInsnNode) {
+						MethodInsnNode mn = (MethodInsnNode)n;
+						if (mn.getOpcode() == INVOKESPECIAL) {
+							mn.owner = cn.superName;
+							break;
+						}
+					}
+				}
+				break;
+			}
+		}
+
 		for (MethodNode m : world.methods) {
 			if (m.name.indexOf('<') != 0 && (m.access & ACC_STATIC) == 0) {
 				{
@@ -288,10 +306,7 @@ public class PCCASMTransformer implements IClassTransformer {
 							i.remove();
 					}
 				}
-				int a = m.access;
-				a &= ~(ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED | ACC_FINAL | ACC_BRIDGE | ACC_ABSTRACT | ACC_STRICT);
-				a |= ACC_PUBLIC | ACC_SYNTHETIC;
-				MethodVisitor mv = cn.visitMethod(a, m.name, m.desc, m.signature, m.exceptions.toArray(new String[0]));
+				MethodVisitor mv = cn.visitMethod(getAccess(m), m.name, m.desc, m.signature, m.exceptions.toArray(new String[0]));
 				mv.visitCode();
 				mv.visitVarInsn(ALOAD, 0);
 				mv.visitFieldInsn(GETFIELD, "skyboy/core/world/WorldServerProxy", "proxiedWorld", "Lnet/minecraft/world/WorldServer;");
@@ -317,10 +332,7 @@ public class PCCASMTransformer implements IClassTransformer {
 							i.remove();
 					}
 				}
-				int a = m.access;
-				a &= ~(ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED | ACC_FINAL | ACC_BRIDGE | ACC_ABSTRACT | ACC_STRICT);
-				a |= ACC_PUBLIC | ACC_SYNTHETIC;
-				MethodVisitor mv = cn.visitMethod(a, m.name, m.desc, m.signature, m.exceptions.toArray(new String[0]));
+				MethodVisitor mv = cn.visitMethod(getAccess(m), m.name, m.desc, m.signature, m.exceptions.toArray(new String[0]));
 				mv.visitCode();
 				mv.visitVarInsn(ALOAD, 0);
 				mv.visitFieldInsn(GETFIELD, "skyboy/core/world/WorldServerProxy", "proxiedWorld", "Lnet/minecraft/world/WorldServer;");
@@ -355,8 +367,8 @@ public class PCCASMTransformer implements IClassTransformer {
 					for (int i = 0, e = values.size(); i < e;) {
 						Object k = values.get(i++);
 						Object v = values.get(i++);
-						if (k instanceof String && k.equals("value") && v instanceof String) {
-							String[] value = ((String) v).split(";");
+						if (k instanceof String && k.equals("value") && v instanceof String[]) {
+							String[] value = (String[])v;
 							for (int j = 0, l = value.length; j < l; ++j) {
 								String clazz = value[j].trim();
 								String cz = clazz.replace('.', '/');
@@ -377,6 +389,14 @@ public class PCCASMTransformer implements IClassTransformer {
 			}
 		}
 		return interfaces;
+	}
+	
+	private static int getAccess(MethodNode m) {
+
+		int r = m.access;
+		r &= ~(ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED | ACC_FINAL | ACC_BRIDGE | ACC_ABSTRACT);
+		r |= ACC_PUBLIC | ACC_SYNTHETIC;
+		return r;
 	}
 
 }
