@@ -11,8 +11,6 @@ public class TabTutorial extends TabBase {
 
 	public static boolean enable;
 
-	int headerColor = 0xe1c92f;
-	int subheaderColor = 0xaaafb8;
 	int textColor = 0xffffff;
 
 	String myInfo;

@@ -178,4 +178,5 @@ public class CoFHFontRender extends FontRenderer {
 
 		return par0 >= 107 && par0 <= 111 || par0 >= 75 && par0 <= 79 || par0 == 114 || par0 == 82;
 	}
+
 }

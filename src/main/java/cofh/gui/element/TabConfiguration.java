@@ -19,9 +19,6 @@ public class TabConfiguration extends TabBase {
 	IReconfigurableFacing myTile;
 	IReconfigurableSides myTileSides;
 	ISidedBlockTexture myTileTexture;
-	int headerColor = 0xe1c92f;
-	int subheaderColor = 0xaaafb8;
-	int textColor = 0x000000;
 
 	public TabConfiguration(GuiBase gui, IReconfigurableFacing theTile) {
 

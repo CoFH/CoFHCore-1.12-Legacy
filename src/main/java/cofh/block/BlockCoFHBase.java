@@ -9,13 +9,13 @@ import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.ISecureTile;
 import cofh.api.tileentity.ITileDebug;
 import cofh.api.tileentity.ITileInfo;
-import cofh.core.CoFHProps;
 import cofh.util.CoreUtils;
 import cofh.util.MathHelper;
 import cofh.util.StringHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -40,8 +40,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebug, IBlockInfo, IDismantleable, IInitializer {
 
 	public static int renderPass = 0;
-	public static byte secureAccess = 0;
-	public static String secureOwner = CoFHProps.DEFAULT_OWNER;
+	public static final ArrayList<ItemStack> NO_DROP = new ArrayList<ItemStack>();
 
 	public BlockCoFHBase(Material material) {
 
@@ -137,9 +136,9 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 
 		TileEntity tile = world.getTileEntity(x, y, z);
 
-		if (tile instanceof ISecureTile) {
-			secureOwner = ((ISecureTile) tile).getOwnerName();
-			secureAccess = (byte) ((ISecureTile) tile).getAccess().ordinal();
+		if (tile instanceof TileCoFHBase) {
+			TileCoFHBase theTile = (TileCoFHBase) tile;
+			theTile.blockBroken();
 		}
 		if (tile instanceof IInventory) {
 			IInventory inv = (IInventory) tile;
@@ -147,11 +146,28 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 				CoreUtils.dropItemStackIntoWorldWithVelocity(inv.getStackInSlot(i), world, x, y, z);
 			}
 		}
-		if (tile instanceof TileCoFHBase) {
-			TileCoFHBase theTile = (TileCoFHBase) tile;
-			theTile.blockBroken();
-		}
 		super.breakBlock(world, x, y, z, bId, bMeta);
+	}
+
+	@Override
+	public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta) {
+
+	}
+
+	@Override
+	public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
+
+		if (!player.capabilities.isCreativeMode) {
+			world.func_147480_a(x, y, z, true);
+		}
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ret.add(dismantleBlock(null, getItemStackTag(world, x, y, z), world, x, y, z, false, true));
+		return ret;
 	}
 
 	@Override

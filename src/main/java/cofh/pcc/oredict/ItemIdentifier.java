@@ -31,4 +31,5 @@ public class ItemIdentifier {
 		ii.itemMeta = stack.getItemDamage();
 		return ii;
 	}
+
 }

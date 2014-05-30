@@ -33,4 +33,5 @@ public final class OreDictTracker {
 
 		return _oreDictIDs.get(ItemIdentifier.fromItemStack(stack));
 	}
+
 }

@@ -11,9 +11,6 @@ import org.lwjgl.opengl.GL11;
 public class TabEnergy extends TabBase {
 
 	IEnergyInfo myTile;
-	int headerColor = 0xe1c92f;
-	int subheaderColor = 0xaaafb8;
-	int textColor = 0x000000;
 	boolean isProducer;
 
 	public TabEnergy(GuiBase gui, IEnergyInfo theTile, boolean isProducer) {

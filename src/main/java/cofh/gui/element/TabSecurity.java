@@ -15,9 +15,6 @@ public class TabSecurity extends TabBase {
 
 	ISecureTile myTile;
 	String myPlayer;
-	int headerColor = 0xe1c92f;
-	int subheaderColor = 0xaaafb8;
-	int textColor = 0x000000;
 
 	public TabSecurity(GuiBase gui, ISecureTile theTile, String playerName) {
 
