@@ -86,7 +86,7 @@ public class TabSecurity extends TabBase {
 	}
 
 	@Override
-	public boolean handleMouseClicked(int x, int y, int mouseButton) {
+	public boolean onMousePressed(int x, int y, int mouseButton) {
 
 		if (!myPlayer.equals(myTile.getOwnerName())) {
 			return true;

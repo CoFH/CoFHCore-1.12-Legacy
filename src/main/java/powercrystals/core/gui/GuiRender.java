@@ -3,7 +3,6 @@ package powercrystals.core.gui;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 
 import org.lwjgl.opengl.GL11;
@@ -96,11 +95,6 @@ public class GuiRender {
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-	}
-
-	public static void drawCenteredString(FontRenderer fontRenderer, String text, int x, int y, int color) {
-
-		fontRenderer.drawStringWithShadow(text, x - fontRenderer.getStringWidth(text) / 2, y, color);
 	}
 
 	public static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height) {

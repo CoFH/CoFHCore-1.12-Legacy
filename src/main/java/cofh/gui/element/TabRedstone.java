@@ -87,7 +87,7 @@ public class TabRedstone extends TabBase {
 	}
 
 	@Override
-	public boolean handleMouseClicked(int x, int y, int mouseButton) {
+	public boolean onMousePressed(int x, int y, int mouseButton) {
 
 		if (!isFullyOpened()) {
 			return false;
