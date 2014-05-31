@@ -1,6 +1,25 @@
 package cofh.asm;
 
-import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
+import static org.objectweb.asm.Opcodes.ACC_BRIDGE;
+import static org.objectweb.asm.Opcodes.ACC_FINAL;
+import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
+import static org.objectweb.asm.Opcodes.ACC_PROTECTED;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
+import static org.objectweb.asm.Opcodes.ACC_SYNTHETIC;
+import static org.objectweb.asm.Opcodes.ACONST_NULL;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ASM4;
+import static org.objectweb.asm.Opcodes.DUP;
+import static org.objectweb.asm.Opcodes.GETFIELD;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
+import static org.objectweb.asm.Opcodes.IRETURN;
+import static org.objectweb.asm.Opcodes.NEW;
+import static org.objectweb.asm.Opcodes.PUTFIELD;
+import static org.objectweb.asm.Opcodes.RETURN;
 
 import cofh.asm.relauncher.Implementable;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
@@ -83,13 +102,9 @@ public class PCCASMTransformer implements IClassTransformer {
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 		String sig = "(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
-		String sigObf = "("
-				+ "L" + remapper.unmap("net/minecraft/world/storage/ISaveHandler") + ";"
-				+ "Ljava/lang/String;"
-				+ "L" + remapper.unmap("net/minecraft/world/WorldProvider") + ";"
-				+ "L" + remapper.unmap("net/minecraft/world/WorldSettings") + ";"
-				+ "L" + remapper.unmap("net/minecraft/profiler/Profiler") + ";"
-				+ ")V";
+		String sigObf = "(" + "L" + remapper.unmap("net/minecraft/world/storage/ISaveHandler") + ";" + "Ljava/lang/String;" + "L"
+				+ remapper.unmap("net/minecraft/world/WorldProvider") + ";" + "L" + remapper.unmap("net/minecraft/world/WorldSettings") + ";" + "L"
+				+ remapper.unmap("net/minecraft/profiler/Profiler") + ";" + ")V";
 
 		l: {
 			for (MethodNode m : cn.methods) {
@@ -101,8 +116,8 @@ public class PCCASMTransformer implements IClassTransformer {
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 			cn.accept(cw);
 			/*
-			 * new World constructor World(ISaveHandler saveHandler, String worldName, WorldProvider provider,
-			 *  WorldSettings worldSettings, Profiler theProfiler)
+			 * new World constructor World(ISaveHandler saveHandler, String worldName, WorldProvider provider, WorldSettings worldSettings, Profiler
+			 * theProfiler)
 			 */
 			cw.newMethod(name, "<init>", sig, true);
 			MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", sig, null, null);
@@ -158,14 +173,10 @@ public class PCCASMTransformer implements IClassTransformer {
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 		String sig = "(Lnet/minecraft/server/MinecraftServer;Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
-		String sigObf = "("
-				+ "L" + remapper.unmap("net/minecraft/server/MinecraftServer") + ";"
-				+ "L" + remapper.unmap("net/minecraft/world/storage/ISaveHandler") + ";"
-				+ "Ljava/lang/String;"
-				+ "L" + remapper.unmap("net/minecraft/world/WorldProvider") + ";"
-				+ "L" + remapper.unmap("net/minecraft/world/WorldSettings") + ";"
-				+ "L" + remapper.unmap("net/minecraft/profiler/Profiler") + ";"
-				+ ")V";
+		String sigObf = "(" + "L" + remapper.unmap("net/minecraft/server/MinecraftServer") + ";" + "L"
+				+ remapper.unmap("net/minecraft/world/storage/ISaveHandler") + ";" + "Ljava/lang/String;" + "L"
+				+ remapper.unmap("net/minecraft/world/WorldProvider") + ";" + "L" + remapper.unmap("net/minecraft/world/WorldSettings") + ";" + "L"
+				+ remapper.unmap("net/minecraft/profiler/Profiler") + ";" + ")V";
 
 		l: {
 			for (MethodNode m : cn.methods) {
@@ -228,9 +239,12 @@ public class PCCASMTransformer implements IClassTransformer {
 
 	private byte[] writeWorldProxy(String name, byte[] bytes, ClassReader cr) {
 
-		if (world == null) try {
-			Class.forName("net.minecraft.world.World");
-		} catch(Throwable _) { /* Won't happen */ }
+		if (world == null) {
+			try {
+				Class.forName("net.minecraft.world.World");
+			} catch (Throwable _) { /* Won't happen */
+			}
+		}
 
 		ClassNode cn = new ClassNode(ASM4);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
@@ -241,8 +255,9 @@ public class PCCASMTransformer implements IClassTransformer {
 					Iterator<MethodNode> i = cn.methods.iterator();
 					while (i.hasNext()) {
 						MethodNode m2 = i.next();
-						if (m2.name.equals(m.name) && m2.desc.equals(m.desc))
+						if (m2.name.equals(m.name) && m2.desc.equals(m.desc)) {
 							i.remove();
+						}
 					}
 				}
 				MethodVisitor mv = cn.visitMethod(getAccess(m), m.name, m.desc, m.signature, m.exceptions.toArray(new String[0]));
@@ -268,12 +283,18 @@ public class PCCASMTransformer implements IClassTransformer {
 
 	private byte[] writeWorldServerProxy(String name, byte[] bytes, ClassReader cr) {
 
-		if (worldServer == null) try {
-			Class.forName("net.minecraft.world.WorldServer");
-		} catch(Throwable _) { /* Won't happen */ }
-		if (world == null) try {
-			Class.forName("net.minecraft.world.World");
-		} catch(Throwable _) { /* Won't happen */ }
+		if (worldServer == null) {
+			try {
+				Class.forName("net.minecraft.world.WorldServer");
+			} catch (Throwable _) { /* Won't happen */
+			}
+		}
+		if (world == null) {
+			try {
+				Class.forName("net.minecraft.world.World");
+			} catch (Throwable _) { /* Won't happen */
+			}
+		}
 
 		ClassNode cn = new ClassNode(ASM4);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
@@ -285,7 +306,7 @@ public class PCCASMTransformer implements IClassTransformer {
 				for (int i = 0, e = l.size(); i < e; ++i) {
 					AbstractInsnNode n = l.get(i);
 					if (n instanceof MethodInsnNode) {
-						MethodInsnNode mn = (MethodInsnNode)n;
+						MethodInsnNode mn = (MethodInsnNode) n;
 						if (mn.getOpcode() == INVOKESPECIAL) {
 							mn.owner = cn.superName;
 							break;
@@ -302,8 +323,9 @@ public class PCCASMTransformer implements IClassTransformer {
 					Iterator<MethodNode> i = cn.methods.iterator();
 					while (i.hasNext()) {
 						MethodNode m2 = i.next();
-						if (m2.name.equals(m.name) && m2.desc.equals(m.desc))
+						if (m2.name.equals(m.name) && m2.desc.equals(m.desc)) {
 							i.remove();
+						}
 					}
 				}
 				MethodVisitor mv = cn.visitMethod(getAccess(m), m.name, m.desc, m.signature, m.exceptions.toArray(new String[0]));
@@ -328,8 +350,9 @@ public class PCCASMTransformer implements IClassTransformer {
 					Iterator<MethodNode> i = cn.methods.iterator();
 					while (i.hasNext()) {
 						MethodNode m2 = i.next();
-						if (m2.name.equals(m.name) && m2.desc.equals(m.desc))
+						if (m2.name.equals(m.name) && m2.desc.equals(m.desc)) {
 							i.remove();
+						}
 					}
 				}
 				MethodVisitor mv = cn.visitMethod(getAccess(m), m.name, m.desc, m.signature, m.exceptions.toArray(new String[0]));
@@ -368,7 +391,7 @@ public class PCCASMTransformer implements IClassTransformer {
 						Object k = values.get(i++);
 						Object v = values.get(i++);
 						if (k instanceof String && k.equals("value") && v instanceof String[]) {
-							String[] value = (String[])v;
+							String[] value = (String[]) v;
 							for (int j = 0, l = value.length; j < l; ++j) {
 								String clazz = value[j].trim();
 								String cz = clazz.replace('.', '/');
@@ -390,7 +413,7 @@ public class PCCASMTransformer implements IClassTransformer {
 		}
 		return interfaces;
 	}
-	
+
 	private static int getAccess(MethodNode m) {
 
 		int r = m.access;

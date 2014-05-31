@@ -25,6 +25,7 @@ info.cofh.information=Information
 info.cofh.infinite=Infinite
 info.cofh.items=Items
 info.cofh.level=Level
+info.cofh.locked=Locked
 info.cofh.maxEnergyPerTick=Maximum Power
 info.cofh.none=None
 info.cofh.owner=Owner
@@ -44,6 +45,7 @@ info.cofh.signal=Signal
 info.cofh.signalRequired=Signal Required
 info.cofh.source=Source
 info.cofh.tutorial=Tutorial
+info.cofh.unlocked=Unlocked
 
 info.cofh.tutorial.fluxRequired=Requires Redstone Flux to operate.
 info.cofh.tutorial.tabConfiguration=The Configuration tab determines how items enter and leave this device.

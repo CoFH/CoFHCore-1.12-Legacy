@@ -13,9 +13,9 @@ import net.minecraft.world.storage.ISaveHandler;
  */
 public abstract class WorldServerShim extends WorldServer {
 
-	public WorldServerShim(MinecraftServer minecraftServer, ISaveHandler saveHandler,
-			String par2String, WorldProvider provider, WorldSettings par4WorldSettings,
-			Profiler theProfiler) {
+	public WorldServerShim(MinecraftServer minecraftServer, ISaveHandler saveHandler, String par2String, WorldProvider provider,
+			WorldSettings par4WorldSettings, Profiler theProfiler) {
+
 		super(minecraftServer, saveHandler, par2String, provider.dimensionId, par4WorldSettings, theProfiler);
 		throw new IllegalAccessError("WorldServerShim cannot be extended. Extend WorldServerProxy instead.");
 	}

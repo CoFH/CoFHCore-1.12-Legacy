@@ -177,7 +177,7 @@ public class RenderUtils {
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0, 0, 1);
 		if (type.equals(ItemRenderType.INVENTORY)) {
-			preRenderIconInv(maskIcon, 0.001);
+			preRenderIconInv(maskIcon, 10);
 		} else {
 			preRenderIconWorld(maskIcon, 0.001);
 		}
@@ -200,7 +200,7 @@ public class RenderUtils {
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0, 0, 1);
 		if (type.equals(ItemRenderType.INVENTORY)) {
-			preRenderIconInv(subIcon, 0.001);
+			preRenderIconInv(subIcon, 10);
 		} else {
 			preRenderIconWorld(subIcon, 0.001);
 		}

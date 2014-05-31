@@ -86,7 +86,7 @@ public class TabSecurity extends TabBase {
 	}
 
 	@Override
-	public boolean onMousePressed(int x, int y, int mouseButton) {
+	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
 
 		if (!myPlayer.equals(myTile.getOwnerName())) {
 			return true;
@@ -94,23 +94,23 @@ public class TabSecurity extends TabBase {
 		if (!isFullyOpened()) {
 			return false;
 		}
-		x -= currentShiftX;
-		y -= currentShiftY;
+		mouseX -= currentShiftX;
+		mouseY -= currentShiftY;
 
-		if (x < 24 || x >= 88 || y < 16 || y >= 40) {
+		if (mouseX < 24 || mouseX >= 88 || mouseY < 16 || mouseY >= 40) {
 			return false;
 		}
-		if (28 <= x && x < 44 && 20 <= y && y < 36) {
+		if (28 <= mouseX && mouseX < 44 && 20 <= mouseY && mouseY < 36) {
 			if (!myTile.getAccess().isPublic()) {
 				myTile.setAccess(ISecureTile.AccessMode.PUBLIC);
 				GuiBase.playSound("random.click", 1.0F, 0.4F);
 			}
-		} else if (48 <= x && x < 64 && 20 <= y && y < 36) {
+		} else if (48 <= mouseX && mouseX < 64 && 20 <= mouseY && mouseY < 36) {
 			if (!myTile.getAccess().isRestricted()) {
 				myTile.setAccess(ISecureTile.AccessMode.RESTRICTED);
 				GuiBase.playSound("random.click", 1.0F, 0.6F);
 			}
-		} else if (68 <= x && x < 84 && 20 <= y && y < 36) {
+		} else if (68 <= mouseX && mouseX < 84 && 20 <= mouseY && mouseY < 36) {
 			if (!myTile.getAccess().isPrivate()) {
 				myTile.setAccess(ISecureTile.AccessMode.PRIVATE);
 				GuiBase.playSound("random.click", 1.0F, 0.8F);
