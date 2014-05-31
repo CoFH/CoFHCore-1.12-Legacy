@@ -10,19 +10,19 @@ public abstract class WorldServerProxy extends WorldServerShim {
 
 	protected WorldServer proxiedWorld;
 
-	private static String getPar2String(World world) {
+	private static String getWorldName(World world) {
 
 		return world.getWorldInfo().getWorldName();
 	}
 
-	private static WorldSettings getPar4WorldSettings(World world) {
+	private static WorldSettings getWorldSettings(World world) {
 
 		return new WorldSettings(world.getWorldInfo());
 	}
 
 	public WorldServerProxy(WorldServer world) {
 
-		super(world.func_73046_m(), world.getSaveHandler(), getPar2String(world), world.provider, getPar4WorldSettings(world), world.theProfiler);
+		super(world.func_73046_m(), world.getSaveHandler(), getWorldName(world), world.provider, getWorldSettings(world), world.theProfiler);
 		this.proxiedWorld = world;
 		// perWorldStorage = world.perWorldStorage; // final, set in super; requires reflection
 		ReflectionHelper.setPrivateValue(World.class, this, world.perWorldStorage, new String[] { "perWorldStorage" }); // forge-added, no reobf
@@ -50,4 +50,5 @@ public abstract class WorldServerProxy extends WorldServerShim {
 		// allPlayersSleeping = world.allPlayersSleeping;
 		customTeleporters = world.customTeleporters;
 	}
+
 }

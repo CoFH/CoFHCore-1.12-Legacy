@@ -36,9 +36,9 @@ public abstract class GuiScreenBase extends GuiContainer {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(guiLeft, guiTop, 0.0F);
 		for (Object c : _controls) {
-			//if (c.getVisible()) {
-			//c.drawBackground(mouseX, mouseY, gameTicks);
-			//}
+			// if (c.getVisible()) {
+			// c.drawBackground(mouseX, mouseY, gameTicks);
+			// }
 		}
 		GL11.glPopMatrix();
 	}

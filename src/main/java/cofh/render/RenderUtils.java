@@ -6,6 +6,7 @@ import codechicken.lib.render.CCRenderState;
 import codechicken.lib.render.uv.IconTransformation;
 import codechicken.lib.render.uv.UV;
 import codechicken.lib.vec.Vector3;
+import cofh.util.BlockHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -20,9 +21,11 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.fluids.FluidStack;
@@ -427,7 +430,7 @@ public class RenderUtils {
 		}
 	}
 
-	public static final void renderItemOnBlockSide(ItemStack stack, int side, double x, double y, double z) {
+	public static final void renderItemOnBlockSide(TileEntity tile, ItemStack stack, int side, double x, double y, double z) {
 
 		if (stack == null) {
 			return;
@@ -459,14 +462,30 @@ public class RenderUtils {
 		GL11.glScaled(0.03125, 0.03125, -RenderHelper.RENDER_OFFSET);
 		GL11.glRotated(180, 0, 0, 1);
 
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		setupLight(tile, side);
+		RenderHelper.enableGUIStandardItemLighting();
 
 		if (!ForgeHooksClient.renderInventoryItem(renderBlocks, RenderHelper.engine(), stack, true, 0.0F, 0.0F, 0.0F)) {
 			renderItem.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, RenderHelper.engine(), stack, 0, 0);
 		}
-		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
+	}
+
+	public static void setupLight(TileEntity tile, int side) {
+
+		int x = tile.xCoord + BlockHelper.SIDE_COORD_MOD[side][0];
+		int y = tile.yCoord + BlockHelper.SIDE_COORD_MOD[side][1];
+		int z = tile.zCoord + BlockHelper.SIDE_COORD_MOD[side][2];
+
+		World world = tile.getWorldObj();
+
+		if (world.getBlock(x, y, z).isOpaqueCube()) {
+			return;
+		}
+		int br = world.getLightBrightnessForSkyBlocks(x, y, z, 0);
+		int brX = br % 65536;
+		int brY = br / 65536;
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brX, brY);
 	}
 
 }

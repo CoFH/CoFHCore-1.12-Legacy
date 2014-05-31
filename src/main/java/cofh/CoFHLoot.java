@@ -17,7 +17,7 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = "CoFHLoot", name = "CoFH Loot", version = CoFHProps.VERSION, dependencies = "required-after:CoFHCore@[" + CoFHProps.VERSION + ",)",
+@Mod(modid = "CoFHLoot", name = "CoFH Loot", version = CoFHCore.version, dependencies = "required-after:CoFHCore@[" + CoFHCore.version + ",)",
 		canBeDeactivated = true)
 public class CoFHLoot {
 
@@ -69,7 +69,7 @@ public class CoFHLoot {
 	}
 
 	public static final Logger log = LogManager.getLogger("CoFHLoot");
-	public static ConfigHandler config = new ConfigHandler(CoFHProps.VERSION);
+	public static ConfigHandler config = new ConfigHandler(CoFHCore.version);
 
 	static {
 		// log.setParent(FMLLog.getLogger());

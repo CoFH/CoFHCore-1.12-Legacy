@@ -21,7 +21,7 @@ public class TabInfo extends TabBase {
 		visible = enable;
 
 		backgroundColor = 0x555555;
-		maxHeight += 4 + StringHelper.getSplitStringHeight(GuiBase.guiFontRenderer, infoString, maxWidth);
+		maxHeight += 4 + StringHelper.getSplitStringHeight(getFontRenderer(), infoString, maxWidth);
 		myInfo = infoString;
 	}
 
@@ -31,7 +31,7 @@ public class TabInfo extends TabBase {
 		visible = enable;
 
 		backgroundColor = 0x555555;
-		maxHeight += 4 + GuiBase.guiFontRenderer.FONT_HEIGHT * extraLines + StringHelper.getSplitStringHeight(GuiBase.guiFontRenderer, infoString, maxWidth);
+		maxHeight += 4 + getFontRenderer().FONT_HEIGHT * extraLines + StringHelper.getSplitStringHeight(getFontRenderer(), infoString, maxWidth);
 		myInfo = infoString;
 	}
 
@@ -46,8 +46,8 @@ public class TabInfo extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.information"), posX - currentWidth + 22, posY + 6, headerColor);
-		GuiBase.guiFontRenderer.drawSplitString(myInfo, posX + 8 - currentWidth, posY + 20, maxWidth - 8, textColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.information"), posX - currentWidth + 22, posY + 6, headerColor);
+		getFontRenderer().drawSplitString(myInfo, posX + 8 - currentWidth, posY + 20, maxWidth - 8, textColor);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 	}

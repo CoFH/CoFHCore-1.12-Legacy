@@ -1,4 +1,4 @@
-package cofh.item;
+package cofh.item.tool;
 
 import cofh.CoFHCore;
 import cofh.entity.EntityCoFHFishHook;

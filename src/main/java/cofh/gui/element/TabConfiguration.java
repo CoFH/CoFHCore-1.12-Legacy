@@ -40,8 +40,8 @@ public class TabConfiguration extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), posX + 20, posY + 6, headerColor);
-		GuiBase.guiFontRenderer.drawString("", posX, posY, 0xffffff);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), posX + 20, posY + 6, headerColor);
+		getFontRenderer().drawString("", posX, posY, 0xffffff);
 		RenderHelper.setBlockTextureSheet();
 
 		GL11.glEnable(GL11.GL_BLEND);

@@ -44,16 +44,18 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = "required-after:Forge@[" + CoFHProps.FORGE_REQ + ",)")
+@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies)
 public class CoFHCore extends BaseMod {
 
 	public static final String modId = "CoFHCore";
-	public static final String version = CoFHProps.VERSION;
-	public static final String modName = CoFHProps.NAME;
+	public static final String modName = "CoFH Core";
+	public static final String version = "1.7.2R3.0.0B1";
+	public static final String dependencies = "required-after:Forge@[" + CoFHProps.FORGE_REQ + ",)";
+	public static final String releaseURL = "http://teamcofh.com/cofhcore/version/version.txt";
 
 	@Instance(modId)
 	public static CoFHCore instance;
-	public static final ConfigHandler config = new ConfigHandler(CoFHProps.VERSION);
+	public static final ConfigHandler config = new ConfigHandler(version);
 	public static Logger log = LogManager.getLogger(modId);
 
 	@SidedProxy(clientSide = "cofh.core.ProxyClient", serverSide = "cofh.core.Proxy")
@@ -68,11 +70,11 @@ public class CoFHCore extends BaseMod {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 
-		UpdateManager.registerUpdater(new UpdateManager(this, CoFHProps.RELEASE_URL));
+		UpdateManager.registerUpdater(new UpdateManager(this, releaseURL));
 
 		CoFHProps.configDir = event.getModConfigurationDirectory();
 
-		config.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/CoFHCore.cfg")));
+		config.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/cfg")));
 
 		String category = "general";
 
@@ -116,6 +118,8 @@ public class CoFHCore extends BaseMod {
 
 		PacketHandler.instance.init();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
+
+		proxy.registerKeyBinds();
 	}
 
 	@EventHandler

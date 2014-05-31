@@ -11,19 +11,19 @@ public abstract class WorldProxy extends World {
 
 	protected World proxiedWorld;
 
-	private static String getPar2String(World world) {
+	private static String getWorldName(World world) {
 
 		return world.getWorldInfo().getWorldName();
 	}
 
-	private static WorldSettings getPar4WorldSettings(World world) {
+	private static WorldSettings getWorldSettings(World world) {
 
 		return new WorldSettings(world.getWorldInfo());
 	}
 
 	public WorldProxy(World world) {
 
-		super(world.getSaveHandler(), getPar2String(world), world.provider, getPar4WorldSettings(world), world.theProfiler);
+		super(world.getSaveHandler(), getWorldName(world), world.provider, getWorldSettings(world), world.theProfiler);
 		this.proxiedWorld = world;
 		// perWorldStorage = world.perWorldStorage; // final, set in super; requires reflection
 		ReflectionHelper.setPrivateValue(World.class, this, world.perWorldStorage, new String[] { "perWorldStorage" }); // forge-added, no reobf
@@ -55,7 +55,7 @@ public abstract class WorldProxy extends World {
 	}
 
 	@Override
-	public Entity getEntityByID(int var1) {
+	public Entity getEntityByID(int id) {
 
 		return null;
 	}

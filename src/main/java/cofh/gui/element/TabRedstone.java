@@ -10,9 +10,6 @@ import org.lwjgl.opengl.GL11;
 
 public class TabRedstone extends TabBase {
 
-	public static final String[] TOOLTIPS = { StringHelper.localize("info.cofh.redstoneStateIgnored"), StringHelper.localize("info.cofh.redstoneStateLow"),
-			StringHelper.localize("info.cofh.redstoneStateHigh") };
-
 	IRedstoneControl myTile;
 
 	public TabRedstone(GuiBase gui, IRedstoneControl theTile) {
@@ -33,29 +30,29 @@ public class TabRedstone extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.redstoneControl"), posX + 20, posY + 6, headerColor);
-		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.controlStatus") + ":", posX + 8, posY + 42, subheaderColor);
-		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", posX + 8, posY + 66, subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.redstoneControl"), posX + 20, posY + 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.controlStatus") + ":", posX + 8, posY + 42, subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", posX + 8, posY + 66, subheaderColor);
 
 		if (myTile.getControl().isDisabled()) {
 			gui.drawButton("IconGunpowder", posX + 28, posY + 20, 1, 1);
 			gui.drawButton("IconRSTorchOff", posX + 48, posY + 20, 1, 0);
 			gui.drawButton("IconRSTorchOn", posX + 68, posY + 20, 1, 0);
-			GuiBase.guiFontRenderer.drawString(StringHelper.localize("info.cofh.redstoneControlOff"), posX + 16, posY + 54, textColor);
-			GuiBase.guiFontRenderer.drawString(TOOLTIPS[0], posX + 16, posY + 78, textColor);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.disabled"), posX + 16, posY + 54, textColor);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.ignored"), posX + 16, posY + 78, textColor);
 		} else {
-			GuiBase.guiFontRenderer.drawString(StringHelper.localize("info.cofh.redstoneControlOn"), posX + 16, posY + 54, textColor);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.enabled"), posX + 16, posY + 54, textColor);
 
 			if (myTile.getControl().isLow()) {
 				gui.drawButton("IconRedstone", posX + 28, posY + 20, 1, 0);
 				gui.drawButton("IconRSTorchOff", posX + 48, posY + 20, 1, 1);
 				gui.drawButton("IconRSTorchOn", posX + 68, posY + 20, 1, 0);
-				GuiBase.guiFontRenderer.drawString(TOOLTIPS[1], posX + 16, posY + 78, textColor);
+				getFontRenderer().drawString(StringHelper.localize("info.cofh.low"), posX + 16, posY + 78, textColor);
 			} else {
 				gui.drawButton("IconRedstone", posX + 28, posY + 20, 1, 0);
 				gui.drawButton("IconRSTorchOff", posX + 48, posY + 20, 1, 0);
 				gui.drawButton("IconRSTorchOn", posX + 68, posY + 20, 1, 1);
-				GuiBase.guiFontRenderer.drawString(TOOLTIPS[2], posX + 16, posY + 78, textColor);
+				getFontRenderer().drawString(StringHelper.localize("info.cofh.high"), posX + 16, posY + 78, textColor);
 			}
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -66,23 +63,23 @@ public class TabRedstone extends TabBase {
 
 		if (!isFullyOpened()) {
 			if (myTile.getControl().isDisabled()) {
-				list.add(StringHelper.localize("info.cofh.redstoneControlOff"));
+				list.add(StringHelper.localize("info.cofh.disabled"));
 				return;
 			} else if (myTile.getControl().isLow()) {
-				list.add(StringHelper.localize("info.cofh.redstoneControlOn") + ", " + StringHelper.localize("info.cofh.redstoneStateLow"));
+				list.add(StringHelper.localize("info.cofh.enabled") + ", " + StringHelper.localize("info.cofh.low"));
 				return;
 			}
-			list.add(StringHelper.localize("info.cofh.redstoneControlOn") + ", " + StringHelper.localize("info.cofh.redstoneStateHigh"));
+			list.add(StringHelper.localize("info.cofh.enabled") + ", " + StringHelper.localize("info.cofh.high"));
 			return;
 		}
 		int x = gui.getMouseX() - currentShiftX;
 		int y = gui.getMouseY() - currentShiftY;
 		if (28 <= x && x < 44 && 20 <= y && y < 36) {
-			list.add(TOOLTIPS[0]);
+			list.add(StringHelper.localize("info.cofh.ignored"));
 		} else if (48 <= x && x < 64 && 20 <= y && y < 36) {
-			list.add(TOOLTIPS[1]);
+			list.add(StringHelper.localize("info.cofh.low"));
 		} else if (68 <= x && x < 84 && 20 <= y && y < 36) {
-			list.add(TOOLTIPS[2]);
+			list.add(StringHelper.localize("info.cofh.high"));
 		}
 	}
 

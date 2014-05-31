@@ -1,4 +1,4 @@
-package cofh.item;
+package cofh.item.tool;
 
 import cofh.util.CoreUtils;
 import cofh.util.ServerHelper;

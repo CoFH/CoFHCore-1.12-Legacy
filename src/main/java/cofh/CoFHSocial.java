@@ -23,7 +23,7 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = "CoFHSocial", name = "CoFH Social", version = CoFHProps.VERSION, dependencies = "required-after:CoFHCore@[" + CoFHProps.VERSION + ",)")
+@Mod(modid = "CoFHSocial", name = "CoFH Social", version = CoFHCore.version, dependencies = "required-after:CoFHCore@[" + CoFHCore.version + ",)")
 public class CoFHSocial {
 
 	@Instance("CoFHSocial")
@@ -64,7 +64,7 @@ public class CoFHSocial {
 	}
 
 	public static final Logger log = LogManager.getLogger("CoFHSocial");
-	public static final ConfigHandler config = new ConfigHandler(CoFHProps.VERSION);
+	public static final ConfigHandler config = new ConfigHandler(CoFHCore.version);
 
 	static {
 		// log.setParent(FMLLog.getLogger());

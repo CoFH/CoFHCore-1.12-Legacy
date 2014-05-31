@@ -1,11 +1,21 @@
 #fr_FR
 
+#death.attack.pyrotheum=%1$s mistook Pyrotheum for Water!
+#death.attack.pyrotheum.player=%1$s burned alive trying to escape %2$s!
+#death.attack.cryotheum=%1$s froze to death!
+#death.attack.cryotheum.player=%1$s froze to death trying to escape %2$s!
+#death.attack.mana=%1$s was torn apart by raw Mana!
+#death.attack.mana.player=%1$s ran into another state of being attempting to escape %2$s!
+death.attack.flux=%1$s ont vu leur réalité détruite par le Flux!
+death.attack.flux.player=%1$s a été Fluxé à mort par %2$s!
+
 info.cofh.access=Accès
 info.cofh.accessMode=Mode d'accès
 info.cofh.accessPublic=Public
 info.cofh.accessRestricted=Restreint
 info.cofh.accessPrivate=Propriétaire Seulement
 info.cofh.all=Tous
+info.cofh.amount=Montant
 info.cofh.blank=Vierge
 info.cofh.charge=Charge
 info.cofh.configuration=Configuration
@@ -13,7 +23,9 @@ info.cofh.contents=Contenu
 info.cofh.controlStatus=Statut de Control
 info.cofh.damageAttack=Dommage d'attaque
 info.cofh.damageFlux=Dommage de Flux
+info.cofh.disabled=Désactivé
 info.cofh.empty=Vide
+info.cofh.enabled=Activé
 info.cofh.energy=Énergie
 info.cofh.energyConsume=Consommation d'énergie
 info.cofh.energyProduce=Énergie produite
@@ -21,10 +33,15 @@ info.cofh.energyStored=Énergie Stockée
 info.cofh.fluid=Fluide
 info.cofh.frequency=Fréquence
 info.cofh.friendsList=Liste d'amis
+info.cofh.high=État Haut
+info.cofh.ignored=Ignoré
 info.cofh.information=Information
 info.cofh.infinite=Infini
+info.cofh.item=Objet
 info.cofh.items=Objets
 info.cofh.level=Niveau
+info.cofh.locked=Fermé
+info.cofh.low=État Bas
 info.cofh.maxEnergyPerTick=Énergie Maximale
 info.cofh.none=Aucune
 info.cofh.owner=Propriétaire
@@ -32,11 +49,6 @@ info.cofh.press=Presser
 info.cofh.receive=Recevoir
 info.cofh.receiving=Reçoit
 info.cofh.redstoneControl=Contrôle de Redstone
-info.cofh.redstoneControlOff=Désactivé
-info.cofh.redstoneControlOn=Activé
-info.cofh.redstoneStateHigh=État Haut
-info.cofh.redstoneStateIgnored=Ignoré
-info.cofh.redstoneStateLow=État Bas
 info.cofh.security=Sécurité
 info.cofh.send=Envoyer
 info.cofh.sending=Envoie
@@ -44,19 +56,12 @@ info.cofh.signal=Signal
 info.cofh.signalRequired=Signal nécessaire
 info.cofh.source=Source
 info.cofh.tutorial=Tutoriel
+info.cofh.unlocked=Déverrouillé
 
 info.cofh.tutorial.fluxRequired=A besoin d'un signal de redstone pour fonctionner.
 info.cofh.tutorial.tabConfiguration=L'onglet de configuration détermine la façon dont les objets entrent et sortent de cette machine.
 info.cofh.tutorial.tabConfiguration2=L'onglet de configuration détermine les modes de fonctionnement de cette machine.
 info.cofh.tutorial.tabRedstone=L'onglet de Contrôle Redstone configure la façon dont cette machine réagit à la Redstone.
-
-info.cofh.lexicon1=Converti les objets dans leurs formes équivalentes.
-info.cofh.lexicon2=Clic-droit (ouvrir) pour étudier.
-info.cofh.lexicon3=Utilisez lorsque vous êtes accroupi pour gagner du savoir !
-info.cofh.lexicon4=Clic-droit (ouvrir) pour transformer des objets.
-info.cofh.lexicon5=Utilisez lorsque vous êtes accroupi pour oublier ce que vous avez appris.
-item.cofh.tool.lexicon.name=Lexique de Forge
-item.cofh.tool.lexiconActive.name=Lexique de Forge (Actif)
 
 item.invalid.name=Objet Invalide (Détruire)
 
@@ -68,3 +73,13 @@ message.cofh.secure2=Vous auriez pû y perdre une main !
 message.cofh.secureWarning=Info: Les opérateurs du serveur peuvent accéder aux blocs "sécurisés".
 message.cofh.receiveConfig=Réception de la configuration du serveur...
 message.cofh.restoreConfig=Restauration de la configuration du client...
+
+#CoFHLexicon
+
+info.cofh.lexicon1=Converti les objets dans leurs formes équivalentes.
+info.cofh.lexicon2=Clic-droit (ouvrir) pour étudier.
+info.cofh.lexicon3=Utilisez lorsque vous êtes accroupi pour gagner du savoir !
+info.cofh.lexicon4=Clic-droit (ouvrir) pour transformer des objets.
+info.cofh.lexicon5=Utilisez lorsque vous êtes accroupi pour oublier ce que vous avez appris.
+item.cofh.tool.lexicon.name=Lexique de Forge
+item.cofh.tool.lexiconActive.name=Lexique de Forge (Actif)

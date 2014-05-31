@@ -2,8 +2,10 @@ package cofh.core;
 
 import cofh.gui.element.TabInfo;
 import cofh.gui.element.TabTutorial;
+import cofh.key.CoFHKey;
 import cofh.render.CoFHFontRender;
 import cofh.render.IconRegistry;
+import cofh.util.KeyBindingEmpower;
 import cofh.util.TickHandlerEnderRegistry;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -25,6 +27,14 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 public class ProxyClient extends Proxy {
 
 	public static CoFHFontRender fontRenderer;
+
+	@Override
+	public void registerKeyBinds() {
+
+		super.registerKeyBinds();
+		FMLCommonHandler.instance().bus().register(new CoFHKey());
+		CoFHKey.addKeyBind(KeyBindingEmpower.instance);
+	}
 
 	@Override
 	public void registerRenderInformation() {

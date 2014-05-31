@@ -10,9 +10,6 @@ import org.lwjgl.opengl.GL11;
 
 public class TabSecurity extends TabBase {
 
-	public static final String[] TOOLTIPS = { StringHelper.localize("info.cofh.accessPublic"), StringHelper.localize("info.cofh.accessRestricted"),
-			StringHelper.localize("info.cofh.accessPrivate") };
-
 	ISecureTile myTile;
 	String myPlayer;
 
@@ -45,24 +42,24 @@ public class TabSecurity extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.security"), posX + 20, posY + 6, headerColor);
-		GuiBase.guiFontRenderer.drawStringWithShadow(StringHelper.localize("info.cofh.accessMode") + ":", posX + 8, posY + 42, subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.security"), posX + 20, posY + 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.accessMode") + ":", posX + 8, posY + 42, subheaderColor);
 
 		if (myTile.getAccess().isPublic()) {
 			gui.drawButton("IconAccessPublic", posX + 28, posY + 20, 1, 1);
 			gui.drawButton("IconAccessFriends", posX + 48, posY + 20, 1, 0);
 			gui.drawButton("IconAccessPrivate", posX + 68, posY + 20, 1, 0);
-			GuiBase.guiFontRenderer.drawString(TOOLTIPS[0], posX + 16, posY + 54, textColor);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPublic"), posX + 16, posY + 54, textColor);
 		} else if (myTile.getAccess().isRestricted()) {
 			gui.drawButton("IconAccessPublic", posX + 28, posY + 20, 1, 0);
 			gui.drawButton("IconAccessFriends", posX + 48, posY + 20, 1, 1);
 			gui.drawButton("IconAccessPrivate", posX + 68, posY + 20, 1, 0);
-			GuiBase.guiFontRenderer.drawString(TOOLTIPS[1], posX + 16, posY + 54, textColor);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessRestricted"), posX + 16, posY + 54, textColor);
 		} else if (myTile.getAccess().isPrivate()) {
 			gui.drawButton("IconAccessPublic", posX + 28, posY + 20, 1, 0);
 			gui.drawButton("IconAccessFriends", posX + 48, posY + 20, 1, 0);
 			gui.drawButton("IconAccessPrivate", posX + 68, posY + 20, 1, 1);
-			GuiBase.guiFontRenderer.drawString(TOOLTIPS[2], posX + 16, posY + 54, textColor);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPrivate"), posX + 16, posY + 54, textColor);
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
@@ -77,11 +74,11 @@ public class TabSecurity extends TabBase {
 		int x = gui.getMouseX() - currentShiftX;
 		int y = gui.getMouseY() - currentShiftY;
 		if (28 <= x && x < 44 && 20 <= y && y < 36) {
-			list.add(TOOLTIPS[0]);
+			list.add(StringHelper.localize("info.cofh.accessPublic"));
 		} else if (48 <= x && x < 64 && 20 <= y && y < 36) {
-			list.add(TOOLTIPS[1]);
+			list.add(StringHelper.localize("info.cofh.accessRestricted"));
 		} else if (68 <= x && x < 84 && 20 <= y && y < 36) {
-			list.add(TOOLTIPS[2]);
+			list.add(StringHelper.localize("info.cofh.accessPrivate"));
 		}
 	}
 

@@ -1,10 +1,12 @@
 package cofh.core;
 
 import cofh.CoFHCore;
+import cofh.key.CoFHKey;
 import cofh.key.KeyPacket;
 import cofh.network.CoFHTileInfoPacket;
 import cofh.network.CoFHTilePacket;
 import cofh.social.SocialPacket;
+import cofh.util.KeyBindingEmpower;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -18,6 +20,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 public class Proxy {
+
+	public void registerKeyBinds() {
+
+		CoFHKey.addServerKeyBind(KeyBindingEmpower.instance);
+	}
 
 	public void registerRenderInformation() {
 
