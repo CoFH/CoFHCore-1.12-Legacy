@@ -1,4 +1,4 @@
-﻿#ru_RU
+#ru_RU
 
 death.attack.pyrotheum=%1$s принял пиротеум за воду!
 death.attack.pyrotheum.player=%1$s сгорел заживо, убегая от %2$s!
@@ -15,7 +15,7 @@ info.cofh.accessPublic=Публичный
 info.cofh.accessRestricted=Ограниченный
 info.cofh.accessPrivate=Приватный
 info.cofh.all=Все
-#info.cofh.amount
+info.cofh.amount=Количество
 info.cofh.blank=Пусто
 info.cofh.charge=Заряд
 info.cofh.configuration=Конфигурация
@@ -37,26 +37,26 @@ info.cofh.high=Высоко
 info.cofh.ignored=Игнорировать
 info.cofh.information=Информация
 info.cofh.infinite=Бесконечность
-#info.cofh.item
+info.cofh.item=Предмет
 info.cofh.items=Предметы
 info.cofh.level=Уровень
-#info.cofh.locked
+info.cofh.locked=Закрыто
 info.cofh.low=Низко
 info.cofh.maxEnergyPerTick=Макс. энергия
-info.cofh.none=Ничего
+info.cofh.none=Нету
 info.cofh.owner=Владелец
 info.cofh.press=Нажать
 info.cofh.receive=Принять
 info.cofh.receiving=Приём
 info.cofh.redstoneControl=Красный контроль
-info.cofh.security=Безопастность
+info.cofh.security=Безопасность
 info.cofh.send=Передать
 info.cofh.sending=Передача
 info.cofh.signal=Сигнал
 info.cofh.signalRequired=Нужный сигнал
 info.cofh.source=Источник
-info.cofh.tutorial=Туториал
-#info.cofh.unlocked
+info.cofh.tutorial=Руководство
+info.cofh.unlocked=Открыто
 
 info.cofh.tutorial.fluxRequired=Для работы необходим Redstone Flux.
 info.cofh.tutorial.tabConfiguration=Эта вкладка конфигурации определяет, как предметы попадают и покидают устройство.
