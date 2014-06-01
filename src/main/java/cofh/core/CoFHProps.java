@@ -1,5 +1,6 @@
 package cofh.core;
 
+import cofh.CoFHCore;
 import cofh.util.StringHelper;
 
 import java.io.File;
@@ -7,6 +8,7 @@ import java.io.File;
 public class CoFHProps {
 
 	public static final String FORGE_REQ = "10.0.12.1080";
+	public static final String VERSION = CoFHCore.version;
 	public static File configDir = null;
 
 	/* Global Constants */
