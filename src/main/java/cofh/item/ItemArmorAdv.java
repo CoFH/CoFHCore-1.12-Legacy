@@ -31,7 +31,7 @@ public class ItemArmorAdv extends ItemArmor {
 	@Override
 	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
 
-		return ItemHelper.isOreName(stack, repairIngot);
+		return ItemHelper.isOreNameEqual(stack, repairIngot);
 	}
 
 	@Override

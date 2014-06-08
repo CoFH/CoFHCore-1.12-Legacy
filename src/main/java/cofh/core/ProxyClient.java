@@ -29,37 +29,6 @@ public class ProxyClient extends Proxy {
 	public static CoFHFontRender fontRenderer;
 
 	@Override
-	public void registerKeyBinds() {
-
-		super.registerKeyBinds();
-		FMLCommonHandler.instance().bus().register(new CoFHKey());
-		CoFHKey.addKeyBind(KeyBindingEmpower.instance);
-	}
-
-	@Override
-	public void registerRenderInformation() {
-
-		TabInfo.enable = CoFHProps.enableInformationTabs;
-		TabTutorial.enable = CoFHProps.enableTutorialTabs;
-
-		fontRenderer = new CoFHFontRender(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"),
-				Minecraft.getMinecraft().renderEngine, false);
-
-		if (Minecraft.getMinecraft().gameSettings.language != null) {
-			fontRenderer.setUnicodeFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode());
-			fontRenderer.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
-		}
-
-		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(fontRenderer);
-	}
-
-	@Override
-	public void registerTickHandlers() {
-
-		FMLCommonHandler.instance().bus().register(TickHandlerEnderRegistry.instance);
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void registerIcons(TextureStitchEvent.Pre event) {
@@ -137,6 +106,37 @@ public class ProxyClient extends Proxy {
 	public EntityPlayer getClientPlayer() {
 
 		return Minecraft.getMinecraft().thePlayer;
+	}
+
+	@Override
+	public void registerKeyBinds() {
+
+		super.registerKeyBinds();
+		FMLCommonHandler.instance().bus().register(new CoFHKey());
+		CoFHKey.addKeyBind(KeyBindingEmpower.instance);
+	}
+
+	@Override
+	public void registerRenderInformation() {
+
+		TabInfo.enable = CoFHProps.enableInformationTabs;
+		TabTutorial.enable = CoFHProps.enableTutorialTabs;
+
+		fontRenderer = new CoFHFontRender(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"),
+				Minecraft.getMinecraft().renderEngine, false);
+
+		if (Minecraft.getMinecraft().gameSettings.language != null) {
+			fontRenderer.setUnicodeFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode());
+			fontRenderer.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
+		}
+
+		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(fontRenderer);
+	}
+
+	@Override
+	public void registerTickHandlers() {
+
+		FMLCommonHandler.instance().bus().register(TickHandlerEnderRegistry.instance);
 	}
 
 }

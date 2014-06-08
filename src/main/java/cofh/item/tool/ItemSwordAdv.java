@@ -24,7 +24,7 @@ public class ItemSwordAdv extends ItemSword {
 	@Override
 	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
 
-		return ItemHelper.isOreName(stack, repairIngot);
+		return ItemHelper.isOreNameEqual(stack, repairIngot);
 	}
 
 }

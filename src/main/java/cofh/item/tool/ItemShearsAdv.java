@@ -26,7 +26,7 @@ public class ItemShearsAdv extends ItemShears {
 	@Override
 	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
 
-		return ItemHelper.isOreName(stack, repairIngot);
+		return ItemHelper.isOreNameEqual(stack, repairIngot);
 	}
 
 }

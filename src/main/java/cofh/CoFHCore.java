@@ -23,23 +23,15 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -110,13 +102,12 @@ public class CoFHCore extends BaseMod {
 		BucketHandler.initialize();
 
 		registerOreDictionaryEntries();
-		fixOreDerptionary();
 	}
 
 	@EventHandler
 	public void initialize(FMLInitializationEvent event) {
 
-		PacketHandler.instance.init();
+		PacketHandler.instance.initialize();
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
 
 		proxy.registerKeyBinds();
@@ -156,62 +147,6 @@ public class CoFHCore extends BaseMod {
 		registerOreDictionaryEntry("cloth", new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE));
 		registerOreDictionaryEntry("coal", new ItemStack(Items.coal, 1, 0));
 		registerOreDictionaryEntry("charcoal", new ItemStack(Items.coal, 1, 1));
-	}
-
-	public void fixOreDerptionary() {
-
-		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
-		List<IRecipe> recipesToRemove = new ArrayList<IRecipe>();
-		List<IRecipe> recipesToAdd = new ArrayList<IRecipe>();
-
-		ItemStack[] stairs = new ItemStack[4];
-
-		stairs[0] = new ItemStack(Blocks.oak_stairs);
-		stairs[1] = new ItemStack(Blocks.spruce_stairs);
-		stairs[2] = new ItemStack(Blocks.birch_stairs);
-		stairs[3] = new ItemStack(Blocks.jungle_stairs);
-
-		for (Object obj : recipes) {
-			if (obj instanceof ShapedOreRecipe) {
-				ShapedOreRecipe recipe = (ShapedOreRecipe) obj;
-				ItemStack output = recipe.getRecipeOutput();
-				for (int i = 0; i < 4; i++) {
-					if (output.getItem() == stairs[i].getItem()) {
-						recipesToRemove.add(recipe);
-					}
-				}
-			} else if (obj instanceof ShapedRecipes) {
-				ShapedRecipes recipe = (ShapedRecipes) obj;
-				ItemStack output = recipe.getRecipeOutput();
-				for (int i = 0; i < 4; i++) {
-					if (output.getItem() == stairs[i].getItem()) {
-						recipesToRemove.add(recipe);
-					}
-				}
-			}
-		}
-
-		recipesToAdd
-				.add(new ShapedOreRecipe(new ItemStack(Blocks.oak_stairs, 4), new Object[] { "#  ", "## ", "###", '#', new ItemStack(Blocks.planks, 1, 0) }));
-		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(Blocks.spruce_stairs, 4), new Object[] { "#  ", "## ", "###", '#',
-				new ItemStack(Blocks.planks, 1, 1) }));
-		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(Blocks.birch_stairs, 4),
-				new Object[] { "#  ", "## ", "###", '#', new ItemStack(Blocks.planks, 1, 2) }));
-		recipesToAdd.add(new ShapedOreRecipe(new ItemStack(Blocks.jungle_stairs, 4), new Object[] { "#  ", "## ", "###", '#',
-				new ItemStack(Blocks.planks, 1, 3) }));
-
-		recipes.removeAll(recipesToRemove);
-		recipes.addAll(recipesToAdd);
-	}
-
-	private boolean registerOreDictionaryEntry(String oreName, Block ore) {
-
-		return registerOreDictionaryEntry(oreName, new ItemStack(ore));
-	}
-
-	private boolean registerOreDictionaryEntry(String oreName, Item ore) {
-
-		return registerOreDictionaryEntry(oreName, new ItemStack(ore));
 	}
 
 	private boolean registerOreDictionaryEntry(String oreName, ItemStack ore) {

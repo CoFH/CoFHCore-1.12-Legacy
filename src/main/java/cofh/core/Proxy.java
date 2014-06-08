@@ -7,6 +7,7 @@ import cofh.network.CoFHTileInfoPacket;
 import cofh.network.CoFHTilePacket;
 import cofh.social.SocialPacket;
 import cofh.util.KeyBindingEmpower;
+import cofh.util.oredict.OreDictionaryArbiter;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -18,21 +19,9 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 
 public class Proxy {
-
-	public void registerKeyBinds() {
-
-		CoFHKey.addServerKeyBind(KeyBindingEmpower.instance);
-	}
-
-	public void registerRenderInformation() {
-
-	}
-
-	public void registerTickHandlers() {
-
-	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -44,6 +33,12 @@ public class Proxy {
 	@SubscribeEvent
 	public void initializeIcons(TextureStitchEvent.Post event) {
 
+	}
+
+	@SubscribeEvent
+	public void handleOreRegisterEvent(OreRegisterEvent event) {
+
+		OreDictionaryArbiter.registerOreDictionaryEntry(event.Ore, event.Name);
 	}
 
 	public boolean isOp(String playerName) {
@@ -136,12 +131,25 @@ public class Proxy {
 		}
 	}
 
+	public void registerKeyBinds() {
+
+		CoFHKey.addServerKeyBind(KeyBindingEmpower.instance);
+	}
+
 	public void registerPacketInformation() {
 
 		SocialPacket.initialize();
 		KeyPacket.initialize();
 		CoFHTileInfoPacket.initialize();
 		CoFHTilePacket.initialize();
+	}
+
+	public void registerRenderInformation() {
+
+	}
+
+	public void registerTickHandlers() {
+
 	}
 
 }
