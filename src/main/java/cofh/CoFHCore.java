@@ -41,8 +41,8 @@ public class CoFHCore extends BaseMod {
 
 	public static final String modId = "CoFHCore";
 	public static final String modName = "CoFH Core";
-	public static final String version = "1.7.2R3.0.0B1";
-	public static final String dependencies = "required-after:Forge@[" + CoFHProps.FORGE_REQ + ",)";
+	public static final String version = CoFHProps.VERSION;
+	public static final String dependencies = CoFHProps.DEPENDENCIES;
 	public static final String releaseURL = "http://teamcofh.com/cofhcore/version/version.txt";
 
 	@Instance(modId)

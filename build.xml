@@ -9,10 +9,10 @@
 	
 	<!-- Project information -->
 	<property name="build.name" value="${ant.project.name}"/>
-	<property name="class.pckg" value="cofh"/>
+	<property name="class.pckg" value="cofh/core"/>
 	<!-- Version file -->
 	<property name="verclass.dir" value="${src.dir}/${class.pckg}" />
-	<property name="verclass.name" value="CoFHCore.java"/>
+	<property name="verclass.name" value="CoFHProps.java"/>
 	
 	<!-- Forge version -->
 	<property name="mc.version"  value="1.7.2"/>
@@ -253,7 +253,7 @@
 	
 	<target name="setup-bon" depends="properties" unless="bon.exists">
 		<echo message="Downloading BON..."/>
-		<get src="https://github.com/skyboy/bearded-octo-nemesis/releases/download/1.0/BON.jar" dest="${reobf.cmd}"/>
+		<get src="https://github.com/skyboy/bearded-octo-nemesis/releases/download/1.1/BON.jar" dest="${reobf.cmd}"/>
 	</target>
 	
 	<macrodef name="update-languages">
