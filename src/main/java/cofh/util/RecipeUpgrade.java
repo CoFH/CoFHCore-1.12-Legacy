@@ -4,16 +4,16 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class UpgradeRecipe extends ShapedOreRecipe {
+public class RecipeUpgrade extends ShapedOreRecipe {
 
 	int upgradeSlot = 4;
 
-	public UpgradeRecipe(ItemStack result, Object[] recipe) {
+	public RecipeUpgrade(ItemStack result, Object[] recipe) {
 
 		super(result, recipe);
 	}
 
-	public UpgradeRecipe(int upgradeSlot, ItemStack result, Object[] recipe) {
+	public RecipeUpgrade(int upgradeSlot, ItemStack result, Object[] recipe) {
 
 		super(result, recipe);
 		this.upgradeSlot = upgradeSlot;

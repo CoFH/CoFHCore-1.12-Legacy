@@ -74,6 +74,13 @@ message.cofh.secureWarning=Notice: Server Ops are able to freely access 'secure'
 message.cofh.receiveConfig=Receiving Server Configuration...
 message.cofh.restoreConfig=Restoring Client Configuration...
 
+#Fluid Name Fixes
+
+fluid.tile.water=Water
+fluid.tile.lava=Lava
+fluid.fuel=Fuel
+fluid.oil=Oil
+
 #CoFHLexicon
 
 info.cofh.lexicon1=Converts items to equivalent forms.

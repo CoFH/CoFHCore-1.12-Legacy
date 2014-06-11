@@ -2,12 +2,11 @@ package cofh.util.fluid;
 
 import cofh.util.BlockWrapper;
 import cofh.util.ItemWrapper;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-
-import gnu.trove.map.TMap;
-import gnu.trove.map.hash.THashMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -28,14 +27,14 @@ public class BucketHandler {
 
 	public static void initialize() {
 
-		registerBucket(Blocks.water, 0, new ItemStack(Items.water_bucket));
 		registerBucket(Blocks.flowing_water, 0, new ItemStack(Items.water_bucket));
-		registerBucket(Blocks.lava, 0, new ItemStack(Items.lava_bucket));
 		registerBucket(Blocks.flowing_lava, 0, new ItemStack(Items.lava_bucket));
 	}
 
-	private static TMap<Integer, ItemWrapper> bucketFill = new THashMap<Integer, ItemWrapper>();
-	private static TMap<Integer, BlockWrapper> bucketEmpty = new THashMap<Integer, BlockWrapper>();
+	private static BlockWrapper queryBlock = new BlockWrapper(Blocks.stone, 0);
+	private static ItemWrapper queryItem = new ItemWrapper(Items.diamond, 0);
+
+	private static BiMap<BlockWrapper, ItemWrapper> buckets = HashBiMap.create();
 
 	private BucketHandler() {
 
@@ -89,12 +88,10 @@ public class BucketHandler {
 
 	public static boolean registerBucket(Block block, int bMeta, ItemStack bucket) {
 
-		if (block == null || bMeta < 0 || bucket == null || bucketFill.containsKey(BlockWrapper.getHashCode(block, bMeta))
-				|| bucketEmpty.containsKey(ItemWrapper.getHashCode(bucket))) {
+		if (block == null || bMeta < 0 || bucket == null || buckets.containsKey(new BlockWrapper(block, bMeta))) {
 			return false;
 		}
-		bucketFill.put(BlockWrapper.getHashCode(block, bMeta), new ItemWrapper(bucket));
-		bucketEmpty.put(ItemWrapper.getHashCode(bucket), new BlockWrapper(block, bMeta));
+		buckets.put(new BlockWrapper(block, bMeta), new ItemWrapper(bucket));
 		return true;
 	}
 
@@ -103,7 +100,7 @@ public class BucketHandler {
 		Block block = world.getBlock(x, y, z);
 		int bMeta = world.getBlockMetadata(x, y, z);
 
-		if (!bucketFill.containsKey(BlockWrapper.getHashCode(block, bMeta))) {
+		if (!buckets.containsKey(new BlockWrapper(block, bMeta))) {
 			if (block instanceof IFluidBlock) {
 				IFluidBlock flBlock = (IFluidBlock) block;
 
@@ -120,19 +117,19 @@ public class BucketHandler {
 			return null;
 		}
 		world.setBlockToAir(x, y, z);
-		ItemWrapper result = bucketFill.get(BlockWrapper.getHashCode(block, bMeta));
+		ItemWrapper result = buckets.get(new BlockWrapper(block, bMeta));
 		return new ItemStack(result.item, 1, result.metadata);
 	}
 
 	public static boolean emptyBucket(World world, int x, int y, int z, ItemStack bucket) {
 
-		if (!bucketEmpty.containsKey(ItemWrapper.getHashCode(bucket))) {
+		if (!buckets.inverse().containsKey(new ItemWrapper(bucket))) {
 			if (bucket.getItem() instanceof ItemBucket) {
 				return ((ItemBucket) bucket.getItem()).tryPlaceContainedLiquid(world, x, y, z);
 			}
 			return false;
 		}
-		BlockWrapper result = bucketEmpty.get(ItemWrapper.getHashCode(bucket));
+		BlockWrapper result = buckets.inverse().get(new ItemWrapper(bucket));
 		world.setBlock(x, y, z, result.block, result.metadata, 3);
 		return true;
 	}

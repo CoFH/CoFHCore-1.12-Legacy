@@ -74,6 +74,13 @@ message.cofh.secureWarning=Notice: Los "Ops" del servidor pueden acceder libreme
 message.cofh.receiveConfig=Reciviendo la configuración del servidor...
 message.cofh.restoreConfig=Restaurando la configuración del cliente...
 
+#Fluid Name Fixes
+
+#fluid.tile.water=
+#fluid.tile.lava=
+#fluid.fuel=
+#fluid.oil=
+
 #CoFHLexicon
 
 info.cofh.lexicon1=Convierte objetos a formas similares.

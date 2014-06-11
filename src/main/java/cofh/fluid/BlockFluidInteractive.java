@@ -11,7 +11,7 @@ import net.minecraftforge.fluids.Fluid;
 
 public class BlockFluidInteractive extends BlockFluidCoFHBase {
 
-	protected final TMap<Integer, BlockWrapper> collisionMap = new THashMap<Integer, BlockWrapper>();
+	protected final TMap<BlockWrapper, BlockWrapper> collisionMap = new THashMap<BlockWrapper, BlockWrapper>();
 
 	public BlockFluidInteractive(Fluid fluid, Material material, String name) {
 
@@ -37,9 +37,9 @@ public class BlockFluidInteractive extends BlockFluidCoFHBase {
 			return false;
 		}
 		if (preMeta < 0) {
-			collisionMap.put(BlockWrapper.getHashCode(preBlock, preMeta), new BlockWrapper(postBlock, postMeta));
+			collisionMap.put(new BlockWrapper(preBlock, preMeta), new BlockWrapper(postBlock, postMeta));
 		} else {
-			collisionMap.put(BlockWrapper.getHashCode(preBlock, preMeta), new BlockWrapper(postBlock, postMeta));
+			collisionMap.put(new BlockWrapper(preBlock, preMeta), new BlockWrapper(postBlock, postMeta));
 		}
 		return true;
 	}
@@ -51,15 +51,15 @@ public class BlockFluidInteractive extends BlockFluidCoFHBase {
 
 	public boolean hasInteraction(Block preBlock, int preMeta) {
 
-		return collisionMap.containsKey(BlockWrapper.getHashCode(preBlock, preMeta)) || collisionMap.containsKey(BlockWrapper.getHashCode(preBlock, -1));
+		return collisionMap.containsKey(new BlockWrapper(preBlock, preMeta)) || collisionMap.containsKey(new BlockWrapper(preBlock, -1));
 	}
 
 	public BlockWrapper getInteraction(Block preBlock, int preMeta) {
 
-		if (collisionMap.containsKey(BlockWrapper.getHashCode(preBlock, preMeta))) {
-			return collisionMap.get(BlockWrapper.getHashCode(preBlock, preMeta));
+		if (collisionMap.containsKey(new BlockWrapper(preBlock, preMeta))) {
+			return collisionMap.get(new BlockWrapper(preBlock, preMeta));
 		}
-		return collisionMap.get(BlockWrapper.getHashCode(preBlock, -1));
+		return collisionMap.get(new BlockWrapper(preBlock, -1));
 	}
 
 }

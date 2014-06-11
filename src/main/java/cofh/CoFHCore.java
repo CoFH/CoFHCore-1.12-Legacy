@@ -3,15 +3,17 @@ package cofh;
 import cofh.command.CommandHandler;
 import cofh.core.CoFHProps;
 import cofh.core.Proxy;
-import cofh.entity.CoFHPlayerTracker;
 import cofh.gui.GuiHandler;
 import cofh.mod.BaseMod;
 import cofh.network.PacketHandler;
 import cofh.updater.UpdateManager;
 import cofh.util.ConfigHandler;
+import cofh.util.FMLEventHandler;
+import cofh.util.RecipeUpgrade;
 import cofh.util.RegistryEnderAttuned;
 import cofh.util.StringHelper;
 import cofh.util.fluid.BucketHandler;
+import cofh.util.oredict.OreDictionaryArbiter;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -32,6 +34,7 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -98,8 +101,10 @@ public class CoFHCore extends BaseMod {
 		config.save();
 
 		MinecraftForge.EVENT_BUS.register(proxy);
-		CoFHPlayerTracker.initialize();
+		FMLEventHandler.initialize();
 		BucketHandler.initialize();
+		OreDictionaryArbiter.initialize();
+		RecipeSorter.register("cofh:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 
 		registerOreDictionaryEntries();
 	}

@@ -17,6 +17,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemBase extends Item {
 
@@ -91,6 +92,22 @@ public class ItemBase extends Item {
 	public ItemStack addItem(int number, String name) {
 
 		return addItem(number, name, 0);
+	}
+
+	public ItemStack addOreDictItem(int number, String name, int rarity) {
+
+		ItemStack stack = addItem(number, name, rarity);
+		OreDictionary.registerOre(name, stack);
+
+		return stack;
+	}
+
+	public ItemStack addOreDictItem(int number, String name) {
+
+		ItemStack stack = addItem(number, name);
+		OreDictionary.registerOre(name, stack);
+
+		return stack;
 	}
 
 	@Override

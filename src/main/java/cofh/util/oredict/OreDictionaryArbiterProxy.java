@@ -17,7 +17,7 @@ public class OreDictionaryArbiterProxy extends OreDictionaryProxy {
 	@Override
 	public final ItemStack getOre(String oreName) {
 
-		if (OreDictionaryArbiter.getOres(oreName).isEmpty()) {
+		if (OreDictionaryArbiter.getOres(oreName) == null) {
 			return null;
 		}
 		return ItemHelper.cloneStack(OreDictionaryArbiter.getOres(oreName).get(0), 1);
@@ -62,7 +62,7 @@ public class OreDictionaryArbiterProxy extends OreDictionaryProxy {
 	@Override
 	public final boolean oreNameExists(String oreName) {
 
-		return !OreDictionaryArbiter.getOres(oreName).isEmpty();
+		return OreDictionaryArbiter.getOres(oreName) != null;
 	}
 
 }

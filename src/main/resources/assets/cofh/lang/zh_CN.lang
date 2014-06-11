@@ -74,6 +74,13 @@ message.cofh.secureWarning=注意: 当前服务器内Op能够自由访问加锁�
 message.cofh.receiveConfig=接收服务端配置...
 message.cofh.restoreConfig=保存客户端配置...
 
+#Fluid Name Fixes
+
+#fluid.tile.water=
+#fluid.tile.lava=
+#fluid.fuel=
+#fluid.oil=
+
 #CoFHLexicon
 
 info.cofh.lexicon1=将物品转换为同一种形式(根据forge矿物辞典规则).

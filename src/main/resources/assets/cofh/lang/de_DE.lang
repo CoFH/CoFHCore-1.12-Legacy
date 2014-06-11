@@ -74,6 +74,13 @@ message.cofh.secureWarning=Anmerkung: Server Ops sind auf diesem Server fähig, 
 message.cofh.receiveConfig=Empfange Server-Konfiguration...
 message.cofh.restoreConfig=Client-Konfiguration wiederherstellen...
 
+#Fluid Name Fixes
+
+#fluid.tile.water=
+#fluid.tile.lava=
+#fluid.fuel=
+#fluid.oil=
+
 #CoFHLexicon
 
 info.cofh.lexicon1=Konvertiert Items in gleichwertige Formen.

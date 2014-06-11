@@ -74,6 +74,13 @@ message.cofh.secureWarning=Заметка: Операторы сервера м�
 message.cofh.receiveConfig=Приём конфигурации сервера...
 message.cofh.restoreConfig=Восстанавливание конфигурации клиента...
 
+#Fluid Name Fixes
+
+fluid.tile.water=Вода
+fluid.tile.lava=Лава
+fluid.fuel=Топливо
+fluid.oil=Нефть
+
 #CoFHLexicon
 
 info.cofh.lexicon1=Конвертирует предметы в их эквивалентные формы.

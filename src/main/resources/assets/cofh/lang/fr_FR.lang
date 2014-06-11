@@ -74,6 +74,13 @@ message.cofh.secureWarning=Info: Les opérateurs du serveur peuvent accéder aux
 message.cofh.receiveConfig=Réception de la configuration du serveur...
 message.cofh.restoreConfig=Restauration de la configuration du client...
 
+#Fluid Name Fixes
+
+#fluid.tile.water=
+#fluid.tile.lava=
+#fluid.fuel=
+#fluid.oil=
+
 #CoFHLexicon
 
 info.cofh.lexicon1=Converti les objets dans leurs formes équivalentes.

@@ -52,9 +52,6 @@ public class OreDictionaryArbiter {
 		for (int i = 0; i < oreNames.length; i++) {
 			ArrayList<ItemStack> ores = OreDictionary.getOres(oreNames[i]);
 
-			oreIDs.put(oreNames[i], OreDictionary.getOreID(oreNames[i]));
-			oreStacks.put(OreDictionary.getOreID(oreNames[i]), ores);
-
 			for (int j = 0; j < ores.size(); j++) {
 				registerOreDictionaryEntry(ores.get(j), oreNames[i]);
 			}
@@ -66,6 +63,15 @@ public class OreDictionaryArbiter {
 	 * Register an Ore Dictionary Entry.
 	 */
 	public static void registerOreDictionaryEntry(ItemStack stack, String name) {
+
+		int id = OreDictionary.getOreID(name);
+
+		oreIDs.put(name, id);
+
+		if (!oreStacks.containsKey(id)) {
+			oreStacks.put(id, new ArrayList<ItemStack>());
+		}
+		oreStacks.get(id).add(stack);
 
 		ItemWrapper item = ItemWrapper.fromItemStack(stack);
 

@@ -1,38 +1,34 @@
 package cofh.render;
 
+import cofh.util.ItemWrapper;
+
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 public class ItemRenderRegistry {
 
-	public static TMap<Integer, IItemRenderer> itemRenders = new THashMap<Integer, IItemRenderer>();
+	public static TMap<ItemWrapper, IItemRenderer> itemRenders = new THashMap<ItemWrapper, IItemRenderer>();
 
-	public static boolean addItemRenderer(ItemStack theItem, IItemRenderer theItemRenderer) {
+	public static boolean addItemRenderer(ItemStack stack, IItemRenderer renderer) {
 
-		if (itemRenders.containsKey(getItemKey(theItem))) {
+		if (validItem(stack)) {
 			return false;
 		}
-		itemRenders.put(getItemKey(theItem), theItemRenderer);
+		itemRenders.put(ItemWrapper.fromItemStack(stack), renderer);
 		return true;
 	}
 
-	public static IItemRenderer getItemRenderer(ItemStack theItem) {
+	public static IItemRenderer getItemRenderer(ItemStack stack) {
 
-		return itemRenders.get(getItemKey(theItem));
+		return itemRenders.get(ItemWrapper.fromItemStack(stack));
 	}
 
-	public static boolean validItem(ItemStack theItem) {
+	public static boolean validItem(ItemStack stack) {
 
-		return itemRenders.containsKey(getItemKey(theItem));
-	}
-
-	private static int getItemKey(ItemStack theItem) {
-
-		return theItem.getItemDamage() | Item.getIdFromItem(theItem.getItem()) << 16;
+		return itemRenders.containsKey(ItemWrapper.fromItemStack(stack));
 	}
 
 }
