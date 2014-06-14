@@ -9,7 +9,7 @@ import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
@@ -27,12 +27,10 @@ public class BucketHandler {
 
 	public static void initialize() {
 
-		registerBucket(Blocks.flowing_water, 0, new ItemStack(Items.water_bucket));
-		registerBucket(Blocks.flowing_lava, 0, new ItemStack(Items.lava_bucket));
 	}
 
-	private static BlockWrapper queryBlock = new BlockWrapper(Blocks.stone, 0);
-	private static ItemWrapper queryItem = new ItemWrapper(Items.diamond, 0);
+	//private static BlockWrapper queryBlock = new BlockWrapper(Blocks.stone, 0);
+	//private static ItemWrapper queryItem = new ItemWrapper(Items.diamond, 0);
 
 	private static BiMap<BlockWrapper, ItemWrapper> buckets = HashBiMap.create();
 
@@ -57,17 +55,24 @@ public class BucketHandler {
 
 		l: if (!current.getItem().equals(Items.bucket)) {
 			if (FluidContainerRegistry.isBucket(current)) {
-				ForgeDirection fside = ForgeDirection.getOrientation(side).getOpposite();
+				ForgeDirection fside = ForgeDirection.getOrientation(side);
+				Block block = event.world.getBlock(x, y, z);
 				x += fside.offsetX;
 				y += fside.offsetY;
 				z += fside.offsetZ;
+				if (!block.isReplaceable(event.world, x, y, z) && block.getMaterial().isSolid()) {
+					x -= fside.offsetX;
+					y -= fside.offsetY;
+					z -= fside.offsetZ;
+				}
 				fill = false;
 				break l;
 			}
 			return;
 		}
 		if (event.entityPlayer != null) {
-			if ((fill && !event.world.canMineBlock(event.entityPlayer, x, y, z)) || !event.entityPlayer.canPlayerEdit(x, y, z, side, current)) {
+			if ((fill && !event.world.canMineBlock(event.entityPlayer, x, y, z)) ||
+					!event.entityPlayer.canPlayerEdit(x, y, z, side, current)) {
 				event.setCanceled(true);
 				return;
 			}
@@ -116,22 +121,35 @@ public class BucketHandler {
 			}
 			return null;
 		}
-		world.setBlockToAir(x, y, z);
+		if (!world.setBlockToAir(x, y, z)) // this can fail
+			return null;
 		ItemWrapper result = buckets.get(new BlockWrapper(block, bMeta));
 		return new ItemStack(result.item, 1, result.metadata);
 	}
 
 	public static boolean emptyBucket(World world, int x, int y, int z, ItemStack bucket) {
 
+		boolean r = false;
 		if (!buckets.inverse().containsKey(new ItemWrapper(bucket))) {
 			if (bucket.getItem() instanceof ItemBucket) {
-				return ((ItemBucket) bucket.getItem()).tryPlaceContainedLiquid(world, x, y, z);
+				r = ((ItemBucket) bucket.getItem()).tryPlaceContainedLiquid(world, x, y, z);
+				world.markBlockForUpdate(x, y, z);
 			}
-			return false;
+			return r;
 		}
 		BlockWrapper result = buckets.inverse().get(new ItemWrapper(bucket));
-		world.setBlock(x, y, z, result.block, result.metadata, 3);
-		return true;
+
+		Material material = world.getBlock(x, y, z).getMaterial();
+		boolean solid = !material.isSolid();
+		if (world.isAirBlock(x, y, z) || solid) {
+			r = world.setBlock(x, y, z, result.block, result.metadata, 3); // this can fail
+
+			if (r && !world.isRemote && solid && !material.isLiquid())
+				world.func_147480_a(x, y, z, true);
+
+			world.markBlockForUpdate(x, y, z);
+		}
+		return r;
 	}
 
 }

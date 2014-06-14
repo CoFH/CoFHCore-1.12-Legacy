@@ -85,6 +85,9 @@
 	</target>
 
 	<target name="get-dependencies" depends="get-version" unless="have.libs">
+		<delete dir="${lib.dir}/"/>
+		<mkdir dir="${lib.dir}/"/>
+
 		<echo message="Downloading CCL... "/>
 		<get src="http://files.minecraftforge.net/maven/codechicken/CodeChickenLib/1.7.2-1.1.0.73/CodeChickenLib-1.7.2-1.1.0.73-dev.jar" dest="${download.dir}/codechickenlib.jar"/>
 		<echo message="Downloading CoFHLib... "/>
@@ -374,6 +377,12 @@
 	<target name="rebuild">
 		<delete file="${forge.jar}" failonerror="false"/>
 		<delete dir="${forge.dir}"/>
+		<delete dir="${download.dir}"/>
+		<antcall target="install"/>
+	</target>
+
+	<target name="refresh-deps">
+		<delete dir="${lib.dir}"/>
 		<delete dir="${download.dir}"/>
 		<antcall target="install"/>
 	</target>
