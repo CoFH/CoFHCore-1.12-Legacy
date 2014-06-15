@@ -16,6 +16,7 @@ info.cofh.accessRestricted=受限
 info.cofh.accessPrivate=私有
 info.cofh.all=全部
 #info.cofh.amount
+#info.cofh.augmentation
 info.cofh.blank=空白
 info.cofh.charge=充能
 info.cofh.configuration=配置

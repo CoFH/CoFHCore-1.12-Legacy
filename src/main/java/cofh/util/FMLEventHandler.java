@@ -1,7 +1,10 @@
 package cofh.util;
 
 import cofh.core.CoFHProps;
+import cofh.render.ItemRenderRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.event.FMLModIdMappingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
@@ -25,6 +28,12 @@ public class FMLEventHandler {
 			player.addChatMessage(new ChatComponentText(StringHelper.YELLOW + "[CoFH] " + StringHelper.WHITE
 					+ StringHelper.localize("message.cofh.secureWarning") + StringHelper.END));
 		}
+	}
+
+	@EventHandler
+	public void handleIdMappingEvent(FMLModIdMappingEvent event) {
+
+		ItemRenderRegistry.reloadRegistry();
 	}
 
 }

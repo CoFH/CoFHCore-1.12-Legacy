@@ -1,8 +1,10 @@
 package cofh.util;
 
 import cofh.api.transport.IEnderAttuned;
+import cofh.api.transport.IEnderEnergyHandler;
+import cofh.api.transport.IEnderFluidHandler;
+import cofh.api.transport.IEnderItemHandler;
 
-import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
 import java.util.ArrayList;
@@ -17,13 +19,13 @@ import net.minecraftforge.common.config.Configuration;
 
 public class RegistryEnderAttuned {
 
-	public static TMap<String, Map<Integer, List<IEnderAttuned>>> inputItem = new THashMap<String, Map<Integer, List<IEnderAttuned>>>();
-	public static TMap<String, Map<Integer, List<IEnderAttuned>>> inputFluid = new THashMap<String, Map<Integer, List<IEnderAttuned>>>();
-	public static TMap<String, Map<Integer, List<IEnderAttuned>>> inputEnergy = new THashMap<String, Map<Integer, List<IEnderAttuned>>>();
+	public static Map<String, Map<Integer, List<IEnderItemHandler>>> inputItem = new THashMap();
+	public static Map<String, Map<Integer, List<IEnderFluidHandler>>> inputFluid = new THashMap();
+	public static Map<String, Map<Integer, List<IEnderEnergyHandler>>> inputEnergy = new THashMap();
 
-	public static TMap<String, Map<Integer, List<IEnderAttuned>>> outputItem = new THashMap<String, Map<Integer, List<IEnderAttuned>>>();
-	public static TMap<String, Map<Integer, List<IEnderAttuned>>> outputFluid = new THashMap<String, Map<Integer, List<IEnderAttuned>>>();
-	public static TMap<String, Map<Integer, List<IEnderAttuned>>> outputEnergy = new THashMap<String, Map<Integer, List<IEnderAttuned>>>();
+	public static Map<String, Map<Integer, List<IEnderItemHandler>>> outputItem = new THashMap();
+	public static Map<String, Map<Integer, List<IEnderFluidHandler>>> outputFluid = new THashMap();
+	public static Map<String, Map<Integer, List<IEnderEnergyHandler>>> outputEnergy = new THashMap();
 
 	public static Configuration linkConf;
 
@@ -40,88 +42,188 @@ public class RegistryEnderAttuned {
 		outputEnergy.clear();
 	}
 
-	public static List<IEnderAttuned> getLinkedStuff(IEnderAttuned theAttuned, Map<String, Map<Integer, List<IEnderAttuned>>> mapToUse) {
+	public static List<IEnderItemHandler> getLinkedItemInputs(IEnderAttuned theAttuned) {
 
-		if (mapToUse.get(theAttuned.getOwnerString()) == null) {
+		if (inputItem.get(theAttuned.getOwnerString()) == null) {
 			return null;
 		}
-		return mapToUse.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency());
+		return inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency());
 	}
 
-	public static List<IEnderAttuned> getLinkedItemInputs(IEnderAttuned theAttuned) {
+	public static List<IEnderItemHandler> getLinkedItemOutputs(IEnderAttuned theAttuned) {
 
-		return getLinkedStuff(theAttuned, inputItem);
+		if (outputItem.get(theAttuned.getOwnerString()) == null) {
+			return null;
+		}
+		return outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency());
 	}
 
-	public static List<IEnderAttuned> getLinkedItemOutputs(IEnderAttuned theAttuned) {
+	public static List<IEnderFluidHandler> getLinkedFluidInputs(IEnderAttuned theAttuned) {
 
-		return getLinkedStuff(theAttuned, outputItem);
+		if (inputFluid.get(theAttuned.getOwnerString()) == null) {
+			return null;
+		}
+		return inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency());
 	}
 
-	public static List<IEnderAttuned> getLinkedFluidInputs(IEnderAttuned theAttuned) {
+	public static List<IEnderFluidHandler> getLinkedFluidOutputs(IEnderAttuned theAttuned) {
 
-		return getLinkedStuff(theAttuned, inputFluid);
+		if (outputFluid.get(theAttuned.getOwnerString()) == null) {
+			return null;
+		}
+		return outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency());
 	}
 
-	public static List<IEnderAttuned> getLinkedFluidOutputs(IEnderAttuned theAttuned) {
+	public static List<IEnderEnergyHandler> getLinkedEnergyInputs(IEnderAttuned theAttuned) {
 
-		return getLinkedStuff(theAttuned, outputFluid);
+		if (inputEnergy.get(theAttuned.getOwnerString()) == null) {
+			return null;
+		}
+		return inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency());
 	}
 
-	public static List<IEnderAttuned> getLinkedPowerInputs(IEnderAttuned theAttuned) {
+	public static List<IEnderEnergyHandler> getLinkedEnergyOutputs(IEnderAttuned theAttuned) {
 
-		return getLinkedStuff(theAttuned, inputEnergy);
-	}
-
-	public static List<IEnderAttuned> getLinkedEnergyOutputs(IEnderAttuned theAttuned) {
-
-		return getLinkedStuff(theAttuned, outputEnergy);
+		if (outputEnergy.get(theAttuned.getOwnerString()) == null) {
+			return null;
+		}
+		return outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency());
 	}
 
 	/* HELPER FUNCTIONS */
-	public static void add(IEnderAttuned theAttuned, Map<String, Map<Integer, List<IEnderAttuned>>> mapToUseInput,
-			Map<String, Map<Integer, List<IEnderAttuned>>> mapToUseOutput, boolean canSend, boolean canReceive) {
+	public static void addItemHandler(IEnderItemHandler theAttuned) {
 
-		if (canSend) {
-			if (mapToUseInput.get(theAttuned.getOwnerString()) == null) {
-				mapToUseInput.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderAttuned>>());
+		if (theAttuned.canSendItems()) {
+			if (inputItem.get(theAttuned.getOwnerString()) == null) {
+				inputItem.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderItemHandler>>());
 			}
-			if (mapToUseInput.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
-				mapToUseInput.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderAttuned>());
+			if (inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
+				inputItem.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderItemHandler>());
 			}
-			if (!mapToUseInput.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
-				mapToUseInput.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
+			if (!inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
+				inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
 			}
 		}
-		if (canReceive) {
-			if (mapToUseOutput.get(theAttuned.getOwnerString()) == null) {
-				mapToUseOutput.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderAttuned>>());
+		if (theAttuned.canReceiveItems()) {
+			if (outputItem.get(theAttuned.getOwnerString()) == null) {
+				outputItem.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderItemHandler>>());
 			}
-			if (mapToUseOutput.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
-				mapToUseOutput.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderAttuned>());
+			if (outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
+				outputItem.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderItemHandler>());
 			}
-			if (!mapToUseOutput.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
-				mapToUseOutput.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
+			if (!outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
+				outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
 			}
 		}
 	}
 
-	public static void remove(IEnderAttuned theAttuned, Map<String, Map<Integer, List<IEnderAttuned>>> mapToUseInput,
-			Map<String, Map<Integer, List<IEnderAttuned>>> mapToUseOutput) {
+	public static void addFluidHandler(IEnderFluidHandler theAttuned) {
 
-		if (mapToUseInput.get(theAttuned.getOwnerString()) != null) {
-			if (mapToUseInput.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
-				mapToUseInput.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
-				if (mapToUseInput.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
-					mapToUseInput.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
+		if (theAttuned.canSendFluid()) {
+			if (inputFluid.get(theAttuned.getOwnerString()) == null) {
+				inputFluid.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderFluidHandler>>());
+			}
+			if (inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
+				inputFluid.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderFluidHandler>());
+			}
+			if (!inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
+				inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
+			}
+		}
+		if (theAttuned.canReceiveFluid()) {
+			if (outputFluid.get(theAttuned.getOwnerString()) == null) {
+				outputFluid.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderFluidHandler>>());
+			}
+			if (outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
+				outputFluid.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderFluidHandler>());
+			}
+			if (!outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
+				outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
+			}
+		}
+	}
+
+	public static void addEnergyHandler(IEnderEnergyHandler theAttuned) {
+
+		if (theAttuned.canSendEnergy()) {
+			if (inputEnergy.get(theAttuned.getOwnerString()) == null) {
+				inputEnergy.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderEnergyHandler>>());
+			}
+			if (inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
+				inputEnergy.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderEnergyHandler>());
+			}
+			if (!inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
+				inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
+			}
+		}
+		if (theAttuned.canReceiveEnergy()) {
+			if (outputEnergy.get(theAttuned.getOwnerString()) == null) {
+				outputEnergy.put(theAttuned.getOwnerString(), new HashMap<Integer, List<IEnderEnergyHandler>>());
+			}
+			if (outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) == null) {
+				outputEnergy.get(theAttuned.getOwnerString()).put(theAttuned.getFrequency(), new ArrayList<IEnderEnergyHandler>());
+			}
+			if (!outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).contains(theAttuned)) {
+				outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).add(theAttuned);
+			}
+		}
+	}
+
+	public static void removeItemHandler(IEnderItemHandler theAttuned) {
+
+		if (inputItem.get(theAttuned.getOwnerString()) != null) {
+			if (inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
+				inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
+				if (inputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
+					inputItem.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
 				}
 			}
 		}
-		if (mapToUseOutput.get(theAttuned.getOwnerString()) != null) {
-			if (mapToUseOutput.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
-				mapToUseOutput.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
-				if (mapToUseOutput.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
-					mapToUseOutput.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
+		if (outputItem.get(theAttuned.getOwnerString()) != null) {
+			if (outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
+				outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
+				if (outputItem.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
+					outputItem.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
+				}
+			}
+		}
+	}
+
+	public static void removeFluidHandler(IEnderFluidHandler theAttuned) {
+
+		if (inputFluid.get(theAttuned.getOwnerString()) != null) {
+			if (inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
+				inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
+				if (inputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
+					inputFluid.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
+				}
+			}
+		}
+		if (outputFluid.get(theAttuned.getOwnerString()) != null) {
+			if (outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
+				outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
+				if (outputFluid.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
+					outputFluid.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
+				}
+			}
+		}
+	}
+
+	public static void removeEnergyHandler(IEnderEnergyHandler theAttuned) {
+
+		if (inputEnergy.get(theAttuned.getOwnerString()) != null) {
+			if (inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
+				inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
+				if (inputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
+					inputEnergy.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
+				}
+			}
+		}
+		if (outputEnergy.get(theAttuned.getOwnerString()) != null) {
+			if (outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()) != null) {
+				outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).remove(theAttuned);
+				if (outputEnergy.get(theAttuned.getOwnerString()).get(theAttuned.getFrequency()).size() == 0) {
+					outputEnergy.get(theAttuned.getOwnerString()).remove(theAttuned.getFrequency());
 				}
 			}
 		}
@@ -129,16 +231,28 @@ public class RegistryEnderAttuned {
 
 	public static void add(IEnderAttuned theAttuned) {
 
-		add(theAttuned, inputItem, outputItem, theAttuned.canSendItems(), theAttuned.canReceiveItems());
-		add(theAttuned, inputFluid, outputFluid, theAttuned.canSendFluid(), theAttuned.canReceiveFluid());
-		add(theAttuned, inputEnergy, outputEnergy, theAttuned.canSendEnergy(), theAttuned.canReceiveEnergy());
+		if (theAttuned instanceof IEnderItemHandler) {
+			addItemHandler((IEnderItemHandler) theAttuned);
+		}
+		if (theAttuned instanceof IEnderFluidHandler) {
+			addFluidHandler((IEnderFluidHandler) theAttuned);
+		}
+		if (theAttuned instanceof IEnderEnergyHandler) {
+			addEnergyHandler((IEnderEnergyHandler) theAttuned);
+		}
 	}
 
 	public static void remove(IEnderAttuned theAttuned) {
 
-		remove(theAttuned, inputItem, outputItem);
-		remove(theAttuned, inputFluid, outputFluid);
-		remove(theAttuned, inputEnergy, outputEnergy);
+		if (theAttuned instanceof IEnderItemHandler) {
+			removeItemHandler((IEnderItemHandler) theAttuned);
+		}
+		if (theAttuned instanceof IEnderFluidHandler) {
+			removeFluidHandler((IEnderFluidHandler) theAttuned);
+		}
+		if (theAttuned instanceof IEnderEnergyHandler) {
+			removeEnergyHandler((IEnderEnergyHandler) theAttuned);
+		}
 	}
 
 	public static void sortClientNames() {

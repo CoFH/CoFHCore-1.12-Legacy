@@ -16,6 +16,7 @@ info.cofh.accessRestricted=Ограниченный
 info.cofh.accessPrivate=Приватный
 info.cofh.all=Все
 info.cofh.amount=Количество
+#info.cofh.augmentation
 info.cofh.blank=Пусто
 info.cofh.charge=Заряд
 info.cofh.configuration=Конфигурация

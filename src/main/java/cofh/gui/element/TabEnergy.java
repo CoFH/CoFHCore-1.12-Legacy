@@ -10,12 +10,19 @@ import org.lwjgl.opengl.GL11;
 
 public class TabEnergy extends TabBase {
 
+	public static int defaultSide = 1;
+
 	IEnergyInfo myTile;
 	boolean isProducer;
 
 	public TabEnergy(GuiBase gui, IEnergyInfo theTile, boolean isProducer) {
 
-		super(gui);
+		this(gui, defaultSide, theTile, isProducer);
+	}
+
+	public TabEnergy(GuiBase gui, int side, IEnergyInfo theTile, boolean isProducer) {
+
+		super(gui, side);
 
 		myTile = theTile;
 		maxHeight = 92;
@@ -34,24 +41,18 @@ public class TabEnergy extends TabBase {
 
 		drawBackground();
 		drawTabIcon("IconEnergy");
-
 		if (!isFullyOpened()) {
 			return;
 		}
-		String powerDirection;
+		String powerDirection = isProducer ? "info.cofh.energyProduce" : "info.cofh.energyConsume";
 
-		if (isProducer) {
-			powerDirection = "info.cofh.energyProduce";
-		} else {
-			powerDirection = "info.cofh.energyConsume";
-		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energy"), posX + 22, posY + 6, headerColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize(powerDirection) + ":", posX + 8, posY + 18, subheaderColor);
-		getFontRenderer().drawString(myTile.getInfoEnergyPerTick() + " RF/t", posX + 16, posY + 30, textColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.maxEnergyPerTick") + ":", posX + 8, posY + 42, subheaderColor);
-		getFontRenderer().drawString(myTile.getInfoMaxEnergyPerTick() + " RF/t", posX + 16, posY + 54, textColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energyStored") + ":", posX + 8, posY + 66, subheaderColor);
-		getFontRenderer().drawString(myTile.getInfoEnergy() + " RF", posX + 16, posY + 78, textColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energy"), posXOffset() + 20, posY + 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize(powerDirection) + ":", posXOffset() + 6, posY + 18, subheaderColor);
+		getFontRenderer().drawString(myTile.getInfoEnergyPerTick() + " RF/t", posXOffset() + 14, posY + 30, textColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.maxEnergyPerTick") + ":", posXOffset() + 6, posY + 42, subheaderColor);
+		getFontRenderer().drawString(myTile.getInfoMaxEnergyPerTick() + " RF/t", posXOffset() + 14, posY + 54, textColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energyStored") + ":", posXOffset() + 6, posY + 66, subheaderColor);
+		getFontRenderer().drawString(myTile.getInfoEnergyStored() + " RF", posXOffset() + 14, posY + 78, textColor);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 

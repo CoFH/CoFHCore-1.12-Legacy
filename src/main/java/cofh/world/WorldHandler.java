@@ -68,7 +68,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		String category = "feature";
 		String comment = null;
 
-		comment = "This allows for vanilla ore generation to be REPLACED. Configure in the 'Vanilla' section of the CoFHCore-Generation.json; vanilla defaults have been provided.";
+		comment = "This allows for vanilla Minecraft ore generation to be REPLACED. Configure in the VanillaGeneration.json file; vanilla defaults have been provided. If you rename the VanillaGeneration.json file, this option WILL NOT WORK.";
 		genReplaceVanilla = CoFHCore.config.get(category, "ReplaceVanillaGeneration", false, comment);
 
 		comment = "This will flatten the bedrock layer.";
@@ -215,16 +215,42 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		}
 		Block filler = world.getBiomeGenForCoords(chunkX, chunkZ).fillerBlock;
 
+		int offsetX = chunkX * 16;
+		int offsetZ = chunkZ * 16;
+
 		for (int blockX = 0; blockX < 16; blockX++) {
 			for (int blockZ = 0; blockZ < 16; blockZ++) {
-				for (int blockY = MAX_BEDROCK_LAYERS; blockY > -1 + layersBedrock; blockY--) {
-					if (world.getBlock(chunkX * 16 + blockX, blockY, chunkZ * 16 + blockZ) == Blocks.bedrock) {
-						world.setBlock(chunkX * 16 + blockX, blockY, chunkZ * 16 + blockZ, filler, 0, 2);
+				for (int blockY = 5; blockY > layersBedrock - 1; blockY--) {
+					if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ) == Blocks.bedrock) {
+						world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, filler, 0, 2);
 					}
 				}
 				for (int blockY = layersBedrock - 1; blockY > 0; blockY--) {
-					if (world.getBlock(chunkX * 16 + blockX, blockY, chunkZ * 16 + blockZ) != Blocks.air) {
-						world.setBlock(chunkX * 16 + blockX, blockY, chunkZ * 16 + blockZ, Blocks.bedrock, 0, 2);
+					if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ) != Blocks.air) {
+						world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, Blocks.bedrock, 0, 2);
+					}
+				}
+			}
+		}
+		/* Flatten bedrock on the top as well */
+		int worldHeight = world.getActualHeight();
+
+		if (world.getBlock(offsetX, worldHeight - 1, offsetZ) == Blocks.bedrock) {
+			/* This is a hack because Mojang coded the Nether wrong. Are you surprised? */
+			if (world.provider.dimensionId == 1) {
+				filler = Blocks.netherrack;
+			}
+			for (int blockX = 0; blockX < 16; blockX++) {
+				for (int blockZ = 0; blockZ < 16; blockZ++) {
+					for (int blockY = worldHeight - 2; blockY > worldHeight - 6; blockY--) {
+						if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ) == Blocks.bedrock) {
+							world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, filler, 0, 2);
+						}
+					}
+					for (int blockY = worldHeight - layersBedrock; blockY < worldHeight - 1; blockY++) {
+						if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ) != Blocks.air) {
+							world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, Blocks.bedrock, 0, 2);
+						}
 					}
 				}
 			}

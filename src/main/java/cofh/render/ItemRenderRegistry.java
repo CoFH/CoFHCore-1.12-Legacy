@@ -2,15 +2,17 @@ package cofh.render;
 
 import cofh.util.ItemWrapper;
 
-import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
+
+import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 public class ItemRenderRegistry {
 
-	public static TMap<ItemWrapper, IItemRenderer> itemRenders = new THashMap<ItemWrapper, IItemRenderer>();
+	public static Map<ItemWrapper, IItemRenderer> itemRenders = new THashMap();
 
 	public static boolean addItemRenderer(ItemStack stack, IItemRenderer renderer) {
 
@@ -29,6 +31,19 @@ public class ItemRenderRegistry {
 	public static boolean validItem(ItemStack stack) {
 
 		return itemRenders.containsKey(ItemWrapper.fromItemStack(stack));
+	}
+
+	public static void reloadRegistry() {
+
+		System.out.println("calllllled");
+
+		Map<ItemWrapper, IItemRenderer> tempMap = new THashMap(itemRenders.size());
+
+		for (Entry<ItemWrapper, IItemRenderer> entry : itemRenders.entrySet()) {
+			tempMap.put(entry.getKey(), entry.getValue());
+		}
+		itemRenders.clear();
+		itemRenders = tempMap;
 	}
 
 }

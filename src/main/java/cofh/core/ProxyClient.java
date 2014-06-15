@@ -42,11 +42,13 @@ public class ProxyClient extends Proxy {
 			IconRegistry.addIcon("IconAccessPublic", "cofh:icons/Icon_Access_Public", event.map);
 			IconRegistry.addIcon("IconAccept", "cofh:icons/Icon_Accept", event.map);
 			IconRegistry.addIcon("IconAcceptInactive", "cofh:icons/Icon_Accept_Inactive", event.map);
+			IconRegistry.addIcon("IconAugment", "cofh:icons/Icon_Augment", event.map);
 			IconRegistry.addIcon("IconButton", "cofh:icons/Icon_Button", event.map);
 			IconRegistry.addIcon("IconButtonHighlight", "cofh:icons/Icon_Button_Highlight", event.map);
 			IconRegistry.addIcon("IconButtonInactive", "cofh:icons/Icon_Button_Inactive", event.map);
 			IconRegistry.addIcon("IconCancel", "cofh:icons/Icon_Cancel", event.map);
 			IconRegistry.addIcon("IconCancelInactive", "cofh:icons/Icon_Cancel_Inactive", event.map);
+			IconRegistry.addIcon("IconConfig", "cofh:icons/Icon_Config", event.map);
 			IconRegistry.addIcon("IconEnergy", "cofh:icons/Icon_Energy", event.map);
 			IconRegistry.addIcon("IconNope", "cofh:icons/Icon_Nope", event.map);
 			IconRegistry.addIcon("IconInformation", "cofh:icons/Icon_Information", event.map);

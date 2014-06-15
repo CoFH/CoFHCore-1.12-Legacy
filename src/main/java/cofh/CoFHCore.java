@@ -14,11 +14,14 @@ import cofh.util.RegistryEnderAttuned;
 import cofh.util.StringHelper;
 import cofh.util.fluid.BucketHandler;
 import cofh.util.oredict.OreDictionaryArbiter;
+import cofh.world.FeatureParser;
+import cofh.world.WorldHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
@@ -69,7 +72,7 @@ public class CoFHCore extends BaseMod {
 
 		CoFHProps.configDir = event.getModConfigurationDirectory();
 
-		config.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/cfg")));
+		config.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/CoFHCore.cfg")));
 
 		String category = "general";
 
@@ -101,6 +104,7 @@ public class CoFHCore extends BaseMod {
 		config.save();
 
 		MinecraftForge.EVENT_BUS.register(proxy);
+		WorldHandler.initialize();
 		FMLEventHandler.initialize();
 		BucketHandler.initialize();
 		OreDictionaryArbiter.initialize();
@@ -130,6 +134,16 @@ public class CoFHCore extends BaseMod {
 	}
 
 	@EventHandler
+	public void loadComplete(FMLLoadCompleteEvent event) {
+
+		try {
+			FeatureParser.parseGenerationFile();
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+	}
+
+	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 
 		RegistryEnderAttuned.linkConf = new Configuration(new File(DimensionManager.getCurrentSaveRootDirectory(), "/cofh/EnderFrequencies.cfg"));
@@ -152,6 +166,9 @@ public class CoFHCore extends BaseMod {
 		registerOreDictionaryEntry("cloth", new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE));
 		registerOreDictionaryEntry("coal", new ItemStack(Items.coal, 1, 0));
 		registerOreDictionaryEntry("charcoal", new ItemStack(Items.coal, 1, 1));
+
+		registerOreDictionaryEntry("ingotIron", new ItemStack(Items.iron_ingot));
+		registerOreDictionaryEntry("ingotGold", new ItemStack(Items.gold_ingot));
 	}
 
 	private boolean registerOreDictionaryEntry(String oreName, ItemStack ore) {

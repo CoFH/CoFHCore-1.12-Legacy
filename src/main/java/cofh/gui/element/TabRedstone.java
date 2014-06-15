@@ -10,11 +10,17 @@ import org.lwjgl.opengl.GL11;
 
 public class TabRedstone extends TabBase {
 
+	public static int defaultSide = 1;
 	IRedstoneControl myTile;
 
 	public TabRedstone(GuiBase gui, IRedstoneControl theTile) {
 
-		super(gui);
+		this(gui, defaultSide, theTile);
+	}
+
+	public TabRedstone(GuiBase gui, int side, IRedstoneControl theTile) {
+
+		super(gui, side);
 
 		myTile = theTile;
 		maxHeight = 92;
@@ -30,29 +36,29 @@ public class TabRedstone extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.redstoneControl"), posX + 20, posY + 6, headerColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.controlStatus") + ":", posX + 8, posY + 42, subheaderColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", posX + 8, posY + 66, subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.redstoneControl"), posXOffset() + 18, posY + 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.controlStatus") + ":", posXOffset() + 6, posY + 42, subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", posXOffset() + 6, posY + 66, subheaderColor);
 
 		if (myTile.getControl().isDisabled()) {
-			gui.drawButton("IconGunpowder", posX + 28, posY + 20, 1, 1);
-			gui.drawButton("IconRSTorchOff", posX + 48, posY + 20, 1, 0);
-			gui.drawButton("IconRSTorchOn", posX + 68, posY + 20, 1, 0);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.disabled"), posX + 16, posY + 54, textColor);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.ignored"), posX + 16, posY + 78, textColor);
+			gui.drawButton("IconGunpowder", posX() + 28, posY + 20, 1, 1);
+			gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 0);
+			gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 0);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.disabled"), posXOffset() + 14, posY + 54, textColor);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.ignored"), posXOffset() + 14, posY + 78, textColor);
 		} else {
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.enabled"), posX + 16, posY + 54, textColor);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.enabled"), posXOffset() + 14, posY + 54, textColor);
 
 			if (myTile.getControl().isLow()) {
-				gui.drawButton("IconRedstone", posX + 28, posY + 20, 1, 0);
-				gui.drawButton("IconRSTorchOff", posX + 48, posY + 20, 1, 1);
-				gui.drawButton("IconRSTorchOn", posX + 68, posY + 20, 1, 0);
-				getFontRenderer().drawString(StringHelper.localize("info.cofh.low"), posX + 16, posY + 78, textColor);
+				gui.drawButton("IconRedstone", posX() + 28, posY + 20, 1, 0);
+				gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 1);
+				gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 0);
+				getFontRenderer().drawString(StringHelper.localize("info.cofh.low"), posXOffset() + 14, posY + 78, textColor);
 			} else {
-				gui.drawButton("IconRedstone", posX + 28, posY + 20, 1, 0);
-				gui.drawButton("IconRSTorchOff", posX + 48, posY + 20, 1, 0);
-				gui.drawButton("IconRSTorchOn", posX + 68, posY + 20, 1, 1);
-				getFontRenderer().drawString(StringHelper.localize("info.cofh.high"), posX + 16, posY + 78, textColor);
+				gui.drawButton("IconRedstone", posX() + 28, posY + 20, 1, 0);
+				gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 0);
+				gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 1);
+				getFontRenderer().drawString(StringHelper.localize("info.cofh.high"), posXOffset() + 14, posY + 78, textColor);
 			}
 		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -126,7 +132,7 @@ public class TabRedstone extends TabBase {
 		float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
 		float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
 		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
-		gui.drawTexturedModalRect(posX + 24, posY + 16, 16, 20, 64, 24);
+		gui.drawTexturedModalRect(posX() + 24, posY + 16, 16, 20, 64, 24);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 

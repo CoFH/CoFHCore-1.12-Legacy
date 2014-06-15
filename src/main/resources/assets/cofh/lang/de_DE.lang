@@ -16,6 +16,7 @@ info.cofh.accessRestricted=Eingeschränkt
 info.cofh.accessPrivate=Nur Besitzer
 info.cofh.all=Alles
 info.cofh.amount=Menge
+#info.cofh.augmentation
 info.cofh.blank=Leer
 info.cofh.charge=Ladung
 info.cofh.configuration=Konfiguration

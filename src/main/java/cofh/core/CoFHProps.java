@@ -6,15 +6,15 @@ import java.io.File;
 
 public class CoFHProps {
 
-	public static final String VERSION       = "1.7.2R3.0.0B1";
+	public static final String VERSION = "1.7.2R3.0.0B1";
 
-	public static final String FML_REQ       = "7.2.188.1074";
-	public static final String FML_REQ_MAX   = "7.3";
-	public static final String FORGE_REQ     = "10.12.1.1074";
+	public static final String FML_REQ = "7.2.188.1074";
+	public static final String FML_REQ_MAX = "7.3";
+	public static final String FORGE_REQ = "10.12.1.1074";
 	public static final String FORGE_REQ_MAX = "10.13";
 
-	public static final String DEPENDENCIES  = "required-after:FML@[" + CoFHProps.FML_REQ + "," + CoFHProps.FML_REQ_MAX + ");"
-			 + "required-after:Forge@[" + CoFHProps.FORGE_REQ + "," + CoFHProps.FORGE_REQ_MAX + ")";
+	public static final String DEPENDENCIES = "required-after:FML@[" + CoFHProps.FML_REQ + "," + CoFHProps.FML_REQ_MAX + ");" + "required-after:Forge@["
+			+ CoFHProps.FORGE_REQ + "," + CoFHProps.FORGE_REQ_MAX + ")";
 
 	public static File configDir = null;
 

@@ -1,6 +1,6 @@
 package cofh.fluid;
 
-import cofh.api.tileentity.ISidedBlockTexture;
+import cofh.api.tileentity.ISidedTexture;
 import cofh.block.TileCoFHBase;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -11,7 +11,7 @@ import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
 
-public class TileFont extends TileCoFHBase implements ISidedBlockTexture {
+public class TileFont extends TileCoFHBase implements ISidedTexture {
 
 	public static void initialize() {
 
@@ -111,7 +111,7 @@ public class TileFont extends TileCoFHBase implements ISidedBlockTexture {
 
 	/* ISidedBlockTexture */
 	@Override
-	public IIcon getBlockTexture(int side, int pass) {
+	public IIcon getTexture(int side, int pass) {
 
 		return icon;
 	}

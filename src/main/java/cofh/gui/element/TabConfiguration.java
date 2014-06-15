@@ -2,7 +2,7 @@ package cofh.gui.element;
 
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IReconfigurableSides;
-import cofh.api.tileentity.ISidedBlockTexture;
+import cofh.api.tileentity.ISidedTexture;
 import cofh.gui.GuiBase;
 import cofh.render.RenderHelper;
 import cofh.util.BlockHelper;
@@ -16,17 +16,24 @@ import org.lwjgl.opengl.GL11;
 
 public class TabConfiguration extends TabBase {
 
+	public static int defaultSide = 1;
+
 	IReconfigurableFacing myTile;
 	IReconfigurableSides myTileSides;
-	ISidedBlockTexture myTileTexture;
+	ISidedTexture myTileTexture;
 
 	public TabConfiguration(GuiBase gui, IReconfigurableFacing theTile) {
 
-		super(gui);
+		this(gui, defaultSide, theTile);
+	}
+
+	public TabConfiguration(GuiBase gui, int side, IReconfigurableFacing theTile) {
+
+		super(gui, side);
 
 		myTile = theTile;
 		myTileSides = (IReconfigurableSides) theTile;
-		myTileTexture = (ISidedBlockTexture) theTile;
+		myTileTexture = (ISidedTexture) theTile;
 		maxHeight = 92;
 		maxWidth = 100;
 		backgroundColor = 0x089e4c;
@@ -36,24 +43,23 @@ public class TabConfiguration extends TabBase {
 	public void draw() {
 
 		drawBackground();
-		drawTabIcon("IconConfigMachine");
+		drawTabIcon("IconConfig");
 		if (!isFullyOpened()) {
 			return;
 		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), posX + 20, posY + 6, headerColor);
-		getFontRenderer().drawString("", posX, posY, 0xffffff);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), posXOffset() + 18, posY + 6, headerColor);
 		RenderHelper.setBlockTextureSheet();
 
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		for (int i = 0; i < 2; i++) {
-			gui.drawIcon(myTileTexture.getBlockTexture(BlockHelper.SIDE_ABOVE[myTile.getFacing()], i), posX + 40, posY + 24, 0);
-			gui.drawIcon(myTileTexture.getBlockTexture(BlockHelper.SIDE_LEFT[myTile.getFacing()], i), posX + 20, posY + 44, 0);
-			gui.drawIcon(myTileTexture.getBlockTexture(myTile.getFacing(), i), posX + 40, posY + 44, 0);
-			gui.drawIcon(myTileTexture.getBlockTexture(BlockHelper.SIDE_RIGHT[myTile.getFacing()], i), posX + 60, posY + 44, 0);
-			gui.drawIcon(myTileTexture.getBlockTexture(BlockHelper.SIDE_BELOW[myTile.getFacing()], i), posX + 40, posY + 64, 0);
-			gui.drawIcon(myTileTexture.getBlockTexture(BlockHelper.SIDE_OPPOSITE[myTile.getFacing()], i), posX + 60, posY + 64, 0);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_ABOVE[myTile.getFacing()], i), posX() + 40, posY + 24, 0);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_LEFT[myTile.getFacing()], i), posX() + 20, posY + 44, 0);
+			gui.drawIcon(myTileTexture.getTexture(myTile.getFacing(), i), posX() + 40, posY + 44, 0);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_RIGHT[myTile.getFacing()], i), posX() + 60, posY + 44, 0);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_BELOW[myTile.getFacing()], i), posX() + 40, posY + 64, 0);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_OPPOSITE[myTile.getFacing()], i), posX() + 60, posY + 64, 0);
 		}
 		GL11.glDisable(GL11.GL_BLEND);
 		RenderHelper.setDefaultFontTextureSheet();
@@ -108,7 +114,7 @@ public class TabConfiguration extends TabBase {
 		float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
 		float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
 		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
-		gui.drawTexturedModalRect(posX + 16, posY + 20, 16, 20, 64, 64);
+		gui.drawTexturedModalRect(posX() + 16, posY + 20, 16, 20, 64, 64);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 

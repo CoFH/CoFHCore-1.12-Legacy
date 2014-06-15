@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 public class TabTutorial extends TabBase {
 
 	public static boolean enable;
+	public static int defaultSide = 0;
 
 	int textColor = 0xffffff;
 
@@ -17,7 +18,12 @@ public class TabTutorial extends TabBase {
 
 	public TabTutorial(GuiBase gui, String infoString) {
 
-		super(gui, 0);
+		this(gui, defaultSide, infoString);
+	}
+
+	public TabTutorial(GuiBase gui, int side, String infoString) {
+
+		super(gui, side);
 		visible = enable;
 
 		backgroundColor = 0x5a09bb;
@@ -36,8 +42,8 @@ public class TabTutorial extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.tutorial"), posX - currentWidth + 22, posY + 6, headerColor);
-		getFontRenderer().drawSplitString(myInfo, posX + 8 - currentWidth, posY + 20, maxWidth - 8, textColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.tutorial"), posXOffset() + 18, posY + 6, headerColor);
+		getFontRenderer().drawSplitString(myInfo, posXOffset() + 2, posY + 20, maxWidth - 8, textColor);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
