@@ -32,6 +32,8 @@ import java.util.List;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
@@ -47,14 +49,16 @@ import org.objectweb.asm.tree.MethodNode;
 
 public class PCCASMTransformer implements IClassTransformer {
 
-	private String implementableDesc, strippableDesc;
+	private static Logger log = LogManager.getLogger("CoFH ASM");
+
+	private String implementableDesc, stripableDesc;
 	private ArrayList<String> workingPath = new ArrayList<String>();
 	private ClassNode world = null, worldServer = null;
 
 	public PCCASMTransformer() {
 
 		implementableDesc = Type.getDescriptor(Implementable.class);
-		strippableDesc = Type.getDescriptor(Stripable.class);
+		stripableDesc = Type.getDescriptor(Stripable.class);
 	}
 
 	@Override
@@ -70,16 +74,18 @@ public class PCCASMTransformer implements IClassTransformer {
 		workingPath.add(transformedName);
 
 		if (this.implement(cn)) {
-			System.out.println("Adding runtime interfaces to " + transformedName);
+			log.info("Adding runtime interfaces to " + transformedName);
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 			cn.accept(cw);
 			bytes = cw.toByteArray();
 			cr = new ClassReader(bytes);
+			cn = new ClassNode();
+			cr.accept(cn, 0);
 		}
 
 		if (this.strip(cn)) {
-			System.out.println("Stripping methods and fields from " + transformedName);
-			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			log.info("Stripping methods and fields from " + transformedName);
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 			cn.accept(cw);
 			bytes = cw.toByteArray();
 			cr = new ClassReader(bytes);
@@ -409,8 +415,9 @@ public class PCCASMTransformer implements IClassTransformer {
 					for (int i = 0, e = values.size(); i < e;) {
 						Object k = values.get(i++);
 						Object v = values.get(i++);
-						if (k instanceof String && k.equals("value") && v instanceof String[]) {
-							String[] value = (String[]) v;
+						if ("value".equals(k) && v instanceof List &&
+								((List<?>)v).size() > 0 && ((List<?>)v).get(0) instanceof String) {
+							String[] value = ((List<?>)v).toArray(new String[0]);
 							for (int j = 0, l = value.length; j < l; ++j) {
 								String clazz = value[j].trim();
 								String cz = clazz.replace('.', '/');
@@ -436,16 +443,17 @@ public class PCCASMTransformer implements IClassTransformer {
 	private boolean strip(ClassNode cn) {
 
 		boolean altered = false;
-		if (cn.visibleAnnotations != null && cn.interfaces != null) {
+		if (cn.visibleAnnotations != null) {
 			for (AnnotationNode node : cn.visibleAnnotations) {
-				if (node.desc.equals(strippableDesc)) {
+				if (node.desc.equals(stripableDesc)) {
 					if (node.values != null) {
 						List<Object> values = node.values;
 						for (int i = 0, e = values.size(); i < e;) {
 							Object k = values.get(i++);
 							Object v = values.get(i++);
-							if (k instanceof String && k.equals("value") && v instanceof String[]) {
-								String[] value = (String[]) v;
+							if ("value".equals(k) && v instanceof List &&
+									((List<?>)v).size() > 0 && ((List<?>)v).get(0) instanceof String) {
+								String[] value = ((List<?>)v).toArray(new String[0]);
 								for (int j = 0, l = value.length; j < l; ++j) {
 									String clazz = value[j].trim();
 									String cz = clazz.replace('.', '/');
@@ -455,7 +463,7 @@ public class PCCASMTransformer implements IClassTransformer {
 										}
 									} catch (Throwable _) {
 										cn.interfaces.remove(cz);
-										break;
+										altered = true;
 									}
 								}
 							}
@@ -470,31 +478,39 @@ public class PCCASMTransformer implements IClassTransformer {
 				MethodNode mn = iter.next();
 				if (mn.visibleAnnotations != null)
 					for (AnnotationNode node : mn.visibleAnnotations)
-						altered |= checkRemove(node, iter);
+						if (checkRemove(node, iter)) {
+							altered = true;
+							break;
+						}
 			}
 		}
 		if (cn.fields != null) {
 			Iterator<FieldNode> iter = cn.fields.iterator();
 			while (iter.hasNext()) {
 				FieldNode fn = iter.next();
-				if (fn.visibleAnnotations != null)
+				if (fn.visibleAnnotations != null) {
 					for (AnnotationNode node : fn.visibleAnnotations)
-						altered |= checkRemove(node, iter);
+						if (checkRemove(node, iter)) {
+							altered = true;
+							break;
+						}
+				}
 			}
 		}
 		return altered;
 	}
 	
-	private boolean checkRemove(AnnotationNode node, Iterator<? extends Object> iter)
-	{
-		if (node.desc.equals(strippableDesc)) {
+	private boolean checkRemove(AnnotationNode node, Iterator<? extends Object> iter) {
+
+		if (node.desc.equals(stripableDesc)) {
 			if (node.values != null) {
 				List<Object> values = node.values;
 				for (int i = 0, e = values.size(); i < e;) {
 					Object k = values.get(i++);
 					Object v = values.get(i++);
-					if (k instanceof String && k.equals("value") && v instanceof String[]) {
-						String[] value = (String[]) v;
+					if ("value".equals(k) && v instanceof List &&
+							((List<?>)v).size() > 0 && ((List<?>)v).get(0) instanceof String) {
+						String[] value = ((List<?>)v).toArray(new String[0]);
 						boolean needsRemoved = false;
 						for (int j = 0, l = value.length; j < l; ++j) {
 							String clazz = value[j].trim();
