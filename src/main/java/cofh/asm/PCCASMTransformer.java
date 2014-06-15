@@ -22,6 +22,7 @@ import static org.objectweb.asm.Opcodes.PUTFIELD;
 import static org.objectweb.asm.Opcodes.RETURN;
 
 import cofh.asm.relauncher.Implementable;
+import cofh.asm.relauncher.Stripable;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLRemappingAdapter;
 
@@ -39,19 +40,21 @@ import org.objectweb.asm.commons.RemappingClassAdapter;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
 public class PCCASMTransformer implements IClassTransformer {
 
-	private String desc;
+	private String implementableDesc, strippableDesc;
 	private ArrayList<String> workingPath = new ArrayList<String>();
 	private ClassNode world = null, worldServer = null;
 
 	public PCCASMTransformer() {
 
-		desc = Type.getDescriptor(Implementable.class);
+		implementableDesc = Type.getDescriptor(Implementable.class);
+		strippableDesc = Type.getDescriptor(Stripable.class);
 	}
 
 	@Override
@@ -68,6 +71,14 @@ public class PCCASMTransformer implements IClassTransformer {
 
 		if (this.implement(cn)) {
 			System.out.println("Adding runtime interfaces to " + transformedName);
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+			cr = new ClassReader(bytes);
+		}
+
+		if (this.strip(cn)) {
+			System.out.println("Stripping methods and fields from " + transformedName);
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 			cn.accept(cw);
 			bytes = cw.toByteArray();
@@ -377,6 +388,14 @@ public class PCCASMTransformer implements IClassTransformer {
 		return bytes;
 	}
 
+	private static int getAccess(MethodNode m) {
+
+		int r = m.access;
+		r &= ~(ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED | ACC_FINAL | ACC_BRIDGE | ACC_ABSTRACT);
+		r |= ACC_PUBLIC | ACC_SYNTHETIC;
+		return r;
+	}
+
 	private boolean implement(ClassNode cn) {
 
 		if (cn.visibleAnnotations == null) {
@@ -384,7 +403,7 @@ public class PCCASMTransformer implements IClassTransformer {
 		}
 		boolean interfaces = false;
 		for (AnnotationNode node : cn.visibleAnnotations) {
-			if (node.desc.equals(desc)) {
+			if (node.desc.equals(implementableDesc)) {
 				if (node.values != null) {
 					List<Object> values = node.values;
 					for (int i = 0, e = values.size(); i < e;) {
@@ -414,12 +433,88 @@ public class PCCASMTransformer implements IClassTransformer {
 		return interfaces;
 	}
 
-	private static int getAccess(MethodNode m) {
+	private boolean strip(ClassNode cn) {
 
-		int r = m.access;
-		r &= ~(ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED | ACC_FINAL | ACC_BRIDGE | ACC_ABSTRACT);
-		r |= ACC_PUBLIC | ACC_SYNTHETIC;
-		return r;
+		boolean altered = false;
+		if (cn.visibleAnnotations != null && cn.interfaces != null) {
+			for (AnnotationNode node : cn.visibleAnnotations) {
+				if (node.desc.equals(strippableDesc)) {
+					if (node.values != null) {
+						List<Object> values = node.values;
+						for (int i = 0, e = values.size(); i < e;) {
+							Object k = values.get(i++);
+							Object v = values.get(i++);
+							if (k instanceof String && k.equals("value") && v instanceof String[]) {
+								String[] value = (String[]) v;
+								for (int j = 0, l = value.length; j < l; ++j) {
+									String clazz = value[j].trim();
+									String cz = clazz.replace('.', '/');
+									if (cn.interfaces.contains(cz)) try {
+										if (!workingPath.contains(clazz)) {
+											Class.forName(clazz, false, this.getClass().getClassLoader());
+										}
+									} catch (Throwable _) {
+										cn.interfaces.remove(cz);
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if (cn.methods != null) {
+			Iterator<MethodNode> iter = cn.methods.iterator();
+			while (iter.hasNext()) {
+				MethodNode mn = iter.next();
+				if (mn.visibleAnnotations != null)
+					for (AnnotationNode node : mn.visibleAnnotations)
+						altered |= checkRemove(node, iter);
+			}
+		}
+		if (cn.fields != null) {
+			Iterator<FieldNode> iter = cn.fields.iterator();
+			while (iter.hasNext()) {
+				FieldNode fn = iter.next();
+				if (fn.visibleAnnotations != null)
+					for (AnnotationNode node : fn.visibleAnnotations)
+						altered |= checkRemove(node, iter);
+			}
+		}
+		return altered;
 	}
-
+	
+	private boolean checkRemove(AnnotationNode node, Iterator<? extends Object> iter)
+	{
+		if (node.desc.equals(strippableDesc)) {
+			if (node.values != null) {
+				List<Object> values = node.values;
+				for (int i = 0, e = values.size(); i < e;) {
+					Object k = values.get(i++);
+					Object v = values.get(i++);
+					if (k instanceof String && k.equals("value") && v instanceof String[]) {
+						String[] value = (String[]) v;
+						boolean needsRemoved = false;
+						for (int j = 0, l = value.length; j < l; ++j) {
+							String clazz = value[j].trim();
+							try {
+								if (!workingPath.contains(clazz)) {
+									Class.forName(clazz, false, this.getClass().getClassLoader());
+								}
+							} catch (Throwable _) {
+								needsRemoved = true;
+								break;
+							}
+						}
+						if (needsRemoved) {
+							iter.remove();
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
 }
