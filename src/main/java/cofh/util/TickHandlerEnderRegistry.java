@@ -1,5 +1,6 @@
 package cofh.util;
 
+import cofh.api.transport.RegistryEnderAttuned;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
