@@ -22,7 +22,7 @@ import static org.objectweb.asm.Opcodes.PUTFIELD;
 import static org.objectweb.asm.Opcodes.RETURN;
 
 import cofh.asm.relauncher.Implementable;
-import cofh.asm.relauncher.Stripable;
+import cofh.asm.relauncher.Strippable;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLRemappingAdapter;
 
@@ -51,14 +51,14 @@ public class PCCASMTransformer implements IClassTransformer {
 
 	private static Logger log = LogManager.getLogger("CoFH ASM");
 
-	private String implementableDesc, stripableDesc;
+	private String implementableDesc, strippableDesc;
 	private ArrayList<String> workingPath = new ArrayList<String>();
 	private ClassNode world = null, worldServer = null;
 
 	public PCCASMTransformer() {
 
 		implementableDesc = Type.getDescriptor(Implementable.class);
-		stripableDesc = Type.getDescriptor(Stripable.class);
+		strippableDesc = Type.getDescriptor(Strippable.class);
 	}
 
 	@Override
@@ -445,7 +445,7 @@ public class PCCASMTransformer implements IClassTransformer {
 		boolean altered = false;
 		if (cn.visibleAnnotations != null) {
 			for (AnnotationNode node : cn.visibleAnnotations) {
-				if (node.desc.equals(stripableDesc)) {
+				if (node.desc.equals(strippableDesc)) {
 					if (node.values != null) {
 						List<Object> values = node.values;
 						for (int i = 0, e = values.size(); i < e;) {
@@ -502,7 +502,7 @@ public class PCCASMTransformer implements IClassTransformer {
 	
 	private boolean checkRemove(AnnotationNode node, Iterator<? extends Object> iter) {
 
-		if (node.desc.equals(stripableDesc)) {
+		if (node.desc.equals(strippableDesc)) {
 			if (node.values != null) {
 				List<Object> values = node.values;
 				for (int i = 0, e = values.size(); i < e;) {
