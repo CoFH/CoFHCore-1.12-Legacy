@@ -16,6 +16,7 @@ public class FluidTankAdv implements IFluidTank {
 
 	protected FluidStack fluid;
 	protected int capacity;
+	protected boolean locked;
 
 	public FluidTankAdv(int capacity) {
 
@@ -37,6 +38,7 @@ public class FluidTankAdv implements IFluidTank {
 
 		if (!nbt.hasKey("Empty")) {
 			FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt);
+			locked = nbt.getBoolean("Lock") && fluid != null;
 
 			if (fluid != null) {
 				setFluid(fluid);
@@ -49,10 +51,18 @@ public class FluidTankAdv implements IFluidTank {
 
 		if (fluid != null) {
 			fluid.writeToNBT(nbt);
+			nbt.setBoolean("Lock", locked);
 		} else {
 			nbt.setString("Empty", "");
 		}
 		return nbt;
+	}
+	
+	public void setLock(Fluid fluid) {
+		
+		locked = fluid != null;
+		if (locked)
+			this.fluid = new FluidStack(fluid, 0);
 	}
 
 	public void setFluid(FluidStack fluid) {
@@ -153,7 +163,10 @@ public class FluidTankAdv implements IFluidTank {
 		if (doDrain) {
 			fluid.amount -= drained;
 			if (fluid.amount <= 0) {
-				fluid = null;
+				if (locked)
+					fluid.amount = 0;
+				else
+					fluid = null;
 			}
 		}
 		return stack;
