@@ -29,7 +29,7 @@ public class TabInfo extends TabBase {
 	public TabInfo(GuiBase gui, int side, String infoString) {
 
 		super(gui, side);
-		visible = enable;
+		setVisible(enable);
 
 		backgroundColor = 0x555555;
 		maxHeight += 4 + StringHelper.getSplitStringHeight(getFontRenderer(), infoString, maxWidth);
@@ -39,7 +39,7 @@ public class TabInfo extends TabBase {
 	public TabInfo(GuiBase gui, int side, String infoString, int extraLines) {
 
 		super(gui, side);
-		visible = enable;
+		setVisible(enable);
 
 		backgroundColor = 0x555555;
 		maxHeight += 4 + getFontRenderer().FONT_HEIGHT * extraLines + StringHelper.getSplitStringHeight(getFontRenderer(), infoString, maxWidth);
@@ -49,7 +49,7 @@ public class TabInfo extends TabBase {
 	@Override
 	public void draw() {
 
-		if (!visible) {
+		if (!isVisible()) {
 			return;
 		}
 		drawBackground();

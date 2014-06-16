@@ -24,7 +24,7 @@ public class TabTutorial extends TabBase {
 	public TabTutorial(GuiBase gui, int side, String infoString) {
 
 		super(gui, side);
-		visible = enable;
+		setVisible(enable);
 
 		backgroundColor = 0x5a09bb;
 		maxHeight += 4 + StringHelper.getSplitStringHeight(getFontRenderer(), infoString, maxWidth);
@@ -34,7 +34,7 @@ public class TabTutorial extends TabBase {
 	@Override
 	public void draw() {
 
-		if (!visible) {
+		if (!isVisible()) {
 			return;
 		}
 		drawBackground();

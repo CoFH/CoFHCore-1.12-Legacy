@@ -34,7 +34,7 @@ public class TabSecurity extends TabBase {
 	@Override
 	public void draw() {
 
-		if (!visible) {
+		if (!isVisible()) {
 			return;
 		}
 		drawBackground();
