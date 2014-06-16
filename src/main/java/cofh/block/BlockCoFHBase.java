@@ -26,6 +26,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -158,7 +159,8 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 	public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
 
 		if (!player.capabilities.isCreativeMode) {
-			world.func_147480_a(x, y, z, true);
+			dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, Blocks.air, 0, 4);
 		}
 	}
 
@@ -197,16 +199,15 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 	}
 
 	@Override
-	public int damageDropped(int bMeta) {
+	public int damageDropped(int i) {
 
-		return bMeta;
+		return i;
 	}
 
 	@Override
 	public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
 
 		TileEntity tile = world.getTileEntity(x, y, z);
-
 		return tile instanceof TileCoFHBase ? ((TileCoFHBase) tile).getComparatorInput(side) : 0;
 	}
 
@@ -218,12 +219,6 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 
 	@Override
 	public boolean isOpaqueCube() {
-
-		return false;
-	}
-
-	@Override
-	public boolean hasComparatorInputOverride() {
 
 		return false;
 	}

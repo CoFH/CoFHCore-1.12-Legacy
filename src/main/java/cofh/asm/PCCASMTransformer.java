@@ -415,9 +415,8 @@ public class PCCASMTransformer implements IClassTransformer {
 					for (int i = 0, e = values.size(); i < e;) {
 						Object k = values.get(i++);
 						Object v = values.get(i++);
-						if ("value".equals(k) && v instanceof List &&
-								((List<?>)v).size() > 0 && ((List<?>)v).get(0) instanceof String) {
-							String[] value = ((List<?>)v).toArray(new String[0]);
+						if ("value".equals(k) && v instanceof List && ((List<?>) v).size() > 0 && ((List<?>) v).get(0) instanceof String) {
+							String[] value = ((List<?>) v).toArray(new String[0]);
 							for (int j = 0, l = value.length; j < l; ++j) {
 								String clazz = value[j].trim();
 								String cz = clazz.replace('.', '/');
@@ -451,19 +450,20 @@ public class PCCASMTransformer implements IClassTransformer {
 						for (int i = 0, e = values.size(); i < e;) {
 							Object k = values.get(i++);
 							Object v = values.get(i++);
-							if ("value".equals(k) && v instanceof List &&
-									((List<?>)v).size() > 0 && ((List<?>)v).get(0) instanceof String) {
-								String[] value = ((List<?>)v).toArray(new String[0]);
+							if ("value".equals(k) && v instanceof List && ((List<?>) v).size() > 0 && ((List<?>) v).get(0) instanceof String) {
+								String[] value = ((List<?>) v).toArray(new String[0]);
 								for (int j = 0, l = value.length; j < l; ++j) {
 									String clazz = value[j].trim();
 									String cz = clazz.replace('.', '/');
-									if (cn.interfaces.contains(cz)) try {
-										if (!workingPath.contains(clazz)) {
-											Class.forName(clazz, false, this.getClass().getClassLoader());
+									if (cn.interfaces.contains(cz)) {
+										try {
+											if (!workingPath.contains(clazz)) {
+												Class.forName(clazz, false, this.getClass().getClassLoader());
+											}
+										} catch (Throwable _) {
+											cn.interfaces.remove(cz);
+											altered = true;
 										}
-									} catch (Throwable _) {
-										cn.interfaces.remove(cz);
-										altered = true;
 									}
 								}
 							}
@@ -476,12 +476,14 @@ public class PCCASMTransformer implements IClassTransformer {
 			Iterator<MethodNode> iter = cn.methods.iterator();
 			while (iter.hasNext()) {
 				MethodNode mn = iter.next();
-				if (mn.visibleAnnotations != null)
-					for (AnnotationNode node : mn.visibleAnnotations)
+				if (mn.visibleAnnotations != null) {
+					for (AnnotationNode node : mn.visibleAnnotations) {
 						if (checkRemove(node, iter)) {
 							altered = true;
 							break;
 						}
+					}
+				}
 			}
 		}
 		if (cn.fields != null) {
@@ -489,17 +491,18 @@ public class PCCASMTransformer implements IClassTransformer {
 			while (iter.hasNext()) {
 				FieldNode fn = iter.next();
 				if (fn.visibleAnnotations != null) {
-					for (AnnotationNode node : fn.visibleAnnotations)
+					for (AnnotationNode node : fn.visibleAnnotations) {
 						if (checkRemove(node, iter)) {
 							altered = true;
 							break;
 						}
+					}
 				}
 			}
 		}
 		return altered;
 	}
-	
+
 	private boolean checkRemove(AnnotationNode node, Iterator<? extends Object> iter) {
 
 		if (node.desc.equals(strippableDesc)) {
@@ -508,9 +511,8 @@ public class PCCASMTransformer implements IClassTransformer {
 				for (int i = 0, e = values.size(); i < e;) {
 					Object k = values.get(i++);
 					Object v = values.get(i++);
-					if ("value".equals(k) && v instanceof List &&
-							((List<?>)v).size() > 0 && ((List<?>)v).get(0) instanceof String) {
-						String[] value = ((List<?>)v).toArray(new String[0]);
+					if ("value".equals(k) && v instanceof List && ((List<?>) v).size() > 0 && ((List<?>) v).get(0) instanceof String) {
+						String[] value = ((List<?>) v).toArray(new String[0]);
 						boolean needsRemoved = false;
 						for (int j = 0, l = value.length; j < l; ++j) {
 							String clazz = value[j].trim();

@@ -57,12 +57,13 @@ public class FluidTankAdv implements IFluidTank {
 		}
 		return nbt;
 	}
-	
+
 	public void setLock(Fluid fluid) {
-		
+
 		locked = fluid != null;
-		if (locked)
+		if (locked) {
 			this.fluid = new FluidStack(fluid, 0);
+		}
 	}
 
 	public void setFluid(FluidStack fluid) {
@@ -163,10 +164,11 @@ public class FluidTankAdv implements IFluidTank {
 		if (doDrain) {
 			fluid.amount -= drained;
 			if (fluid.amount <= 0) {
-				if (locked)
+				if (locked) {
 					fluid.amount = 0;
-				else
+				} else {
 					fluid = null;
+				}
 			}
 		}
 		return stack;

@@ -38,4 +38,5 @@ public class TickHandlerEnderRegistry {
 
 		RegistryEnderAttuned.clear();
 	}
+
 }

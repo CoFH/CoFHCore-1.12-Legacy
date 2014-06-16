@@ -29,8 +29,8 @@ public class BucketHandler {
 
 	}
 
-	//private static BlockWrapper queryBlock = new BlockWrapper(Blocks.stone, 0);
-	//private static ItemWrapper queryItem = new ItemWrapper(Items.diamond, 0);
+	// private static BlockWrapper queryBlock = new BlockWrapper(Blocks.stone, 0);
+	// private static ItemWrapper queryItem = new ItemWrapper(Items.diamond, 0);
 
 	private static BiMap<BlockWrapper, ItemWrapper> buckets = HashBiMap.create();
 
@@ -71,8 +71,7 @@ public class BucketHandler {
 			return;
 		}
 		if (event.entityPlayer != null) {
-			if ((fill && !event.world.canMineBlock(event.entityPlayer, x, y, z)) ||
-					!event.entityPlayer.canPlayerEdit(x, y, z, side, current)) {
+			if ((fill && !event.world.canMineBlock(event.entityPlayer, x, y, z)) || !event.entityPlayer.canPlayerEdit(x, y, z, side, current)) {
 				event.setCanceled(true);
 				return;
 			}
@@ -121,8 +120,9 @@ public class BucketHandler {
 			}
 			return null;
 		}
-		if (!world.setBlockToAir(x, y, z)) // this can fail
+		if (!world.setBlockToAir(x, y, z)) {
 			return null;
+		}
 		ItemWrapper result = buckets.get(new BlockWrapper(block, bMeta));
 		return new ItemStack(result.item, 1, result.metadata);
 	}
@@ -144,8 +144,9 @@ public class BucketHandler {
 		if (world.isAirBlock(x, y, z) || solid) {
 			r = world.setBlock(x, y, z, result.block, result.metadata, 3); // this can fail
 
-			if (r && !world.isRemote && solid && !material.isLiquid())
+			if (r && !world.isRemote && solid && !material.isLiquid()) {
 				world.func_147480_a(x, y, z, true);
+			}
 
 			world.markBlockForUpdate(x, y, z);
 		}
