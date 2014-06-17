@@ -4,9 +4,9 @@ import cofh.api.block.IBlockDebug;
 import cofh.api.block.IBlockInfo;
 import cofh.api.block.IDismantleable;
 import cofh.api.core.IInitializer;
+import cofh.api.core.ISecurable;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.tileentity.IReconfigurableFacing;
-import cofh.api.tileentity.ISecureTile;
 import cofh.api.tileentity.ITileDebug;
 import cofh.api.tileentity.ITileInfo;
 import cofh.util.CoreUtils;
@@ -60,8 +60,8 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 
 		TileEntity tile = world.getTileEntity(x, y, z);
 
-		if (tile instanceof ISecureTile && living instanceof ICommandSender) {
-			((ISecureTile) tile).setOwnerName(((ICommandSender) living).getCommandSenderName());
+		if (tile instanceof ISecurable && living instanceof ICommandSender) {
+			((ISecurable) tile).setOwnerName(((ICommandSender) living).getCommandSenderName());
 		}
 		if (tile instanceof IReconfigurableFacing) {
 			IReconfigurableFacing reconfig = (IReconfigurableFacing) tile;
@@ -192,7 +192,7 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 
 		TileEntity tile = world.getTileEntity(x, y, z);
 
-		if (tile instanceof ISecureTile && !((ISecureTile) tile).canPlayerAccess(player.getCommandSenderName())) {
+		if (tile instanceof ISecurable && !((ISecurable) tile).canPlayerAccess(player.getCommandSenderName())) {
 			return -1;
 		}
 		return ForgeHooks.blockStrength(this, player, world, x, y, z);
@@ -281,8 +281,8 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 
 		TileEntity tile = world.getTileEntity(x, y, z);
 
-		if (tile instanceof ISecureTile) {
-			return ((ISecureTile) tile).canPlayerAccess(player.getCommandSenderName());
+		if (tile instanceof ISecurable) {
+			return ((ISecurable) tile).canPlayerAccess(player.getCommandSenderName());
 		} else if (tile instanceof TileCoFHBase) {
 			return ((TileCoFHBase) tile).canPlayerDismantle(player);
 		}

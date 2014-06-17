@@ -1,6 +1,6 @@
 package cofh.gui.element;
 
-import cofh.api.tileentity.IEnergyInfo;
+import cofh.api.core.IEnergyInfo;
 import cofh.gui.GuiBase;
 import cofh.util.StringHelper;
 
@@ -12,19 +12,19 @@ public class TabEnergy extends TabBase {
 
 	public static int defaultSide = 1;
 
-	IEnergyInfo myTile;
+	IEnergyInfo myContainer;
 	boolean isProducer;
 
-	public TabEnergy(GuiBase gui, IEnergyInfo theTile, boolean isProducer) {
+	public TabEnergy(GuiBase gui, IEnergyInfo container, boolean isProducer) {
 
-		this(gui, defaultSide, theTile, isProducer);
+		this(gui, defaultSide, container, isProducer);
 	}
 
-	public TabEnergy(GuiBase gui, int side, IEnergyInfo theTile, boolean isProducer) {
+	public TabEnergy(GuiBase gui, int side, IEnergyInfo container, boolean isProducer) {
 
 		super(gui, side);
 
-		myTile = theTile;
+		myContainer = container;
 		maxHeight = 92;
 		maxWidth = 100;
 		this.isProducer = isProducer;
@@ -48,11 +48,11 @@ public class TabEnergy extends TabBase {
 
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energy"), posXOffset() + 20, posY + 6, headerColor);
 		getFontRenderer().drawStringWithShadow(StringHelper.localize(powerDirection) + ":", posXOffset() + 6, posY + 18, subheaderColor);
-		getFontRenderer().drawString(myTile.getInfoEnergyPerTick() + " RF/t", posXOffset() + 14, posY + 30, textColor);
+		getFontRenderer().drawString(myContainer.getInfoEnergyPerTick() + " RF/t", posXOffset() + 14, posY + 30, textColor);
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.maxEnergyPerTick") + ":", posXOffset() + 6, posY + 42, subheaderColor);
-		getFontRenderer().drawString(myTile.getInfoMaxEnergyPerTick() + " RF/t", posXOffset() + 14, posY + 54, textColor);
+		getFontRenderer().drawString(myContainer.getInfoMaxEnergyPerTick() + " RF/t", posXOffset() + 14, posY + 54, textColor);
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energyStored") + ":", posXOffset() + 6, posY + 66, subheaderColor);
-		getFontRenderer().drawString(myTile.getInfoEnergyStored() + " RF", posXOffset() + 14, posY + 78, textColor);
+		getFontRenderer().drawString(myContainer.getInfoEnergyStored() + " RF", posXOffset() + 14, posY + 78, textColor);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
@@ -60,7 +60,7 @@ public class TabEnergy extends TabBase {
 	public void addTooltip(List<String> list) {
 
 		if (!isFullyOpened()) {
-			list.add(myTile.getInfoEnergyPerTick() + " RF/t");
+			list.add(myContainer.getInfoEnergyPerTick() + " RF/t");
 			return;
 		}
 	}

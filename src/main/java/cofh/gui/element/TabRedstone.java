@@ -11,18 +11,18 @@ import org.lwjgl.opengl.GL11;
 public class TabRedstone extends TabBase {
 
 	public static int defaultSide = 1;
-	IRedstoneControl myTile;
+	IRedstoneControl myContainer;
 
-	public TabRedstone(GuiBase gui, IRedstoneControl theTile) {
+	public TabRedstone(GuiBase gui, IRedstoneControl container) {
 
-		this(gui, defaultSide, theTile);
+		this(gui, defaultSide, container);
 	}
 
-	public TabRedstone(GuiBase gui, int side, IRedstoneControl theTile) {
+	public TabRedstone(GuiBase gui, int side, IRedstoneControl container) {
 
 		super(gui, side);
 
-		myTile = theTile;
+		myContainer = container;
 		maxHeight = 92;
 		maxWidth = 112;
 		backgroundColor = 0xd0230a;
@@ -40,7 +40,7 @@ public class TabRedstone extends TabBase {
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.controlStatus") + ":", posXOffset() + 6, posY + 42, subheaderColor);
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", posXOffset() + 6, posY + 66, subheaderColor);
 
-		if (myTile.getControl().isDisabled()) {
+		if (myContainer.getControl().isDisabled()) {
 			gui.drawButton("IconGunpowder", posX() + 28, posY + 20, 1, 1);
 			gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 0);
 			gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 0);
@@ -49,7 +49,7 @@ public class TabRedstone extends TabBase {
 		} else {
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.enabled"), posXOffset() + 14, posY + 54, textColor);
 
-			if (myTile.getControl().isLow()) {
+			if (myContainer.getControl().isLow()) {
 				gui.drawButton("IconRedstone", posX() + 28, posY + 20, 1, 0);
 				gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 1);
 				gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 0);
@@ -68,10 +68,10 @@ public class TabRedstone extends TabBase {
 	public void addTooltip(List<String> list) {
 
 		if (!isFullyOpened()) {
-			if (myTile.getControl().isDisabled()) {
+			if (myContainer.getControl().isDisabled()) {
 				list.add(StringHelper.localize("info.cofh.disabled"));
 				return;
-			} else if (myTile.getControl().isLow()) {
+			} else if (myContainer.getControl().isLow()) {
 				list.add(StringHelper.localize("info.cofh.enabled") + ", " + StringHelper.localize("info.cofh.low"));
 				return;
 			}
@@ -102,18 +102,18 @@ public class TabRedstone extends TabBase {
 			return false;
 		}
 		if (28 <= mouseX && mouseX < 44 && 20 <= mouseY && mouseY < 36) {
-			if (!myTile.getControl().isDisabled()) {
-				myTile.setControl(IRedstoneControl.ControlMode.DISABLED);
+			if (!myContainer.getControl().isDisabled()) {
+				myContainer.setControl(IRedstoneControl.ControlMode.DISABLED);
 				GuiBase.playSound("random.click", 1.0F, 0.4F);
 			}
 		} else if (48 <= mouseX && mouseX < 64 && 20 <= mouseY && mouseY < 36) {
-			if (!myTile.getControl().isLow()) {
-				myTile.setControl(IRedstoneControl.ControlMode.LOW);
+			if (!myContainer.getControl().isLow()) {
+				myContainer.setControl(IRedstoneControl.ControlMode.LOW);
 				GuiBase.playSound("random.click", 1.0F, 0.6F);
 			}
 		} else if (68 <= mouseX && mouseX < 84 && 20 <= mouseY && mouseY < 36) {
-			if (!myTile.getControl().isHigh()) {
-				myTile.setControl(IRedstoneControl.ControlMode.HIGH);
+			if (!myContainer.getControl().isHigh()) {
+				myContainer.setControl(IRedstoneControl.ControlMode.HIGH);
 				GuiBase.playSound("random.click", 1.0F, 0.8F);
 			}
 		}

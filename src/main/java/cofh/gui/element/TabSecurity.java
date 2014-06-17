@@ -1,6 +1,6 @@
 package cofh.gui.element;
 
-import cofh.api.tileentity.ISecureTile;
+import cofh.api.core.ISecurable;
 import cofh.gui.GuiBase;
 import cofh.util.StringHelper;
 
@@ -12,20 +12,20 @@ public class TabSecurity extends TabBase {
 
 	public static int defaultSide = 1;
 
-	ISecureTile myTile;
+	ISecurable myContainer;
 	String myPlayer;
 
-	public TabSecurity(GuiBase gui, ISecureTile theTile, String playerName) {
+	public TabSecurity(GuiBase gui, ISecurable container, String playerName) {
 
-		this(gui, defaultSide, theTile, playerName);
+		this(gui, defaultSide, container, playerName);
 	}
 
-	public TabSecurity(GuiBase gui, int side, ISecureTile theTile, String playerName) {
+	public TabSecurity(GuiBase gui, int side, ISecurable container, String playerName) {
 
 		super(gui, side);
 
 		myPlayer = playerName;
-		myTile = theTile;
+		myContainer = container;
 		maxHeight = 68;
 		maxWidth = 112;
 		backgroundColor = 0x4c99b2;
@@ -39,11 +39,11 @@ public class TabSecurity extends TabBase {
 		}
 		drawBackground();
 
-		if (myTile.getAccess().isPublic()) {
+		if (myContainer.getAccess().isPublic()) {
 			drawTabIcon("IconAccessPublic");
-		} else if (myTile.getAccess().isRestricted()) {
+		} else if (myContainer.getAccess().isRestricted()) {
 			drawTabIcon("IconAccessFriends");
-		} else if (myTile.getAccess().isPrivate()) {
+		} else if (myContainer.getAccess().isPrivate()) {
 			drawTabIcon("IconAccessPrivate");
 		}
 		if (!isFullyOpened()) {
@@ -52,17 +52,17 @@ public class TabSecurity extends TabBase {
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.security"), posXOffset() + 18, posY + 6, headerColor);
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.accessMode") + ":", posXOffset() + 6, posY + 42, subheaderColor);
 
-		if (myTile.getAccess().isPublic()) {
+		if (myContainer.getAccess().isPublic()) {
 			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 1);
 			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 0);
 			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 0);
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPublic"), posXOffset() + 14, posY + 54, textColor);
-		} else if (myTile.getAccess().isRestricted()) {
+		} else if (myContainer.getAccess().isRestricted()) {
 			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 0);
 			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 1);
 			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 0);
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessRestricted"), posXOffset() + 14, posY + 54, textColor);
-		} else if (myTile.getAccess().isPrivate()) {
+		} else if (myContainer.getAccess().isPrivate()) {
 			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 0);
 			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 0);
 			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 1);
@@ -75,7 +75,7 @@ public class TabSecurity extends TabBase {
 	public void addTooltip(List<String> list) {
 
 		if (!isFullyOpened()) {
-			list.add(StringHelper.localize("info.cofh.owner") + ": " + myTile.getOwnerName());
+			list.add(StringHelper.localize("info.cofh.owner") + ": " + myContainer.getOwnerName());
 			return;
 		}
 		int x = gui.getMouseX() - currentShiftX;
@@ -92,7 +92,7 @@ public class TabSecurity extends TabBase {
 	@Override
 	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
 
-		if (!myPlayer.equals(myTile.getOwnerName())) {
+		if (!myPlayer.equals(myContainer.getOwnerName())) {
 			return true;
 		}
 		if (!isFullyOpened()) {
@@ -105,18 +105,18 @@ public class TabSecurity extends TabBase {
 			return false;
 		}
 		if (28 <= mouseX && mouseX < 44 && 20 <= mouseY && mouseY < 36) {
-			if (!myTile.getAccess().isPublic()) {
-				myTile.setAccess(ISecureTile.AccessMode.PUBLIC);
+			if (!myContainer.getAccess().isPublic()) {
+				myContainer.setAccess(ISecurable.AccessMode.PUBLIC);
 				GuiBase.playSound("random.click", 1.0F, 0.4F);
 			}
 		} else if (48 <= mouseX && mouseX < 64 && 20 <= mouseY && mouseY < 36) {
-			if (!myTile.getAccess().isRestricted()) {
-				myTile.setAccess(ISecureTile.AccessMode.RESTRICTED);
+			if (!myContainer.getAccess().isRestricted()) {
+				myContainer.setAccess(ISecurable.AccessMode.RESTRICTED);
 				GuiBase.playSound("random.click", 1.0F, 0.6F);
 			}
 		} else if (68 <= mouseX && mouseX < 84 && 20 <= mouseY && mouseY < 36) {
-			if (!myTile.getAccess().isPrivate()) {
-				myTile.setAccess(ISecureTile.AccessMode.PRIVATE);
+			if (!myContainer.getAccess().isPrivate()) {
+				myContainer.setAccess(ISecurable.AccessMode.PRIVATE);
 				GuiBase.playSound("random.click", 1.0F, 0.8F);
 			}
 		}
@@ -142,7 +142,7 @@ public class TabSecurity extends TabBase {
 	@Override
 	public void setFullyOpen() {
 
-		if (!myPlayer.equals(myTile.getOwnerName())) {
+		if (!myPlayer.equals(myContainer.getOwnerName())) {
 			return;
 		}
 		super.setFullyOpen();

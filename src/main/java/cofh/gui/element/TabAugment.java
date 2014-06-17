@@ -25,16 +25,16 @@ public class TabAugment extends TabBase {
 	int slotsBorderY1 = 20;
 	int slotsBorderY2 = slotsBorderY1 + 42;
 
-	public TabAugment(GuiBase gui, IAugmentableContainer theTile) {
+	public TabAugment(GuiBase gui, IAugmentableContainer container) {
 
-		this(gui, defaultSide, theTile);
+		this(gui, defaultSide, container);
 	}
 
-	public TabAugment(GuiBase gui, int side, IAugmentableContainer theTile) {
+	public TabAugment(GuiBase gui, int side, IAugmentableContainer container) {
 
 		super(gui, side);
 
-		myContainer = theTile;
+		myContainer = container;
 		maxHeight = 92;
 		maxWidth = 100;
 		backgroundColor = 0x226688;

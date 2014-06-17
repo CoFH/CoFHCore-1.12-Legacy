@@ -1,7 +1,7 @@
 package cofh.block;
 
-import cofh.api.tileentity.ISecureTile;
-import cofh.api.tileentity.ISecureTile.AccessMode;
+import cofh.api.core.ISecurable;
+import cofh.api.core.ISecurable.AccessMode;
 import cofh.core.CoFHProps;
 import cofh.network.CoFHPacket;
 import cofh.network.CoFHTilePacket;
@@ -11,7 +11,9 @@ import cofh.util.CoreUtils;
 import cofh.util.ServerHelper;
 import cpw.mods.fml.relauncher.Side;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.network.Packet;
@@ -30,11 +32,11 @@ public abstract class TileCoFHBase extends TileEntity {
 
 	public boolean canPlayerAccess(String name) {
 
-		if (!(this instanceof ISecureTile)) {
+		if (!(this instanceof ISecurable)) {
 			return false;
 		}
-		AccessMode access = ((ISecureTile) this).getAccess();
-		String owner = ((ISecureTile) this).getOwnerName();
+		AccessMode access = ((ISecurable) this).getAccess();
+		String owner = ((ISecurable) this).getOwnerName();
 
 		return access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name)) || owner.equals(CoFHProps.DEFAULT_OWNER) || owner.equals(name)
 				|| access.isRestricted() && RegistryFriends.playerHasAccess(name, owner);
@@ -130,6 +132,16 @@ public abstract class TileCoFHBase extends TileEntity {
 	}
 
 	/* GUI METHODS */
+	public GuiContainer getGuiClient(InventoryPlayer inventory) {
+
+		return null;
+	}
+
+	public Container getGuiServer(InventoryPlayer inventory) {
+
+		return null;
+	}
+
 	public int getInvSlotCount() {
 
 		return 0;
