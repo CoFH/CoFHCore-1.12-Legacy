@@ -143,15 +143,15 @@ public class TabAugment extends TabBase {
 		switch (numAugments) {
 		case 4:
 			for (int i = 0; i < numAugments; i++) {
-				myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() - gui.getGuiLeft() + slotsBorderX1 + 4 + 18 * (i % 2);
-				myContainer.getAugmentSlots()[i].yDisplayPosition = posY - gui.getGuiTop() + slotsBorderY1 + 4 + 18 * (i / 2);
+				myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 2);
+				myContainer.getAugmentSlots()[i].yDisplayPosition = posY + slotsBorderY1 + 4 + 18 * (i / 2);
 			}
 			break;
 		case 5:
 		default:
 			for (int i = 0; i < numAugments; i++) {
-				myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() - gui.getGuiLeft() + slotsBorderX1 + 4 + 18 * (i % 3);
-				myContainer.getAugmentSlots()[i].yDisplayPosition = posY - gui.getGuiTop() + slotsBorderY1 + 4 + 18 * (i / 3);
+				myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 3);
+				myContainer.getAugmentSlots()[i].yDisplayPosition = posY + slotsBorderY1 + 4 + 18 * (i / 3);
 			}
 		}
 	}
@@ -161,8 +161,8 @@ public class TabAugment extends TabBase {
 
 		if (open) {
 			for (int i = 0; i < numAugments; i++) {
-				myContainer.getAugmentSlots()[i].xDisplayPosition = -gui.getGuiLeft() - 16;
-				myContainer.getAugmentSlots()[i].yDisplayPosition = -gui.getGuiTop() - 16;
+				myContainer.getAugmentSlots()[i].xDisplayPosition = -16;
+				myContainer.getAugmentSlots()[i].yDisplayPosition = -16;
 			}
 		}
 		super.toggleOpen();
