@@ -25,6 +25,11 @@ public abstract class GuiBaseAdv extends GuiBase {
 	public static final int PROGRESS = 24;
 	public static final int SPEED = 16;
 
+	public GuiBaseAdv(Container container) {
+
+		super(container);
+	}
+
 	public GuiBaseAdv(Container container, ResourceLocation texture) {
 
 		super(container, texture);

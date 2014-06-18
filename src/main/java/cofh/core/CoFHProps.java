@@ -4,6 +4,8 @@ import cofh.util.StringHelper;
 
 import java.io.File;
 
+import net.minecraft.util.ResourceLocation;
+
 public class CoFHProps {
 
 	public static final String VERSION = "1.7.2R3.0.0B1";
@@ -28,9 +30,31 @@ public class CoFHProps {
 	public static final int RF_PER_MJ = 10;
 	public static final int ENTITY_TRACKING_DISTANCE = 64;
 
+	public static final int[] STORAGE_SIZE = { 1, 9, 18, 27, 36, 45, 54, 63, 72, 80, 88, 96, 104 };
+	public static final int[][] SLOTS = new int[STORAGE_SIZE.length][];
+
+	static {
+		for (int i = 0; i < STORAGE_SIZE.length; i++) {
+			SLOTS[i] = new int[CoFHProps.STORAGE_SIZE[i]];
+			for (int j = 0; j < CoFHProps.STORAGE_SIZE[i]; j++) {
+				SLOTS[i][j] = j;
+			}
+		}
+	}
+
 	/* Graphics */
 	public static final String PATH_GFX = "cofh:textures/";
 	public static final String PATH_ENTITY = PATH_GFX + "entity/";
+	public static final String PATH_GUI = PATH_GFX + "gui/";
+	public static final String PATH_GUI_STORAGE = PATH_GUI + "storage/";
+
+	public static final ResourceLocation[] TEXTURE_STORAGE = new ResourceLocation[STORAGE_SIZE.length];
+
+	static {
+		for (int i = 0; i < STORAGE_SIZE.length; i++) {
+			TEXTURE_STORAGE[i] = new ResourceLocation(PATH_GUI_STORAGE + "Storage" + STORAGE_SIZE[i] + ".png");
+		}
+	}
 
 	/* Global Localizations */
 	public static String tutorialTabConfiguration = StringHelper.localize("info.cofh.tutorial.tabConfiguration");

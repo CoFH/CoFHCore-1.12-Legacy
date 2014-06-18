@@ -4,6 +4,7 @@ import cofh.api.transport.RegistryEnderAttuned;
 import cofh.command.CommandHandler;
 import cofh.core.CoFHProps;
 import cofh.core.Proxy;
+import cofh.enchantment.CoFHEnchantment;
 import cofh.gui.GuiHandler;
 import cofh.mod.BaseMod;
 import cofh.network.PacketHandler;
@@ -124,6 +125,8 @@ public class CoFHCore extends BaseMod {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
+
+		CoFHEnchantment.postInit();
 
 		proxy.registerRenderInformation();
 		proxy.registerTickHandlers();

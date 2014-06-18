@@ -9,6 +9,8 @@ death.attack.mana.player=%1$s ran into another state of being attempting to esca
 death.attack.flux=%1$s had their reality torn apart by Flux!
 death.attack.flux.player=%1$s was Fluxed to death by %2$s!
 
+enchant.cofh.holding=Holding
+
 info.cofh.access=Access
 info.cofh.accessMode=Access Mode
 info.cofh.accessPublic=Public Access
