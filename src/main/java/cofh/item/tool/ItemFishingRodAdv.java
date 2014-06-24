@@ -3,10 +3,8 @@ package cofh.item.tool;
 import cofh.CoFHCore;
 import cofh.entity.EntityCoFHFishHook;
 import cofh.util.ItemHelper;
-import com.google.common.collect.Multimap;
 
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemStack;
@@ -15,8 +13,10 @@ import net.minecraft.world.World;
 
 public class ItemFishingRodAdv extends ItemFishingRod {
 
+	protected IIcon normalIcons[] = new IIcon[2];
+
+	protected ToolMaterial toolMaterial;
 	public String repairIngot = "";
-	public ToolMaterial toolMaterial;
 
 	public ItemFishingRodAdv(ToolMaterial toolMaterial) {
 
@@ -31,20 +31,21 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 	}
 
 	@Override
+	public int getItemEnchantability() {
+
+		return toolMaterial.getEnchantability();
+	}
+
+	@Override
 	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
 
 		return ItemHelper.isOreNameEqual(stack, repairIngot);
 	}
 
 	@Override
-	public IIcon getIcon(ItemStack stack, int pass) {
+	public boolean isItemTool(ItemStack stack) {
 
-		EntityPlayer player = CoFHCore.proxy.getClientPlayer();
-
-		if (player.inventory.getCurrentItem() == stack && player.fishEntity != null) {
-			return func_94597_g();
-		}
-		return getIconFromDamageForRenderPass(stack.getItemDamage(), pass);
+		return true;
 	}
 
 	@Override
@@ -66,12 +67,27 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(ItemStack stack) {
+	public IIcon getIconIndex(ItemStack stack) {
 
-		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(stack);
-		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(),
-				new AttributeModifier(field_111210_e, "Tool modifier", toolMaterial.getDamageVsEntity(), 0));
-		return multimap;
+		return getIcon(stack, 0);
+	}
+
+	@Override
+	public IIcon getIcon(ItemStack stack, int pass) {
+
+		EntityPlayer player = CoFHCore.proxy.getClientPlayer();
+
+		if (player.inventory.getCurrentItem() == stack && player.fishEntity != null) {
+			return this.normalIcons[1];
+		}
+		return this.normalIcons[0];
+	}
+
+	@Override
+	public void registerIcons(IIconRegister ir) {
+
+		this.normalIcons[0] = ir.registerIcon(this.getIconString() + "_Uncast");
+		this.normalIcons[1] = ir.registerIcon(this.getIconString() + "_Cast");
 	}
 
 }

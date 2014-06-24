@@ -27,6 +27,7 @@ info.cofh.controlStatus=Control Status
 info.cofh.damageAttack=Attack Damage
 info.cofh.damageFlux=Flux Damage
 info.cofh.disabled=Disabled
+info.cofh.dry=Dry
 info.cofh.empty=Empty
 info.cofh.enabled=Enabled
 info.cofh.energy=Energy
@@ -58,6 +59,7 @@ info.cofh.send=Send
 info.cofh.sending=Sending
 info.cofh.signal=Signal
 info.cofh.signalRequired=Signal Required
+info.cofh.soaked=Soaked
 info.cofh.source=Source
 info.cofh.tutorial=Tutorial
 info.cofh.unlocked=Unlocked
@@ -84,13 +86,3 @@ fluid.tile.water=Water
 fluid.tile.lava=Lava
 fluid.fuel=Fuel
 fluid.oil=Oil
-
-#CoFHLexicon
-
-info.cofh.lexicon1=Converts items to equivalent forms.
-info.cofh.lexicon2=Right click (open) to study.
-info.cofh.lexicon3=Use while sneaking to gain wisdom!
-info.cofh.lexicon4=Right click (open) to transmute items.
-info.cofh.lexicon5=Use while sneaking to forsake knowledge.
-item.cofh.tool.lexicon.name=Forge Lexicon
-item.cofh.tool.lexiconActive.name=Forge Lexicon (Active)

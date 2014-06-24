@@ -35,8 +35,6 @@ public class ItemRenderRegistry {
 
 	public static void reloadRegistry() {
 
-		System.out.println("calllllled");
-
 		Map<ItemWrapper, IItemRenderer> tempMap = new THashMap(itemRenders.size());
 
 		for (Entry<ItemWrapper, IItemRenderer> entry : itemRenders.entrySet()) {

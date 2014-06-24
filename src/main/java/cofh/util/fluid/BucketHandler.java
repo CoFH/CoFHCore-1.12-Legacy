@@ -142,12 +142,10 @@ public class BucketHandler {
 		Material material = world.getBlock(x, y, z).getMaterial();
 		boolean solid = !material.isSolid();
 		if (world.isAirBlock(x, y, z) || solid) {
-			r = world.setBlock(x, y, z, result.block, result.metadata, 3); // this can fail
-
 			if (r && !world.isRemote && solid && !material.isLiquid()) {
 				world.func_147480_a(x, y, z, true);
 			}
-
+			r = world.setBlock(x, y, z, result.block, result.metadata, 3); // this can fail
 			world.markBlockForUpdate(x, y, z);
 		}
 		return r;

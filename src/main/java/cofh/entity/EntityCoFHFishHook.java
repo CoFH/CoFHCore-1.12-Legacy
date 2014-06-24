@@ -120,7 +120,7 @@ public class EntityCoFHFishHook extends EntityFishHook {
 			double d0 = 0.0D;
 			double d2;
 
-			for (int i = 0; i < list.size(); ++i) {
+			for (int i = 0; i < list.size(); i++) {
 				Entity entity1 = list.get(i);
 
 				if (entity1.canBeCollidedWith() && (entity1 != this.field_146042_b || this.field_146047_aw >= 5)) {

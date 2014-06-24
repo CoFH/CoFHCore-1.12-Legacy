@@ -53,10 +53,9 @@ public class CoFHFontRender extends FontRenderer {
 				i += k;
 
 				if (flag) {
-					++i;
+					i++;
 				}
 			}
-
 			return i;
 		}
 	}

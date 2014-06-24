@@ -159,19 +159,11 @@ public class CoFHCore extends BaseMod {
 
 	public static final GuiHandler guiHandler = new GuiHandler();
 
-	static {
-		// log.setParent(FMLLog.getLogger());
-		// TODO: parents?
-	}
-
 	public void registerOreDictionaryEntries() {
 
 		registerOreDictionaryEntry("cloth", new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE));
 		registerOreDictionaryEntry("coal", new ItemStack(Items.coal, 1, 0));
 		registerOreDictionaryEntry("charcoal", new ItemStack(Items.coal, 1, 1));
-
-		registerOreDictionaryEntry("ingotIron", new ItemStack(Items.iron_ingot));
-		registerOreDictionaryEntry("ingotGold", new ItemStack(Items.gold_ingot));
 	}
 
 	private boolean registerOreDictionaryEntry(String oreName, ItemStack ore) {

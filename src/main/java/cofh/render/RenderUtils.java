@@ -416,7 +416,7 @@ public class RenderUtils {
 		float vScale = 1 / 256f;
 		float s = 4.0F; // skew
 		GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
-		for (int i = 0; i < 2; ++i) {
+		for (int i = 0; i < 2; i++) {
 			float uOffset = Minecraft.getSystemTime() % (3000 + i * 1873) / (3000F + i * 1873) * 256F;
 			float vOffset = 0.0F;
 

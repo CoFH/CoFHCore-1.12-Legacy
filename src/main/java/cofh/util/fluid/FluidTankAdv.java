@@ -123,19 +123,15 @@ public class FluidTankAdv implements IFluidTank {
 			if (fluid == null) {
 				return Math.min(capacity, resource.amount);
 			}
-
 			if (!fluid.isFluidEqual(resource)) {
 				return 0;
 			}
-
 			return Math.min(capacity - fluid.amount, resource.amount);
 		}
-
 		if (fluid == null) {
 			fluid = new FluidStack(resource, Math.min(capacity, resource.amount));
 			return fluid.amount;
 		}
-
 		if (!fluid.isFluidEqual(resource)) {
 			return 0;
 		}
@@ -172,6 +168,14 @@ public class FluidTankAdv implements IFluidTank {
 			}
 		}
 		return stack;
+	}
+
+	public FluidStack drain(FluidStack resource, boolean doDrain) {
+
+		if (resource == null || !resource.isFluidEqual(fluid)) {
+			return null;
+		}
+		return drain(resource.amount, doDrain);
 	}
 
 }

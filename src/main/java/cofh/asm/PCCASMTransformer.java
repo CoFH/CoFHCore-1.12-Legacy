@@ -51,8 +51,8 @@ public class PCCASMTransformer implements IClassTransformer {
 
 	private static Logger log = LogManager.getLogger("CoFH ASM");
 
-	private String implementableDesc, strippableDesc;
-	private ArrayList<String> workingPath = new ArrayList<String>();
+	private final String implementableDesc, strippableDesc;
+	private final ArrayList<String> workingPath = new ArrayList<String>();
 	private ClassNode world = null, worldServer = null;
 
 	public PCCASMTransformer() {
@@ -282,7 +282,7 @@ public class PCCASMTransformer implements IClassTransformer {
 				mv.visitVarInsn(ALOAD, 0);
 				mv.visitFieldInsn(GETFIELD, "skyboy/core/world/WorldProxy", "proxiedWorld", "Lnet/minecraft/world/World;");
 				Type[] types = Type.getArgumentTypes(m.desc);
-				for (int i = 0, w = 1, e = types.length; i < e; ++i) {
+				for (int i = 0, w = 1, e = types.length; i < e; i++) {
 					mv.visitVarInsn(types[i].getOpcode(ILOAD), w);
 					w += types[i].getSize();
 				}
@@ -320,7 +320,7 @@ public class PCCASMTransformer implements IClassTransformer {
 		for (MethodNode m : cn.methods) {
 			if ("<init>".equals(m.name)) {
 				InsnList l = m.instructions;
-				for (int i = 0, e = l.size(); i < e; ++i) {
+				for (int i = 0, e = l.size(); i < e; i++) {
 					AbstractInsnNode n = l.get(i);
 					if (n instanceof MethodInsnNode) {
 						MethodInsnNode mn = (MethodInsnNode) n;
@@ -350,7 +350,7 @@ public class PCCASMTransformer implements IClassTransformer {
 				mv.visitVarInsn(ALOAD, 0);
 				mv.visitFieldInsn(GETFIELD, "skyboy/core/world/WorldServerProxy", "proxiedWorld", "Lnet/minecraft/world/WorldServer;");
 				Type[] types = Type.getArgumentTypes(m.desc);
-				for (int i = 0, w = 1, e = types.length; i < e; ++i) {
+				for (int i = 0, w = 1, e = types.length; i < e; i++) {
 					mv.visitVarInsn(types[i].getOpcode(ILOAD), w);
 					w += types[i].getSize();
 				}
@@ -377,7 +377,7 @@ public class PCCASMTransformer implements IClassTransformer {
 				mv.visitVarInsn(ALOAD, 0);
 				mv.visitFieldInsn(GETFIELD, "skyboy/core/world/WorldServerProxy", "proxiedWorld", "Lnet/minecraft/world/WorldServer;");
 				Type[] types = Type.getArgumentTypes(m.desc);
-				for (int i = 0, w = 1, e = types.length; i < e; ++i) {
+				for (int i = 0, w = 1, e = types.length; i < e; i++) {
 					mv.visitVarInsn(types[i].getOpcode(ILOAD), w);
 					w += types[i].getSize();
 				}
@@ -535,4 +535,5 @@ public class PCCASMTransformer implements IClassTransformer {
 		}
 		return false;
 	}
+
 }

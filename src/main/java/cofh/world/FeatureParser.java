@@ -203,7 +203,7 @@ public class FeatureParser {
 	private static boolean parseResList(JsonObject genObject, List<WeightedRandomBlock> resList) {
 
 		if (genObject.get("block").isJsonArray()) {
-			JsonArray blockList = genObject.getAsJsonArray("blockList");
+			JsonArray blockList = genObject.getAsJsonArray("block");
 
 			if (!genObject.get("metadata").isJsonArray()) {
 				CoFHCore.log.error("Invalid metadata array.");

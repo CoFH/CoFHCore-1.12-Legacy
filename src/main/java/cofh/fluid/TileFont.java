@@ -109,7 +109,7 @@ public class TileFont extends TileCoFHBase implements ISidedTexture {
 
 	}
 
-	/* ISidedBlockTexture */
+	/* ISidedTexture */
 	@Override
 	public IIcon getTexture(int side, int pass) {
 

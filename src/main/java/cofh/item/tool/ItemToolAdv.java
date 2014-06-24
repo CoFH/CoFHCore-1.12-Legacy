@@ -79,6 +79,12 @@ public abstract class ItemToolAdv extends ItemTool {
 	}
 
 	@Override
+	public boolean isItemTool(ItemStack stack) {
+
+		return true;
+	}
+
+	@Override
 	public float func_150893_a(ItemStack stack, Block block) {
 
 		return (getEffectiveMaterials(stack).contains(block.getMaterial()) || getEffectiveBlocks(stack).contains(block)) ? getEfficiency(stack) : 1.0F;

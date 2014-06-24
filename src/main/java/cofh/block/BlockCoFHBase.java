@@ -188,6 +188,8 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 		ItemStack pickBlock = new ItemStack(item, 1, bMeta);
 		pickBlock.setTagCompound(getItemStackTag(world, x, y, z));
 
+		System.out.println("called");
+
 		return pickBlock;
 	}
 

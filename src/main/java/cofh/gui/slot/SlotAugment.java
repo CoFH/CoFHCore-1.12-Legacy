@@ -39,7 +39,7 @@ public class SlotAugment extends Slot {
 	@Override
 	public void onSlotChanged() {
 
-		myTile.augmentTile();
+		myTile.installAugments();
 		((TileEntity) myTile).markDirty();
 	}
 
