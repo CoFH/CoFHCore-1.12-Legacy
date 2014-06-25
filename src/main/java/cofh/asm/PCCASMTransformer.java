@@ -24,6 +24,7 @@ import static org.objectweb.asm.Opcodes.RETURN;
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLRemappingAdapter;
 
@@ -518,17 +519,16 @@ public class PCCASMTransformer implements IClassTransformer {
 							String clazz = value[j];
 							if (clazz.startsWith("mod:")) {
 								needsRemoved = !Loader.isModLoaded(clazz.substring(4));
-								if (needsRemoved) break;
-								continue;
-							}
-							try {
+							} else if (clazz.startsWith("api:")) {
+								needsRemoved = !ModAPIManager.INSTANCE.hasAPI(clazz.substring(4));
+							} else try {
 								if (!workingPath.contains(clazz)) {
 									Class.forName(clazz, false, this.getClass().getClassLoader());
 								}
 							} catch (Throwable _) {
 								needsRemoved = true;
-								break;
 							}
+							if (needsRemoved) break;
 						}
 						if (needsRemoved) {
 							iter.remove();
