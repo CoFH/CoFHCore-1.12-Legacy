@@ -23,6 +23,7 @@ import static org.objectweb.asm.Opcodes.RETURN;
 
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLRemappingAdapter;
 
@@ -330,7 +331,6 @@ public class PCCASMTransformer implements IClassTransformer {
 						}
 					}
 				}
-				break;
 			}
 		}
 
@@ -453,7 +453,7 @@ public class PCCASMTransformer implements IClassTransformer {
 							if ("value".equals(k) && v instanceof List && ((List<?>) v).size() > 0 && ((List<?>) v).get(0) instanceof String) {
 								String[] value = ((List<?>) v).toArray(new String[0]);
 								for (int j = 0, l = value.length; j < l; ++j) {
-									String clazz = value[j].trim();
+									String clazz = value[j];
 									String cz = clazz.replace('.', '/');
 									if (cn.interfaces.contains(cz)) {
 										try {
@@ -515,7 +515,12 @@ public class PCCASMTransformer implements IClassTransformer {
 						String[] value = ((List<?>) v).toArray(new String[0]);
 						boolean needsRemoved = false;
 						for (int j = 0, l = value.length; j < l; ++j) {
-							String clazz = value[j].trim();
+							String clazz = value[j];
+							if (clazz.startsWith("mod:")) {
+								needsRemoved = !Loader.isModLoaded(clazz.substring(4));
+								if (needsRemoved) break;
+								continue;
+							}
 							try {
 								if (!workingPath.contains(clazz)) {
 									Class.forName(clazz, false, this.getClass().getClassLoader());
