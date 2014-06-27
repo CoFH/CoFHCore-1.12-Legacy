@@ -5,35 +5,30 @@ import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C15PacketClientSettings;
-import net.minecraft.server.management.ItemInWorldManager;
-import net.minecraft.stats.StatBase;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.FakePlayer;
 
-public class PlayerFake extends EntityPlayerMP {
+public class CoFHFakePlayer extends FakePlayer {
 
-	private static GameProfile NAME = new GameProfile("08B9E87C-A9F9-4161-AEC6-B671C8F4FCB4", "[CoFH]");
+	private static GameProfile NAME = new GameProfile(null, "[CoFH]");
 
 	public boolean isSneaking = false;
 	public ItemStack previousItem = null;
 	public String myName = "[CoFH]";
 
-	public PlayerFake(WorldServer world) {
+	public CoFHFakePlayer(WorldServer world) {
 
-		super(FMLCommonHandler.instance().getMinecraftServerInstance(), world, NAME, new ItemInWorldManager(world));
+		super(world, NAME);
 		playerNetServerHandler = new NetServerHandlerFake(FMLCommonHandler.instance().getMinecraftServerInstance(), this);
 		this.addedToChunk = false;
 	}
 
-	public static boolean isBlockBreakable(PlayerFake myFakePlayer, World worldObj, int x, int y, int z) {
+	public static boolean isBlockBreakable(CoFHFakePlayer myFakePlayer, World worldObj, int x, int y, int z) {
 
 		Block block = worldObj.getBlock(x, y, z);
 		if (myFakePlayer == null) {
@@ -41,18 +36,6 @@ public class PlayerFake extends EntityPlayerMP {
 		} else {
 			return block.getPlayerRelativeBlockHardness(myFakePlayer, worldObj, x, y, z) > -1;
 		}
-	}
-
-	@Override
-	public boolean canCommandSenderUseCommand(int var1, String var2) {
-
-		return false;
-	}
-
-	@Override
-	public ChunkCoordinates getPlayerCoordinates() {
-
-		return null;
 	}
 
 	public void setItemInHand(ItemStack m_item) {
@@ -163,37 +146,4 @@ public class PlayerFake extends EntityPlayerMP {
 
 	}
 
-	@Override
-	public void addStat(StatBase par1StatBase, int par2) {
-
-	}
-
-	@Override
-	public void openGui(Object mod, int modGuiId, World world, int x, int y, int z) {
-
-	}
-
-	@Override
-	public boolean isEntityInvulnerable() {
-
-		return true;
-	}
-
-	@Override
-	public void onDeath(DamageSource source) {
-
-		return;
-	}
-
-	@Override
-	public void travelToDimension(int dim) {
-
-		return;
-	}
-
-	@Override
-	public void func_147100_a(C15PacketClientSettings pkt) {
-
-		return;
-	}
 }

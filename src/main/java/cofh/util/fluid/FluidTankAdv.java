@@ -118,7 +118,6 @@ public class FluidTankAdv implements IFluidTank {
 		if (resource == null) {
 			return 0;
 		}
-
 		if (!doFill) {
 			if (fluid == null) {
 				return Math.min(capacity, resource.amount);

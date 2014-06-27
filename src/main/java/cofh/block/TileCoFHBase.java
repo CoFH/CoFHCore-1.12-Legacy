@@ -21,6 +21,10 @@ import net.minecraft.tileentity.TileEntity;
 
 public abstract class TileCoFHBase extends TileEntity {
 
+	public abstract String getName();
+
+	public abstract int getType();
+
 	public void blockBroken() {
 
 	}
@@ -28,6 +32,31 @@ public abstract class TileCoFHBase extends TileEntity {
 	public void blockDismantled() {
 
 		blockBroken();
+	}
+
+	public void callNeighborTileChange() {
+
+		if (getBlockType() != null) {
+			worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
+		}
+	}
+
+	public void onNeighborBlockChange() {
+
+	}
+
+	public void onNeighborTileChange(int tileX, int tileY, int tileZ) {
+
+	}
+
+	public int getComparatorInput(int side) {
+
+		return 0;
+	}
+
+	public int getLightValue() {
+
+		return 0;
 	}
 
 	public boolean canPlayerAccess(String name) {
@@ -47,38 +76,9 @@ public abstract class TileCoFHBase extends TileEntity {
 		return true;
 	}
 
-	public int getComparatorInput(int side) {
-
-		return 0;
-	}
-
-	public int getLightValue() {
-
-		return 0;
-	}
-
-	public abstract String getName();
-
-	public abstract int getType();
-
-	public void callNeighborTileChange() {
-
-		if (getBlockType() != null) {
-			worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
-		}
-	}
-
 	public boolean isUseable(EntityPlayer player) {
 
 		return player.getDistanceSq(xCoord, yCoord, zCoord) <= 64D;
-	}
-
-	public void onNeighborBlockChange() {
-
-	}
-
-	public void onNeighborTileChange(int tileX, int tileY, int tileZ) {
-
 	}
 
 	public boolean onWrench(EntityPlayer player, int hitSide) {
@@ -86,17 +86,12 @@ public abstract class TileCoFHBase extends TileEntity {
 		return false;
 	}
 
-	public boolean openGui(EntityPlayer player) {
-
-		return false;
-	}
-
-	protected boolean timeCheck() {
+	protected final boolean timeCheck() {
 
 		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT == 0;
 	}
 
-	protected boolean timeCheckEighth() {
+	protected final boolean timeCheckEighth() {
 
 		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT_EIGHTH == 0;
 	}
@@ -145,6 +140,11 @@ public abstract class TileCoFHBase extends TileEntity {
 	public int getInvSlotCount() {
 
 		return 0;
+	}
+
+	public boolean openGui(EntityPlayer player) {
+
+		return false;
 	}
 
 	public void receiveGuiNetworkData(int i, int j) {

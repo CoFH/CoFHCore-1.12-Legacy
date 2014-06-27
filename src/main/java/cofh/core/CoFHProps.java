@@ -14,6 +14,7 @@ public class CoFHProps {
 	public static final String FML_REQ_MAX = "7.3";
 	public static final String FORGE_REQ = "10.12.1.1074";
 	public static final String FORGE_REQ_MAX = "10.13";
+	public static final String COFH_LIB_REQ = "1.0";
 
 	public static final String DEPENDENCIES = "required-after:FML@[" + CoFHProps.FML_REQ + "," + CoFHProps.FML_REQ_MAX + ");" + "required-after:Forge@["
 			+ CoFHProps.FORGE_REQ + "," + CoFHProps.FORGE_REQ_MAX + ")";

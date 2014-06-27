@@ -294,7 +294,7 @@ public abstract class CoFHPacket extends BasePacket {
 		} else {
 			byte[] abyte = new byte[nbtLength];
 			getByteArray(abyte);
-			return CompressedStreamTools.decompress(abyte);
+			return CompressedStreamTools.read(new DataInputStream(new ByteArrayInputStream(abyte)));
 		}
 	}
 

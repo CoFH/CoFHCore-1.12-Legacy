@@ -57,6 +57,38 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 	}
 
 	@Override
+	public void breakBlock(World world, int x, int y, int z, Block bId, int bMeta) {
+
+		TileEntity tile = world.getTileEntity(x, y, z);
+
+		if (tile instanceof TileCoFHBase) {
+			TileCoFHBase theTile = (TileCoFHBase) tile;
+			theTile.blockBroken();
+		}
+		if (tile instanceof IInventory) {
+			IInventory inv = (IInventory) tile;
+			for (int i = 0; i < inv.getSizeInventory(); i++) {
+				CoreUtils.dropItemStackIntoWorldWithVelocity(inv.getStackInSlot(i), world, x, y, z);
+			}
+		}
+		super.breakBlock(world, x, y, z, bId, bMeta);
+	}
+
+	@Override
+	public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta) {
+
+	}
+
+	@Override
+	public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
+
+		if (!player.capabilities.isCreativeMode) {
+			dropBlockAsItem(world, x, y, z, meta, 0);
+			world.setBlock(x, y, z, Blocks.air, 0, 4);
+		}
+	}
+
+	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase living, ItemStack stack) {
 
 		TileEntity tile = world.getTileEntity(x, y, z);
@@ -118,82 +150,6 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 	}
 
 	@Override
-	public int getLightValue(IBlockAccess world, int x, int y, int z) {
-
-		TileEntity tile = world.getTileEntity(x, y, z);
-
-		if (tile instanceof TileCoFHBase && tile.getWorldObj() != null) {
-			return ((TileCoFHBase) tile).getLightValue();
-		}
-		return 0;
-	}
-
-	@Override
-	public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
-
-		TileEntity tile = world.getTileEntity(x, y, z);
-
-		return tile instanceof IReconfigurableFacing ? ((IReconfigurableFacing) tile).rotateBlock() : false;
-	}
-
-	@Override
-	public void breakBlock(World world, int x, int y, int z, Block bId, int bMeta) {
-
-		TileEntity tile = world.getTileEntity(x, y, z);
-
-		if (tile instanceof TileCoFHBase) {
-			TileCoFHBase theTile = (TileCoFHBase) tile;
-			theTile.blockBroken();
-		}
-		if (tile instanceof IInventory) {
-			IInventory inv = (IInventory) tile;
-			for (int i = 0; i < inv.getSizeInventory(); i++) {
-				CoreUtils.dropItemStackIntoWorldWithVelocity(inv.getStackInSlot(i), world, x, y, z);
-			}
-		}
-		super.breakBlock(world, x, y, z, bId, bMeta);
-	}
-
-	@Override
-	public void harvestBlock(World world, EntityPlayer player, int x, int y, int z, int meta) {
-
-	}
-
-	@Override
-	public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
-
-		if (!player.capabilities.isCreativeMode) {
-			dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, Blocks.air, 0, 4);
-		}
-	}
-
-	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(dismantleBlock(null, getItemStackTag(world, x, y, z), world, x, y, z, false, true));
-		return ret;
-	}
-
-	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
-
-		Item item = Item.getItemFromBlock(this);
-
-		if (item == null) {
-			return null;
-		}
-		int bMeta = world.getBlockMetadata(x, y, z);
-		ItemStack pickBlock = new ItemStack(item, 1, bMeta);
-		pickBlock.setTagCompound(getItemStackTag(world, x, y, z));
-
-		System.out.println("called");
-
-		return pickBlock;
-	}
-
-	@Override
 	public float getPlayerRelativeBlockHardness(EntityPlayer player, World world, int x, int y, int z) {
 
 		TileEntity tile = world.getTileEntity(x, y, z);
@@ -218,6 +174,17 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 	}
 
 	@Override
+	public int getLightValue(IBlockAccess world, int x, int y, int z) {
+
+		TileEntity tile = world.getTileEntity(x, y, z);
+
+		if (tile instanceof TileCoFHBase && tile.getWorldObj() != null) {
+			return ((TileCoFHBase) tile).getLightValue();
+		}
+		return 0;
+	}
+
+	@Override
 	public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
 
 		return false;
@@ -236,9 +203,40 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 	}
 
 	@Override
+	public boolean rotateBlock(World world, int x, int y, int z, ForgeDirection axis) {
+
+		TileEntity tile = world.getTileEntity(x, y, z);
+
+		return tile instanceof IReconfigurableFacing ? ((IReconfigurableFacing) tile).rotateBlock() : false;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister ir) {
 
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ret.add(dismantleBlock(null, getItemStackTag(world, x, y, z), world, x, y, z, false, true));
+		return ret;
+	}
+
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z) {
+
+		Item item = Item.getItemFromBlock(this);
+
+		if (item == null) {
+			return null;
+		}
+		int bMeta = world.getBlockMetadata(x, y, z);
+		ItemStack pickBlock = new ItemStack(item, 1, bMeta);
+		pickBlock.setTagCompound(getItemStackTag(world, x, y, z));
+
+		return pickBlock;
 	}
 
 	public NBTTagCompound getItemStackTag(World world, int x, int y, int z) {

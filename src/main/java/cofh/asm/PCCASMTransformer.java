@@ -521,14 +521,18 @@ public class PCCASMTransformer implements IClassTransformer {
 								needsRemoved = !Loader.isModLoaded(clazz.substring(4));
 							} else if (clazz.startsWith("api:")) {
 								needsRemoved = !ModAPIManager.INSTANCE.hasAPI(clazz.substring(4));
-							} else try {
-								if (!workingPath.contains(clazz)) {
-									Class.forName(clazz, false, this.getClass().getClassLoader());
+							} else {
+								try {
+									if (!workingPath.contains(clazz)) {
+										Class.forName(clazz, false, this.getClass().getClassLoader());
+									}
+								} catch (Throwable _) {
+									needsRemoved = true;
 								}
-							} catch (Throwable _) {
-								needsRemoved = true;
 							}
-							if (needsRemoved) break;
+							if (needsRemoved) {
+								break;
+							}
 						}
 						if (needsRemoved) {
 							iter.remove();
