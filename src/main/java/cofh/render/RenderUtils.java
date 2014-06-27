@@ -137,7 +137,7 @@ public class RenderUtils {
 
 	public static void preItemRender() {
 
-		TextureUtil.func_147950_a(false, false);
+		TextureUtil.func_152777_a(false, false, 1.0f);
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);

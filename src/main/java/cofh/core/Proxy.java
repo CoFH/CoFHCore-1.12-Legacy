@@ -44,7 +44,11 @@ public class Proxy {
 	public boolean isOp(String playerName) {
 
 		MinecraftServer theServer = FMLCommonHandler.instance().getMinecraftServerInstance();
-		return theServer.getConfigurationManager().getOps().contains(playerName.trim().toLowerCase());
+		playerName = playerName.trim();
+		for (String a : theServer.getConfigurationManager().func_152606_n())
+			if (playerName.equalsIgnoreCase(a))
+				return true; // TODO: this is completely horrible. needs improvement. will probably still be horrible.
+		return false;
 	}
 
 	public boolean isClient() {

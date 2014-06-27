@@ -91,7 +91,7 @@
 		<mkdir dir="${lib.dir}/"/>
 
 		<echo message="Downloading CCL... "/>
-		<get src="http://files.minecraftforge.net/maven/codechicken/CodeChickenLib/1.7.2-1.1.0.73/CodeChickenLib-1.7.2-1.1.0.73-dev.jar" dest="${download.dir}/codechickenlib.jar"/>
+		<get src="http://files.minecraftforge.net/maven/codechicken/CodeChickenLib/1.7.10-1.1.1.88/CodeChickenLib-1.7.10-1.1.1.88-dev.jar" dest="${download.dir}/codechickenlib.jar"/>
 		<echo message="Downloading CoFHLib... "/>
 		<get src="https://github.com/CoFH/CoFHLib/archive/master.zip" dest="${download.dir}/CoFHLib.zip"/>
 		<!-- Begin hack -->

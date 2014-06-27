@@ -69,12 +69,6 @@ public class ProxyClient extends Proxy {
 	}
 
 	@Override
-	public boolean isOp(String playerName) {
-
-		return true;
-	}
-
-	@Override
 	public boolean isClient() {
 
 		return true;
