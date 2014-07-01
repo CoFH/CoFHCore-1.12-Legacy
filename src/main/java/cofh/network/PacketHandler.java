@@ -55,7 +55,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 			return false;
 		}
 		if (this.isPostInitialised) {
-			// ToDo: Resort or throw error
+			// TODO: Resort or throw error
 			return false;
 		}
 		this.packets.add(packet);

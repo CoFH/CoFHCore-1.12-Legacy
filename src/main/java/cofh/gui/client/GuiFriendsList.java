@@ -1,6 +1,5 @@
 package cofh.gui.client;
 
-import cofh.audio.SoundBase;
 import cofh.gui.GuiBaseAdv;
 import cofh.gui.GuiProps;
 import cofh.gui.GuiTextList;
@@ -177,8 +176,7 @@ public class GuiFriendsList extends GuiBaseAdv {
 		if (this.tbName.isFocused()) {
 
 			if (j == 28) { // enter
-
-				this.mc.getSoundHandler().playSound(new SoundBase("random.click", 1.0F, 0.7F));
+				playSound("random.click", 1.0F, 0.7F);
 			}
 		}
 		updateButtons();

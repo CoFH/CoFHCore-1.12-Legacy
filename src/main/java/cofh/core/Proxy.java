@@ -18,6 +18,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 
@@ -45,9 +46,11 @@ public class Proxy {
 
 		MinecraftServer theServer = FMLCommonHandler.instance().getMinecraftServerInstance();
 		playerName = playerName.trim();
-		for (String a : theServer.getConfigurationManager().func_152606_n())
-			if (playerName.equalsIgnoreCase(a))
+		for (String a : theServer.getConfigurationManager().func_152606_n()) {
+			if (playerName.equalsIgnoreCase(a)) {
 				return true; // TODO: this is completely horrible. needs improvement. will probably still be horrible.
+			}
+		}
 		return false;
 	}
 
@@ -61,7 +64,16 @@ public class Proxy {
 		return true;
 	}
 
+	public void playSound() {
+
+	}
+
 	public EntityPlayer findPlayer(String player) {
+
+		return null;
+	}
+
+	public EntityPlayer getClientPlayer() {
 
 		return null;
 	}
@@ -77,7 +89,7 @@ public class Proxy {
 		return result;
 	}
 
-	public EntityPlayer getClientPlayer() {
+	public World getWorld() {
 
 		return null;
 	}

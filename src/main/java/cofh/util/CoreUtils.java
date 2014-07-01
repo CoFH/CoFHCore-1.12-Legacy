@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 
 public class CoreUtils {
@@ -41,7 +42,7 @@ public class CoreUtils {
 
 	public static boolean isFakePlayer(EntityPlayer player) {
 
-		return !(player instanceof EntityPlayerMP);
+		return (player instanceof FakePlayer);
 	}
 
 	public static boolean isOp(EntityPlayer player) {

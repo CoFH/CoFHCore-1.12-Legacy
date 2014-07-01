@@ -1,6 +1,5 @@
 package cofh.item;
 
-import cofh.render.IconRegistry;
 import cofh.util.ItemHelper;
 import cofh.util.StringHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -24,6 +23,7 @@ public class ItemBase extends Item {
 	public class ItemEntry {
 
 		public String name;
+		public IIcon icon;
 		public int rarity = 0;
 		public int maxDamage = 0;
 
@@ -113,10 +113,10 @@ public class ItemBase extends Item {
 	@Override
 	public IIcon getIconFromDamage(int i) {
 
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
+		if (!itemMap.containsKey(i)) {
 			return null;
 		}
-		return IconRegistry.getIcon(itemMap.get(Integer.valueOf(i)).name);
+		return itemMap.get(i).icon;
 	}
 
 	@Override
@@ -170,8 +170,7 @@ public class ItemBase extends Item {
 		}
 		for (int i = 0; i < itemList.size(); i++) {
 			ItemEntry item = itemMap.get(itemList.get(i));
-			IconRegistry.addIcon(item.name,
-					modName + ":" + getUnlocalizedName().replace("item." + modName + ".", "") + "/" + StringHelper.titleCase(item.name), ir);
+			item.icon = ir.registerIcon(modName + ":" + getUnlocalizedName().replace("item." + modName + ".", "") + "/" + StringHelper.titleCase(item.name));
 		}
 	}
 

@@ -151,6 +151,7 @@ public class CoFHCore extends BaseMod {
 
 		RegistryEnderAttuned.linkConf = new Configuration(new File(DimensionManager.getCurrentSaveRootDirectory(), "/cofh/EnderFrequencies.cfg"));
 		RegistryEnderAttuned.linkConf.load();
+		OreDictionaryArbiter.initialize();
 		CommandHandler.initCommands(event);
 		server = event.getServer();
 	}

@@ -21,6 +21,7 @@ import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 @SideOnly(Side.CLIENT)
@@ -93,15 +94,21 @@ public class ProxyClient extends Proxy {
 	}
 
 	@Override
+	public EntityPlayer getClientPlayer() {
+
+		return Minecraft.getMinecraft().thePlayer;
+	}
+
+	@Override
 	public List<EntityPlayer> getPlayerList() {
 
 		return new LinkedList<EntityPlayer>();
 	}
 
 	@Override
-	public EntityPlayer getClientPlayer() {
+	public World getWorld() {
 
-		return Minecraft.getMinecraft().thePlayer;
+		return Minecraft.getMinecraft().theWorld;
 	}
 
 	@Override
@@ -125,7 +132,6 @@ public class ProxyClient extends Proxy {
 			fontRenderer.setUnicodeFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode());
 			fontRenderer.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
 		}
-
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(fontRenderer);
 	}
 
