@@ -473,6 +473,9 @@ public class RenderUtils {
 
 	public static void setupLight(TileEntity tile, int side) {
 
+		if (tile == null) {
+			return;
+		}
 		int x = tile.xCoord + BlockHelper.SIDE_COORD_MOD[side][0];
 		int y = tile.yCoord + BlockHelper.SIDE_COORD_MOD[side][1];
 		int z = tile.zCoord + BlockHelper.SIDE_COORD_MOD[side][2];

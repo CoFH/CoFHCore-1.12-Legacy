@@ -28,7 +28,7 @@ public class TabSecurity extends TabBase {
 		myContainer = container;
 		maxHeight = 68;
 		maxWidth = 112;
-		backgroundColor = 0x4c99b2;
+		backgroundColor = 0xd0a610;
 	}
 
 	@Override

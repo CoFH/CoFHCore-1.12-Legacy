@@ -1,6 +1,7 @@
 package cofh.gui.slot;
 
 import cofh.api.core.IAugmentable;
+import cofh.api.item.IAugmentItem;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -20,7 +21,7 @@ public class SlotAugment extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack stack) {
 
-		return super.isItemValid(stack);
+		return stack != null && stack.getItem() instanceof IAugmentItem;
 	}
 
 	@Override

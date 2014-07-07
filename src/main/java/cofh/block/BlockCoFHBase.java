@@ -268,6 +268,9 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 		} else {
 			if (tile instanceof IEnergyHandler) {
 				IEnergyHandler eHandler = (IEnergyHandler) tile;
+				if (eHandler.getMaxEnergyStored(side) <= 0) {
+					return;
+				}
 				info.add(StringHelper.localize("info.cofh.energy") + ": " + eHandler.getEnergyStored(side) + "/" + eHandler.getMaxEnergyStored(side) + " RF.");
 			}
 		}

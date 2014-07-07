@@ -55,7 +55,7 @@ public class TabAugment extends TabBase {
 			slotsBorderX1 += 9 * (3 - numAugments);
 			slotsBorderX2 = slotsBorderX1 + 18 * numAugments + 6;
 			slotsBorderY1 += 9;
-			slotsBorderY2 -= 18;
+			slotsBorderY2 -= 9;
 		}
 	}
 
@@ -89,9 +89,13 @@ public class TabAugment extends TabBase {
 		mouseX -= currentShiftX;
 		mouseY -= currentShiftY;
 
+		System.out.println(mouseX);
+		System.out.println(mouseY);
+
 		if (mouseX < slotsBorderX1 + offset() || mouseX >= slotsBorderX2 + offset() || mouseY < slotsBorderY1 || mouseY >= slotsBorderY2) {
 			return false;
 		}
+
 		return true;
 	}
 
@@ -161,8 +165,8 @@ public class TabAugment extends TabBase {
 
 		if (open) {
 			for (int i = 0; i < numAugments; i++) {
-				myContainer.getAugmentSlots()[i].xDisplayPosition = -16;
-				myContainer.getAugmentSlots()[i].yDisplayPosition = -16;
+				myContainer.getAugmentSlots()[i].xDisplayPosition = -gui.getGuiLeft() - 16;
+				myContainer.getAugmentSlots()[i].yDisplayPosition = -gui.getGuiTop() - 16;
 			}
 		}
 		super.toggleOpen();
