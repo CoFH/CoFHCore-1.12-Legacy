@@ -67,8 +67,6 @@ public class CoFHProps {
 	public static final int NETWORK_UPDATE_RANGE = 192;
 
 	/* Options */
-	public static boolean enableInformationTabs = true;
-	public static boolean enableTutorialTabs = true;
 	public static boolean enableUpdateNotice = true;
 	public static boolean enableItemPickupModule = true;
 

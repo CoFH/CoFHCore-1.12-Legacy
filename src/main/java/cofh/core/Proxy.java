@@ -1,11 +1,10 @@
 package cofh.core;
 
-import cofh.CoFHCore;
 import cofh.key.CoFHKey;
 import cofh.key.KeyPacket;
 import cofh.network.CoFHTileInfoPacket;
 import cofh.network.CoFHTilePacket;
-import cofh.social.SocialPacket;
+import cofh.network.SocialPacket;
 import cofh.util.KeyBindingEmpower;
 import cofh.util.oredict.OreDictionaryArbiter;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -89,62 +88,13 @@ public class Proxy {
 		return result;
 	}
 
+	public void updateFriendListGui() {
+
+	}
+
 	public World getWorld() {
 
 		return null;
-	}
-
-	public int registerGui(String guiName, boolean isTileEntity) {
-
-		Class<?> gui = null;
-		Class<?> container = null;
-		try {
-			gui = Proxy.class.getClassLoader().loadClass("cofh.gui.client.Gui" + guiName);
-		} catch (ClassNotFoundException e) {
-
-		}
-		try {
-			container = Proxy.class.getClassLoader().loadClass("cofh.gui.container.Container" + guiName);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		if (gui == null) {
-			if (isTileEntity) {
-				return CoFHCore.guiHandler.registerServerGuiTile(container);
-			}
-			return CoFHCore.guiHandler.registerServerGui(container);
-		} else {
-			if (isTileEntity) {
-				return CoFHCore.guiHandler.registerClientGuiTile(gui, container);
-			}
-			return CoFHCore.guiHandler.registerClientGui(gui, container);
-		}
-	}
-
-	public int registerGui(String guiName, String containerName, boolean isTileEntity) {
-
-		Class<?> gui = null;
-		Class<?> container = null;
-		try {
-			gui = Proxy.class.getClassLoader().loadClass("cofh.gui.client.Gui" + guiName);
-		} catch (ClassNotFoundException e) {
-		}
-		try {
-			container = Proxy.class.getClassLoader().loadClass("cofh.gui.container.Container" + containerName);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		if (gui == null) {
-			if (isTileEntity) {
-				return CoFHCore.guiHandler.registerServerGuiTile(container);
-			}
-			return CoFHCore.guiHandler.registerServerGui(container);
-		} else {
-			if (isTileEntity) {
-				return CoFHCore.guiHandler.registerClientGuiTile(gui, container);
-			}
-			return CoFHCore.guiHandler.registerClientGui(gui, container);
-		}
 	}
 
 	public void registerKeyBinds() {

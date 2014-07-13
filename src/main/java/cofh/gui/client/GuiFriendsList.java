@@ -7,9 +7,9 @@ import cofh.gui.container.ContainerFriendsList;
 import cofh.gui.element.ElementButton;
 import cofh.gui.element.TabInfo;
 import cofh.network.PacketHandler;
-import cofh.social.RegistryFriends;
-import cofh.social.SocialPacket;
-import cofh.social.SocialPacket.Type;
+import cofh.network.SocialPacket;
+import cofh.network.SocialPacket.Type;
+import cofh.util.SocialRegistry;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -89,7 +89,7 @@ public class GuiFriendsList extends GuiBaseAdv {
 		// Setup Text Area
 
 		taFriendsList = new GuiTextList(this.fontRendererObj, taflX, taflY, 128, 10);
-		taFriendsList.textLines = RegistryFriends.clientPlayerFriends;
+		taFriendsList.textLines = SocialRegistry.clientPlayerFriends;
 		taFriendsList.drawBackground = false;
 		taFriendsList.drawBorder = false;
 
@@ -231,7 +231,7 @@ public class GuiFriendsList extends GuiBaseAdv {
 			olDown.setDisabled();
 		}
 
-		if (RegistryFriends.clientPlayerFriends.contains(tbName.getText().toLowerCase())) {
+		if (SocialRegistry.clientPlayerFriends.contains(tbName.getText().toLowerCase())) {
 			addName.setDisabled();
 			removeName.setActive();
 		} else {

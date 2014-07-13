@@ -69,20 +69,20 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		String comment = null;
 
 		comment = "This allows for vanilla Minecraft ore generation to be REPLACED. Configure in the VanillaGeneration.json file; vanilla defaults have been provided. If you rename the VanillaGeneration.json file, this option WILL NOT WORK.";
-		genReplaceVanilla = CoFHCore.config.get(category, "ReplaceVanillaGeneration", false, comment);
+		genReplaceVanilla = CoFHCore.configCore.get(category, "ReplaceVanillaGeneration", false, comment);
 
 		comment = "This will flatten the bedrock layer.";
-		genFlatBedrock = CoFHCore.config.get(category, "FlatBedrock", false, comment);
+		genFlatBedrock = CoFHCore.configCore.get(category, "FlatBedrock", false, comment);
 
 		comment = "The number of layers of bedrock to flatten to. (Max: " + MAX_BEDROCK_LAYERS + ")";
-		layersBedrock = CoFHCore.config.get(category, "FlatBedrockLayers", 1, comment);
+		layersBedrock = CoFHCore.configCore.get(category, "FlatBedrockLayers", 1, comment);
 		layersBedrock = MathHelper.clampI(layersBedrock, 1, MAX_BEDROCK_LAYERS);
 
 		comment = "If FlatBedrock is enabled, this will enforce it in previously generated chunks.";
-		retroFlatBedrock = CoFHCore.config.get(category, "RetroactiveFlatBedrock", false, comment);
+		retroFlatBedrock = CoFHCore.configCore.get(category, "RetroactiveFlatBedrock", false, comment);
 
 		comment = "This will retroactively generate ores in previously generated chunks.";
-		retroGeneration = CoFHCore.config.get(category, "RetroactiveOreGeneration", false, comment);
+		retroGeneration = CoFHCore.configCore.get(category, "RetroactiveOreGeneration", false, comment);
 
 		GameRegistry.registerWorldGenerator(instance, 0);
 		MinecraftForge.EVENT_BUS.register(instance);

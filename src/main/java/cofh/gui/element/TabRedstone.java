@@ -1,7 +1,9 @@
 package cofh.gui.element;
 
+import cofh.CoFHCore;
 import cofh.api.tileentity.IRedstoneControl;
 import cofh.gui.GuiBase;
+import cofh.util.MathHelper;
 import cofh.util.StringHelper;
 
 import java.util.List;
@@ -10,7 +12,25 @@ import org.lwjgl.opengl.GL11;
 
 public class TabRedstone extends TabBase {
 
+	public static boolean enable;
 	public static int defaultSide = 1;
+	public static int defaultHeaderColor = 0xe1c92f;
+	public static int defaultSubHeaderColor = 0xaaafb8;
+	public static int defaultTextColor = 0x000000;
+	public static int defaultBackgroundColor = 0xd0230a;
+
+	public static void initialize() {
+
+		String category = "tab.redstone";
+		// enable = CoFHCore.configClient.get(category, "Enable", true);
+		defaultSide = MathHelper.clampI(CoFHCore.configClient.get(category, "Side", defaultSide), 0, 1);
+		defaultHeaderColor = MathHelper.clampI(CoFHCore.configClient.get(category, "ColorHeader", defaultHeaderColor), 0, 0xffffff);
+		defaultSubHeaderColor = MathHelper.clampI(CoFHCore.configClient.get(category, "ColorSubHeader", defaultSubHeaderColor), 0, 0xffffff);
+		defaultTextColor = MathHelper.clampI(CoFHCore.configClient.get(category, "ColorText", defaultTextColor), 0, 0xffffff);
+		defaultBackgroundColor = MathHelper.clampI(CoFHCore.configClient.get(category, "ColorBackground", defaultBackgroundColor), 0, 0xffffff);
+		CoFHCore.configClient.save();
+	}
+
 	IRedstoneControl myContainer;
 
 	public TabRedstone(GuiBase gui, IRedstoneControl container) {
@@ -22,10 +42,14 @@ public class TabRedstone extends TabBase {
 
 		super(gui, side);
 
-		myContainer = container;
+		headerColor = defaultHeaderColor;
+		subheaderColor = defaultSubHeaderColor;
+		textColor = defaultTextColor;
+		backgroundColor = defaultBackgroundColor;
+
 		maxHeight = 92;
 		maxWidth = 112;
-		backgroundColor = 0xd0230a;
+		myContainer = container;
 	}
 
 	@Override
@@ -94,6 +118,9 @@ public class TabRedstone extends TabBase {
 
 		if (!isFullyOpened()) {
 			return false;
+		}
+		if (side == LEFT) {
+			mouseX += currentWidth;
 		}
 		mouseX -= currentShiftX;
 		mouseY -= currentShiftY;

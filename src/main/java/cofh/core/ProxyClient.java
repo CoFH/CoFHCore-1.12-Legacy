@@ -1,11 +1,19 @@
 package cofh.core;
 
+import cofh.CoFHCore;
+import cofh.gui.client.GuiFriendsList;
+import cofh.gui.element.TabAugment;
+import cofh.gui.element.TabConfiguration;
+import cofh.gui.element.TabEnergy;
 import cofh.gui.element.TabInfo;
+import cofh.gui.element.TabRedstone;
+import cofh.gui.element.TabSecurity;
 import cofh.gui.element.TabTutorial;
 import cofh.key.CoFHKey;
 import cofh.render.CoFHFontRender;
 import cofh.render.IconRegistry;
 import cofh.util.KeyBindingEmpower;
+import cofh.util.SocialRegistry;
 import cofh.util.TickHandlerEnderRegistry;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -13,6 +21,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,6 +32,7 @@ import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.config.Configuration;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy {
@@ -59,6 +69,11 @@ public class ProxyClient extends Proxy {
 			IconRegistry.addIcon("IconRedstone", Items.redstone.getIconFromDamage(0));
 			IconRegistry.addIcon("IconRSTorchOff", "cofh:icons/Icon_RSTorchOff", event.map);
 			IconRegistry.addIcon("IconRSTorchOn", "cofh:icons/Icon_RSTorchOn", event.map);
+
+			IconRegistry.addIcon("IconArrowDown0", "cofh:/icons/Icon_ArrowDown_Inactive", event.map);
+			IconRegistry.addIcon("IconArrowDown1", "cofh:/icons/Icon_ArrowDown", event.map);
+			IconRegistry.addIcon("IconArrowUp0", "cofh:/icons/Icon_ArrowUp_Inactive", event.map);
+			IconRegistry.addIcon("IconArrowUp1", "cofh:/icons/Icon_ArrowUp", event.map);
 		}
 	}
 
@@ -106,6 +121,14 @@ public class ProxyClient extends Proxy {
 	}
 
 	@Override
+	public void updateFriendListGui() {
+
+		if (Minecraft.getMinecraft().currentScreen != null) {
+			((GuiFriendsList) Minecraft.getMinecraft().currentScreen).taFriendsList.textLines = SocialRegistry.clientPlayerFriends;
+		}
+	}
+
+	@Override
 	public World getWorld() {
 
 		return Minecraft.getMinecraft().theWorld;
@@ -122,8 +145,15 @@ public class ProxyClient extends Proxy {
 	@Override
 	public void registerRenderInformation() {
 
-		TabInfo.enable = CoFHProps.enableInformationTabs;
-		TabTutorial.enable = CoFHProps.enableTutorialTabs;
+		CoFHCore.configClient.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/Client.cfg")));
+
+		TabAugment.initialize();
+		TabConfiguration.initialize();
+		TabEnergy.initialize();
+		TabInfo.initialize();
+		TabRedstone.initialize();
+		TabSecurity.initialize();
+		TabTutorial.initialize();
 
 		fontRenderer = new CoFHFontRender(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"),
 				Minecraft.getMinecraft().renderEngine, false);

@@ -1,6 +1,7 @@
 package cofh.item;
 
 import cofh.util.ItemHelper;
+import cofh.util.SecurityHelper;
 import cofh.util.StringHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -12,10 +13,13 @@ import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemBase extends Item {
@@ -145,6 +149,23 @@ public class ItemBase extends Item {
 			return "item.invalid";
 		}
 		return new StringBuilder().append(getUnlocalizedName()).append('.').append(itemMap.get(i).name).toString();
+	}
+
+	@Override
+	public boolean hasCustomEntity(ItemStack stack) {
+
+		return SecurityHelper.isSecure(stack);
+	}
+
+	@Override
+	public Entity createEntity(World world, Entity location, ItemStack stack) {
+
+		if (SecurityHelper.isSecure(stack)) {
+			location.invulnerable = true;
+			location.isImmuneToFire = true;
+			((EntityItem) location).lifespan = Integer.MAX_VALUE;
+		}
+		return null;
 	}
 
 	@Override

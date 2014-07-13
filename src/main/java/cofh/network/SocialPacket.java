@@ -1,8 +1,7 @@
-package cofh.social;
+package cofh.network;
 
-import cofh.CoFHSocial;
-import cofh.network.CoFHPacket;
-import cofh.network.PacketHandler;
+import cofh.CoFHCore;
+import cofh.util.SocialRegistry;
 
 import java.util.LinkedList;
 
@@ -22,20 +21,20 @@ public class SocialPacket extends CoFHPacket {
 		switch (Type.values()[getByte()]) {
 		case FRIEND_LIST:
 			int size = getInt();
-			RegistryFriends.clientPlayerFriends = new LinkedList<String>();
+			SocialRegistry.clientPlayerFriends = new LinkedList<String>();
 			for (int i = 0; i < size; i++) {
-				RegistryFriends.clientPlayerFriends.add(getString());
+				SocialRegistry.clientPlayerFriends.add(getString());
 			}
-			java.util.Collections.sort(RegistryFriends.clientPlayerFriends);
-			CoFHSocial.proxy.updateFriendListGui();
+			java.util.Collections.sort(SocialRegistry.clientPlayerFriends);
+			CoFHCore.proxy.updateFriendListGui();
 			return;
 		case ADD_FRIEND:
-			RegistryFriends.addFriend(player.getCommandSenderName(), getString());
-			RegistryFriends.sendFriendsToPlayer((EntityPlayerMP) player);
+			SocialRegistry.addFriend(player.getCommandSenderName(), getString());
+			SocialRegistry.sendFriendsToPlayer((EntityPlayerMP) player);
 			return;
 		case REMOVE_FRIEND:
-			RegistryFriends.removeFriend(player.getCommandSenderName(), getString());
-			RegistryFriends.sendFriendsToPlayer((EntityPlayerMP) player);
+			SocialRegistry.removeFriend(player.getCommandSenderName(), getString());
+			SocialRegistry.sendFriendsToPlayer((EntityPlayerMP) player);
 			return;
 		}
 	}

@@ -1,7 +1,8 @@
 package cofh.command;
 
 import cofh.CoFHCore;
-import cofh.social.RegistryFriends;
+import cofh.gui.GuiHandler;
+import cofh.util.SocialRegistry;
 import cofh.util.StringHelper;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class CommandFriend implements ISubCommand {
 		if (arguments.length > 2) {
 			if (arguments[1].equalsIgnoreCase("add")) {
 				if (validUsername(arguments[2])) {
-					if (RegistryFriends.addFriend(sender.getCommandSenderName(), arguments[2])) {
+					if (SocialRegistry.addFriend(sender.getCommandSenderName(), arguments[2])) {
 						sender.addChatMessage(new ChatComponentText(StringHelper.YELLOW + arguments[2] + StringHelper.GREEN
 								+ " successfully added to your friends list."));
 					} else {
@@ -46,7 +47,7 @@ public class CommandFriend implements ISubCommand {
 				}
 			} else if (arguments[1].equalsIgnoreCase("remove")) {
 				if (validUsername(arguments[2])) {
-					if (RegistryFriends.removeFriend(sender.getCommandSenderName(), arguments[2])) {
+					if (SocialRegistry.removeFriend(sender.getCommandSenderName(), arguments[2])) {
 						sender.addChatMessage(new ChatComponentText(StringHelper.YELLOW + arguments[2] + StringHelper.GREEN
 								+ " successfully removed from your friends list."));
 					} else {
@@ -62,8 +63,8 @@ public class CommandFriend implements ISubCommand {
 		} else if (arguments.length > 1 && arguments[1].equalsIgnoreCase("gui")) {
 			if (sender instanceof EntityPlayerMP) {
 				EntityPlayerMP thePlayer = (EntityPlayerMP) sender;
-				RegistryFriends.sendFriendsToPlayer(thePlayer);
-				thePlayer.openGui(CoFHCore.instance, RegistryFriends.guiId, thePlayer.worldObj, (int) thePlayer.posX, (int) thePlayer.posY,
+				SocialRegistry.sendFriendsToPlayer(thePlayer);
+				thePlayer.openGui(CoFHCore.instance, GuiHandler.FRIENDS_ID, thePlayer.worldObj, (int) thePlayer.posX, (int) thePlayer.posY,
 						(int) thePlayer.posZ);
 			}
 		} else {

@@ -55,7 +55,7 @@ public class RenderHitbox {
 		addMainVertex(hitbox, 1, hitbox.middleHeight, tessellator);
 		addMainVertex(hitbox, 0, 0, tessellator);
 
-		// Top and Bottom extended conduits
+		// Top and Bottom extensions
 		addTopBottomVertex(hitbox, 1, hitbox.sideLength[1], hitbox.middleHeight + hitbox.sideLength[1], tessellator);
 		addTopBottomVertex(hitbox, 0, -hitbox.sideLength[0], -hitbox.sideLength[0], tessellator);
 

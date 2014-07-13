@@ -133,7 +133,6 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 				if (com == 0) {
 					com = packetClass1.getCanonicalName().compareTo(packetClass2.getCanonicalName());
 				}
-
 				return com;
 			}
 		});

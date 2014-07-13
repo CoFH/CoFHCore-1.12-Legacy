@@ -1,17 +1,22 @@
 package cofh;
 
 import cofh.api.transport.RegistryEnderAttuned;
+import cofh.command.CommandFriend;
 import cofh.command.CommandHandler;
 import cofh.core.CoFHProps;
 import cofh.core.Proxy;
 import cofh.enchantment.CoFHEnchantment;
+import cofh.entity.DropHandler;
 import cofh.gui.GuiHandler;
 import cofh.mod.BaseMod;
 import cofh.network.PacketHandler;
+import cofh.network.SocialPacket;
 import cofh.updater.UpdateManager;
 import cofh.util.ConfigHandler;
 import cofh.util.FMLEventHandler;
+import cofh.util.RecipeSecure;
 import cofh.util.RecipeUpgrade;
+import cofh.util.SocialRegistry;
 import cofh.util.StringHelper;
 import cofh.util.fluid.BucketHandler;
 import cofh.util.oredict.OreDictionaryArbiter;
@@ -54,11 +59,18 @@ public class CoFHCore extends BaseMod {
 
 	@Instance(modId)
 	public static CoFHCore instance;
-	public static final ConfigHandler config = new ConfigHandler(version);
-	public static Logger log = LogManager.getLogger(modId);
 
 	@SidedProxy(clientSide = "cofh.core.ProxyClient", serverSide = "cofh.core.Proxy")
 	public static Proxy proxy;
+
+	public static Logger log = LogManager.getLogger(modId);
+
+	public static final ConfigHandler configCore = new ConfigHandler(version);
+	public static final ConfigHandler configLoot = new ConfigHandler(version);
+	public static final ConfigHandler configClient = new ConfigHandler(version);
+	public static final GuiHandler guiHandler = new GuiHandler();
+
+	public static MinecraftServer server;
 
 	/* INIT SEQUENCE */
 	public CoFHCore() {
@@ -69,47 +81,22 @@ public class CoFHCore extends BaseMod {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 
-		UpdateManager.registerUpdater(new UpdateManager(this, releaseURL));
-
 		CoFHProps.configDir = event.getModConfigurationDirectory();
 
-		config.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/CoFHCore.cfg")));
-
-		String category = "general";
-
-		String comment = "Enable this to be informed of non-critical updates. You will still receive critical update notifications.";
-		CoFHProps.enableUpdateNotice = config.get(category, "EnableUpdateNotifications", true, comment);
-
-		category = "gui";
-		CoFHProps.enableInformationTabs = config.get(category, "EnableInformationTabs", true);
-		CoFHProps.enableTutorialTabs = config.get(category, "EnableTutorialTabs", true);
-
-		category = "gui.hud";
-		CoFHProps.enableItemPickupModule = config.get(category, "EnableItemPickupModule", true,
-				"Enable messages that notify you of item pickups. Note: You cannot disable this if your Minecraft username is \"Jadedcat\"");
-
-		category = "gui.tooltips";
-		comment = "This adds a tooltip prompting you to press Shift for more details on various items.";
-		StringHelper.displayShiftForDetail = config.get(category, "DisplayHoldShiftForDetail", true, comment);
-
-		comment = "This option determines if items contained in other items are displayed as a single quantity or a stack count.";
-		StringHelper.displayStackCount = config.get(category, "DisplayStackCountInInventory", false, comment);
-
-		category = "security";
-		comment = "Enable this to allow for Server Ops to access 'secure' blocks. Your players will be warned upon server connection. (Default: false)";
-		CoFHProps.enableOpSecureAccess = config.get(category, "OpsCanAccessSecureBlocks", false, comment);
-
-		comment = "Enable this to be warned about Ops having access to 'secure' blocks when connecting to a server. (Default: true)";
-		CoFHProps.enableOpSecureAccessWarning = config.get(category, "OpsCanAccessSecureBlocksWarning", true, comment);
-
-		config.save();
-
+		UpdateManager.registerUpdater(new UpdateManager(this, releaseURL));
+		configCore.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/CoFHCore.cfg")));
 		MinecraftForge.EVENT_BUS.register(proxy);
+
+		moduleCore();
+		moduleLoot();
+
 		WorldHandler.initialize();
 		FMLEventHandler.initialize();
 		BucketHandler.initialize();
+		PacketHandler.instance.initialize();
 		OreDictionaryArbiter.initialize();
 		RecipeSorter.register("cofh:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
+		RecipeSorter.register("cofh:secure", RecipeSecure.class, RecipeSorter.Category.SHAPED, "before:cofh:upgrade");
 
 		registerOreDictionaryEntries();
 	}
@@ -117,10 +104,13 @@ public class CoFHCore extends BaseMod {
 	@EventHandler
 	public void initialize(FMLInitializationEvent event) {
 
-		PacketHandler.instance.initialize();
-		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
+		/* Init World Gen */
 
-		proxy.registerKeyBinds();
+		/* Register Handlers */
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
+		CommandHandler.registerSubCommand(CommandFriend.instance);
+		SocialPacket.initialize();
+		SocialRegistry.initialize();
 	}
 
 	@EventHandler
@@ -128,12 +118,13 @@ public class CoFHCore extends BaseMod {
 
 		CoFHEnchantment.postInit();
 
+		proxy.registerKeyBinds();
 		proxy.registerRenderInformation();
 		proxy.registerTickHandlers();
 		proxy.registerPacketInformation();
 
 		PacketHandler.instance.postInit();
-		config.cleanUp(false, true);
+		configCore.cleanUp(false, true);
 	}
 
 	@EventHandler
@@ -156,13 +147,9 @@ public class CoFHCore extends BaseMod {
 		server = event.getServer();
 	}
 
-	public static MinecraftServer server;
-
-	public static final GuiHandler guiHandler = new GuiHandler();
-
 	public void registerOreDictionaryEntries() {
 
-		registerOreDictionaryEntry("cloth", new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE));
+		registerOreDictionaryEntry("blockCloth", new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE));
 		registerOreDictionaryEntry("coal", new ItemStack(Items.coal, 1, 0));
 		registerOreDictionaryEntry("charcoal", new ItemStack(Items.coal, 1, 1));
 	}
@@ -174,6 +161,76 @@ public class CoFHCore extends BaseMod {
 			return true;
 		}
 		return false;
+	}
+
+	private boolean moduleCore() {
+
+		String category = "general";
+
+		String comment = "Enable this to be informed of non-critical updates. You will still receive critical update notifications.";
+		CoFHProps.enableUpdateNotice = configCore.get(category, "EnableUpdateNotifications", true, comment);
+
+		category = "gui.tooltips";
+		comment = "This adds a tooltip prompting you to press Shift for more details on various items.";
+		StringHelper.displayShiftForDetail = configCore.get(category, "DisplayHoldShiftForDetail", true, comment);
+
+		comment = "This option determines if items contained in other items are displayed as a single quantity or a stack count.";
+		StringHelper.displayStackCount = configCore.get(category, "DisplayStackCountInInventory", false, comment);
+
+		category = "security";
+		comment = "Enable this to allow for Server Ops to access 'secure' blocks. Your players will be warned upon server connection. (Default: false)";
+		CoFHProps.enableOpSecureAccess = configCore.get(category, "OpsCanAccessSecureBlocks", false, comment);
+
+		comment = "Enable this to be warned about Ops having access to 'secure' blocks when connecting to a server. (Default: true)";
+		CoFHProps.enableOpSecureAccessWarning = configCore.get(category, "OpsCanAccessSecureBlocksWarning", true, comment);
+
+		configCore.save();
+
+		return true;
+	}
+
+	private boolean moduleLoot() {
+
+		configLoot.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/CoFHLoot.cfg")));
+
+		String category = "general";
+		String comment = null;
+
+		boolean enable = configLoot.get(category, "EnableModule", true);
+
+		if (!enable) {
+			configLoot.save();
+			return false;
+		}
+		category = "feature.heads";
+
+		comment = "If enabled, mobs only drop heads when killed by players.";
+		DropHandler.mobPvEOnly = configLoot.get(category, "MobsDropOnPvEOnly", DropHandler.mobPvEOnly, comment);
+
+		comment = "If enabled, players only drop heads when killed by other players.";
+		DropHandler.playerPvPOnly = configLoot.get(category, "PlayersDropOnPvPOnly", DropHandler.playerPvPOnly, comment);
+
+		category = "feature.heads.enable";
+
+		DropHandler.playersEnabled = configLoot.get(category, "PlayersDropHeads", DropHandler.playersEnabled);
+		DropHandler.creeperEnabled = configLoot.get(category, "CreepersDropHeads", DropHandler.creeperEnabled);
+		DropHandler.skeletonEnabled = configLoot.get(category, "SkeletonsDropHeads", DropHandler.skeletonEnabled);
+		DropHandler.skeletonEnabled = configLoot.get(category, "WitherSkeletonsDropHeads", DropHandler.witherSkeletonEnabled);
+		DropHandler.zombieEnabled = configLoot.get(category, "ZombiesDropHeads", DropHandler.zombieEnabled);
+
+		category = "feature.heads.chance";
+
+		DropHandler.playerChance = configLoot.get(category, "PlayerDropChance", DropHandler.playerChance);
+		DropHandler.creeperChance = configLoot.get(category, "CreeperDropChance", DropHandler.creeperChance);
+		DropHandler.skeletonChance = configLoot.get(category, "SkeletonDropChance", DropHandler.skeletonChance);
+		DropHandler.witherSkeletonChance = configLoot.get(category, "WitherSkeletonDropChance", DropHandler.witherSkeletonChance);
+		DropHandler.zombieChance = configLoot.get(category, "ZombieDropChance", DropHandler.zombieChance);
+
+		configLoot.save();
+
+		MinecraftForge.EVENT_BUS.register(DropHandler.instance);
+
+		return true;
 	}
 
 	/* BaseMod */

@@ -6,9 +6,9 @@ import cofh.core.CoFHProps;
 import cofh.network.CoFHPacket;
 import cofh.network.CoFHTilePacket;
 import cofh.network.PacketHandler;
-import cofh.social.RegistryFriends;
 import cofh.util.CoreUtils;
 import cofh.util.ServerHelper;
+import cofh.util.SocialRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -73,7 +73,7 @@ public abstract class TileCoFHBase extends TileEntity {
 		String owner = ((ISecurable) this).getOwnerName();
 
 		return access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name)) || owner.equals(CoFHProps.DEFAULT_OWNER) || owner.equals(name)
-				|| access.isRestricted() && RegistryFriends.playerHasAccess(name, owner);
+				|| access.isRestricted() && SocialRegistry.playerHasAccess(name, owner);
 	}
 
 	public boolean canPlayerDismantle(EntityPlayer player) {

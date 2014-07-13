@@ -8,10 +8,13 @@ import cofh.api.core.ISecurable;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.tileentity.IPlacedTile;
 import cofh.api.tileentity.IReconfigurableFacing;
+import cofh.api.tileentity.IRedstoneControl;
 import cofh.api.tileentity.ITileDebug;
 import cofh.api.tileentity.ITileInfo;
 import cofh.util.CoreUtils;
 import cofh.util.MathHelper;
+import cofh.util.RSControlHelper;
+import cofh.util.SecurityHelper;
 import cofh.util.StringHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -93,8 +96,22 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 
 		TileEntity tile = world.getTileEntity(x, y, z);
 
-		if (tile instanceof ISecurable && living instanceof ICommandSender) {
-			((ISecurable) tile).setOwnerName(((ICommandSender) living).getCommandSenderName());
+		if (tile instanceof ISecurable) {
+			if (SecurityHelper.isSecure(stack)) {
+				String stackOwner = SecurityHelper.getOwnerName(stack);
+
+				if (!stackOwner.isEmpty()) {
+					((ISecurable) tile).setOwnerName(stackOwner);
+				} else if (living instanceof ICommandSender) {
+					((ISecurable) tile).setOwnerName(living.getCommandSenderName());
+				}
+				((ISecurable) tile).setAccess(SecurityHelper.getAccess(stack));
+			}
+		}
+		if (tile instanceof IRedstoneControl) {
+			if (RSControlHelper.hasRSControl(stack)) {
+				((IRedstoneControl) tile).setControl(RSControlHelper.getControl(stack));
+			}
 		}
 		if (tile instanceof IReconfigurableFacing) {
 			IReconfigurableFacing reconfig = (IReconfigurableFacing) tile;

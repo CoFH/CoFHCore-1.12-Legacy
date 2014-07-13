@@ -15,7 +15,7 @@ public class CoFHEnchantment {
 
 	public static void postInit() {
 
-		int enchantId = CoFHCore.config.get("enchantment", "holding", 100);
+		int enchantId = CoFHCore.configCore.get("enchantment", "holding", 100);
 
 		for (int i = enchantId; i < 256; i++) {
 			try {
@@ -25,7 +25,7 @@ public class CoFHEnchantment {
 
 			}
 		}
-		CoFHCore.config.get("enchantment", "holding", enchantmentHolding.effectId);
+		CoFHCore.configCore.get("enchantment", "holding", enchantmentHolding.effectId);
 	}
 
 	public static NBTTagList getEnchantmentTagList(NBTTagCompound nbt) {

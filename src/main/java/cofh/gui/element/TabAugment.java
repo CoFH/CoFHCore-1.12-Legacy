@@ -1,9 +1,11 @@
 package cofh.gui.element;
 
+import cofh.CoFHCore;
 import cofh.gui.GuiBase;
 import cofh.gui.GuiProps;
 import cofh.gui.container.IAugmentableContainer;
 import cofh.render.RenderHelper;
+import cofh.util.MathHelper;
 import cofh.util.StringHelper;
 
 import java.util.List;
@@ -14,7 +16,25 @@ import org.lwjgl.opengl.GL11;
 
 public class TabAugment extends TabBase {
 
+	public static boolean enable;
 	public static int defaultSide = 1;
+	public static int defaultHeaderColor = 0xe1c92f;
+	public static int defaultSubHeaderColor = 0xaaafb8;
+	public static int defaultTextColor = 0x000000;
+	public static int defaultBackgroundColor = 0x089e4c;
+
+	public static void initialize() {
+
+		String category = "tab.augment";
+		// enable = CoFHCore.configClient.get(category, "Enable", true);
+		defaultSide = MathHelper.clampI(CoFHCore.configClient.get(category, "Side", defaultSide), 0, 1);
+		defaultHeaderColor = MathHelper.clampI(CoFHCore.configClient.get(category, "ColorHeader", defaultHeaderColor), 0, 0xffffff);
+		defaultSubHeaderColor = MathHelper.clampI(CoFHCore.configClient.get(category, "ColorSubHeader", defaultSubHeaderColor), 0, 0xffffff);
+		defaultTextColor = MathHelper.clampI(CoFHCore.configClient.get(category, "ColorText", defaultTextColor), 0, 0xffffff);
+		defaultBackgroundColor = MathHelper.clampI(CoFHCore.configClient.get(category, "ColorBackground", defaultBackgroundColor), 0, 0xffffff);
+		CoFHCore.configClient.save();
+	}
+
 	public static ResourceLocation GRID_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Slot_Grid_Augment.png");
 
 	IAugmentableContainer myContainer;
@@ -34,10 +54,14 @@ public class TabAugment extends TabBase {
 
 		super(gui, side);
 
-		myContainer = container;
+		headerColor = defaultHeaderColor;
+		subheaderColor = defaultSubHeaderColor;
+		textColor = defaultTextColor;
+		backgroundColor = defaultBackgroundColor;
+
 		maxHeight = 92;
 		maxWidth = 100;
-		backgroundColor = 0x226688;
+		myContainer = container;
 
 		numAugments = myContainer.getAugmentSlots().length;
 
@@ -86,11 +110,11 @@ public class TabAugment extends TabBase {
 		if (!isFullyOpened()) {
 			return false;
 		}
+		if (side == LEFT) {
+			mouseX += currentWidth;
+		}
 		mouseX -= currentShiftX;
 		mouseY -= currentShiftY;
-
-		System.out.println(mouseX);
-		System.out.println(mouseY);
 
 		if (mouseX < slotsBorderX1 + offset() || mouseX >= slotsBorderX2 + offset() || mouseY < slotsBorderY1 || mouseY >= slotsBorderY2) {
 			return false;

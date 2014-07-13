@@ -1,9 +1,9 @@
-package cofh.social;
+package cofh.util;
 
-import cofh.CoFHCore;
 import cofh.core.CoFHProps;
 import cofh.network.PacketHandler;
-import cofh.social.SocialPacket.Type;
+import cofh.network.SocialPacket;
+import cofh.network.SocialPacket.Type;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -12,16 +12,13 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.config.Configuration;
 
-public class RegistryFriends {
+public class SocialRegistry {
 
 	public static void initialize() {
 
 		friendConf = new Configuration(new File(CoFHProps.configDir, "/cofh/CoFHSocial-Friends.cfg"));
 		friendConf.load();
-		guiId = CoFHCore.proxy.registerGui("FriendsList", false);
 	}
-
-	public static int guiId;
 
 	public static Configuration friendConf;
 	public static List<String> clientPlayerFriends = new LinkedList<String>();
