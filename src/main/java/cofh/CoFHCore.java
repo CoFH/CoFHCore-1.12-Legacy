@@ -239,6 +239,12 @@ public class CoFHCore extends BaseMod {
 
 		return modId;
 	}
+	
+	@Override
+	protected String getAssetDir() {
+
+		return "cofh";
+	}
 
 	@Override
 	public String getModName() {

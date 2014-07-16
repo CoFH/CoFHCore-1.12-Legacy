@@ -80,6 +80,11 @@ public abstract class BaseMod implements IUpdatableMod {
 
 		return getConfig("common");
 	}
+	
+	protected String getAssetDir() {
+
+		return _modid;
+	}
 
 	@Override
 	public Logger getLogger() {
@@ -141,7 +146,7 @@ public abstract class BaseMod implements IUpdatableMod {
 			}
 		}
 
-		String path = "/assets/" + _modid + "/language/";
+		String path = "/assets/" + getAssetDir() + "/language/";
 		InputStream s = null;
 		try {
 			s = Loader.getResource(path + ".languages", null).openStream();
@@ -187,7 +192,7 @@ public abstract class BaseMod implements IUpdatableMod {
 
 		public LangManager(IResourceManager manager) {
 
-			_path = _modid + ":language/";
+			_path = getAssetDir() + ":language/";
 			loadAllLanguages(manager);
 		}
 
