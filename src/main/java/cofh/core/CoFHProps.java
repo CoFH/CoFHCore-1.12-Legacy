@@ -72,6 +72,8 @@ public class CoFHProps {
 
 	public static boolean enableOpSecureAccess = false;
 	public static boolean enableOpSecureAccessWarning = true;
+	
+	public static boolean enableLivingEntityDeathMessages = true;
 
 	private CoFHProps() {
 

@@ -185,7 +185,14 @@ public class CoFHCore extends BaseMod {
 
 		comment = "Enable this to be warned about Ops having access to 'secure' blocks when connecting to a server. (Default: true)";
 		CoFHProps.enableOpSecureAccessWarning = configCore.get(category, "OpsCanAccessSecureBlocksWarning", true, comment);
+		
+		comment = "Set to true to display death messages for any named entity.";
+		CoFHProps.enableLivingEntityDeathMessages = configCore.get(Configuration.CATEGORY_GENERAL, "EnableGenericDeathMessage", true, comment);
 
+		configCore.save();
+		
+		// CLIENT ONLY
+		
 		configCore.save();
 
 		return true;

@@ -154,6 +154,12 @@ public class ProxyClient extends Proxy {
 		TabRedstone.initialize();
 		TabSecurity.initialize();
 		TabTutorial.initialize();
+		
+		String comment = "Set to false to disable any particles from spawning in minecraft.";
+		if (!CoFHCore.configClient.get(Configuration.CATEGORY_GENERAL, "EnableParticles", true, comment)) {
+			CoFHCore.log.info("Replacing EffectRenderer");
+			Minecraft.getMinecraft().effectRenderer = new cofh.render.CustomEffectRenderer();
+		}
 
 		fontRenderer = new CoFHFontRender(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"),
 				Minecraft.getMinecraft().renderEngine, false);
@@ -168,6 +174,7 @@ public class ProxyClient extends Proxy {
 	@Override
 	public void registerTickHandlers() {
 
+		super.registerTickHandlers();
 		FMLCommonHandler.instance().bus().register(TickHandlerEnderRegistry.instance);
 	}
 

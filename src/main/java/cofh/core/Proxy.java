@@ -15,10 +15,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 
 public class Proxy {
@@ -116,6 +120,17 @@ public class Proxy {
 
 	public void registerTickHandlers() {
 
+		MinecraftForge.EVENT_BUS.register(this);
+	}
+
+	@SubscribeEvent
+	public void onLivingDeathEvent(LivingDeathEvent event)
+	{
+		if (!CoFHProps.enableLivingEntityDeathMessages || event.entity.worldObj.isRemote ||
+				!(event.entity instanceof EntityLiving) ||
+				!((EntityLiving)event.entityLiving).hasCustomNameTag()) return;
+		((WorldServer)event.entity.worldObj).func_73046_m().
+			getConfigurationManager().sendChatMsg(event.entityLiving.func_110142_aN().func_151521_b());
 	}
 
 }
