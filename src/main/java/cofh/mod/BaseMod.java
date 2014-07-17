@@ -227,13 +227,29 @@ public abstract class BaseMod implements IUpdatableMod {
 				}
 				for (String lang : langs) {
 					try {
-						loadLanguageFile(lang, manager.getResource(new ResourceLocation(_path + lang + ".lang")).getInputStream());
+						files = manager.getAllResources(new ResourceLocation(_path + lang + ".lang"));
+						for (IResource file : files) {
+							if (file.getInputStream() == null) {
+								_log.warn("A resource pack defines an entry for language '" + lang + "' but the InputStream is null.");
+								continue;
+							}
+							try {
+								loadLanguageFile(lang, file.getInputStream());
+							} catch (Throwable _) {
+								_log.warn(AbstractLogger.CATCHING_MARKER, "A resource pack has a file for language '" + lang + "' but the file is invalid.", _);
+							}
+						}
 					} catch (Throwable _) {
 						_log.warn(AbstractLogger.CATCHING_MARKER, "A resource pack defines the language '" + lang + "' but the file does not exist.", _);
 					}
 				}
 			} catch (Throwable _) {
-				_log.catching(Level.INFO, _);
+				_log.info(AbstractLogger.CATCHING_MARKER, "There is no '.languages' file.", _);
+				try {
+					loadLanguageFile("en_US", manager.getResource(new ResourceLocation(_path + "en_US.lang")).getInputStream());
+				} catch (Throwable t) {
+					_log.error(AbstractLogger.CATCHING_MARKER, "There are no language files.", t);
+				}
 			}
 		}
 	}
