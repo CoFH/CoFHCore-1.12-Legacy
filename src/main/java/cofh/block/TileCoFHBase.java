@@ -1,7 +1,7 @@
 package cofh.block;
 
-import cofh.api.core.ISecurable;
-import cofh.api.core.ISecurable.AccessMode;
+import cofh.api.tileentity.ISecurable;
+import cofh.api.tileentity.ISecurable.AccessMode;
 import cofh.core.CoFHProps;
 import cofh.network.CoFHPacket;
 import cofh.network.CoFHTilePacket;
@@ -67,7 +67,7 @@ public abstract class TileCoFHBase extends TileEntity {
 	public boolean canPlayerAccess(String name) {
 
 		if (!(this instanceof ISecurable)) {
-			return false;
+			return true;
 		}
 		AccessMode access = ((ISecurable) this).getAccess();
 		String owner = ((ISecurable) this).getOwnerName();

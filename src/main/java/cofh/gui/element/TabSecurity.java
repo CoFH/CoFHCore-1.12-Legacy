@@ -1,7 +1,7 @@
 package cofh.gui.element;
 
 import cofh.CoFHCore;
-import cofh.api.core.ISecurable;
+import cofh.api.tileentity.ISecurable;
 import cofh.gui.GuiBase;
 import cofh.util.MathHelper;
 import cofh.util.StringHelper;

@@ -16,8 +16,9 @@ public abstract class GuiBaseAdv extends GuiBase {
 	public static final String TEX_ALCHEMY = GuiProps.PATH_ELEMENTS + "Scale_Alchemy.png";
 	public static final String TEX_BUBBLE = GuiProps.PATH_ELEMENTS + "Scale_Bubble.png";
 	public static final String TEX_CRUSH = GuiProps.PATH_ELEMENTS + "Scale_Crush.png";
-	public static final String TEX_SAW = GuiProps.PATH_ELEMENTS + "Scale_Saw.png";
 	public static final String TEX_FLAME = GuiProps.PATH_ELEMENTS + "Scale_Flame.png";
+	public static final String TEX_FLUX = GuiProps.PATH_ELEMENTS + "Scale_Flux.png";
+	public static final String TEX_SAW = GuiProps.PATH_ELEMENTS + "Scale_Saw.png";
 	public static final String TEX_SNOWFLAKE = GuiProps.PATH_ELEMENTS + "Scale_Snowflake.png";
 
 	public static final String TEX_TANK = GuiProps.PATH_ELEMENTS + "FluidTank.png";

@@ -6,26 +6,26 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class RecipeUpgrade extends ShapedOreRecipe {
 
-	int upgradeSlot = 4;
+	int targetSlot = 4;
 
 	public RecipeUpgrade(ItemStack result, Object[] recipe) {
 
 		super(result, recipe);
 	}
 
-	public RecipeUpgrade(int upgradeSlot, ItemStack result, Object[] recipe) {
+	public RecipeUpgrade(int slot, ItemStack result, Object[] recipe) {
 
 		super(result, recipe);
-		this.upgradeSlot = upgradeSlot;
+		targetSlot = slot;
 	}
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting craftMatrix) {
 
-		if (craftMatrix.getStackInSlot(upgradeSlot) == null || craftMatrix.getStackInSlot(upgradeSlot).stackTagCompound == null) {
+		if (craftMatrix.getStackInSlot(targetSlot) == null || craftMatrix.getStackInSlot(targetSlot).stackTagCompound == null) {
 			return super.getCraftingResult(craftMatrix);
 		}
-		return ItemHelper.copyTag(getRecipeOutput().copy(), craftMatrix.getStackInSlot(upgradeSlot));
+		return ItemHelper.copyTag(getRecipeOutput().copy(), craftMatrix.getStackInSlot(targetSlot));
 	}
 
 }

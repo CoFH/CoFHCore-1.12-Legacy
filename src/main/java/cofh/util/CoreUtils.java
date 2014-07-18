@@ -1,6 +1,7 @@
 package cofh.util;
 
 import cofh.CoFHCore;
+import cofh.core.CoFHProps;
 import cofh.entity.EntityLightningBoltFake;
 import cofh.util.position.BlockPosition;
 
@@ -84,6 +85,13 @@ public class CoreUtils {
 	public static boolean isRedstonePowered(TileEntity te) {
 
 		return isRedstonePowered(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
+	}
+
+	public static void dismantleLog(String playerName, Block block, int metadata, double x, double y, double z) {
+
+		if (CoFHProps.enableDismantleLogging) {
+			CoFHCore.log.info("Player " + playerName + " dismantled " + " (" + block + ":" + metadata + ") at (" + x + "," + y + "," + z + ")");
+		}
 	}
 
 	/* FILE UTILS */

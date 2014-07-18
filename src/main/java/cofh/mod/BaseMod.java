@@ -80,7 +80,7 @@ public abstract class BaseMod implements IUpdatableMod {
 
 		return getConfig("common");
 	}
-	
+
 	protected String getAssetDir() {
 
 		return _modid;

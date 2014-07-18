@@ -8,15 +8,15 @@ import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityFX;
 
 @SideOnly(Side.CLIENT)
-public class CustomEffectRenderer extends EffectRenderer
-{
-	public CustomEffectRenderer()
-	{
+public class CustomEffectRenderer extends EffectRenderer {
+
+	public CustomEffectRenderer() {
+
 		super(Minecraft.getMinecraft().theWorld, Minecraft.getMinecraft().renderEngine);
 	}
 
 	@Override
-	public void addEffect(EntityFX p)
-	{
+	public void addEffect(EntityFX p) {
+
 	}
 }

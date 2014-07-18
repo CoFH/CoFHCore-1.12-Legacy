@@ -25,8 +25,8 @@ public class FMLEventHandler {
 
 		EntityPlayer player = event.player;
 		if (ServerHelper.isMultiPlayerServer() && CoFHProps.enableOpSecureAccess && CoFHProps.enableOpSecureAccessWarning) {
-			player.addChatMessage(new ChatComponentText(StringHelper.YELLOW + "[CoFH] " + StringHelper.WHITE
-					+ StringHelper.localize("message.cofh.secureWarning") + StringHelper.END));
+			player.addChatMessage(new ChatComponentText(StringHelper.YELLOW + "[CoFH] " + StringHelper.WHITE + StringHelper.localize("chat.cofh.secure.0")
+					+ StringHelper.END));
 		}
 	}
 

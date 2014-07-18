@@ -1,12 +1,14 @@
 package cofh.core;
 
-import cofh.util.StringHelper;
-
 import java.io.File;
 
 import net.minecraft.util.ResourceLocation;
 
 public class CoFHProps {
+
+	private CoFHProps() {
+
+	}
 
 	public static final String VERSION = "1.7.10R3.0.0B1";
 
@@ -57,26 +59,16 @@ public class CoFHProps {
 		}
 	}
 
-	/* Global Localizations */
-	public static String tutorialTabConfiguration = StringHelper.localize("info.cofh.tutorial.tabConfiguration");
-	public static String tutorialTabOperation = StringHelper.localize("info.cofh.tutorial.tabConfiguration2");
-	public static String tutorialTabRedstone = StringHelper.localize("info.cofh.tutorial.tabRedstone");
-	public static String tutorialTabFluxRequired = StringHelper.localize("info.cofh.tutorial.fluxRequired");
-
 	/* Network */
 	public static final int NETWORK_UPDATE_RANGE = 192;
 
 	/* Options */
 	public static boolean enableUpdateNotice = true;
-	public static boolean enableItemPickupModule = true;
 
+	public static boolean enableDismantleLogging = false;
 	public static boolean enableOpSecureAccess = false;
 	public static boolean enableOpSecureAccessWarning = true;
-	
+
 	public static boolean enableLivingEntityDeathMessages = true;
-
-	private CoFHProps() {
-
-	}
 
 }

@@ -124,13 +124,13 @@ public class Proxy {
 	}
 
 	@SubscribeEvent
-	public void onLivingDeathEvent(LivingDeathEvent event)
-	{
-		if (!CoFHProps.enableLivingEntityDeathMessages || event.entity.worldObj.isRemote ||
-				!(event.entity instanceof EntityLiving) ||
-				!((EntityLiving)event.entityLiving).hasCustomNameTag()) return;
-		((WorldServer)event.entity.worldObj).func_73046_m().
-			getConfigurationManager().sendChatMsg(event.entityLiving.func_110142_aN().func_151521_b());
+	public void onLivingDeathEvent(LivingDeathEvent event) {
+
+		if (!CoFHProps.enableLivingEntityDeathMessages || event.entity.worldObj.isRemote || !(event.entity instanceof EntityLiving)
+				|| !((EntityLiving) event.entityLiving).hasCustomNameTag()) {
+			return;
+		}
+		((WorldServer) event.entity.worldObj).func_73046_m().getConfigurationManager().sendChatMsg(event.entityLiving.func_110142_aN().func_151521_b());
 	}
 
 }

@@ -2,6 +2,8 @@ package cofh.fluid;
 
 import cofh.block.BlockCoFHBase;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +28,7 @@ public class BlockFont extends BlockCoFHBase {
 
 	/* IDismantleable */
 	@Override
-	public ItemStack dismantleBlock(EntityPlayer player, NBTTagCompound nbt, World world, int x, int y, int z, boolean returnBlock, boolean simulate) {
+	public ArrayList<ItemStack> dismantleBlock(EntityPlayer player, NBTTagCompound nbt, World world, int x, int y, int z, boolean returnDrops, boolean simulate) {
 
 		return null;
 	}

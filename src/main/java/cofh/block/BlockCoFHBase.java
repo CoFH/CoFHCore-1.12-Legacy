@@ -4,16 +4,15 @@ import cofh.api.block.IBlockDebug;
 import cofh.api.block.IBlockInfo;
 import cofh.api.block.IDismantleable;
 import cofh.api.core.IInitializer;
-import cofh.api.core.ISecurable;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.tileentity.IPlacedTile;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IRedstoneControl;
-import cofh.api.tileentity.ITileDebug;
+import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ITileInfo;
 import cofh.util.CoreUtils;
 import cofh.util.MathHelper;
-import cofh.util.RSControlHelper;
+import cofh.util.RedstoneControlHelper;
 import cofh.util.SecurityHelper;
 import cofh.util.StringHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -36,6 +35,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -109,8 +110,8 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 			}
 		}
 		if (tile instanceof IRedstoneControl) {
-			if (RSControlHelper.hasRSControl(stack)) {
-				((IRedstoneControl) tile).setControl(RSControlHelper.getControl(stack));
+			if (RedstoneControlHelper.hasRSControl(stack)) {
+				((IRedstoneControl) tile).setControl(RedstoneControlHelper.getControl(stack));
 			}
 		}
 		if (tile instanceof IReconfigurableFacing) {
@@ -236,9 +237,7 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 
-		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		ret.add(dismantleBlock(null, getItemStackTag(world, x, y, z), world, x, y, z, false, true));
-		return ret;
+		return dismantleBlock(null, getItemStackTag(world, x, y, z), world, x, y, z, false, true);
 	}
 
 	@Override
@@ -261,22 +260,18 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 		return null;
 	}
 
-	public abstract ItemStack dismantleBlock(EntityPlayer player, NBTTagCompound nbt, World world, int x, int y, int z, boolean returnBlock, boolean simulate);
+	public abstract ArrayList<ItemStack> dismantleBlock(EntityPlayer player, NBTTagCompound nbt, World world, int x, int y, int z, boolean returnDrops,
+			boolean simulate);
 
 	/* IBlockDebug */
 	@Override
 	public void debugBlock(IBlockAccess world, int x, int y, int z, ForgeDirection side, EntityPlayer player) {
 
-		TileEntity tile = world.getTileEntity(x, y, z);
-
-		if (tile instanceof ITileDebug) {
-			((ITileDebug) tile).debugTile(side, player);
-		}
 	}
 
 	/* IBlockInfo */
 	@Override
-	public void getBlockInfo(IBlockAccess world, int x, int y, int z, ForgeDirection side, EntityPlayer player, List<String> info, boolean debug) {
+	public void getBlockInfo(IBlockAccess world, int x, int y, int z, ForgeDirection side, EntityPlayer player, List<IChatComponent> info, boolean debug) {
 
 		TileEntity tile = world.getTileEntity(x, y, z);
 
@@ -288,16 +283,17 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 				if (eHandler.getMaxEnergyStored(side) <= 0) {
 					return;
 				}
-				info.add(StringHelper.localize("info.cofh.energy") + ": " + eHandler.getEnergyStored(side) + "/" + eHandler.getMaxEnergyStored(side) + " RF.");
+				info.add(new ChatComponentText(StringHelper.localize("info.cofh.energy") + ": " + eHandler.getEnergyStored(side) + "/"
+						+ eHandler.getMaxEnergyStored(side) + " RF."));
 			}
 		}
 	}
 
 	/* IDismantleable */
 	@Override
-	public ItemStack dismantleBlock(EntityPlayer player, World world, int x, int y, int z, boolean returnBlock) {
+	public ArrayList<ItemStack> dismantleBlock(EntityPlayer player, World world, int x, int y, int z, boolean returnDrops) {
 
-		return dismantleBlock(player, getItemStackTag(world, x, y, z), world, x, y, z, returnBlock, false);
+		return dismantleBlock(player, getItemStackTag(world, x, y, z), world, x, y, z, returnDrops, false);
 	}
 
 	@Override

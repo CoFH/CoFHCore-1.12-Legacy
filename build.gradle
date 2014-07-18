@@ -22,14 +22,14 @@ group = "cofh"
 archivesBaseName = "CoFHCore"
 
 minecraft {
-    version = "1.7.10-10.13.0.1151"
-    assetDir = "eclipse/assets"
+    version = "1.7.10-10.13.0.1180"
+    runDir = "eclipse/assets"
 }
 
 // the repository{} block is not needed because ForgeGradle adds the forge maven repo automatically.
 dependencies {
     // adds CCL as a dependency
-    compile "codechicken:CodeChickenLib:1.7.2-1.1.1.87:dev"
+    compile "codechicken:CodeChickenLib:1.7.10-1.1.1.95:dev"
 }
 
 processResources

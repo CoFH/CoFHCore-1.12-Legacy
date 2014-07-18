@@ -1,13 +1,8 @@
 #en_US
 
-death.attack.pyrotheum=%1$s mistook Pyrotheum for Water!
-death.attack.pyrotheum.player=%1$s burned alive trying to escape %2$s!
-death.attack.cryotheum=%1$s froze to death!
-death.attack.cryotheum.player=%1$s froze to death trying to escape %2$s!
-death.attack.mana=%1$s was torn apart by raw Mana!
-death.attack.mana.player=%1$s ran into another state of being attempting to escape %2$s!
-death.attack.flux=%1$s had their reality torn apart by Flux!
-death.attack.flux.player=%1$s was Fluxed to death by %2$s!
+chat.cofh.secure.0=Notice: Server Ops are able to freely access 'secure' blocks on this server.
+chat.cofh.secure.1=This is private and belongs to
+chat.cofh.secure.2=You could have lost your hand!
 
 enchant.cofh.holding=Holding
 
@@ -35,9 +30,12 @@ info.cofh.energyConsume=Power Usage
 info.cofh.energyProduce=Power Output
 info.cofh.energyStored=Energy Stored
 info.cofh.fluid=Fluid
+info.cofh.forDetails=for Details
 info.cofh.frequency=Frequency
 info.cofh.friendsList=Friends List
+info.cofh.hasInfo=Has Information
 info.cofh.high=High
+info.cofh.hold=Hold
 info.cofh.ignored=Ignored
 info.cofh.information=Information
 info.cofh.infinite=Infinite
@@ -57,28 +55,23 @@ info.cofh.redstoneControl=Redstone Control
 info.cofh.security=Security
 info.cofh.send=Send
 info.cofh.sending=Sending
+info.cofh.shift=Shift
 info.cofh.signal=Signal
 info.cofh.signalRequired=Signal Required
 info.cofh.soaked=Soaked
 info.cofh.source=Source
+info.cofh.transfer=Transfer
 info.cofh.tutorial=Tutorial
 info.cofh.unlocked=Unlocked
 
 info.cofh.tutorial.fluxRequired=Requires Redstone Flux to operate.
-info.cofh.tutorial.tabConfiguration=The Configuration tab determines how items enter and leave this device.
-info.cofh.tutorial.tabConfiguration2=The Configuration tab determines the operation modes for this device.
+info.cofh.tutorial.tabAugment=The Augment tab allows for modular additions.
+info.cofh.tutorial.tabConfiguration.0=The Configuration tab determines how items enter and leave this device.
+info.cofh.tutorial.tabConfiguration.1=The Configuration tab determines the operation modes for this device.
 info.cofh.tutorial.tabRedstone=The Redstone Control tab configures how this device reacts to redstone signals.
+info.cofh.tutorial.tabSecurity=The Security tab allows the owner to control who can access this device.
 
 item.invalid.name=Invalid Item (Destroy)
-
-message.cofh.holdShift1=Hold
-message.cofh.holdShift2=Shift
-message.cofh.holdShift3=for Details
-message.cofh.secure1=This is private and belongs to
-message.cofh.secure2=You could have lost your hand!
-message.cofh.secureWarning=Notice: Server Ops are able to freely access 'secure' blocks on this server.
-message.cofh.receiveConfig=Receiving Server Configuration...
-message.cofh.restoreConfig=Restoring Client Configuration...
 
 #Fluid Name Fixes
 

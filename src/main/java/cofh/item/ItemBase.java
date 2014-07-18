@@ -51,7 +51,7 @@ public class ItemBase extends Item {
 	}
 
 	public TMap<Integer, ItemEntry> itemMap = new THashMap<Integer, ItemEntry>();
-	public ArrayList<Integer> itemList = new ArrayList<Integer>();
+	public ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
 
 	public boolean hasTextures = true;
 	public String modName = "cofh";
