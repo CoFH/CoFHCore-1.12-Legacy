@@ -1,25 +1,6 @@
 package cofh.asm;
 
-import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
-import static org.objectweb.asm.Opcodes.ACC_BRIDGE;
-import static org.objectweb.asm.Opcodes.ACC_FINAL;
-import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
-import static org.objectweb.asm.Opcodes.ACC_PROTECTED;
-import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
-import static org.objectweb.asm.Opcodes.ACC_STATIC;
-import static org.objectweb.asm.Opcodes.ACC_SYNTHETIC;
-import static org.objectweb.asm.Opcodes.ACONST_NULL;
-import static org.objectweb.asm.Opcodes.ALOAD;
-import static org.objectweb.asm.Opcodes.ASM4;
-import static org.objectweb.asm.Opcodes.DUP;
-import static org.objectweb.asm.Opcodes.GETFIELD;
-import static org.objectweb.asm.Opcodes.ILOAD;
-import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
-import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
-import static org.objectweb.asm.Opcodes.IRETURN;
-import static org.objectweb.asm.Opcodes.NEW;
-import static org.objectweb.asm.Opcodes.PUTFIELD;
-import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.*;
 
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
@@ -27,6 +8,11 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLRemappingAdapter;
+import cpw.mods.fml.common.discovery.ASMDataTable;
+import cpw.mods.fml.common.discovery.ASMDataTable.ASMData;
+
+import gnu.trove.map.hash.TObjectByteHashMap;
+import gnu.trove.set.hash.THashSet;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -52,15 +38,53 @@ import org.objectweb.asm.tree.MethodNode;
 public class PCCASMTransformer implements IClassTransformer {
 
 	private static Logger log = LogManager.getLogger("CoFH ASM");
-
-	private final String implementableDesc, strippableDesc;
-	private final ArrayList<String> workingPath = new ArrayList<String>();
-	private ClassNode world = null, worldServer = null;
-
-	public PCCASMTransformer() {
-
+	private static boolean scrappedData = false;
+	private static THashSet<String> parsables, implementables, strippables;
+	private static final String implementableDesc, strippableDesc; static {
+		
 		implementableDesc = Type.getDescriptor(Implementable.class);
 		strippableDesc = Type.getDescriptor(Strippable.class);
+
+		parsables = new THashSet<String>(10);
+		implementables = new THashSet<String>(10);
+		strippables = new THashSet<String>(10);
+	}
+	
+	private final ArrayList<String> workingPath = new ArrayList<String>();
+	private ClassNode world = null, worldServer = null;
+	
+	private TObjectByteHashMap<String> hashes = new TObjectByteHashMap<String>(4, 2, (byte)0);
+
+	public PCCASMTransformer() {
+		hashes.put("net.minecraft.world.WorldServer", (byte)1);
+		hashes.put("net.minecraft.world.World", (byte)2);
+		hashes.put("skyboy.core.world.WorldProxy", (byte)3);
+		hashes.put("skyboy.core.world.WorldServerProxy", (byte)4);
+	}
+	
+	public static void scrapeData(ASMDataTable table) {
+		
+		log.debug("Scraping data");
+
+		for (ASMData data : table.getAll(Implementable.class.getName())) {
+			String name = data.getClassName();
+			parsables.add(name);
+			parsables.add(name + "$class");
+			implementables.add(name);
+			implementables.add(name + "$class");
+		}
+
+		for (ASMData data : table.getAll(Strippable.class.getName())) {
+			String name = data.getClassName();
+			parsables.add(name);
+			parsables.add(name + "$class");
+			strippables.add(name);
+			strippables.add(name + "$class");
+		}
+		
+		log.debug("Found %s @Implementable and %s @Strippable", implementables.size(), strippables.size());
+
+		scrappedData = true;
 	}
 
 	@Override
@@ -69,40 +93,58 @@ public class PCCASMTransformer implements IClassTransformer {
 		if (bytes == null) {
 			return null;
 		}
-		ClassReader cr = new ClassReader(bytes);
-		ClassNode cn = new ClassNode();
-		cr.accept(cn, 0);
 
-		workingPath.add(transformedName);
+		l: if (scrappedData) {
+			if (!parsables.contains(name)) break l;
 
-		if (this.implement(cn)) {
-			log.info("Adding runtime interfaces to " + transformedName);
-			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-			cn.accept(cw);
-			bytes = cw.toByteArray();
-			cr = new ClassReader(bytes);
-			cn = new ClassNode();
-			cr.accept(cn, 0);
+			workingPath.add(transformedName);
+
+			if (implementables.contains(name)) {
+				log.info("Adding runtime interfaces to " + transformedName);
+				ClassReader cr = new ClassReader(bytes);
+				ClassNode cn = new ClassNode();
+				cr.accept(cn, 0);
+				if (this.implement(cn)) {
+					ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+					cn.accept(cw);
+					bytes = cw.toByteArray();
+				} else {
+					log.debug("Nothing implemented on " + transformedName);
+				}
+			}
+
+			if (strippables.contains(name)) {
+				log.info("Stripping methods and fields from " + transformedName);
+				ClassReader cr = new ClassReader(bytes);
+				ClassNode cn = new ClassNode();
+				cr.accept(cn, 0);
+				if (this.strip(cn)) {
+					ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+					cn.accept(cw);
+					bytes = cw.toByteArray();
+				} else {
+					log.debug("Nothing stripped from " + transformedName);
+				}
+			}
+
+			workingPath.remove(workingPath.size() - 1);
 		}
 
-		if (this.strip(cn)) {
-			log.info("Stripping methods and fields from " + transformedName);
-			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
-			cn.accept(cw);
-			bytes = cw.toByteArray();
-			cr = new ClassReader(bytes);
-		}
-
-		workingPath.remove(workingPath.size() - 1);
-
-		if ("net.minecraft.world.WorldServer".equals(transformedName)) {
-			bytes = writeWorldServer(name, transformedName, bytes, cr);
-		} else if ("net.minecraft.world.World".equals(transformedName)) {
-			bytes = writeWorld(name, transformedName, bytes, cr);
-		} else if ("skyboy.core.world.WorldProxy".equals(transformedName)) {
-			bytes = writeWorldProxy(name, bytes, cr);
-		} else if ("skyboy.core.world.WorldServerProxy".equals(transformedName)) {
-			bytes = writeWorldServerProxy(name, bytes, cr);
+		switch(hashes.get(transformedName)) {
+		case 1:
+			bytes = writeWorldServer(name, transformedName, bytes, new ClassReader(bytes));
+			break;
+		case 2:
+			bytes = writeWorld(name, transformedName, bytes, new ClassReader(bytes));
+			break;
+		case 3:
+			bytes = writeWorldProxy(name, bytes, new ClassReader(bytes));
+			break;
+		case 4:
+			bytes = writeWorldServerProxy(name, bytes, new ClassReader(bytes));
+			break;
+		default:
+			break;
 		}
 
 		return bytes;

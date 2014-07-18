@@ -22,7 +22,7 @@ public class PCCAccessTransformer extends AccessTransformer {
 		// CoFH_at.cfg must also contain all entries from cofhlib_at.cfg
 
 		for (String file : mapFileList) {
-			readMapFile(file);
+			readMappingFile(file);
 		}
 	}
 
@@ -31,11 +31,11 @@ public class PCCAccessTransformer extends AccessTransformer {
 		if (instance == null) {
 			mapFileList.add(mapFile);
 		} else {
-			instance.readMapFile(mapFile);
+			instance.readMappingFile(mapFile);
 		}
 	}
 
-	private void readMapFile(String mapFile) {
+	private void readMappingFile(String mapFile) {
 
 		System.out.println("Adding Accesstransformer map: " + mapFile);
 		try {

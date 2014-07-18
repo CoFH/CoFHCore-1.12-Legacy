@@ -9,9 +9,9 @@
 	
 	<!-- Project information -->
 	<property name="build.name" value="${ant.project.name}"/>
-	<property name="class.pckg" value="cofh/core"/>
+	<property name="class.pckg" value="cofh"/>
 	<!-- Version file -->
-	<property name="verclass.dir" value="${src.dir}/${class.pckg}" />
+	<property name="verclass.dir" value="${src.dir}/${class.pckg}/core" />
 	<property name="verclass.name" value="CoFHProps.java"/>
 
 	<!-- Forge version -->
@@ -265,7 +265,7 @@
 		<sequential>
 			<script language="javascript"><![CDATA[
 				importPackage(java.io);
-				var path = "/assets/" + project.getProperty("build.name").toLowerCase() + "/language/";
+				var path = "/assets/cofh/language/";
 				var languages = new File(project.getProperty("resources.dir") + path);
 				if (languages.exists() && languages.isDirectory()) {
 					var out = "";
