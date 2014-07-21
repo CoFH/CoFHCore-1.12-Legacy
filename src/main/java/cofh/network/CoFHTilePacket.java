@@ -50,4 +50,5 @@ public class CoFHTilePacket extends CoFHPacket {
 
 		return new CoFHTilePacket(theTile);
 	}
+
 }

@@ -1,6 +1,25 @@
 package cofh.asm;
 
-import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
+import static org.objectweb.asm.Opcodes.ACC_BRIDGE;
+import static org.objectweb.asm.Opcodes.ACC_FINAL;
+import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
+import static org.objectweb.asm.Opcodes.ACC_PROTECTED;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
+import static org.objectweb.asm.Opcodes.ACC_SYNTHETIC;
+import static org.objectweb.asm.Opcodes.ACONST_NULL;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ASM4;
+import static org.objectweb.asm.Opcodes.DUP;
+import static org.objectweb.asm.Opcodes.GETFIELD;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
+import static org.objectweb.asm.Opcodes.IRETURN;
+import static org.objectweb.asm.Opcodes.NEW;
+import static org.objectweb.asm.Opcodes.PUTFIELD;
+import static org.objectweb.asm.Opcodes.RETURN;
 
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
@@ -40,8 +59,9 @@ public class PCCASMTransformer implements IClassTransformer {
 	private static Logger log = LogManager.getLogger("CoFH ASM");
 	private static boolean scrappedData = false;
 	private static THashSet<String> parsables, implementables, strippables;
-	private static final String implementableDesc, strippableDesc; static {
-		
+	private static final String implementableDesc, strippableDesc;
+	static {
+
 		implementableDesc = Type.getDescriptor(Implementable.class);
 		strippableDesc = Type.getDescriptor(Strippable.class);
 
@@ -49,21 +69,22 @@ public class PCCASMTransformer implements IClassTransformer {
 		implementables = new THashSet<String>(10);
 		strippables = new THashSet<String>(10);
 	}
-	
+
 	private final ArrayList<String> workingPath = new ArrayList<String>();
 	private ClassNode world = null, worldServer = null;
-	
-	private TObjectByteHashMap<String> hashes = new TObjectByteHashMap<String>(4, 2, (byte)0);
+
+	private TObjectByteHashMap<String> hashes = new TObjectByteHashMap<String>(4, 2, (byte) 0);
 
 	public PCCASMTransformer() {
-		hashes.put("net.minecraft.world.WorldServer", (byte)1);
-		hashes.put("net.minecraft.world.World", (byte)2);
-		hashes.put("skyboy.core.world.WorldProxy", (byte)3);
-		hashes.put("skyboy.core.world.WorldServerProxy", (byte)4);
+
+		hashes.put("net.minecraft.world.WorldServer", (byte) 1);
+		hashes.put("net.minecraft.world.World", (byte) 2);
+		hashes.put("skyboy.core.world.WorldProxy", (byte) 3);
+		hashes.put("skyboy.core.world.WorldServerProxy", (byte) 4);
 	}
-	
+
 	public static void scrapeData(ASMDataTable table) {
-		
+
 		log.debug("Scraping data");
 
 		for (ASMData data : table.getAll(Implementable.class.getName())) {
@@ -81,7 +102,7 @@ public class PCCASMTransformer implements IClassTransformer {
 			strippables.add(name);
 			strippables.add(name + "$class");
 		}
-		
+
 		log.debug("Found %s @Implementable and %s @Strippable", implementables.size(), strippables.size());
 
 		scrappedData = true;
@@ -95,7 +116,9 @@ public class PCCASMTransformer implements IClassTransformer {
 		}
 
 		l: if (scrappedData) {
-			if (!parsables.contains(name)) break l;
+			if (!parsables.contains(name)) {
+				break l;
+			}
 
 			workingPath.add(transformedName);
 
@@ -130,7 +153,7 @@ public class PCCASMTransformer implements IClassTransformer {
 			workingPath.remove(workingPath.size() - 1);
 		}
 
-		switch(hashes.get(transformedName)) {
+		switch (hashes.get(transformedName)) {
 		case 1:
 			bytes = writeWorldServer(name, transformedName, bytes, new ClassReader(bytes));
 			break;

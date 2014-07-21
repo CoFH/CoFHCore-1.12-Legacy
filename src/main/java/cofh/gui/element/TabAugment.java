@@ -160,6 +160,7 @@ public class TabAugment extends TabBase {
 		default:
 			drawSlots(0, 0, numAugments);
 		}
+
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
@@ -176,6 +177,11 @@ public class TabAugment extends TabBase {
 			}
 			break;
 		case 5:
+			for (int i = 0; i < numAugments; i++) {
+				myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 3) + 9 * (i / 3);
+				myContainer.getAugmentSlots()[i].yDisplayPosition = posY + slotsBorderY1 + 4 + 18 * (i / 3);
+			}
+			break;
 		default:
 			for (int i = 0; i < numAugments; i++) {
 				myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 3);

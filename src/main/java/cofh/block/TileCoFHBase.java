@@ -83,7 +83,7 @@ public abstract class TileCoFHBase extends TileEntity {
 
 	public boolean isUseable(EntityPlayer player) {
 
-		return player.getDistanceSq(xCoord, yCoord, zCoord) <= 64D;
+		return player.getDistanceSq(xCoord, yCoord, zCoord) <= 64D && worldObj.getBlock(xCoord, yCoord, zCoord) == getBlockType();
 	}
 
 	public boolean onWrench(EntityPlayer player, int hitSide) {
@@ -105,7 +105,7 @@ public abstract class TileCoFHBase extends TileEntity {
 	@Override
 	public Packet getDescriptionPacket() {
 
-		return PacketHandler.toMcPacket(getPacket());
+		return PacketHandler.toMCPacket(getPacket());
 	}
 
 	public CoFHPacket getPacket() {

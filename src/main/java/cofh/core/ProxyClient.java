@@ -49,6 +49,7 @@ public class ProxyClient extends Proxy {
 		} else if (event.map.getTextureType() == 1) {
 
 			IconRegistry.addIcon("IconAccessFriends", "cofh:icons/Icon_Access_Friends", event.map);
+			IconRegistry.addIcon("IconAccessGuild", "cofh:icons/Icon_Access_Guild", event.map);
 			IconRegistry.addIcon("IconAccessPrivate", "cofh:icons/Icon_Access_Private", event.map);
 			IconRegistry.addIcon("IconAccessPublic", "cofh:icons/Icon_Access_Public", event.map);
 			IconRegistry.addIcon("IconAccept", "cofh:icons/Icon_Accept", event.map);

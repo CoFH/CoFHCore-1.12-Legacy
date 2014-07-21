@@ -1,6 +1,7 @@
 package cofh.network;
 
 import cofh.util.FluidHelper;
+import cofh.util.ItemHelper;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
@@ -251,27 +253,24 @@ public abstract class CoFHPacket extends BasePacket {
 		} else {
 			addShort(Item.getIdFromItem(theStack.getItem()));
 			addByte(theStack.stackSize);
-			addShort(theStack.getItemDamage());
-
-			if (theStack.getItem().isDamageable() || theStack.getItem().getShareTag()) {
-				writeNBT(theStack.stackTagCompound);
-			}
+			addShort(ItemHelper.getItemDamage(theStack));
+			writeNBT(theStack.stackTagCompound);
 		}
 	}
 
 	public ItemStack readItemStack() throws IOException {
 
-		ItemStack itemstack = null;
+		ItemStack stack = null;
 		short itemID = getShort();
 
 		if (itemID >= 0) {
 			byte stackSize = getByte();
 			short damage = getShort();
-			itemstack = new ItemStack(Item.getItemById(itemID), stackSize, damage);
-			itemstack.stackTagCompound = readNBT();
+			stack = new ItemStack(Item.getItemById(itemID), stackSize, damage);
+			stack.stackTagCompound = readNBT();
 		}
 
-		return itemstack;
+		return stack;
 	}
 
 	public void writeNBT(NBTTagCompound nbt) throws IOException {
@@ -294,7 +293,7 @@ public abstract class CoFHPacket extends BasePacket {
 		} else {
 			byte[] abyte = new byte[nbtLength];
 			getByteArray(abyte);
-			return CompressedStreamTools.read(new DataInputStream(new ByteArrayInputStream(abyte)));
+			return CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L));
 		}
 	}
 

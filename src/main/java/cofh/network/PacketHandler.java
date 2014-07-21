@@ -106,7 +106,6 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 
 		default:
 		}
-		out.add(pkt);
 	}
 
 	// Method to call from FMLInitializationEvent
@@ -202,7 +201,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, BasePac
 		instance.channels.get(Side.CLIENT).writeAndFlush(message);
 	}
 
-	public static Packet toMcPacket(BasePacket packet) {
+	public static Packet toMCPacket(BasePacket packet) {
 
 		return instance.channels.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
 	}
