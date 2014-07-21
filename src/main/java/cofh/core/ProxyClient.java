@@ -21,7 +21,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -145,8 +144,6 @@ public class ProxyClient extends Proxy {
 
 	@Override
 	public void registerRenderInformation() {
-
-		CoFHCore.configClient.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/Client.cfg")));
 
 		TabAugment.initialize();
 		TabConfiguration.initialize();

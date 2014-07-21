@@ -2,11 +2,14 @@ package cofh.util.fluid;
 
 import cofh.util.BlockWrapper;
 import cofh.util.ItemWrapper;
+import cofh.util.ServerHelper;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -29,9 +32,6 @@ public class BucketHandler {
 
 	}
 
-	// private static BlockWrapper queryBlock = new BlockWrapper(Blocks.stone, 0);
-	// private static ItemWrapper queryItem = new ItemWrapper(Items.diamond, 0);
-
 	private static BiMap<BlockWrapper, ItemWrapper> buckets = HashBiMap.create();
 
 	private BucketHandler() {
@@ -45,11 +45,10 @@ public class BucketHandler {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onBucketFill(FillBucketEvent event) {
 
-		if (event.world.isRemote | event.result != null || event.getResult() != Result.DEFAULT) {
+		if (ServerHelper.isClientWorld(event.world) | event.result != null || event.getResult() != Result.DEFAULT) {
 			return;
 		}
 		ItemStack current = event.current;
-
 		if (event.target.typeOfHit != MovingObjectType.BLOCK) {
 			return;
 		}
@@ -152,6 +151,17 @@ public class BucketHandler {
 			world.markBlockForUpdate(x, y, z);
 		}
 		return r;
+	}
+
+	public static void refreshMap() {
+
+		BiMap<BlockWrapper, ItemWrapper> tempMap = HashBiMap.create(buckets.size());
+
+		for (Entry<BlockWrapper, ItemWrapper> entry : buckets.entrySet()) {
+			tempMap.put(entry.getKey(), entry.getValue());
+		}
+		buckets.clear();
+		buckets = tempMap;
 	}
 
 }

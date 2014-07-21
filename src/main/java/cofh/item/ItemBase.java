@@ -114,6 +114,15 @@ public class ItemBase extends Item {
 		return stack;
 	}
 
+	public String getRawName(ItemStack stack) {
+
+		int i = ItemHelper.getItemDamage(stack);
+		if (!itemMap.containsKey(Integer.valueOf(i))) {
+			return "invalid";
+		}
+		return itemMap.get(i).name;
+	}
+
 	@Override
 	public IIcon getIconFromDamage(int i) {
 

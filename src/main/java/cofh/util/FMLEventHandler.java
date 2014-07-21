@@ -2,6 +2,7 @@ package cofh.util;
 
 import cofh.core.CoFHProps;
 import cofh.render.ItemRenderRegistry;
+import cofh.util.fluid.BucketHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLModIdMappingEvent;
@@ -33,7 +34,8 @@ public class FMLEventHandler {
 	@EventHandler
 	public void handleIdMappingEvent(FMLModIdMappingEvent event) {
 
-		ItemRenderRegistry.reloadRegistry();
+		BucketHandler.refreshMap();
+		ItemRenderRegistry.refreshMap();
 	}
 
 }

@@ -14,10 +14,10 @@ import cofh.network.SocialPacket;
 import cofh.updater.UpdateManager;
 import cofh.util.ConfigHandler;
 import cofh.util.FMLEventHandler;
-import cofh.util.RecipeSecure;
-import cofh.util.RecipeUpgrade;
 import cofh.util.SocialRegistry;
 import cofh.util.StringHelper;
+import cofh.util.crafting.RecipeSecure;
+import cofh.util.crafting.RecipeUpgrade;
 import cofh.util.fluid.BucketHandler;
 import cofh.util.oredict.OreDictionaryArbiter;
 import cofh.world.FeatureParser;
@@ -87,6 +87,7 @@ public class CoFHCore extends BaseMod {
 
 		UpdateManager.registerUpdater(new UpdateManager(this, releaseURL));
 		configCore.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/CoFHCore.cfg")));
+		configClient.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/Client.cfg")));
 		MinecraftForge.EVENT_BUS.register(proxy);
 
 		moduleCore();
@@ -171,6 +172,9 @@ public class CoFHCore extends BaseMod {
 
 		String comment = "Enable this to be informed of non-critical updates. You will still receive critical update notifications.";
 		CoFHProps.enableUpdateNotice = configCore.get(category, "EnableUpdateNotifications", true, comment);
+
+		comment = "Enable this to log when a block is dismantled.";
+		CoFHProps.enableDismantleLogging = configCore.get(category, "EnableDismantleLogging", CoFHProps.enableDismantleLogging, comment);
 
 		category = "gui.tooltips";
 		comment = "This adds a tooltip prompting you to press Shift for more details on various items.";

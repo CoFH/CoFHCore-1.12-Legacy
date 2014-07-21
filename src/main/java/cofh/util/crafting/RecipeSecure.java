@@ -1,4 +1,7 @@
-package cofh.util;
+package cofh.util.crafting;
+
+import cofh.util.ItemHelper;
+import cofh.util.SecurityHelper;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;

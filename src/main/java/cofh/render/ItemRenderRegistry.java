@@ -33,7 +33,7 @@ public class ItemRenderRegistry {
 		return itemRenders.containsKey(ItemWrapper.fromItemStack(stack));
 	}
 
-	public static void reloadRegistry() {
+	public static void refreshMap() {
 
 		Map<ItemWrapper, IItemRenderer> tempMap = new THashMap(itemRenders.size());
 
