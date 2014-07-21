@@ -45,6 +45,9 @@ public class BucketHandler {
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onBucketFill(FillBucketEvent event) {
 
+		if (event.world.isRemote | event.result != null || event.getResult() != Result.DEFAULT) {
+			return;
+		}
 		ItemStack current = event.current;
 
 		if (event.target.typeOfHit != MovingObjectType.BLOCK) {
@@ -142,7 +145,7 @@ public class BucketHandler {
 		Material material = world.getBlock(x, y, z).getMaterial();
 		boolean solid = !material.isSolid();
 		if (world.isAirBlock(x, y, z) || solid) {
-			if (r && !world.isRemote && solid && !material.isLiquid()) {
+			if (!world.isRemote && solid && !material.isLiquid()) {
 				world.func_147480_a(x, y, z, true);
 			}
 			r = world.setBlock(x, y, z, result.block, result.metadata, 3); // this can fail
