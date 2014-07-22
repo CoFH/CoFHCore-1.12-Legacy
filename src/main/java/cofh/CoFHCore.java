@@ -16,6 +16,7 @@ import cofh.util.ConfigHandler;
 import cofh.util.FMLEventHandler;
 import cofh.util.SocialRegistry;
 import cofh.util.StringHelper;
+import cofh.util.crafting.RecipeAugmentable;
 import cofh.util.crafting.RecipeSecure;
 import cofh.util.crafting.RecipeUpgrade;
 import cofh.util.fluid.BucketHandler;
@@ -98,8 +99,9 @@ public class CoFHCore extends BaseMod {
 		BucketHandler.initialize();
 		PacketHandler.instance.initialize();
 		OreDictionaryArbiter.initialize();
-		RecipeSorter.register("cofh:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
+		RecipeSorter.register("cofh:augment", RecipeAugmentable.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 		RecipeSorter.register("cofh:secure", RecipeSecure.class, RecipeSorter.Category.SHAPED, "before:cofh:upgrade");
+		RecipeSorter.register("cofh:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 
 		registerOreDictionaryEntries();
 	}

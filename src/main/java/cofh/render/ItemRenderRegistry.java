@@ -38,7 +38,8 @@ public class ItemRenderRegistry {
 		Map<ItemWrapper, IItemRenderer> tempMap = new THashMap(itemRenders.size());
 
 		for (Entry<ItemWrapper, IItemRenderer> entry : itemRenders.entrySet()) {
-			tempMap.put(entry.getKey(), entry.getValue());
+			ItemWrapper tempItem = new ItemWrapper(entry.getKey().item, entry.getKey().metadata);
+			tempMap.put(tempItem, entry.getValue());
 		}
 		itemRenders.clear();
 		itemRenders = tempMap;

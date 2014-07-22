@@ -39,11 +39,14 @@ public abstract class TileCoFHBase extends TileEntity {
 		worldObj.markTileEntityChunkModified(this.xCoord, this.yCoord, this.zCoord, this);
 	}
 
+	public void callNeighborBlockChange() {
+
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+	}
+
 	public void callNeighborTileChange() {
 
-		if (getBlockType() != null) {
-			worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
-		}
+		worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
 	}
 
 	public void onNeighborBlockChange() {

@@ -158,10 +158,11 @@ public class BucketHandler {
 		BiMap<BlockWrapper, ItemWrapper> tempMap = HashBiMap.create(buckets.size());
 
 		for (Entry<BlockWrapper, ItemWrapper> entry : buckets.entrySet()) {
-			tempMap.put(entry.getKey(), entry.getValue());
+			BlockWrapper tempBlock = new BlockWrapper(entry.getKey().block, entry.getKey().metadata);
+			ItemWrapper tempItem = new ItemWrapper(entry.getValue().item, entry.getValue().metadata);
+			tempMap.put(tempBlock, tempItem);
 		}
 		buckets.clear();
 		buckets = tempMap;
 	}
-
 }
