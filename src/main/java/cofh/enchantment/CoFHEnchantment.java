@@ -25,7 +25,7 @@ public class CoFHEnchantment {
 
 			}
 		}
-		CoFHCore.configCore.get("enchantment", "holding", enchantmentHolding.effectId);
+		CoFHCore.configCore.set("enchantment", "holding", enchantmentHolding.effectId);
 	}
 
 	public static NBTTagList getEnchantmentTagList(NBTTagCompound nbt) {

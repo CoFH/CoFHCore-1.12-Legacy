@@ -3,15 +3,14 @@ package cofh.block;
 import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
 import cofh.core.CoFHProps;
-import cofh.network.CoFHPacket;
-import cofh.network.CoFHTilePacket;
+import cofh.network.PacketCoFHBase;
 import cofh.network.PacketHandler;
+import cofh.network.PacketTile;
 import cofh.util.CoreUtils;
 import cofh.util.ServerHelper;
 import cofh.util.SocialRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -111,9 +110,9 @@ public abstract class TileCoFHBase extends TileEntity {
 		return PacketHandler.toMCPacket(getPacket());
 	}
 
-	public CoFHPacket getPacket() {
+	public PacketCoFHBase getPacket() {
 
-		return new CoFHTilePacket(this);
+		return new PacketTile(this);
 	}
 
 	public void sendDescPacket() {
@@ -135,12 +134,12 @@ public abstract class TileCoFHBase extends TileEntity {
 	}
 
 	/* GUI METHODS */
-	public GuiContainer getGuiClient(InventoryPlayer inventory) {
+	public Object getGuiClient(InventoryPlayer inventory) {
 
 		return null;
 	}
 
-	public Container getGuiServer(InventoryPlayer inventory) {
+	public Object getGuiServer(InventoryPlayer inventory) {
 
 		return null;
 	}

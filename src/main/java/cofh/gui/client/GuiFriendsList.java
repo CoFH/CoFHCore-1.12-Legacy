@@ -7,8 +7,8 @@ import cofh.gui.container.ContainerFriendsList;
 import cofh.gui.element.ElementButton;
 import cofh.gui.element.TabInfo;
 import cofh.network.PacketHandler;
-import cofh.network.SocialPacket;
-import cofh.network.SocialPacket.Type;
+import cofh.network.PacketSocial;
+import cofh.network.PacketSocial.Type;
 import cofh.util.SocialRegistry;
 
 import java.util.LinkedList;
@@ -121,9 +121,9 @@ public class GuiFriendsList extends GuiBaseAdv {
 	public void handleElementButtonClick(String buttonName, int mouseButton) {
 
 		if (buttonName.equals("SetName")) {
-			PacketHandler.sendToServer(new SocialPacket().addByte(Type.ADD_FRIEND.ordinal()).addString(tbName.getText()));
+			PacketHandler.sendToServer(new PacketSocial().addByte(Type.ADD_FRIEND.ordinal()).addString(tbName.getText()));
 		} else if (buttonName.equals("RemoveName")) {
-			PacketHandler.sendToServer(new SocialPacket().addByte(Type.REMOVE_FRIEND.ordinal()).addString(tbName.getText()));
+			PacketHandler.sendToServer(new PacketSocial().addByte(Type.REMOVE_FRIEND.ordinal()).addString(tbName.getText()));
 		} else if (buttonName.equals("OnlineUp")) {
 			taOnlineList.scrollDown();
 		} else if (buttonName.equals("OnlineDown")) {

@@ -1,6 +1,5 @@
 package cofh.util;
 
-import cofh.CoFHCore;
 import cofh.api.item.IEmpowerableItem;
 import cofh.key.IKeyBinding;
 
@@ -19,7 +18,7 @@ public class KeyBindingEmpower implements IKeyBinding {
 	@Override
 	public boolean keyPress() {
 
-		EntityPlayer player = CoFHCore.proxy.getClientPlayer();
+		EntityPlayer player = CoreUtils.getClientPlayer();
 		return player != null && ItemHelper.isPlayerHoldingEmpowerableItem(player);
 	}
 

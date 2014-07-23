@@ -10,7 +10,7 @@ import cofh.entity.DropHandler;
 import cofh.gui.GuiHandler;
 import cofh.mod.BaseMod;
 import cofh.network.PacketHandler;
-import cofh.network.SocialPacket;
+import cofh.network.PacketSocial;
 import cofh.updater.UpdateManager;
 import cofh.util.ConfigHandler;
 import cofh.util.FMLEventHandler;
@@ -114,7 +114,7 @@ public class CoFHCore extends BaseMod {
 		/* Register Handlers */
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
 		CommandHandler.registerSubCommand(CommandFriend.instance);
-		SocialPacket.initialize();
+		PacketSocial.initialize();
 		SocialRegistry.initialize();
 	}
 

@@ -1,7 +1,7 @@
 package cofh.item.tool;
 
-import cofh.CoFHCore;
 import cofh.entity.EntityCoFHFishHook;
+import cofh.util.CoreUtils;
 import cofh.util.ItemHelper;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -75,7 +75,7 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 	@Override
 	public IIcon getIcon(ItemStack stack, int pass) {
 
-		EntityPlayer player = CoFHCore.proxy.getClientPlayer();
+		EntityPlayer player = CoreUtils.getClientPlayer();
 
 		if (player.inventory.getCurrentItem() == stack && player.fishEntity != null) {
 			return this.normalIcons[1];

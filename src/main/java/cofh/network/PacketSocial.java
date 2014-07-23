@@ -8,11 +8,11 @@ import java.util.LinkedList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-public class SocialPacket extends CoFHPacket {
+public class PacketSocial extends PacketCoFHBase {
 
 	public static void initialize() {
 
-		PacketHandler.instance.registerPacket(SocialPacket.class);
+		PacketHandler.instance.registerPacket(PacketSocial.class);
 	}
 
 	@Override

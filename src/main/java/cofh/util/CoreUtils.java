@@ -36,6 +36,11 @@ public class CoreUtils {
 	}
 
 	/* PLAYER UTILS */
+	public static EntityPlayer getClientPlayer() {
+
+		return CoFHCore.proxy.getClientPlayer();
+	}
+
 	public static boolean isPlayer(EntityPlayer player) {
 
 		return player instanceof EntityPlayerMP;
@@ -59,6 +64,17 @@ public class CoreUtils {
 	public static boolean isOpOrServer(String senderName) {
 
 		return CoFHCore.proxy.isOp(senderName) || senderName.equals("Server");
+	}
+
+	/* SERVER UTILS */
+	public static boolean isClient() {
+
+		return CoFHCore.proxy.isClient();
+	}
+
+	public static boolean isServer() {
+
+		return CoFHCore.proxy.isServer();
 	}
 
 	/* BLOCK UTILS */
@@ -110,18 +126,9 @@ public class CoreUtils {
 	}
 
 	/* SOUND UTILS */
-	public static final String getSoundName(String soundpath) {
+	public static final String getSoundName(String modId, String soundpath) {
 
-		return getSoundName("cofh", soundpath, false);
-	}
-
-	public static final String getSoundName(String modId, String soundpath, boolean registering) {
-
-		if (registering) {
-			soundpath += ".ogg";
-		} else {
-			soundpath = soundpath.replaceAll("/", ".");
-		}
+		soundpath = soundpath.replaceAll("/", ".");
 		return String.format("%s:%s", modId, soundpath);
 	}
 

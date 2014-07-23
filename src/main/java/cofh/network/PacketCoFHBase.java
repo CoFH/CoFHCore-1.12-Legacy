@@ -21,24 +21,24 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
 
-public abstract class CoFHPacket extends BasePacket {
+public abstract class PacketCoFHBase extends PacketBase {
 
 	private ByteArrayOutputStream arrayout;
 	private DataOutputStream dataout;
 	public DataInputStream datain;
 
-	public CoFHPacket() {
+	public PacketCoFHBase() {
 
 		arrayout = new ByteArrayOutputStream();
 		dataout = new DataOutputStream(arrayout);
 	}
 
-	public CoFHPacket(byte[] data) {
+	public PacketCoFHBase(byte[] data) {
 
 		datain = new DataInputStream(new ByteArrayInputStream(data));
 	}
 
-	public CoFHPacket addString(String theString) {
+	public PacketCoFHBase addString(String theString) {
 
 		try {
 			dataout.writeUTF(theString);
@@ -48,7 +48,7 @@ public abstract class CoFHPacket extends BasePacket {
 		return this;
 	}
 
-	public CoFHPacket addInt(int theInteger) {
+	public PacketCoFHBase addInt(int theInteger) {
 
 		try {
 			dataout.writeInt(theInteger);
@@ -58,7 +58,7 @@ public abstract class CoFHPacket extends BasePacket {
 		return this;
 	}
 
-	public CoFHPacket addBool(boolean theBoolean) {
+	public PacketCoFHBase addBool(boolean theBoolean) {
 
 		try {
 			dataout.writeBoolean(theBoolean);
@@ -68,7 +68,7 @@ public abstract class CoFHPacket extends BasePacket {
 		return this;
 	}
 
-	public CoFHPacket addByte(byte theByte) {
+	public PacketCoFHBase addByte(byte theByte) {
 
 		try {
 			dataout.writeByte(theByte);
@@ -78,12 +78,12 @@ public abstract class CoFHPacket extends BasePacket {
 		return this;
 	}
 
-	public CoFHPacket addByte(int theByte) {
+	public PacketCoFHBase addByte(int theByte) {
 
 		return addByte((byte) theByte);
 	}
 
-	public CoFHPacket addShort(short theShort) {
+	public PacketCoFHBase addShort(short theShort) {
 
 		try {
 			dataout.writeShort(theShort);
@@ -93,12 +93,12 @@ public abstract class CoFHPacket extends BasePacket {
 		return this;
 	}
 
-	public CoFHPacket addShort(int theShort) {
+	public PacketCoFHBase addShort(int theShort) {
 
 		return addShort((short) theShort);
 	}
 
-	public CoFHPacket addByteArray(byte theByteArray[]) {
+	public PacketCoFHBase addByteArray(byte theByteArray[]) {
 
 		try {
 			dataout.write(theByteArray);
@@ -108,7 +108,7 @@ public abstract class CoFHPacket extends BasePacket {
 		return this;
 	}
 
-	public CoFHPacket addFloat(float theFloat) {
+	public PacketCoFHBase addFloat(float theFloat) {
 
 		try {
 			dataout.writeFloat(theFloat);
@@ -118,7 +118,7 @@ public abstract class CoFHPacket extends BasePacket {
 		return this;
 	}
 
-	public CoFHPacket addItemStack(ItemStack theStack) {
+	public PacketCoFHBase addItemStack(ItemStack theStack) {
 
 		try {
 			writeItemStack(theStack);
@@ -128,7 +128,7 @@ public abstract class CoFHPacket extends BasePacket {
 		return this;
 	}
 
-	public CoFHPacket addFluidStack(FluidStack theStack) {
+	public PacketCoFHBase addFluidStack(FluidStack theStack) {
 
 		try {
 			FluidHelper.writeFluidStackToPacket(theStack, dataout);
@@ -138,14 +138,14 @@ public abstract class CoFHPacket extends BasePacket {
 		return this;
 	}
 
-	public CoFHPacket addCoords(TileEntity theTile) {
+	public PacketCoFHBase addCoords(TileEntity theTile) {
 
 		addInt(theTile.xCoord);
 		addInt(theTile.yCoord);
 		return addInt(theTile.zCoord);
 	}
 
-	public CoFHPacket addCoords(int x, int y, int z) {
+	public PacketCoFHBase addCoords(int x, int y, int z) {
 
 		addInt(x);
 		addInt(y);

@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-public abstract class BasePacket {
+public abstract class PacketBase {
 
 	public abstract void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer);
 

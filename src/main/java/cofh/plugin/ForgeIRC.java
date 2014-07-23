@@ -1,6 +1,7 @@
 package cofh.plugin;
 
 import cofh.CoFHCore;
+import cofh.util.CoreUtils;
 import cofh.util.StringHelper;
 
 import java.text.DecimalFormat;
@@ -15,7 +16,7 @@ public class ForgeIRC {
 	public static List<String> onMessage(String n, String u, String h, String d, String m) {
 
 		n = colorNick(n, u, h);
-		if (CoFHCore.proxy.isServer()) {
+		if (CoreUtils.isServer()) {
 			if (m.split(" ")[0].equals("!tps")) {
 				return commandTps(m.split(" "));
 			}

@@ -3,18 +3,18 @@ package cofh.network;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
-public class CoFHTileInfoPacket extends CoFHPacket {
+public class PacketTile extends PacketCoFHBase {
 
 	public static void initialize() {
 
-		PacketHandler.instance.registerPacket(CoFHTileInfoPacket.class);
+		PacketHandler.instance.registerPacket(PacketTile.class);
 	}
 
-	public CoFHTileInfoPacket() {
+	public PacketTile() {
 
 	}
 
-	public CoFHTileInfoPacket(TileEntity theTile) {
+	public PacketTile(TileEntity theTile) {
 
 		addInt(theTile.xCoord);
 		addInt(theTile.yCoord);
@@ -39,15 +39,16 @@ public class CoFHTileInfoPacket extends CoFHPacket {
 
 		TileEntity tile = player.worldObj.getTileEntity(getInt(), getInt(), getInt());
 
-		if (tile instanceof ITileInfoPacketHandler) {
-			((ITileInfoPacketHandler) tile).handleTileInfoPacket(this, isServer, player);
+		if (tile instanceof ITilePacketHandler) {
+			((ITilePacketHandler) tile).handleTilePacket(this, isServer);
 		} else {
 			// TODO: Throw error, bad packet
 		}
 	}
 
-	public static CoFHTileInfoPacket newPacket(TileEntity theTile) {
+	public static PacketTile newPacket(TileEntity theTile) {
 
-		return new CoFHTileInfoPacket(theTile);
+		return new PacketTile(theTile);
 	}
+
 }

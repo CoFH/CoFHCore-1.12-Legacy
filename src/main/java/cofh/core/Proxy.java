@@ -2,9 +2,9 @@ package cofh.core;
 
 import cofh.key.CoFHKey;
 import cofh.key.KeyPacket;
-import cofh.network.CoFHTileInfoPacket;
-import cofh.network.CoFHTilePacket;
-import cofh.network.SocialPacket;
+import cofh.network.PacketSocial;
+import cofh.network.PacketTile;
+import cofh.network.PacketTileInfo;
 import cofh.util.KeyBindingEmpower;
 import cofh.util.oredict.OreDictionaryArbiter;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -81,6 +81,11 @@ public class Proxy {
 		return null;
 	}
 
+	public World getClientWorld() {
+
+		return null;
+	}
+
 	public List<EntityPlayer> getPlayerList() {
 
 		List<EntityPlayer> result = new LinkedList<EntityPlayer>();
@@ -96,11 +101,6 @@ public class Proxy {
 
 	}
 
-	public World getWorld() {
-
-		return null;
-	}
-
 	public void registerKeyBinds() {
 
 		CoFHKey.addServerKeyBind(KeyBindingEmpower.instance);
@@ -108,10 +108,10 @@ public class Proxy {
 
 	public void registerPacketInformation() {
 
-		SocialPacket.initialize();
+		PacketSocial.initialize();
 		KeyPacket.initialize();
-		CoFHTileInfoPacket.initialize();
-		CoFHTilePacket.initialize();
+		PacketTileInfo.initialize();
+		PacketTile.initialize();
 	}
 
 	public void registerRenderInformation() {

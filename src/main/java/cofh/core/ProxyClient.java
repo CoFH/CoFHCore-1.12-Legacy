@@ -115,6 +115,12 @@ public class ProxyClient extends Proxy {
 	}
 
 	@Override
+	public World getClientWorld() {
+
+		return Minecraft.getMinecraft().theWorld;
+	}
+
+	@Override
 	public List<EntityPlayer> getPlayerList() {
 
 		return new LinkedList<EntityPlayer>();
@@ -126,12 +132,6 @@ public class ProxyClient extends Proxy {
 		if (Minecraft.getMinecraft().currentScreen != null) {
 			((GuiFriendsList) Minecraft.getMinecraft().currentScreen).taFriendsList.textLines = SocialRegistry.clientPlayerFriends;
 		}
-	}
-
-	@Override
-	public World getWorld() {
-
-		return Minecraft.getMinecraft().theWorld;
 	}
 
 	@Override
