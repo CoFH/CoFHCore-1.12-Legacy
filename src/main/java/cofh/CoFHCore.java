@@ -84,7 +84,7 @@ public class CoFHCore extends BaseMod {
 
 		CoFHProps.configDir = event.getModConfigurationDirectory();
 
-		loadLang();
+		// loadLang();
 
 		UpdateManager.registerUpdater(new UpdateManager(this, releaseURL));
 		configCore.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/CoFHCore.cfg")));
@@ -94,6 +94,7 @@ public class CoFHCore extends BaseMod {
 		moduleCore();
 		moduleLoot();
 
+		FeatureParser.initialize();
 		WorldHandler.initialize();
 		FMLEventHandler.initialize();
 		BucketHandler.initialize();

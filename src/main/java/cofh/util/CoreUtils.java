@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
 import net.minecraft.block.Block;
@@ -24,6 +26,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+
+import org.apache.logging.log4j.core.helpers.Loader;
 
 public class CoreUtils {
 
@@ -111,6 +115,44 @@ public class CoreUtils {
 	}
 
 	/* FILE UTILS */
+	public static void copyFileUsingStream(String source, File dest) throws IOException {
+
+		InputStream is = null;
+		OutputStream os = null;
+		try {
+			is = Loader.getResource(source, null).openStream();
+			os = new FileOutputStream(dest);
+
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = is.read(buffer)) > 0) {
+				os.write(buffer, 0, length);
+			}
+		} finally {
+			is.close();
+			os.close();
+		}
+	}
+
+	public static void copyFileUsingStream(String source, String dest) throws IOException {
+
+		InputStream is = null;
+		OutputStream os = null;
+		try {
+			is = Loader.getResource(source, null).openStream();
+			os = new FileOutputStream(new File(dest));
+
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = is.read(buffer)) > 0) {
+				os.write(buffer, 0, length);
+			}
+		} finally {
+			is.close();
+			os.close();
+		}
+	}
+
 	public static void copyFileUsingChannel(File source, File dest) throws IOException {
 
 		FileChannel sourceChannel = null;
@@ -120,8 +162,8 @@ public class CoreUtils {
 			destChannel = new FileOutputStream(dest).getChannel();
 			destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
 		} finally {
-			sourceChannel.close();
-			destChannel.close();
+			// sourceChannel.close();
+			// destChannel.close();
 		}
 	}
 
@@ -130,6 +172,11 @@ public class CoreUtils {
 
 		soundpath = soundpath.replaceAll("/", ".");
 		return String.format("%s:%s", modId, soundpath);
+	}
+
+	public static final float getSoundVolume(int category) {
+
+		return CoFHCore.proxy.getSoundVolume(category);
 	}
 
 	/* ENTITY UTILS */

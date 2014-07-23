@@ -133,4 +133,10 @@ public class Proxy {
 		((WorldServer) event.entity.worldObj).func_73046_m().getConfigurationManager().sendChatMsg(event.entityLiving.func_110142_aN().func_151521_b());
 	}
 
+	/* SOUND UTILS */
+	public float getSoundVolume(int category) {
+
+		return 0;
+	}
+
 }

@@ -63,6 +63,9 @@ public class CoFHProps {
 	/* Network */
 	public static final int NETWORK_UPDATE_RANGE = 192;
 
+	/* Audio */
+	public static float soundVolume = 1;
+
 	/* Options */
 	public static boolean enableUpdateNotice = true;
 

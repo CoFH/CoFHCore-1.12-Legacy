@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -70,10 +71,10 @@ public class ProxyClient extends Proxy {
 			IconRegistry.addIcon("IconRSTorchOff", "cofh:icons/Icon_RSTorchOff", event.map);
 			IconRegistry.addIcon("IconRSTorchOn", "cofh:icons/Icon_RSTorchOn", event.map);
 
-			IconRegistry.addIcon("IconArrowDown0", "cofh:/icons/Icon_ArrowDown_Inactive", event.map);
-			IconRegistry.addIcon("IconArrowDown1", "cofh:/icons/Icon_ArrowDown", event.map);
-			IconRegistry.addIcon("IconArrowUp0", "cofh:/icons/Icon_ArrowUp_Inactive", event.map);
-			IconRegistry.addIcon("IconArrowUp1", "cofh:/icons/Icon_ArrowUp", event.map);
+			IconRegistry.addIcon("IconArrowDown0", "cofh:icons/Icon_ArrowDown_Inactive", event.map);
+			IconRegistry.addIcon("IconArrowDown1", "cofh:icons/Icon_ArrowDown", event.map);
+			IconRegistry.addIcon("IconArrowUp0", "cofh:icons/Icon_ArrowUp_Inactive", event.map);
+			IconRegistry.addIcon("IconArrowUp1", "cofh:icons/Icon_ArrowUp", event.map);
 		}
 	}
 
@@ -82,6 +83,12 @@ public class ProxyClient extends Proxy {
 	@SubscribeEvent
 	public void initializeIcons(TextureStitchEvent.Post event) {
 
+	}
+
+	@Override
+	public boolean isOp(String playerName) {
+
+		return true;
 	}
 
 	@Override
@@ -174,6 +181,16 @@ public class ProxyClient extends Proxy {
 
 		super.registerTickHandlers();
 		FMLCommonHandler.instance().bus().register(TickHandlerEnderRegistry.instance);
+	}
+
+	/* SOUND UTILS */
+	@Override
+	public float getSoundVolume(int category) {
+
+		if (category > SoundCategory.values().length) {
+			return 0;
+		}
+		return FMLClientHandler.instance().getClient().gameSettings.getSoundLevel(SoundCategory.values()[category]);
 	}
 
 }

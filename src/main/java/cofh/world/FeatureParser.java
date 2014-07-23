@@ -2,6 +2,7 @@ package cofh.world;
 
 import cofh.CoFHCore;
 import cofh.core.CoFHProps;
+import cofh.util.CoreUtils;
 import cofh.util.MathHelper;
 import cofh.util.WeightedRandomBlock;
 import cofh.world.feature.FeatureBase;
@@ -27,12 +28,32 @@ import net.minecraft.item.ItemStack;
 public class FeatureParser {
 
 	private static final File worldGenFolder = new File(CoFHProps.configDir, "/cofh/world/");
-	private static final File vanillaGen = new File(CoFHProps.configDir, "/cofh/world/Vanilla.json");
+	public static final File vanillaGen = new File(CoFHProps.configDir, "/cofh/world/Vanilla.json");
+	public static final String vanillaGenInternal = "/assets/cofh/world/Vanilla.json";
 
 	private static final File[] worldGenList = worldGenFolder.listFiles();
 
 	private FeatureParser() {
 
+	}
+
+	public static void initialize() {
+
+		if (!worldGenFolder.exists()) {
+			try {
+				worldGenFolder.mkdir();
+			} catch (Throwable t) {
+				// pokemon!
+			}
+		}
+		if (!vanillaGen.exists()) {
+			try {
+				vanillaGen.createNewFile();
+				CoreUtils.copyFileUsingStream(vanillaGenInternal, vanillaGen);
+			} catch (Throwable t) {
+				t.printStackTrace();
+			}
+		}
 	}
 
 	public static void parseGenerationFile() {
