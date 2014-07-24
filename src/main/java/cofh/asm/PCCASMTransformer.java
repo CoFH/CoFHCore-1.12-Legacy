@@ -103,7 +103,7 @@ public class PCCASMTransformer implements IClassTransformer {
 			strippables.add(name + "$class");
 		}
 
-		log.debug("Found %s @Implementable and %s @Strippable", implementables.size(), strippables.size());
+		log.debug("Found " + implementables.size() + " @Implementable and " + strippables.size() + " @Strippable");
 
 		scrappedData = true;
 	}

@@ -27,17 +27,19 @@ import net.minecraft.item.ItemStack;
 
 public class FeatureParser {
 
-	private static final File worldGenFolder = new File(CoFHProps.configDir, "/cofh/world/");
-	public static final File vanillaGen = new File(CoFHProps.configDir, "/cofh/world/Vanilla.json");
-	public static final String vanillaGenInternal = "/assets/cofh/world/Vanilla.json";
+	private static File worldGenFolder;
+	private static File vanillaGen;
+	private static final String vanillaGenInternal = "assets/cofh/world/Vanilla.json";
 
-	private static final File[] worldGenList = worldGenFolder.listFiles();
+	private static File[] worldGenList;
 
 	private FeatureParser() {
 
 	}
 
 	public static void initialize() {
+		
+		worldGenFolder = new File(CoFHProps.configDir, "/cofh/world/");
 
 		if (!worldGenFolder.exists()) {
 			try {
@@ -46,13 +48,15 @@ public class FeatureParser {
 				// pokemon!
 			}
 		}
-		if (!vanillaGen.exists()) {
-			try {
-				vanillaGen.createNewFile();
+
+		vanillaGen = new File(CoFHProps.configDir, "/cofh/world/Vanilla.json");
+
+		try {
+			if (vanillaGen.createNewFile()) {
 				CoreUtils.copyFileUsingStream(vanillaGenInternal, vanillaGen);
-			} catch (Throwable t) {
-				t.printStackTrace();
 			}
+		} catch (Throwable t) {
+			t.printStackTrace();
 		}
 	}
 
@@ -60,6 +64,8 @@ public class FeatureParser {
 
 		JsonParser parser = new JsonParser();
 		JsonObject genList;
+		
+		worldGenList = worldGenFolder.listFiles();
 
 		if (worldGenList == null) {
 			CoFHCore.log.error("There are no World Generation files present in the configuration directory.");

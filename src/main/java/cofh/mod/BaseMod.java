@@ -146,7 +146,7 @@ public abstract class BaseMod implements IUpdatableMod {
 			}
 		}
 
-		String path = "/assets/" + getAssetDir() + "/language/";
+		String path = "assets/" + getAssetDir() + "/language/";
 		InputStream s = null;
 		try {
 			s = Loader.getResource(path + ".languages", null).openStream();
