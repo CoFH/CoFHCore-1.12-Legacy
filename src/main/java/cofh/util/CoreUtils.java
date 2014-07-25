@@ -129,10 +129,12 @@ public class CoreUtils {
 				os.write(buffer, 0, length);
 			}
 		} finally {
-			if (is != null)
+			if (is != null) {
 				is.close();
-			if (os != null)
+			}
+			if (os != null) {
 				os.close();
+			}
 		}
 	}
 
@@ -150,10 +152,12 @@ public class CoreUtils {
 				os.write(buffer, 0, length);
 			}
 		} finally {
-			if (is != null)
+			if (is != null) {
 				is.close();
-			if (os != null)
+			}
+			if (os != null) {
 				os.close();
+			}
 		}
 	}
 

@@ -38,7 +38,7 @@ public class FeatureParser {
 	}
 
 	public static void initialize() {
-		
+
 		worldGenFolder = new File(CoFHProps.configDir, "/cofh/world/");
 
 		if (!worldGenFolder.exists()) {
@@ -48,7 +48,6 @@ public class FeatureParser {
 				// pokemon!
 			}
 		}
-
 		vanillaGen = new File(CoFHProps.configDir, "/cofh/world/Vanilla.json");
 
 		try {
@@ -64,7 +63,7 @@ public class FeatureParser {
 
 		JsonParser parser = new JsonParser();
 		JsonObject genList;
-		
+
 		worldGenList = worldGenFolder.listFiles();
 
 		if (worldGenList == null) {
