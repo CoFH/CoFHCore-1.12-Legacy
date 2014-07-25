@@ -32,6 +32,7 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -53,6 +54,7 @@ public class PCCASMTransformer implements IClassTransformer {
 		strippables = new THashSet<String>(10);
 	}
 	private static final String[] emptyList = {};
+	private static final boolean ENABLE_HACK = Boolean.valueOf(System.getProperty("cofh.classloadinghack", "true"));
 
 	private final ArrayList<String> workingPath = new ArrayList<String>();
 	private ClassNode world = null, worldServer = null;
@@ -155,6 +157,22 @@ public class PCCASMTransformer implements IClassTransformer {
 		default:
 			break;
 		}
+		
+		if (ENABLE_HACK) {
+			synchronized (workingPath) {
+				workingPath.add(name);
+				ClassReader cr = new ClassReader(bytes);
+				ClassNode cn = new ClassNode();
+				cr.accept(cn, 0);
+				if (cn.innerClasses != null) for (InnerClassNode node : cn.innerClasses) {
+					log.debug("\tInner class: " + node.name);
+					if (!workingPath.contains(node.name)) try {
+						Class.forName(node.name, false, this.getClass().getClassLoader());
+					} catch (Throwable _) {}
+				}
+				workingPath.remove(workingPath.size() - 1);
+			}
+		}
 
 		return bytes;
 	}
@@ -170,6 +188,7 @@ public class PCCASMTransformer implements IClassTransformer {
 		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM4);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+		
 		String sig = "(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 		String sigObf = "(" + "L" + remapper.unmap("net/minecraft/world/storage/ISaveHandler") + ";" + "Ljava/lang/String;" + "L"
