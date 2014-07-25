@@ -69,6 +69,7 @@ public class TabAugment extends TabBase {
 			myContainer.getAugmentSlots()[i].xDisplayPosition = -gui.getGuiLeft() - 16;
 			myContainer.getAugmentSlots()[i].yDisplayPosition = -gui.getGuiTop() - 16;
 		}
+		myContainer.setAugmentLock(true);
 		switch (numAugments) {
 		case 4:
 			slotsBorderX1 += 9;
@@ -81,6 +82,7 @@ public class TabAugment extends TabBase {
 			slotsBorderY1 += 9;
 			slotsBorderY2 -= 9;
 		}
+		myContainer.setAugmentLock(true);
 	}
 
 	@Override
@@ -188,6 +190,7 @@ public class TabAugment extends TabBase {
 				myContainer.getAugmentSlots()[i].yDisplayPosition = posY + slotsBorderY1 + 4 + 18 * (i / 3);
 			}
 		}
+		myContainer.setAugmentLock(false);
 	}
 
 	@Override
@@ -198,6 +201,7 @@ public class TabAugment extends TabBase {
 				myContainer.getAugmentSlots()[i].xDisplayPosition = -gui.getGuiLeft() - 16;
 				myContainer.getAugmentSlots()[i].yDisplayPosition = -gui.getGuiTop() - 16;
 			}
+			myContainer.setAugmentLock(true);
 		}
 		super.toggleOpen();
 	}
