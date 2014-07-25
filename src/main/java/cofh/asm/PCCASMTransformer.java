@@ -1,28 +1,10 @@
 package cofh.asm;
 
-import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
-import static org.objectweb.asm.Opcodes.ACC_BRIDGE;
-import static org.objectweb.asm.Opcodes.ACC_FINAL;
-import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
-import static org.objectweb.asm.Opcodes.ACC_PROTECTED;
-import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
-import static org.objectweb.asm.Opcodes.ACC_STATIC;
-import static org.objectweb.asm.Opcodes.ACC_SYNTHETIC;
-import static org.objectweb.asm.Opcodes.ACONST_NULL;
-import static org.objectweb.asm.Opcodes.ALOAD;
-import static org.objectweb.asm.Opcodes.ASM4;
-import static org.objectweb.asm.Opcodes.DUP;
-import static org.objectweb.asm.Opcodes.GETFIELD;
-import static org.objectweb.asm.Opcodes.ILOAD;
-import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
-import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
-import static org.objectweb.asm.Opcodes.IRETURN;
-import static org.objectweb.asm.Opcodes.NEW;
-import static org.objectweb.asm.Opcodes.PUTFIELD;
-import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.*;
 
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
@@ -60,6 +42,7 @@ public class PCCASMTransformer implements IClassTransformer {
 	private static boolean scrappedData = false;
 	private static THashSet<String> parsables, implementables, strippables;
 	private static final String implementableDesc, strippableDesc;
+	private static String side;
 	static {
 
 		implementableDesc = Type.getDescriptor(Implementable.class);
@@ -69,6 +52,7 @@ public class PCCASMTransformer implements IClassTransformer {
 		implementables = new THashSet<String>(10);
 		strippables = new THashSet<String>(10);
 	}
+	private static final String[] emptyList = {};
 
 	private final ArrayList<String> workingPath = new ArrayList<String>();
 	private ClassNode world = null, worldServer = null;
@@ -86,6 +70,8 @@ public class PCCASMTransformer implements IClassTransformer {
 	public static void scrapeData(ASMDataTable table) {
 
 		log.debug("Scraping data");
+
+		side = FMLCommonHandler.instance().getSide().toString().toUpperCase().intern();
 
 		for (ASMData data : table.getAll(Implementable.class.getName())) {
 			String name = data.getClassName();
@@ -474,29 +460,21 @@ public class PCCASMTransformer implements IClassTransformer {
 			return false;
 		}
 		boolean interfaces = false;
-		for (AnnotationNode node : cn.visibleAnnotations) {
-			if (node.desc.equals(implementableDesc)) {
-				if (node.values != null) {
-					List<Object> values = node.values;
-					for (int i = 0, e = values.size(); i < e;) {
-						Object k = values.get(i++);
-						Object v = values.get(i++);
-						if ("value".equals(k) && v instanceof List && ((List<?>) v).size() > 0 && ((List<?>) v).get(0) instanceof String) {
-							String[] value = ((List<?>) v).toArray(new String[0]);
-							for (int j = 0, l = value.length; j < l; ++j) {
-								String clazz = value[j].trim();
-								String cz = clazz.replace('.', '/');
-								if (!cn.interfaces.contains(cz)) {
-									try {
-										if (!workingPath.contains(clazz)) {
-											Class.forName(clazz, false, this.getClass().getClassLoader());
-										}
-										cn.interfaces.add(cz);
-										interfaces = true;
-									} catch (Throwable _) {
-									}
-								}
+		for (AnnotationNode n : cn.visibleAnnotations) {
+			AnnotationInfo node = parseAnnotation(n, implementableDesc);
+			if (node != null && side == node.side) {
+				String[] value = node.values;
+				for (int j = 0, l = value.length; j < l; ++j) {
+					String clazz = value[j].trim();
+					String cz = clazz.replace('.', '/');
+					if (!cn.interfaces.contains(cz)) {
+						try {
+							if (!workingPath.contains(clazz)) {
+								Class.forName(clazz, false, this.getClass().getClassLoader());
 							}
+							cn.interfaces.add(cz);
+							interfaces = true;
+						} catch (Throwable _) {
 						}
 					}
 				}
@@ -509,29 +487,25 @@ public class PCCASMTransformer implements IClassTransformer {
 
 		boolean altered = false;
 		if (cn.visibleAnnotations != null) {
-			for (AnnotationNode node : cn.visibleAnnotations) {
-				if (node.desc.equals(strippableDesc)) {
-					if (node.values != null) {
-						List<Object> values = node.values;
-						for (int i = 0, e = values.size(); i < e;) {
-							Object k = values.get(i++);
-							Object v = values.get(i++);
-							if ("value".equals(k) && v instanceof List && ((List<?>) v).size() > 0 && ((List<?>) v).get(0) instanceof String) {
-								String[] value = ((List<?>) v).toArray(new String[0]);
-								for (int j = 0, l = value.length; j < l; ++j) {
-									String clazz = value[j];
-									String cz = clazz.replace('.', '/');
-									if (cn.interfaces.contains(cz)) {
-										try {
-											if (!workingPath.contains(clazz)) {
-												Class.forName(clazz, false, this.getClass().getClassLoader());
-											}
-										} catch (Throwable _) {
-											cn.interfaces.remove(cz);
-											altered = true;
-										}
-									}
+			for (AnnotationNode n : cn.visibleAnnotations) {
+				AnnotationInfo node = parseAnnotation(n, strippableDesc);
+				if (node != null) {
+					String[] value = node.values;
+					boolean wrongSide = side == node.side;
+					for (int j = 0, l = value.length; j < l; ++j) {
+						String clazz = value[j];
+						String cz = clazz.replace('.', '/');
+						if (cn.interfaces.contains(cz)) {
+							boolean remove = true;
+							try {
+								if (!wrongSide && !workingPath.contains(clazz)) {
+									Class.forName(clazz, false, this.getClass().getClassLoader());
+									remove = false;
 								}
+							} catch (Throwable _) {}
+							if (remove) {
+								cn.interfaces.remove(cz);
+								altered = true;
 							}
 						}
 					}
@@ -544,7 +518,7 @@ public class PCCASMTransformer implements IClassTransformer {
 				MethodNode mn = iter.next();
 				if (mn.visibleAnnotations != null) {
 					for (AnnotationNode node : mn.visibleAnnotations) {
-						if (checkRemove(node, iter)) {
+						if (checkRemove(parseAnnotation(node, strippableDesc), iter)) {
 							altered = true;
 							break;
 						}
@@ -558,7 +532,7 @@ public class PCCASMTransformer implements IClassTransformer {
 				FieldNode fn = iter.next();
 				if (fn.visibleAnnotations != null) {
 					for (AnnotationNode node : fn.visibleAnnotations) {
-						if (checkRemove(node, iter)) {
+						if (checkRemove(parseAnnotation(node, strippableDesc), iter)) {
 							altered = true;
 							break;
 						}
@@ -569,45 +543,67 @@ public class PCCASMTransformer implements IClassTransformer {
 		return altered;
 	}
 
-	private boolean checkRemove(AnnotationNode node, Iterator<? extends Object> iter) {
+	private boolean checkRemove(AnnotationInfo node, Iterator<? extends Object> iter) {
 
-		if (node.desc.equals(strippableDesc)) {
-			if (node.values != null) {
-				List<Object> values = node.values;
-				for (int i = 0, e = values.size(); i < e;) {
-					Object k = values.get(i++);
-					Object v = values.get(i++);
-					if ("value".equals(k) && v instanceof List && ((List<?>) v).size() > 0 && ((List<?>) v).get(0) instanceof String) {
-						String[] value = ((List<?>) v).toArray(new String[0]);
-						boolean needsRemoved = false;
-						for (int j = 0, l = value.length; j < l; ++j) {
-							String clazz = value[j];
-							if (clazz.startsWith("mod:")) {
-								needsRemoved = !Loader.isModLoaded(clazz.substring(4));
-							} else if (clazz.startsWith("api:")) {
-								needsRemoved = !ModAPIManager.INSTANCE.hasAPI(clazz.substring(4));
-							} else {
-								try {
-									if (!workingPath.contains(clazz)) {
-										Class.forName(clazz, false, this.getClass().getClassLoader());
-									}
-								} catch (Throwable _) {
-									needsRemoved = true;
-								}
+		if (node != null) {
+			boolean needsRemoved = node.side == side;
+			if (!needsRemoved) {
+				String[] value = node.values;
+				for (int j = 0, l = value.length; j < l; ++j) {
+					String clazz = value[j];
+					if (clazz.startsWith("mod:")) {
+						needsRemoved = !Loader.isModLoaded(clazz.substring(4));
+					} else if (clazz.startsWith("api:")) {
+						needsRemoved = !ModAPIManager.INSTANCE.hasAPI(clazz.substring(4));
+					} else {
+						try {
+							if (!workingPath.contains(clazz)) {
+								Class.forName(clazz, false, this.getClass().getClassLoader());
 							}
-							if (needsRemoved) {
-								break;
-							}
-						}
-						if (needsRemoved) {
-							iter.remove();
-							return true;
+						} catch (Throwable _) {
+							needsRemoved = true;
 						}
 					}
+					if (needsRemoved) {
+						break;
+					}
 				}
+			}
+			if (needsRemoved) {
+				iter.remove();
+				return true;
 			}
 		}
 		return false;
 	}
 
+	private static AnnotationInfo parseAnnotation(AnnotationNode node, String desc) {
+
+		AnnotationInfo info = null;
+		if (node.desc.equals(desc)) {
+			info = new AnnotationInfo();
+			if (node.values != null) {
+				List<Object> values = node.values;
+				for (int i = 0, e = values.size(); i < e;) {
+					Object k = values.get(i++);
+					Object v = values.get(i++);
+					if ("value".equals(k)) {
+						if (!(v instanceof List && ((List<?>) v).size() > 0 && ((List<?>) v).get(0) instanceof String))
+							continue;
+						info.values = ((List<?>) v).toArray(emptyList);
+					} else if ("side".equals(k) && v instanceof String[]) {
+						String t = ((String[])v)[1];
+						if (t != null)
+							info.side = t.toUpperCase().intern();
+					}
+				}
+			}
+		}
+		return info;
+	}
+
+	private static class AnnotationInfo {
+		public String side;
+		public String[] values = emptyList;
+	}
 }
