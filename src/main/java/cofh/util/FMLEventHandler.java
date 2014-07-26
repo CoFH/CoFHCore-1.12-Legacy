@@ -29,6 +29,7 @@ public class FMLEventHandler {
 			player.addChatMessage(new ChatComponentText(StringHelper.YELLOW + "[CoFH] " + StringHelper.WHITE + StringHelper.localize("chat.cofh.secure.0")
 					+ StringHelper.END));
 		}
+		handleIdMappingEvent(null);
 	}
 
 	@EventHandler

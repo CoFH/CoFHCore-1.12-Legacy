@@ -23,9 +23,6 @@ import cofh.util.fluid.BucketHandler;
 import cofh.util.oredict.OreDictionaryArbiter;
 import cofh.world.FeatureParser;
 import cofh.world.WorldHandler;
-import com.google.common.eventbus.EventBus;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLModContainer;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -38,7 +35,6 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
 import java.io.File;
-import java.lang.reflect.Field;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -119,15 +115,6 @@ public class CoFHCore extends BaseMod {
 		CommandHandler.registerSubCommand(CommandFriend.instance);
 		PacketSocial.initialize();
 		SocialRegistry.initialize();
-
-		try {
-			Field eBus = FMLModContainer.class.getDeclaredField("eventBus");
-			eBus.setAccessible(true);
-			EventBus FMLbus = (EventBus) eBus.get(FMLCommonHandler.instance().findContainerFor(this));
-			FMLbus.register(this);
-		} catch (Throwable t) {
-			// pokemon!
-		}
 	}
 
 	@EventHandler
@@ -211,7 +198,7 @@ public class CoFHCore extends BaseMod {
 
 		// CLIENT ONLY
 
-		configCore.save();
+		configClient.save();
 
 		return true;
 	}

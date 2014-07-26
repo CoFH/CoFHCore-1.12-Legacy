@@ -132,6 +132,11 @@ public class ConfigHandler {
 		return modConfiguration.getCategory(category);
 	}
 
+	public Set<String> getCategoryNames() {
+
+		return modConfiguration.getCategoryNames();
+	}
+
 	public Set<String> getCategoryKeys(String category) {
 
 		return modConfiguration.getCategory(category).getValues().keySet();
@@ -222,11 +227,11 @@ public class ConfigHandler {
 
 	public void cleanUp(boolean delConfig, boolean saveVersion) {
 
-		removeProperty("general", "version");
-		removeProperty("general", "Version");
+		removeProperty("version", "version");
+		removeProperty("version", "Version");
 
 		if (saveVersion) {
-			get("general", "Version", modVersion);
+			get("version", "Version", modVersion);
 		}
 		modConfiguration.save();
 

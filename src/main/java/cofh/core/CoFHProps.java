@@ -17,10 +17,9 @@ public class CoFHProps {
 	public static final String FML_REQ_MAX = "7.11";
 	public static final String FORGE_REQ = "10.13.0." + BUILD;
 	public static final String FORGE_REQ_MAX = "10.14";
-	public static final String COFH_LIB_REQ = "1.0";
 
 	public static final String DEPENDENCIES = "required-after:FML@[" + CoFHProps.FML_REQ + "," + CoFHProps.FML_REQ_MAX + ");" + "required-after:Forge@["
-			+ CoFHProps.FORGE_REQ + "," + CoFHProps.FORGE_REQ_MAX + ")";
+			+ CoFHProps.FORGE_REQ + "," + CoFHProps.FORGE_REQ_MAX + ");";
 
 	public static File configDir = null;
 

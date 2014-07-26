@@ -1,6 +1,25 @@
 package cofh.asm;
 
-import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
+import static org.objectweb.asm.Opcodes.ACC_BRIDGE;
+import static org.objectweb.asm.Opcodes.ACC_FINAL;
+import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
+import static org.objectweb.asm.Opcodes.ACC_PROTECTED;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
+import static org.objectweb.asm.Opcodes.ACC_SYNTHETIC;
+import static org.objectweb.asm.Opcodes.ACONST_NULL;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ASM4;
+import static org.objectweb.asm.Opcodes.DUP;
+import static org.objectweb.asm.Opcodes.GETFIELD;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
+import static org.objectweb.asm.Opcodes.IRETURN;
+import static org.objectweb.asm.Opcodes.NEW;
+import static org.objectweb.asm.Opcodes.PUTFIELD;
+import static org.objectweb.asm.Opcodes.RETURN;
 
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
@@ -157,18 +176,23 @@ public class PCCASMTransformer implements IClassTransformer {
 		default:
 			break;
 		}
-		
+
 		if (ENABLE_HACK) {
 			synchronized (workingPath) {
 				workingPath.add(name);
 				ClassReader cr = new ClassReader(bytes);
 				ClassNode cn = new ClassNode();
 				cr.accept(cn, 0);
-				if (cn.innerClasses != null) for (InnerClassNode node : cn.innerClasses) {
-					log.debug("\tInner class: " + node.name);
-					if (!workingPath.contains(node.name)) try {
-						Class.forName(node.name, false, this.getClass().getClassLoader());
-					} catch (Throwable _) {}
+				if (cn.innerClasses != null) {
+					for (InnerClassNode node : cn.innerClasses) {
+						log.debug("\tInner class: " + node.name);
+						if (!workingPath.contains(node.name)) {
+							try {
+								Class.forName(node.name, false, this.getClass().getClassLoader());
+							} catch (Throwable _) {
+							}
+						}
+					}
 				}
 				workingPath.remove(workingPath.size() - 1);
 			}
@@ -188,7 +212,7 @@ public class PCCASMTransformer implements IClassTransformer {
 		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM4);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
-		
+
 		String sig = "(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 		String sigObf = "(" + "L" + remapper.unmap("net/minecraft/world/storage/ISaveHandler") + ";" + "Ljava/lang/String;" + "L"
@@ -521,7 +545,8 @@ public class PCCASMTransformer implements IClassTransformer {
 									Class.forName(clazz, false, this.getClass().getClassLoader());
 									remove = false;
 								}
-							} catch (Throwable _) {}
+							} catch (Throwable _) {
+							}
 							if (remove) {
 								cn.interfaces.remove(cz);
 								altered = true;
@@ -607,13 +632,15 @@ public class PCCASMTransformer implements IClassTransformer {
 					Object k = values.get(i++);
 					Object v = values.get(i++);
 					if ("value".equals(k)) {
-						if (!(v instanceof List && ((List<?>) v).size() > 0 && ((List<?>) v).get(0) instanceof String))
+						if (!(v instanceof List && ((List<?>) v).size() > 0 && ((List<?>) v).get(0) instanceof String)) {
 							continue;
+						}
 						info.values = ((List<?>) v).toArray(emptyList);
 					} else if ("side".equals(k) && v instanceof String[]) {
-						String t = ((String[])v)[1];
-						if (t != null)
+						String t = ((String[]) v)[1];
+						if (t != null) {
 							info.side = t.toUpperCase().intern();
+						}
 					}
 				}
 			}
@@ -622,6 +649,7 @@ public class PCCASMTransformer implements IClassTransformer {
 	}
 
 	private static class AnnotationInfo {
+
 		public String side;
 		public String[] values = emptyList;
 	}
