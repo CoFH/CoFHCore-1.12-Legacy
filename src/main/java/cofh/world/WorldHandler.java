@@ -21,6 +21,7 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.MinecraftForge;
@@ -65,7 +66,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 
 	public static void initialize() {
 
-		String category = "feature";
+		String category = "world";
 		String comment = null;
 
 		comment = "This allows for vanilla Minecraft ore generation to be REPLACED. Configure in the Vanilla.json file; vanilla defaults have been provided. If you rename the Vanilla.json file, this option WILL NOT WORK.";
@@ -100,18 +101,23 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	@SubscribeEvent
 	public void handleChunkSaveEvent(ChunkDataEvent.Save event) {
 
-		NBTTagCompound tag = new NBTTagCompound();
+		NBTTagCompound genTag = new NBTTagCompound();
 
-		if (retroFlatBedrock && genFlatBedrock) {
-			tag.setBoolean("Bedrock", true);
+		if (genFlatBedrock) {
+			genTag.setBoolean("Bedrock", true);
 		}
-		if (retroGeneration) {
-			for (int i = 0; i < features.size(); i++) {
-				tag.setBoolean(features.get(i).getFeatureName(), true);
-			}
-			tag.setLong("Features", genHash);
+		NBTTagList featureList = new NBTTagList();
+		for (int i = 0; i < features.size(); i++) {
+			NBTTagCompound featureTag = new NBTTagCompound();
+			featureTag.setBoolean(features.get(i).getFeatureName(), true);
+			featureList.appendTag(featureTag);
 		}
-		event.getData().setTag("CoFHWorld", tag);
+		genTag.setTag("Features", featureList);
+		
+		// Intentional Error
+		Okay here you go skyboy
+		
+		event.getData().setTag("CoFHWorldGen", genTag);
 	}
 
 	@SubscribeEvent
