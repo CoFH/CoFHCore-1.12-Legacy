@@ -5,6 +5,8 @@ import cofh.api.world.IFeatureGenerator;
 import cofh.api.world.IFeatureHandler;
 import cofh.util.MathHelper;
 import cofh.util.position.ChunkCoord;
+import cofh.world.TickHandlerWorld.RetroChunkCoord;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -13,6 +15,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 import gnu.trove.set.hash.THashSet;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -22,9 +25,11 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -89,8 +94,8 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		MinecraftForge.EVENT_BUS.register(instance);
 		MinecraftForge.ORE_GEN_BUS.register(instance);
 
-		if (genFlatBedrock && retroFlatBedrock || retroGeneration) {
-			MinecraftForge.EVENT_BUS.register(TickHandlerWorld.instance);
+		if (genFlatBedrock & retroFlatBedrock | retroGeneration) {
+			FMLCommonHandler.instance().bus().register(TickHandlerWorld.instance);
 		}
 	}
 
@@ -108,16 +113,13 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		}
 		NBTTagList featureList = new NBTTagList();
 		for (int i = 0; i < features.size(); i++) {
-			NBTTagCompound featureTag = new NBTTagCompound();
-			featureTag.setBoolean(features.get(i).getFeatureName(), true);
-			featureList.appendTag(featureTag);
+			featureList.appendTag(new NBTTagString(features.get(i).getFeatureName()));
 		}
-		genTag.setTag("Features", featureList);
-		
-		// Intentional Error
-		Okay here you go skyboy
-		
-		event.getData().setTag("CoFHWorldGen", genTag);
+		genTag.setTag("FeatureL", featureList);
+		genTag.setLong("Features", genHash);
+		// FIXME: is it possible for a chunk to save out before we retrogen it?
+
+		event.getData().setTag("CoFHWorld-Gen", genTag);
 	}
 
 	@SubscribeEvent
@@ -125,37 +127,43 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 
 		int dim = event.world.provider.dimensionId;
 
-		boolean bedrock = false;
-		boolean features = false;
 		boolean regen = false;
-		NBTTagCompound tag = (NBTTagCompound) event.getData().getTag("CoFHCore");
-
-		if (tag != null) {
-			bedrock = !tag.hasKey("Bedrock") && retroFlatBedrock && genFlatBedrock;
-			features = tag.getLong("Features") != genHash && retroGeneration;
-		}
+		NBTTagCompound tag = (NBTTagCompound) event.getData().getTag("CoFHWorld-Gen");
+		NBTTagList list = null;
 		ChunkCoord cCoord = new ChunkCoord(event.getChunk());
 
-		if (tag == null && (retroFlatBedrock && genFlatBedrock || retroGeneration)) {
-			regen = true;
+		if (tag != null) {
+			boolean genFeatures = false;
+			boolean bedrock = retroFlatBedrock & genFlatBedrock && !tag.hasKey("Bedrock");
+			if (retroGeneration) {
+				genFeatures = tag.getLong("Features") != genHash;
+				if (tag.hasKey("FeatureL")) {
+					list = tag.getTagList("FeatureL", Constants.NBT.TAG_STRING);
+					genFeatures |= list.tagCount() != features.size();
+				}
+			}
+
+			if (bedrock) {
+				CoFHCore.log.info("Queuing RetroGen for flattening bedrock for the chunk at " + cCoord.toString() + ".");
+				regen = true;
+			}
+			if (genFeatures) {
+				CoFHCore.log.info("Queuing RetroGen for features for the chunk at " + cCoord.toString() + ".");
+				regen = true;
+			}
+		} else {
+			regen = retroFlatBedrock & genFlatBedrock | retroGeneration;
 		}
-		if (bedrock) {
-			CoFHCore.log.info("Retroactively flattening bedrock for the chunk at " + cCoord.toString() + ".");
-			regen = true;
-		}
-		if (features) {
-			CoFHCore.log.info("Retroactively generating features for the chunk at " + cCoord.toString() + ".");
-			regen = true;
-		}
+
 		if (regen) {
-			ArrayList<ChunkCoord> chunks = TickHandlerWorld.chunksToGen.get(Integer.valueOf(dim));
+			ArrayDeque<RetroChunkCoord> chunks = TickHandlerWorld.chunksToGen.get(Integer.valueOf(dim));
 
 			if (chunks == null) {
-				TickHandlerWorld.chunksToGen.put(Integer.valueOf(dim), new ArrayList<ChunkCoord>());
+				TickHandlerWorld.chunksToGen.put(Integer.valueOf(dim), new ArrayDeque<RetroChunkCoord>(128));
 				chunks = TickHandlerWorld.chunksToGen.get(Integer.valueOf(dim));
 			}
 			if (chunks != null) {
-				chunks.add(cCoord);
+				chunks.addLast(new RetroChunkCoord(cCoord, list));
 				TickHandlerWorld.chunksToGen.put(Integer.valueOf(dim), chunks);
 			}
 		}
@@ -203,7 +211,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 
 		replaceBedrock(random, chunkX, chunkZ, world, newGen | forceFullRegeneration);
 
-		if (!newGen && !retroGeneration) {
+		if (!newGen & !retroGeneration) {
 			return;
 		}
 		for (IFeatureGenerator feature : features) {
@@ -214,12 +222,55 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		}
 	}
 
-	public void replaceBedrock(Random random, int chunkX, int chunkZ, World world, boolean newGen) {
+	public void generateWorld(Random random, RetroChunkCoord chunk, World world, boolean newGen) {
 
-		if (!genFlatBedrock || !newGen && !retroFlatBedrock) {
+		int chunkX = chunk.coord.chunkX, chunkZ = chunk.coord.chunkZ;
+		if ((newGen | retroGeneration) & forceFullRegeneration) {
+			generateWorld(random, chunkX, chunkZ, world, newGen);
 			return;
 		}
+
+		replaceBedrock(random, chunkX, chunkZ, world, newGen | forceFullRegeneration);
+
+		if (!newGen & !retroGeneration) {
+			return;
+		}
+		THashSet<String> genned = chunk.generatedFeatures;
+		for (IFeatureGenerator feature : features) {
+			if (genned.contains(feature.getFeatureName())) {
+				continue;
+			}
+			feature.generateFeature(random, chunkX, chunkZ, world, newGen | forceFullRegeneration);
+		}
+		if (!newGen) {
+			world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
+		}
+	}
+
+	public void replaceBedrock(Random random, int chunkX, int chunkZ, World world, boolean newGen) {
+
+		if (!genFlatBedrock | !newGen & !retroFlatBedrock) {
+			return;
+		}
+		// TODO: pull out the ExtendedStorageArray and edit that directly. faster.
 		Block filler = world.getBiomeGenForCoords(chunkX, chunkZ).fillerBlock;
+		// NOTE: filler block is dirt by default, the actual filler block for the biome is part of a method body
+		int meta = 0; // no meta field for filler
+		switch (world.provider.dimensionId) {
+		case -1:
+			/* This is a hack because Mojang coded the Nether wrong. Are you surprised? */
+			filler = Blocks.netherrack;
+			break;
+		case 0:
+			/* Due to above note, overworld gets replaced with stone. other
+			 * dimensions are on their own for helping us with the filler block */
+			filler = Blocks.stone;
+			break;
+		case 1:
+			/* This is a hack because Mojang coded The End wrong. Are you surprised? */
+			filler = Blocks.end_stone;
+			break;
+		}
 
 		int offsetX = chunkX * 16;
 		int offsetZ = chunkZ * 16;
@@ -228,7 +279,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			for (int blockZ = 0; blockZ < 16; blockZ++) {
 				for (int blockY = 5; blockY > layersBedrock - 1; blockY--) {
 					if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ) == Blocks.bedrock) {
-						world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, filler, 0, 2);
+						world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, filler, meta, 2);
 					}
 				}
 				for (int blockY = layersBedrock - 1; blockY > 0; blockY--) {
@@ -242,15 +293,11 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		int worldHeight = world.getActualHeight();
 
 		if (world.getBlock(offsetX, worldHeight - 1, offsetZ) == Blocks.bedrock) {
-			/* This is a hack because Mojang coded the Nether wrong. Are you surprised? */
-			if (world.provider.dimensionId == 1) {
-				filler = Blocks.netherrack;
-			}
 			for (int blockX = 0; blockX < 16; blockX++) {
 				for (int blockZ = 0; blockZ < 16; blockZ++) {
 					for (int blockY = worldHeight - 2; blockY > worldHeight - 6; blockY--) {
 						if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ) == Blocks.bedrock) {
-							world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, filler, 0, 2);
+							world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, filler, meta, 2);
 						}
 					}
 					for (int blockY = worldHeight - layersBedrock; blockY < worldHeight - 1; blockY++) {
