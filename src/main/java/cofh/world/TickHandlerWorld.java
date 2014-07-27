@@ -1,5 +1,6 @@
 package cofh.world;
 
+import cofh.CoFHCore;
 import cofh.util.position.ChunkCoord;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
@@ -35,6 +36,7 @@ public class TickHandlerWorld {
 		if (chunks != null && chunks.size() > 0) {
 			RetroChunkCoord r = chunks.pollFirst();
 			ChunkCoord c = r.coord;
+			CoFHCore.log.info("RetroGening " + c.toString() + ".");
 			long worldSeed = world.getSeed();
 			Random rand = new Random(worldSeed);
 			long xSeed = rand.nextLong() >> 2 + 1L;

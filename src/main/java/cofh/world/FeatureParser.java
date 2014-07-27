@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 public class FeatureParser {
@@ -117,6 +118,7 @@ public class FeatureParser {
 		boolean retrogen = false;
 		GenRestriction biomeRes = GenRestriction.NONE;
 		GenRestriction dimRes = GenRestriction.NONE;
+		Block block = Blocks.stone;
 
 		if (genObject.has("clusterSize")) {
 			clusterSize = genObject.get("clusterSize").getAsInt();
@@ -151,6 +153,13 @@ public class FeatureParser {
 				dimRes = GenRestriction.WHITELIST;
 			}
 		}
+		if (genObject.has("material")) {
+			String b = genObject.get("material").getAsString();
+			block = Block.getBlockFromName(b);
+			if (block == Blocks.air) {
+				block = Blocks.stone;
+			}
+		}
 		int minHeight = genObject.get("minHeight").getAsInt();
 		int maxHeight = genObject.get("maxHeight").getAsInt();
 
@@ -158,7 +167,7 @@ public class FeatureParser {
 			CoFHCore.log.error("Invalid height parameters specified in \"" + featureName + "\"");
 			return false;
 		}
-		FeatureBase feature = new FeatureOreGenUniform(featureName, new WorldGenMinableCluster(resList, clusterSize), numClusters, minHeight, maxHeight,
+		FeatureBase feature = new FeatureOreGenUniform(featureName, new WorldGenMinableCluster(resList, clusterSize, block), numClusters, minHeight, maxHeight,
 				biomeRes, retrogen, dimRes);
 
 		addFeatureRestrictions(feature, genObject);
@@ -178,6 +187,7 @@ public class FeatureParser {
 		boolean retrogen = false;
 		GenRestriction biomeRes = GenRestriction.NONE;
 		GenRestriction dimRes = GenRestriction.NONE;
+		Block block = Blocks.stone;
 
 		if (genObject.has("clusterSize")) {
 			clusterSize = genObject.get("clusterSize").getAsInt();
@@ -212,6 +222,13 @@ public class FeatureParser {
 				dimRes = GenRestriction.WHITELIST;
 			}
 		}
+		if (genObject.has("material")) {
+			String b = genObject.get("material").getAsString();
+			block = Block.getBlockFromName(b);
+			if (block == Blocks.air) {
+				block = Blocks.stone;
+			}
+		}
 		int meanHeight = genObject.get("meanHeight").getAsInt();
 		int maxVariance = genObject.get("maxVariance").getAsInt();
 
@@ -219,7 +236,7 @@ public class FeatureParser {
 			CoFHCore.log.error("Invalid height parameters specified in \"" + featureName + "\"");
 			return false;
 		}
-		FeatureBase feature = new FeatureOreGenNormal(featureName, new WorldGenMinableCluster(resList, clusterSize), numClusters, meanHeight, maxVariance,
+		FeatureBase feature = new FeatureOreGenNormal(featureName, new WorldGenMinableCluster(resList, clusterSize, block), numClusters, meanHeight, maxVariance,
 				biomeRes, retrogen, dimRes);
 		addFeatureRestrictions(feature, genObject);
 		WorldHandler.addFeature(feature);

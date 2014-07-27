@@ -6,6 +6,7 @@ import cofh.api.world.IFeatureHandler;
 import cofh.util.MathHelper;
 import cofh.util.position.ChunkCoord;
 import cofh.world.TickHandlerWorld.RetroChunkCoord;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -93,8 +94,8 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		MinecraftForge.EVENT_BUS.register(instance);
 		MinecraftForge.ORE_GEN_BUS.register(instance);
 
-		if (genFlatBedrock && retroFlatBedrock || retroGeneration) {
-			MinecraftForge.EVENT_BUS.register(TickHandlerWorld.instance);
+		if (genFlatBedrock & retroFlatBedrock | retroGeneration) {
+			FMLCommonHandler.instance().bus().register(TickHandlerWorld.instance);
 		}
 	}
 
@@ -116,9 +117,9 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		}
 		genTag.setTag("FeatureL", featureList);
 		genTag.setLong("Features", genHash);
-		// TODO: is it possible for a chunk to save out before we retrogen it?
-		
-		event.getData().setTag("CoFHWorldGen", genTag);
+		// FIXME: is it possible for a chunk to save out before we retrogen it?
+
+		event.getData().setTag("CoFHWorld-Gen", genTag);
 	}
 
 	@SubscribeEvent
@@ -126,14 +127,14 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 
 		int dim = event.world.provider.dimensionId;
 
-		boolean bedrock = false;
-		boolean genFeatures = false;
 		boolean regen = false;
-		NBTTagCompound tag = (NBTTagCompound) event.getData().getTag("CoFHCore");
+		NBTTagCompound tag = (NBTTagCompound) event.getData().getTag("CoFHWorld-Gen");
 		NBTTagList list = null;
+		ChunkCoord cCoord = new ChunkCoord(event.getChunk());
 
 		if (tag != null) {
-			bedrock = retroFlatBedrock & genFlatBedrock && !tag.hasKey("Bedrock");
+			boolean genFeatures = false;
+			boolean bedrock = retroFlatBedrock & genFlatBedrock && !tag.hasKey("Bedrock");
 			if (retroGeneration) {
 				genFeatures = tag.getLong("Features") != genHash;
 				if (tag.hasKey("FeatureL")) {
@@ -141,20 +142,19 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 					genFeatures |= list.tagCount() != features.size();
 				}
 			}
-		}
-		ChunkCoord cCoord = new ChunkCoord(event.getChunk());
 
-		if (tag == null && (retroFlatBedrock && genFlatBedrock || retroGeneration)) {
-			regen = true;
+			if (bedrock) {
+				CoFHCore.log.info("Queuing RetroGen for flattening bedrock for the chunk at " + cCoord.toString() + ".");
+				regen = true;
+			}
+			if (genFeatures) {
+				CoFHCore.log.info("Queuing RetroGen for features for the chunk at " + cCoord.toString() + ".");
+				regen = true;
+			}
+		} else {
+			regen = retroFlatBedrock & genFlatBedrock | retroGeneration;
 		}
-		if (bedrock) {
-			CoFHCore.log.info("Retroactively flattening bedrock for the chunk at " + cCoord.toString() + ".");
-			regen = true;
-		}
-		if (genFeatures) {
-			CoFHCore.log.info("Retroactively generating features for the chunk at " + cCoord.toString() + ".");
-			regen = true;
-		}
+
 		if (regen) {
 			ArrayDeque<RetroChunkCoord> chunks = TickHandlerWorld.chunksToGen.get(Integer.valueOf(dim));
 
@@ -252,6 +252,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		if (!genFlatBedrock | !newGen & !retroFlatBedrock) {
 			return;
 		}
+		// TODO: pull out the ExtendedStorageArray and edit that directly. faster.
 		Block filler = world.getBiomeGenForCoords(chunkX, chunkZ).fillerBlock;
 		// NOTE: filler block is dirt by default, the actual filler block for the biome is part of a method body
 		int meta = 0; // no meta field for filler
