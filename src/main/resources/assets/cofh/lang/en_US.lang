@@ -65,6 +65,13 @@ info.cofh.transfer=Transfer
 info.cofh.tutorial=Tutorial
 info.cofh.unlocked=Unlocked
 
+info.cofh.help.help=The command to help you out with other commands!
+info.cofh.version.help=Gives you the version of this mod.
+info.cofh.killall.help=Kills all of the entities of the given name, and kills all hostle mobs by default.
+info.cofh.tps.help=Gets the Ticks Per Second on the server. On a perfect server this should be 20. 
+info.cofh.tpx.help=A improved version of the /tp command that works in between dimensions. 
+info.cofh.friend.help=The command to add and remove friends from your friend list. 
+
 info.cofh.tutorial.fluxRequired=Requires Redstone Flux to operate.
 info.cofh.tutorial.tabAugment=The Augment tab allows for modular additions.
 info.cofh.tutorial.tabConfiguration.0=The Configuration tab determines how items enter and leave this device.
