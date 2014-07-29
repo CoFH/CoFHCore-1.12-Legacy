@@ -236,8 +236,8 @@ public class FeatureParser {
 			CoFHCore.log.error("Invalid height parameters specified in \"" + featureName + "\"");
 			return false;
 		}
-		FeatureBase feature = new FeatureOreGenNormal(featureName, new WorldGenMinableCluster(resList, clusterSize, block), numClusters, meanHeight, maxVariance,
-				biomeRes, retrogen, dimRes);
+		FeatureBase feature = new FeatureOreGenNormal(featureName, new WorldGenMinableCluster(resList, clusterSize, block), numClusters, meanHeight,
+				maxVariance, biomeRes, retrogen, dimRes);
 		addFeatureRestrictions(feature, genObject);
 		WorldHandler.addFeature(feature);
 		return true;
@@ -292,7 +292,7 @@ public class FeatureParser {
 				}
 				int metadata = MathHelper.clampI(metaList.get(i).getAsInt(), 0, 15);
 				int weight = MathHelper.clampI(weightList.get(i).getAsInt(), 1, 1000000);
-				resList.add(new WeightedRandomBlock(new ItemStack(block, metadata), weight));
+				resList.add(new WeightedRandomBlock(new ItemStack(block, 1, metadata), weight));
 			}
 		} else {
 			String blockRaw = genObject.get("block").getAsString();
@@ -323,7 +323,7 @@ public class FeatureParser {
 			if (genObject.has("metadata")) {
 				metadata = MathHelper.clampI(genObject.get("metadata").getAsInt(), 0, 15);
 			}
-			resList.add(new WeightedRandomBlock(new ItemStack(block, metadata)));
+			resList.add(new WeightedRandomBlock(new ItemStack(block, 1, metadata)));
 		}
 		return true;
 	}

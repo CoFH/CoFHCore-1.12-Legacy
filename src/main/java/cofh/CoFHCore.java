@@ -14,6 +14,7 @@ import cofh.network.PacketSocial;
 import cofh.updater.UpdateManager;
 import cofh.util.ConfigHandler;
 import cofh.util.FMLEventHandler;
+import cofh.util.MathHelper;
 import cofh.util.SocialRegistry;
 import cofh.util.StringHelper;
 import cofh.util.crafting.RecipeAugmentable;
@@ -56,7 +57,7 @@ public class CoFHCore extends BaseMod {
 	public static final String modName = "CoFH Core";
 	public static final String version = CoFHProps.VERSION;
 	public static final String dependencies = CoFHProps.DEPENDENCIES;
-	public static final String releaseURL = "http://teamcofh.com/cofhcore/version/version.txt";
+	public static final String releaseURL = "https://github.com/CoFH/CoFHCore/VERSION";
 
 	@Instance(modId)
 	public static CoFHCore instance;
@@ -197,6 +198,7 @@ public class CoFHCore extends BaseMod {
 		configCore.save();
 
 		// CLIENT ONLY
+		CoFHProps.soundVolume = MathHelper.clampF((float) configClient.get("sound", "Volume", 1.0F), 0.0F, 1.0F);
 
 		configClient.save();
 

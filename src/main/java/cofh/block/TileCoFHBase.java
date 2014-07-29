@@ -85,7 +85,7 @@ public abstract class TileCoFHBase extends TileEntity {
 
 	public boolean isUseable(EntityPlayer player) {
 
-		return player.getDistanceSq(xCoord, yCoord, zCoord) <= 64D && worldObj.getBlock(xCoord, yCoord, zCoord) == getBlockType();
+		return player.getDistanceSq(xCoord, yCoord, zCoord) <= 64D && worldObj.getTileEntity(xCoord, yCoord, zCoord) == this;
 	}
 
 	public boolean onWrench(EntityPlayer player, int hitSide) {

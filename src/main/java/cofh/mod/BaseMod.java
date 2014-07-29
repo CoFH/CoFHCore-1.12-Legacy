@@ -207,23 +207,26 @@ public abstract class BaseMod implements IUpdatableMod {
 				_log.catching(Level.WARN, _);
 			}
 
-			for (String lang : Arrays.asList("en_US", l))
-				if (lang != null) try {
-					List<IResource> files = manager.getAllResources(new ResourceLocation(_path + lang + ".lang"));
-					for (IResource file : files) {
-						if (file.getInputStream() == null) {
-							_log.warn("A resource pack defines an entry for language '" + lang + "' but the InputStream is null.");
-							continue;
+			for (String lang : Arrays.asList("en_US", l)) {
+				if (lang != null) {
+					try {
+						List<IResource> files = manager.getAllResources(new ResourceLocation(_path + lang + ".lang"));
+						for (IResource file : files) {
+							if (file.getInputStream() == null) {
+								_log.warn("A resource pack defines an entry for language '" + lang + "' but the InputStream is null.");
+								continue;
+							}
+							try {
+								loadLanguageFile(lang, file.getInputStream());
+							} catch (Throwable _) {
+								_log.warn(AbstractLogger.CATCHING_MARKER, "A resource pack has a file for language '" + lang + "' but the file is invalid.", _);
+							}
 						}
-						try {
-							loadLanguageFile(lang, file.getInputStream());
-						} catch (Throwable _) {
-							_log.warn(AbstractLogger.CATCHING_MARKER, "A resource pack has a file for language '" + lang + "' but the file is invalid.", _);
-						}
+					} catch (Throwable _) {
+						_log.info(AbstractLogger.CATCHING_MARKER, "No language data for '" + lang + "'", _);
 					}
-				} catch (Throwable _) {
-					_log.info(AbstractLogger.CATCHING_MARKER, "No language data for '" + lang + "'", _);
 				}
+			}
 		}
 
 		public void loadAllLanguages(IResourceManager manager) {
