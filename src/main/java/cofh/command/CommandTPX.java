@@ -76,7 +76,7 @@ public class CommandTPX implements ISubCommand {
 		case 3: // (tpx <player> {<player>|<dimension>}) teleporting player to player or player to dimension
 			EntityPlayerMP player = CommandBase.getPlayer(sender, arguments[1]);
 			try {
-				EntityPlayerMP otherPlayer = CommandBase.getPlayer(sender, arguments[1]);
+				EntityPlayerMP otherPlayer = CommandBase.getPlayer(sender, arguments[2]);
 				if (!player.equals(otherPlayer)) {
 					player.mountEntity((Entity)null);
 					if (otherPlayer.dimension == player.dimension) {
@@ -92,7 +92,7 @@ public class CommandTPX implements ISubCommand {
 			} catch (Throwable t) {
 				int dimension;
 				try {
-					dimension = Integer.parseInt(arguments[1]);
+					dimension = Integer.parseInt(arguments[2]);
 				} catch (Throwable p) { // not a number, assume they wanted a player
 					if (t instanceof RuntimeException)
 						throw (RuntimeException)t; // player error is
@@ -143,7 +143,7 @@ public class CommandTPX implements ISubCommand {
 	@Override
 	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
 
-		if (args.length == 2) {
+		if (args.length == 2 || args.length == 3) {
 			return CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames()); 
 		} else if(args.length >= 6) {
 
