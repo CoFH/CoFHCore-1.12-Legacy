@@ -33,14 +33,15 @@ public class CommandTPX implements ISubCommand {
 
 		case 0: // () ???? how did we get here again?
 		case 1: // (tpx) invalid command
-			sender.addChatMessage(new ChatComponentText("Invalid Syntax. /cofh tpx " + StringHelper.PINK + "[username] " + StringHelper.YELLOW + "[<x> <y> <z>] <dimension id>"));
+			sender.addChatMessage(new ChatComponentText("Invalid Syntax. /cofh tpx " + StringHelper.PINK + "[username] " + StringHelper.YELLOW
+					+ "[<x> <y> <z>] <dimension id>"));
 			break;
 		case 2: // (tpx {<player>|<dimension>}) teleporting player to self, or self to dimension
 			EntityPlayerMP playerSender = CommandBase.getCommandSenderAsPlayer(sender);
 			try {
 				EntityPlayerMP player = CommandBase.getPlayer(sender, arguments[1]);
 				if (!player.equals(playerSender)) {
-					player.mountEntity((Entity)null);
+					player.mountEntity((Entity) null);
 					if (playerSender.dimension == player.dimension) {
 						player.setPositionAndUpdate(playerSender.posX, playerSender.posY, playerSender.posZ);
 					} else {
@@ -56,8 +57,9 @@ public class CommandTPX implements ISubCommand {
 				try {
 					dimension = Integer.parseInt(arguments[1]);
 				} catch (Throwable p) { // not a number, assume they wanted a player
-					if (t instanceof RuntimeException)
-						throw (RuntimeException)t; // player error is
+					if (t instanceof RuntimeException) {
+						throw (RuntimeException) t; // player error is
+					}
 					throw new RuntimeException(t);
 				}
 
@@ -66,7 +68,7 @@ public class CommandTPX implements ISubCommand {
 					break;
 				}
 
-				playerSender.mountEntity((Entity)null);
+				playerSender.mountEntity((Entity) null);
 				if (playerSender.dimension != dimension) {
 					EntityHelper.transferPlayerToDimension(playerSender, dimension, playerSender.mcServer.getConfigurationManager());
 				}
@@ -78,7 +80,7 @@ public class CommandTPX implements ISubCommand {
 			try {
 				EntityPlayerMP otherPlayer = CommandBase.getPlayer(sender, arguments[2]);
 				if (!player.equals(otherPlayer)) {
-					player.mountEntity((Entity)null);
+					player.mountEntity((Entity) null);
 					if (otherPlayer.dimension == player.dimension) {
 						player.setPositionAndUpdate(otherPlayer.posX, otherPlayer.posY, otherPlayer.posZ);
 					} else {
@@ -94,8 +96,9 @@ public class CommandTPX implements ISubCommand {
 				try {
 					dimension = Integer.parseInt(arguments[2]);
 				} catch (Throwable p) { // not a number, assume they wanted a player
-					if (t instanceof RuntimeException)
-						throw (RuntimeException)t; // player error is
+					if (t instanceof RuntimeException) {
+						throw (RuntimeException) t; // player error is
+					}
 					throw new RuntimeException(t);
 				}
 
@@ -104,7 +107,7 @@ public class CommandTPX implements ISubCommand {
 					break;
 				}
 
-				player.mountEntity((Entity)null);
+				player.mountEntity((Entity) null);
 				if (player.dimension != dimension) {
 					EntityHelper.transferPlayerToDimension(player, dimension, player.mcServer.getConfigurationManager());
 				}
@@ -113,12 +116,15 @@ public class CommandTPX implements ISubCommand {
 			break;
 		case 4: // (tpx <x> <y> <z>) teleporting self within dimension
 			playerSender = CommandBase.getCommandSenderAsPlayer(sender);
-			playerSender.setPositionAndUpdate(CommandBase.func_110666_a(playerSender, playerSender.posX, arguments[1]), CommandBase.func_110666_a(playerSender, playerSender.posY, arguments[2]), CommandBase.func_110666_a(playerSender, playerSender.posZ, arguments[3]));
+			playerSender.setPositionAndUpdate(CommandBase.func_110666_a(playerSender, playerSender.posX, arguments[1]),
+					CommandBase.func_110666_a(playerSender, playerSender.posY, arguments[2]),
+					CommandBase.func_110666_a(playerSender, playerSender.posZ, arguments[3]));
 			break;
 		case 5: // (tpx <player> <x> <y> <z>) teleporting player within player's dimension
 			player = CommandBase.getPlayer(sender, arguments[1]);
-			player.mountEntity((Entity)null);
-			player.setPositionAndUpdate(CommandBase.func_110666_a(player, player.posX, arguments[2]), CommandBase.func_110666_a(player, player.posY, arguments[3]), CommandBase.func_110666_a(player, player.posZ, arguments[4]));
+			player.mountEntity((Entity) null);
+			player.setPositionAndUpdate(CommandBase.func_110666_a(player, player.posX, arguments[2]),
+					CommandBase.func_110666_a(player, player.posY, arguments[3]), CommandBase.func_110666_a(player, player.posZ, arguments[4]));
 			break;
 		case 6: // (tpx <player> <x> <y> <z> <dimension>) teleporting player to dimension and location
 		default: // ignore excess tokens. warn?
@@ -130,11 +136,12 @@ public class CommandTPX implements ISubCommand {
 				break;
 			}
 
-			player.mountEntity((Entity)null);
+			player.mountEntity((Entity) null);
 			if (player.dimension != dimension) {
 				EntityHelper.transferPlayerToDimension(player, dimension, player.mcServer.getConfigurationManager());
 			}
-			player.setPositionAndUpdate(CommandBase.func_110666_a(player, player.posX, arguments[2]), CommandBase.func_110666_a(player, player.posY, arguments[3]), CommandBase.func_110666_a(player, player.posZ, arguments[4]));
+			player.setPositionAndUpdate(CommandBase.func_110666_a(player, player.posX, arguments[2]),
+					CommandBase.func_110666_a(player, player.posY, arguments[3]), CommandBase.func_110666_a(player, player.posZ, arguments[4]));
 			break;
 		}
 	}
@@ -144,8 +151,8 @@ public class CommandTPX implements ISubCommand {
 	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
 
 		if (args.length == 2 || args.length == 3) {
-			return CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames()); 
-		} else if(args.length >= 6) {
+			return CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames());
+		} else if (args.length >= 6) {
 
 			Integer[] ids = DimensionManager.getIDs();
 			String[] strings = new String[ids.length];
@@ -154,7 +161,7 @@ public class CommandTPX implements ISubCommand {
 				strings[i] = ids[i].toString();
 			}
 
-			return CommandBase.getListOfStringsMatchingLastWord(args, strings); 
+			return CommandBase.getListOfStringsMatchingLastWord(args, strings);
 		}
 
 		return null;
@@ -162,4 +169,3 @@ public class CommandTPX implements ISubCommand {
 	}
 
 }
-

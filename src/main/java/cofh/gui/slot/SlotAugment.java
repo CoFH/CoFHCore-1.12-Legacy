@@ -1,7 +1,7 @@
 package cofh.gui.slot;
 
-import cofh.api.core.IAugmentable;
 import cofh.api.item.IAugmentItem;
+import cofh.api.tileentity.IAugmentable;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

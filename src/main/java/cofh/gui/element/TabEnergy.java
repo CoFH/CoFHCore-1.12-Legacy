@@ -1,7 +1,7 @@
 package cofh.gui.element;
 
 import cofh.CoFHCore;
-import cofh.api.core.IEnergyInfo;
+import cofh.api.tileentity.IEnergyInfo;
 import cofh.gui.GuiBase;
 import cofh.util.MathHelper;
 import cofh.util.StringHelper;

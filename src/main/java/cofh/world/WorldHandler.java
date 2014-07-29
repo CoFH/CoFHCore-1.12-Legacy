@@ -115,11 +115,11 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		for (int i = 0; i < features.size(); i++) {
 			featureList.appendTag(new NBTTagString(features.get(i).getFeatureName()));
 		}
-		genTag.setTag("FeatureL", featureList);
-		genTag.setLong("Features", genHash);
+		genTag.setTag("List", featureList);
+		genTag.setLong("Hash", genHash);
 		// FIXME: is it possible for a chunk to save out before we retrogen it?
 
-		event.getData().setTag("CoFHWorld-Gen", genTag);
+		event.getData().setTag("CoFHWorld", genTag);
 	}
 
 	@SubscribeEvent
@@ -136,9 +136,9 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			boolean genFeatures = false;
 			boolean bedrock = retroFlatBedrock & genFlatBedrock && !tag.hasKey("Bedrock");
 			if (retroGeneration) {
-				genFeatures = tag.getLong("Features") != genHash;
-				if (tag.hasKey("FeatureL")) {
-					list = tag.getTagList("FeatureL", Constants.NBT.TAG_STRING);
+				genFeatures = tag.getLong("Hash") != genHash;
+				if (tag.hasKey("List")) {
+					list = tag.getTagList("List", Constants.NBT.TAG_STRING);
 					genFeatures |= list.tagCount() != features.size();
 				}
 			}
@@ -262,8 +262,9 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			filler = Blocks.netherrack;
 			break;
 		case 0:
-			/* Due to above note, overworld gets replaced with stone. other
-			 * dimensions are on their own for helping us with the filler block */
+			/*
+			 * Due to above note, overworld gets replaced with stone. other dimensions are on their own for helping us with the filler block
+			 */
 			filler = Blocks.stone;
 			break;
 		case 1:

@@ -5,6 +5,7 @@ import cofh.api.block.IBlockInfo;
 import cofh.api.block.IDismantleable;
 import cofh.api.core.IInitializer;
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.inventory.IInventoryRetainer;
 import cofh.api.tileentity.IPlacedTile;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IRedstoneControl;
@@ -69,7 +70,9 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 			TileCoFHBase theTile = (TileCoFHBase) tile;
 			theTile.blockBroken();
 		}
-		if (tile instanceof IInventory) {
+		if (tile instanceof IInventoryRetainer) {
+			// do nothing
+		} else if (tile instanceof IInventory) {
 			IInventory inv = (IInventory) tile;
 			for (int i = 0; i < inv.getSizeInventory(); i++) {
 				CoreUtils.dropItemStackIntoWorldWithVelocity(inv.getStackInSlot(i), world, x, y, z);
@@ -88,7 +91,7 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 
 		if (!player.capabilities.isCreativeMode) {
 			dropBlockAsItem(world, x, y, z, meta, 0);
-			world.setBlock(x, y, z, Blocks.air, 0, 4);
+			world.setBlock(x, y, z, Blocks.air, 0, 7);
 		}
 	}
 

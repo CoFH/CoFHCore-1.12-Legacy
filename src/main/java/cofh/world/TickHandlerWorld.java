@@ -48,11 +48,13 @@ public class TickHandlerWorld {
 	}
 
 	public static class RetroChunkCoord {
+
 		private static final THashSet<String> emptySet = new THashSet<String>(0);
 		public final ChunkCoord coord;
 		public final THashSet<String> generatedFeatures;
 
 		public RetroChunkCoord(ChunkCoord pos, NBTTagList features) {
+
 			coord = pos;
 			if (features == null) {
 				generatedFeatures = emptySet;

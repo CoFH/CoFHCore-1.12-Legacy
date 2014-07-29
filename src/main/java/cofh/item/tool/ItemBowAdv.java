@@ -64,6 +64,13 @@ public class ItemBowAdv extends ItemBow {
 		return ItemHelper.isOreNameEqual(stack, repairIngot);
 	}
 
+	// TODO: This will need a custom render or something
+	@Override
+	public boolean isFull3D() {
+
+		return true;
+	}
+
 	@Override
 	public boolean isItemTool(ItemStack stack) {
 
