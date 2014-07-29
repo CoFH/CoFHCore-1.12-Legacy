@@ -128,7 +128,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		int dim = event.world.provider.dimensionId;
 
 		boolean regen = false;
-		NBTTagCompound tag = (NBTTagCompound) event.getData().getTag("CoFHWorld-Gen");
+		NBTTagCompound tag = (NBTTagCompound) event.getData().getTag("CoFHWorld");
 		NBTTagList list = null;
 		ChunkCoord cCoord = new ChunkCoord(event.getChunk());
 
