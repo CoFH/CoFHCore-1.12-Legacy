@@ -1,13 +1,10 @@
 #ru_RU
 
-death.attack.pyrotheum=%1$s принял пиротеум за воду!
-death.attack.pyrotheum.player=%1$s сгорел заживо, убегая от %2$s!
-death.attack.cryotheum=%1$s замёрз досмерти!
-death.attack.cryotheum.player=%1$s замёрз досмерти, убегая от %2$s!
-death.attack.mana=%1$s был разорван на части сырой маной!
-death.attack.mana.player=%1$s побежал не в то место, при попытке к бегству от %2$s!
-death.attack.flux=%1$s был разодран флаксом!
-death.attack.flux.player=%1$s был зафлаксирован до смерти %2$s!
+chat.cofh.secure.0=Примечание: Операторы сервера могут свободно получить доступ к "защищённым" блокам на этом сервере.
+chat.cofh.secure.1=Это личная вещь и принадлежит
+chat.cofh.secure.2=Вы могли потерять руку!
+
+enchant.cofh.holding=Удержание
 
 info.cofh.access=Доступ
 info.cofh.accessMode=Режим доступа
@@ -16,8 +13,9 @@ info.cofh.accessRestricted=Ограниченный
 info.cofh.accessPrivate=Приватный
 info.cofh.all=Все
 info.cofh.amount=Количество
-#info.cofh.augmentation
+info.cofh.augmentation=Прирост
 info.cofh.blank=Пусто
+info.cofh.capacity=Ёмкость
 info.cofh.charge=Заряд
 info.cofh.configuration=Конфигурация
 info.cofh.contents=Содержит
@@ -25,6 +23,7 @@ info.cofh.controlStatus=Режим управления
 info.cofh.damageAttack=Урон
 info.cofh.damageFlux=Флаксовый урон
 info.cofh.disabled=Выключено
+info.cofh.dry=Сухо
 info.cofh.empty=Пусто
 info.cofh.enabled=Включено
 info.cofh.energy=Энергия
@@ -32,9 +31,12 @@ info.cofh.energyConsume=Расход энергии
 info.cofh.energyProduce=Выходная энергия
 info.cofh.energyStored=Хранимая энергия
 info.cofh.fluid=Жидкость
+info.cofh.forDetails=для деталей
 info.cofh.frequency=Частота
 info.cofh.friendsList=Список друзей
+info.cofh.hasInfo=Есть информация
 info.cofh.high=Высоко
+info.cofh.hold=Удерживайте
 info.cofh.ignored=Игнорировать
 info.cofh.information=Информация
 info.cofh.infinite=Бесконечность
@@ -46,34 +48,31 @@ info.cofh.low=Низко
 info.cofh.maxEnergyPerTick=Макс. энергия
 info.cofh.none=Нет
 info.cofh.owner=Владелец
-info.cofh.press=Нажать
+info.cofh.perUse=За использование
+info.cofh.press=Нажмите
 info.cofh.receive=Принять
 info.cofh.receiving=Приём
 info.cofh.redstoneControl=Красный контроль
 info.cofh.security=Безопасность
 info.cofh.send=Передать
 info.cofh.sending=Передача
+info.cofh.shift=Shift
 info.cofh.signal=Сигнал
 info.cofh.signalRequired=Нужный сигнал
+info.cofh.soaked=Смоченный
 info.cofh.source=Источник
+info.cofh.transfer=Передача
 info.cofh.tutorial=Руководство
 info.cofh.unlocked=Открыто
 
 info.cofh.tutorial.fluxRequired=Для работы необходим Redstone Flux.
+info.cofh.tutorial.tabAugment=Вкладка "Прирост" предоставляет модульные дополнения.
 info.cofh.tutorial.tabConfiguration=Эта вкладка конфигурации определяет, как предметы попадают и покидают устройство.
 info.cofh.tutorial.tabConfiguration2=Эта вкладка конфигурации определяет режим работы этого устройства.
 info.cofh.tutorial.tabRedstone=Вкладка "Красный контроль" настраивает поведение устройства на сигнал красного камня.
+info.cofh.tutorial.tabSecurity=Вкладка "Безопасность" позволяет владельцу контролировать, кто может управлять этим устройством.
 
 item.invalid.name=Неизвестный предмет (Уничтожить)
-
-message.cofh.holdShift1=Нажмите
-message.cofh.holdShift2=Shift
-message.cofh.holdShift3=для информации
-message.cofh.secure1=Это личная вещь и принадлежит
-message.cofh.secure2=Вы могли потерять руку!
-message.cofh.secureWarning=Заметка: Операторы сервера могут свободно получить доступ к "защищённым" блокам на этом сервере.
-message.cofh.receiveConfig=Приём конфигурации сервера...
-message.cofh.restoreConfig=Восстанавливание конфигурации клиента...
 
 #Fluid Name Fixes
 
@@ -81,13 +80,3 @@ fluid.tile.water=Вода
 fluid.tile.lava=Лава
 fluid.fuel=Топливо
 fluid.oil=Нефть
-
-#CoFHLexicon
-
-info.cofh.lexicon1=Конвертирует предметы в их эквивалентные формы.
-info.cofh.lexicon2=ПКМ (открыть), чтобы изучить.
-info.cofh.lexicon3=Когда присядете, откройте, дабы обрести мудрость!
-info.cofh.lexicon4=ПКМ (открыть) для трансмутации предметов.
-info.cofh.lexicon5=Когда присядете, откройте, чтобы позабыть знания.
-item.cofh.tool.lexicon.name=Лексикон Forge
-item.cofh.tool.lexiconActive.name=Лексикон Forge (Активен)
