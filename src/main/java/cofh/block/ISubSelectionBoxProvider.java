@@ -1,6 +1,6 @@
 package cofh.block;
 
-import codechicken.lib.raytracer.IndexedCuboid6;
+import cofh.repack.codechicken.lib.raytracer.IndexedCuboid6;
 
 import java.util.List;
 

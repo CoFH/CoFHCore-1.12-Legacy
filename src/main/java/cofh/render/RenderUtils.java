@@ -1,11 +1,11 @@
 package cofh.render;
 
-import codechicken.lib.colour.Colour;
-import codechicken.lib.colour.ColourRGBA;
-import codechicken.lib.render.CCRenderState;
-import codechicken.lib.render.uv.IconTransformation;
-import codechicken.lib.render.uv.UV;
-import codechicken.lib.vec.Vector3;
+import cofh.repack.codechicken.lib.colour.Colour;
+import cofh.repack.codechicken.lib.colour.ColourRGBA;
+import cofh.repack.codechicken.lib.render.CCRenderState;
+import cofh.repack.codechicken.lib.render.uv.IconTransformation;
+import cofh.repack.codechicken.lib.render.uv.UV;
+import cofh.repack.codechicken.lib.vec.Vector3;
 import cofh.util.BlockHelper;
 
 import net.minecraft.block.Block;
