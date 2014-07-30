@@ -1,9 +1,15 @@
 package cofh.mod;
 
 import cofh.updater.IUpdatableMod;
+import cofh.updater.ModRange;
+import cofh.updater.ModVersion;
+import com.google.common.base.Strings;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.common.versioning.InvalidVersionSpecificationException;
 import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -51,13 +57,42 @@ public abstract class BaseMod implements IUpdatableMod {
 		_modid = name.toLowerCase();
 		_log = LogManager.getLogger(name);
 	}
+	
+	@NetworkCheckHandler
+	public final boolean networkCheck(Map<String, String> remoteVersions, Side side) throws InvalidVersionSpecificationException {
+
+		if (!requiresRemoteFrom(side)) {
+			return true;
+		}
+		Mod mod = getClass().getAnnotation(Mod.class);
+		String _modid = mod.modid();
+		if (!remoteVersions.containsKey(_modid)) {
+			return false;
+		}
+		String remotes = mod.acceptableRemoteVersions();
+		if (!"*".equals(remotes)) {
+
+			String remote = remoteVersions.get(_modid);
+			if (Strings.isNullOrEmpty(remotes)) {
+				return getModVersion().equalsIgnoreCase(remote);
+			}
+
+			return ModRange.createFromVersionSpec(_modid, remotes).containsVersion(new ModVersion(_modid, remote));
+		}
+		return true;
+	}
+	
+	protected boolean requiresRemoteFrom(Side side) {
+
+		return true;
+	}
 
 	protected String getConfigBaseFolder() {
 
 		String base = getClass().getPackage().getName();
 		int i = base.indexOf('.');
 		if (i >= 0) {
-			return base.substring(0, base.indexOf('.'));
+			return base.substring(0, i);
 		}
 		return "";
 	}
@@ -147,7 +182,7 @@ public abstract class BaseMod implements IUpdatableMod {
 			}
 		}
 
-		String path = "assets/" + getAssetDir() + "/language/";
+		String path = "/assets/" + getAssetDir() + "/language/";
 		InputStream s = null;
 		try {
 			s = Loader.getResource(path + ".languages", null).openStream();

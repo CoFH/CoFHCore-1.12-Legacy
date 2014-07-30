@@ -35,13 +35,14 @@ public class UpdateCheckThread extends Thread {
 	public void run() {
 
 		try {
-			ModVersion ourVer = ModVersion.parse(_mod.getModVersion());
+			String id = _mod.getModName();
+			ModVersion ourVer = ModVersion.parse(id, _mod.getModVersion());
 
 			URL versionFile = new URL(_releaseUrl);
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(versionFile.openStream()));
-			ModVersion newVer = ModVersion.parse(reader.readLine());
-			ModVersion critVer = ModVersion.parse(reader.readLine());
+			ModVersion newVer = ModVersion.parse(id, reader.readLine());
+			ModVersion critVer = ModVersion.parse(id, reader.readLine());
 			reader.close();
 
 			_newVer = newVer;

@@ -1,7 +1,10 @@
 package cofh.updater;
 
-public class ModVersion implements Comparable<ModVersion> {
+import cpw.mods.fml.common.versioning.ArtifactVersion;
 
+public class ModVersion implements  ArtifactVersion {
+
+	private final String _label;
 	private final ReleaseVersion _mcVer;
 	private final ReleaseVersion _modVer;
 	private final String _desc;
@@ -21,18 +24,16 @@ public class ModVersion implements Comparable<ModVersion> {
 		return _desc;
 	}
 
-	public ModVersion(ReleaseVersion minecraftVersion, ReleaseVersion modVersion, String description) {
+	public ModVersion(String label, ReleaseVersion minecraftVersion, ReleaseVersion modVersion, String description) {
 
+		_label = label;
 		_mcVer = minecraftVersion;
 		_modVer = modVersion;
 		_desc = description;
 	}
 
-	public static ModVersion parse(String s) {
+	public ModVersion(String label, String s) {
 
-		if (s == null) {
-			return null;
-		}
 		String[] parts = s.split(" ", 2);
 		String desc = "";
 
@@ -40,14 +41,42 @@ public class ModVersion implements Comparable<ModVersion> {
 			desc = parts[1].trim();
 		}
 		parts = parts[0].split("R", 2);
-		return new ModVersion(ReleaseVersion.parse(parts[0]), ReleaseVersion.parse(parts[1]), desc);
+
+		_label = label;
+		_mcVer = new ReleaseVersion("Minecraft", parts[0]);
+		_modVer = new ReleaseVersion(label, parts[1]);
+		_desc = desc;
 	}
 
+	public static ModVersion parse(String label, String s) {
+		
+		if (s == null || s.length() == 0) {
+			return null;
+		}
+		return new ModVersion(label, s);
+	}
+
+
 	@Override
+	public int compareTo(ArtifactVersion o) {
+
+		if (o instanceof ModVersion)
+			return compareTo((ModVersion)o);
+		if (o instanceof ReleaseVersion) {
+			ReleaseVersion r = (ReleaseVersion)o;
+			if (_label.equals(r.getLabel())) {
+				return _modVer.compareTo(r);
+			} else if ("Minecraft".equals(r.getLabel())) {
+				return _mcVer.compareTo(r);
+			}
+		}
+		return Integer.MIN_VALUE;
+	}
+
 	public int compareTo(ModVersion o) {
 
 		if (o == null) {
-			return 0;
+			return Integer.MIN_VALUE;
 		}
 		if (_mcVer.compareTo(o.minecraftVersion()) != 0) {
 			return _mcVer.compareTo(o.minecraftVersion());
@@ -58,7 +87,31 @@ public class ModVersion implements Comparable<ModVersion> {
 	@Override
 	public String toString() {
 
-		return _mcVer.toString() + "R" + _modVer.toString();
+		return _modVer.toString() + " for " + _mcVer.toString();
+	}
+
+	@Override
+	public String getVersionString() {
+
+		return _mcVer.getVersionString() + "R" + _modVer.getVersionString();
+	}
+
+	@Override
+	public String getLabel() {
+
+		return _label;
+	}
+
+	@Override
+	public boolean containsVersion(ArtifactVersion source) {
+
+		return compareTo(source) == 0;
+	}
+
+	@Override
+	public String getRangeString() {
+
+		return null;
 	}
 
 }

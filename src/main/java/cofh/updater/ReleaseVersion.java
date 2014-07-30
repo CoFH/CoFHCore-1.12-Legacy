@@ -1,20 +1,24 @@
 package cofh.updater;
 
-public class ReleaseVersion implements Comparable<ReleaseVersion> {
+import cpw.mods.fml.common.versioning.ArtifactVersion;
 
+public class ReleaseVersion implements ArtifactVersion {
+
+	private final String _label;
 	private final int _major;
 	private final int _minor;
 	private final int _patch;
 	private final int _rc;
 	private final int _beta;
 
-	public ReleaseVersion(int major, int minor, int patch) {
+	public ReleaseVersion(String label, int major, int minor, int patch) {
 
-		this(major, minor, patch, 0, 0);
+		this(label, major, minor, patch, 0, 0);
 	}
 
-	public ReleaseVersion(int major, int minor, int patch, int rc, int beta) {
+	public ReleaseVersion(String label, int major, int minor, int patch, int rc, int beta) {
 
+		_label = label;
 		_major = major;
 		_minor = minor;
 		_patch = patch;
@@ -22,7 +26,8 @@ public class ReleaseVersion implements Comparable<ReleaseVersion> {
 		_beta = beta;
 	}
 
-	public static ReleaseVersion parse(String s) {
+
+	public ReleaseVersion(String label, String s) {
 
 		int major = 0;
 		int minor = 0;
@@ -43,11 +48,30 @@ public class ReleaseVersion implements Comparable<ReleaseVersion> {
 			main = parts[0];
 		}
 		parts = main.split("\\.");
-		major = Integer.parseInt(parts[0]);
-		minor = Integer.parseInt(parts[1]);
-		patch = Integer.parseInt(parts[2]);
+		switch (parts.length) {
 
-		return new ReleaseVersion(major, minor, patch, rc, beta);
+		default:
+		case 3:
+			patch = Integer.parseInt(parts[2]);
+		case 2:
+			minor = Integer.parseInt(parts[1]);
+		case 1:
+			major = Integer.parseInt(parts[0]);
+		case 0:
+			break;
+		}
+
+		_label = label;
+		_major = major;
+		_minor = minor;
+		_patch = patch;
+		_rc = rc;
+		_beta = beta;
+	}
+
+	public static ReleaseVersion parse(String label, String s) {
+
+		return new ReleaseVersion(label, s);
 	}
 
 	public int major() {
@@ -91,8 +115,26 @@ public class ReleaseVersion implements Comparable<ReleaseVersion> {
 	}
 
 	@Override
+	public int compareTo(ArtifactVersion o) {
+
+		if (o instanceof ReleaseVersion)
+			return compareTo((ReleaseVersion)o);
+		if (o instanceof ModVersion) {
+			ModVersion r = (ModVersion)o;
+			if (_label.equals(r.getLabel())) {
+				return compareTo(r.modVersion());
+			} else if ("Minecraft".equals(_label)) {
+				return compareTo(r.minecraftVersion());
+			}
+		}
+		return Integer.MIN_VALUE;
+	}
+
 	public int compareTo(ReleaseVersion arg0) {
 
+		if (arg0 == null) {
+			return Integer.MIN_VALUE;
+		}
 		if (this.major() != arg0.major()) {
 			return this.major() < arg0.major() ? -1 : 1;
 		}
@@ -128,6 +170,12 @@ public class ReleaseVersion implements Comparable<ReleaseVersion> {
 	@Override
 	public String toString() {
 
+		return _label + " " + getVersionString();
+	}
+
+	@Override
+	public String getVersionString() {
+
 		String v = _major + "." + _minor + "." + _patch;
 		if (_rc != 0) {
 			v += "RC" + _rc;
@@ -136,6 +184,24 @@ public class ReleaseVersion implements Comparable<ReleaseVersion> {
 			v += "B" + _beta;
 		}
 		return v;
+	}
+
+	@Override
+	public String getLabel() {
+
+		return _label;
+	}
+
+	@Override
+	public boolean containsVersion(ArtifactVersion source) {
+
+		return compareTo(source) == 0;
+	}
+
+	@Override
+	public String getRangeString() {
+
+		return null;
 	}
 
 }

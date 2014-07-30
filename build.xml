@@ -157,6 +157,7 @@
 				compress="true" level="9" basedir="${classes.dir}"
 				manifest="${classes.dir}/MANIFEST.MF">
 				<exclude name="MANIFEST.MF"/>
+				<zipfileset src="${lib.dir}/CoFHLib.jar"/>
 			</jar>
 		</sequential>
 	</macrodef>
