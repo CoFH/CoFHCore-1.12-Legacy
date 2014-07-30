@@ -87,7 +87,7 @@ public class FeatureParser {
 				if (parseGenerationEntry(genEntry.getKey(), genEntry.getValue())) {
 					CoFHCore.log.info("Generation entry successfully parsed: \"" + genEntry.getKey() + "\"");
 				} else {
-					CoFHCore.log.error("Error parsing generation entry: \"" + genEntry.getKey() + "\" > Please check the parameters.");
+					CoFHCore.log.error("Error parsing generation entry: \"" + genEntry.getKey() + "\" > Please check the parameters. It *may* be a duplicate.");
 				}
 			}
 		}
@@ -171,8 +171,7 @@ public class FeatureParser {
 				biomeRes, retrogen, dimRes);
 
 		addFeatureRestrictions(feature, genObject);
-		WorldHandler.addFeature(feature);
-		return true;
+		return WorldHandler.addFeature(feature);
 	}
 
 	private static boolean addNormalTemplate(String featureName, JsonObject genObject) {
