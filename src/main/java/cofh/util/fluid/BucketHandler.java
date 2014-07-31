@@ -31,8 +31,6 @@ public class BucketHandler {
 
 	public static void initialize() {
 
-		registerBucket(Blocks.flowing_water, 0, new ItemStack(Items.water_bucket));
-		registerBucket(Blocks.flowing_lava, 0, new ItemStack(Items.lava_bucket));
 	}
 
 	private static BiMap<BlockWrapper, ItemWrapper> buckets = HashBiMap.create();
@@ -110,6 +108,19 @@ public class BucketHandler {
 		int bMeta = world.getBlockMetadata(x, y, z);
 
 		if (!buckets.containsKey(new BlockWrapper(block, bMeta))) {
+			if (block.equals(Blocks.water) || block.equals(Blocks.flowing_water)) {
+				if (world.getBlockMetadata(x, y, z) == 0) {
+					world.setBlockToAir(x, y, z);
+					return new ItemStack(Items.water_bucket);
+				}
+				return null;
+			} else if (block.equals(Blocks.lava) || block.equals(Blocks.flowing_lava)) {
+				if (world.getBlockMetadata(x, y, z) == 0) {
+					world.setBlockToAir(x, y, z);
+					return new ItemStack(Items.lava_bucket);
+				}
+				return null;
+			}
 			if (block instanceof IFluidBlock) {
 				IFluidBlock flBlock = (IFluidBlock) block;
 
