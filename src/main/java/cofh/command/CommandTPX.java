@@ -62,12 +62,10 @@ public class CommandTPX implements ISubCommand {
 					}
 					throw new RuntimeException(t);
 				}
-
 				if (!DimensionManager.isDimensionRegistered(dimension)) {
 					sender.addChatMessage(new ChatComponentText(StringHelper.RED + "That dimension does not exist."));
 					break;
 				}
-
 				playerSender.mountEntity((Entity) null);
 				if (playerSender.dimension != dimension) {
 					EntityHelper.transferPlayerToDimension(playerSender, dimension, playerSender.mcServer.getConfigurationManager());
@@ -101,12 +99,10 @@ public class CommandTPX implements ISubCommand {
 					}
 					throw new RuntimeException(t);
 				}
-
 				if (!DimensionManager.isDimensionRegistered(dimension)) {
 					sender.addChatMessage(new ChatComponentText(StringHelper.RED + "That dimension does not exist"));
 					break;
 				}
-
 				player.mountEntity((Entity) null);
 				if (player.dimension != dimension) {
 					EntityHelper.transferPlayerToDimension(player, dimension, player.mcServer.getConfigurationManager());
@@ -135,7 +131,6 @@ public class CommandTPX implements ISubCommand {
 				sender.addChatMessage(new ChatComponentText(StringHelper.RED + "That dimension does not exist"));
 				break;
 			}
-
 			player.mountEntity((Entity) null);
 			if (player.dimension != dimension) {
 				EntityHelper.transferPlayerToDimension(player, dimension, player.mcServer.getConfigurationManager());
@@ -153,14 +148,12 @@ public class CommandTPX implements ISubCommand {
 		if (args.length == 2 || args.length == 3) {
 			return CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames());
 		} else if (args.length >= 6) {
-
 			Integer[] ids = DimensionManager.getIDs();
 			String[] strings = new String[ids.length];
 
 			for (int i = 0; i < ids.length; i++) {
 				strings[i] = ids[i].toString();
 			}
-
 			return CommandBase.getListOfStringsMatchingLastWord(args, strings);
 		}
 

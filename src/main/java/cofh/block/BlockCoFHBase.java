@@ -145,6 +145,9 @@ public abstract class BlockCoFHBase extends BlockContainer implements IBlockDebu
 				return;
 			}
 		}
+		if (tile instanceof TileCoFHBase) {
+			((TileCoFHBase) tile).onNeighborBlockChange();
+		}
 		if (tile instanceof IPlacedTile) {
 			((IPlacedTile) tile).tilePlaced();
 		}

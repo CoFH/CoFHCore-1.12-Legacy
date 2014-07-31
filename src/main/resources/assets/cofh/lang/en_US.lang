@@ -65,12 +65,26 @@ info.cofh.transfer=Transfer
 info.cofh.tutorial=Tutorial
 info.cofh.unlocked=Unlocked
 
-info.cofh.help.help=The command to help you out with other commands!
-info.cofh.version.help=Gives you the version of this mod.
-info.cofh.killall.help=Kills all of the entities of the given name, and kills all hostle mobs by default.
-info.cofh.tps.help=Gets the Ticks Per Second on the server. On a perfect server this should be 20. 
-info.cofh.tpx.help=A improved version of the /tp command that works in between dimensions. 
-info.cofh.friend.help=The command to add and remove friends from your friend list. 
+info.cofh.command.friend=The command to add and remove friends from your friend list.
+info.cofh.command.help=The command to help you out with other commands!
+info.cofh.command.killall=Kills all of the entities of the given name, and kills all hostle mobs by default.
+info.cofh.command.tps=Gets the Ticks Per Second on the server. On a perfect server this should be 20.
+info.cofh.command.tpx=A improved version of the /tp command that works in between dimensions.
+info.cofh.command.version=Gives you the version of this mod.
+
+info.cofh.command.syntaxError=Invalid Syntax.
+
+info.cofh.command.friend.0=successfully added to your friends list.
+info.cofh.command.friend.1=Sorry, there was a problem adding
+info.cofh.command.friend.2=to your list.
+info.cofh.command.friend.3=Sorry, that is not a valid username.
+info.cofh.command.friend.4=successfully removed from your friends list.
+info.cofh.command.friend.5=was not your friend.
+info.cofh.command.help.0=Available commands are:
+info.cofh.command.killall.0=
+info.cofh.command.killall.1=
+info.cofh.command.killall.2=No hostile mobs found!
+info.cofh.command.version.0=This mod is on version
 
 info.cofh.tutorial.fluxRequired=Requires Redstone Flux to operate.
 info.cofh.tutorial.tabAugment=The Augment tab allows for modular additions.

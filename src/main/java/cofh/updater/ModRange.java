@@ -28,8 +28,8 @@ public class ModRange {
 			int index2 = process.indexOf(']');
 
 			int index = index2;
-			if (((index2 < 0) | index1 < index2) & index1 >= 0 ) {
-					index = index1;
+			if (((index2 < 0) | index1 < index2) & index1 >= 0) {
+				index = index1;
 			}
 
 			if (index < 0) {
@@ -85,7 +85,7 @@ public class ModRange {
 
 		if (index < 0) {
 			if (!lowerBoundInclusive | !upperBoundInclusive) {
-				throw new InvalidVersionSpecificationException( "Single version must be surrounded by []: " + spec );
+				throw new InvalidVersionSpecificationException("Single version must be surrounded by []: " + spec);
 			}
 
 			ArtifactVersion version = getArtifactVersion(label, process);
@@ -116,7 +116,7 @@ public class ModRange {
 
 		return restriction;
 	}
-	
+
 	private static ArtifactVersion getArtifactVersion(String label, String process) {
 
 		int index = process.indexOf('R');

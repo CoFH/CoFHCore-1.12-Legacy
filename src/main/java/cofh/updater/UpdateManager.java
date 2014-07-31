@@ -58,6 +58,11 @@ public class UpdateManager {
 					return;
 				}
 				ModVersion version = _updateThread.newVersion();
+
+				// TODO: This really shouldn't be null, but it's happening
+				if (version == null) {
+					return;
+				}
 				EntityPlayer player = evt.player;
 				player.addChatMessage(new ChatComponentText(GOLD + "[" + _mod.getModName() + "]").appendText(WHITE + " A new version is available: ")
 						.appendText(AQUA + version.modVersion().toString()));

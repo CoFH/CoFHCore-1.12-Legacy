@@ -57,7 +57,7 @@ public abstract class BaseMod implements IUpdatableMod {
 		_modid = name.toLowerCase();
 		_log = LogManager.getLogger(name);
 	}
-	
+
 	@NetworkCheckHandler
 	public final boolean networkCheck(Map<String, String> remoteVersions, Side side) throws InvalidVersionSpecificationException {
 
@@ -81,7 +81,7 @@ public abstract class BaseMod implements IUpdatableMod {
 		}
 		return true;
 	}
-	
+
 	protected boolean requiresRemoteFrom(Side side) {
 
 		return true;

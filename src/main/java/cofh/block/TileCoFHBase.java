@@ -128,6 +128,7 @@ public abstract class TileCoFHBase extends TileEntity {
 		if (side == Side.CLIENT && ServerHelper.isServerWorld(worldObj)) {
 			PacketHandler.sendToAllAround(getPacket(), this);
 			worldObj.func_147451_t(xCoord, yCoord, zCoord); // ???
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		} else if (side == Side.SERVER && ServerHelper.isClientWorld(worldObj)) {
 			PacketHandler.sendToServer(getPacket());
 		}

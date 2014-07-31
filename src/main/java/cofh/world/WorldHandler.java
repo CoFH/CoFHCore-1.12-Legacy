@@ -191,17 +191,15 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	@Override
 	public boolean registerFeature(IFeatureGenerator feature) {
 
-        String featureName = feature.getFeatureName();
+		String featureName = feature.getFeatureName();
 		if (featureName == null) {
-            CoFHCore.log.error("Feature attempted to register without providing a valid name... ignoring.");
-            return false;
-        }
-
-        if (featureNames.contains(featureName)) {
-            CoFHCore.log.debug("Feature " + featureName + " was attempting to register a second time... ignoring.")
+			CoFHCore.log.error("Feature attempted to register without providing a valid name... ignoring.");
 			return false;
 		}
-
+		if (featureNames.contains(featureName)) {
+			CoFHCore.log.debug("Feature " + featureName + " was attempting to register a second time... ignoring.");
+			return false;
+		}
 		featureNames.add(featureName);
 		features.add(feature);
 		genHash += featureName.hashCode();

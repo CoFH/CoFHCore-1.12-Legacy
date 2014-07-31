@@ -1,8 +1,10 @@
 package cofh.command;
 
+import cofh.CoFHCore;
+import cofh.util.StringHelper;
+
 import java.util.List;
 
-import cofh.CoFHCore;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
@@ -20,7 +22,7 @@ public class CommandVersion implements ISubCommand {
 	@Override
 	public void handleCommand(ICommandSender sender, String[] arguments) {
 
-		sender.addChatMessage(new ChatComponentText("This mod is on Version " + CoFHCore.version + "."));
+		sender.addChatMessage(new ChatComponentText(StringHelper.localize("info.cofh.command.version.0") + " " + CoFHCore.version + "."));
 	}
 
 	@Override

@@ -68,7 +68,6 @@ public class UpdateCheckThread extends Thread {
 			if (i > 0) {
 				base = base.substring(0, i);
 			}
-
 			if (base.equals("cofh") || base.equals("powercrystals")) {
 				level = Level.ERROR;
 			}

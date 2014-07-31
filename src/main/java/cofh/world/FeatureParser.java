@@ -238,8 +238,7 @@ public class FeatureParser {
 		FeatureBase feature = new FeatureOreGenNormal(featureName, new WorldGenMinableCluster(resList, clusterSize, block), numClusters, meanHeight,
 				maxVariance, biomeRes, retrogen, dimRes);
 		addFeatureRestrictions(feature, genObject);
-		WorldHandler.addFeature(feature);
-		return true;
+		return WorldHandler.addFeature(feature);
 	}
 
 	private static boolean parseResList(JsonObject genObject, List<WeightedRandomBlock> resList) {

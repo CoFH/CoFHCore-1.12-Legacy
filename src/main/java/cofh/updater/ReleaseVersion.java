@@ -26,7 +26,6 @@ public class ReleaseVersion implements ArtifactVersion {
 		_beta = beta;
 	}
 
-
 	public ReleaseVersion(String label, String s) {
 
 		int major = 0;
@@ -117,10 +116,11 @@ public class ReleaseVersion implements ArtifactVersion {
 	@Override
 	public int compareTo(ArtifactVersion o) {
 
-		if (o instanceof ReleaseVersion)
-			return compareTo((ReleaseVersion)o);
+		if (o instanceof ReleaseVersion) {
+			return compareTo((ReleaseVersion) o);
+		}
 		if (o instanceof ModVersion) {
-			ModVersion r = (ModVersion)o;
+			ModVersion r = (ModVersion) o;
 			if (_label.equals(r.getLabel())) {
 				return compareTo(r.modVersion());
 			} else if ("Minecraft".equals(_label)) {

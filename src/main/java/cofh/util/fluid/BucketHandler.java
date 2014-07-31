@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
@@ -30,6 +31,8 @@ public class BucketHandler {
 
 	public static void initialize() {
 
+		registerBucket(Blocks.flowing_water, 0, new ItemStack(Items.water_bucket));
+		registerBucket(Blocks.flowing_lava, 0, new ItemStack(Items.lava_bucket));
 	}
 
 	private static BiMap<BlockWrapper, ItemWrapper> buckets = HashBiMap.create();

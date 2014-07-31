@@ -2,6 +2,7 @@ package cofh.command;
 
 import cofh.util.StringHelper;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
@@ -28,7 +29,7 @@ public class CommandHandler extends CommandBase {
 		registerSubCommand(CommandTPX.instance);
 		registerSubCommand(CommandEnchant.instance);
 	}
-	
+
 	public static void initCommands(FMLServerStartingEvent event) {
 
 		event.registerServerCommand(instance);
@@ -43,10 +44,11 @@ public class CommandHandler extends CommandBase {
 		return false;
 	}
 
-	public static Set<String> getCommandList(){
-	    return commands.keySet();
+	public static Set<String> getCommandList() {
+
+		return commands.keySet();
 	}
-	
+
 	@Override
 	public String getCommandName() {
 

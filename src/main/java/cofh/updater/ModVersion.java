@@ -2,7 +2,7 @@ package cofh.updater;
 
 import cpw.mods.fml.common.versioning.ArtifactVersion;
 
-public class ModVersion implements  ArtifactVersion {
+public class ModVersion implements ArtifactVersion {
 
 	private final String _label;
 	private final ReleaseVersion _mcVer;
@@ -49,21 +49,21 @@ public class ModVersion implements  ArtifactVersion {
 	}
 
 	public static ModVersion parse(String label, String s) {
-		
+
 		if (s == null || s.length() == 0) {
 			return null;
 		}
 		return new ModVersion(label, s);
 	}
 
-
 	@Override
 	public int compareTo(ArtifactVersion o) {
 
-		if (o instanceof ModVersion)
-			return compareTo((ModVersion)o);
+		if (o instanceof ModVersion) {
+			return compareTo((ModVersion) o);
+		}
 		if (o instanceof ReleaseVersion) {
-			ReleaseVersion r = (ReleaseVersion)o;
+			ReleaseVersion r = (ReleaseVersion) o;
 			if (_label.equals(r.getLabel())) {
 				return _modVer.compareTo(r);
 			} else if ("Minecraft".equals(r.getLabel())) {
