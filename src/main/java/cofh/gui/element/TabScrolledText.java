@@ -9,10 +9,10 @@ import org.lwjgl.opengl.GL11;
 
 public abstract class TabScrolledText extends TabBase {
 
-	List<String> myText;
-	int firstLine = 0;
-	int maxFirstLine = 0;
-	int numLines = 0;
+	protected List<String> myText;
+	protected int firstLine = 0;
+	protected int maxFirstLine = 0;
+	protected int numLines = 0;
 
 	public TabScrolledText(GuiBase gui, int side, String infoString) {
 
