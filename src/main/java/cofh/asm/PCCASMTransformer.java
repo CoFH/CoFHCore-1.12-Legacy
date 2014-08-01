@@ -73,7 +73,7 @@ public class PCCASMTransformer implements IClassTransformer {
 		strippables = new THashSet<String>(10);
 	}
 	private static final String[] emptyList = {};
-	private static final boolean ENABLE_HACK = Boolean.valueOf(System.getProperty("cofh.classloadinghack", "true"));
+	private static final boolean ENABLE_HACK = Boolean.valueOf(System.getProperty("cofh.classloadinghack", "false"));
 
 	private final ArrayList<String> workingPath = new ArrayList<String>();
 	private ClassNode world = null, worldServer = null;

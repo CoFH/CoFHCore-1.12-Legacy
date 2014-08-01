@@ -70,14 +70,11 @@ public class ModVersion implements ArtifactVersion {
 				return _mcVer.compareTo(r);
 			}
 		}
-		return Integer.MIN_VALUE;
+		return 0;
 	}
 
 	public int compareTo(ModVersion o) {
 
-		if (o == null) {
-			return Integer.MIN_VALUE;
-		}
 		if (_mcVer.compareTo(o.minecraftVersion()) != 0) {
 			return _mcVer.compareTo(o.minecraftVersion());
 		}

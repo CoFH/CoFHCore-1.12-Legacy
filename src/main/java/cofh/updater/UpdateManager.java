@@ -16,6 +16,7 @@ import net.minecraft.util.ChatComponentText;
 
 public class UpdateManager {
 
+	private static transient int pollOffset = 0;
 	public static void registerUpdater(UpdateManager manager) {
 
 		FMLCommonHandler.instance().bus().register(manager);
@@ -36,6 +37,7 @@ public class UpdateManager {
 		_mod = mod;
 		_updateThread = new UpdateCheckThread(mod, releaseUrl);
 		_updateThread.start();
+		lastPoll += (pollOffset += 140);
 	}
 
 	@SubscribeEvent
@@ -59,10 +61,6 @@ public class UpdateManager {
 				}
 				ModVersion version = _updateThread.newVersion();
 
-				// TODO: This really shouldn't be null, but it's happening
-				if (version == null) {
-					return;
-				}
 				EntityPlayer player = evt.player;
 				player.addChatMessage(new ChatComponentText(GOLD + "[" + _mod.getModName() + "]").appendText(WHITE + " A new version is available: ")
 						.appendText(AQUA + version.modVersion().toString()));

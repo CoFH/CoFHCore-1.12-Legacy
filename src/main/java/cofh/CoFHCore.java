@@ -57,7 +57,7 @@ public class CoFHCore extends BaseMod {
 	public static final String modName = "CoFH Core";
 	public static final String version = CoFHProps.VERSION;
 	public static final String dependencies = CoFHProps.DEPENDENCIES;
-	public static final String releaseURL = "http://github.com/CoFH/CoFHCore/blob/master/VERSION";
+	public static final String releaseURL = "https://raw.github.com/CoFH/CoFHCore/master/VERSION";
 
 	@Instance(modId)
 	public static CoFHCore instance;

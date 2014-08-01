@@ -127,14 +127,11 @@ public class ReleaseVersion implements ArtifactVersion {
 				return compareTo(r.minecraftVersion());
 			}
 		}
-		return Integer.MIN_VALUE;
+		return 0;
 	}
 
 	public int compareTo(ReleaseVersion arg0) {
 
-		if (arg0 == null) {
-			return Integer.MIN_VALUE;
-		}
 		if (this.major() != arg0.major()) {
 			return this.major() < arg0.major() ? -1 : 1;
 		}

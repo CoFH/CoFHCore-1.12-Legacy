@@ -34,7 +34,7 @@ public class UpdateCheckThread extends Thread {
 	@Override
 	public void run() {
 
-		try {
+		l: try {
 			String id = _mod.getModName();
 			ModVersion ourVer = ModVersion.parse(id, _mod.getModVersion());
 
@@ -45,21 +45,25 @@ public class UpdateCheckThread extends Thread {
 			ModVersion critVer = ModVersion.parse(id, reader.readLine());
 			reader.close();
 
+			if (newVer == null) break l;
+
 			_newVer = newVer;
 			_newVerAvailable = ourVer.compareTo(newVer) < 0;
 
 			if (_newVerAvailable) {
-				_mod.getLogger().info("An updated version of " + _mod.getModName() + " is available: " + newVer.modVersion().toString() + ".");
+				_mod.getLogger().info("An updated version of " + _mod.getModName() + " is available: " + newVer + ".");
 
 				if (ourVer.minecraftVersion().compareTo(newVer.minecraftVersion()) < 0) {
-					_mod.getLogger().info("This update is for Minecraft " + newVer.minecraftVersion().toString() + ".");
+					ReleaseVersion crit = critVer.minecraftVersion(), our = ourVer.minecraftVersion();
+					_newVerAvailable = crit.major() == our.major() && crit.minor() == our.minor();
 				}
-				if (ourVer.compareTo(critVer) > 0) {
+				if (critVer != null && ourVer.compareTo(critVer) > 0) {
 					_criticalUpdate = Boolean.parseBoolean(critVer.description());
+					_criticalUpdate &= _newVerAvailable;
 				}
 			}
 			if (_criticalUpdate) {
-				_mod.getLogger().info("This update has been marked as CRITICAL " + "and will ignore notification suppression.");
+				_mod.getLogger().info("This update has been marked as CRITICAL and will ignore notification suppression.");
 			}
 		} catch (Exception e) {
 			Level level = Level.WARN;
