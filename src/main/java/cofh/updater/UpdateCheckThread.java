@@ -45,7 +45,9 @@ public class UpdateCheckThread extends Thread {
 			ModVersion critVer = ModVersion.parse(id, reader.readLine());
 			reader.close();
 
-			if (newVer == null) break l;
+			if (newVer == null) {
+				break l;
+			}
 
 			_newVer = newVer;
 			_newVerAvailable = ourVer.compareTo(newVer) < 0;

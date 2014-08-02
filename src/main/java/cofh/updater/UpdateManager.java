@@ -17,6 +17,7 @@ import net.minecraft.util.ChatComponentText;
 public class UpdateManager {
 
 	private static transient int pollOffset = 0;
+
 	public static void registerUpdater(UpdateManager manager) {
 
 		FMLCommonHandler.instance().bus().register(manager);
