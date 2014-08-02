@@ -1,0 +1,82 @@
+#it_IT
+
+chat.cofh.secure.0=Nota: Op del Server possono accedere a blocchi "sicuri" su questo server.
+chat.cofh.secure.1=Questo è privato e appartiene a te
+chat.cofh.secure.2=Potevi perdere la mano!
+
+enchant.cofh.holding=Contenere
+
+info.cofh.access=Accesso
+info.cofh.accessMode=Modalità accesso
+info.cofh.accessPublic=Accesso pubblico
+info.cofh.accessRestricted=Ristretto
+info.cofh.accessPrivate=Solo proprietario
+info.cofh.all=Tutto
+info.cofh.amount=Quantità
+info.cofh.augmentation=Potenziamento
+info.cofh.blank=Vouto
+info.cofh.capacity=Capacità
+info.cofh.charge=Carica
+info.cofh.configuration=Configurazioni
+info.cofh.contents=Contenuto
+info.cofh.controlStatus=Controllo stato
+info.cofh.damageAttack=Danno dell'attacco
+info.cofh.damageFlux=Danno del Flux
+info.cofh.disabled=Disabilitato
+info.cofh.dry=Asciutto
+info.cofh.empty=Vuoto
+info.cofh.enabled=Attiva
+info.cofh.energy=Energia
+info.cofh.energyConsume=Uso di corrente
+info.cofh.energyProduce=Corrente in uscita
+info.cofh.energyStored=Corrente immagazinata
+info.cofh.fluid=Fluido
+info.cofh.forDetails=per dettagli
+info.cofh.frequency=Frequenza
+info.cofh.friendsList=Lista degli amici
+info.cofh.hasInfo=Ha informazioni
+info.cofh.high=Alto
+info.cofh.hold=Tiene
+info.cofh.ignored=Ignorato
+info.cofh.information=Informazioni
+info.cofh.infinite=Infinito
+info.cofh.item=Oggetto
+info.cofh.items=Oggetti
+info.cofh.level=Livello
+info.cofh.locked=Serrato
+info.cofh.low=Basso
+info.cofh.maxEnergyPerTick=Corrente massima
+info.cofh.none=Niente
+info.cofh.owner=Proprietario
+info.cofh.perUse=Per uso
+info.cofh.press=Premi
+info.cofh.receive=Riceve
+info.cofh.receiving=Ricevendo
+info.cofh.redstoneControl=Controllo pietrarossa
+info.cofh.security=Sicurezza
+info.cofh.send=Manda
+info.cofh.sending=Mandando
+info.cofh.shift=Shift
+info.cofh.signal=Segnale
+info.cofh.signalRequired=Segnale richiesto
+info.cofh.soaked=Fradicio
+info.cofh.source=Fonte
+info.cofh.transfer=Trasferisci
+info.cofh.tutorial=Tutorial
+info.cofh.unlocked=Sblocca
+
+info.cofh.tutorial.fluxRequired=Richiede Redstone Flux per funzionare.
+info.cofh.tutorial.tabAugment=Il tab Potenziamento permette aggiunte modulari.
+info.cofh.tutorial.tabConfiguration.0=Il tab Configurazioni determina come gli oggetti entrano e escono da questo dispositivo.
+info.cofh.tutorial.tabConfiguration.1=Il tab Configurazioni determina le modalità di operazione di questo dispositivo.
+info.cofh.tutorial.tabRedstone=Il tab Controllo pietrarossa configura come quest dispositivo reagisce a segnali di pietrarossa.
+info.cofh.tutorial.tabSecurity=Il tab Sicurezza permette al proprietario di controllare chi ha accesso a quest dispositivo.
+
+item.invalid.name=Oggetto invalido (elimina)
+
+#Fluid Name Fixes
+
+fluid.tile.water=Acqua
+fluid.tile.lava=Lava
+fluid.fuel=Carburante
+fluid.oil=Petrolio
