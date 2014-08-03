@@ -4,6 +4,8 @@ import cofh.util.ItemHelper;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
 
+import java.util.UUID;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
@@ -15,7 +17,7 @@ import net.minecraftforge.common.util.FakePlayer;
 
 public class CoFHFakePlayer extends FakePlayer {
 
-	private static GameProfile NAME = new GameProfile(null, "[CoFH]");
+	private static GameProfile NAME = new GameProfile(UUID.fromString("5ae51d0b-e8bc-5a02-89f4-b5dbb05963da"), "[CoFH]");
 
 	public boolean isSneaking = false;
 	public ItemStack previousItem = null;
