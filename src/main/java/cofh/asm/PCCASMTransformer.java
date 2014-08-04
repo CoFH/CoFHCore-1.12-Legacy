@@ -208,44 +208,28 @@ public class PCCASMTransformer implements IClassTransformer {
 	
 	private byte[] writeRenderGlobal(String name, String transformedName, byte[] bytes, ClassReader cr) {
 		
-		String mName;
-		if (LoadingPlugin.runtimeDeobfEnabled) {
-			mName = "func_72716_a";
-		} else {
-			mName = "updateRenderers";
-		}
-		String sig = "(Lnet/minecraft/entity/EntityLivingBase;Z)Z";
-		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
-		String sigObf = "(" + "L" + remapper.unmap("net/minecraft/entity/EntityLivingBase") + ";" + "Z)Z";
-
 		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM4);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
-		l: {
-			MethodNode m = null;
-			for (MethodNode n : cn.methods) {
-				if (mName.equals(n.name) && (sig.equals(n.desc) || sigObf.equals(n.desc))) {
-					m = n;
-					break;
-				}
-			}
-
-			if (m == null)
-				break l;
-
-			for (int i = 0, e = m.instructions.size(); i < e; ++i) {
-				AbstractInsnNode n = m.instructions.get(i);
-				if (n instanceof MethodInsnNode && n.getOpcode() == Opcodes.INVOKESTATIC) {
-					MethodInsnNode mn = (MethodInsnNode)n;
-					if ("java/util/Collections".equals(mn.owner)) {
-						mn.owner = "cofh/asm/HooksCore";
-						break;
+		{
+			for (MethodNode m : cn.methods) {
+				for (int i = 0, e = m.instructions.size(); i < e; ++i) {
+					AbstractInsnNode n = m.instructions.get(i);
+					if (n instanceof MethodInsnNode && n.getOpcode() == Opcodes.INVOKESTATIC) {
+						MethodInsnNode mn = (MethodInsnNode)n;
+						if ("java/util/Collections".equals(mn.owner)) {
+							mn.owner = "cofh/asm/HooksCore";
+							break;
+						} else if ("java/util/Arrays".equals(mn.owner)) {
+							mn.owner = "cofh/asm/HooksCore";
+							break; // only ever called once in a given method
+						}
 					}
 				}
 			}
 
-			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+			ClassWriter cw = new ClassWriter(0);
 			cn.accept(cw);
 			bytes = cw.toByteArray();
 		}

@@ -166,6 +166,13 @@ public class ProxyClient extends Proxy {
 			Minecraft.getMinecraft().effectRenderer = new cofh.render.CustomEffectRenderer();
 		}
 
+		comment = "Set to false to disable rendering from sorting chunks";
+		if (!CoFHCore.configClient.get(Configuration.CATEGORY_GENERAL, "EnableRenderSorting", true, comment)) {
+			CoFHProps.enableRenderSorting = false;
+		}
+
+		CoFHCore.configClient.save();
+
 		fontRenderer = new CoFHFontRender(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"),
 				Minecraft.getMinecraft().renderEngine, false);
 
