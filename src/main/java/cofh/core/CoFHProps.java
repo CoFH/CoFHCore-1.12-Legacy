@@ -12,7 +12,7 @@ public class CoFHProps {
 
 	public static final String VERSION = "1.7.10R3.0.0B2";
 
-	private static final String BUILD = "1180";
+	private static final String BUILD = "1197";
 	public static final String FML_REQ = "7.10.0." + BUILD;
 	public static final String FML_REQ_MAX = "7.11";
 	public static final String FORGE_REQ = "10.13.0." + BUILD;
