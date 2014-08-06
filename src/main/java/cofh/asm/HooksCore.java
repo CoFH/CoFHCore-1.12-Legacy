@@ -7,11 +7,23 @@ import java.util.List;
 
 public class HooksCore {
 
-	public static void getObjectClass(Object aObject) {
+	//{ Optifine hooks
+	public static <T extends Object> void sort(T[] list, int start, int toIndex, Comparator<T> cmp) {
 
-		System.out.println("INJECT OBJ: " + aObject.getClass().getName());
+		if (CoFHProps.enableRenderSorting) {
+			quickSortArray(list, start, toIndex - 1, 0, cmp);
+		}
 	}
 
+	public static <T extends Object> void sort(List<T> list, int start, int toIndex, Comparator<T> cmp) {
+
+		if (CoFHProps.enableRenderSorting) {
+			quickSortList(list, start, toIndex - 1, 0, cmp);
+		}
+	}
+	//}
+
+	//{ Vanilla hooks
 	public static <T extends Object> void sort(T[] list, Comparator<T> cmp) {
 
 		if (CoFHProps.enableRenderSorting) {
@@ -25,6 +37,7 @@ public class HooksCore {
 			quickSortList(list, 0, list.size() - 1, 0, cmp);
 		}
 	}
+	//}
 
 	private static <T> void quickSortList(List<T> input, int left, int right, int d, Comparator<T> cmp) {
 
