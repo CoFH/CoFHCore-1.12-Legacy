@@ -1,20 +1,20 @@
 package cofh.core;
 
 import cofh.CoFHCore;
-import cofh.gui.client.GuiFriendsList;
-import cofh.gui.element.TabAugment;
-import cofh.gui.element.TabConfiguration;
-import cofh.gui.element.TabEnergy;
-import cofh.gui.element.TabInfo;
-import cofh.gui.element.TabRedstone;
-import cofh.gui.element.TabSecurity;
-import cofh.gui.element.TabTutorial;
-import cofh.key.CoFHKey;
-import cofh.render.CoFHFontRender;
-import cofh.render.IconRegistry;
-import cofh.util.KeyBindingEmpower;
-import cofh.util.SocialRegistry;
-import cofh.util.TickHandlerEnderRegistry;
+import cofh.core.gui.client.GuiFriendsList;
+import cofh.core.gui.element.TabAugment;
+import cofh.core.gui.element.TabConfiguration;
+import cofh.core.gui.element.TabEnergy;
+import cofh.core.gui.element.TabInfo;
+import cofh.core.gui.element.TabRedstone;
+import cofh.core.gui.element.TabSecurity;
+import cofh.core.gui.element.TabTutorial;
+import cofh.core.key.CoFHKey;
+import cofh.core.render.CoFHFontRender;
+import cofh.core.render.IconRegistry;
+import cofh.core.util.KeyBindingEmpower;
+import cofh.core.util.SocialRegistry;
+import cofh.core.util.TickHandlerEnderRegistry;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -163,7 +163,7 @@ public class ProxyClient extends Proxy {
 		String comment = "Set to false to disable any particles from spawning in minecraft.";
 		if (!CoFHCore.configClient.get(Configuration.CATEGORY_GENERAL, "EnableParticles", true, comment)) {
 			CoFHCore.log.info("Replacing EffectRenderer");
-			Minecraft.getMinecraft().effectRenderer = new cofh.render.CustomEffectRenderer();
+			Minecraft.getMinecraft().effectRenderer = new cofh.core.render.CustomEffectRenderer();
 		}
 
 		comment = "Set to false to disable rendering from sorting chunks";

@@ -1,8 +1,8 @@
 package cofh.mod;
 
-import cofh.updater.IUpdatableMod;
-import cofh.updater.ModRange;
-import cofh.updater.ModVersion;
+import cofh.mod.updater.IUpdatableMod;
+import cofh.mod.updater.ModRange;
+import cofh.mod.updater.ModVersion;
 import com.google.common.base.Strings;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;

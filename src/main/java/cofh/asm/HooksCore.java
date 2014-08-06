@@ -5,7 +5,6 @@ import cofh.core.CoFHProps;
 import java.util.Comparator;
 import java.util.List;
 
-
 public class HooksCore {
 
 	public static void getObjectClass(Object aObject) {
@@ -13,22 +12,25 @@ public class HooksCore {
 		System.out.println("INJECT OBJ: " + aObject.getClass().getName());
 	}
 
-
 	public static <T extends Object> void sort(T[] list, Comparator<T> cmp) {
 
-		if (CoFHProps.enableRenderSorting)
+		if (CoFHProps.enableRenderSorting) {
 			quickSortArray(list, 0, list.length - 1, 0, cmp);
+		}
 	}
-
 
 	public static <T extends Object> void sort(List<T> list, Comparator<T> cmp) {
 
-		if (CoFHProps.enableRenderSorting)
+		if (CoFHProps.enableRenderSorting) {
 			quickSortList(list, 0, list.size() - 1, 0, cmp);
+		}
 	}
 
 	private static <T> void quickSortList(List<T> input, int left, int right, int d, Comparator<T> cmp) {
-		if (left >= right) return;
+
+		if (left >= right) {
+			return;
+		}
 		int j = right, i = left;
 		int size = right - left;
 		T pivotPoint = input.get(((right >>> 1) + (left >>> 1))), t;
@@ -53,10 +55,12 @@ public class HooksCore {
 				return;
 			}
 			while (left < right) {
-				while (cmp.compare(input.get(right), pivotPoint) > 0)
+				while (cmp.compare(input.get(right), pivotPoint) > 0) {
 					--right;
-				while (cmp.compare(input.get(left), pivotPoint) < 0)
+				}
+				while (cmp.compare(input.get(left), pivotPoint) < 0) {
 					++left;
+				}
 				if (left < right) {
 					t = input.get(left);
 					input.set(left, input.get(right));
@@ -67,15 +71,20 @@ public class HooksCore {
 			}
 			if (right > 0) {
 				if (left == right) {
-					if (cmp.compare(input.get(left), pivotPoint) < 0) ++left;
-					else if (cmp.compare(input.get(right), pivotPoint) > 0) --right;
+					if (cmp.compare(input.get(left), pivotPoint) < 0) {
+						++left;
+					} else if (cmp.compare(input.get(right), pivotPoint) > 0) {
+						--right;
+					}
 				}
 				if (i < right) {
 					quickSortList(input, i, right, d + 1, cmp);
 				}
 			}
 			left |= (left == 0) & (right == 0) ? 1 : 0;
-			if (j <= left) return;
+			if (j <= left) {
+				return;
+			}
 			i = left;
 			right = j;
 			pivotPoint = input.get(((right >>> 1) + (left >>> 1)));
@@ -85,7 +94,10 @@ public class HooksCore {
 	}
 
 	private static <T> void quickSortArray(T[] input, int left, int right, int d, Comparator<T> cmp) {
-		if (left >= right) return;
+
+		if (left >= right) {
+			return;
+		}
 		int j = right, i = left;
 		int size = right - left;
 		T pivotPoint = input[((right >>> 1) + (left >>> 1))], t;
@@ -110,10 +122,12 @@ public class HooksCore {
 				return;
 			}
 			while (left < right) {
-				while (cmp.compare(input[right], pivotPoint) > 0)
+				while (cmp.compare(input[right], pivotPoint) > 0) {
 					--right;
-				while (cmp.compare(input[left], pivotPoint) < 0)
+				}
+				while (cmp.compare(input[left], pivotPoint) < 0) {
 					++left;
+				}
 				if (left < right) {
 					t = input[left];
 					input[left] = input[right];
@@ -124,15 +138,20 @@ public class HooksCore {
 			}
 			if (right > 0) {
 				if (left == right) {
-					if (cmp.compare(input[left], pivotPoint) < 0) ++left;
-					else if (cmp.compare(input[right], pivotPoint) > 0) --right;
+					if (cmp.compare(input[left], pivotPoint) < 0) {
+						++left;
+					} else if (cmp.compare(input[right], pivotPoint) > 0) {
+						--right;
+					}
 				}
 				if (i < right) {
 					quickSortArray(input, i, right, d + 1, cmp);
 				}
 			}
 			left |= (left == 0) & (right == 0) ? 1 : 0;
-			if (j <= left) return;
+			if (j <= left) {
+				return;
+			}
 			i = left;
 			right = j;
 			pivotPoint = input[((right >>> 1) + (left >>> 1))];

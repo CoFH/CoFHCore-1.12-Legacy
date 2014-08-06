@@ -1,29 +1,28 @@
 package cofh;
 
 import cofh.api.transport.RegistryEnderAttuned;
-import cofh.command.CommandFriend;
-import cofh.command.CommandHandler;
 import cofh.core.CoFHProps;
 import cofh.core.Proxy;
-import cofh.enchantment.CoFHEnchantment;
-import cofh.entity.DropHandler;
-import cofh.gui.GuiHandler;
+import cofh.core.command.CommandFriend;
+import cofh.core.command.CommandHandler;
+import cofh.core.enchantment.CoFHEnchantment;
+import cofh.core.entity.DropHandler;
+import cofh.core.gui.GuiHandler;
+import cofh.core.network.PacketHandler;
+import cofh.core.network.PacketSocial;
+import cofh.core.util.ConfigHandler;
+import cofh.core.util.FMLEventHandler;
+import cofh.core.util.SocialRegistry;
+import cofh.core.util.crafting.RecipeAugmentable;
+import cofh.core.util.crafting.RecipeSecure;
+import cofh.core.util.crafting.RecipeUpgrade;
+import cofh.core.util.fluid.BucketHandler;
+import cofh.core.util.oredict.OreDictionaryArbiter;
+import cofh.core.world.FeatureParser;
+import cofh.core.world.WorldHandler;
+import cofh.lib.util.helpers.StringHelper;
 import cofh.mod.BaseMod;
-import cofh.network.PacketHandler;
-import cofh.network.PacketSocial;
-import cofh.updater.UpdateManager;
-import cofh.util.ConfigHandler;
-import cofh.util.FMLEventHandler;
-import cofh.util.MathHelper;
-import cofh.util.SocialRegistry;
-import cofh.util.StringHelper;
-import cofh.util.crafting.RecipeAugmentable;
-import cofh.util.crafting.RecipeSecure;
-import cofh.util.crafting.RecipeUpgrade;
-import cofh.util.fluid.BucketHandler;
-import cofh.util.oredict.OreDictionaryArbiter;
-import cofh.world.FeatureParser;
-import cofh.world.WorldHandler;
+import cofh.mod.updater.UpdateManager;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -198,7 +197,7 @@ public class CoFHCore extends BaseMod {
 		configCore.save();
 
 		// CLIENT ONLY
-		CoFHProps.soundVolume = MathHelper.clampF((float) configClient.get("sound", "Volume", 1.0F), 0.0F, 1.0F);
+		// CoFHProps.soundVolume = MathHelper.clampF((float) configClient.get("sound", "Volume", 1.0F), 0.0F, 1.0F);
 
 		configClient.save();
 

@@ -205,9 +205,9 @@ public class PCCASMTransformer implements IClassTransformer {
 
 		return bytes;
 	}
-	
+
 	private byte[] writeRenderGlobal(String name, String transformedName, byte[] bytes, ClassReader cr) {
-		
+
 		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM4);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
@@ -217,7 +217,7 @@ public class PCCASMTransformer implements IClassTransformer {
 				for (int i = 0, e = m.instructions.size(); i < e; ++i) {
 					AbstractInsnNode n = m.instructions.get(i);
 					if (n instanceof MethodInsnNode && n.getOpcode() == Opcodes.INVOKESTATIC) {
-						MethodInsnNode mn = (MethodInsnNode)n;
+						MethodInsnNode mn = (MethodInsnNode) n;
 						if ("java/util/Collections".equals(mn.owner)) {
 							mn.owner = "cofh/asm/HooksCore";
 							break;

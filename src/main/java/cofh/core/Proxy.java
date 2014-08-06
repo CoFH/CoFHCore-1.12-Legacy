@@ -1,12 +1,12 @@
 package cofh.core;
 
-import cofh.key.CoFHKey;
-import cofh.key.KeyPacket;
-import cofh.network.PacketSocial;
-import cofh.network.PacketTile;
-import cofh.network.PacketTileInfo;
-import cofh.util.KeyBindingEmpower;
-import cofh.util.oredict.OreDictionaryArbiter;
+import cofh.core.key.CoFHKey;
+import cofh.core.key.KeyPacket;
+import cofh.core.network.PacketSocial;
+import cofh.core.network.PacketTile;
+import cofh.core.network.PacketTileInfo;
+import cofh.core.util.KeyBindingEmpower;
+import cofh.core.util.oredict.OreDictionaryArbiter;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;

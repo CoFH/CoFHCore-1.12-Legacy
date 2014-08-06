@@ -1,8 +1,8 @@
 package cofh.plugin;
 
 import cofh.CoFHCore;
-import cofh.util.CoreUtils;
-import cofh.util.StringHelper;
+import cofh.core.util.CoreUtils;
+import cofh.lib.util.helpers.StringHelper;
 
 import java.text.DecimalFormat;
 import java.util.LinkedList;
