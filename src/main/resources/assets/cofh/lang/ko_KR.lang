@@ -1,0 +1,103 @@
+#ko_KR
+
+#chat.cofh.secure.0=알림: 서버에 모든 Op는 제한없이 보안 설정된 블록을 접근 할 수 있습니다.
+#chat.cofh.secure.1=This is private and belongs to
+#chat.cofh.secure.2=You could have lost your hand!
+
+#enchant.cofh.holding=Holding
+
+info.cofh.access=보안
+info.cofh.accessMode=보안 설정
+info.cofh.accessPublic=공개
+info.cofh.accessRestricted=한정됨
+info.cofh.accessPrivate=비공개
+info.cofh.all=모두
+#info.cofh.amount=Amount
+info.cofh.augmentation=강화
+info.cofh.blank=비어있음
+info.cofh.capacity=용량
+info.cofh.charge=충전량
+info.cofh.configuration=설정
+#info.cofh.contents=Contents
+info.cofh.controlStatus=활성화 상태
+info.cofh.damageAttack=공격 피해
+info.cofh.damageFlux=플럭스 피해
+info.cofh.disabled=비활성화
+info.cofh.dry=마른
+info.cofh.empty=비어있음
+info.cofh.enabled=활성화
+info.cofh.energy=에너지
+info.cofh.energyConsume=현재 소모량
+info.cofh.energyProduce=현재 발전량
+info.cofh.energyStored=에너지 저장량
+info.cofh.fluid=액체
+info.cofh.forDetails=로 자세한 정보 보기
+info.cofh.frequency=주파수
+info.cofh.friendsList=친구 목록
+#info.cofh.hasInfo=Has Information
+info.cofh.high=높음
+info.cofh.hold=
+info.cofh.ignored=신호 무시
+info.cofh.information=정보
+info.cofh.infinite=무한
+info.cofh.item=Item
+info.cofh.items=아이템
+info.cofh.level=단계
+#info.cofh.locked=Locked
+info.cofh.low=낮음
+info.cofh.maxEnergyPerTick=최대 전력
+info.cofh.none=없음
+info.cofh.owner=소유주
+info.cofh.perUse=소모
+#info.cofh.press=Press
+info.cofh.receive=출력량
+info.cofh.receiving=받기
+info.cofh.redstoneControl=레드스톤 제어
+info.cofh.security=보안
+info.cofh.send=입력량
+info.cofh.sending=보내기
+info.cofh.shift=Shift
+info.cofh.signal=신호
+info.cofh.signalRequired=요구 신호 세기
+info.cofh.soaked=빨아들인
+info.cofh.source=소스
+#info.cofh.transfer=Transfer
+info.cofh.tutorial=도움말
+#info.cofh.unlocked=Unlocked
+
+info.cofh.command.friend=친구 목록에 친구를 추가, 삭제 하는 명령어입니다.
+info.cofh.command.help=다른 명령어의 정보를 알려주는 명령어입니다.
+info.cofh.command.killall=지정된 엔티티를 제거하는 명령어입니다. 지정하지 않을경우 적대적인 엔티티만 제거합니다.
+info.cofh.command.tps=서버의 TPS를 출력하는 명령어입니다. TPS가 20일때 최적의 상태입니다.
+info.cofh.command.tpx=차원간 이동이 가능한 향상된 /tp 명령어입니다.
+info.cofh.command.version=버전 정보를 알려주는 명령어입니다.
+
+info.cofh.command.syntaxError=잘못된 구문입니다.
+
+info.cofh.command.friend.0=플레이어를 성공적으로 친구 목록에 등록하였습니다.
+#info.cofh.command.friend.1=Sorry, there was a problem adding
+#info.cofh.command.friend.2=to your list.
+#info.cofh.command.friend.3=Sorry, that is not a valid username.
+info.cofh.command.friend.4=플레이어를 성공적으로 친구 목록에서 제거하였습니다.
+info.cofh.command.friend.5=플레이어는 친구 목록에 등록되어있지 않습니다.
+#info.cofh.command.help.0=Available commands are:
+#info.cofh.command.killall.0=
+#info.cofh.command.killall.1=
+info.cofh.command.killall.2=적대적인 몬스터를 찾을 수 없습니다.
+info.cofh.command.version.0=현재 모드 버전
+
+info.cofh.tutorial.fluxRequired=기계가 동작하는데 RF가 필요합니다.
+info.cofh.tutorial.tabAugment=강화 탭에서 모듈을 통해서 기기를 업그레이드 할 수있습니다.
+info.cofh.tutorial.tabConfiguration.0=설정 탭에서 블록의 입력/출력 방향을 설정할 수 있습니다.
+info.cofh.tutorial.tabConfiguration.1=설정 탭에서 블록의 전송/수송 상태를 설정할 수 있습니다.
+info.cofh.tutorial.tabRedstone=레드스톤 제어 탭에서 레드스톤 신호 세기에따른 동작 여부를 설정할 수 있습니다.
+info.cofh.tutorial.tabSecurity=보안 탭에서 블록에 접근 가능한 사용자를 설정할 수 있습니다.
+
+#item.invalid.name=Invalid Item (Destroy)
+
+#액체 이름 수정
+
+#fluid.tile.water=물
+#fluid.tile.lava=용암
+#fluid.fuel=연료
+#fluid.oil=오일
