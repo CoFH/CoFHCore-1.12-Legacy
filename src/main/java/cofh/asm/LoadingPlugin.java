@@ -23,39 +23,20 @@ import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-@IFMLLoadingPlugin.TransformerExclusions({ "cofh.asm" })
+@IFMLLoadingPlugin.TransformerExclusions({ "cofh.asm." })
 public class LoadingPlugin implements IFMLLoadingPlugin {
 
-	public static final String MC_VERSION = "[1.7.2]";
+	public static final String MC_VERSION = "[1.7.10]";
 	public static ArrayList<String> transformersList = new ArrayList<String>();
 	public static boolean runtimeDeobfEnabled = false;
 	public static ASMDataTable ASM_DATA = null;
 
 	// Initialize SubMod transformers
 	static {
+
+		versionCheck(MC_VERSION, "CoFHCore");
 		attemptClassLoad("cofh.asm.TransformerCore", "Failed to find Main Transformer! Critical Issue!");
 		attemptClassLoad("cofh.asm.PCCASMTransformer", "Failed to find Secondary Transformer! Critical Issue!");
-	}
-
-	public LoadingPlugin() {
-
-		// DepLoader.load();
-	}
-
-	public static void attemptClassLoad(String className, String failMessage) {
-
-		try {
-			// Class.forName(className);
-			transformersList.add(className);
-		} catch (Throwable e) {
-			FMLLog.warning(failMessage);
-		}
-	}
-
-	@Override
-	public String getAccessTransformerClass() {
-
-		return "cofh.asm.PCCAccessTransformer";
 	}
 
 	public static void versionCheck(String reqVersion, String mod) {
@@ -88,10 +69,30 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 		}
 	}
 
+	public LoadingPlugin() {
+
+		// DepLoader.load();
+	}
+
+	public static void attemptClassLoad(String className, String failMessage) {
+
+		try {
+			Class.forName(className, false, LoadingPlugin.class.getClassLoader());
+			transformersList.add(className);
+		} catch (Throwable e) {
+			FMLLog.warning(failMessage);
+		}
+	}
+
+	@Override
+	public String getAccessTransformerClass() {
+
+		return "cofh.asm.PCCAccessTransformer";
+	}
+
 	@Override
 	public String[] getASMTransformerClass() {
 
-		// versionCheck(MC_VERSION, "CoFHCore");
 		return transformersList.toArray(new String[2]);
 	}
 
