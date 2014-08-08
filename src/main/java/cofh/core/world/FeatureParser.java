@@ -35,6 +35,7 @@ public class FeatureParser {
 	private static File worldGenFolder;
 	private static File vanillaGen;
 	private static final String vanillaGenInternal = "assets/cofh/world/Vanilla.json";
+	private static List<Block> defaultMaterial;
 
 	private FeatureParser() {
 
@@ -60,6 +61,8 @@ public class FeatureParser {
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
+		
+		defaultMaterial = Arrays.asList(Blocks.stone);
 	}
 	
 	private static void addFiles(ArrayList<File> list, File folder) {
@@ -141,7 +144,7 @@ public class FeatureParser {
 		boolean retrogen = false;
 		GenRestriction biomeRes = GenRestriction.NONE;
 		GenRestriction dimRes = GenRestriction.NONE;
-		Block block = Blocks.stone;
+		List<Block> matList = defaultMaterial;
 
 		if (genObject.has("clusterSize")) {
 			clusterSize = genObject.get("clusterSize").getAsInt();
@@ -177,10 +180,10 @@ public class FeatureParser {
 			}
 		}
 		if (genObject.has("material")) {
-			String b = genObject.get("material").getAsString();
-			block = Block.getBlockFromName(b);
-			if (block == Blocks.air) {
-				block = Blocks.stone;
+			matList = new ArrayList<Block>();
+			parseMaterialList(genObject, matList);
+			if (matList.size() == 0) {
+				matList = defaultMaterial;
 			}
 		}
 		int minHeight = genObject.get("minHeight").getAsInt();
@@ -190,7 +193,7 @@ public class FeatureParser {
 			CoFHCore.log.error("Invalid height parameters specified in \"" + featureName + "\"");
 			return false;
 		}
-		FeatureBase feature = template.construct(featureName, resList, clusterSize, block, numClusters, minHeight, maxHeight,
+		FeatureBase feature = template.construct(featureName, resList, clusterSize, matList, numClusters, minHeight, maxHeight,
 				biomeRes, retrogen, dimRes);
 
 		addFeatureRestrictions(feature, genObject);
@@ -203,28 +206,58 @@ public class FeatureParser {
 		return GameRegistry.findBlock(blockTokens.length > 1 ? blockTokens[i++] : "minecraft", blockTokens[i]);
 	}
 
+	private static boolean parseMaterialList(JsonObject genObject, List<Block> resList) {
+
+		if (genObject.get("material").isJsonArray()) {
+			JsonArray blockList = genObject.getAsJsonArray("block");
+
+			for (int i = 0; i < blockList.size(); i++) {
+				String blockRaw = blockList.get(i).getAsString();
+				Block block = parseBlock(blockRaw);
+				if (block == null) {
+					CoFHCore.log.error("Invalid block entry!");
+					return false;
+				}
+				resList.add(block);
+			}
+		} else {
+			String blockRaw = genObject.get("material").getAsString();
+			Block block = parseBlock(blockRaw);
+			if (block == null) {
+				CoFHCore.log.error("Invalid block entry!");
+				return false;
+			}
+			resList.add(block);
+		}
+		return true;
+	}
+
 	private static boolean parseResList(JsonObject genObject, List<WeightedRandomBlock> resList) {
 
 		if (genObject.get("block").isJsonArray()) {
-			JsonArray blockList = genObject.getAsJsonArray("block");
+			JsonArray blockList = genObject.getAsJsonArray("block"), metaList = null, weightList = null;
 
-			if (!genObject.get("metadata").isJsonArray()) {
-				CoFHCore.log.error("Invalid metadata array.");
-				return false;
+			if (genObject.has("metadata")) {
+				if (!genObject.get("metadata").isJsonArray()) {
+					CoFHCore.log.error("Invalid metadata array. 'metadata' must be an array when 'block' is an array.");
+					return false;
+				}
+				metaList = genObject.getAsJsonArray("metadata");
+				if (metaList.size() != blockList.size()) {
+					CoFHCore.log.error("Block and metadata array sizes are inconsistent.");
+					return false;
+				}
 			}
-			if (!genObject.get("weight").isJsonArray()) {
-				CoFHCore.log.error("Invalid block weight array.");
-				return false;
-			}
-			JsonArray metaList = genObject.getAsJsonArray("metadata");
-			if (metaList.size() != blockList.size()) {
-				CoFHCore.log.error("Block and metadata array sizes are inconsistent.");
-				return false;
-			}
-			JsonArray weightList = genObject.getAsJsonArray("weight");
-			if (weightList.size() != blockList.size()) {
-				CoFHCore.log.error("Block and weight array sizes are inconsistent.");
-				return false;
+			if (genObject.has("weight")) {
+				if (!genObject.get("weight").isJsonArray()) {
+					CoFHCore.log.error("Invalid block weight array. 'weight' must be an array.");
+					return false;
+				}
+				weightList = genObject.getAsJsonArray("weight");
+				if (weightList.size() != blockList.size()) {
+					CoFHCore.log.error("Block and weight array sizes are inconsistent.");
+					return false;
+				}
 			}
 			for (int i = 0; i < blockList.size(); i++) {
 				String blockRaw = blockList.get(i).getAsString();
@@ -234,8 +267,8 @@ public class FeatureParser {
 					return false;
 				}
 
-				int metadata = MathHelper.clampI(metaList.get(i).getAsInt(), 0, 15);
-				int weight = MathHelper.clampI(weightList.get(i).getAsInt(), 1, 1000000);
+				int metadata = metaList != null ? MathHelper.clampI(metaList.get(i).getAsInt(), 0, 15) : 0;
+				int weight = weightList != null ? MathHelper.clampI(weightList.get(i).getAsInt(), 1, 1000000) : 100;
 				resList.add(new WeightedRandomBlock(new ItemStack(block, 1, metadata), weight));
 			}
 		} else {
@@ -326,14 +359,14 @@ public class FeatureParser {
 			}
 
 			try {
-				g = gen.getDeclaredConstructor(List.class, int.class, Block.class);
+				g = gen.getDeclaredConstructor(List.class, int.class, List.class);
 			} catch (Throwable e) {
 				CoFHCore.log.error("Invalid template generator!");
 				throw Throwables.propagate(e);
 			}
 		}
 
-		public FeatureBase construct(String name, List<WeightedRandomBlock> resources, int clusterSize, Block material,
+		public FeatureBase construct(String name, List<WeightedRandomBlock> resources, int clusterSize, List<Block> material,
 				int count, int meanY, int maxVar, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 			try {
