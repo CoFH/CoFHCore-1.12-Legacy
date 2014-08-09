@@ -1,0 +1,103 @@
+#en_US
+
+chat.cofh.secure.0=Megjegyzés: A szerveroperátorok szabadon hozzáférnek a 'levédett' blokkokhoz.
+chat.cofh.secure.1=Ez egy privát blokk, a tulajdonosa 
+chat.cofh.secure.2=Nagyon megütheted a bokád!
+
+enchant.cofh.holding=Holding
+
+info.cofh.access=Hozzáférés
+info.cofh.accessMode=Hozzáférés módja
+info.cofh.accessPublic=Nyilvános
+info.cofh.accessRestricted=Korlátozott
+info.cofh.accessPrivate=Csak tulajdonos
+info.cofh.all=All
+info.cofh.amount=Mennyiség
+info.cofh.augmentation=Augmentation
+info.cofh.blank=Üres
+info.cofh.capacity=Kapacitás
+info.cofh.charge=Töltöttség
+info.cofh.configuration=Beállítás
+info.cofh.contents=Tartalom
+info.cofh.controlStatus=Control Status
+info.cofh.damageAttack=Okozott sebzés
+info.cofh.damageFlux=Flux támadás
+info.cofh.disabled=Letiltva
+info.cofh.dry=Száraz
+info.cofh.empty=Üres
+info.cofh.enabled=Engedélyezve
+info.cofh.energy=Energia
+info.cofh.energyConsume=Fogyasztás
+info.cofh.energyProduce=Termelés
+info.cofh.energyStored=Tárolt energia
+info.cofh.fluid=Folyadék
+info.cofh.forDetails=for Details
+info.cofh.frequency=Frekvencia
+info.cofh.friendsList=Barát lista
+info.cofh.hasInfo=Has Information
+info.cofh.high=Magas
+info.cofh.hold=Hold
+info.cofh.ignored=Mellőzve
+info.cofh.information=Információ
+info.cofh.infinite=Végtelen
+info.cofh.item=Tárgy
+info.cofh.items=Tárgyak
+info.cofh.level=Szint
+info.cofh.locked=Zárolva
+info.cofh.low=Alacsony
+info.cofh.maxEnergyPerTick=Legnagyobb áram
+info.cofh.none=None
+info.cofh.owner=Tulajdonos
+info.cofh.perUse=használatonként
+info.cofh.press=Nyomd
+info.cofh.receive=Fogad
+info.cofh.receiving=Fogadás
+info.cofh.redstoneControl=Vöröskő vezérlés
+info.cofh.security=Biztonság
+info.cofh.send=Küld
+info.cofh.sending=Küldés
+info.cofh.shift=Eltolás
+info.cofh.signal=Jel
+info.cofh.signalRequired=Jel szükséges
+info.cofh.soaked=Átázott
+info.cofh.source=Forrás
+info.cofh.transfer=Átvitel
+info.cofh.tutorial=Bevezető
+info.cofh.unlocked=Feloldva
+
+info.cofh.command.friend=Ezzel a paranccsal hozzá tudsz adni valakit a barátlistádhoz, vagy törölni tudod róla.
+info.cofh.command.help=Ez a parancs segít neked más parancsok használatában!
+info.cofh.command.killall=Minden megadott nevü entitást töröl, valamint alapértelmezés szerint minden ellenséges mobot is.
+info.cofh.command.tps=Megadja a szerveren aktuálisan elérhető tick per másodperc értéket. Egy jó szerveren ez az érték 20.
+info.cofh.command.tpx=Továbbfejlesztett /tp parancs, ami működik dimenziók között is.
+info.cofh.command.version=Megadja a mod verziószámát.
+
+info.cofh.command.syntaxError=Hibás parancs.
+
+info.cofh.command.friend.0=sikeresen hozzáadva a barátlistádhoz.
+info.cofh.command.friend.1=Bocs, de nem lehetett
+info.cofh.command.friend.2=-t hozzáadni a barátlistádhoz.
+info.cofh.command.friend.3=Bocs, de ez nem egy érvényes felhasználónév.
+info.cofh.command.friend.4=sikeresen eltávolítva a barátlistádról.
+info.cofh.command.friend.5=nem volt a barátod.
+info.cofh.command.help.0=A használható parancsok:
+info.cofh.command.killall.0=
+info.cofh.command.killall.1=
+info.cofh.command.killall.2=Nem voltak ellenséges mobok!
+info.cofh.command.version.0=A mod verziószáma
+
+info.cofh.tutorial.fluxRequired=Redstone Flux kell a működéséhez.
+info.cofh.tutorial.tabAugment=The Augment tab allows for modular additions.
+info.cofh.tutorial.tabConfiguration.0=A Beállítások fülön megadhatod, hogy a tárgyak hogyan jöjjenek be és távozzanak ebből az eszközből.
+info.cofh.tutorial.tabConfiguration.1=A Beállítások fülön az eszköz működési módját szabhatod testre.
+info.cofh.tutorial.tabRedstone=A Vöröskő vezérlés fülön beállíthatod, hogyan reagáljon az eszköz a vöröskő jelre.
+info.cofh.tutorial.tabSecurity=A Biztonság fül lehetőséget ad a tulajdonosnak, hogy megadja: mások milyen módon férhetnek hozzá az eszközhöz.
+
+item.invalid.name=Hibás tárgy (érvénytelen)
+
+#Fluid Name Fixes
+
+fluid.tile.water=Víz
+fluid.tile.lava=Láva
+fluid.fuel=Üzemanyag
+fluid.oil=Kőolaj
