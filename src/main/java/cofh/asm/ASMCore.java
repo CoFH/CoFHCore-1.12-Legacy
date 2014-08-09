@@ -216,6 +216,9 @@ class ASMCore {
 					AbstractInsnNode n = m.instructions.get(i);
 					if (n instanceof MethodInsnNode && n.getOpcode() == INVOKESTATIC) {
 						MethodInsnNode mn = (MethodInsnNode)n;
+						if (!"sort".equals(mn.name)) {
+							continue;
+						}
 						if ("java/util/Collections".equals(mn.owner)) {
 							mn.owner = "cofh/asm/HooksCore";
 							break;
