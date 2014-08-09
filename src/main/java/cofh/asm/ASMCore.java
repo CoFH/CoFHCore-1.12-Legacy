@@ -34,6 +34,8 @@ import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -64,6 +66,7 @@ class ASMCore {
 		hashes.put("skyboy.core.world.WorldServerProxy", (byte) 4);
 		hashes.put("net.minecraft.client.renderer.RenderGlobal", (byte) 5);
 		hashes.put("net.minecraft.inventory.Container", (byte) 6);
+		hashes.put("net.minecraft.client.multiplayer.PlayerControllerMP", (byte) 7);
 	}
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
@@ -148,9 +151,11 @@ class ASMCore {
 		case 4:
 			return writeWorldServerProxy(name, bytes, cr);
 		case 5:
-			return writeRenderGlobal(name, transformedName, bytes, cr);
+			return alterRenderGlobal(name, transformedName, bytes, cr);
 		case 6:
 			return alterContainer(name, transformedName, bytes, cr);
+		case 7:
+			return alterController(name, transformedName, bytes, cr);
 
 		default: return bytes;
 		}
@@ -159,6 +164,81 @@ class ASMCore {
 	//.mergeItemStack(ItemStack, int, int, boolean)
 
 	//{ Improve Vanilla
+	private static byte[] alterController(String name, String transformedName, byte[] bytes, ClassReader cr) {
+		String[] names;
+		if (LoadingPlugin.runtimeDeobfEnabled) {
+			names = new String[] {"func_85182_a", "field_85183_f"};
+		} else {
+			names = new String[] {"sameToolAndBlock", "currentItemHittingBlock"};
+		}
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM4);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+
+		final String sig = "(III)Z";
+		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
+		final String itemstack = remapper.unmap("net/minecraft/item/ItemStack");
+
+		l: {
+			MethodNode m = null;
+			for (MethodNode n : cn.methods) {
+				if (names[0].equals(remapper.mapMethodName(name, n.name, n.desc)) && sig.equals(n.desc)) {
+					m = n;
+					break;
+				}
+			}
+
+			if (m == null) break l;
+
+			for (int i = 0, e = m.instructions.size(); i < e; i++) {
+				AbstractInsnNode n = m.instructions.get(i);
+				if (n.getOpcode() == INVOKEVIRTUAL) {
+					MethodInsnNode mn = (MethodInsnNode)n;
+					if (itemstack.equals(mn.owner)) {
+						LabelNode jmp = null, jmp2 = null;
+						s: for (int j = i; j < e; ++j) {
+							n = m.instructions.get(j);
+							if (n.getOpcode() == ICONST_1) {
+								for (int k = j; k > i; --k) {
+									n = m.instructions.get(k);
+									if (n.getType() == AbstractInsnNode.LABEL) {
+										jmp = (LabelNode) n;
+										break;
+									}
+								}
+								for (int k = j; k < e; ++k) {
+									n = m.instructions.get(k);
+									if (n.getType() == AbstractInsnNode.LABEL) {
+										jmp2 = (LabelNode) n;
+										break s;
+									}
+								}
+							}
+						}
+						if (jmp == null || jmp2 == null) break l;
+
+						// presently on stack: player.getHeldItem()
+						m.instructions.insertBefore(mn, new VarInsnNode(ALOAD, 0));
+						m.instructions.insertBefore(mn, new FieldInsnNode(GETFIELD, name, names[1], 'L' + itemstack + ';'));
+						final String clazz = "cofh/asm/HooksCore";
+						final String method = "areItemsEqualHook";
+						final String sign = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z";
+						m.instructions.insertBefore(mn, new MethodInsnNode(INVOKESTATIC, clazz, method, sign));
+						m.instructions.insertBefore(mn, new JumpInsnNode(IFEQ, jmp2));
+						m.instructions.insertBefore(mn, new JumpInsnNode(GOTO, jmp));
+						break;
+					}
+				}
+			}
+
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+		}
+		return bytes;
+	}
+
 	private static byte[] alterContainer(String name, String transformedName, byte[] bytes, ClassReader cr) {
 
 		String[] names;
@@ -172,7 +252,7 @@ class ASMCore {
 		ClassNode cn = new ClassNode(ASM4);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
-		String sig = "(Lnet/minecraft/item/ItemStack;IIZ)Z";
+		final String sig = "(Lnet/minecraft/item/ItemStack;IIZ)Z";
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 
 		l: {
@@ -204,7 +284,7 @@ class ASMCore {
 		return bytes;
 	}
 
-	private static byte[] writeRenderGlobal(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] alterRenderGlobal(String name, String transformedName, byte[] bytes, ClassReader cr) {
 
 		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM4);
@@ -249,7 +329,7 @@ class ASMCore {
 		ClassNode cn = new ClassNode(ASM4);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
-		String sig = "(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
+		final String sig = "(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 
 		l: {
@@ -317,7 +397,7 @@ class ASMCore {
 		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM4);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
-		String sig = "(Lnet/minecraft/server/MinecraftServer;Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
+		final String sig = "(Lnet/minecraft/server/MinecraftServer;Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 
 		l: {

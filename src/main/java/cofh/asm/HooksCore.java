@@ -1,6 +1,10 @@
 package cofh.asm;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 import cofh.core.CoFHProps;
+import cofh.core.item.IEqualityOverrideItem;
 
 import java.util.Comparator;
 import java.util.List;
@@ -36,6 +40,22 @@ public class HooksCore {
 		if (CoFHProps.enableRenderSorting) {
 			quickSortList(list, 0, list.size() - 1, 0, cmp);
 		}
+	}
+
+	public static boolean areItemsEqualHook(ItemStack held, ItemStack lastHeld) {
+
+		if (held.getItem() != lastHeld.getItem()) {
+			return false;
+		}
+		Item item = held.getItem();
+		if (item instanceof IEqualityOverrideItem && ((IEqualityOverrideItem)item).isLastHeldItemEqual(held, lastHeld)) {
+			return true;
+		}
+		if (held.isItemStackDamageable() && held.getItemDamage() != lastHeld.getItemDamage()) {
+			return false;
+		}
+
+		return ItemStack.areItemStackTagsEqual(held, lastHeld);
 	}
 	//}
 
