@@ -88,10 +88,10 @@ public class HooksCore {
 				return;
 			}
 			while (left < right) {
-				while (cmp.compare(input.get(right), pivotPoint) > 0) {
+				while (right > left & cmp.compare(input.get(right), pivotPoint) > 0) {
 					--right;
 				}
-				while (cmp.compare(input.get(left), pivotPoint) < 0) {
+				while (left < right & cmp.compare(input.get(left), pivotPoint) < 0) {
 					++left;
 				}
 				if (left < right) {
@@ -155,10 +155,10 @@ public class HooksCore {
 				return;
 			}
 			while (left < right) {
-				while (cmp.compare(input[right], pivotPoint) > 0) {
+				while (right > left & cmp.compare(input[right], pivotPoint) > 0) {
 					--right;
 				}
-				while (cmp.compare(input[left], pivotPoint) < 0) {
+				while (left < right & cmp.compare(input[left], pivotPoint) < 0) {
 					++left;
 				}
 				if (left < right) {
