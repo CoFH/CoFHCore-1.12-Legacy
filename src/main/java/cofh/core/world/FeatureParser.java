@@ -61,10 +61,10 @@ public class FeatureParser {
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
-		
+
 		defaultMaterial = Arrays.asList(Blocks.stone);
 	}
-	
+
 	private static void addFiles(ArrayList<File> list, File folder) {
 
 		File[] fList = folder.listFiles();
@@ -128,7 +128,7 @@ public class FeatureParser {
 			addGenerationEntry(featureName, genObject, template);
 			// TODO: expand parsing for different templates
 		}
-		
+
 		return false;
 	}
 
@@ -193,14 +193,14 @@ public class FeatureParser {
 			CoFHCore.log.error("Invalid height parameters specified in \"" + featureName + "\"");
 			return false;
 		}
-		FeatureBase feature = template.construct(featureName, resList, clusterSize, matList, numClusters, minHeight, maxHeight,
-				biomeRes, retrogen, dimRes);
+		FeatureBase feature = template.construct(featureName, resList, clusterSize, matList, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
 
 		addFeatureRestrictions(feature, genObject);
 		return WorldHandler.addFeature(feature);
 	}
 
 	private static Block parseBlock(String blockRaw) {
+
 		String[] blockTokens = blockRaw.split(":", 2);
 		int i = 0;
 		return GameRegistry.findBlock(blockTokens.length > 1 ? blockTokens[i++] : "minecraft", blockTokens[i]);
@@ -333,7 +333,7 @@ public class FeatureParser {
 				gen = WorldGenSparseMinableCluster.class;
 			} else if ("fractal".equals(template)) {
 				// TODO: WorldGenMinableCell
-				//gen = WorldGenMinableCell.class;
+				// gen = WorldGenMinableCell.class;
 			}
 
 			template = genObject.get("type").getAsString();
@@ -348,6 +348,7 @@ public class FeatureParser {
 
 		private final java.lang.reflect.Constructor<? extends FeatureBase> c;
 		private final java.lang.reflect.Constructor<? extends WorldGenerator> g;
+
 		Template(Class<? extends FeatureBase> base, Class<? extends WorldGenerator> gen) {
 
 			try {
@@ -366,8 +367,8 @@ public class FeatureParser {
 			}
 		}
 
-		public FeatureBase construct(String name, List<WeightedRandomBlock> resources, int clusterSize, List<Block> material,
-				int count, int meanY, int maxVar, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
+		public FeatureBase construct(String name, List<WeightedRandomBlock> resources, int clusterSize, List<Block> material, int count, int meanY, int maxVar,
+				GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 			try {
 				WorldGenerator gen = g.newInstance(resources, clusterSize, material);

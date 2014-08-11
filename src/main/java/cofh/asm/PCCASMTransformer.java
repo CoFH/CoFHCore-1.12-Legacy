@@ -1,6 +1,9 @@
 package cofh.asm;
 
-import static cofh.asm.ASMCore.*;
+import static cofh.asm.ASMCore.HACK;
+import static cofh.asm.ASMCore.hashes;
+import static cofh.asm.ASMCore.parsables;
+import static cofh.asm.ASMCore.parse;
 
 import cpw.mods.fml.common.discovery.ASMDataTable;
 
@@ -10,7 +13,7 @@ public class PCCASMTransformer implements IClassTransformer {
 
 	private static boolean scrappedData = false;
 	private static final boolean ENABLE_HACK = Boolean.valueOf(System.getProperty("cofh.classloadinghack", "false"));
-	
+
 	public PCCASMTransformer() {
 
 		ASMCore.init();

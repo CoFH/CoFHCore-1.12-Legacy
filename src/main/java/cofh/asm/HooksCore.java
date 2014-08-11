@@ -1,17 +1,17 @@
 package cofh.asm;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import cofh.core.CoFHProps;
 import cofh.core.item.IEqualityOverrideItem;
 
 import java.util.Comparator;
 import java.util.List;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 public class HooksCore {
 
-	//{ Optifine hooks
+	// { Optifine hooks
 	public static <T extends Object> void sort(T[] list, int start, int toIndex, Comparator<T> cmp) {
 
 		if (CoFHProps.enableRenderSorting) {
@@ -25,9 +25,10 @@ public class HooksCore {
 			quickSortList(list, start, toIndex - 1, 0, cmp);
 		}
 	}
-	//}
 
-	//{ Vanilla hooks
+	// }
+
+	// { Vanilla hooks
 	public static <T extends Object> void sort(T[] list, Comparator<T> cmp) {
 
 		if (CoFHProps.enableRenderSorting) {
@@ -48,7 +49,7 @@ public class HooksCore {
 			return false;
 		}
 		Item item = held.getItem();
-		if (item instanceof IEqualityOverrideItem && ((IEqualityOverrideItem)item).isLastHeldItemEqual(held, lastHeld)) {
+		if (item instanceof IEqualityOverrideItem && ((IEqualityOverrideItem) item).isLastHeldItemEqual(held, lastHeld)) {
 			return true;
 		}
 		if (held.isItemStackDamageable() && held.getItemDamage() != lastHeld.getItemDamage()) {
@@ -57,7 +58,8 @@ public class HooksCore {
 
 		return ItemStack.areItemStackTagsEqual(held, lastHeld);
 	}
-	//}
+
+	// }
 
 	private static <T> void quickSortList(List<T> input, int left, int right, int d, Comparator<T> cmp) {
 

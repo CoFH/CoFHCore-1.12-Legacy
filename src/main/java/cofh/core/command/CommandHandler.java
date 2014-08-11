@@ -80,7 +80,6 @@ public class CommandHandler extends CommandBase {
 		if (arguments.length <= 0) {
 			throw new WrongUsageException("Type '" + getCommandUsage(sender) + "' for help.");
 		}
-
 		if (commands.containsKey(arguments[0])) {
 			commands.get(arguments[0]).handleCommand(sender, arguments);
 			return;

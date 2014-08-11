@@ -1,6 +1,30 @@
 package cofh.asm;
 
-import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
+import static org.objectweb.asm.Opcodes.ACC_BRIDGE;
+import static org.objectweb.asm.Opcodes.ACC_FINAL;
+import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
+import static org.objectweb.asm.Opcodes.ACC_PROTECTED;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
+import static org.objectweb.asm.Opcodes.ACC_SYNTHETIC;
+import static org.objectweb.asm.Opcodes.ACONST_NULL;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ASM4;
+import static org.objectweb.asm.Opcodes.DUP;
+import static org.objectweb.asm.Opcodes.GETFIELD;
+import static org.objectweb.asm.Opcodes.GOTO;
+import static org.objectweb.asm.Opcodes.ICONST_0;
+import static org.objectweb.asm.Opcodes.ICONST_1;
+import static org.objectweb.asm.Opcodes.IFEQ;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
+import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
+import static org.objectweb.asm.Opcodes.IRETURN;
+import static org.objectweb.asm.Opcodes.NEW;
+import static org.objectweb.asm.Opcodes.PUTFIELD;
+import static org.objectweb.asm.Opcodes.RETURN;
 
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
@@ -50,7 +74,9 @@ class ASMCore {
 	static String side;
 
 	static void init() {
+
 	}
+
 	static {
 
 		implementableDesc = Type.getDescriptor(Implementable.class);
@@ -71,6 +97,7 @@ class ASMCore {
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
 	private static final String[] emptyList = {};
+
 	static class AnnotationInfo {
 
 		public String side;
@@ -157,19 +184,21 @@ class ASMCore {
 		case 7:
 			return alterController(name, transformedName, bytes, cr);
 
-		default: return bytes;
+		default:
+			return bytes;
 		}
 	}
 
-	//.mergeItemStack(ItemStack, int, int, boolean)
+	// .mergeItemStack(ItemStack, int, int, boolean)
 
-	//{ Improve Vanilla
+	// { Improve Vanilla
 	private static byte[] alterController(String name, String transformedName, byte[] bytes, ClassReader cr) {
+
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
-			names = new String[] {"func_85182_a", "field_85183_f"};
+			names = new String[] { "func_85182_a", "field_85183_f" };
 		} else {
-			names = new String[] {"sameToolAndBlock", "currentItemHittingBlock"};
+			names = new String[] { "sameToolAndBlock", "currentItemHittingBlock" };
 		}
 
 		name = name.replace('.', '/');
@@ -189,12 +218,14 @@ class ASMCore {
 				}
 			}
 
-			if (m == null) break l;
+			if (m == null) {
+				break l;
+			}
 
 			for (int i = 0, e = m.instructions.size(); i < e; i++) {
 				AbstractInsnNode n = m.instructions.get(i);
 				if (n.getOpcode() == INVOKEVIRTUAL) {
-					MethodInsnNode mn = (MethodInsnNode)n;
+					MethodInsnNode mn = (MethodInsnNode) n;
 					if (itemstack.equals(mn.owner)) {
 						LabelNode jmp = null, jmp2 = null;
 						s: for (int j = i; j < e; ++j) {
@@ -216,7 +247,9 @@ class ASMCore {
 								}
 							}
 						}
-						if (jmp == null || jmp2 == null) break l;
+						if (jmp == null || jmp2 == null) {
+							break l;
+						}
 
 						// presently on stack: player.getHeldItem()
 						m.instructions.insertBefore(mn, new VarInsnNode(ALOAD, 0));
@@ -243,9 +276,9 @@ class ASMCore {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
-			names = new String[] {"func_75135_a", "field_75151_b"};
+			names = new String[] { "func_75135_a", "field_75151_b" };
 		} else {
-			names = new String[] {"mergeItemStack", "inventorySlots"};
+			names = new String[] { "mergeItemStack", "inventorySlots" };
 		}
 
 		name = name.replace('.', '/');
@@ -264,7 +297,9 @@ class ASMCore {
 				}
 			}
 
-			if (m == null) break l;
+			if (m == null) {
+				break l;
+			}
 
 			m.instructions.clear();
 			m.instructions.add(new VarInsnNode(ALOAD, 0));
@@ -274,7 +309,8 @@ class ASMCore {
 			m.instructions.add(new VarInsnNode(ILOAD, 3));
 			m.instructions.add(new VarInsnNode(ILOAD, 4));
 			m.instructions.add(new InsnNode(ICONST_0));
-			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/lib/util/helpers/InventoryHelper", "mergeItemStack", "(Ljava/util/List;Lnet/minecraft/item/ItemStack;IIZZ)Z"));
+			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/lib/util/helpers/InventoryHelper", "mergeItemStack",
+					"(Ljava/util/List;Lnet/minecraft/item/ItemStack;IIZZ)Z"));
 			m.instructions.add(new InsnNode(IRETURN));
 
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -295,7 +331,7 @@ class ASMCore {
 				for (int i = 0, e = m.instructions.size(); i < e; ++i) {
 					AbstractInsnNode n = m.instructions.get(i);
 					if (n instanceof MethodInsnNode && n.getOpcode() == INVOKESTATIC) {
-						MethodInsnNode mn = (MethodInsnNode)n;
+						MethodInsnNode mn = (MethodInsnNode) n;
 						if (!"sort".equals(mn.name)) {
 							continue;
 						}
@@ -605,9 +641,10 @@ class ASMCore {
 		r |= ACC_PUBLIC | ACC_SYNTHETIC;
 		return r;
 	}
-	//}
 
-	//{ Implement & Strip
+	// }
+
+	// { Implement & Strip
 	static boolean implement(ClassNode cn) {
 
 		if (cn.visibleAnnotations == null) {
@@ -731,7 +768,8 @@ class ASMCore {
 		}
 		return false;
 	}
-	//}
+
+	// }
 
 	static AnnotationInfo parseAnnotation(AnnotationNode node, String desc) {
 

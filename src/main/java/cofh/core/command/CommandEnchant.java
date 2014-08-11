@@ -1,5 +1,7 @@
 package cofh.core.command;
 
+import cofh.core.util.CoreUtils;
+
 import java.util.List;
 
 import net.minecraft.command.CommandBase;
@@ -10,6 +12,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentText;
 
 public class CommandEnchant implements ISubCommand {
 
@@ -24,6 +27,10 @@ public class CommandEnchant implements ISubCommand {
 	@Override
 	public void handleCommand(ICommandSender sender, String[] args) {
 
+		if (!CoreUtils.isOpOrServer(sender.getCommandSenderName())) {
+			sender.addChatMessage(new ChatComponentText(CommandHandler.COMMAND_DISALLOWED));
+			return;
+		}
 		int l = args.length;
 		int i = 1;
 		EntityPlayerMP player = null;

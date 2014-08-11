@@ -1,5 +1,6 @@
 package cofh.core.command;
 
+import cofh.core.util.CoreUtils;
 import cofh.lib.util.helpers.EntityHelper;
 import cofh.lib.util.helpers.StringHelper;
 
@@ -29,6 +30,10 @@ public class CommandTPX implements ISubCommand {
 		// TODO: allow selector commands to target anything (single player, all players[@a], specific entities [@e], etc.)
 		// where it makes sense to allow it (e.g., not allowing teleporting a single thing to many things)
 
+		if (!CoreUtils.isOpOrServer(sender.getCommandSenderName())) {
+			sender.addChatMessage(new ChatComponentText(CommandHandler.COMMAND_DISALLOWED));
+			return;
+		}
 		switch (arguments.length) {
 
 		case 0: // () ???? how did we get here again?
