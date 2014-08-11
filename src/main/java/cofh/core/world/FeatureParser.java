@@ -35,7 +35,7 @@ public class FeatureParser {
 	private static File worldGenFolder;
 	private static File vanillaGen;
 	private static final String vanillaGenInternal = "assets/cofh/world/Vanilla.json";
-	private static List<Block> defaultMaterial;
+	private static List<WeightedRandomBlock> defaultMaterial;
 
 	private FeatureParser() {
 
@@ -62,7 +62,7 @@ public class FeatureParser {
 			t.printStackTrace();
 		}
 
-		defaultMaterial = Arrays.asList(Blocks.stone);
+		defaultMaterial = Arrays.asList(new WeightedRandomBlock(new ItemStack(Blocks.stone, 1, 0)));
 	}
 
 	private static void addFiles(ArrayList<File> list, File folder) {
@@ -136,7 +136,7 @@ public class FeatureParser {
 
 		List<WeightedRandomBlock> resList = new ArrayList<WeightedRandomBlock>();
 
-		if (!parseResList(genObject, resList)) {
+		if (!parseResList(genObject.get("block"), resList)) {
 			return false;
 		}
 		int clusterSize = 0;
@@ -144,7 +144,7 @@ public class FeatureParser {
 		boolean retrogen = false;
 		GenRestriction biomeRes = GenRestriction.NONE;
 		GenRestriction dimRes = GenRestriction.NONE;
-		List<Block> matList = defaultMaterial;
+		List<WeightedRandomBlock> matList = defaultMaterial;
 
 		if (genObject.has("clusterSize")) {
 			clusterSize = genObject.get("clusterSize").getAsInt();
@@ -180,9 +180,9 @@ public class FeatureParser {
 			}
 		}
 		if (genObject.has("material")) {
-			matList = new ArrayList<Block>();
-			parseMaterialList(genObject, matList);
-			if (matList.size() == 0) {
+			matList = new ArrayList<WeightedRandomBlock>();
+			if (!parseResList(genObject.get("material"), matList)) {
+				CoFHCore.log.warn("Invalid material list! Using default list.");
 				matList = defaultMaterial;
 			}
 		}
@@ -199,91 +199,57 @@ public class FeatureParser {
 		return WorldHandler.addFeature(feature);
 	}
 
-	private static Block parseBlock(String blockRaw) {
+	public static Block parseBlockName(String blockRaw) {
 
 		String[] blockTokens = blockRaw.split(":", 2);
 		int i = 0;
 		return GameRegistry.findBlock(blockTokens.length > 1 ? blockTokens[i++] : "minecraft", blockTokens[i]);
 	}
 
-	private static boolean parseMaterialList(JsonObject genObject, List<Block> resList) {
+	public static WeightedRandomBlock parseBlockEntry(JsonElement genElement) {
 
-		if (genObject.get("material").isJsonArray()) {
-			JsonArray blockList = genObject.getAsJsonArray("block");
-
-			for (int i = 0; i < blockList.size(); i++) {
-				String blockRaw = blockList.get(i).getAsString();
-				Block block = parseBlock(blockRaw);
-				if (block == null) {
-					CoFHCore.log.error("Invalid block entry!");
-					return false;
-				}
-				resList.add(block);
+		if (genElement.isJsonObject()) {
+			JsonObject blockElement = genElement.getAsJsonObject();
+			if (!blockElement.has("name")) {
+				CoFHCore.log.error("Block entry needs a name!");
+				return null;
 			}
-		} else {
-			String blockRaw = genObject.get("material").getAsString();
-			Block block = parseBlock(blockRaw);
+			Block block = parseBlockName(blockElement.get("name").getAsString());
 			if (block == null) {
 				CoFHCore.log.error("Invalid block entry!");
-				return false;
+				return null;
 			}
-			resList.add(block);
+			int metadata = blockElement.has("metadata") ? MathHelper.clampI(blockElement.get("metadata").getAsInt(), 0, 15) : 0;
+			int weight = blockElement.has("weight") ? MathHelper.clampI(blockElement.get("weight").getAsInt(), 1, 1000000) : 100;
+			return new WeightedRandomBlock(new ItemStack(block, 1, metadata), weight);
+		} else {
+			Block block = parseBlockName(genElement.getAsString());
+			if (block == null) {
+				CoFHCore.log.error("Invalid block entry!");
+				return null;
+			}
+			return new WeightedRandomBlock(new ItemStack(block, 1, 0));
 		}
-		return true;
 	}
 
-	private static boolean parseResList(JsonObject genObject, List<WeightedRandomBlock> resList) {
+	public static boolean parseResList(JsonElement genElement, List<WeightedRandomBlock> resList) {
 
-		if (genObject.get("block").isJsonArray()) {
-			JsonArray blockList = genObject.getAsJsonArray("block"), metaList = null, weightList = null;
+		if (genElement.isJsonArray()) {
+			JsonArray blockList = genElement.getAsJsonArray();
 
-			if (genObject.has("metadata")) {
-				if (!genObject.get("metadata").isJsonArray()) {
-					CoFHCore.log.error("Invalid metadata array. 'metadata' must be an array when 'block' is an array.");
-					return false;
-				}
-				metaList = genObject.getAsJsonArray("metadata");
-				if (metaList.size() != blockList.size()) {
-					CoFHCore.log.error("Block and metadata array sizes are inconsistent.");
-					return false;
-				}
-			}
-			if (genObject.has("weight")) {
-				if (!genObject.get("weight").isJsonArray()) {
-					CoFHCore.log.error("Invalid block weight array. 'weight' must be an array.");
-					return false;
-				}
-				weightList = genObject.getAsJsonArray("weight");
-				if (weightList.size() != blockList.size()) {
-					CoFHCore.log.error("Block and weight array sizes are inconsistent.");
-					return false;
-				}
-			}
 			for (int i = 0; i < blockList.size(); i++) {
-				String blockRaw = blockList.get(i).getAsString();
-				Block block = parseBlock(blockRaw);
-				if (block == null) {
-					CoFHCore.log.error("Invalid block entry!");
+				WeightedRandomBlock entry = parseBlockEntry(blockList.get(i));
+				if (entry == null) {
 					return false;
 				}
-
-				int metadata = metaList != null ? MathHelper.clampI(metaList.get(i).getAsInt(), 0, 15) : 0;
-				int weight = weightList != null ? MathHelper.clampI(weightList.get(i).getAsInt(), 1, 1000000) : 100;
-				resList.add(new WeightedRandomBlock(new ItemStack(block, 1, metadata), weight));
+				resList.add(entry);
 			}
 		} else {
-			String blockRaw = genObject.get("block").getAsString();
-			Block block = parseBlock(blockRaw);
-			if (block == null) {
-				CoFHCore.log.error("Invalid block entry!");
+			WeightedRandomBlock entry = parseBlockEntry(genElement);
+			if (entry == null) {
 				return false;
 			}
-
-			int metadata = 0;
-			if (genObject.has("metadata")) {
-				metadata = MathHelper.clampI(genObject.get("metadata").getAsInt(), 0, 15);
-			}
-			resList.add(new WeightedRandomBlock(new ItemStack(block, 1, metadata)));
+			resList.add(entry);
 		}
 		return true;
 	}
@@ -367,8 +333,9 @@ public class FeatureParser {
 			}
 		}
 
-		public FeatureBase construct(String name, List<WeightedRandomBlock> resources, int clusterSize, List<Block> material, int count, int meanY, int maxVar,
-				GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
+		public FeatureBase construct(String name, List<WeightedRandomBlock> resources, int clusterSize,
+				List<WeightedRandomBlock> material, int count, int meanY, int maxVar, GenRestriction biomeRes,
+				boolean regen, GenRestriction dimRes) {
 
 			try {
 				WorldGenerator gen = g.newInstance(resources, clusterSize, material);
