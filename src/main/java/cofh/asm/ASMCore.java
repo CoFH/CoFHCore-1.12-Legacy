@@ -1,30 +1,6 @@
 package cofh.asm;
 
-import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
-import static org.objectweb.asm.Opcodes.ACC_BRIDGE;
-import static org.objectweb.asm.Opcodes.ACC_FINAL;
-import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
-import static org.objectweb.asm.Opcodes.ACC_PROTECTED;
-import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
-import static org.objectweb.asm.Opcodes.ACC_STATIC;
-import static org.objectweb.asm.Opcodes.ACC_SYNTHETIC;
-import static org.objectweb.asm.Opcodes.ACONST_NULL;
-import static org.objectweb.asm.Opcodes.ALOAD;
-import static org.objectweb.asm.Opcodes.ASM4;
-import static org.objectweb.asm.Opcodes.DUP;
-import static org.objectweb.asm.Opcodes.GETFIELD;
-import static org.objectweb.asm.Opcodes.GOTO;
-import static org.objectweb.asm.Opcodes.ICONST_0;
-import static org.objectweb.asm.Opcodes.ICONST_1;
-import static org.objectweb.asm.Opcodes.IFEQ;
-import static org.objectweb.asm.Opcodes.ILOAD;
-import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
-import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
-import static org.objectweb.asm.Opcodes.IRETURN;
-import static org.objectweb.asm.Opcodes.NEW;
-import static org.objectweb.asm.Opcodes.PUTFIELD;
-import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.*;
 
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
@@ -60,6 +36,7 @@ import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -95,6 +72,10 @@ class ASMCore {
 		}
 		hashes.put("net.minecraft.inventory.Container", (byte) 6);
 		hashes.put("net.minecraft.client.multiplayer.PlayerControllerMP", (byte) 7);
+		hashes.put("net.minecraft.util.LongHashMap", (byte) 8);
+		if (Boolean.parseBoolean(System.getProperty("cofh.lightedit", "true"))) {
+			hashes.put("net.minecraft.world.chunk.Chunk", (byte) 9);
+		}
 	}
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
@@ -185,6 +166,10 @@ class ASMCore {
 			return alterContainer(name, transformedName, bytes, cr);
 		case 7:
 			return alterController(name, transformedName, bytes, cr);
+		case 8:
+			return alterLongHashMap(name, transformedName, bytes, cr);
+		case 9:
+			return alterChunk(name, transformedName, bytes, cr);
 
 		default:
 			return bytes;
@@ -194,6 +179,138 @@ class ASMCore {
 	// .mergeItemStack(ItemStack, int, int, boolean)
 
 	// { Improve Vanilla
+	private static byte[] alterChunk(String name, String transformedName, byte[] bytes, ClassReader cr) {
+
+		String[] names;
+		if (LoadingPlugin.runtimeDeobfEnabled) {
+			names = new String[] { "func_150803_c", "field_76650_s" };
+		} else {
+			names = new String[] { "recheckGaps", "isGapLightingUpdated" };
+		}
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM4);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+
+		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
+
+		l: {
+			boolean updated = false;
+			for (MethodNode m : cn.methods) {
+				String mName = remapper.mapMethodName(name, m.name, m.desc);
+				if (names[0].equals(mName) && "(Z)V".equals(m.desc)) {
+					updated = true;
+					for (int i = 0, e = m.instructions.size(); i < e; ++i) {
+						AbstractInsnNode n = m.instructions.get(i);
+						if (n.getOpcode() == RETURN) {
+							m.instructions.insertBefore(n, new VarInsnNode(ALOAD, 0));
+							m.instructions.insertBefore(n, new InsnNode(ICONST_0));
+							m.instructions.insertBefore(n, new FieldInsnNode(PUTFIELD, name, names[1], "Z"));
+							break;
+						}
+					}
+				}
+			}
+
+			if (!updated) {
+				break l;
+			}
+
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+		}
+		return bytes;
+	}
+
+	private static byte[] alterLongHashMap(String name, String transformedName, byte[] bytes, ClassReader cr) {
+
+		String[] names;
+		if (LoadingPlugin.runtimeDeobfEnabled) {
+			names = new String[] { "func_76155_g", "func_76160_c", "func_76161_b" };
+		} else {
+			names = new String[] { "getHashedKey", "getEntry", "containsItem" };
+		}
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM4);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+
+		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
+
+		l: {
+			boolean updated = false;
+			MethodNode getEntry = null, containsItem = null;
+			for (MethodNode m : cn.methods) {
+				String mName = remapper.mapMethodName(name, m.name, m.desc);
+				if (names[0].equals(mName) && "(J)I".equals(m.desc)) {
+					updated = true;
+					for (int i = 0, e = m.instructions.size(); i < e; ++i) {
+						AbstractInsnNode n = m.instructions.get(i);
+						if (n.getOpcode() == LXOR) {
+							m.instructions.insertBefore(n, new LdcInsnNode(new Long(13L)));
+							m.instructions.insertBefore(n, new InsnNode(LMUL));
+							break;
+						}
+					}
+					if (containsItem != null) {
+						break;
+					}
+				} else  if (names[2].equals(mName) && "(J)Z".equals(m.desc)) {
+					containsItem = m;
+					if (updated) {
+						break;
+					}
+				}
+			}
+
+			mc: if (containsItem != null) {
+				//{ cloning methods to get a different set of instructions to avoid erasing getEntry
+				ClassNode clone = new ClassNode(ASM4);
+				cr.accept(clone, ClassReader.EXPAND_FRAMES);
+				String sig = "(J)Lnet/minecraft/util/LongHashMap$Entry;";
+				for (MethodNode m : clone.methods) {
+					String mName = remapper.mapMethodName(name, m.name, m.desc);
+					if (names[1].equals(mName) && sig.equals(remapper.mapDesc(m.desc))) {
+						getEntry = m;
+						break;
+					}
+				}
+				//}
+				if (getEntry == null) {
+					break mc;
+				}
+				updated = true;
+				containsItem.instructions.clear();
+				containsItem.instructions.add(getEntry.instructions);
+				/**
+				 * this looks counter intuitive (replacing getEntry != null check with the full method)
+				 * but due to how the JVM handles inlining, this needs to be done manually
+				 */
+				for (AbstractInsnNode n = containsItem.instructions.get(0); n != null; n = n.getNext()) {
+					if (n.getOpcode() == ARETURN) {
+						AbstractInsnNode n2 = n.getPrevious();
+						if (n2.getOpcode() == ACONST_NULL) {
+							containsItem.instructions.set(n2, new InsnNode(ICONST_0));
+						} else {
+							containsItem.instructions.set(n2, new InsnNode(ICONST_1));
+						}
+						containsItem.instructions.set(n, new InsnNode(IRETURN));
+					}
+				}
+			}
+
+			if (!updated) {
+				break l;
+			}
+
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+		}
+		return bytes;
+	}
+
 	private static byte[] alterController(String name, String transformedName, byte[] bytes, ClassReader cr) {
 
 		String[] names;
