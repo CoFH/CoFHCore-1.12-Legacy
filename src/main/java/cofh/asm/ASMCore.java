@@ -90,7 +90,9 @@ class ASMCore {
 		hashes.put("net.minecraft.world.World", (byte) 2);
 		hashes.put("skyboy.core.world.WorldProxy", (byte) 3);
 		hashes.put("skyboy.core.world.WorldServerProxy", (byte) 4);
-		hashes.put("net.minecraft.client.renderer.RenderGlobal", (byte) 5);
+		if (Boolean.parseBoolean(System.getProperty("cofh.renderedit", "false"))) {
+			hashes.put("net.minecraft.client.renderer.RenderGlobal", (byte) 5);
+		}
 		hashes.put("net.minecraft.inventory.Container", (byte) 6);
 		hashes.put("net.minecraft.client.multiplayer.PlayerControllerMP", (byte) 7);
 	}
