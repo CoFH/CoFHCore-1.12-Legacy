@@ -171,6 +171,11 @@ public class ProxyClient extends Proxy {
 			CoFHProps.enableRenderSorting = false;
 		}
 
+		comment = "Set to false to disable all animated texutres in minecraft";
+		if (!CoFHCore.configClient.get(Configuration.CATEGORY_GENERAL, "EnableAnimatedTextures", true, comment)) {
+			CoFHProps.enableAnimatedTexutres = false;
+		}
+
 		CoFHCore.configClient.save();
 
 		fontRenderer = new CoFHFontRender(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"),

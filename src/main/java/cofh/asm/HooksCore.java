@@ -2,10 +2,13 @@ package cofh.asm;
 
 import cofh.core.CoFHProps;
 import cofh.core.item.IEqualityOverrideItem;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import java.util.Comparator;
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -57,6 +60,14 @@ public class HooksCore {
 		}
 
 		return ItemStack.areItemStackTagsEqual(held, lastHeld);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void tickTextures(ITickable obj) {
+
+		if (CoFHProps.enableAnimatedTexutres) {
+			obj.tick();
+		}
 	}
 
 	// }

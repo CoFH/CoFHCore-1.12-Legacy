@@ -74,5 +74,6 @@ public class CoFHProps {
 
 	public static boolean enableLivingEntityDeathMessages = true;
 	public static boolean enableRenderSorting = true;
+	public static boolean enableAnimatedTexutres = true;
 
 }

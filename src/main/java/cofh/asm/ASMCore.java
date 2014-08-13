@@ -76,6 +76,7 @@ class ASMCore {
 		if (Boolean.parseBoolean(System.getProperty("cofh.lightedit", "true"))) {
 			hashes.put("net.minecraft.world.chunk.Chunk", (byte) 9);
 		}
+		hashes.put("net.minecraft.client.Minecraft", (byte) 10);
 	}
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
@@ -170,15 +171,61 @@ class ASMCore {
 			return alterLongHashMap(name, transformedName, bytes, cr);
 		case 9:
 			return alterChunk(name, transformedName, bytes, cr);
+		case 10:
+			return alterMinecraft(name, transformedName, bytes, cr);
 
 		default:
 			return bytes;
 		}
 	}
 
-	// .mergeItemStack(ItemStack, int, int, boolean)
-
 	// { Improve Vanilla
+	private static byte[] alterMinecraft(String name, String transformedName, byte[] bytes, ClassReader cr) {
+
+		String[] names;
+		if (LoadingPlugin.runtimeDeobfEnabled) {
+			names = new String[] { "func_71407_l", "func_110550_d" };
+		} else {
+			names = new String[] { "runTick", "tick" };
+		}
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM4);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+
+		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
+		String mOwner = remapper.unmap("net/minecraft/client/renderer/texture/TextureManager");
+
+		l: {
+			boolean updated = false;
+			mc: for (MethodNode m : cn.methods) {
+				String mName = remapper.mapMethodName(name, m.name, m.desc);
+				if (names[0].equals(mName) && "()V".equals(m.desc)) {
+					updated = true;
+					for (int i = 0, e = m.instructions.size(); i < e; ++i) {
+						AbstractInsnNode n = m.instructions.get(i);
+						if (n.getOpcode() == INVOKEVIRTUAL) {
+							MethodInsnNode mn = (MethodInsnNode)n;
+							if (mOwner.equals(mn.owner) && names[1].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc)) && "()V".equals(mn.desc)) {
+								m.instructions.set(mn, new MethodInsnNode(INVOKESTATIC, "cofh/asm/HooksCore", "tickTextures", "(Lnet/minecraft/client/renderer/texture/ITickable;)V"));
+								break mc;
+							}
+						}
+					}
+				}
+			}
+
+			if (!updated) {
+				break l;
+			}
+
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+		}
+		return bytes;
+	}
+
 	private static byte[] alterChunk(String name, String transformedName, byte[] bytes, ClassReader cr) {
 
 		String[] names;
