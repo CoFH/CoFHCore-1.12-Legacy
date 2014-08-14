@@ -7,8 +7,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.WorldTickEvent;
 import cpw.mods.fml.relauncher.Side;
 
-import gnu.trove.map.TMap;
-import gnu.trove.map.hash.THashMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.hash.THashSet;
 
 import java.util.ArrayDeque;
@@ -21,29 +20,47 @@ public class TickHandlerWorld {
 
 	public static TickHandlerWorld instance = new TickHandlerWorld();
 
-	public static TMap<Integer, ArrayDeque<RetroChunkCoord>> chunksToGen = new THashMap<Integer, ArrayDeque<RetroChunkCoord>>();
+	public static TIntObjectHashMap<ArrayDeque<RetroChunkCoord>> chunksToGen = new TIntObjectHashMap<ArrayDeque<RetroChunkCoord>>();
+	public static TIntObjectHashMap<ArrayDeque<ChunkCoord>> chunksToPreGen = new TIntObjectHashMap<ArrayDeque<ChunkCoord>>();
+	// FIXME: put adding to these behind a function so we can remove the tick handler when there's nothing to do
+	// size of the maps indicates how many dimensions are needing to gen/pregen, and will be 0 when no work is required
 
 	@SubscribeEvent
 	public void tickEnd(WorldTickEvent event) {
 
-		if (event.phase != Phase.END | event.side != Side.SERVER) {
+		if (event.side != Side.SERVER) {
 			return;
 		}
 		World world = event.world;
 		int dim = world.provider.dimensionId;
-		ArrayDeque<RetroChunkCoord> chunks = chunksToGen.get(Integer.valueOf(dim));
 
-		if (chunks != null && chunks.size() > 0) {
-			RetroChunkCoord r = chunks.pollFirst();
-			ChunkCoord c = r.coord;
-			CoFHCore.log.info("RetroGening " + c.toString() + ".");
-			long worldSeed = world.getSeed();
-			Random rand = new Random(worldSeed);
-			long xSeed = rand.nextLong() >> 2 + 1L;
-			long zSeed = rand.nextLong() >> 2 + 1L;
-			rand.setSeed(xSeed * c.chunkX + zSeed * c.chunkZ ^ worldSeed);
-			WorldHandler.instance.generateWorld(rand, r, world, false);
-			chunksToGen.put(Integer.valueOf(dim), chunks);
+		if (event.phase == Phase.END) {
+			ArrayDeque<RetroChunkCoord> chunks = chunksToGen.get(dim);
+
+			if (chunks != null && chunks.size() > 0) {
+				RetroChunkCoord r = chunks.pollFirst();
+				ChunkCoord c = r.coord;
+				CoFHCore.log.info("RetroGening " + c.toString() + ".");
+				long worldSeed = world.getSeed();
+				Random rand = new Random(worldSeed);
+				long xSeed = rand.nextLong() >> 2 + 1L;
+				long zSeed = rand.nextLong() >> 2 + 1L;
+				rand.setSeed(xSeed * c.chunkX + zSeed * c.chunkZ ^ worldSeed);
+				WorldHandler.instance.generateWorld(rand, r, world, false);
+				chunksToGen.put(dim, chunks);
+			} else if (chunks != null) {
+				chunksToGen.remove(dim);
+			}
+		} else {
+			ArrayDeque<ChunkCoord> chunks = chunksToPreGen.get(dim);
+
+			if (chunks != null && chunks.size() > 0) {
+				ChunkCoord c = chunks.pollFirst();
+				CoFHCore.log.info("PreGening " + c.toString() + ".");
+				world.getChunkFromChunkCoords(c.chunkX, c.chunkZ);
+			} else if (chunks != null) {
+				chunksToPreGen.remove(dim);
+			}
 		}
 	}
 

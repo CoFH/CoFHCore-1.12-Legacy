@@ -156,15 +156,16 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		}
 
 		if (regen) {
-			ArrayDeque<RetroChunkCoord> chunks = TickHandlerWorld.chunksToGen.get(Integer.valueOf(dim));
+			// TODO: this is threaded. should we synchronize?
+			ArrayDeque<RetroChunkCoord> chunks = TickHandlerWorld.chunksToGen.get(dim);
 
 			if (chunks == null) {
-				TickHandlerWorld.chunksToGen.put(Integer.valueOf(dim), new ArrayDeque<RetroChunkCoord>(128));
-				chunks = TickHandlerWorld.chunksToGen.get(Integer.valueOf(dim));
+				TickHandlerWorld.chunksToGen.put(dim, new ArrayDeque<RetroChunkCoord>(128));
+				chunks = TickHandlerWorld.chunksToGen.get(dim);
 			}
 			if (chunks != null) {
 				chunks.addLast(new RetroChunkCoord(cCoord, list));
-				TickHandlerWorld.chunksToGen.put(Integer.valueOf(dim), chunks);
+				TickHandlerWorld.chunksToGen.put(dim, chunks);
 			}
 		}
 	}
