@@ -22,6 +22,7 @@ public class TickHandlerWorld {
 
 	public static TIntObjectHashMap<ArrayDeque<RetroChunkCoord>> chunksToGen = new TIntObjectHashMap<ArrayDeque<RetroChunkCoord>>();
 	public static TIntObjectHashMap<ArrayDeque<ChunkCoord>> chunksToPreGen = new TIntObjectHashMap<ArrayDeque<ChunkCoord>>();
+
 	// FIXME: put adding to these behind a function so we can remove the tick handler when there's nothing to do
 	// size of the maps indicates how many dimensions are needing to gen/pregen, and will be 0 when no work is required
 

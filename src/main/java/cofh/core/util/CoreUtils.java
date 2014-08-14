@@ -102,9 +102,9 @@ public class CoreUtils {
 		return false;
 	}
 
-	public static boolean isRedstonePowered(TileEntity te) {
+	public static boolean isRedstonePowered(TileEntity tile) {
 
-		return isRedstonePowered(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
+		return isRedstonePowered(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
 	}
 
 	public static void dismantleLog(String playerName, Block block, int metadata, double x, double y, double z) {

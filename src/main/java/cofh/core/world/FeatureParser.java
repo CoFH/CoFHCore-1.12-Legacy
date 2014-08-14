@@ -333,9 +333,8 @@ public class FeatureParser {
 			}
 		}
 
-		public FeatureBase construct(String name, List<WeightedRandomBlock> resources, int clusterSize,
-				List<WeightedRandomBlock> material, int count, int meanY, int maxVar, GenRestriction biomeRes,
-				boolean regen, GenRestriction dimRes) {
+		public FeatureBase construct(String name, List<WeightedRandomBlock> resources, int clusterSize, List<WeightedRandomBlock> material, int count,
+				int meanY, int maxVar, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
 
 			try {
 				WorldGenerator gen = g.newInstance(resources, clusterSize, material);

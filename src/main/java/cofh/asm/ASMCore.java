@@ -1,6 +1,33 @@
 package cofh.asm;
 
-import static org.objectweb.asm.Opcodes.*;
+import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
+import static org.objectweb.asm.Opcodes.ACC_BRIDGE;
+import static org.objectweb.asm.Opcodes.ACC_FINAL;
+import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
+import static org.objectweb.asm.Opcodes.ACC_PROTECTED;
+import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
+import static org.objectweb.asm.Opcodes.ACC_STATIC;
+import static org.objectweb.asm.Opcodes.ACC_SYNTHETIC;
+import static org.objectweb.asm.Opcodes.ACONST_NULL;
+import static org.objectweb.asm.Opcodes.ALOAD;
+import static org.objectweb.asm.Opcodes.ARETURN;
+import static org.objectweb.asm.Opcodes.ASM4;
+import static org.objectweb.asm.Opcodes.DUP;
+import static org.objectweb.asm.Opcodes.GETFIELD;
+import static org.objectweb.asm.Opcodes.GOTO;
+import static org.objectweb.asm.Opcodes.ICONST_0;
+import static org.objectweb.asm.Opcodes.ICONST_1;
+import static org.objectweb.asm.Opcodes.IFEQ;
+import static org.objectweb.asm.Opcodes.ILOAD;
+import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
+import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
+import static org.objectweb.asm.Opcodes.IRETURN;
+import static org.objectweb.asm.Opcodes.LMUL;
+import static org.objectweb.asm.Opcodes.LXOR;
+import static org.objectweb.asm.Opcodes.NEW;
+import static org.objectweb.asm.Opcodes.PUTFIELD;
+import static org.objectweb.asm.Opcodes.RETURN;
 
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
@@ -205,9 +232,10 @@ class ASMCore {
 					for (int i = 0, e = m.instructions.size(); i < e; ++i) {
 						AbstractInsnNode n = m.instructions.get(i);
 						if (n.getOpcode() == INVOKEVIRTUAL) {
-							MethodInsnNode mn = (MethodInsnNode)n;
+							MethodInsnNode mn = (MethodInsnNode) n;
 							if (mOwner.equals(mn.owner) && names[1].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc)) && "()V".equals(mn.desc)) {
-								m.instructions.set(mn, new MethodInsnNode(INVOKESTATIC, "cofh/asm/HooksCore", "tickTextures", "(Lnet/minecraft/client/renderer/texture/ITickable;)V"));
+								m.instructions.set(mn, new MethodInsnNode(INVOKESTATIC, "cofh/asm/HooksCore", "tickTextures",
+										"(Lnet/minecraft/client/renderer/texture/ITickable;)V"));
 								break mc;
 							}
 						}
@@ -303,7 +331,7 @@ class ASMCore {
 					if (containsItem != null) {
 						break;
 					}
-				} else  if (names[2].equals(mName) && "(J)Z".equals(m.desc)) {
+				} else if (names[2].equals(mName) && "(J)Z".equals(m.desc)) {
 					containsItem = m;
 					if (updated) {
 						break;
@@ -312,7 +340,7 @@ class ASMCore {
 			}
 
 			mc: if (containsItem != null) {
-				//{ cloning methods to get a different set of instructions to avoid erasing getEntry
+				// { cloning methods to get a different set of instructions to avoid erasing getEntry
 				ClassNode clone = new ClassNode(ASM4);
 				cr.accept(clone, ClassReader.EXPAND_FRAMES);
 				String sig = "(J)Lnet/minecraft/util/LongHashMap$Entry;";
@@ -323,7 +351,7 @@ class ASMCore {
 						break;
 					}
 				}
-				//}
+				// }
 				if (getEntry == null) {
 					break mc;
 				}
@@ -331,8 +359,8 @@ class ASMCore {
 				containsItem.instructions.clear();
 				containsItem.instructions.add(getEntry.instructions);
 				/**
-				 * this looks counter intuitive (replacing getEntry != null check with the full method)
-				 * but due to how the JVM handles inlining, this needs to be done manually
+				 * this looks counter intuitive (replacing getEntry != null check with the full method) but due to how the JVM handles inlining, this needs to
+				 * be done manually
 				 */
 				for (AbstractInsnNode n = containsItem.instructions.get(0); n != null; n = n.getNext()) {
 					if (n.getOpcode() == ARETURN) {
