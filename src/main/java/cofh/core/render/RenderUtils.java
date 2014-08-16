@@ -151,7 +151,6 @@ public class RenderUtils {
 		CCRenderState.useNormals = false;
 
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
 	}
 
 	public static void preWorldRender(IBlockAccess world, int x, int y, int z) {
