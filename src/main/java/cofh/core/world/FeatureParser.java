@@ -1,17 +1,13 @@
 package cofh.core.world;
 
-import cofh.CoFHCore;
+import cofh.api.world.IFeatureGenerator;
+import cofh.api.world.IFeatureParser;
 import cofh.core.CoFHProps;
 import cofh.core.util.CoreUtils;
+import cofh.core.world.feature.NormalParser;
+import cofh.core.world.feature.UniformParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;
-import cofh.lib.world.WorldGenMinableCluster;
-import cofh.lib.world.WorldGenSparseMinableCluster;
-import cofh.lib.world.feature.FeatureBase;
-import cofh.lib.world.feature.FeatureBase.GenRestriction;
-import cofh.lib.world.feature.FeatureOreGenNormal;
-import cofh.lib.world.feature.FeatureOreGenUniform;
-import com.google.common.base.Throwables;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -22,23 +18,37 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.gen.feature.WorldGenerator;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FeatureParser {
 
 	private static File worldGenFolder;
 	private static File vanillaGen;
 	private static final String vanillaGenInternal = "assets/cofh/world/Vanilla.json";
-	private static List<WeightedRandomBlock> defaultMaterial;
+	private static HashMap<String, IFeatureParser> templateHandlers = new HashMap<String, IFeatureParser>();
+	private static Logger log = LogManager.getLogger("CoFHWorld");
 
 	private FeatureParser() {
 
+	}
+
+	public static boolean registerTemplate(String template, IFeatureParser handler) {
+
+		// TODO: provide this function through IFeatureHandler?
+		if (!templateHandlers.containsKey(template)) {
+			templateHandlers.put(template, handler);
+			return true;
+		}
+		log.error("Attempted to register duplicate template '" + template + "'!");
+		return false;
 	}
 
 	public static void initialize() {
@@ -62,7 +72,10 @@ public class FeatureParser {
 			t.printStackTrace();
 		}
 
-		defaultMaterial = Arrays.asList(new WeightedRandomBlock(new ItemStack(Blocks.stone, 1, 0)));
+		log.info("Registering default templates");
+		registerTemplate("uniform", new UniformParser());
+		registerTemplate("normal", new NormalParser());
+		registerTemplate("fractal", null);// FIXME: convert WorldGenMineableCell
 	}
 
 	private static void addFiles(ArrayList<File> list, File folder) {
@@ -70,7 +83,7 @@ public class FeatureParser {
 		File[] fList = folder.listFiles();
 
 		if (fList == null) {
-			CoFHCore.log.error("There are no World Generation files present in " + folder + ".");
+			log.error("There are no World Generation files present in " + folder + ".");
 			return;
 		}
 		list.addAll(Arrays.asList(fList));
@@ -104,100 +117,53 @@ public class FeatureParser {
 			try {
 				genList = (JsonObject) parser.parse(new FileReader(genFile));
 			} catch (Throwable t) {
-				CoFHCore.log.error("Critical error reading from a world generation file: " + genFile + " > Please be sure the file is correct!", t);
+				log.error("Critical error reading from a world generation file: " + genFile + " > Please be sure the file is correct!", t);
 				continue;
 			}
 
-			CoFHCore.log.info("Reading world generation info from: " + genFile + ":");
+			log.info("Reading world generation info from: " + genFile + ":");
 			for (Entry<String, JsonElement> genEntry : genList.entrySet()) {
 				if (parseGenerationEntry(genEntry.getKey(), genEntry.getValue())) {
-					CoFHCore.log.debug("Generation entry successfully parsed: \"" + genEntry.getKey() + "\"");
+					log.debug("Generation entry successfully parsed: \"" + genEntry.getKey() + "\"");
 				} else {
-					CoFHCore.log.error("Error parsing generation entry: \"" + genEntry.getKey() + "\" > Please check the parameters. It *may* be a duplicate.");
+					log.error("Error parsing generation entry: \"" + genEntry.getKey() + "\" > Please check the parameters. It *may* be a duplicate.");
 				}
 			}
 		}
 	}
 
-	public static boolean parseGenerationEntry(String featureName, JsonElement genEntry) {
+	private static boolean parseGenerationEntry(String featureName, JsonElement genEntry) {
 
 		JsonObject genObject = genEntry.getAsJsonObject();
 
-		Template template = parseTemplate(genObject);
+		String templateName = parseTemplate(genObject);
+		IFeatureParser template = templateHandlers.get(templateName);
 		if (template != null) {
-			addGenerationEntry(featureName, genObject, template);
-			// TODO: expand parsing for different templates
+			IFeatureGenerator feature = template.parseFeature(featureName, genObject, log);
+			if (feature != null) {
+				return WorldHandler.addFeature(feature);
+			}
+			log.warn("Template '" + templateName + "' failed to parse its entry!");
+		} else {
+			log.warn("Unknown template + '" + templateName + "'.");
 		}
 
 		return false;
 	}
 
-	private static boolean addGenerationEntry(String featureName, JsonObject genObject, Template template) {
+	private static String parseTemplate(JsonObject genObject) {
 
-		List<WeightedRandomBlock> resList = new ArrayList<WeightedRandomBlock>();
+		JsonElement genElement = genObject.get("template");
+		if (genElement.isJsonObject()) {
+			genObject = genElement.getAsJsonObject();
 
-		if (!parseResList(genObject.get("block"), resList)) {
-			return false;
+			return genObject.get("type").getAsString();
+		} else {
+			return genElement.getAsString();
 		}
-		int clusterSize = 0;
-		int numClusters = 0;
-		boolean retrogen = false;
-		GenRestriction biomeRes = GenRestriction.NONE;
-		GenRestriction dimRes = GenRestriction.NONE;
-		List<WeightedRandomBlock> matList = defaultMaterial;
-
-		if (genObject.has("clusterSize")) {
-			clusterSize = genObject.get("clusterSize").getAsInt();
-		}
-		if (genObject.has("numClusters")) {
-			numClusters = genObject.get("numClusters").getAsInt();
-		}
-		if (clusterSize <= 0 || numClusters <= 0) {
-			CoFHCore.log.error("Invalid cluster size or count specified in \"" + featureName + "\"");
-			return false;
-		}
-		if (genObject.has("retrogen")) {
-			retrogen = genObject.get("retrogen").getAsBoolean();
-		}
-		if (genObject.has("biomeRestriction")) {
-			String resString = genObject.get("biomeRestriction").getAsString().toLowerCase();
-
-			if (resString.equals("blacklist")) {
-				biomeRes = GenRestriction.BLACKLIST;
-			}
-			if (resString.equals("whitelist")) {
-				biomeRes = GenRestriction.WHITELIST;
-			}
-		}
-		if (genObject.has("dimensionRestriction")) {
-			String resString = genObject.get("dimensionRestriction").getAsString().toLowerCase();
-
-			if (resString.equals("blacklist")) {
-				dimRes = GenRestriction.BLACKLIST;
-			}
-			if (resString.equals("whitelist")) {
-				dimRes = GenRestriction.WHITELIST;
-			}
-		}
-		if (genObject.has("material")) {
-			matList = new ArrayList<WeightedRandomBlock>();
-			if (!parseResList(genObject.get("material"), matList)) {
-				CoFHCore.log.warn("Invalid material list! Using default list.");
-				matList = defaultMaterial;
-			}
-		}
-		int minHeight = genObject.get("minHeight").getAsInt();
-		int maxHeight = genObject.get("maxHeight").getAsInt();
-
-		if (minHeight >= maxHeight || minHeight < 0) {
-			CoFHCore.log.error("Invalid height parameters specified in \"" + featureName + "\"");
-			return false;
-		}
-		FeatureBase feature = template.construct(featureName, resList, clusterSize, matList, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
-
-		addFeatureRestrictions(feature, genObject);
-		return WorldHandler.addFeature(feature);
 	}
+
+	// TODO: move these helper functions outside core?
 
 	public static Block parseBlockName(String blockRaw) {
 
@@ -211,12 +177,12 @@ public class FeatureParser {
 		if (genElement.isJsonObject()) {
 			JsonObject blockElement = genElement.getAsJsonObject();
 			if (!blockElement.has("name")) {
-				CoFHCore.log.error("Block entry needs a name!");
+				log.error("Block entry needs a name!");
 				return null;
 			}
 			Block block = parseBlockName(blockElement.get("name").getAsString());
 			if (block == null) {
-				CoFHCore.log.error("Invalid block entry!");
+				log.error("Invalid block entry!");
 				return null;
 			}
 			int metadata = blockElement.has("metadata") ? MathHelper.clampI(blockElement.get("metadata").getAsInt(), 0, 15) : 0;
@@ -225,7 +191,7 @@ public class FeatureParser {
 		} else {
 			Block block = parseBlockName(genElement.getAsString());
 			if (block == null) {
-				CoFHCore.log.error("Invalid block entry!");
+				log.error("Invalid block entry!");
 				return null;
 			}
 			return new WeightedRandomBlock(new ItemStack(block, 1, 0));
@@ -252,98 +218,6 @@ public class FeatureParser {
 			resList.add(entry);
 		}
 		return true;
-	}
-
-	private static boolean addFeatureRestrictions(FeatureBase feature, JsonObject genObject) {
-
-		if (feature.biomeRestriction != GenRestriction.NONE && genObject.has("biomes")) {
-			JsonArray restrictionList = genObject.getAsJsonArray("biomes");
-			for (int i = 0; i < restrictionList.size(); i++) {
-				feature.addBiome(restrictionList.get(i).getAsString());
-			}
-		}
-		if (feature.dimensionRestriction != GenRestriction.NONE && genObject.has("dimensions")) {
-			JsonArray restrictionList = genObject.getAsJsonArray("dimensions");
-			for (int i = 0; i < restrictionList.size(); i++) {
-				feature.addDimension(restrictionList.get(i).getAsInt());
-			}
-		}
-		return true;
-	}
-
-	private static Class<? extends FeatureBase> parseType(String template) {
-
-		// TODO: off-load template types to HashMap<String, Class<? extends FeatureBase>> ?
-		// factory-paradigm may be the best option here
-		if ("uniform".equals(template)) {
-			return FeatureOreGenUniform.class;
-		} else if ("normal".equals(template)) {
-			return FeatureOreGenNormal.class;
-		}
-		return null;
-	}
-
-	private static Template parseTemplate(JsonObject genObject) {
-
-		JsonElement genElement = genObject.get("template");
-		if (genElement.isJsonObject()) {
-			genObject = genElement.getAsJsonObject();
-
-			Class<? extends WorldGenerator> gen = null;
-			String template = genObject.get("generator").getAsString();
-			// TODO: off-load template generators to HashMap<String, Class<? extends WorldGenerator>> ?
-			// factory-paradigm may be the best option here
-			if ("cluster".equals(template)) {
-				gen = WorldGenMinableCluster.class;
-			} else if ("sparse-cluster".equals(template)) {
-				gen = WorldGenSparseMinableCluster.class;
-			} else if ("fractal".equals(template)) {
-				// TODO: WorldGenMinableCell
-				// gen = WorldGenMinableCell.class;
-			}
-
-			template = genObject.get("type").getAsString();
-			return new Template(parseType(template), gen);
-		} else {
-			String template = genElement.getAsString();
-			return new Template(parseType(template), WorldGenMinableCluster.class);
-		}
-	}
-
-	static class Template {
-
-		private final java.lang.reflect.Constructor<? extends FeatureBase> c;
-		private final java.lang.reflect.Constructor<? extends WorldGenerator> g;
-
-		Template(Class<? extends FeatureBase> base, Class<? extends WorldGenerator> gen) {
-
-			try {
-				Class<?> i = int.class, r = GenRestriction.class;
-				c = base.getDeclaredConstructor(String.class, WorldGenerator.class, i, i, i, r, boolean.class, r);
-			} catch (Throwable e) {
-				CoFHCore.log.error("Invalid template type!");
-				throw Throwables.propagate(e);
-			}
-
-			try {
-				g = gen.getDeclaredConstructor(List.class, int.class, List.class);
-			} catch (Throwable e) {
-				CoFHCore.log.error("Invalid template generator!");
-				throw Throwables.propagate(e);
-			}
-		}
-
-		public FeatureBase construct(String name, List<WeightedRandomBlock> resources, int clusterSize, List<WeightedRandomBlock> material, int count,
-				int meanY, int maxVar, GenRestriction biomeRes, boolean regen, GenRestriction dimRes) {
-
-			try {
-				WorldGenerator gen = g.newInstance(resources, clusterSize, material);
-				return c.newInstance(name, gen, count, meanY, maxVar, biomeRes, regen, dimRes);
-			} catch (Throwable e) {
-				throw Throwables.propagate(e);
-			}
-		}
-
 	}
 
 }
