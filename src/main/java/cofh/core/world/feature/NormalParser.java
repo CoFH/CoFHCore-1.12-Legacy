@@ -11,19 +11,19 @@ public class NormalParser extends UniformParser {
 
 	@Override
 	protected FeatureBase getFeature(String name, WorldGenerator gen, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes) {
-		
+
 		return new FeatureOreGenNormal(name, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
 	}
-	
+
 	@Override
 	protected int parseMinHeight(JsonObject genObject) {
-		
+
 		return genObject.get("meanHeight").getAsInt();
 	}
 
 	@Override
 	protected int parseMaxHeight(JsonObject genObject) {
-		
+
 		return genObject.get("maxVariance").getAsInt();
 	}
 

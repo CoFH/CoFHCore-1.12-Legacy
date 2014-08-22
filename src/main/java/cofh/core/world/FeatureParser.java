@@ -5,6 +5,7 @@ import cofh.api.world.IFeatureParser;
 import cofh.core.CoFHProps;
 import cofh.core.util.CoreUtils;
 import cofh.core.world.feature.NormalParser;
+import cofh.core.world.feature.SurfaceParser;
 import cofh.core.world.feature.UniformParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;
@@ -81,6 +82,7 @@ public class FeatureParser {
 		log.info("Registering default templates");
 		registerTemplate("uniform", new UniformParser());
 		registerTemplate("normal", new NormalParser());
+		registerTemplate("surface", new SurfaceParser());
 		registerTemplate("fractal", null);// FIXME: convert WorldGenMineableCell
 	}
 

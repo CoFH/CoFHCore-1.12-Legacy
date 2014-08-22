@@ -25,11 +25,16 @@ import org.apache.logging.log4j.Logger;
 
 public class UniformParser implements IFeatureParser {
 
-	private static List<WeightedRandomBlock> defaultMaterial;
+	private final List<WeightedRandomBlock> defaultMaterial;
 
-	static {
+	public UniformParser() {
 
-		defaultMaterial = Arrays.asList(new WeightedRandomBlock(new ItemStack(Blocks.stone, 1, 0)));
+		defaultMaterial = generateDefaultMaterial();
+	}
+
+	protected List<WeightedRandomBlock> generateDefaultMaterial() {
+
+		return Arrays.asList(new WeightedRandomBlock(new ItemStack(Blocks.stone, 1, -1)));
 	}
 
 	@Override
@@ -82,7 +87,7 @@ public class UniformParser implements IFeatureParser {
 		}
 		if (genObject.has("material")) {
 			matList = new ArrayList<WeightedRandomBlock>();
-			if (!FeatureParser.parseResList(genObject.get("material"), matList)) {
+			if (!parseMaterial(genObject, matList)) {
 				log.warn("Invalid material list! Using default list.");
 				matList = defaultMaterial;
 			}
@@ -99,20 +104,25 @@ public class UniformParser implements IFeatureParser {
 		addFeatureRestrictions(feature, genObject);
 		return feature;
 	}
-	
+
 	protected FeatureBase getFeature(String name, WorldGenerator gen, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes) {
-		
+
 		return new FeatureOreGenUniform(name, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
 	}
-	
+
 	protected int parseMinHeight(JsonObject genObject) {
-		
+
 		return genObject.get("minHeight").getAsInt();
 	}
 
 	protected int parseMaxHeight(JsonObject genObject) {
-		
+
 		return genObject.get("maxHeight").getAsInt();
+	}
+
+	protected boolean parseMaterial(JsonObject genObject, List<WeightedRandomBlock> matList) {
+
+		return FeatureParser.parseResList(genObject.get("material"), matList);
 	}
 
 	protected WorldGenerator getGenerator(JsonObject genObject, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
