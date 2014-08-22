@@ -128,11 +128,17 @@ public class CoFHCore extends BaseMod {
 		proxy.registerPacketInformation();
 
 		PacketHandler.instance.postInit();
-		configCore.cleanUp(false, true);
 	}
 
 	@EventHandler
 	public void loadComplete(FMLLoadCompleteEvent event) {
+
+		try {
+			FeatureParser.complete();
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+		configCore.cleanUp(false, true);
 
 		try {
 			FeatureParser.parseGenerationFile();

@@ -52,6 +52,8 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	public static boolean forceFullRegeneration = false;
 
 	public static ArrayList<String> registeredFeatureNames = new ArrayList<String>();
+	
+	private static final String TAG_NAME = "CoFHWorld";
 
 	public static int layersBedrock = 1;
 
@@ -106,7 +108,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	@SubscribeEvent
 	public void handleChunkSaveEvent(ChunkDataEvent.Save event) {
 
-		NBTTagCompound genTag = new NBTTagCompound();
+		NBTTagCompound genTag = event.getData().getCompoundTag(TAG_NAME);
 
 		if (genFlatBedrock) {
 			genTag.setBoolean("Bedrock", true);
@@ -119,7 +121,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		genTag.setLong("Hash", genHash);
 		// FIXME: is it possible for a chunk to save out before we retrogen it?
 
-		event.getData().setTag("CoFHWorld", genTag);
+		event.getData().setTag(TAG_NAME, genTag);
 	}
 
 	@SubscribeEvent
@@ -128,7 +130,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		int dim = event.world.provider.dimensionId;
 
 		boolean regen = false;
-		NBTTagCompound tag = (NBTTagCompound) event.getData().getTag("CoFHWorld");
+		NBTTagCompound tag = (NBTTagCompound) event.getData().getTag(TAG_NAME);
 		NBTTagList list = null;
 		ChunkCoord cCoord = new ChunkCoord(event.getChunk());
 

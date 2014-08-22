@@ -40,6 +40,16 @@ public class ConfigHandler {
 		return modVersion;
 	}
 
+	public String getConfigVersion() {
+
+		return get("version", "Version", modVersion);
+	}
+	
+	public boolean isOldConfig() {
+		
+		return !getConfigVersion().equals(modVersion);
+	}
+
 	public void save() {
 
 		modConfiguration.save();
@@ -229,9 +239,11 @@ public class ConfigHandler {
 
 		removeProperty("version", "version");
 		removeProperty("version", "Version");
+		removeProperty("general", "version");
+		removeProperty("general", "Version");
 
 		if (saveVersion) {
-			get("version", "Version", modVersion);
+			getConfigVersion();
 		}
 		modConfiguration.save();
 
