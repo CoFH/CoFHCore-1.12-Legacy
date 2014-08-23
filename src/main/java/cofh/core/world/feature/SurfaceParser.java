@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class SurfaceParser extends UniformParser {
@@ -19,14 +18,14 @@ public class SurfaceParser extends UniformParser {
 	@Override
 	protected List<WeightedRandomBlock> generateDefaultMaterial() {
 
-		return Arrays.asList(new WeightedRandomBlock(new ItemStack(Blocks.stone, 1, -1)),
-				new WeightedRandomBlock(new ItemStack(Blocks.dirt, 1, -1)),
-				new WeightedRandomBlock(new ItemStack(Blocks.grass, 1, -1)),
-				new WeightedRandomBlock(new ItemStack(Blocks.sand, 1, -1)),
-				new WeightedRandomBlock(new ItemStack(Blocks.gravel, 1, -1)),
-				new WeightedRandomBlock(new ItemStack(Blocks.snow, 1, -1)),
-				new WeightedRandomBlock(new ItemStack(Blocks.air, 1, -1)),
-				new WeightedRandomBlock(new ItemStack(Blocks.water, 1, -1)));
+		return Arrays.asList(new WeightedRandomBlock(Blocks.stone, -1),
+				new WeightedRandomBlock(Blocks.dirt, -1),
+				new WeightedRandomBlock(Blocks.grass, -1),
+				new WeightedRandomBlock(Blocks.sand, -1),
+				new WeightedRandomBlock(Blocks.gravel, -1),
+				new WeightedRandomBlock(Blocks.snow, -1),
+				new WeightedRandomBlock(Blocks.air, -1),
+				new WeightedRandomBlock(Blocks.water, -1));
 	}
 
 	@Override
