@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -293,14 +292,14 @@ public class FeatureParser {
 			}
 			int metadata = blockElement.has("metadata") ? MathHelper.clampI(blockElement.get("metadata").getAsInt(), 0, 15) : 0;
 			int weight = blockElement.has("weight") ? MathHelper.clampI(blockElement.get("weight").getAsInt(), 1, 1000000) : 100;
-			return new WeightedRandomBlock(new ItemStack(block, 1, metadata), weight);
+			return new WeightedRandomBlock(block, metadata, weight);
 		} else {
 			Block block = parseBlockName(genElement.getAsString());
 			if (block == null) {
 				log.error("Invalid block entry!");
 				return null;
 			}
-			return new WeightedRandomBlock(new ItemStack(block, 1, 0));
+			return new WeightedRandomBlock(block, 0);
 		}
 	}
 
