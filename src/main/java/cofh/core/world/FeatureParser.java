@@ -115,7 +115,7 @@ public class FeatureParser {
 			}
 			boolean saveFile = false;
 			log.warn("Checking if " + genFile.getName() + " is from an old version.");
-			for (Iterator<Entry<String, JsonElement> > iter = genList.entrySet().iterator(); iter.hasNext();) {
+			for (Iterator<Entry<String, JsonElement>> iter = genList.entrySet().iterator(); iter.hasNext();) {
 				Entry<String, JsonElement> genEntry = iter.next();
 
 				JsonObject genObject = genEntry.getValue().getAsJsonObject();

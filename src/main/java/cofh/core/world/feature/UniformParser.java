@@ -99,13 +99,15 @@ public class UniformParser implements IFeatureParser {
 			log.error("Invalid height parameters specified in \"" + featureName + "\"");
 			return null;
 		}
-		FeatureBase feature = getFeature(featureName, getGenerator(genObject, resList, clusterSize, matList), numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
+		FeatureBase feature = getFeature(featureName, getGenerator(genObject, resList, clusterSize, matList), numClusters, minHeight, maxHeight, biomeRes,
+				retrogen, dimRes);
 
 		addFeatureRestrictions(feature, genObject);
 		return feature;
 	}
 
-	protected FeatureBase getFeature(String name, WorldGenerator gen, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes) {
+	protected FeatureBase getFeature(String name, WorldGenerator gen, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen,
+			GenRestriction dimRes) {
 
 		return new FeatureOreGenUniform(name, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
 	}

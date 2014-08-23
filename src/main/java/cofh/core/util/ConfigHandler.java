@@ -44,9 +44,9 @@ public class ConfigHandler {
 
 		return get("version", "Version", modVersion);
 	}
-	
+
 	public boolean isOldConfig() {
-		
+
 		return !getConfigVersion().equals(modVersion);
 	}
 

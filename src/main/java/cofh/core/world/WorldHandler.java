@@ -52,7 +52,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	public static boolean forceFullRegeneration = false;
 
 	public static ArrayList<String> registeredFeatureNames = new ArrayList<String>();
-	
+
 	private static final String TAG_NAME = "CoFHWorld";
 
 	public static int layersBedrock = 1;

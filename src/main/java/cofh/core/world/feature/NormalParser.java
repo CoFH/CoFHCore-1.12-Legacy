@@ -10,7 +10,8 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class NormalParser extends UniformParser {
 
 	@Override
-	protected FeatureBase getFeature(String name, WorldGenerator gen, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes) {
+	protected FeatureBase getFeature(String name, WorldGenerator gen, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen,
+			GenRestriction dimRes) {
 
 		return new FeatureOreGenNormal(name, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
 	}

@@ -18,18 +18,14 @@ public class SurfaceParser extends UniformParser {
 	@Override
 	protected List<WeightedRandomBlock> generateDefaultMaterial() {
 
-		return Arrays.asList(new WeightedRandomBlock(Blocks.stone, -1),
-				new WeightedRandomBlock(Blocks.dirt, -1),
-				new WeightedRandomBlock(Blocks.grass, -1),
-				new WeightedRandomBlock(Blocks.sand, -1),
-				new WeightedRandomBlock(Blocks.gravel, -1),
-				new WeightedRandomBlock(Blocks.snow, -1),
-				new WeightedRandomBlock(Blocks.air, -1),
-				new WeightedRandomBlock(Blocks.water, -1));
+		return Arrays.asList(new WeightedRandomBlock(Blocks.stone, -1), new WeightedRandomBlock(Blocks.dirt, -1), new WeightedRandomBlock(Blocks.grass, -1),
+				new WeightedRandomBlock(Blocks.sand, -1), new WeightedRandomBlock(Blocks.gravel, -1), new WeightedRandomBlock(Blocks.snow, -1),
+				new WeightedRandomBlock(Blocks.air, -1), new WeightedRandomBlock(Blocks.water, -1));
 	}
 
 	@Override
-	protected FeatureBase getFeature(String name, WorldGenerator gen, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes) {
+	protected FeatureBase getFeature(String name, WorldGenerator gen, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen,
+			GenRestriction dimRes) {
 
 		return new FeatureOreGenSurface(name, gen, numClusters, minHeight, biomeRes, retrogen, dimRes);
 	}
