@@ -86,7 +86,7 @@ public class CoFHCore extends BaseMod {
 
 		// loadLang();
 
-		UpdateManager.registerUpdater(new UpdateManager(this, releaseURL));
+		UpdateManager.registerUpdater(new UpdateManager(this, releaseURL, CoFHProps.DOWNLOAD_URL));
 		configCore.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/CoFHCore.cfg")));
 		configClient.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/Client.cfg")));
 		MinecraftForge.EVENT_BUS.register(proxy);

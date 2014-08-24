@@ -1,11 +1,9 @@
 package cofh.mod.updater;
 
-import static net.minecraft.util.EnumChatFormatting.AQUA;
-import static net.minecraft.util.EnumChatFormatting.GOLD;
-import static net.minecraft.util.EnumChatFormatting.GRAY;
-import static net.minecraft.util.EnumChatFormatting.WHITE;
+import static net.minecraft.util.EnumChatFormatting.*;
 
 import cofh.core.CoFHProps;
+import com.google.common.base.Strings;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
@@ -14,14 +12,17 @@ import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
+import net.minecraft.util.IChatComponent;
 
 public class UpdateManager {
 
 	private static transient int pollOffset = 0;
-	private static final ChatStyle gray = new ChatStyle();
+	private static final ChatStyle description = new ChatStyle();
+	private static final ChatStyle version = new ChatStyle();
 	static {
 		
-		gray.setColor(GRAY);
+		description.setColor(GRAY);
+		version.setColor(AQUA);
 	}
 
 	public static void registerUpdater(UpdateManager manager) {
@@ -32,6 +33,7 @@ public class UpdateManager {
 	private boolean _notificationDisplayed;
 	private final IUpdatableMod _mod;
 	private final UpdateCheckThread _updateThread;
+	private final String _downloadUrl;
 	private int lastPoll = 400;
 
 	public UpdateManager(IUpdatableMod mod) {
@@ -41,9 +43,15 @@ public class UpdateManager {
 
 	public UpdateManager(IUpdatableMod mod, String releaseUrl) {
 
+		this(mod, releaseUrl, null);
+	}
+
+	public UpdateManager(IUpdatableMod mod, String releaseUrl, String downloadUrl) {
+
 		_mod = mod;
 		_updateThread = new UpdateCheckThread(mod, releaseUrl);
 		_updateThread.start();
+		_downloadUrl = downloadUrl;
 		lastPoll += (pollOffset += 140);
 	}
 
@@ -66,13 +74,24 @@ public class UpdateManager {
 				if (!CoFHProps.enableUpdateNotice && !_updateThread.isCriticalUpdate()) {
 					return;
 				}
-				ModVersion version = _updateThread.newVersion();
+				ModVersion newVersion = _updateThread.newVersion();
 
 				EntityPlayer player = evt.player;
 				player.addChatMessage(new ChatComponentText(GOLD + "[" + _mod.getModName() + "]").
 						appendText(WHITE + " A new version is available:"));
-				player.addChatMessage(new ChatComponentText(AQUA + version.modVersion().toString()));
-				player.addChatMessage(new ChatComponentText(version.description()).setChatStyle(gray));
+				IChatComponent chat;
+				String text = newVersion.modVersion().toString();
+				if (Strings.isNullOrEmpty(_downloadUrl)) {
+					chat = new ChatComponentText(text).setChatStyle(version);
+				} else {
+					chat = IChatComponent.Serializer.func_150699_a("[{\"text\":\"" + text + "\",\"color\":\"aqua\"}," +
+							"{\"text\":\" " + WHITE + "[" + GREEN + "Download" + WHITE + "]\"," +
+							"\"color\":\"green\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":" +
+							"{\"text\":\"Click this to download the latest version\",\"color\":\"yellow\"}}," +
+							"\"clickEvent\":{\"action\":\"open_url\",\"value\":\"" + _downloadUrl + "\"}}]");
+				}
+				player.addChatMessage(chat);
+				player.addChatMessage(new ChatComponentText(newVersion.description()).setChatStyle(description));
 			}
 		}
 	}
