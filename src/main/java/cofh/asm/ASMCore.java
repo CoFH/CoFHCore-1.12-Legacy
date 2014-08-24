@@ -507,6 +507,9 @@ class ASMCore {
 					"(Ljava/util/List;Lnet/minecraft/item/ItemStack;IIZZ)Z"));
 			m.instructions.add(new InsnNode(IRETURN));
 
+			// this fixes a crash in dev and with cauldron
+			m.localVariables = null;
+
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 			cn.accept(cw);
 			bytes = cw.toByteArray();
