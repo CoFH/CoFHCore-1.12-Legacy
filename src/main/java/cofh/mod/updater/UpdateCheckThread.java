@@ -59,7 +59,7 @@ public class UpdateCheckThread extends Thread {
 					ReleaseVersion crit = critVer.minecraftVersion(), our = ourVer.minecraftVersion();
 					_newVerAvailable = crit.major() == our.major() && crit.minor() == our.minor();
 				}
-				if (critVer != null && ourVer.compareTo(critVer) > 0) {
+				if (critVer != null && ourVer.compareTo(critVer) >= 0) {
 					_criticalUpdate = Boolean.parseBoolean(critVer.description());
 					_criticalUpdate &= _newVerAvailable;
 				}
