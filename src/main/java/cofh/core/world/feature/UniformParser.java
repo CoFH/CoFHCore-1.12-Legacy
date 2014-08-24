@@ -95,7 +95,7 @@ public class UniformParser implements IFeatureParser {
 		int minHeight = parseMinHeight(genObject);
 		int maxHeight = parseMaxHeight(genObject);
 
-		if (minHeight >= maxHeight || minHeight < 0) {
+		if (verifyHeight(minHeight, maxHeight)) {
 			log.error("Invalid height parameters specified in \"" + featureName + "\"");
 			return null;
 		}
@@ -120,6 +120,11 @@ public class UniformParser implements IFeatureParser {
 	protected int parseMaxHeight(JsonObject genObject) {
 
 		return genObject.get("maxHeight").getAsInt();
+	}
+
+	protected boolean verifyHeight(int minHeight, int maxHeight) {
+
+		return minHeight >= maxHeight || minHeight < 0;
 	}
 
 	protected boolean parseMaterial(JsonObject genObject, List<WeightedRandomBlock> matList) {

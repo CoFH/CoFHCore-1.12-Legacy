@@ -28,4 +28,10 @@ public class NormalParser extends UniformParser {
 		return genObject.get("maxVariance").getAsInt();
 	}
 
+	@Override
+	protected boolean verifyHeight(int minHeight, int maxHeight) {
+
+		return false;
+	}
+
 }

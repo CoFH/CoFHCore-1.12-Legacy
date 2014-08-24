@@ -42,4 +42,10 @@ public class SurfaceParser extends UniformParser {
 		return 0;
 	}
 
+	@Override
+	protected boolean verifyHeight(int minHeight, int maxHeight) {
+
+		return false;
+	}
+
 }
