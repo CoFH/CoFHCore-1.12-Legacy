@@ -13,10 +13,16 @@ import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 
 public class UpdateManager {
 
 	private static transient int pollOffset = 0;
+	private static final ChatStyle gray = new ChatStyle();
+	static {
+		
+		gray.setColor(GRAY);
+	}
 
 	public static void registerUpdater(UpdateManager manager) {
 
@@ -63,9 +69,10 @@ public class UpdateManager {
 				ModVersion version = _updateThread.newVersion();
 
 				EntityPlayer player = evt.player;
-				player.addChatMessage(new ChatComponentText(GOLD + "[" + _mod.getModName() + "]").appendText(WHITE + " A new version is available: ")
-						.appendText(AQUA + version.modVersion().toString()));
-				player.addChatMessage(new ChatComponentText(GRAY + version.description()));
+				player.addChatMessage(new ChatComponentText(GOLD + "[" + _mod.getModName() + "]").
+						appendText(WHITE + " A new version is available:"));
+				player.addChatMessage(new ChatComponentText(AQUA + version.modVersion().toString()));
+				player.addChatMessage(new ChatComponentText(version.description()).setChatStyle(gray));
 			}
 		}
 	}
