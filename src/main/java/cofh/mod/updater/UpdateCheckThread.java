@@ -24,6 +24,7 @@ public class UpdateCheckThread extends Thread {
 
 	public UpdateCheckThread(IUpdatableMod mod, String releaseUrl) {
 
+		super("CoFHUpdater");
 		_mod = mod;
 		if (releaseUrl == null) {
 			releaseUrl = "https://raw.github.com/skyboy/" + mod.getModId() + "/master/VERSION";
@@ -56,8 +57,8 @@ public class UpdateCheckThread extends Thread {
 				_mod.getLogger().info("An updated version of " + _mod.getModName() + " is available: " + newVer + ".");
 
 				if (ourVer.minecraftVersion().compareTo(newVer.minecraftVersion()) < 0) {
-					ReleaseVersion crit = critVer.minecraftVersion(), our = ourVer.minecraftVersion();
-					_newVerAvailable = crit.major() == our.major() && crit.minor() == our.minor();
+					ReleaseVersion newv = newVer.minecraftVersion(), our = ourVer.minecraftVersion();
+					_newVerAvailable = newv.major() == our.major() && newv.minor() == our.minor();
 				}
 				if (critVer != null && ourVer.compareTo(critVer) >= 0) {
 					_criticalUpdate = Boolean.parseBoolean(critVer.description());
