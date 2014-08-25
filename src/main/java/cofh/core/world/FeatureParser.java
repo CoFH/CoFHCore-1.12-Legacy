@@ -241,6 +241,13 @@ public class FeatureParser {
 
 		JsonObject genObject = genEntry.getAsJsonObject();
 
+		if (genObject.has("enabled")) {
+			if (!genObject.get("enabled").getAsBoolean()) {
+				log.info('"' + featureName + "\" is disabled.");
+				return true;
+			}
+		}
+
 		String templateName = parseTemplate(genObject);
 		IFeatureParser template = templateHandlers.get(templateName);
 		if (template != null) {

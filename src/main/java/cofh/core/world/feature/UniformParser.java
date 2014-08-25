@@ -99,7 +99,7 @@ public class UniformParser implements IFeatureParser {
 			log.error("Invalid height parameters specified in \"" + featureName + "\"");
 			return null;
 		}
-		FeatureBase feature = getFeature(featureName, getGenerator(genObject, resList, clusterSize, matList), numClusters, minHeight, maxHeight, biomeRes,
+		FeatureBase feature = getFeature(featureName, getGenerator(genObject, log, resList, clusterSize, matList), numClusters, minHeight, maxHeight, biomeRes,
 				retrogen, dimRes);
 
 		addFeatureRestrictions(feature, genObject);
@@ -132,7 +132,7 @@ public class UniformParser implements IFeatureParser {
 		return FeatureParser.parseResList(genObject.get("material"), matList);
 	}
 
-	protected WorldGenerator getGenerator(JsonObject genObject, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	protected WorldGenerator getGenerator(JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
 
 		JsonElement genElement = genObject.get("template");
 		if (genElement.isJsonObject()) {
@@ -143,7 +143,7 @@ public class UniformParser implements IFeatureParser {
 			if ("sparse-cluster".equals(template)) {
 				return new WorldGenSparseMinableCluster(resList, clusterSize, matList);
 			} else if (!"cluster".equals(template)) {
-				// TODO: log warning
+				log.warn("Unknown generator " + template + '!');
 			}
 			return new WorldGenMinableCluster(resList, clusterSize, matList);
 		}
