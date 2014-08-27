@@ -41,11 +41,11 @@ public class OreDictionaryArbiter {
 	 */
 	public static void initialize() {
 
-		oreIDs = HashBiMap.create();
-		oreStacks = new THashMap<Integer, ArrayList<ItemStack>>();
+		oreIDs = HashBiMap.create(oreIDs == null ? 32 : oreIDs.size());
+		oreStacks = new THashMap<Integer, ArrayList<ItemStack>>(oreStacks == null ? 32 : oreStacks.size());
 
-		stackIDs = new THashMap<ItemWrapper, ArrayList<Integer>>();
-		stackNames = new THashMap<ItemWrapper, ArrayList<String>>();
+		stackIDs = new THashMap<ItemWrapper, ArrayList<Integer>>(stackIDs == null ? 32 : stackIDs.size());
+		stackNames = new THashMap<ItemWrapper, ArrayList<String>>(stackNames == null ? 32 : stackNames.size());
 
 		oreNames = OreDictionary.getOreNames();
 
@@ -54,6 +54,15 @@ public class OreDictionaryArbiter {
 
 			for (int j = 0; j < ores.size(); j++) {
 				registerOreDictionaryEntry(ores.get(j), oreNames[i]);
+			}
+		}
+		for (ItemWrapper wrapper : stackIDs.keySet()) {
+			if (wrapper.metadata != WILDCARD_VALUE) {
+				ItemWrapper wildItem = new ItemWrapper(wrapper.item, WILDCARD_VALUE);
+				if (stackIDs.containsKey(wildItem)) {
+					stackIDs.get(wrapper).addAll(stackIDs.get(wildItem));
+					stackNames.get(wrapper).addAll(stackNames.get(wildItem));
+				}
 			}
 		}
 		ItemHelper.oreProxy = new OreDictionaryArbiterProxy();
@@ -160,7 +169,9 @@ public class OreDictionaryArbiter {
 	 */
 	public static ArrayList<String> getAllOreNames(ItemStack stack) {
 
-		return stackNames.get(new ItemWrapper(stack));
+		ArrayList<String> names = stackNames.get(new ItemWrapper(stack));
+
+		return names == null ? stackNames.get(new ItemWrapper(stack.getItem(), WILDCARD_VALUE)) : names;
 	}
 
 	/**

@@ -132,7 +132,8 @@ public class UniformParser implements IFeatureParser {
 		return FeatureParser.parseResList(genObject.get("material"), matList);
 	}
 
-	protected WorldGenerator getGenerator(JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	protected WorldGenerator getGenerator(JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
+			List<WeightedRandomBlock> matList) {
 
 		JsonElement genElement = genObject.get("template");
 		if (genElement.isJsonObject()) {

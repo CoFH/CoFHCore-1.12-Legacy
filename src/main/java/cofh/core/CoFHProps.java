@@ -21,7 +21,7 @@ public class CoFHProps {
 	public static final String DEPENDENCIES = "required-after:FML@[" + CoFHProps.FML_REQ + "," + CoFHProps.FML_REQ_MAX + ");" + "required-after:Forge@["
 			+ CoFHProps.FORGE_REQ + "," + CoFHProps.FORGE_REQ_MAX + ");";
 
-	public static final String DOWNLOAD_URL = "http://teamcofh.com/downloads/"; 
+	public static final String DOWNLOAD_URL = "http://teamcofh.com/downloads/";
 
 	public static File configDir = null;
 

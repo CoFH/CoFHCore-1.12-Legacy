@@ -3,6 +3,7 @@ package cofh.core.util;
 import cofh.core.CoFHProps;
 import cofh.core.render.ItemRenderRegistry;
 import cofh.core.util.fluid.BucketHandler;
+import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.lib.util.helpers.ServerHelper;
 import cofh.lib.util.helpers.StringHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -39,6 +40,7 @@ public class FMLEventHandler {
 
 		BucketHandler.refreshMap();
 		ItemRenderRegistry.refreshMap();
+		OreDictionaryArbiter.initialize();
 	}
 
 }
