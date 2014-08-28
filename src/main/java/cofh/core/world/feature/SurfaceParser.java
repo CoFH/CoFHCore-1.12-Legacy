@@ -24,10 +24,10 @@ public class SurfaceParser extends UniformParser {
 	}
 
 	@Override
-	protected FeatureBase getFeature(String name, WorldGenerator gen, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen,
+	protected FeatureBase getFeature(String name, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen,
 			GenRestriction dimRes) {
 
-		return new FeatureOreGenSurface(name, gen, numClusters, minHeight, biomeRes, retrogen, dimRes);
+		return new FeatureOreGenSurface(name, gen, matList, numClusters, minHeight, biomeRes, retrogen, dimRes);
 	}
 
 	@Override
