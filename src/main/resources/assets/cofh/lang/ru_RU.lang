@@ -84,7 +84,7 @@ info.cofh.command.help.0=Доступны следующие команды:
 info.cofh.command.killall.0=
 info.cofh.command.killall.1=
 info.cofh.command.killall.2=Не найдено враждебных мобов!
-info.cofh.command.version.0=Этот мод имеет актуальную версию
+info.cofh.command.version.0=Этот мод работает на версии
 
 info.cofh.tutorial.fluxRequired=Для работы необходим Redstone Flux.
 info.cofh.tutorial.tabAugment=Вкладка "Прирост" предоставляет модульные дополнения.
