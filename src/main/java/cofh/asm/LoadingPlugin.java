@@ -47,7 +47,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 			System.err.println(err);
 
 			JEditorPane ep = new JEditorPane("text/html", "<html>" + err
-					+ "<br>Remove it from your coremods folder and check <a href=\"http://thermalexpansion.wikispaces.com/\">here</a> for updates" + "</html>");
+					+ "<br>Remove it from your coremods folder and check <a href=\"http://teamcofh.com/\">here</a> for updates" + "</html>");
 
 			ep.setEditable(false);
 			ep.setOpaque(false);
