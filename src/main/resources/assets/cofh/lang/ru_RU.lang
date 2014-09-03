@@ -65,6 +65,27 @@ info.cofh.transfer=Передача
 info.cofh.tutorial=Руководство
 info.cofh.unlocked=Открыто
 
+info.cofh.command.friend=Команда, чтобы добавить и удалить друзей из вашего списка друзей.
+info.cofh.command.help=Команда, чтобы помочь с другими командами!
+info.cofh.command.killall=Убивает всех существ данного имени и по умолчанию убивает всех враждебных мобов..
+info.cofh.command.tps=Получает такты в секунду на сервере. На прекрасном сервере это должно быть 20.
+info.cofh.command.tpx=Улучшенная версия команды /tp, которая работает между измерениями.
+info.cofh.command.version=Выдаёт версию этого мода.
+
+info.cofh.command.syntaxError=Неправильный синтаксис.
+
+info.cofh.command.friend.0=успшено добавлен в ваш список друзей.
+info.cofh.command.friend.1=Извините, возникла проблема при добавлении
+info.cofh.command.friend.2=в ваш список.
+info.cofh.command.friend.3=Извините, это имя не допустимо.
+info.cofh.command.friend.4=успешно удалён из вашего списка друзей.
+info.cofh.command.friend.5=не был вашим другом.
+info.cofh.command.help.0=Доступны следующие команды:
+info.cofh.command.killall.0=
+info.cofh.command.killall.1=
+info.cofh.command.killall.2=Не найдено враждебных мобов!
+info.cofh.command.version.0=Этот мод имеет актуальную версию
+
 info.cofh.tutorial.fluxRequired=Для работы необходим Redstone Flux.
 info.cofh.tutorial.tabAugment=Вкладка "Прирост" предоставляет модульные дополнения.
 info.cofh.tutorial.tabConfiguration=Эта вкладка конфигурации определяет, как предметы попадают и покидают устройство.
