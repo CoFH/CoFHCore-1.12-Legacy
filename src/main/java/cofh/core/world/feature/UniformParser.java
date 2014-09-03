@@ -8,7 +8,7 @@ import cofh.lib.world.WorldGenMinableCluster;
 import cofh.lib.world.WorldGenSparseMinableCluster;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
-import cofh.lib.world.feature.FeatureOreGenUniform;
+import cofh.lib.world.feature.FeatureGenUniform;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -109,7 +109,7 @@ public class UniformParser implements IFeatureParser {
 	protected FeatureBase getFeature(String name, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen,
 			GenRestriction dimRes) {
 
-		return new FeatureOreGenUniform(name, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
+		return new FeatureGenUniform(name, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
 	}
 
 	protected int parseMinHeight(JsonObject genObject) {
