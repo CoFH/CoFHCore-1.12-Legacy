@@ -154,11 +154,8 @@ public class UniformParser implements IFeatureParser {
 
 	protected static boolean addFeatureRestrictions(FeatureBase feature, JsonObject genObject) {
 
-		if (feature.biomeRestriction != GenRestriction.NONE && genObject.has("biomes")) {
-			JsonArray restrictionList = genObject.getAsJsonArray("biomes");
-			for (int i = 0; i < restrictionList.size(); i++) {
-				feature.addBiome(restrictionList.get(i).getAsString());
-			}
+		if (feature.biomeRestriction != GenRestriction.NONE) {
+			feature.addBiomes(FeatureParser.parseBiomeRestrictions(genObject));
 		}
 		if (feature.dimensionRestriction != GenRestriction.NONE && genObject.has("dimensions")) {
 			JsonArray restrictionList = genObject.getAsJsonArray("dimensions");

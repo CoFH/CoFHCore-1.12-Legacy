@@ -10,6 +10,8 @@ import cofh.core.world.feature.UnderwaterParser;
 import cofh.core.world.feature.UniformParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;
+import cofh.lib.world.biome.BiomeInfo;
+import cofh.lib.world.biome.BiomeInfoSet;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -31,6 +33,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
+import net.minecraft.world.biome.BiomeGenBase.TempCategory;
+import net.minecraftforge.common.BiomeDictionary.Type;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -278,6 +282,35 @@ public class FeatureParser {
 	}
 
 	// TODO: move these helper functions outside core?
+	
+	public static BiomeInfoSet parseBiomeRestrictions(JsonObject genObject) {
+		BiomeInfoSet set = null;
+		if (genObject.has("biomes")) {
+			JsonArray restrictionList = genObject.getAsJsonArray("biomes");
+			set = new BiomeInfoSet(restrictionList.size());
+			for (int i = 0, e = restrictionList.size(); i < e; i++) {
+				BiomeInfo info = null;
+				JsonElement element = restrictionList.get(i);
+				if (element.isJsonObject()) {
+					JsonObject obj = element.getAsJsonObject();
+					String type = obj.get("type").getAsString();
+					boolean wl = obj.has("whitelist") ? obj.get("whitelist").getAsBoolean() : true;
+					if (type.equalsIgnoreCase("name")) {
+						info = new BiomeInfo(obj.get("entry").getAsString());
+					} else if (type.equalsIgnoreCase("temperature")) {
+						info = new BiomeInfo(TempCategory.valueOf(obj.get("entry").getAsString()), 1, wl);
+					} else if (type.equalsIgnoreCase("dictionary")) {
+						info = new BiomeInfo(Type.valueOf(obj.get("entry").getAsString()), 2, wl);
+					}
+				} else {
+					info = new BiomeInfo(element.getAsString());
+				}
+				if (info != null)
+					set.add(info);
+			}
+		}
+		return set;
+	}
 
 	public static Block parseBlockName(String blockRaw) {
 
