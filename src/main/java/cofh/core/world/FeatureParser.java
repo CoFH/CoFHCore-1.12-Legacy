@@ -5,7 +5,7 @@ import cofh.api.world.IFeatureParser;
 import cofh.core.CoFHProps;
 import cofh.core.util.CoreUtils;
 import cofh.core.world.feature.NormalParser;
-import cofh.core.world.feature.RareParser;
+import cofh.core.world.feature.FractalParser;
 import cofh.core.world.feature.SurfaceParser;
 import cofh.core.world.feature.UnderwaterParser;
 import cofh.core.world.feature.UniformParser;
@@ -90,7 +90,7 @@ public class FeatureParser {
 		registerTemplate("normal", new NormalParser());
 		registerTemplate("surface", new SurfaceParser());
 		registerTemplate("underwater", new UnderwaterParser());
-		registerTemplate("rare", new RareParser());
+		registerTemplate("fractal", new FractalParser());
 	}
 
 	public static void complete() {
@@ -322,10 +322,12 @@ public class FeatureParser {
 							log.warn("Biome entry of unknown type");
 							break l;
 						}
-						if (rarity > 0)
-							info = new BiomeInfoRarity(data, t, wl, rarity);
-						else
-							info = new BiomeInfo(data, t, wl);
+						if (data != null) {
+							if (rarity > 0)
+								info = new BiomeInfoRarity(data, t, wl, rarity);
+							else
+								info = new BiomeInfo(data, t, wl);
+						}
 					}
 				} else {
 					info = new BiomeInfo(element.getAsString());

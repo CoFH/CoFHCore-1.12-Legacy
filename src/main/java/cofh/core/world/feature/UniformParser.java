@@ -141,7 +141,7 @@ public class UniformParser implements IFeatureParser {
 
 		if ("sparse-cluster".equals(template)) {
 			return new WorldGenSparseMinableCluster(resList, clusterSize, matList);
-		} else if ("fractal".equals(template)) {
+		} else if ("large-vein".equals(template)) {
 			return new WorldGenMinableLargeVein(resList, clusterSize, matList);
 		} else if (!"cluster".equals(template)) {
 			log.warn("Unknown generator " + template + "! Using 'cluster'");

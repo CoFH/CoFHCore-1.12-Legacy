@@ -13,7 +13,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 import org.apache.logging.log4j.Logger;
 
-public class RareParser extends UniformParser {
+public class FractalParser extends UniformParser {
 
 	@Override
 	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen,
@@ -31,7 +31,7 @@ public class RareParser extends UniformParser {
 	
 	@Override
 	protected String getDefaultTemplate() {
-		return "fractal";
+		return "large-vein";
 	}
 
 }
