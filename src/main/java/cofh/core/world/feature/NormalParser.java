@@ -1,5 +1,7 @@
 package cofh.core.world.feature;
 
+import org.apache.logging.log4j.Logger;
+
 import java.util.List;
 
 import cofh.lib.util.WeightedRandomBlock;
@@ -13,28 +15,13 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class NormalParser extends UniformParser {
 
 	@Override
-	protected FeatureBase getFeature(String name, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen,
-			GenRestriction dimRes) {
+	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen,
+			GenRestriction dimRes, Logger log) {
 
-		return new FeatureGenNormal(name, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
-	}
+		int meanHeight = genObject.get("meanHeight").getAsInt();
+		int maxVariance = genObject.get("maxVariance").getAsInt();
 
-	@Override
-	protected int parseMinHeight(JsonObject genObject) {
-
-		return genObject.get("meanHeight").getAsInt();
-	}
-
-	@Override
-	protected int parseMaxHeight(JsonObject genObject) {
-
-		return genObject.get("maxVariance").getAsInt();
-	}
-
-	@Override
-	protected boolean verifyHeight(int minHeight, int maxHeight) {
-
-		return false;
+		return new FeatureGenNormal(featureName, gen, numClusters, meanHeight, maxVariance, biomeRes, retrogen, dimRes);
 	}
 
 }

@@ -1,5 +1,7 @@
 package cofh.core.world.feature;
 
+import org.apache.logging.log4j.Logger;
+
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.feature.FeatureBase;
@@ -24,28 +26,12 @@ public class SurfaceParser extends UniformParser {
 	}
 
 	@Override
-	protected FeatureBase getFeature(String name, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen,
-			GenRestriction dimRes) {
+	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen,
+			GenRestriction dimRes, Logger log) {
 
-		return new FeatureGenSurface(name, gen, matList, numClusters, minHeight, biomeRes, retrogen, dimRes);
-	}
+		int chunkChance = MathHelper.clampI(genObject.get("chunkChance").getAsInt(), 1, 1000000);
 
-	@Override
-	protected int parseMinHeight(JsonObject genObject) {
-
-		return MathHelper.clampI(genObject.get("chunkChance").getAsInt(), 1, 1000000);
-	}
-
-	@Override
-	protected int parseMaxHeight(JsonObject genObject) {
-
-		return 0;
-	}
-
-	@Override
-	protected boolean verifyHeight(int minHeight, int maxHeight) {
-
-		return false;
+		return new FeatureGenSurface(featureName, gen, matList, numClusters, chunkChance, biomeRes, retrogen, dimRes);
 	}
 
 }

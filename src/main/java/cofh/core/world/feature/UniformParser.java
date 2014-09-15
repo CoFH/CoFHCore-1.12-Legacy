@@ -5,6 +5,7 @@ import cofh.api.world.IFeatureParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.world.WorldGenMinableCluster;
+import cofh.lib.world.WorldGenMinableLargeVein;
 import cofh.lib.world.WorldGenSparseMinableCluster;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
@@ -92,39 +93,31 @@ public class UniformParser implements IFeatureParser {
 				matList = defaultMaterial;
 			}
 		}
-		int minHeight = parseMinHeight(genObject);
-		int maxHeight = parseMaxHeight(genObject);
 
-		if (verifyHeight(minHeight, maxHeight)) {
-			log.error("Invalid height parameters specified in \"" + featureName + "\"");
-			return null;
-		}
-		FeatureBase feature = getFeature(featureName, getGenerator(genObject, log, resList, clusterSize, matList), matList, numClusters, minHeight, maxHeight, biomeRes,
-				retrogen, dimRes);
+		FeatureBase feature = getFeature(featureName, genObject, getGenerator(genObject, log, resList, clusterSize, matList),
+				matList, numClusters, biomeRes, retrogen, dimRes, log);
 
-		addFeatureRestrictions(feature, genObject);
+		if (feature != null)
+			addFeatureRestrictions(feature, genObject);
 		return feature;
 	}
 
-	protected FeatureBase getFeature(String name, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, int minHeight, int maxHeight, GenRestriction biomeRes, boolean retrogen,
-			GenRestriction dimRes) {
+	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen,
+			GenRestriction dimRes, Logger log) {
 
-		return new FeatureGenUniform(name, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
+		int minHeight = genObject.get("minHeight").getAsInt();
+		int maxHeight = genObject.get("maxHeight").getAsInt();
+
+		if (minHeight >= maxHeight || minHeight < 0) {
+			log.error("Invalid height parameters specified in \"" + featureName + "\"");
+			return null;
+		}
+
+		return new FeatureGenUniform(featureName, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
 	}
 
-	protected int parseMinHeight(JsonObject genObject) {
-
-		return genObject.get("minHeight").getAsInt();
-	}
-
-	protected int parseMaxHeight(JsonObject genObject) {
-
-		return genObject.get("maxHeight").getAsInt();
-	}
-
-	protected boolean verifyHeight(int minHeight, int maxHeight) {
-
-		return minHeight >= maxHeight || minHeight < 0;
+	protected String getDefaultTemplate() {
+		return "cluster";
 	}
 
 	protected boolean parseMaterial(JsonObject genObject, List<WeightedRandomBlock> matList) {
@@ -135,20 +128,24 @@ public class UniformParser implements IFeatureParser {
 	protected WorldGenerator getGenerator(JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
 			List<WeightedRandomBlock> matList) {
 
+		String template = getDefaultTemplate();
+
 		JsonElement genElement = genObject.get("template");
 		if (genElement.isJsonObject()) {
 			genObject = genElement.getAsJsonObject();
 
-			String template = genObject.get("generator").getAsString();
-
-			if ("sparse-cluster".equals(template)) {
-				return new WorldGenSparseMinableCluster(resList, clusterSize, matList);
-			} else if (!"cluster".equals(template)) {
-				log.warn("Unknown generator " + template + '!');
+			if (genObject.has("generator")) {
+				template = genObject.get("generator").getAsString();
 			}
-			return new WorldGenMinableCluster(resList, clusterSize, matList);
 		}
 
+		if ("sparse-cluster".equals(template)) {
+			return new WorldGenSparseMinableCluster(resList, clusterSize, matList);
+		} else if ("fractal".equals(template)) {
+			return new WorldGenMinableLargeVein(resList, clusterSize, matList);
+		} else if (!"cluster".equals(template)) {
+			log.warn("Unknown generator " + template + "! Using 'cluster'");
+		}
 		return new WorldGenMinableCluster(resList, clusterSize, matList);
 	}
 

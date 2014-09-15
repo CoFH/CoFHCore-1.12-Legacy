@@ -11,6 +11,7 @@ import cofh.core.world.feature.UniformParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.biome.BiomeInfo;
+import cofh.lib.world.biome.BiomeInfoRarity;
 import cofh.lib.world.biome.BiomeInfoSet;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -295,12 +296,31 @@ public class FeatureParser {
 					JsonObject obj = element.getAsJsonObject();
 					String type = obj.get("type").getAsString();
 					boolean wl = obj.has("whitelist") ? obj.get("whitelist").getAsBoolean() : true;
-					if (type.equalsIgnoreCase("name")) {
-						info = new BiomeInfo(obj.get("entry").getAsString());
-					} else if (type.equalsIgnoreCase("temperature")) {
-						info = new BiomeInfo(TempCategory.valueOf(obj.get("entry").getAsString()), 1, wl);
-					} else if (type.equalsIgnoreCase("dictionary")) {
-						info = new BiomeInfo(Type.valueOf(obj.get("entry").getAsString()), 2, wl);
+					String entry = obj.get("entry").getAsString();
+					int rarity = obj.has("rarity") ? obj.get("rarity").getAsInt() : -1;
+
+					l: if (type.equalsIgnoreCase("name")) {
+						if (rarity > 0)
+							info = new BiomeInfoRarity(entry, rarity);
+						else
+							info = new BiomeInfo(entry);
+					} else {
+						Object data = null;
+						int t = -1;
+						if (type.equalsIgnoreCase("temperature")) {
+							data = TempCategory.valueOf(entry);
+							t = 1;
+						} else if (type.equalsIgnoreCase("dictionary")) {
+							data = Type.valueOf(entry);
+							t = 2;
+						} else {
+							log.warn("Biome entry of unknown type");
+							break l;
+						}
+						if (rarity > 0)
+							info = new BiomeInfoRarity(data, t, wl, rarity);
+						else
+							info = new BiomeInfo(data, t, wl);
 					}
 				} else {
 					info = new BiomeInfo(element.getAsString());
