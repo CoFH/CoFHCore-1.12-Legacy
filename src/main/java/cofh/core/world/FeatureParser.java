@@ -5,6 +5,7 @@ import cofh.api.world.IFeatureParser;
 import cofh.core.CoFHProps;
 import cofh.core.util.CoreUtils;
 import cofh.core.world.feature.NormalParser;
+import cofh.core.world.feature.RareParser;
 import cofh.core.world.feature.SurfaceParser;
 import cofh.core.world.feature.UnderwaterParser;
 import cofh.core.world.feature.UniformParser;
@@ -89,7 +90,7 @@ public class FeatureParser {
 		registerTemplate("normal", new NormalParser());
 		registerTemplate("surface", new SurfaceParser());
 		registerTemplate("underwater", new UnderwaterParser());
-		registerTemplate("fractal", null);// FIXME: convert WorldGenMineableCell
+		registerTemplate("rare", new RareParser());
 	}
 
 	public static void complete() {
@@ -235,10 +236,14 @@ public class FeatureParser {
 
 			log.info("Reading world generation info from: " + genFile + ":");
 			for (Entry<String, JsonElement> genEntry : genList.entrySet()) {
-				if (parseGenerationEntry(genEntry.getKey(), genEntry.getValue())) {
-					log.debug("Generation entry successfully parsed: \"" + genEntry.getKey() + "\"");
-				} else {
-					log.error("Error parsing generation entry: \"" + genEntry.getKey() + "\" > Please check the parameters. It *may* be a duplicate.");
+				try {
+					if (parseGenerationEntry(genEntry.getKey(), genEntry.getValue())) {
+						log.debug("Generation entry successfully parsed: \"" + genEntry.getKey() + "\"");
+					} else {
+						log.error("Error parsing generation entry: \"" + genEntry.getKey() + "\" > Please check the parameters. It *may* be a duplicate.");
+					}
+				} catch (Throwable t) {
+					log.fatal("There was a severe error parsing '" + genEntry.getKey() + "'!", t);
 				}
 			}
 		}
