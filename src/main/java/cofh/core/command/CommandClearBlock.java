@@ -9,6 +9,7 @@ import gnu.trove.set.hash.THashSet;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -115,6 +116,134 @@ public class CommandClearBlock implements ISubCommand {
 
 		for (int e = args.length; i < e; ++i) {
 			String blockRaw = args[i];
+			if (blockRaw.charAt(0) == '*') {
+				if (blockRaw.equals("*fluid")) {
+					for (int x = xS; x <= xL; ++x) {
+						for (int z = zS; z <= zL; ++z) {
+							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							int cX = x & 15, cZ = z & 15;
+							for (int y = yS; y <= yL; ++y) {
+								Block block = chunk.getBlock(cX, y, cZ);
+								if (block.getMaterial().isLiquid()) {
+									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+										set.add(chunk);
+									}
+								}
+							}
+						}
+					}
+				} else if (blockRaw.equals("*tree")) {
+					for (int x = xS; x <= xL; ++x) {
+						for (int z = zS; z <= zL; ++z) {
+							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							int cX = x & 15, cZ = z & 15;
+							for (int y = yS; y <= yL; ++y) {
+								Block block = chunk.getBlock(cX, y, cZ);
+								if (block.isWood(world, x, y, z) || block.isLeaves(world, x, y, z)) {
+									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+										set.add(chunk);
+									}
+								}
+							}
+						}
+					}
+				} else if (blockRaw.startsWith("*repl")) {
+					for (int x = xS; x <= xL; ++x) {
+						for (int z = zS; z <= zL; ++z) {
+							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							int cX = x & 15, cZ = z & 15;
+							for (int y = yS; y <= yL; ++y) {
+								Block block = chunk.getBlock(cX, y, cZ);
+								if (block.isReplaceable(world, x, y, z)) {
+									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+										set.add(chunk);
+									}
+								}
+							}
+						}
+					}
+				} else if (blockRaw.equals("*stone")) {
+					for (int x = xS; x <= xL; ++x) {
+						for (int z = zS; z <= zL; ++z) {
+							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							int cX = x & 15, cZ = z & 15;
+							for (int y = yS; y <= yL; ++y) {
+								Block block = chunk.getBlock(cX, y, cZ);
+								if (block.getMaterial() == Material.rock) {
+									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+										set.add(chunk);
+									}
+								}
+							}
+						}
+					}
+				} else if (blockRaw.equals("*sand")) {
+					for (int x = xS; x <= xL; ++x) {
+						for (int z = zS; z <= zL; ++z) {
+							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							int cX = x & 15, cZ = z & 15;
+							for (int y = yS; y <= yL; ++y) {
+								Block block = chunk.getBlock(cX, y, cZ);
+								if (block.getMaterial() == Material.sand) {
+									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+										set.add(chunk);
+									}
+								}
+							}
+						}
+					}
+				} else if (blockRaw.equals("*dirt")) {
+					for (int x = xS; x <= xL; ++x) {
+						for (int z = zS; z <= zL; ++z) {
+							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							int cX = x & 15, cZ = z & 15;
+							for (int y = yS; y <= yL; ++y) {
+								Block block = chunk.getBlock(cX, y, cZ);
+								Material m = block.getMaterial();
+								if (m == Material.grass || m == Material.ground || m == Material.clay || m == Material.snow
+										|| m == Material.craftedSnow || m == Material.ice || m == Material.packedIce) {
+									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+										set.add(chunk);
+									}
+								}
+							}
+						}
+					}
+				} else if (blockRaw.equals("*plants")) {
+					for (int x = xS; x <= xL; ++x) {
+						for (int z = zS; z <= zL; ++z) {
+							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							int cX = x & 15, cZ = z & 15;
+							for (int y = yS; y <= yL; ++y) {
+								Block block = chunk.getBlock(cX, y, cZ);
+								Material m = block.getMaterial();
+								if (m == Material.plants || m == Material.vine || m == Material.cactus || m == Material.leaves) {
+									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+										set.add(chunk);
+									}
+								}
+							}
+						}
+					}
+				} else if (blockRaw.equals("*fire")) {
+					for (int x = xS; x <= xL; ++x) {
+						for (int z = zS; z <= zL; ++z) {
+							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							int cX = x & 15, cZ = z & 15;
+							for (int y = yS; y <= yL; ++y) {
+								Block block = chunk.getBlock(cX, y, cZ);
+								Material m = block.getMaterial();
+								if (m == Material.fire || m == Material.lava || block.isBurning(world, x, y, z)) {
+									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+										set.add(chunk);
+									}
+								}
+							}
+						}
+					}
+				}
+				continue;
+			}
 			int meta = -1;
 			t = blockRaw.indexOf('#');
 			if (t > 0) {
