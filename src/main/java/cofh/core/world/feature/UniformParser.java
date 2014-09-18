@@ -129,10 +129,12 @@ public class UniformParser implements IFeatureParser {
 			List<WeightedRandomBlock> matList) {
 
 		String template = getDefaultTemplate();
+		boolean isObject = false;
 
 		JsonElement genElement = genObject.get("template");
 		if (genElement.isJsonObject()) {
 			genObject = genElement.getAsJsonObject();
+			isObject = true;
 
 			if (genObject.has("generator")) {
 				template = genObject.get("generator").getAsString();
@@ -142,7 +144,11 @@ public class UniformParser implements IFeatureParser {
 		if ("sparse-cluster".equals(template)) {
 			return new WorldGenSparseMinableCluster(resList, clusterSize, matList);
 		} else if ("large-vein".equals(template)) {
-			return new WorldGenMinableLargeVein(resList, clusterSize, matList);
+			boolean sparse = true;
+			if (isObject) {
+				sparse = genObject.has("sparse") ? genObject.get("sparse").getAsBoolean() : sparse;
+			}
+			return new WorldGenMinableLargeVein(resList, clusterSize, matList, sparse);
 		} else if (!"cluster".equals(template)) {
 			log.warn("Unknown generator " + template + "! Using 'cluster'");
 		}
