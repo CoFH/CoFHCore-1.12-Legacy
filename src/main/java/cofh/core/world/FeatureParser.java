@@ -4,8 +4,8 @@ import cofh.api.world.IFeatureGenerator;
 import cofh.api.world.IFeatureParser;
 import cofh.core.CoFHProps;
 import cofh.core.util.CoreUtils;
-import cofh.core.world.feature.NormalParser;
 import cofh.core.world.feature.FractalParser;
+import cofh.core.world.feature.NormalParser;
 import cofh.core.world.feature.SurfaceParser;
 import cofh.core.world.feature.UnderwaterParser;
 import cofh.core.world.feature.UniformParser;
@@ -29,6 +29,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -288,7 +289,7 @@ public class FeatureParser {
 	}
 
 	// TODO: move these helper functions outside core?
-	
+
 	public static BiomeInfoSet parseBiomeRestrictions(JsonObject genObject) {
 		BiomeInfoSet set = null;
 		if (genObject.has("biomes")) {
@@ -301,23 +302,56 @@ public class FeatureParser {
 					JsonObject obj = element.getAsJsonObject();
 					String type = obj.get("type").getAsString();
 					boolean wl = obj.has("whitelist") ? obj.get("whitelist").getAsBoolean() : true;
-					String entry = obj.get("entry").getAsString();
+					JsonElement value = obj.get("entry");
+					JsonArray array = value.isJsonArray() ? value.getAsJsonArray() : null;
+					String entry = array != null ? null : value.getAsString();
 					int rarity = obj.has("rarity") ? obj.get("rarity").getAsInt() : -1;
 
 					l: if (type.equalsIgnoreCase("name")) {
-						if (rarity > 0)
-							info = new BiomeInfoRarity(entry, rarity);
-						else
-							info = new BiomeInfo(entry);
+						if (array != null) {
+							ArrayList<String> names = new ArrayList<String>();
+							for (int k = 0, j = array.size(); k < j; k++) {
+								names.add(array.get(k).getAsString());
+							}
+							if (rarity > 0)
+								info = new BiomeInfoRarity(names, 4, true, rarity);
+							else
+								info = new BiomeInfo(names, 4, true);
+						} else {
+							if (rarity > 0)
+								info = new BiomeInfoRarity(entry, rarity);
+							else
+								info = new BiomeInfo(entry);
+						}
 					} else {
 						Object data = null;
 						int t = -1;
 						if (type.equalsIgnoreCase("temperature")) {
-							data = TempCategory.valueOf(entry);
-							t = 1;
+							if (array != null) {
+								ArrayList<TempCategory> temps = new ArrayList<TempCategory>();
+								for (int k = 0, j = array.size(); k < j; k++) {
+									temps.add(TempCategory.valueOf(array.get(k).getAsString()));
+								}
+								data = EnumSet.copyOf(temps);
+								t = 5;
+							} else {
+								data = TempCategory.valueOf(entry);
+								t = 1;
+							}
 						} else if (type.equalsIgnoreCase("dictionary")) {
-							data = Type.valueOf(entry);
-							t = 2;
+							if (array != null) {
+								ArrayList<Type> tags = new ArrayList<Type>();
+								for (int k = 0, j = array.size(); k < j; k++) {
+									Type a = Type.valueOf(array.get(k).getAsString());
+									if (a != null)
+										tags.add(a);
+								}
+								data = tags.toArray(new Type[tags.size()]);
+								t = 6;
+							} else {
+								data = Type.valueOf(entry);
+								t = 2;
+							}
 						} else {
 							log.warn("Biome entry of unknown type");
 							break l;
@@ -377,7 +411,7 @@ public class FeatureParser {
 		if (genElement.isJsonArray()) {
 			JsonArray blockList = genElement.getAsJsonArray();
 
-			for (int i = 0; i < blockList.size(); i++) {
+			for (int i = 0, e = blockList.size(); i < e; i++) {
 				WeightedRandomBlock entry = parseBlockEntry(blockList.get(i));
 				if (entry == null) {
 					return false;
