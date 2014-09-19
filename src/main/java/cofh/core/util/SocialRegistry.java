@@ -3,7 +3,7 @@ package cofh.core.util;
 import cofh.core.CoFHProps;
 import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketSocial;
-import cofh.core.network.PacketSocial.Type;
+import cofh.core.network.PacketSocial.PacketTypes;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -61,7 +61,7 @@ public class SocialRegistry {
 	public static void sendFriendsToPlayer(EntityPlayerMP thePlayer) {
 
 		PacketSocial aPacket = new PacketSocial();
-		aPacket.addByte(Type.FRIEND_LIST.ordinal());
+		aPacket.addByte(PacketTypes.FRIEND_LIST.ordinal());
 		aPacket.addInt(friendConf.getCategory(thePlayer.getCommandSenderName().toLowerCase()).keySet().size());
 		for (String theName : friendConf.getCategory(thePlayer.getCommandSenderName().toLowerCase()).keySet()) {
 			aPacket.addString(theName);

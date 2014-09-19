@@ -8,6 +8,9 @@ import cofh.core.command.CommandHandler;
 import cofh.core.enchantment.CoFHEnchantment;
 import cofh.core.entity.DropHandler;
 import cofh.core.gui.GuiHandler;
+import cofh.core.network.PacketCoFHBase;
+import cofh.core.network.PacketCore;
+import cofh.core.network.PacketCore.PacketTypes;
 import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketSocial;
 import cofh.core.util.ConfigHandler;
@@ -113,6 +116,7 @@ public class CoFHCore extends BaseMod {
 		/* Register Handlers */
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
 		CommandHandler.registerSubCommand(CommandFriend.instance);
+		PacketCore.initialize();
 		PacketSocial.initialize();
 		SocialRegistry.initialize();
 	}
@@ -155,6 +159,18 @@ public class CoFHCore extends BaseMod {
 		OreDictionaryArbiter.initialize();
 		CommandHandler.initCommands(event);
 		server = event.getServer();
+	}
+
+	public void handleConfigSync(PacketCoFHBase payload) {
+
+		FMLEventHandler.instance.handleIdMappingEvent(null);
+	}
+
+	public PacketCoFHBase getConfigSync() {
+
+		PacketCoFHBase payload = PacketCore.getPacket(PacketTypes.CONFIG_SYNC);
+
+		return payload;
 	}
 
 	public void registerOreDictionaryEntries() {
