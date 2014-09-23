@@ -15,10 +15,14 @@ public class PacketSocial extends PacketCoFHBase {
 		PacketHandler.instance.registerPacket(PacketSocial.class);
 	}
 
+	public enum PacketTypes {
+		FRIEND_LIST, ADD_FRIEND, REMOVE_FRIEND
+	}
+
 	@Override
 	public void handlePacket(EntityPlayer player, boolean isServer) {
 
-		switch (Type.values()[getByte()]) {
+		switch (PacketTypes.values()[getByte()]) {
 		case FRIEND_LIST:
 			int size = getInt();
 			SocialRegistry.clientPlayerFriends = new LinkedList<String>();
@@ -37,10 +41,6 @@ public class PacketSocial extends PacketCoFHBase {
 			SocialRegistry.sendFriendsToPlayer((EntityPlayerMP) player);
 			return;
 		}
-	}
-
-	public enum Type {
-		FRIEND_LIST, ADD_FRIEND, REMOVE_FRIEND
 	}
 
 }

@@ -145,6 +145,9 @@ public class ItemBowAdv extends ItemBow {
 			if (ServerHelper.isServerWorld(world)) {
 				world.spawnEntityInWorld(arrow);
 			}
+			if (!player.capabilities.isCreativeMode) {
+				stack.damageItem(1, player);
+			}
 		}
 	}
 

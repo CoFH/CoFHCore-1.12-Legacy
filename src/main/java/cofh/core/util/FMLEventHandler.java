@@ -1,6 +1,7 @@
 package cofh.core.util;
 
 import cofh.core.CoFHProps;
+import cofh.core.network.PacketCore;
 import cofh.core.render.ItemRenderRegistry;
 import cofh.core.util.fluid.BucketHandler;
 import cofh.core.util.oredict.OreDictionaryArbiter;
@@ -32,6 +33,7 @@ public class FMLEventHandler {
 			player.addChatMessage(new ChatComponentText(StringHelper.YELLOW + "[CoFH] " + StringHelper.WHITE + StringHelper.localize("chat.cofh.secure.0")
 					+ StringHelper.END));
 		}
+		PacketCore.sendConfigSyncPacketToClient(event.player);
 		handleIdMappingEvent(null);
 	}
 

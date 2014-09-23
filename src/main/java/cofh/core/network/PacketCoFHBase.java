@@ -326,8 +326,6 @@ public abstract class PacketCoFHBase extends PacketBase {
 		handlePacket(player, true);
 	}
 
-	public void handlePacket(EntityPlayer player, boolean isServer) {
-
-	}
+	public abstract void handlePacket(EntityPlayer player, boolean isServer);
 
 }
