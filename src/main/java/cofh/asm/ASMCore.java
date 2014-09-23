@@ -1,33 +1,6 @@
 package cofh.asm;
 
-import static org.objectweb.asm.Opcodes.ACC_ABSTRACT;
-import static org.objectweb.asm.Opcodes.ACC_BRIDGE;
-import static org.objectweb.asm.Opcodes.ACC_FINAL;
-import static org.objectweb.asm.Opcodes.ACC_PRIVATE;
-import static org.objectweb.asm.Opcodes.ACC_PROTECTED;
-import static org.objectweb.asm.Opcodes.ACC_PUBLIC;
-import static org.objectweb.asm.Opcodes.ACC_STATIC;
-import static org.objectweb.asm.Opcodes.ACC_SYNTHETIC;
-import static org.objectweb.asm.Opcodes.ACONST_NULL;
-import static org.objectweb.asm.Opcodes.ALOAD;
-import static org.objectweb.asm.Opcodes.ARETURN;
-import static org.objectweb.asm.Opcodes.ASM4;
-import static org.objectweb.asm.Opcodes.DUP;
-import static org.objectweb.asm.Opcodes.GETFIELD;
-import static org.objectweb.asm.Opcodes.GOTO;
-import static org.objectweb.asm.Opcodes.ICONST_0;
-import static org.objectweb.asm.Opcodes.ICONST_1;
-import static org.objectweb.asm.Opcodes.IFEQ;
-import static org.objectweb.asm.Opcodes.ILOAD;
-import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
-import static org.objectweb.asm.Opcodes.INVOKEVIRTUAL;
-import static org.objectweb.asm.Opcodes.IRETURN;
-import static org.objectweb.asm.Opcodes.LMUL;
-import static org.objectweb.asm.Opcodes.LXOR;
-import static org.objectweb.asm.Opcodes.NEW;
-import static org.objectweb.asm.Opcodes.PUTFIELD;
-import static org.objectweb.asm.Opcodes.RETURN;
+import static org.objectweb.asm.Opcodes.*;
 
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
@@ -72,7 +45,7 @@ class ASMCore {
 
 	static Logger log = LogManager.getLogger("CoFH ASM");
 
-	static TObjectByteHashMap<String> hashes = new TObjectByteHashMap<String>(10, 2, (byte) 0);
+	static TObjectByteHashMap<String> hashes = new TObjectByteHashMap<String>(20, 1, (byte) 0);
 	static THashSet<String> parsables, implementables, strippables;
 	static final String implementableDesc, strippableDesc;
 	static String side;
@@ -94,9 +67,7 @@ class ASMCore {
 		hashes.put("net.minecraft.world.World", (byte) 2);
 		hashes.put("skyboy.core.world.WorldProxy", (byte) 3);
 		hashes.put("skyboy.core.world.WorldServerProxy", (byte) 4);
-		if (Boolean.parseBoolean(System.getProperty("cofh.renderedit", "false"))) {
-			hashes.put("net.minecraft.client.renderer.RenderGlobal", (byte) 5);
-		}
+		hashes.put("net.minecraft.block.BlockPane", (byte) 5);
 		hashes.put("net.minecraft.inventory.Container", (byte) 6);
 		hashes.put("net.minecraft.client.multiplayer.PlayerControllerMP", (byte) 7);
 		hashes.put("net.minecraft.util.LongHashMap", (byte) 8);
@@ -189,7 +160,7 @@ class ASMCore {
 		case 4:
 			return writeWorldServerProxy(name, bytes, cr);
 		case 5:
-			return alterRenderGlobal(name, transformedName, bytes, cr);
+			return alterBlockPane(name, transformedName, bytes, cr);
 		case 6:
 			return alterContainer(name, transformedName, bytes, cr);
 		case 7:
@@ -200,6 +171,7 @@ class ASMCore {
 			return alterChunk(name, transformedName, bytes, cr);
 		case 10:
 			return alterMinecraft(name, transformedName, bytes, cr);
+		case 11:
 
 		default:
 			return bytes;
@@ -207,6 +179,46 @@ class ASMCore {
 	}
 
 	// { Improve Vanilla
+	private static byte[] alterBlockPane(String name, String transformedName, byte[] bytes, ClassReader cr) {
+
+		String names = "canPaneConnectTo";
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM4);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+
+		final String sig = "(Lnet/minecraft/world/IBlockAccess;IIILnet/minecraftforge/common/util/ForgeDirection;)Z";
+		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
+
+		l: {
+			MethodNode m = null;
+			for (MethodNode n : cn.methods) {
+				if (names.equals(remapper.mapMethodName(name, n.name, n.desc)) && sig.equals(remapper.mapMethodDesc(n.desc))) {
+					m = n;
+					break;
+				}
+			}
+
+			if (m == null) {
+				break l;
+			}
+
+			m.instructions.clear();
+			m.instructions.add(new VarInsnNode(ALOAD, 1));
+			m.instructions.add(new VarInsnNode(ALOAD, 2));
+			m.instructions.add(new VarInsnNode(ILOAD, 3));
+			m.instructions.add(new VarInsnNode(ILOAD, 4));
+			m.instructions.add(new VarInsnNode(ILOAD, 5));
+			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asm/HooksCore", "paneConnectsTo", sig));
+			m.instructions.add(new InsnNode(IRETURN));
+
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+		}
+		return bytes;
+	}
+
 	private static byte[] alterMinecraft(String name, String transformedName, byte[] bytes, ClassReader cr) {
 
 		String[] names;
@@ -511,39 +523,6 @@ class ASMCore {
 			m.localVariables = null;
 
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-			cn.accept(cw);
-			bytes = cw.toByteArray();
-		}
-		return bytes;
-	}
-
-	private static byte[] alterRenderGlobal(String name, String transformedName, byte[] bytes, ClassReader cr) {
-
-		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
-		cr.accept(cn, ClassReader.EXPAND_FRAMES);
-
-		{
-			for (MethodNode m : cn.methods) {
-				for (int i = 0, e = m.instructions.size(); i < e; ++i) {
-					AbstractInsnNode n = m.instructions.get(i);
-					if (n instanceof MethodInsnNode && n.getOpcode() == INVOKESTATIC) {
-						MethodInsnNode mn = (MethodInsnNode) n;
-						if (!"sort".equals(mn.name)) {
-							continue;
-						}
-						if ("java/util/Collections".equals(mn.owner)) {
-							mn.owner = "cofh/asm/HooksCore";
-							break;
-						} else if ("java/util/Arrays".equals(mn.owner)) {
-							mn.owner = "cofh/asm/HooksCore";
-							break; // only ever called once in a given method
-						}
-					}
-				}
-			}
-
-			ClassWriter cw = new ClassWriter(0);
 			cn.accept(cw);
 			bytes = cw.toByteArray();
 		}
