@@ -41,7 +41,7 @@ public class HooksCore {
 		}
 	}
 
-	public boolean paneConnectsTo(IBlockAccess world, int x, int y, int z, ForgeDirection dir) {
+	public static boolean paneConnectsTo(IBlockAccess world, int x, int y, int z, ForgeDirection dir) {
 
 		Block block = world.getBlock(x, y, z);
 		return block.func_149730_j() ||

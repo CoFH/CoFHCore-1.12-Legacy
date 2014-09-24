@@ -75,6 +75,7 @@ class ASMCore {
 			hashes.put("net.minecraft.world.chunk.Chunk", (byte) 9);
 		}
 		hashes.put("net.minecraft.client.Minecraft", (byte) 10);
+		hashes.put("net.minecraft.client.renderer.RenderBlocks", (byte) 11);
 	}
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
@@ -172,6 +173,7 @@ class ASMCore {
 		case 10:
 			return alterMinecraft(name, transformedName, bytes, cr);
 		case 11:
+			return alterRenderBlocks(name, transformedName, bytes, cr);
 
 		default:
 			return bytes;
@@ -179,9 +181,76 @@ class ASMCore {
 	}
 
 	// { Improve Vanilla
+	private static byte[] alterRenderBlocks(String name, String transformedName, byte[] bytes, ClassReader cr) {
+		//.renderBlockStainedGlassPane(Block, int, int, int)
+		String[] names;
+		if (LoadingPlugin.runtimeDeobfEnabled) {
+			names = new String[] { "func_147733_k", "func_150098_a", "func_147439_a" };
+		} else {
+			names = new String[] { "renderBlockStainedGlassPane", "canPaneConnectToBlock", "getBlock" };
+		}
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM4);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+
+		final String sig = "(Lnet/minecraft/block/Block;III)Z";
+		final String Rsig = "(Lnet/minecraft/world/IBlockAccess;IIILnet/minecraftforge/common/util/ForgeDirection;)Z";
+		final String Ssig = "(Lnet/minecraft/block/Block;)Z";
+		final String Csig = "(III)Lnet/minecraft/block/Block;";
+		final String cc = "net/minecraft/block/BlockPane";
+		final String fd = "net/minecraftforge/common/util/ForgeDirection";
+		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
+
+		l: {
+			MethodNode m = null;
+			for (MethodNode n : cn.methods) {
+				if (names[0].equals(remapper.mapMethodName(name, n.name, n.desc)) && sig.equals(remapper.mapMethodDesc(n.desc))) {
+					m = n;
+					break;
+				}
+			}
+
+			if (m == null)
+				break l;
+
+			m.localVariables = null;
+
+			final String[] dirs = {"NORTH", "NORTH", "SOUTH", "SOUTH", "WEST", "WEST", "EAST", "EAST"};
+			int di = 0;
+
+			for (int i = 0, e = m.instructions.size(); i < e; ++i) {
+				AbstractInsnNode n = m.instructions.get(i);
+				if (n.getType() == AbstractInsnNode.METHOD_INSN) {
+					MethodInsnNode mn = (MethodInsnNode)n;
+					if (n.getOpcode() == INVOKEINTERFACE && n.getNext().getOpcode() == INVOKEVIRTUAL) {
+						if (names[2].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc))) {
+							if (Csig.equals(remapper.mapMethodDesc(mn.desc)) &&
+									Ssig.equals(remapper.mapMethodDesc(((MethodInsnNode)mn.getNext()).desc))) {
+								m.instructions.insertBefore(n, new FieldInsnNode(GETSTATIC, fd, dirs[di++], 'L'+fd+';'));
+								m.instructions.insertBefore(n, new MethodInsnNode(INVOKEVIRTUAL, cc, "canPaneConnectTo", Rsig));
+								m.instructions.remove(n.getNext());
+								m.instructions.remove(n);
+							}
+						}
+					}
+				}
+			}
+
+			if (di == 0)
+				 break l;
+
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+		}
+
+		return bytes;
+	}
+
 	private static byte[] alterBlockPane(String name, String transformedName, byte[] bytes, ClassReader cr) {
 
-		String names = "canPaneConnectTo";
+		String names = "canPaneConnectTo"; // forge added
 
 		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM4);
@@ -205,12 +274,14 @@ class ASMCore {
 
 			m.instructions.clear();
 			m.instructions.add(new VarInsnNode(ALOAD, 1));
-			m.instructions.add(new VarInsnNode(ALOAD, 2));
+			m.instructions.add(new VarInsnNode(ILOAD, 2));
 			m.instructions.add(new VarInsnNode(ILOAD, 3));
 			m.instructions.add(new VarInsnNode(ILOAD, 4));
-			m.instructions.add(new VarInsnNode(ILOAD, 5));
+			m.instructions.add(new VarInsnNode(ALOAD, 5));
 			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asm/HooksCore", "paneConnectsTo", sig));
 			m.instructions.add(new InsnNode(IRETURN));
+
+			m.localVariables = null;
 
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 			cn.accept(cw);
