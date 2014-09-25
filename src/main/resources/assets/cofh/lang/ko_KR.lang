@@ -4,7 +4,7 @@ chat.cofh.secure.0=알림: 서버의 모든 OP는 제한없이 보안 설정된 
 chat.cofh.secure.1=이것은 개인용이며 소유권이 타인에게 있습니다.
 chat.cofh.secure.2=손이 미끄러졌습니다!
 
-enchant.cofh.holding=화물
+enchant.cofh.holding=화물증가
 
 info.cofh.access=보안
 info.cofh.accessMode=보안 설정
