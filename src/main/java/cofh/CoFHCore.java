@@ -102,7 +102,6 @@ public class CoFHCore extends BaseMod {
 		FMLEventHandler.initialize();
 		BucketHandler.initialize();
 		PacketHandler.instance.initialize();
-		OreDictionaryArbiter.initialize();
 		RecipeSorter.register("cofh:augment", RecipeAugmentable.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 		RecipeSorter.register("cofh:secure", RecipeSecure.class, RecipeSorter.Category.SHAPED, "before:cofh:upgrade");
 		RecipeSorter.register("cofh:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
@@ -149,6 +148,7 @@ public class CoFHCore extends BaseMod {
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
+		OreDictionaryArbiter.initialize();
 	}
 
 	@EventHandler
