@@ -12,6 +12,7 @@ import java.util.Random;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -63,6 +64,12 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 		this.particleBlue = particleBlue;
 
 		return this;
+	}
+
+	@Override
+	public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z)
+	{
+		return false;
 	}
 
 	public boolean preInit() {
