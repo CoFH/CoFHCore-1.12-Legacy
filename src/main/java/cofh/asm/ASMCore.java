@@ -228,7 +228,7 @@ class ASMCore {
 							if (Csig.equals(remapper.mapMethodDesc(mn.desc)) &&
 									Ssig.equals(remapper.mapMethodDesc(((MethodInsnNode)mn.getNext()).desc))) {
 								m.instructions.insertBefore(n, new FieldInsnNode(GETSTATIC, fd, dirs[di++], 'L'+fd+';'));
-								m.instructions.insertBefore(n, new MethodInsnNode(INVOKEVIRTUAL, cc, "canPaneConnectTo", Rsig));
+								m.instructions.insertBefore(n, new MethodInsnNode(INVOKEVIRTUAL, cc, "canPaneConnectTo", Rsig, false));
 								m.instructions.remove(n.getNext());
 								m.instructions.remove(n);
 							}
@@ -278,7 +278,7 @@ class ASMCore {
 			m.instructions.add(new VarInsnNode(ILOAD, 3));
 			m.instructions.add(new VarInsnNode(ILOAD, 4));
 			m.instructions.add(new VarInsnNode(ALOAD, 5));
-			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asm/HooksCore", "paneConnectsTo", sig));
+			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asm/HooksCore", "paneConnectsTo", sig, false));
 			m.instructions.add(new InsnNode(IRETURN));
 
 			m.localVariables = null;
@@ -318,7 +318,7 @@ class ASMCore {
 							MethodInsnNode mn = (MethodInsnNode) n;
 							if (mOwner.equals(mn.owner) && names[1].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc)) && "()V".equals(mn.desc)) {
 								m.instructions.set(mn, new MethodInsnNode(INVOKESTATIC, "cofh/asm/HooksCore", "tickTextures",
-										"(Lnet/minecraft/client/renderer/texture/ITickable;)V"));
+										"(Lnet/minecraft/client/renderer/texture/ITickable;)V", false));
 								break mc;
 							}
 						}
@@ -534,7 +534,7 @@ class ASMCore {
 						final String clazz = "cofh/asm/HooksCore";
 						final String method = "areItemsEqualHook";
 						final String sign = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z";
-						m.instructions.insertBefore(mn, new MethodInsnNode(INVOKESTATIC, clazz, method, sign));
+						m.instructions.insertBefore(mn, new MethodInsnNode(INVOKESTATIC, clazz, method, sign, false));
 						m.instructions.insertBefore(mn, new JumpInsnNode(IFEQ, jmp2));
 						m.instructions.insertBefore(mn, new JumpInsnNode(GOTO, jmp));
 						break;
@@ -587,7 +587,7 @@ class ASMCore {
 			m.instructions.add(new VarInsnNode(ILOAD, 4));
 			m.instructions.add(new InsnNode(ICONST_0));
 			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/lib/util/helpers/InventoryHelper", "mergeItemStack",
-					"(Ljava/util/List;Lnet/minecraft/item/ItemStack;IIZZ)Z"));
+					"(Ljava/util/List;Lnet/minecraft/item/ItemStack;IIZZ)Z", false));
 			m.instructions.add(new InsnNode(IRETURN));
 
 			// this fixes a crash in dev and with cauldron
@@ -637,14 +637,14 @@ class ASMCore {
 			mv.visitInsn(DUP);
 			mv.visitInsn(DUP);
 			mv.visitInsn(DUP);
-			mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
+			mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
 			mv.visitVarInsn(ALOAD, 1);
 			mv.visitFieldInsn(PUTFIELD, name, names[0], "Lnet/minecraft/world/storage/ISaveHandler;");
 			mv.visitTypeInsn(NEW, "net/minecraft/world/storage/WorldInfo");
 			mv.visitInsn(DUP);
 			mv.visitVarInsn(ALOAD, 4);
 			mv.visitVarInsn(ALOAD, 2);
-			mv.visitMethodInsn(INVOKESPECIAL, "net/minecraft/world/storage/WorldInfo", "<init>", "(Lnet/minecraft/world/WorldSettings;Ljava/lang/String;)V");
+			mv.visitMethodInsn(INVOKESPECIAL, "net/minecraft/world/storage/WorldInfo", "<init>", "(Lnet/minecraft/world/WorldSettings;Ljava/lang/String;)V", false);
 			mv.visitFieldInsn(PUTFIELD, name, names[1], "Lnet/minecraft/world/storage/WorldInfo;");
 			mv.visitVarInsn(ALOAD, 3);
 			mv.visitFieldInsn(PUTFIELD, name, names[2], "Lnet/minecraft/world/WorldProvider;");
@@ -714,7 +714,7 @@ class ASMCore {
 					INVOKESPECIAL,
 					"net/minecraft/world/World",
 					"<init>",
-					"(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V");
+					"(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V", false);
 			mv.visitVarInsn(ALOAD, 1);
 			mv.visitFieldInsn(PUTFIELD, name, names[0], "Lnet/minecraft/server/MinecraftServer;");
 			mv.visitInsn(ACONST_NULL);
@@ -774,7 +774,7 @@ class ASMCore {
 					mv.visitVarInsn(types[i].getOpcode(ILOAD), w);
 					w += types[i].getSize();
 				}
-				mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/World", m.name, m.desc);
+				mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/World", m.name, m.desc, false);
 				mv.visitInsn(Type.getReturnType(m.desc).getOpcode(IRETURN));
 				mv.visitMaxs(1, 1);
 				mv.visitEnd();
@@ -841,7 +841,7 @@ class ASMCore {
 					mv.visitVarInsn(types[i].getOpcode(ILOAD), w);
 					w += types[i].getSize();
 				}
-				mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/World", m.name, m.desc);
+				mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/World", m.name, m.desc, false);
 				mv.visitInsn(Type.getReturnType(m.desc).getOpcode(IRETURN));
 				mv.visitMaxs(1, 1);
 				mv.visitEnd();
@@ -868,7 +868,7 @@ class ASMCore {
 					mv.visitVarInsn(types[i].getOpcode(ILOAD), w);
 					w += types[i].getSize();
 				}
-				mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/WorldServer", m.name, m.desc);
+				mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/WorldServer", m.name, m.desc, false);
 				mv.visitInsn(Type.getReturnType(m.desc).getOpcode(IRETURN));
 				mv.visitMaxs(1, 1);
 				mv.visitEnd();

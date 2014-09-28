@@ -123,6 +123,7 @@ public class CoFHCore extends BaseMod {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 
+		OreDictionaryArbiter.initialize();
 		CoFHEnchantment.postInit();
 
 		proxy.registerKeyBinds();
@@ -148,7 +149,6 @@ public class CoFHCore extends BaseMod {
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
-		OreDictionaryArbiter.initialize();
 	}
 
 	@EventHandler
