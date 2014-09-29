@@ -4,6 +4,8 @@ import cofh.api.world.IFeatureGenerator;
 import cofh.api.world.IFeatureParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.world.WorldGenAdvLakes;
+import cofh.lib.world.WorldGenGeode;
 import cofh.lib.world.WorldGenMinableCluster;
 import cofh.lib.world.WorldGenMinableLargeVein;
 import cofh.lib.world.WorldGenSparseMinableCluster;
@@ -51,7 +53,6 @@ public class UniformParser implements IFeatureParser {
 		boolean retrogen = false;
 		GenRestriction biomeRes = GenRestriction.NONE;
 		GenRestriction dimRes = GenRestriction.NONE;
-		List<WeightedRandomBlock> matList = defaultMaterial;
 
 		if (genObject.has("clusterSize")) {
 			clusterSize = genObject.get("clusterSize").getAsInt();
@@ -59,7 +60,7 @@ public class UniformParser implements IFeatureParser {
 		if (genObject.has("numClusters")) {
 			numClusters = genObject.get("numClusters").getAsInt();
 		}
-		if (clusterSize <= 0 || numClusters <= 0) {
+		if (clusterSize < 0 || numClusters <= 0) {
 			log.error("Invalid cluster size or count specified in \"" + featureName + "\"");
 			return null;
 		}
@@ -86,13 +87,7 @@ public class UniformParser implements IFeatureParser {
 				dimRes = GenRestriction.WHITELIST;
 			}
 		}
-		if (genObject.has("material")) {
-			matList = new ArrayList<WeightedRandomBlock>();
-			if (!parseMaterial(genObject, matList)) {
-				log.warn("Invalid material list! Using default list.");
-				matList = defaultMaterial;
-			}
-		}
+		List<WeightedRandomBlock> matList = parseMaterial(genObject, log);
 
 		FeatureBase feature = getFeature(featureName, genObject, getGenerator(genObject, log, resList, clusterSize, matList),
 				matList, numClusters, biomeRes, retrogen, dimRes, log);
@@ -120,9 +115,17 @@ public class UniformParser implements IFeatureParser {
 		return "cluster";
 	}
 
-	protected boolean parseMaterial(JsonObject genObject, List<WeightedRandomBlock> matList) {
+	protected List<WeightedRandomBlock> parseMaterial(JsonObject genObject, Logger log) {
 
-		return FeatureParser.parseResList(genObject.get("material"), matList);
+		List<WeightedRandomBlock> matList = defaultMaterial;
+		if (genObject.has("material")) {
+			matList = new ArrayList<WeightedRandomBlock>();
+			if (!FeatureParser.parseResList(genObject.get("material"), matList)) {
+				log.warn("Invalid material list! Using default list.");
+				matList = defaultMaterial;
+			}
+		}
+		return matList;
 	}
 
 	protected WorldGenerator getGenerator(JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
@@ -131,6 +134,7 @@ public class UniformParser implements IFeatureParser {
 		String template = getDefaultTemplate();
 		boolean isObject = false;
 
+		JsonObject entry = genObject;
 		JsonElement genElement = genObject.get("template");
 		if (genElement.isJsonObject()) {
 			genObject = genElement.getAsJsonObject();
@@ -149,7 +153,35 @@ public class UniformParser implements IFeatureParser {
 				sparse = genObject.has("sparse") ? genObject.get("sparse").getAsBoolean() : sparse;
 			}
 			return new WorldGenMinableLargeVein(resList, clusterSize, matList, sparse);
-		} else if (!"cluster".equals(template)) {
+		} else if ("lake".equals(template)) {
+			boolean useMaterial = false;
+			if (isObject) {
+				useMaterial = genObject.has("useMaterial") ? genObject.get("useMaterial").getAsBoolean() : useMaterial;
+			}
+			WorldGenAdvLakes r = new WorldGenAdvLakes(resList, useMaterial ? matList : null);
+			if (isObject) {
+				if (genObject.has("outlineWithStone"))
+					r.outlineInStone = genObject.get("outlineWithStone").getAsBoolean();
+				if (genObject.has("lineWithFiller"))
+					r.lineWithFiller = genObject.get("lineWithFiller").getAsBoolean();
+			}
+			return r;
+		} else if ("geode".equals(template)) {
+			ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
+			if (!entry.has("crust")) {
+				log.info("Entry does not specify crust for 'geode' generator. Using stone.");
+				list.add(new WeightedRandomBlock(Blocks.stone));
+			} else {
+				if (!FeatureParser.parseResList(entry.get("crust"), list)) {
+					log.info("Entry specifies invalid crust for 'geode' generator. Using obsidian.");
+					list.clear();
+					list.add(new WeightedRandomBlock(Blocks.obsidian));
+				}
+			}
+			return new WorldGenGeode(resList, matList, list);
+		}
+
+		else if (!"cluster".equals(template)) {
 			log.warn("Unknown generator " + template + "! Using 'cluster'");
 		}
 		return new WorldGenMinableCluster(resList, clusterSize, matList);
