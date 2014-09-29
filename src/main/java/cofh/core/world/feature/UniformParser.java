@@ -173,12 +173,17 @@ public class UniformParser implements IFeatureParser {
 				list.add(new WeightedRandomBlock(Blocks.stone));
 			} else {
 				if (!FeatureParser.parseResList(entry.get("crust"), list)) {
-					log.info("Entry specifies invalid crust for 'geode' generator. Using obsidian.");
+					log.warn("Entry specifies invalid crust for 'geode' generator! Using obsidian!");
 					list.clear();
 					list.add(new WeightedRandomBlock(Blocks.obsidian));
 				}
 			}
-			return new WorldGenGeode(resList, matList, list);
+			WorldGenGeode r = new WorldGenGeode(resList, matList, list);
+			if (isObject) {
+				if (genObject.has("hollow"))
+					r.hollow = genObject.get("hollow").getAsBoolean();
+			}
+			return r;
 		}
 
 		else if (!"cluster".equals(template)) {
