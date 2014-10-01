@@ -1,12 +1,11 @@
 package cofh.core.world.feature;
 
-import org.apache.logging.log4j.Logger;
-
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenSurface;
+import cofh.lib.world.feature.FeatureGenTopBlock;
 import com.google.gson.JsonObject;
 
 import java.util.Arrays;
@@ -14,6 +13,8 @@ import java.util.List;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import org.apache.logging.log4j.Logger;
 
 public class SurfaceParser extends UniformParser {
 
@@ -31,7 +32,11 @@ public class SurfaceParser extends UniformParser {
 
 		int chunkChance = MathHelper.clampI(genObject.get("chunkChance").getAsInt(), 1, 1000000);
 
-		return new FeatureGenSurface(featureName, gen, matList, numClusters, chunkChance, biomeRes, retrogen, dimRes);
+		if (genObject.has("followTerrain") && genObject.get("followTerrain").getAsBoolean()) {
+			return new FeatureGenTopBlock(featureName, gen, matList, numClusters, chunkChance, biomeRes, retrogen, dimRes);
+		} else {
+			return new FeatureGenSurface(featureName, gen, matList, numClusters, chunkChance, biomeRes, retrogen, dimRes);
+		}
 	}
 
 }

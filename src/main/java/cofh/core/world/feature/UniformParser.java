@@ -5,6 +5,7 @@ import cofh.api.world.IFeatureParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.world.WorldGenAdvLakes;
+import cofh.lib.world.WorldGenBoulder;
 import cofh.lib.world.WorldGenGeode;
 import cofh.lib.world.WorldGenMinableCluster;
 import cofh.lib.world.WorldGenMinableLargeVein;
@@ -182,6 +183,15 @@ public class UniformParser implements IFeatureParser {
 			if (isObject) {
 				if (genObject.has("hollow"))
 					r.hollow = genObject.get("hollow").getAsBoolean();
+			}
+			return r;
+		} else if ("boulder".equals(template)) {
+			WorldGenBoulder r = new WorldGenBoulder(resList, clusterSize, matList);
+			if (isObject) {
+				if (genObject.has("sizeVariance"))
+					r.sizeVariance = genObject.get("sizeVariance").getAsInt();
+				if (genObject.has("count"))
+					r.clusters = genObject.get("count").getAsInt();
 			}
 			return r;
 		}
