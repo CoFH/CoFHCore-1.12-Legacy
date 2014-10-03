@@ -2,7 +2,7 @@
     "dirt": {
         "template": "uniform",
         "block": "dirt",
-		"material": "minecraft:stone",
+        "material": "minecraft:stone",
         "clusterSize": 32,
         "numClusters": 20,
         "minHeight": 0,
@@ -19,7 +19,7 @@
     "gravel": {
         "template": "uniform",
         "block": "gravel",
-		"material": "stone",
+        "material": "stone",
         "clusterSize": 32,
         "numClusters": 10,
         "minHeight": 0,
@@ -36,7 +36,7 @@
     "coal": {
         "template": "uniform",
         "block": "coal_ore",
-		"material": "stone",
+        "material": "stone",
         "clusterSize": 16,
         "numClusters": 20,
         "minHeight": 0,
@@ -53,7 +53,7 @@
     "iron": {
         "template": "uniform",
         "block": "iron_ore",
-		"material": "minecraft:stone",
+        "material": "minecraft:stone",
         "clusterSize": 8,
         "numClusters": 20,
         "minHeight": 0,
@@ -70,7 +70,7 @@
     "gold": {
         "template": "uniform",
         "block": "gold_ore",
-		"material": "minecraft:stone",
+        "material": "minecraft:stone",
         "clusterSize": 8,
         "numClusters": 2,
         "minHeight": 0,
@@ -87,7 +87,7 @@
     "redstone": {
         "template": "uniform",
         "block": "redstone_ore",
-		"material": "minecraft:stone",
+        "material": "minecraft:stone",
         "clusterSize": 7,
         "numClusters": 8,
         "minHeight": 0,
@@ -104,7 +104,7 @@
     "diamond": {
         "template": "uniform",
         "block": "diamond_ore",
-		"material": "minecraft:stone",
+        "material": "minecraft:stone",
         "clusterSize": 7,
         "numClusters": 1,
         "minHeight": 0,
@@ -121,7 +121,7 @@
     "lapis": {
         "template": "normal",
         "block": "lapis_ore",
-		"material": "minecraft:stone",
+        "material": "minecraft:stone",
         "clusterSize": 6,
         "numClusters": 1,
         "meanHeight": 16,
@@ -138,7 +138,7 @@
     "quartz": {
         "template": "uniform",
         "block": "quartz_ore",
-		"material": "minecraft:netherrack",
+        "material": "minecraft:netherrack",
         "clusterSize": 13,
         "numClusters": 16,
         "minHeight": 10,
@@ -146,11 +146,9 @@
         "retrogen": "true",
         "biomeRestriction": "whitelist",
         "biomes": [
-            "hell"
+            {"type": "dictionary", "entry": "NETHER"}
         ],
-        "dimensionRestriction": "whitelist",
-        "dimensions": [
-            -1
-        ]
+        "dimensionRestriction": "none",
+        "dimensions": []
     }
 }
