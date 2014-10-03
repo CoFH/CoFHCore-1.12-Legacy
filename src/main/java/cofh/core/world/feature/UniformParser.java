@@ -4,13 +4,16 @@ import cofh.api.world.IFeatureGenerator;
 import cofh.api.world.IFeatureParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.util.WeightedRandomNBTTag;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.WorldGenAdvLakes;
 import cofh.lib.world.WorldGenBoulder;
+import cofh.lib.world.WorldGenDungeon;
 import cofh.lib.world.WorldGenGeode;
 import cofh.lib.world.WorldGenMinableCluster;
 import cofh.lib.world.WorldGenMinableLargeVein;
 import cofh.lib.world.WorldGenSparseMinableCluster;
+import cofh.lib.world.WorldGenSpike;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenUniform;
@@ -24,7 +27,9 @@ import java.util.List;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.DungeonHooks.DungeonMob;
 
 import org.apache.logging.log4j.Logger;
 
@@ -197,6 +202,70 @@ public class UniformParser implements IFeatureParser {
 					r.sizeVariance = genObject.get("sizeVariance").getAsInt();
 				if (genObject.has("count"))
 					r.clusters = genObject.get("count").getAsInt();
+			}
+			return r;
+		} else if ("spike".equals(template)) {
+			WorldGenSpike r = new WorldGenSpike(resList, matList);
+			if (isObject) {
+				if (genObject.has("largeSpikes"))
+					r.largeSpikes = genObject.get("largeSpikes").getAsBoolean();
+			}
+			return r;
+		} else if ("dungeon".equals(template)) {
+			ArrayList<WeightedRandomNBTTag> mobList = new ArrayList<WeightedRandomNBTTag>();
+			if (entry.has("spawnEntity")) {
+				if (!FeatureParser.parseEntityList(entry.get("spawnEntity"), mobList)) {
+					log.warn("Entry specifies invalid entity list for 'dungeon' generator! Using 'Pig'!");
+					mobList.clear();
+					NBTTagCompound tag = new NBTTagCompound();
+					tag.setString("EntityId", "Pig");
+					mobList.add(new WeightedRandomNBTTag(100, tag));
+				}
+			} else {
+				log.warn("Entry specifies invalid entity list for 'dungeon' generator! Using 'Pig'!");
+				NBTTagCompound tag = new NBTTagCompound();
+				tag.setString("EntityId", "Pig");
+				mobList.add(new WeightedRandomNBTTag(100, tag));
+			}
+			WorldGenDungeon r = new WorldGenDungeon(resList, matList, mobList);
+			if (entry.has("spawnerFloor")) {
+				resList = new ArrayList<WeightedRandomBlock>();
+				if (FeatureParser.parseResList(entry.get("spawnerFloor"), resList)) {
+					r.floor = resList;
+				} else {
+					log.warn("Entry specifies invalid block list for 'spawnerFloor'! Using walls.");
+				}
+			}
+			if (isObject) {
+				if (genObject.has("lootTable")) {
+					ArrayList<DungeonMob> lootList = new ArrayList<DungeonMob>();
+					if (FeatureParser.parseWeightedStringList(genObject.get("lootTable"), lootList)) {
+						r.lootTables = lootList;
+					} else {
+						log.warn("Entry specifies invalid string list for 'lootTable'! Using default.");
+					}
+				}
+				if (genObject.has("maxChests"))
+					r.maxChests = genObject.get("maxChests").getAsInt();
+
+				if (genObject.has("minHoles"))
+					r.minHoles = genObject.get("minHoles").getAsInt();
+				if (genObject.has("maxHoles"))
+					r.maxHoles = genObject.get("maxHoles").getAsInt();
+
+				if (genObject.has("minHeight"))
+					r.minHeight = genObject.get("minHeight").getAsInt();
+				if (genObject.has("maxHeight"))
+					r.maxHeight = genObject.get("maxHeight").getAsInt();
+
+				if (genObject.has("minWidthX"))
+					r.minWidthX = genObject.get("minWidthX").getAsInt();
+				if (genObject.has("maxWidthX"))
+					r.maxWidthX = genObject.get("maxWidthX").getAsInt();
+				if (genObject.has("minWidthZ"))
+					r.minWidthZ = genObject.get("minWidthZ").getAsInt();
+				if (genObject.has("maxWidthZ"))
+					r.maxWidthZ = genObject.get("maxWidthZ").getAsInt();
 			}
 			return r;
 		}

@@ -10,6 +10,7 @@ import cofh.core.world.feature.SurfaceParser;
 import cofh.core.world.feature.UnderwaterParser;
 import cofh.core.world.feature.UniformParser;
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.util.WeightedRandomNBTTag;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.biome.BiomeInfo;
 import cofh.lib.world.biome.BiomeInfoRarity;
@@ -36,8 +37,12 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTException;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.biome.BiomeGenBase.TempCategory;
 import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.common.DungeonHooks.DungeonMob;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -424,6 +429,108 @@ public class FeatureParser {
 				return false;
 			}
 			resList.add(entry);
+		}
+		return true;
+	}
+
+	public static WeightedRandomNBTTag parseEntityEntry(JsonElement genElement) {
+
+		if (genElement.isJsonObject()) {
+			JsonObject genObject = genElement.getAsJsonObject();
+			NBTTagCompound data;
+			if (genObject.has("spawnerTag")) {
+				try {
+					data = (NBTTagCompound)JsonToNBT.func_150315_a(genObject.get("spawnerTag").toString());
+				} catch (NBTException e) {
+					log.error("Invalid entity entry!", e);
+					return null;
+				}
+			} else {
+				data = new NBTTagCompound();
+				String type = genObject.get("entity").getAsString();
+				if (type == null) {
+					log.error("Invalid entity entry!");
+					return null;
+				}
+				data.setString("EntityId", type);
+			}
+			return new WeightedRandomNBTTag(genObject.get("weight").getAsInt(), data);
+		} else {
+			String type = genElement.getAsString();
+			if (type == null) {
+				log.error("Invalid entity entry!");
+				return null;
+			}
+			NBTTagCompound tag = new NBTTagCompound();
+			tag.setString("EntityId", type);
+			return new WeightedRandomNBTTag(100, tag);
+		}
+	}
+
+	public static boolean parseEntityList(JsonElement genElement, List<WeightedRandomNBTTag> list) {
+
+		if (genElement.isJsonArray()) {
+			JsonArray blockList = genElement.getAsJsonArray();
+
+			for (int i = 0, e = blockList.size(); i < e; i++) {
+				WeightedRandomNBTTag entry = parseEntityEntry(blockList.get(i));
+				if (entry == null) {
+					return false;
+				}
+				list.add(entry);
+			}
+		} else {
+			WeightedRandomNBTTag entry = parseEntityEntry(genElement);
+			if (entry == null) {
+				return false;
+			}
+			list.add(entry);
+		}
+		return true;
+	}
+
+	public static DungeonMob parseWeightedStringEntry(JsonElement genElement) {
+
+		int weight = 100;
+		String type = null;
+		if (genElement.isJsonObject()) {
+			JsonObject genObject = genElement.getAsJsonObject();
+			type = genObject.get("name").getAsString();
+			if (type == null) {
+				log.warn("Invalid string entry!");
+				return null;
+			}
+			if (genObject.has("weight")) {
+				weight = genObject.get("weight").getAsInt();
+			}
+		} else {
+			type = genElement.getAsString();
+			if (type == null) {
+				log.warn("Invalid string entry!");
+				return null;
+			}
+		}
+		return new DungeonMob(weight, type);
+	}
+
+	public static boolean parseWeightedStringList(JsonElement genElement, List<DungeonMob> list) {
+
+		if (genElement.isJsonArray()) {
+			JsonArray blockList = genElement.getAsJsonArray();
+
+			for (int i = 0, e = blockList.size(); i < e; i++) {
+				DungeonMob entry = parseWeightedStringEntry(blockList.get(i));
+				if (entry == null) {
+					return false;
+				}
+				list.add(entry);
+			}
+		} else {
+			DungeonMob entry = parseWeightedStringEntry(genElement);
+			if (entry == null) {
+				return false;
+			}
+			list.add(entry);
 		}
 		return true;
 	}
