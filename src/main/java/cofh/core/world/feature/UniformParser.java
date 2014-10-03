@@ -196,7 +196,7 @@ public class UniformParser implements IFeatureParser {
 			return r;
 		}
 
-		else if (!"cluster".equals(template)) {
+		if (!"cluster".equals(template)) {
 			log.warn("Unknown generator " + template + "! Using 'cluster'");
 		}
 		return new WorldGenMinableCluster(resList, clusterSize, matList);

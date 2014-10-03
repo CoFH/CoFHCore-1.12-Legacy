@@ -4,7 +4,7 @@ import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
-import cofh.lib.world.feature.FeatureGenRare;
+import cofh.lib.world.feature.FeatureGenLargeVein;
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class FractalParser extends UniformParser {
 		int vD= genObject.get("verticalDensity").getAsInt();
 		int hD = genObject.get("horizontalDensity").getAsInt();
 
-		return new FeatureGenRare(featureName, gen, numClusters, minY, rarity, biomeRes, retrogen, dimRes, h, d, vD, hD);
+		return new FeatureGenLargeVein(featureName, gen, numClusters, minY, rarity, biomeRes, retrogen, dimRes, h, d, vD, hD);
 	}
 	
 	@Override
