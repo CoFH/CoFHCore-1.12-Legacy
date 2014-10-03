@@ -4,6 +4,7 @@ import cofh.api.world.IFeatureGenerator;
 import cofh.api.world.IFeatureParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.WorldGenAdvLakes;
 import cofh.lib.world.WorldGenBoulder;
 import cofh.lib.world.WorldGenGeode;
@@ -93,6 +94,10 @@ public class UniformParser implements IFeatureParser {
 		FeatureBase feature = getFeature(featureName, genObject, getGenerator(genObject, log, resList, clusterSize, matList),
 				matList, numClusters, biomeRes, retrogen, dimRes, log);
 
+		if (genObject.has("chunkChance")) {
+			int rarity = MathHelper.clampI(genObject.get("chunkChance").getAsInt(), 1, 1000000);
+			feature.setRarity(rarity);
+		}
 		if (feature != null)
 			addFeatureRestrictions(feature, genObject);
 		return feature;

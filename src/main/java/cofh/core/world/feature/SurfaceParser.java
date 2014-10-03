@@ -1,7 +1,6 @@
 package cofh.core.world.feature;
 
 import cofh.lib.util.WeightedRandomBlock;
-import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenSurface;
@@ -30,12 +29,10 @@ public class SurfaceParser extends UniformParser {
 	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen,
 			GenRestriction dimRes, Logger log) {
 
-		int chunkChance = MathHelper.clampI(genObject.get("chunkChance").getAsInt(), 1, 1000000);
-
 		if (genObject.has("followTerrain") && genObject.get("followTerrain").getAsBoolean()) {
-			return new FeatureGenTopBlock(featureName, gen, matList, numClusters, chunkChance, biomeRes, retrogen, dimRes);
+			return new FeatureGenTopBlock(featureName, gen, matList, numClusters, biomeRes, retrogen, dimRes);
 		} else {
-			return new FeatureGenSurface(featureName, gen, matList, numClusters, chunkChance, biomeRes, retrogen, dimRes);
+			return new FeatureGenSurface(featureName, gen, matList, numClusters, biomeRes, retrogen, dimRes);
 		}
 	}
 
