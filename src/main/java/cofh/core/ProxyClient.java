@@ -40,6 +40,13 @@ public class ProxyClient extends Proxy {
 	public static CoFHFontRender fontRenderer;
 
 	@Override
+	public void preinit() {
+
+		Minecraft.memoryReserve = null;
+		// someone removed this from minecraft itself. lets fix that bug.
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void registerIcons(TextureStitchEvent.Pre event) {

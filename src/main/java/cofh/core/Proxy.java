@@ -27,6 +27,10 @@ import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 
 public class Proxy {
 
+	public void preinit() {
+
+	}
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void registerIcons(TextureStitchEvent.Pre event) {
