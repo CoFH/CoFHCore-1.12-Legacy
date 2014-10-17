@@ -1,0 +1,103 @@
+#en_US
+
+chat.cofh.secure.0=Upozornění: OPerátoři serveru maji volný přístup k 'uzamčeným' blokům na tomto serveru.
+chat.cofh.secure.1=Toto je soukromé a patří hráči
+chat.cofh.secure.2=Mohl by jsi přijít o ruku!
+
+enchant.cofh.holding=Držení
+
+info.cofh.access=Přístup
+info.cofh.accessMode=Přístupový mód
+info.cofh.accessPublic=Veřejný přístup
+info.cofh.accessRestricted=Omezený
+info.cofh.accessPrivate=Pouze majitel
+info.cofh.all=Všichni
+info.cofh.amount=Množství
+info.cofh.augmentation=Navýšení
+info.cofh.blank=Prázdný
+info.cofh.capacity=Kapacita
+info.cofh.charge=Nabití
+info.cofh.configuration=Nastavení
+info.cofh.contents=Obsahy
+info.cofh.controlStatus=Stav řízení
+info.cofh.damageAttack=Útočné poškození
+info.cofh.damageFlux=Fluxové poškození
+info.cofh.disabled=Zakázáno
+info.cofh.dry=Mokrý
+info.cofh.empty=Prázdný
+info.cofh.enabled=Povoleno
+info.cofh.energy=Energie
+info.cofh.energyConsume=Využití energie
+info.cofh.energyProduce=Výstup energie
+info.cofh.energyStored=Uloženo energie
+info.cofh.fluid=Tekutina
+info.cofh.forDetails=pro více informací
+info.cofh.frequency=Frekvence
+info.cofh.friendsList=Seznam přátel
+info.cofh.hasInfo=Má informace
+info.cofh.high=Výška
+info.cofh.hold=Držet
+info.cofh.ignored=Ignorovaný
+info.cofh.information=Informace
+info.cofh.infinite=Neomezený
+info.cofh.item=Předmět
+info.cofh.items=Předměty
+info.cofh.level=Úroveň
+info.cofh.locked=Uzamčeno
+info.cofh.low=Slabý
+info.cofh.maxEnergyPerTick=Maximální síla
+info.cofh.none=Nic
+info.cofh.owner=Majitel
+info.cofh.perUse=Za užití
+info.cofh.press=Zmáčknout
+info.cofh.receive=Získat
+info.cofh.receiving=Získává
+info.cofh.redstoneControl=Ruditové ovládání
+info.cofh.security=Bezpečnost
+info.cofh.send=Odeslat
+info.cofh.sending=Odesílám
+info.cofh.shift=Shift
+info.cofh.signal=Signál
+info.cofh.signalRequired=Potřebný signál
+info.cofh.soaked=Namočený
+info.cofh.source=Zdroj
+info.cofh.transfer=Přesun
+info.cofh.tutorial=Tutoriál
+info.cofh.unlocked=Odemčené
+
+info.cofh.command.friend=Příkaz pro přidání nebo odebrání přítel z tvého seznamu přátel.
+info.cofh.command.help=Příkaz pro pomoc s dalšími příkazy!
+info.cofh.command.killall=Zabije všechny entity zadaného jména nebo zabije všechny nepřátelské příšery.
+info.cofh.command.tps=Zobrazí TPS na serveru. Ideálně by mělo být na serveru 20 TPS.
+info.cofh.command.tpx=Vylepšená verze příkazu /tp, která funguje mezi dimenzemi.
+info.cofh.command.version=Zobrazí verzi módu.
+
+info.cofh.command.syntaxError=Nesprávný formát.
+
+info.cofh.command.friend.0=byl úspěšně přidán to tvého seznamu přátel.
+info.cofh.command.friend.1=Omlouváme se, nastal problém při přidávání
+info.cofh.command.friend.2=do tvého seznamu přátel.
+info.cofh.command.friend.3=Omlouváme se, ale toto není existující uživatelské jméno.
+info.cofh.command.friend.4=byl úspěšně odebrán z tvého seznamu přátel.
+info.cofh.command.friend.5=nebyl tvůj přítel.
+info.cofh.command.help.0=Dostupné příkazy jsou:
+info.cofh.command.killall.0=
+info.cofh.command.killall.1=
+info.cofh.command.killall.2=Žádné nepřátelské příšery nebyli nalezeny!
+info.cofh.command.version.0=Tento mód má verzi
+
+info.cofh.tutorial.fluxRequired=Potřebuje ruditový flux pro funkci.
+info.cofh.tutorial.tabAugment=Panel rozšíření umožňuje modulární přídavky.
+info.cofh.tutorial.tabConfiguration.0=Konfigurační panel popisuje, jak předměty vstupují a opouští toto zařízení.
+info.cofh.tutorial.tabConfiguration.1=Konfigurační panel popisuje operační kroky pro toto zařízení.
+info.cofh.tutorial.tabRedstone=Ruditový ovládací panel nastavuje, jak reaguje toto zařízení na ruditové signály.
+info.cofh.tutorial.tabSecurity=Bezpečnostní panel umožňuje majiteli nastavit kdo bude mít přístup do tohoto zařízení.
+
+item.invalid.name=Nesprávný předmět (Zničit)
+
+#Fluid Name Fixes
+
+fluid.tile.water=Voda
+fluid.tile.lava=Láva
+fluid.fuel=Palivo
+fluid.oil=Olej
