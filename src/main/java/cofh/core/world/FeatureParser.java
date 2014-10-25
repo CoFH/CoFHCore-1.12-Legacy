@@ -96,6 +96,7 @@ public class FeatureParser {
 		registerTemplate("normal", new NormalParser());
 		registerTemplate("surface", new SurfaceParser());
 		registerTemplate("underfluid", new UnderfluidParser());
+		registerTemplate("underwater", new UnderfluidParser());
 		registerTemplate("fractal", new FractalParser());
 	}
 
