@@ -7,7 +7,7 @@ import cofh.core.util.CoreUtils;
 import cofh.core.world.feature.FractalParser;
 import cofh.core.world.feature.NormalParser;
 import cofh.core.world.feature.SurfaceParser;
-import cofh.core.world.feature.UnderwaterParser;
+import cofh.core.world.feature.UnderfluidParser;
 import cofh.core.world.feature.UniformParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.WeightedRandomNBTTag;
@@ -95,7 +95,7 @@ public class FeatureParser {
 		registerTemplate("uniform", new UniformParser());
 		registerTemplate("normal", new NormalParser());
 		registerTemplate("surface", new SurfaceParser());
-		registerTemplate("underwater", new UnderwaterParser());
+		registerTemplate("underfluid", new UnderfluidParser());
 		registerTemplate("fractal", new FractalParser());
 	}
 
@@ -303,7 +303,9 @@ public class FeatureParser {
 			for (int i = 0, e = restrictionList.size(); i < e; i++) {
 				BiomeInfo info = null;
 				JsonElement element = restrictionList.get(i);
-				if (element.isJsonObject()) {
+				if (element.isJsonNull()) {
+					log.info("Null biome entry. Ignoring.");
+				} else if (element.isJsonObject()) {
 					JsonObject obj = element.getAsJsonObject();
 					String type = obj.get("type").getAsString();
 					boolean wl = obj.has("whitelist") ? obj.get("whitelist").getAsBoolean() : true;
@@ -387,7 +389,10 @@ public class FeatureParser {
 
 	public static WeightedRandomBlock parseBlockEntry(JsonElement genElement) {
 
-		if (genElement.isJsonObject()) {
+		if (genElement.isJsonNull()) {
+			log.warn("Null Block entry!");
+			return null;
+		} else if (genElement.isJsonObject()) {
 			JsonObject blockElement = genElement.getAsJsonObject();
 			if (!blockElement.has("name")) {
 				log.error("Block entry needs a name!");
@@ -435,7 +440,10 @@ public class FeatureParser {
 
 	public static WeightedRandomNBTTag parseEntityEntry(JsonElement genElement) {
 
-		if (genElement.isJsonObject()) {
+		if (genElement.isJsonNull()) {
+			log.warn("Null entity entry!");
+			return null;
+		} else if (genElement.isJsonObject()) {
 			JsonObject genObject = genElement.getAsJsonObject();
 			NBTTagCompound data;
 			if (genObject.has("spawnerTag")) {
@@ -493,7 +501,10 @@ public class FeatureParser {
 
 		int weight = 100;
 		String type = null;
-		if (genElement.isJsonObject()) {
+		if (genElement.isJsonNull()) {
+			log.warn("Null string entry!");
+			return null;
+		} else if (genElement.isJsonObject()) {
 			JsonObject genObject = genElement.getAsJsonObject();
 			type = genObject.get("name").getAsString();
 			if (type == null) {
