@@ -8,6 +8,7 @@ import cofh.lib.util.WeightedRandomNBTTag;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.WorldGenAdvLakes;
 import cofh.lib.world.WorldGenBoulder;
+import cofh.lib.world.WorldGenDecoration;
 import cofh.lib.world.WorldGenDungeon;
 import cofh.lib.world.WorldGenGeode;
 import cofh.lib.world.WorldGenMinableCluster;
@@ -194,6 +195,32 @@ public class UniformParser implements IFeatureParser {
 				if (genObject.has("hollow"))
 					r.hollow = genObject.get("hollow").getAsBoolean();
 			}
+			return r;
+		} else if ("decoration".equals(template)) {
+			ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
+			if (!entry.has("genSurface")) {
+				log.info("Entry does not specify genSurface for 'decoration' generator. Using grass.");
+				list.add(new WeightedRandomBlock(Blocks.grass));
+			} else {
+				if (!FeatureParser.parseResList(entry.get("crust"), list)) {
+					log.warn("Entry specifies invalid genSurface for 'decoration' generator! Using grass!");
+					list.clear();
+					list.add(new WeightedRandomBlock(Blocks.grass));
+				}
+			}
+			WorldGenDecoration r = new WorldGenDecoration(resList, clusterSize, matList, list);
+			if (genObject.has("genSky"))
+				r.seeSky = genObject.get("genSky").getAsBoolean();
+			if (genObject.has("checkStay"))
+				r.checkStay = genObject.get("checkStay").getAsBoolean();
+			if (genObject.has("stackHeight"))
+				r.stackHeight = genObject.get("stackHeight").getAsInt();
+			if (genObject.has("xVariance"))
+				r.stackHeight = genObject.get("xVariance").getAsInt();
+			if (genObject.has("yVariance"))
+				r.stackHeight = genObject.get("yVariance").getAsInt();
+			if (genObject.has("zVariance"))
+				r.stackHeight = genObject.get("zVariance").getAsInt();
 			return r;
 		} else if ("boulder".equals(template)) {
 			WorldGenBoulder r = new WorldGenBoulder(resList, clusterSize, matList);

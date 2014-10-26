@@ -4,6 +4,7 @@ import cofh.api.world.IFeatureGenerator;
 import cofh.api.world.IFeatureParser;
 import cofh.core.CoFHProps;
 import cofh.core.util.CoreUtils;
+import cofh.core.world.feature.DecorationParser;
 import cofh.core.world.feature.FractalParser;
 import cofh.core.world.feature.NormalParser;
 import cofh.core.world.feature.SurfaceParser;
@@ -95,6 +96,7 @@ public class FeatureParser {
 		registerTemplate("uniform", new UniformParser());
 		registerTemplate("normal", new NormalParser());
 		registerTemplate("surface", new SurfaceParser());
+		registerTemplate("decoration", new DecorationParser());
 		registerTemplate("underfluid", new UnderfluidParser());
 		registerTemplate("underwater", new UnderfluidParser());
 		registerTemplate("fractal", new FractalParser());
