@@ -8,6 +8,7 @@ import cofh.core.network.PacketTileInfo;
 import cofh.core.util.KeyBindingEmpower;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -23,6 +24,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
 import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 
 public class Proxy {
@@ -125,6 +127,14 @@ public class Proxy {
 	public void registerTickHandlers() {
 
 		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.TERRAIN_GEN_BUS.register(this);
+	}
+
+	@SubscribeEvent
+	public void onSaplingGrowTree(SaplingGrowTreeEvent event) {
+
+		if (CoFHProps.treeGrowthChance > 1 && event.world.rand.nextInt(CoFHProps.treeGrowthChance) != 0)
+			event.setResult(Result.DENY);
 	}
 
 	@SubscribeEvent

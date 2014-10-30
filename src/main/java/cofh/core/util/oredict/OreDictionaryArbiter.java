@@ -92,7 +92,7 @@ public class OreDictionaryArbiter {
 			stackIDs.put(item, new ArrayList<Integer>());
 			stackNames.put(item, new ArrayList<String>());
 		}
-		stackIDs.get(item).add(OreDictionary.getOreID(name));
+		stackIDs.get(item).add(id);
 		stackNames.get(item).add(name);
 	}
 

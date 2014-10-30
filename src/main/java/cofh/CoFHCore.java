@@ -200,6 +200,9 @@ public class CoFHCore extends BaseMod {
 		comment = "Enable this to log when a block is dismantled.";
 		CoFHProps.enableDismantleLogging = configCore.get(category, "EnableDismantleLogging", CoFHProps.enableDismantleLogging, comment);
 
+		comment = "Set to true to display death messages for any named entity.";
+		CoFHProps.enableLivingEntityDeathMessages = configCore.get(category, "EnableGenericDeathMessage", true, comment);
+
 		category = "gui.tooltips";
 		comment = "This adds a tooltip prompting you to press Shift for more details on various items.";
 		StringHelper.displayShiftForDetail = configCore.get(category, "DisplayHoldShiftForDetail", true, comment);
@@ -214,8 +217,9 @@ public class CoFHCore extends BaseMod {
 		comment = "Enable this to be warned about Ops having access to 'secure' blocks when connecting to a server. (Default: true)";
 		CoFHProps.enableOpSecureAccessWarning = configCore.get(category, "OpsCanAccessSecureBlocksWarning", true, comment);
 
-		comment = "Set to true to display death messages for any named entity.";
-		CoFHProps.enableLivingEntityDeathMessages = configCore.get(Configuration.CATEGORY_GENERAL, "EnableGenericDeathMessage", true, comment);
+		category = "tweaks";
+		comment = "Set this to a value >1 to make trees grow more infrequently. Rate is 1/this value.";
+		CoFHProps.treeGrowthChance = configCore.get(category, "TreeGrowthChance", 1, comment);
 
 		configCore.save();
 

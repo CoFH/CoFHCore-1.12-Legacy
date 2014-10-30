@@ -68,6 +68,8 @@ public class CoFHProps {
 	public static float soundVolume = 1;
 
 	/* Options */
+	public static int treeGrowthChance = 1;
+
 	public static boolean enableUpdateNotice = true;
 
 	public static boolean enableDismantleLogging = false;
