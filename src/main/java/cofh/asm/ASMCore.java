@@ -712,6 +712,7 @@ class ASMCore {
 			n = n.getPrevious().getPrevious();
 			LabelNode lStart = new LabelNode(new Label());
 			LabelNode lCond = new LabelNode(new Label());
+			LabelNode lGuard = new LabelNode(new Label());
 			LabelNode a = new LabelNode(new Label());
 			updateEntities.instructions.insert(n, n = a);
 			updateEntities.instructions.insert(n, n = new LineNumberNode(-15004, a));
@@ -722,7 +723,12 @@ class ASMCore {
 			updateEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
 			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "shift", "()Ljava/lang/Object;", false));
 			updateEntities.instructions.insert(n, n = new TypeInsnNode(CHECKCAST, "net/minecraft/tileentity/TileEntity"));
+			updateEntities.instructions.insert(n, n = new InsnNode(DUP));
+			updateEntities.instructions.insert(n, n = new JumpInsnNode(IFNULL, lGuard));
 			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity", "cofh_validate", "()V", false));
+			updateEntities.instructions.insert(n, n = new InsnNode(ACONST_NULL));
+			updateEntities.instructions.insert(n, n = lGuard);
+			updateEntities.instructions.insert(n, n = new InsnNode(POP));
 			updateEntities.instructions.insert(n, n = lCond);
 			updateEntities.instructions.insert(n, n = new FrameNode(F_SAME, 0, null, 0, null));
 			updateEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
@@ -836,16 +842,18 @@ class ASMCore {
 
 		ClassNode world = new ClassNode(ASM4);
 		{
+			FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 			try {
-				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes("net.minecraft.world.World"));
-				reader.accept(world, ClassReader.EXPAND_FRAMES);
+				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(
+						remapper.unmap("net/minecraft/world/World").replace('/', '.')));
+				reader.accept(world, ClassReader.SKIP_CODE);
 			} catch (Throwable e) {
 				Throwables.propagate(e);
 			}
 		}
 
 		ClassNode cn = new ClassNode(ASM4);
-		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+		cr.accept(cn, ClassReader.SKIP_FRAMES);
 
 		for (MethodNode m : world.methods) {
 			if (m.name.indexOf('<') != 0 && (m.access & ACC_STATIC) == 0) {
@@ -883,25 +891,29 @@ class ASMCore {
 
 		ClassNode worldServer = new ClassNode(ASM4);
 		{
+			FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 			try {
-				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes("net.minecraft.world.WorldServer"));
-				reader.accept(worldServer, ClassReader.EXPAND_FRAMES);
+				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(
+						remapper.unmap("net/minecraft/world/WorldServer").replace('/', '.')));
+				reader.accept(worldServer, ClassReader.SKIP_CODE);
 			} catch (Throwable e) {
 				Throwables.propagate(e);
 			}
 		}
 		ClassNode world = new ClassNode(ASM4);
 		{
+			FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 			try {
-				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes("net.minecraft.world.World"));
-				reader.accept(world, ClassReader.EXPAND_FRAMES);
+				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(
+						remapper.unmap("net/minecraft/world/World").replace('/', '.')));
+				reader.accept(world, ClassReader.SKIP_CODE);
 			} catch (Throwable e) {
 				Throwables.propagate(e);
 			}
 		}
 
 		ClassNode cn = new ClassNode(ASM4);
-		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+		cr.accept(cn, ClassReader.SKIP_FRAMES);
 
 		cn.superName = "net/minecraft/world/WorldServer";
 		for (MethodNode m : cn.methods) {
