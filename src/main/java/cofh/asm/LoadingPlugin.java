@@ -11,6 +11,7 @@ import cpw.mods.fml.common.event.FMLConstructionEvent;
 import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import cpw.mods.fml.common.versioning.VersionParser;
 import cpw.mods.fml.relauncher.FMLInjectionData;
+import cpw.mods.fml.relauncher.IFMLCallHook;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 import java.awt.Desktop;
@@ -23,6 +24,8 @@ import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import net.minecraft.launchwrapper.LaunchClassLoader;
+
 @IFMLLoadingPlugin.TransformerExclusions({ "cofh.asm." })
 public class LoadingPlugin implements IFMLLoadingPlugin {
 
@@ -30,6 +33,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	public static ArrayList<String> transformersList = new ArrayList<String>();
 	public static boolean runtimeDeobfEnabled = false;
 	public static ASMDataTable ASM_DATA = null;
+	public static LaunchClassLoader loader = null;
 
 	// Initialize SubMod transformers
 	static {
@@ -105,7 +109,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	@Override
 	public String getSetupClass() {
 
-		return null;
+		return CoFHDummyContainer.class.getName();
 	}
 
 	@Override
@@ -119,7 +123,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 
 	public File myLocation;
 
-	public static class CoFHDummyContainer extends DummyModContainer {
+	public static class CoFHDummyContainer extends DummyModContainer implements IFMLCallHook {
 
 		public CoFHDummyContainer() {
 
@@ -144,6 +148,18 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 
 			ASM_DATA = evt.getASMHarvestedData();
 			PCCASMTransformer.scrapeData(ASM_DATA);
+		}
+
+		@Override
+		public Void call() throws Exception {
+
+			return null;
+		}
+
+		@Override
+		public void injectData(Map<String, Object> data) {
+
+			loader = (LaunchClassLoader) data.get("classLoader");
 		}
 	}
 

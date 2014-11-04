@@ -4,11 +4,11 @@ import static org.objectweb.asm.Opcodes.*;
 
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
+import com.google.common.base.Throwables;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
-import cpw.mods.fml.common.asm.transformers.deobf.FMLRemappingAdapter;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 import cpw.mods.fml.common.discovery.ASMDataTable.ASMData;
 
@@ -23,22 +23,25 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.RemappingClassAdapter;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
 class ASMCore {
@@ -76,6 +79,7 @@ class ASMCore {
 		}
 		hashes.put("net.minecraft.client.Minecraft", (byte) 10);
 		hashes.put("net.minecraft.client.renderer.RenderBlocks", (byte) 11);
+		hashes.put("net.minecraft.tileentity.TileEntity", (byte) 12);
 	}
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
@@ -86,8 +90,6 @@ class ASMCore {
 		public String side;
 		public String[] values = emptyList;
 	}
-
-	private static ClassNode world = null, worldServer = null;
 
 	static byte[] parse(String name, String transformedName, byte[] bytes) {
 
@@ -174,6 +176,8 @@ class ASMCore {
 			return alterMinecraft(name, transformedName, bytes, cr);
 		case 11:
 			return alterRenderBlocks(name, transformedName, bytes, cr);
+		case 12:
+			return alterTileEntity(name, transformedName, bytes, cr);
 
 		default:
 			return bytes;
@@ -600,13 +604,30 @@ class ASMCore {
 		return bytes;
 	}
 
+	private static byte[] alterTileEntity(String name, String transformedName, byte[] bytes, ClassReader cr) {
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM4);
+		cr.accept(cn, 0);
+		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		cn.accept(cw);
+		cw.newMethod(name, "cofh_validate", "()V", true);
+		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "cofh_validate", "()V", null, null);
+		mv.visitCode();
+		mv.visitInsn(RETURN);
+		mv.visitMaxs(0, 1);
+		mv.visitEnd();
+		cw.visitEnd();
+		return cw.toByteArray();
+	}
+
 	private static byte[] writeWorld(String name, String transformedName, byte[] bytes, ClassReader cr) {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
-			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F" };
+			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F", "func_147448_a", "func_147455_a", "func_72939_s" };
 		} else {
-			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler" };
+			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a", "setTileEntity", "updateEntities" };
 		}
 		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM4);
@@ -615,15 +636,104 @@ class ASMCore {
 		final String sig = "(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 
-		l: {
-			for (MethodNode m : cn.methods) {
-				if ("<init>".equals(m.name) && sig.equals(remapper.mapMethodDesc(m.desc))) {
-					break l;
-				}
+		MethodNode addTileEntity = null, addTileEntities = null, setTileEntity = null, updateEntities = null;
+		boolean found = false;
+		for (MethodNode m : cn.methods) {
+			if ("<init>".equals(m.name)) {
+				if (sig.equals(remapper.mapMethodDesc(m.desc)))
+						found = true;
+				LabelNode a = new LabelNode(new Label());
+				AbstractInsnNode n = m.instructions.getLast();
+				while (n.getOpcode() != RETURN) n = n.getPrevious();
+				m.instructions.insertBefore(n, a);
+				m.instructions.insertBefore(n, new LineNumberNode(-15000, a));
+				m.instructions.insertBefore(n, new VarInsnNode(ALOAD, 0));
+				m.instructions.insertBefore(n, new TypeInsnNode(NEW, "cofh/lib/util/LinkedHashList"));
+				m.instructions.insertBefore(n, new InsnNode(DUP));
+				m.instructions.insertBefore(n, new MethodInsnNode(INVOKESPECIAL, "cofh/lib/util/LinkedHashList", "<init>", "()V", false));
+				m.instructions.insertBefore(n, new FieldInsnNode(PUTFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
+			} else if ("addTileEntity".equals(m.name) && "(Lnet/minecraft/tileentity/TileEntity;)V".equals(remapper.mapMethodDesc(m.desc))) {
+				addTileEntity = m;
+			} else if (names[4].equals(remapper.mapMethodName(name, m.name, m.desc)) && "(Ljava/util/Collection;)V".equals(m.desc)) {
+				addTileEntities = m;
+			} else if (names[5].equals(remapper.mapMethodName(name, m.name, m.desc)) && "(IIILnet/minecraft/tileentity/TileEntity;)V".equals(remapper.mapMethodDesc(m.desc))) {
+				setTileEntity = m;
+			} else if (names[6].equals(remapper.mapMethodName(name, m.name, m.desc)) && "()V".equals(remapper.mapMethodDesc(m.desc))) {
+				updateEntities = m;
 			}
+		}
+		cn.fields.add(new FieldNode(ACC_PRIVATE, "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;", null, null));
+		if (addTileEntity != null) {
 
-			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
-			cn.accept(cw);
+			LabelNode a = new LabelNode(new Label());
+			AbstractInsnNode n;
+			addTileEntity.instructions.insert(n = a);
+			addTileEntity.instructions.insert(n, n = new LineNumberNode(-15001, a));
+			addTileEntity.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
+			addTileEntity.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
+			addTileEntity.instructions.insert(n, n = new VarInsnNode(ALOAD, 1));
+			addTileEntity.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
+			addTileEntity.instructions.insert(n, n = new InsnNode(POP));
+		}
+		if (setTileEntity != null) {
+
+			LabelNode a = new LabelNode(new Label());
+			AbstractInsnNode n = setTileEntity.instructions.getLast();
+			while (n.getOpcode() != RETURN) n = n.getPrevious();
+			n = n.getPrevious();
+			setTileEntity.instructions.insert(n = a);
+			setTileEntity.instructions.insert(n, n = new LineNumberNode(-15002, a));
+			setTileEntity.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
+			setTileEntity.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
+			setTileEntity.instructions.insert(n, n = new VarInsnNode(ALOAD, 4));
+			setTileEntity.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
+			setTileEntity.instructions.insert(n, n = new InsnNode(POP));
+		}
+		if (addTileEntities != null) {
+			LabelNode a = new LabelNode(new Label());
+			AbstractInsnNode n = addTileEntities.instructions.getFirst();
+			while (n.getOpcode() != CHECKCAST) n = n.getNext();
+			n = n.getNext();
+			VarInsnNode store = (VarInsnNode)n;
+			addTileEntities.instructions.insert(n, n = a);
+			addTileEntities.instructions.insert(n, n = new LineNumberNode(-15003, a));
+			addTileEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
+			addTileEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
+			addTileEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, store.var));
+			addTileEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
+			addTileEntities.instructions.insert(n, n = new InsnNode(POP));
+		}
+		if (updateEntities != null) {
+			AbstractInsnNode n = updateEntities.instructions.getFirst();
+			while (n.getOpcode() != INVOKEVIRTUAL ||
+					!"onChunkUnload".equals(((MethodInsnNode)n).name) ||
+					!"()V".equals(((MethodInsnNode)n).desc)) n = n.getNext();
+			while (n.getOpcode() != PUTFIELD) n = n.getNext();
+			n = n.getPrevious().getPrevious();
+			LabelNode lStart = new LabelNode(new Label());
+			LabelNode lCond = new LabelNode(new Label());
+			LabelNode a = new LabelNode(new Label());
+			updateEntities.instructions.insert(n, n = a);
+			updateEntities.instructions.insert(n, n = new LineNumberNode(-15004, a));
+			updateEntities.instructions.insert(n, n = new JumpInsnNode(GOTO, lCond));
+			updateEntities.instructions.insert(n, n = lStart);
+			updateEntities.instructions.insert(n, n = new FrameNode(F_SAME, 0, null, 0, null));
+			updateEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
+			updateEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
+			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "shift", "()Ljava/lang/Object;", false));
+			updateEntities.instructions.insert(n, n = new TypeInsnNode(CHECKCAST, "net/minecraft/tileentity/TileEntity"));
+			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity", "cofh_validate", "()V", false));
+			updateEntities.instructions.insert(n, n = lCond);
+			updateEntities.instructions.insert(n, n = new FrameNode(F_SAME, 0, null, 0, null));
+			updateEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
+			updateEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
+			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "size", "()I", false));
+			updateEntities.instructions.insert(n, n = new JumpInsnNode(IFNE, lStart));
+		}
+
+		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+		cn.accept(cw);
+		if (!found) {
 			/*
 			 * new World constructor World(ISaveHandler saveHandler, String worldName, WorldProvider provider, WorldSettings worldSettings, Profiler
 			 * theProfiler)
@@ -654,18 +764,8 @@ class ASMCore {
 			mv.visitMaxs(11, 10);
 			mv.visitEnd();
 			cw.visitEnd();
-			bytes = cw.toByteArray();
 		}
-		{
-			ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-			RemappingClassAdapter remapAdapter = new FMLRemappingAdapter(classWriter);
-			cr = new ClassReader(bytes);
-			cr.accept(remapAdapter, ClassReader.EXPAND_FRAMES);
-			cn = new ClassNode(ASM4);
-			cr = new ClassReader(classWriter.toByteArray());
-			cr.accept(cn, ClassReader.EXPAND_FRAMES);
-			world = cn;
-		}
+		bytes = cw.toByteArray();
 		return bytes;
 	}
 
@@ -729,25 +829,18 @@ class ASMCore {
 			cw.visitEnd();
 			bytes = cw.toByteArray();
 		}
-		{
-			ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-			RemappingClassAdapter remapAdapter = new FMLRemappingAdapter(classWriter);
-			cr = new ClassReader(bytes);
-			cr.accept(remapAdapter, ClassReader.EXPAND_FRAMES);
-			cn = new ClassNode(ASM4);
-			cr = new ClassReader(classWriter.toByteArray());
-			cr.accept(cn, ClassReader.EXPAND_FRAMES);
-			worldServer = cn;
-		}
 		return bytes;
 	}
 
 	private static byte[] writeWorldProxy(String name, byte[] bytes, ClassReader cr) {
 
-		if (world == null) {
+		ClassNode world = new ClassNode(ASM4);
+		{
 			try {
-				Class.forName("net.minecraft.world.World");
-			} catch (Throwable _) { /* Won't happen */
+				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes("net.minecraft.world.World"));
+				reader.accept(world, ClassReader.EXPAND_FRAMES);
+			} catch (Throwable e) {
+				Throwables.propagate(e);
 			}
 		}
 
@@ -788,16 +881,22 @@ class ASMCore {
 
 	private static byte[] writeWorldServerProxy(String name, byte[] bytes, ClassReader cr) {
 
-		if (worldServer == null) {
+		ClassNode worldServer = new ClassNode(ASM4);
+		{
 			try {
-				Class.forName("net.minecraft.world.WorldServer");
-			} catch (Throwable _) { /* Won't happen */
+				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes("net.minecraft.world.WorldServer"));
+				reader.accept(worldServer, ClassReader.EXPAND_FRAMES);
+			} catch (Throwable e) {
+				Throwables.propagate(e);
 			}
 		}
-		if (world == null) {
+		ClassNode world = new ClassNode(ASM4);
+		{
 			try {
-				Class.forName("net.minecraft.world.World");
-			} catch (Throwable _) { /* Won't happen */
+				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes("net.minecraft.world.World"));
+				reader.accept(world, ClassReader.EXPAND_FRAMES);
+			} catch (Throwable e) {
+				Throwables.propagate(e);
 			}
 		}
 
