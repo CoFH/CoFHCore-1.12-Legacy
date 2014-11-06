@@ -9,6 +9,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+import cpw.mods.fml.common.asm.transformers.deobf.FMLRemappingAdapter;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 import cpw.mods.fml.common.discovery.ASMDataTable.ASMData;
 
@@ -846,7 +847,7 @@ class ASMCore {
 			try {
 				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(
 						remapper.unmap("net/minecraft/world/World").replace('/', '.')));
-				reader.accept(world, ClassReader.SKIP_CODE);
+				reader.accept(new FMLRemappingAdapter(world), ClassReader.SKIP_CODE);
 			} catch (Throwable e) {
 				Throwables.propagate(e);
 			}
@@ -895,7 +896,7 @@ class ASMCore {
 			try {
 				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(
 						remapper.unmap("net/minecraft/world/WorldServer").replace('/', '.')));
-				reader.accept(worldServer, ClassReader.SKIP_CODE);
+				reader.accept(new FMLRemappingAdapter(worldServer), ClassReader.SKIP_CODE);
 			} catch (Throwable e) {
 				Throwables.propagate(e);
 			}
@@ -906,7 +907,7 @@ class ASMCore {
 			try {
 				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(
 						remapper.unmap("net/minecraft/world/World").replace('/', '.')));
-				reader.accept(world, ClassReader.SKIP_CODE);
+				reader.accept(new FMLRemappingAdapter(world), ClassReader.SKIP_CODE);
 			} catch (Throwable e) {
 				Throwables.propagate(e);
 			}
