@@ -644,15 +644,16 @@ class ASMCore {
 				if (sig.equals(remapper.mapMethodDesc(m.desc)))
 						found = true;
 				LabelNode a = new LabelNode(new Label());
-				AbstractInsnNode n = m.instructions.getLast();
-				while (n.getOpcode() != RETURN) n = n.getPrevious();
-				m.instructions.insertBefore(n, a);
-				m.instructions.insertBefore(n, new LineNumberNode(-15000, a));
-				m.instructions.insertBefore(n, new VarInsnNode(ALOAD, 0));
-				m.instructions.insertBefore(n, new TypeInsnNode(NEW, "cofh/lib/util/LinkedHashList"));
-				m.instructions.insertBefore(n, new InsnNode(DUP));
-				m.instructions.insertBefore(n, new MethodInsnNode(INVOKESPECIAL, "cofh/lib/util/LinkedHashList", "<init>", "()V", false));
-				m.instructions.insertBefore(n, new FieldInsnNode(PUTFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
+				AbstractInsnNode n = m.instructions.getFirst();
+				while (n.getOpcode() != INVOKESPECIAL ||
+						!((MethodInsnNode)n).name.equals("<init>")) n = n.getNext();
+				m.instructions.insert(n, n = a);
+				m.instructions.insert(n, n = new LineNumberNode(-15000, a));
+				m.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
+				m.instructions.insert(n, n = new TypeInsnNode(NEW, "cofh/lib/util/LinkedHashList"));
+				m.instructions.insert(n, n = new InsnNode(DUP));
+				m.instructions.insert(n, n = new MethodInsnNode(INVOKESPECIAL, "cofh/lib/util/LinkedHashList", "<init>", "()V", false));
+				m.instructions.insert(n, n = new FieldInsnNode(PUTFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
 			} else if ("addTileEntity".equals(m.name) && "(Lnet/minecraft/tileentity/TileEntity;)V".equals(remapper.mapMethodDesc(m.desc))) {
 				addTileEntity = m;
 			} else if (names[4].equals(remapper.mapMethodName(name, m.name, m.desc)) && "(Ljava/util/Collection;)V".equals(m.desc)) {
@@ -693,14 +694,17 @@ class ASMCore {
 		if (addTileEntities != null) {
 			LabelNode a = new LabelNode(new Label());
 			AbstractInsnNode n = addTileEntities.instructions.getFirst();
-			while (n.getOpcode() != CHECKCAST) n = n.getNext();
-			n = n.getNext();
-			VarInsnNode store = (VarInsnNode)n;
+			for (;;) {
+				while (n.getOpcode() != CHECKCAST) n = n.getNext();
+				if (remapper.mapType(((TypeInsnNode)n).desc).equals("net/minecraft/tileentity/TileEntity"))
+					break;
+			}
 			addTileEntities.instructions.insert(n, n = a);
 			addTileEntities.instructions.insert(n, n = new LineNumberNode(-15003, a));
+			addTileEntities.instructions.insert(n, n = new InsnNode(DUP));
 			addTileEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
 			addTileEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
-			addTileEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, store.var));
+			addTileEntities.instructions.insert(n, n = new InsnNode(SWAP));
 			addTileEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
 			addTileEntities.instructions.insert(n, n = new InsnNode(POP));
 		}
