@@ -132,7 +132,7 @@ public class RenderUtils {
 
 	public static void setFluidRenderColor(FluidStack fluid) {
 
-		CCRenderState.setColour(0xFF | (fluid.getFluid().getColor(fluid) << 8));
+		CCRenderState.baseColour = (0xFF | (fluid.getFluid().getColor(fluid) << 8));
 	}
 
 	public static void preItemRender() {
