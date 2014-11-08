@@ -93,13 +93,13 @@ public class FeatureParser {
 		}
 
 		log.info("Registering default templates");
-		registerTemplate("uniform", new UniformParser());
 		registerTemplate("normal", new NormalParser());
+		registerTemplate("uniform", new UniformParser());
 		registerTemplate("surface", new SurfaceParser());
+		registerTemplate("fractal", new FractalParser());
 		registerTemplate("decoration", new DecorationParser());
 		registerTemplate("underfluid", new UnderfluidParser());
 		registerTemplate("underwater", new UnderfluidParser());
-		registerTemplate("fractal", new FractalParser());
 	}
 
 	public static void complete() {

@@ -173,7 +173,12 @@ public class UniformParser implements IFeatureParser {
 			WorldGenAdvLakes r = new WorldGenAdvLakes(resList, useMaterial ? matList : null);
 			if (isObject) {
 				if (genObject.has("outlineWithStone"))
-					r.outlineInStone = genObject.get("outlineWithStone").getAsBoolean();
+					r.outlineBlock = genObject.get("outlineWithStone").getAsBoolean() ?
+							new WeightedRandomBlock(Blocks.stone, 0) : null;
+				if (genObject.has("outlineBlock"))
+					r.outlineBlock = FeatureParser.parseBlockEntry(genObject.get("outlineBlock"));
+				if (genObject.has("gapBlock"))
+					r.gapBlock = FeatureParser.parseBlockEntry(genObject.get("gapBlock"));
 				if (genObject.has("lineWithFiller"))
 					r.lineWithFiller = genObject.get("lineWithFiller").getAsBoolean();
 			}
