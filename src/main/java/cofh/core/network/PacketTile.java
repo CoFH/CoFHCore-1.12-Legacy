@@ -41,6 +41,10 @@ public class PacketTile extends PacketCoFHBase {
 
 		if (tile instanceof ITilePacketHandler) {
 			((ITilePacketHandler) tile).handleTilePacket(this, isServer);
+			tile.getWorldObj().markBlockForUpdate(tile.xCoord, tile.yCoord, tile.zCoord);
+			if (isServer) {
+				tile.getWorldObj().func_147453_f(tile.xCoord, tile.yCoord, tile.zCoord, tile.getBlockType());
+			}
 		} else {
 			// TODO: Throw error, bad packet
 		}
