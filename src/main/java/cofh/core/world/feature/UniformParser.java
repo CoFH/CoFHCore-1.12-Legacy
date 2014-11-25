@@ -207,7 +207,7 @@ public class UniformParser implements IFeatureParser {
 				log.info("Entry does not specify genSurface for 'decoration' generator. Using grass.");
 				list.add(new WeightedRandomBlock(Blocks.grass));
 			} else {
-				if (!FeatureParser.parseResList(entry.get("crust"), list)) {
+				if (!FeatureParser.parseResList(entry.get("genSurface"), list)) {
 					log.warn("Entry specifies invalid genSurface for 'decoration' generator! Using grass!");
 					list.clear();
 					list.add(new WeightedRandomBlock(Blocks.grass));
