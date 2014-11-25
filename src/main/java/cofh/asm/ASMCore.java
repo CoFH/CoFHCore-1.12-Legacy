@@ -626,9 +626,9 @@ class ASMCore {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
-			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F", "func_147448_a", "func_147455_a", "func_72939_s" };
+			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F", "func_147448_a", "func_147455_a", "func_72939_s", "func_145830_o" };
 		} else {
-			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a", "setTileEntity", "updateEntities" };
+			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a", "setTileEntity", "updateEntities", "hasWorldObj" };
 		}
 		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM4);
@@ -730,6 +730,9 @@ class ASMCore {
 			updateEntities.instructions.insert(n, n = new TypeInsnNode(CHECKCAST, "net/minecraft/tileentity/TileEntity"));
 			updateEntities.instructions.insert(n, n = new InsnNode(DUP));
 			updateEntities.instructions.insert(n, n = new JumpInsnNode(IFNULL, lGuard));
+			updateEntities.instructions.insert(n, n = new InsnNode(DUP));
+			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity", names[7], "()Z", false));
+			updateEntities.instructions.insert(n, n = new JumpInsnNode(IFNE, lGuard));
 			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity", "cofh_validate", "()V", false));
 			updateEntities.instructions.insert(n, n = new InsnNode(ACONST_NULL));
 			updateEntities.instructions.insert(n, n = lGuard);
