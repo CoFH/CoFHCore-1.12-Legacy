@@ -5,7 +5,6 @@ import cpw.mods.fml.common.versioning.InvalidVersionSpecificationException;
 import cpw.mods.fml.common.versioning.Restriction;
 import cpw.mods.fml.common.versioning.VersionRange;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,9 +65,7 @@ public class ModRange {
 		}
 
 		try {
-			Constructor<VersionRange> c = VersionRange.class.getDeclaredConstructor(ArtifactVersion.class, List.class);
-			c.setAccessible(true);
-			return c.newInstance(version, restrictions);
+			return VersionRange.newRange(version, restrictions);
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}

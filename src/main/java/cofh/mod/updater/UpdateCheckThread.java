@@ -24,7 +24,7 @@ public class UpdateCheckThread extends Thread {
 
 	public UpdateCheckThread(IUpdatableMod mod, String releaseUrl) {
 
-		super("CoFHUpdater");
+		super("CoFHUpdater:" + mod.getModId());
 		_mod = mod;
 		if (releaseUrl == null) {
 			releaseUrl = "https://raw.github.com/skyboy/" + mod.getModId() + "/master/VERSION";
