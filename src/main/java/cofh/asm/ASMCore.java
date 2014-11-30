@@ -4,21 +4,28 @@ import static org.objectweb.asm.Opcodes.*;
 
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
+import cofh.mod.updater.ModRange;
+import cofh.mod.updater.ModVersion;
 import com.google.common.base.Throwables;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModAPIManager;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLRemappingAdapter;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 import cpw.mods.fml.common.discovery.ASMDataTable.ASMData;
+import cpw.mods.fml.common.versioning.InvalidVersionSpecificationException;
+import cpw.mods.fml.common.versioning.VersionRange;
 
 import gnu.trove.map.hash.TObjectByteHashMap;
 import gnu.trove.set.hash.THashSet;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -1109,10 +1116,41 @@ class ASMCore {
 				String[] value = node.values;
 				for (int j = 0, l = value.length; j < l; ++j) {
 					String clazz = value[j];
+					String mod = clazz.substring(4);
 					if (clazz.startsWith("mod:")) {
-						needsRemoved = !Loader.isModLoaded(clazz.substring(4));
+						int i = mod.indexOf('@');
+						if (i > 0) {
+							clazz = mod.substring(i+1);
+							mod = mod.substring(0, i);
+						}
+						needsRemoved = !Loader.isModLoaded(mod);
+						if (!needsRemoved && i > 0) {
+							ModContainer modc = getLoadedMods().get(mod);
+							try {
+								if (Boolean.parseBoolean(modc.getCustomModProperties().get("cofhversion"))) {
+									needsRemoved = !ModRange.createFromVersionSpec(mod, clazz).containsVersion(new ModVersion(mod, modc.getVersion()));
+								} else {
+									needsRemoved = !VersionRange.createFromVersionSpec(clazz).containsVersion(modc.getProcessedVersion());
+								}
+							} catch (InvalidVersionSpecificationException e) {
+								needsRemoved = true;
+							}
+						}
 					} else if (clazz.startsWith("api:")) {
-						needsRemoved = !ModAPIManager.INSTANCE.hasAPI(clazz.substring(4));
+						int i = mod.indexOf('@');
+						if (i > 0) {
+							clazz = mod.substring(i+1);
+							mod = mod.substring(0, i);
+						}
+						needsRemoved = !ModAPIManager.INSTANCE.hasAPI(mod);
+						if (!needsRemoved && i > 0) {
+							ModContainer modc = getLoadedAPIs().get(mod);
+							try {
+								needsRemoved = !VersionRange.createFromVersionSpec(clazz).containsVersion(modc.getProcessedVersion());
+							} catch (InvalidVersionSpecificationException e) {
+								needsRemoved = true;
+							}
+						}
 					} else {
 						try {
 							if (!workingPath.contains(clazz)) {
@@ -1136,6 +1174,28 @@ class ASMCore {
 	}
 
 	// }
+
+	private static Map<String, ModContainer> mods;
+	static Map<String, ModContainer> getLoadedMods() {
+
+		if (mods == null) {
+			mods = new HashMap<String, ModContainer>();
+			for (ModContainer m : Loader.instance().getModList())
+				mods.put(m.getModId(), m);
+		}
+		return mods;
+	}
+
+	private static Map<String, ModContainer> apis;
+	static Map<String, ModContainer> getLoadedAPIs() {
+
+		if (apis == null) {
+			apis = new HashMap<String, ModContainer>();
+			for (ModContainer m : ModAPIManager.INSTANCE.getAPIList())
+				apis.put(m.getModId(), m);
+		}
+		return apis;
+	}
 
 	static AnnotationInfo parseAnnotation(AnnotationNode node, String desc) {
 
