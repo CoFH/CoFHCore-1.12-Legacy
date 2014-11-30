@@ -27,6 +27,7 @@ import cofh.lib.util.helpers.StringHelper;
 import cofh.mod.BaseMod;
 import cofh.mod.updater.UpdateManager;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.CustomProperty;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
@@ -52,7 +53,8 @@ import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies)
+@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies,
+customProperties = @CustomProperty(k = "cofhversion", v = "true"))
 public class CoFHCore extends BaseMod {
 
 	public static final String modId = "CoFHCore";
