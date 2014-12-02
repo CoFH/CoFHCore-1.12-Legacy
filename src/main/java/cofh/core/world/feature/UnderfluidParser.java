@@ -37,7 +37,7 @@ public class UnderfluidParser extends UniformParser {
 		int[] fluidList = null;
 		l: if (genObject.has("genFluid")) {
 			ArrayList<DungeonMob> list = new ArrayList<DungeonMob>();
-			if (FeatureParser.parseWeightedStringList(genObject.get("genFluid"), list)) {
+			if (!FeatureParser.parseWeightedStringList(genObject.get("genFluid"), list)) {
 				break l;
 			}
 			water = false;
