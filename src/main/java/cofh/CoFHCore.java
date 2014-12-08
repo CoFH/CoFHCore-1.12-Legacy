@@ -15,6 +15,7 @@ import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketSocial;
 import cofh.core.util.ConfigHandler;
 import cofh.core.util.FMLEventHandler;
+import cofh.core.util.IBakeable;
 import cofh.core.util.SocialRegistry;
 import cofh.core.util.crafting.RecipeAugmentable;
 import cofh.core.util.crafting.RecipeSecure;
@@ -39,6 +40,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -77,6 +79,12 @@ public class CoFHCore extends BaseMod {
 	public static final GuiHandler guiHandler = new GuiHandler();
 
 	public static MinecraftServer server;
+
+	private ArrayList<IBakeable> oven = new ArrayList<IBakeable>();
+
+	public static void registerBakeable(IBakeable a) {
+		instance.oven.add(a);
+	}
 
 	/* INIT SEQUENCE */
 	public CoFHCore() {
@@ -162,6 +170,9 @@ public class CoFHCore extends BaseMod {
 		OreDictionaryArbiter.initialize();
 		CommandHandler.initCommands(event);
 		server = event.getServer();
+		for (IBakeable i : oven) {
+			i.bake();
+		}
 	}
 
 	public void handleConfigSync(PacketCoFHBase payload) {

@@ -1,5 +1,7 @@
 package cofh.core.fluid;
 
+import cofh.CoFHCore;
+import cofh.core.util.IBakeable;
 import cofh.lib.util.BlockWrapper;
 
 import gnu.trove.map.TMap;
@@ -9,18 +11,20 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.fluids.Fluid;
 
-public class BlockFluidInteractive extends BlockFluidCoFHBase {
+public class BlockFluidInteractive extends BlockFluidCoFHBase implements IBakeable {
 
 	protected final TMap<BlockWrapper, BlockWrapper> collisionMap = new THashMap<BlockWrapper, BlockWrapper>();
 
 	public BlockFluidInteractive(Fluid fluid, Material material, String name) {
 
 		super(fluid, material, name);
+		CoFHCore.registerBakeable(this);
 	}
 
 	public BlockFluidInteractive(String modName, Fluid fluid, Material material, String name) {
 
 		super(modName, fluid, material, name);
+		CoFHCore.registerBakeable(this);
 	}
 
 	public boolean addInteraction(Block preBlock, Block postBlock) {
@@ -60,6 +64,15 @@ public class BlockFluidInteractive extends BlockFluidCoFHBase {
 			return collisionMap.get(new BlockWrapper(preBlock, preMeta));
 		}
 		return collisionMap.get(new BlockWrapper(preBlock, -1));
+	}
+
+	@Override
+	public void bake() {
+
+		TMap<BlockWrapper, BlockWrapper> temp = new THashMap<BlockWrapper, BlockWrapper>();
+		temp.putAll(collisionMap);
+		collisionMap.clear();
+		collisionMap.putAll(temp);
 	}
 
 }

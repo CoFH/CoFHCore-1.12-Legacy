@@ -29,10 +29,10 @@ public class Base64 {
 		for (int i = 0; i < stringArray.length; i += 3) {
 			int j = ((stringArray[i] & 0xFF) << 16) + ((stringArray[i + 1] & 0xFF) << 8) + (stringArray[i + 2] & 0xFF);
 
-			encoded = encoded + "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".charAt(j >> 18 & 0x3F)
-					+ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".charAt(j >> 12 & 0x3F)
-					+ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".charAt(j >> 6 & 0x3F)
-					+ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".charAt(j & 0x3F);
+			encoded = encoded + base64code.charAt(j >> 18 & 0x3F)
+					+ base64code.charAt(j >> 12 & 0x3F)
+					+ base64code.charAt(j >> 6 & 0x3F)
+					+ base64code.charAt(j & 0x3F);
 		}
 
 		return splitLines(encoded.substring(0, encoded.length() - paddingCount) + "==".substring(0, paddingCount));
@@ -41,8 +41,8 @@ public class Base64 {
 	public static String splitLines(String string) {
 
 		String lines = "";
-		for (int i = 0; i < string.length(); i += 76) {
-			lines = lines + string.substring(i, Math.min(string.length(), i + 76));
+		for (int i = 0; i < string.length(); i += splitLinesAt) {
+			lines = lines + string.substring(i, Math.min(string.length(), i + splitLinesAt));
 			lines = lines + "\r\n";
 		}
 

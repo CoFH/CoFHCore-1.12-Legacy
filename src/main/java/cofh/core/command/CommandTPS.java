@@ -17,8 +17,8 @@ public class CommandTPS implements ISubCommand {
 	public static CommandTPS instance = new CommandTPS();
 
 	private static DecimalFormat floatfmt = new DecimalFormat("##0.00");
-	private static final int MAX_TPS = 20;
-	private static final int MIN_TICK_MS = 50;
+	//private static final int MAX_TPS = 20;
+	//private static final int MIN_TICK_MS = 50;
 
 	private double getTickTimeSum(long[] times) {
 

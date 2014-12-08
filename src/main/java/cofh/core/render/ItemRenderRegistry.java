@@ -12,7 +12,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 public class ItemRenderRegistry {
 
-	public static Map<ItemWrapper, IItemRenderer> itemRenders = new THashMap();
+	public static Map<ItemWrapper, IItemRenderer> itemRenders = new THashMap<ItemWrapper, IItemRenderer>();
 
 	public static boolean addItemRenderer(ItemStack stack, IItemRenderer renderer) {
 
@@ -35,7 +35,7 @@ public class ItemRenderRegistry {
 
 	public static void refreshMap() {
 
-		Map<ItemWrapper, IItemRenderer> tempMap = new THashMap(itemRenders.size());
+		Map<ItemWrapper, IItemRenderer> tempMap = new THashMap<ItemWrapper, IItemRenderer>(itemRenders.size());
 
 		for (Entry<ItemWrapper, IItemRenderer> entry : itemRenders.entrySet()) {
 			ItemWrapper tempItem = new ItemWrapper(entry.getKey().item, entry.getKey().metadata);
