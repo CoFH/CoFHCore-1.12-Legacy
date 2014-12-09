@@ -20,6 +20,13 @@ import net.minecraft.tileentity.TileEntity;
 
 public abstract class TileCoFHBase extends TileEntity {
 
+	@Override
+	public void onChunkUnload() {
+
+		if (!tileEntityInvalid)
+			invalidate(); // this isn't called when a tile unloads. guard incase it is in the future
+	}
+
 	public abstract String getName();
 
 	public abstract int getType();
