@@ -252,17 +252,9 @@ public class CoreUtils {
 		if (MinecraftForge.EVENT_BUS.post(event)) {
 			return false;
 		}
-		double x2 = entity.posX;
-		double y2 = entity.posY;
-		double z2 = entity.posZ;
-
-		entity.posX = event.targetX;
-		entity.posY = event.targetY;
-		entity.posZ = event.targetZ;
 
 		entity.setPositionAndUpdate(event.targetX, event.targetY, event.targetZ);
-		entity.worldObj.playSoundEffect(x2, y2, z2, "mob.endermen.portal", 1.0F, 1.0F);
-		entity.playSound("mob.endermen.portal", 1.0F, 1.0F);
+		entity.worldObj.playSoundAtEntity(entity, "mob.endermen.portal", 1.0F, 1.0F);
 
 		return true;
 	}
