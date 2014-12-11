@@ -31,6 +31,7 @@ import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderUtils {
 
@@ -465,6 +466,7 @@ public class RenderUtils {
 		if (!ForgeHooksClient.renderInventoryItem(renderBlocks, RenderHelper.engine(), stack, true, 0.0F, 0.0F, 0.0F)) {
 			renderItem.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, RenderHelper.engine(), stack, 0, 0);
 		}
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
 	}
 
