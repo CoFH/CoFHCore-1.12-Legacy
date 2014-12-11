@@ -22,6 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -269,6 +270,19 @@ public class CoreUtils {
 		entity.worldObj.playSoundAtEntity(entity, "mob.endermen.portal", 1.0F, 1.0F);
 
 		return true;
+	}
+
+	public static boolean teleportEntityTo(EntityLivingBase entity, double x, double y, double z, boolean cooldown) {
+
+		if (cooldown) {
+			NBTTagCompound tag = entity.getEntityData();
+			long time = entity.worldObj.getTotalWorldTime();
+			if (tag.getLong("cofh:tD") > time)
+				return false;
+			tag.setLong("cofh:tD", time + 35);
+		}
+
+		return teleportEntityTo(entity, x, y, z);
 	}
 
 }
