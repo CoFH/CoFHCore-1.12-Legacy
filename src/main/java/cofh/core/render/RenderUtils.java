@@ -483,9 +483,9 @@ public class RenderUtils {
 		if (world.getBlock(x, y, z).isOpaqueCube()) {
 			return;
 		}
-		int br = world.getLightBrightnessForSkyBlocks(x, y, z, 0);
-		int brX = br % 65536;
-		int brY = br / 65536;
+		int br = world.getLightBrightnessForSkyBlocks(x, y, z, 4);
+		int brX = br & 65535;
+		int brY = br >>> 16;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brX, brY);
 	}
 
