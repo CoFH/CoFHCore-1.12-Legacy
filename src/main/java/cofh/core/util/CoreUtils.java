@@ -15,6 +15,7 @@ import java.nio.channels.FileChannel;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -244,6 +245,17 @@ public class CoreUtils {
 
 		EntityLightningBoltFake bolt = new EntityLightningBoltFake(world, x, y, z);
 		world.addWeatherEffect(bolt);
+	}
+
+	public static boolean teleportEntityTo(Entity entity, double x, double y, double z) {
+
+		if (entity instanceof EntityLivingBase) {
+			return teleportEntityTo((EntityLivingBase) entity, x, y, z);
+		} else {
+			entity.setLocationAndAngles(x, y, z, entity.rotationYaw, entity.rotationPitch);
+			entity.worldObj.playSoundAtEntity(entity, "mob.endermen.portal", 1.0F, 1.0F);
+		}
+		return true;
 	}
 
 	public static boolean teleportEntityTo(EntityLivingBase entity, double x, double y, double z) {
