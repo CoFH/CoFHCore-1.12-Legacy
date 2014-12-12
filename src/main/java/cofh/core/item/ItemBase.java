@@ -73,19 +73,29 @@ public class ItemBase extends Item {
 		return this;
 	}
 
-	public ItemStack addItem(int number, String name, int rarity, boolean register) {
+	public ItemStack addItem(int number, ItemEntry entry, boolean register) {
 
 		if (itemMap.containsKey(Integer.valueOf(number))) {
 			return null;
 		}
-		itemMap.put(Integer.valueOf(number), new ItemEntry(name, rarity));
+		itemMap.put(Integer.valueOf(number), entry);
 		itemList.add(Integer.valueOf(number));
 
 		ItemStack item = new ItemStack(this, 1, number);
 		if (register) {
-			GameRegistry.registerCustomItemStack(name, item);
+			GameRegistry.registerCustomItemStack(entry.name, item);
 		}
 		return item;
+	}
+
+	public ItemStack addItem(int number, ItemEntry entry) {
+
+		return addItem(number, entry, true);
+	}
+
+	public ItemStack addItem(int number, String name, int rarity, boolean register) {
+
+		return addItem(number, new ItemEntry(name, rarity), register);
 	}
 
 	public ItemStack addItem(int number, String name, int rarity) {
