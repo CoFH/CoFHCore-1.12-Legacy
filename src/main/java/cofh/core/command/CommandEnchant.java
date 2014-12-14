@@ -1,6 +1,7 @@
 package cofh.core.command;
 
 import cofh.core.util.CoreUtils;
+import com.google.common.base.Throwables;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 
 public class CommandEnchant implements ISubCommand {
 
@@ -38,9 +40,9 @@ public class CommandEnchant implements ISubCommand {
 
 		case 0:
 		case 1:
-			// TODO: error
+			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
+			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
 			break;
-
 		default:
 		case 4:
 		case 3:
@@ -48,11 +50,9 @@ public class CommandEnchant implements ISubCommand {
 				player = CommandBase.getPlayer(sender, args[i++]);
 			} catch (Throwable t) {
 				if (l != 3) {
-					if (t instanceof RuntimeException) {
-						throw (RuntimeException) t;
-					} else {
-						throw new RuntimeException(t);
-					}
+					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
+					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
+					Throwables.propagate(t);
 				}
 				--i;
 			}

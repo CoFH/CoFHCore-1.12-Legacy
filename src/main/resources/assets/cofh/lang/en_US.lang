@@ -67,10 +67,25 @@ info.cofh.unlocked=Unlocked
 
 info.cofh.command.friend=The command to add and remove friends from your friend list.
 info.cofh.command.help=The command to help you out with other commands!
+info.cofh.command.syntax=The command to help you out with the syntax other commands!
 info.cofh.command.killall=Kills all of the entities of the given name, and kills all hostle mobs by default.
 info.cofh.command.tps=Gets the Ticks Per Second on the server. On a perfect server this should be 20.
 info.cofh.command.tpx=A improved version of the /tp command that works in between dimensions.
 info.cofh.command.version=Gives you the version of this mod.
+info.cofh.command.enchant=Improved /enchant. Has no limits on level or applicability.
+info.cofh.command.clearblocks=Clears specified blocks from a specified area in the world.
+info.cofh.command.replaceblocks=Replaces specified blocks from a specified area in the world.
+
+info.cofh.command.friend.syntax=/cofh friend {gui | add <username> | remove <username>}
+info.cofh.command.help.syntax=/cofh help [command]
+info.cofh.command.syntax.syntax=/cofh syntax [command]
+info.cofh.command.killall.syntax=/cofh killall [partial name]
+info.cofh.command.tps.syntax=/cofh tps [{o | a | <dim ID>}]
+info.cofh.command.tpx.syntax=/cofh tpx [player] {(<player> | <dimension>) | <x> <y> <z> [dimension]}
+info.cofh.command.version.syntax=/cofh version
+info.cofh.command.enchant.syntax=/cofh enchant [player] <enchantment ID> [level]
+info.cofh.command.clearblocks.syntax=/cofh clearblocks {<user> <x radius> <y radius> <z radius> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} [block#meta] [block#meta] ...
+info.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<user> <x radius> <y radius> <z radius> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} <replaceBlock#meta> [block#meta] [block#meta] ...
 
 info.cofh.command.syntaxError=Invalid Syntax.
 

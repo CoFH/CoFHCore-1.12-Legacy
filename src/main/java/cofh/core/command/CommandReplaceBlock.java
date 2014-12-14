@@ -24,14 +24,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 
-public class CommandClearBlock implements ISubCommand {
+public class CommandReplaceBlock implements ISubCommand {
 
-	public static ISubCommand instance = new CommandClearBlock();
+	public static ISubCommand instance = new CommandReplaceBlock();
 
 	@Override
 	public String getCommandName() {
 
-		return "clearblocks";
+		return "replaceblocks";
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class CommandClearBlock implements ISubCommand {
 			sender.addChatMessage(new ChatComponentText(CommandHandler.COMMAND_DISALLOWED));
 			return;
 		}
-		if (args.length < 6) {
+		if (args.length < 7) {
 			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
 			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
 			return;
@@ -115,6 +115,27 @@ public class CommandClearBlock implements ISubCommand {
 			yL = 255;
 		}
 
+		Block replBlock;
+		int replMeta;
+		{
+			int meta = 0;
+			String blockRaw = args[i];
+			t = blockRaw.indexOf('#');
+			if (t > 0) {
+				meta = CommandBase.parseInt(sender, blockRaw.substring(t + 1));
+				blockRaw = blockRaw.substring(0, t);
+			}
+			Block block = Block.getBlockFromName(blockRaw);
+			if (block == Blocks.air || meta > 15 || meta < 0) {
+				sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
+				sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
+				// TODO: more descriptive error
+				return;
+			}
+			replBlock = block;
+			replMeta = meta;
+		}
+
 		THashSet<Chunk> set = new THashSet<Chunk>();
 
 		for (int e = args.length; i < e; ++i) {
@@ -128,7 +149,7 @@ public class CommandClearBlock implements ISubCommand {
 							for (int y = yS; y <= yL; ++y) {
 								Block block = chunk.getBlock(cX, y, cZ);
 								if (block.getMaterial().isLiquid()) {
-									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
 										set.add(chunk);
 									}
 								}
@@ -143,7 +164,7 @@ public class CommandClearBlock implements ISubCommand {
 							for (int y = yS; y <= yL; ++y) {
 								Block block = chunk.getBlock(cX, y, cZ);
 								if (block.isWood(world, x, y, z) || block.isLeaves(world, x, y, z)) {
-									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
 										set.add(chunk);
 									}
 								}
@@ -158,7 +179,7 @@ public class CommandClearBlock implements ISubCommand {
 							for (int y = yS; y <= yL; ++y) {
 								Block block = chunk.getBlock(cX, y, cZ);
 								if (block.isReplaceable(world, x, y, z)) {
-									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
 										set.add(chunk);
 									}
 								}
@@ -173,7 +194,7 @@ public class CommandClearBlock implements ISubCommand {
 							for (int y = yS; y <= yL; ++y) {
 								Block block = chunk.getBlock(cX, y, cZ);
 								if (block.getMaterial() == Material.rock) {
-									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
 										set.add(chunk);
 									}
 								}
@@ -188,7 +209,7 @@ public class CommandClearBlock implements ISubCommand {
 							for (int y = yS; y <= yL; ++y) {
 								Block block = chunk.getBlock(cX, y, cZ);
 								if (block.getMaterial() == Material.sand) {
-									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
 										set.add(chunk);
 									}
 								}
@@ -205,7 +226,7 @@ public class CommandClearBlock implements ISubCommand {
 								Material m = block.getMaterial();
 								if (m == Material.grass || m == Material.ground || m == Material.clay || m == Material.snow
 										|| m == Material.craftedSnow || m == Material.ice || m == Material.packedIce) {
-									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
 										set.add(chunk);
 									}
 								}
@@ -221,7 +242,7 @@ public class CommandClearBlock implements ISubCommand {
 								Block block = chunk.getBlock(cX, y, cZ);
 								Material m = block.getMaterial();
 								if (m == Material.plants || m == Material.vine || m == Material.cactus || m == Material.leaves) {
-									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
 										set.add(chunk);
 									}
 								}
@@ -237,7 +258,7 @@ public class CommandClearBlock implements ISubCommand {
 								Block block = chunk.getBlock(cX, y, cZ);
 								Material m = block.getMaterial();
 								if (m == Material.fire || m == Material.lava || block.isBurning(world, x, y, z)) {
-									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
 										set.add(chunk);
 									}
 								}
@@ -265,7 +286,7 @@ public class CommandClearBlock implements ISubCommand {
 					for (int y = yS; y <= yL; ++y) {
 						boolean v = meta == -1 || chunk.getBlockMetadata(cX, y, cZ) == meta;
 						if (v && chunk.getBlock(cX, y, cZ) == block) {
-							if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
+							if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
 								set.add(chunk);
 							}
 						}

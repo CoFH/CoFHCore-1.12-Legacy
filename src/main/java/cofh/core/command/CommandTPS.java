@@ -1,6 +1,7 @@
 package cofh.core.command;
 
 import cofh.CoFHCore;
+import com.google.common.base.Throwables;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 
 public class CommandTPS implements ISubCommand {
@@ -100,9 +102,11 @@ public class CommandTPS implements ISubCommand {
 		} else {
 			int dim = 0;
 			try {
-				dim = Integer.parseInt(arguments[1]);
+				dim = CommandBase.parseInt(sender, arguments[1]);
 			} catch (Throwable e) {
-				sender.addChatMessage(new ChatComponentText(CommandHandler.instance.getCommandUsage(null)));
+				sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
+				sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
+				Throwables.propagate(e);
 			}
 
 			World world = CoFHCore.server.worldServerForDimension(dim);

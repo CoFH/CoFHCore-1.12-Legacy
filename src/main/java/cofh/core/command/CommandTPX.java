@@ -3,6 +3,7 @@ package cofh.core.command;
 import cofh.core.util.CoreUtils;
 import cofh.lib.util.helpers.EntityHelper;
 import cofh.lib.util.helpers.StringHelper;
+import com.google.common.base.Throwables;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.DimensionManager;
 
 public class CommandTPX implements ISubCommand {
@@ -30,6 +32,8 @@ public class CommandTPX implements ISubCommand {
 		// TODO: allow selector commands to target anything (single player, all players[@a], specific entities [@e], etc.)
 		// where it makes sense to allow it (e.g., not allowing teleporting a single thing to many things)
 
+		// TODO: localize errors
+
 		if (!CoreUtils.isOpOrServer(sender.getCommandSenderName())) {
 			sender.addChatMessage(new ChatComponentText(CommandHandler.COMMAND_DISALLOWED));
 			return;
@@ -38,8 +42,8 @@ public class CommandTPX implements ISubCommand {
 
 		case 0: // () ???? how did we get here again?
 		case 1: // (tpx) invalid command
-			sender.addChatMessage(new ChatComponentText("Invalid Syntax. /cofh tpx " + StringHelper.PINK + "[username] " + StringHelper.YELLOW
-					+ "[<x> <y> <z>] <dimension id>"));
+			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
+			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
 			break;
 		case 2: // (tpx {<player>|<dimension>}) teleporting player to self, or self to dimension
 			EntityPlayerMP playerSender = CommandBase.getCommandSenderAsPlayer(sender);
@@ -58,14 +62,13 @@ public class CommandTPX implements ISubCommand {
 				}
 				break;
 			} catch (Throwable t) {
-				int dimension;
+				int dimension = 0;
 				try {
-					dimension = Integer.parseInt(arguments[1]);
+					dimension = CommandBase.parseInt(sender, arguments[1]);
 				} catch (Throwable p) { // not a number, assume they wanted a player
-					if (t instanceof RuntimeException) {
-						throw (RuntimeException) t; // player error is
-					}
-					throw new RuntimeException(t);
+					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
+					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
+					Throwables.propagate(p);
 				}
 				if (!DimensionManager.isDimensionRegistered(dimension)) {
 					sender.addChatMessage(new ChatComponentText(StringHelper.RED + "That dimension does not exist."));
@@ -95,14 +98,13 @@ public class CommandTPX implements ISubCommand {
 				}
 				break;
 			} catch (Throwable t) {
-				int dimension;
+				int dimension = 0;
 				try {
-					dimension = Integer.parseInt(arguments[2]);
+					dimension = CommandBase.parseInt(sender, arguments[2]);
 				} catch (Throwable p) { // not a number, assume they wanted a player
-					if (t instanceof RuntimeException) {
-						throw (RuntimeException) t; // player error is
-					}
-					throw new RuntimeException(t);
+					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
+					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
+					Throwables.propagate(p);
 				}
 				if (!DimensionManager.isDimensionRegistered(dimension)) {
 					sender.addChatMessage(new ChatComponentText(StringHelper.RED + "That dimension does not exist"));
