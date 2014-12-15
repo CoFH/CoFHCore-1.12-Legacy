@@ -4,11 +4,10 @@ import cofh.CoFHCore;
 import cofh.core.util.CoreUtils;
 import cofh.lib.util.helpers.StringHelper;
 
-import gnu.trove.map.hash.THashMap;
+import gnu.trove.iterator.TObjectIntIterator;
+import gnu.trove.map.hash.TObjectIntHashMap;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
@@ -28,6 +27,7 @@ public class CommandKillAll implements ISubCommand {
 		return "killall";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void handleCommand(ICommandSender sender, String[] arguments) {
 
@@ -37,42 +37,39 @@ public class CommandKillAll implements ISubCommand {
 		}
 		int killCount = 0;
 		String curName;
-		THashMap<String, Integer> names = new THashMap<String, Integer>();
+		TObjectIntHashMap<String> names = new TObjectIntHashMap<String>();
+		String target = null;
+		boolean all = false;
+		if (arguments.length > 1) {
+			target = arguments[1].toLowerCase();
+			all = "*".equals(target);
+		}
 		for (WorldServer theWorld : CoFHCore.server.worldServers) {
-			for (int i = 0; i < theWorld.loadedEntityList.size(); i++) {
-				if (theWorld.loadedEntityList.get(i) != null) {
-					curName = EntityList.getEntityString((Entity) theWorld.loadedEntityList.get(i));
-					if (arguments.length > 1) {
-						if (curName != null && curName.toLowerCase().contains(arguments[1].toLowerCase())) {
-							if (names.containsKey(curName)) {
-								names.put(curName, names.get(curName) + 1);
-							} else {
-								names.put(curName, 1);
-							}
+			for (Entity entity : (List<Entity>)theWorld.loadedEntityList) {
+				if (entity != null) {
+					curName = EntityList.getEntityString(entity);
+					if (target != null | all) {
+						if (all || curName != null && curName.toLowerCase().contains(target)) {
+							names.adjustOrPutValue(curName, 1, 1);
 							killCount++;
-							theWorld.removeEntity((Entity) theWorld.loadedEntityList.get(i));
+							theWorld.removeEntity(entity);
 						}
-					} else if (theWorld.loadedEntityList.get(i) instanceof EntityMob) {
+					} else if (entity instanceof EntityMob) {
 						if (curName == null) {
-							curName = theWorld.loadedEntityList.get(i).toString();
+							curName = entity.getClass().getName();
 						}
-						if (names.containsKey(curName)) {
-							names.put(curName, names.get(curName) + 1);
-						} else {
-							names.put(curName, 1);
-						}
+						names.adjustOrPutValue(curName, 1, 1);
 						killCount++;
-						theWorld.removeEntity((Entity) theWorld.loadedEntityList.get(i));
+						theWorld.removeEntity(entity);
 					}
 				}
 			}
 		}
 		if (killCount > 0) {
 			String finalNames = "";
-			Iterator<Map.Entry<String, Integer>> it = names.entrySet().iterator();
+			TObjectIntIterator<String> it = names.iterator();
 			while (it.hasNext()) {
-				Map.Entry<String, Integer> pairs = it.next();
-				finalNames = finalNames + StringHelper.LIGHT_RED + pairs.getValue() + StringHelper.WHITE + "x" + StringHelper.YELLOW + pairs.getKey()
+				finalNames = finalNames + StringHelper.LIGHT_RED + it.value() + StringHelper.WHITE + "x" + StringHelper.YELLOW + it.key()
 						+ StringHelper.WHITE + ", ";
 			}
 			finalNames = finalNames.substring(0, finalNames.length() - 2);
