@@ -144,13 +144,11 @@ public class UniformParser implements IFeatureParser {
 			List<WeightedRandomBlock> matList) {
 
 		String template = getDefaultTemplate();
-		boolean isObject = false;
 
 		JsonObject entry = genObject;
 		JsonElement genElement = genObject.get("template");
 		if (genElement.isJsonObject()) {
 			genObject = genElement.getAsJsonObject();
-			isObject = true;
 
 			if (genObject.has("generator")) {
 				template = genObject.get("generator").getAsString();
@@ -161,17 +159,17 @@ public class UniformParser implements IFeatureParser {
 			return new WorldGenSparseMinableCluster(resList, clusterSize, matList);
 		} else if ("large-vein".equals(template)) {
 			boolean sparse = true;
-			if (isObject) {
+			{
 				sparse = genObject.has("sparse") ? genObject.get("sparse").getAsBoolean() : sparse;
 			}
 			return new WorldGenMinableLargeVein(resList, clusterSize, matList, sparse);
 		} else if ("lake".equals(template)) {
 			boolean useMaterial = false;
-			if (isObject) {
+			{
 				useMaterial = genObject.has("useMaterial") ? genObject.get("useMaterial").getAsBoolean() : useMaterial;
 			}
 			WorldGenAdvLakes r = new WorldGenAdvLakes(resList, useMaterial ? matList : null);
-			if (isObject) {
+			{
 				if (genObject.has("outlineWithStone"))
 					r.outlineBlock = genObject.get("outlineWithStone").getAsBoolean() ?
 							new WeightedRandomBlock(Blocks.stone, 0) : null;
@@ -196,9 +194,18 @@ public class UniformParser implements IFeatureParser {
 				}
 			}
 			WorldGenGeode r = new WorldGenGeode(resList, matList, list);
-			if (isObject) {
-				if (genObject.has("hollow"))
+			{
+				if (genObject.has("hollow")) {
 					r.hollow = genObject.get("hollow").getAsBoolean();
+				}
+				if (genObject.has("filler")) {
+					list = new ArrayList<WeightedRandomBlock>();
+					if (!FeatureParser.parseResList(entry.get("filler"), list)) {
+						log.warn("Entry specifies invalid filler for 'geode' generator! Not filling!");
+					} else {
+						r.fillBlock = list;
+					}
+				}
 			}
 			return r;
 		} else if ("decoration".equals(template)) {
@@ -229,7 +236,7 @@ public class UniformParser implements IFeatureParser {
 			return r;
 		} else if ("boulder".equals(template)) {
 			WorldGenBoulder r = new WorldGenBoulder(resList, clusterSize, matList);
-			if (isObject) {
+			{
 				if (genObject.has("sizeVariance"))
 					r.sizeVariance = genObject.get("sizeVariance").getAsInt();
 				if (genObject.has("count"))
@@ -238,7 +245,7 @@ public class UniformParser implements IFeatureParser {
 			return r;
 		} else if ("spike".equals(template)) {
 			WorldGenSpike r = new WorldGenSpike(resList, matList);
-			if (isObject) {
+			{
 				if (genObject.has("largeSpikes"))
 					r.largeSpikes = genObject.get("largeSpikes").getAsBoolean();
 			}
@@ -268,7 +275,7 @@ public class UniformParser implements IFeatureParser {
 					log.warn("Entry specifies invalid block list for 'spawnerFloor'! Using walls.");
 				}
 			}
-			if (isObject) {
+			{
 				if (genObject.has("lootTable")) {
 					ArrayList<DungeonMob> lootList = new ArrayList<DungeonMob>();
 					if (FeatureParser.parseWeightedStringList(genObject.get("lootTable"), lootList)) {
