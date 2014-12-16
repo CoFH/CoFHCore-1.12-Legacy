@@ -13,6 +13,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.WorldServer;
 
@@ -45,22 +46,26 @@ public class CommandKillAll implements ISubCommand {
 			all = "*".equals(target);
 		}
 		for (WorldServer theWorld : CoFHCore.server.worldServers) {
-			for (Entity entity : (List<Entity>)theWorld.loadedEntityList) {
-				if (entity != null) {
-					curName = EntityList.getEntityString(entity);
-					if (target != null | all) {
-						if (all || curName != null && curName.toLowerCase().contains(target)) {
+			synchronized (theWorld) {
+				List<Entity> list = theWorld.loadedEntityList;
+				for (int i = list.size(); i --> 0; ) {
+					Entity entity = list.get(i);
+					if (entity != null && !(entity instanceof EntityPlayer)) {
+						curName = EntityList.getEntityString(entity);
+						if (target != null | all) {
+							if (all || curName != null && curName.toLowerCase().contains(target)) {
+								names.adjustOrPutValue(curName, 1, 1);
+								killCount++;
+								theWorld.removeEntity(entity);
+							}
+						} else if (entity instanceof EntityMob) {
+							if (curName == null) {
+								curName = entity.getClass().getName();
+							}
 							names.adjustOrPutValue(curName, 1, 1);
 							killCount++;
 							theWorld.removeEntity(entity);
 						}
-					} else if (entity instanceof EntityMob) {
-						if (curName == null) {
-							curName = entity.getClass().getName();
-						}
-						names.adjustOrPutValue(curName, 1, 1);
-						killCount++;
-						theWorld.removeEntity(entity);
 					}
 				}
 			}
