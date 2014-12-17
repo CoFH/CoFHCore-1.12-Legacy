@@ -1,0 +1,118 @@
+#pl_PL
+
+chat.cofh.secure.0=Ogłoszenie: Operatorzy mają dostęp do 'zabezpieczonych' bloków na tym serwerze.
+chat.cofh.secure.1=To jest prywatne i należy do
+chat.cofh.secure.2=Mogłeś stracić rękę!
+
+enchant.cofh.holding=Trzymanie
+
+info.cofh.access=Dostęp
+info.cofh.accessMode=Tryb dostępu
+info.cofh.accessPublic=Public Access
+info.cofh.accessRestricted=Ograniczony
+info.cofh.accessPrivate=Tylko właściciel
+info.cofh.all=Wszystko
+info.cofh.amount=Ilość
+info.cofh.augmentation=Zwiększanie
+info.cofh.blank=Czyste
+info.cofh.capacity=Pojemność
+info.cofh.charge=Charge
+info.cofh.configuration=Konfiguracja
+info.cofh.contents=Contents
+info.cofh.controlStatus=Status kontrolowania
+info.cofh.damageAttack=Obrażenia ataku
+info.cofh.damageFlux=Obrażenia flux'owe
+info.cofh.disabled=Wyłączone
+info.cofh.dry=Suche
+info.cofh.empty=Puste
+info.cofh.enabled=Włączone
+info.cofh.energy=Energia
+info.cofh.energyConsume=Użytek mocy
+info.cofh.energyProduce=Wyjście mocy
+info.cofh.energyStored=Przechowywana energia
+info.cofh.fluid=Ciecz
+info.cofh.forDetails=dla detali
+info.cofh.frequency=Częstotliwość
+info.cofh.friendsList=Lista przyjaciół
+info.cofh.hasInfo=Ma informacje
+info.cofh.high=Wysoki
+info.cofh.hold=Trzyma
+info.cofh.ignored=Ignorowane
+info.cofh.information=Informacje
+info.cofh.infinite=Nieskończone
+info.cofh.item=Przedmiot
+info.cofh.items=Przedmioty
+info.cofh.level=Przedmiot
+info.cofh.locked=Zablokowane
+info.cofh.low=Niski
+info.cofh.maxEnergyPerTick=Maksymalna moc
+info.cofh.none=Żadne
+info.cofh.owner=Właściciel
+info.cofh.perUse=Na użycie
+info.cofh.press=Naciśnij
+info.cofh.receive=Otrzymaj
+info.cofh.receiving=Receiving
+info.cofh.redstoneControl=Kontrola redstone'em
+info.cofh.security=Bezpieczeństwo
+info.cofh.send=Wyślij
+info.cofh.sending=Wysyłanie
+info.cofh.shift=Przesunięcie
+info.cofh.signal=Sygnał
+info.cofh.signalRequired=Sygnał wymagany
+info.cofh.soaked=Mokry
+info.cofh.source=Źródło
+info.cofh.transfer=Transfer
+info.cofh.tutorial=Tutorial
+info.cofh.unlocked=Odblokowany
+
+info.cofh.command.friend=Komenda do dodawania i usuwania przyjaciół z listy przyjaciół.
+info.cofh.command.help=Komenda do pomagania z innymi komendami!
+info.cofh.command.syntax=Komenda do pomagania ze składnią innych komend!
+info.cofh.command.killall=Zabija wszystko z daną nazwą i domyślnie morduje wszystkie wrogie moby.
+info.cofh.command.tps=Sprawdza ilość tików na sekundę na serwerze. Na perfekcyjnym serwerze byłoby to 20.
+info.cofh.command.tpx=Ulepszona wersja komendy /tp która teleportuje również między wymiarami.
+info.cofh.command.version=Daje ci wersję moda.
+info.cofh.command.enchant=Ulepszone /enchant. Nie ma limitów poziomu ani stosowania.
+info.cofh.command.clearblocks=Usuwa wyspecyfikowane bloki z wyspecyfikowanego obszaru świata.
+info.cofh.command.replaceblocks=Wymienia wyspecyfikowane bloki z wyspecyfikowanego obszaru świata.
+
+info.cofh.command.friend.syntax=/cofh friend {gui | add <nazwa użytkownika> | remove <nazwa użytkownika>}
+info.cofh.command.help.syntax=/cofh help [komenda]
+info.cofh.command.syntax.syntax=/cofh syntax [komenda]
+info.cofh.command.killall.syntax=/cofh killall [częściowa nazwa]
+info.cofh.command.tps.syntax=/cofh tps [{o | a | <ID wymiaru>}]
+info.cofh.command.tpx.syntax=/cofh tpx [gracz] {(<gracz> | <wymiar>) | <x> <y> <z> [wymiar]}
+info.cofh.command.version.syntax=/cofh version
+info.cofh.command.enchant.syntax=/cofh enchant [gracz] <ID zaklęcia> [poziom]
+info.cofh.command.clearblocks.syntax=/cofh clearblocks {<użytkownik> <x promień> <y promień> <z promień> | <xPoczątek> <yPoczątek> <zPoczątek> <xKoniec> <yKoniec> <zKoniec>} [blok#meta] [blok#meta] ...
+info.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<użytkownik> <x promień> <y promień> <z promień> | <xPoczątek> <yPoczątek> <zPoczątek> <xKoniec> <yKoniec> <zKoniec>} <wymieniającyBlok#meta> [blok#meta] [blok#meta] ...
+
+info.cofh.command.syntaxError=Nieprzwidłowa składnia.
+
+info.cofh.command.friend.0=poprawnie dodany/a do twojej listy przyjaciół.
+info.cofh.command.friend.1=Przepraszamy, był problem z dodawaniem
+info.cofh.command.friend.2=do twojej listy.
+info.cofh.command.friend.3=Przepraszamy, to nie jest poprawna nazwa użytkownika.
+info.cofh.command.friend.4=poprawnie usunięty/a z twojej listy przyjaciół.
+info.cofh.command.friend.5=nie był/a twoim przyjacielem.
+info.cofh.command.help.0=Dostępne komendy to:
+info.cofh.command.killall.0=
+info.cofh.command.killall.1=
+info.cofh.command.killall.2=Nie można znaleźć żadnych wrogich mobów!
+info.cofh.command.version.0=Ten mod ma wersję
+
+info.cofh.tutorial.fluxRequired=Wymaga redstone'owego flux'u do operacji.
+info.cofh.tutorial.tabAugment=Karta powiększeń zezwala na modularne dodatki.
+info.cofh.tutorial.tabConfiguration.0=Karta konfiguracji determinuje to, jak przedmioty wchodzą i wychodzą z tego urządzenia.
+info.cofh.tutorial.tabConfiguration.1=Karta konfiguracji determinuje tryby operacji tego urządzeia.
+info.cofh.tutorial.tabRedstone=Karta kontroli redstone'a konfiguruje to, jak to urządzenie reaguje na sygnały redstone'a.
+info.cofh.tutorial.tabSecurity=Karta bezpieczeństwa zezwala na kontrolowanie tego, kto ma prawo dostępu do tego urządzenia.
+
+item.invalid.name=Niepoprawny przedmiot (zniszcz)
+
+#Fluid Name Fixes
+
+fluid.tile.water=Woda
+fluid.tile.lava=Lawa
+fluid.fuel=Paliwo
+fluid.oil=Olej
