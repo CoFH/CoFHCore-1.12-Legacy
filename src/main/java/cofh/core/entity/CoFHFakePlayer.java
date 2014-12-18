@@ -14,6 +14,7 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.ForgeEventFactory;
 
 public class CoFHFakePlayer extends FakePlayer {
 
@@ -88,7 +89,7 @@ public class CoFHFakePlayer extends FakePlayer {
 		theItemInWorldManager.updateBlockRemoving();
 
 		if (itemInUse != null) {
-			tickItemInUse(itemstack);
+			//tickItemInUse(itemstack);
 		}
 	}
 
@@ -96,13 +97,18 @@ public class CoFHFakePlayer extends FakePlayer {
 
 		if (updateItem != null && ItemHelper.itemsEqualWithMetadata(previousItem, itemInUse)) {
 
-			itemInUse.getItem().onUsingTick(itemInUse, this, itemInUseCount);
-			if (itemInUseCount <= 25 && itemInUseCount % 4 == 0) {
-				updateItemUse(updateItem, 5);
-			}
-			if (--itemInUseCount == 0 && !worldObj.isRemote) {
-				onItemUseFinish();
-			}
+			itemInUseCount = ForgeEventFactory.onItemUseTick(this, itemInUse, itemInUseCount);
+            if (itemInUseCount <= 0) {
+                onItemUseFinish();
+            } else {
+				itemInUse.getItem().onUsingTick(itemInUse, this, itemInUseCount);
+				if (itemInUseCount <= 25 && itemInUseCount % 4 == 0) {
+					updateItemUse(updateItem, 5);
+				}
+				if (--itemInUseCount == 0 && !worldObj.isRemote) {
+					onItemUseFinish();
+				}
+            }
 		} else {
 			clearItemInUse();
 		}
