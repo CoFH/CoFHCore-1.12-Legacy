@@ -74,6 +74,7 @@ public class CommandKillAll implements ISubCommand {
 			String finalNames = "";
 			TObjectIntIterator<String> it = names.iterator();
 			while (it.hasNext()) {
+				it.advance();
 				finalNames = finalNames + StringHelper.LIGHT_RED + it.value() + StringHelper.WHITE + "x" + StringHelper.YELLOW + it.key()
 						+ StringHelper.WHITE + ", ";
 			}
