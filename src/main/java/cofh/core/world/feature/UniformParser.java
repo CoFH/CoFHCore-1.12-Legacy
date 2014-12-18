@@ -248,6 +248,22 @@ public class UniformParser implements IFeatureParser {
 			{
 				if (genObject.has("largeSpikes"))
 					r.largeSpikes = genObject.get("largeSpikes").getAsBoolean();
+				if (genObject.has("largeSpikeChance"))
+					r.largeSpikeChance = genObject.get("largeSpikeChance").getAsInt();
+				if (genObject.has("minHeight"))
+					r.minHeight = genObject.get("minHeight").getAsInt();
+				if (genObject.has("heightVariance"))
+					r.heightVariance = genObject.get("heightVariance").getAsInt();
+				if (genObject.has("sizeVariance"))
+					r.sizeVariance = genObject.get("sizeVariance").getAsInt();
+				if (genObject.has("positionVariance"))
+					r.positionVariance = genObject.get("positionVariance").getAsInt();
+				if (genObject.has("minLargeSpikeHeightGain"))
+					r.minLargeSpikeHeightGain = genObject.get("minLargeSpikeHeightGain").getAsInt();
+				if (genObject.has("largeSpikeHeightVariance"))
+					r.largeSpikeHeightVariance = genObject.get("largeSpikeHeightVariance").getAsInt();
+				if (genObject.has("largeSpikeFillerSize"))
+					r.largeSpikeFillerSize = genObject.get("largeSpikeFillerSize").getAsInt();
 			}
 			return r;
 		} else if ("dungeon".equals(template)) {
