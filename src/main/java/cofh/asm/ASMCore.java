@@ -432,8 +432,6 @@ class ASMCore {
 						for (; n != null; n = n.getNext()) {
 							if (n.getOpcode() != IF_ICMPNE)
 								continue;
-							for (int w = 1000; w --> 0; )
-								System.out.println("!!!!!!!!!!!!!!!!!!!!!");
 							((JumpInsnNode)n).setOpcode(IF_ICMPLT);
 							break q;
 						}
