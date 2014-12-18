@@ -200,7 +200,7 @@ public class UniformParser implements IFeatureParser {
 				}
 				if (genObject.has("filler")) {
 					list = new ArrayList<WeightedRandomBlock>();
-					if (!FeatureParser.parseResList(entry.get("filler"), list)) {
+					if (!FeatureParser.parseResList(genObject.get("filler"), list)) {
 						log.warn("Entry specifies invalid filler for 'geode' generator! Not filling!");
 					} else {
 						r.fillBlock = list;
