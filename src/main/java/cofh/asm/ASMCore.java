@@ -88,6 +88,7 @@ class ASMCore {
 		hashes.put("net.minecraft.client.Minecraft", (byte) 10);
 		hashes.put("net.minecraft.client.renderer.RenderBlocks", (byte) 11);
 		hashes.put("net.minecraft.tileentity.TileEntity", (byte) 12);
+		hashes.put("net.minecraft.server.management.PlayerManager$PlayerInstance", (byte) 13);
 	}
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
@@ -186,6 +187,8 @@ class ASMCore {
 			return alterRenderBlocks(name, transformedName, bytes, cr);
 		case 12:
 			return alterTileEntity(name, transformedName, bytes, cr);
+		case 13:
+			return fixWorldGenLag(name, transformedName, bytes, cr);
 
 		default:
 			return bytes;
@@ -384,6 +387,58 @@ class ASMCore {
 
 			if (!updated) {
 				break l;
+			}
+
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+		}
+		return bytes;
+	}
+
+	private static byte[] fixWorldGenLag(String name, String transformedName, byte[] bytes, ClassReader cr) {
+
+		String names;
+		if (LoadingPlugin.runtimeDeobfEnabled) {
+			names = "func_73254_a";
+		} else {
+			names = "sendChunkUpdate";
+		}
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM4);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+
+		String sig = "()V";
+		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
+
+		l: {
+			MethodNode m = null;
+			for (MethodNode n : cn.methods) {
+				if (names.equals(remapper.mapMethodName(name, n.name, n.desc)) && sig.equals(n.desc)) {
+					m = n;
+					break;
+				}
+			}
+
+			if (m == null) {
+				break l;
+			}
+
+			q: for (int i = 0, e = m.instructions.size(); i < e; ++i) {
+				AbstractInsnNode n = m.instructions.get(i);
+				if (n.getOpcode() == GETSTATIC) {
+					if ("net/minecraftforge/common/ForgeModContainer".equals(((FieldInsnNode)n).owner)) {
+						for (; n != null; n = n.getNext()) {
+							if (n.getOpcode() != IF_ICMPNE)
+								continue;
+							for (int w = 1000; w --> 0; )
+								System.out.println("!!!!!!!!!!!!!!!!!!!!!");
+							((JumpInsnNode)n).setOpcode(IF_ICMPLT);
+							break q;
+						}
+					}
+				}
 			}
 
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
