@@ -31,6 +31,7 @@ public class CommandHandler extends CommandBase {
 		registerSubCommand(CommandEnchant.instance);
 		registerSubCommand(CommandClearBlock.instance);
 		registerSubCommand(CommandReplaceBlock.instance);
+		registerSubCommand(CommandUnloadChunk.instance);
 	}
 
 	public static void initCommands(FMLServerStartingEvent event) {
