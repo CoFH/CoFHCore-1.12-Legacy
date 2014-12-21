@@ -89,6 +89,7 @@ class ASMCore {
 		hashes.put("net.minecraft.client.renderer.RenderBlocks", (byte) 11);
 		hashes.put("net.minecraft.tileentity.TileEntity", (byte) 12);
 		hashes.put("net.minecraft.server.management.PlayerManager$PlayerInstance", (byte) 13);
+		hashes.put("net.minecraft.entity.Entity", (byte) 14);
 	}
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
@@ -189,6 +190,8 @@ class ASMCore {
 			return alterTileEntity(name, transformedName, bytes, cr);
 		case 13:
 			return fixWorldGenLag(name, transformedName, bytes, cr);
+		case 14:
+			return alterEntity(name, transformedName, bytes, cr);
 
 		default:
 			return bytes;
@@ -196,6 +199,56 @@ class ASMCore {
 	}
 
 	// { Improve Vanilla
+	private static byte[] alterEntity(String name, String transformedName, byte[] bytes, ClassReader cr) {
+
+		String[] names;
+		if (LoadingPlugin.runtimeDeobfEnabled) {
+			names = new String[] { "func_70091_d", "func_72945_a", "" };
+		} else {
+			names = new String[] { "moveEntity", "getCollidingBoundingBoxes", "" };
+		}
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM4);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+
+		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
+		String mOwner = "net/minecraft/world/World";
+
+		// net.minecraft.entity.Entity.moveEntity(double, double, double)
+		l: {
+			MethodNode m = null;
+			for (MethodNode n : cn.methods) {
+				if (names[0].equals(remapper.mapMethodName(name, n.name, n.desc))) {
+					m = n;
+					break;
+				}
+			}
+
+			if (m == null)
+				break l;
+
+			for (int i = 0, e = m.instructions.size(); i < e; ++i) {
+				AbstractInsnNode n = m.instructions.get(i);
+				if (n.getOpcode() == INVOKEVIRTUAL) {
+					MethodInsnNode mn = (MethodInsnNode)n;
+					if (mOwner.equals(remapper.map(mn.owner)) && names[1].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc))) {
+						mn.setOpcode(INVOKESTATIC);
+						mn.owner = "cofh/asm/HooksCore";
+						mn.desc = "(Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/AxisAlignedBB;)Ljava/util/List;";
+						mn.name = "getEntityCollisonBoxes";
+					}
+				}
+			}
+
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+		}
+
+		return bytes;
+	}
+
 	private static byte[] alterRenderBlocks(String name, String transformedName, byte[] bytes, ClassReader cr) {
 		//.renderBlockStainedGlassPane(Block, int, int, int)
 		String[] names;

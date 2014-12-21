@@ -148,11 +148,6 @@ public class CoFHCore extends BaseMod {
 	@EventHandler
 	public void loadComplete(FMLLoadCompleteEvent event) {
 
-		try {
-			FeatureParser.complete();
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
 		configCore.cleanUp(false, true);
 
 		try {

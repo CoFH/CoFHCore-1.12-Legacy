@@ -5,13 +5,19 @@ import cofh.core.item.IEqualityOverrideItem;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.ITickable;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class HooksCore {
@@ -31,6 +37,15 @@ public class HooksCore {
 		}
 
 		return ItemStack.areItemStackTagsEqual(held, lastHeld);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static List getEntityCollisonBoxes(World world, Entity entity, AxisAlignedBB bb) {
+
+		if (entity instanceof EntityItem) {
+			return world.func_147461_a(bb);
+		}
+		 return world.getCollidingBoundingBoxes(entity, bb);
 	}
 
 	@SideOnly(Side.CLIENT)
