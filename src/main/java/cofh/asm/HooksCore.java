@@ -2,10 +2,11 @@ package cofh.asm;
 
 import cofh.core.CoFHProps;
 import cofh.core.item.IEqualityOverrideItem;
+import cofh.lib.util.helpers.MathHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -18,7 +19,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -42,20 +42,34 @@ public class HooksCore {
 		return ItemStack.areItemStackTagsEqual(held, lastHeld);
 	}
 
-	@SuppressWarnings("rawtypes")
-	private static List collidingBoundingBoxes = new ArrayList();
+	public static void stackItems(EntityItem entity) {
+
+		if (!CoFHProps.enableItemStacking)
+			return;
+
+		ItemStack stack = entity.getEntityItem();
+		if (stack == null || stack.stackSize >= stack.getMaxStackSize())
+			return;
+
+        @SuppressWarnings("rawtypes")
+		Iterator iterator = entity.worldObj.getEntitiesWithinAABB(EntityItem.class, entity.boundingBox.expand(0.5D, 0.0D, 0.5D)).iterator();
+
+        while (iterator.hasNext())
+            entity.combineItems((EntityItem)iterator.next());
+	}
 
 	@SuppressWarnings("rawtypes")
 	public static List getEntityCollisonBoxes(World world, Entity entity, AxisAlignedBB bb) {
 
 		if (entity instanceof EntityItem) {
-	        collidingBoundingBoxes.clear();
-	        int i = MathHelper.floor_double(bb.minX);
-	        int j = MathHelper.floor_double(bb.maxX + 1.0D);
-	        int k = MathHelper.floor_double(bb.minY);
-	        int l = MathHelper.floor_double(bb.maxY + 1.0D);
-	        int i1 = MathHelper.floor_double(bb.minZ);
-	        int j1 = MathHelper.floor_double(bb.maxZ + 1.0D);
+			List collidingBoundingBoxes = world.collidingBoundingBoxes;
+			collidingBoundingBoxes.clear();
+	        int i = MathHelper.floor(bb.minX);
+	        int j = MathHelper.floor(bb.maxX + 1.0D);
+	        int k = MathHelper.floor(bb.minY);
+	        int l = MathHelper.floor(bb.maxY + 1.0D);
+	        int i1 = MathHelper.floor(bb.minZ);
+	        int j1 = MathHelper.floor(bb.maxZ + 1.0D);
 
 	        for (int x = i; x < j; ++x) {
 	            for (int z = i1; z < j1; ++z) {

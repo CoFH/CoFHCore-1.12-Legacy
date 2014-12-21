@@ -211,6 +211,9 @@ public class CoFHCore extends BaseMod {
 		comment = "Set to true to display death messages for any named entity.";
 		CoFHProps.enableLivingEntityDeathMessages = configCore.get(category, "EnableGenericDeathMessage", true, comment);
 
+		comment = "Set to false to disable items on the ground from trying to stack. This can improve server performance.";
+		CoFHProps.enableItemStacking = configCore.get(category, "EnableItemStacking", true, comment);
+
 		category = "gui.tooltips";
 		comment = "This adds a tooltip prompting you to press Shift for more details on various items.";
 		StringHelper.displayShiftForDetail = configCore.get(category, "DisplayHoldShiftForDetail", true, comment);

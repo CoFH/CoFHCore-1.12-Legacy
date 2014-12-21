@@ -76,6 +76,7 @@ public class CoFHProps {
 	public static boolean enableOpSecureAccess = false;
 	public static boolean enableOpSecureAccessWarning = true;
 
+	public static boolean enableItemStacking = true;
 	public static boolean enableLivingEntityDeathMessages = true;
 	public static boolean enableRenderSorting = true;
 	public static boolean enableAnimatedTexutres = true;

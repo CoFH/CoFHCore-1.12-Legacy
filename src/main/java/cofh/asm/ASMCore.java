@@ -90,6 +90,7 @@ class ASMCore {
 		hashes.put("net.minecraft.tileentity.TileEntity", (byte) 12);
 		hashes.put("net.minecraft.server.management.PlayerManager$PlayerInstance", (byte) 13);
 		hashes.put("net.minecraft.entity.Entity", (byte) 14);
+		hashes.put("net.minecraft.entity.item.EntityItem", (byte) 15);
 	}
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
@@ -192,6 +193,8 @@ class ASMCore {
 			return fixWorldGenLag(name, transformedName, bytes, cr);
 		case 14:
 			return alterEntity(name, transformedName, bytes, cr);
+		case 15:
+			return alterEntityItem(name, transformedName, bytes, cr);
 
 		default:
 			return bytes;
@@ -199,6 +202,48 @@ class ASMCore {
 	}
 
 	// { Improve Vanilla
+	private static byte[] alterEntityItem(String name, String transformedName, byte[] bytes, ClassReader cr) {
+
+		String[] names;
+		if (LoadingPlugin.runtimeDeobfEnabled) {
+			names = new String[] { "func_85054_d", "", "" };
+		} else {
+			names = new String[] { "searchForOtherItemsNearby", "", "" };
+		}
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM4);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+
+		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
+
+		l: {
+			MethodNode m = null;
+			for (MethodNode n : cn.methods) {
+				if (names[0].equals(remapper.mapMethodName(name, n.name, n.desc))) {
+					m = n;
+					break;
+				}
+			}
+
+			if (m == null)
+				break l;
+
+			m.localVariables = null;
+
+			m.instructions.clear();
+			m.instructions.add(new VarInsnNode(ALOAD, 0));
+			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asm/HooksCore", "stackItems", "(Lnet/minecraft/entity/item/EntityItem;)V", false));
+			m.instructions.add(new InsnNode(RETURN));
+
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+		}
+
+		return bytes;
+	}
+
 	private static byte[] alterEntity(String name, String transformedName, byte[] bytes, ClassReader cr) {
 
 		String[] names;
@@ -215,7 +260,6 @@ class ASMCore {
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 		String mOwner = "net/minecraft/world/World";
 
-		// net.minecraft.entity.Entity.moveEntity(double, double, double)
 		l: {
 			MethodNode m = null;
 			for (MethodNode n : cn.methods) {
