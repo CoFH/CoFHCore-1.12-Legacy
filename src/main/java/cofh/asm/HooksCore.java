@@ -61,7 +61,7 @@ public class HooksCore {
 	@SuppressWarnings("rawtypes")
 	public static List getEntityCollisonBoxes(World world, Entity entity, AxisAlignedBB bb) {
 
-		if (entity instanceof EntityItem) {
+		if (!entity.canBePushed()) {
 			List collidingBoundingBoxes = world.collidingBoundingBoxes;
 			collidingBoundingBoxes.clear();
 	        int i = MathHelper.floor(bb.minX);
@@ -72,8 +72,9 @@ public class HooksCore {
 	        int j1 = MathHelper.floor(bb.maxZ + 1.0D);
 
 	        for (int x = i; x < j; ++x) {
+	        	boolean xBound = x >= -30000000 & x < 30000000;
 	            for (int z = i1; z < j1; ++z) {
-	            	boolean def = x >= -30000000 & x < 30000000 & z >= -30000000 & z < 30000000;
+	            	boolean def = xBound & z >= -30000000 & z < 30000000;
 	                if (!world.blockExists(x, 64, z)) {
 	                	continue;
 	                }
