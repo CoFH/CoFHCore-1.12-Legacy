@@ -6,6 +6,7 @@ import cofh.lib.util.helpers.MathHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -63,6 +64,9 @@ public class HooksCore {
 
 		if (!entity.canBePushed()) {
 			List collidingBoundingBoxes = world.collidingBoundingBoxes;
+			if (collidingBoundingBoxes == null) {
+				collidingBoundingBoxes = world.collidingBoundingBoxes = new ArrayList();
+			}
 			collidingBoundingBoxes.clear();
 			int i = MathHelper.floor(bb.minX);
 			int j = MathHelper.floor(bb.maxX + 1.0D);
