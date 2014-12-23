@@ -15,6 +15,8 @@ import cofh.lib.world.WorldGenMinableCluster;
 import cofh.lib.world.WorldGenMinableLargeVein;
 import cofh.lib.world.WorldGenSparseMinableCluster;
 import cofh.lib.world.WorldGenSpike;
+import cofh.lib.world.WorldGenStalactite;
+import cofh.lib.world.WorldGenStalagmite;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenUniform;
@@ -173,12 +175,12 @@ public class UniformParser implements IFeatureParser {
 				if (genObject.has("outlineWithStone"))
 					r.outlineBlock = genObject.get("outlineWithStone").getAsBoolean() ?
 							new WeightedRandomBlock(Blocks.stone, 0) : null;
-				if (genObject.has("outlineBlock"))
-					r.outlineBlock = FeatureParser.parseBlockEntry(genObject.get("outlineBlock"));
-				if (genObject.has("gapBlock"))
-					r.gapBlock = FeatureParser.parseBlockEntry(genObject.get("gapBlock"));
-				if (genObject.has("lineWithFiller"))
-					r.lineWithFiller = genObject.get("lineWithFiller").getAsBoolean();
+							if (genObject.has("outlineBlock"))
+								r.outlineBlock = FeatureParser.parseBlockEntry(genObject.get("outlineBlock"));
+							if (genObject.has("gapBlock"))
+								r.gapBlock = FeatureParser.parseBlockEntry(genObject.get("gapBlock"));
+							if (genObject.has("lineWithFiller"))
+								r.lineWithFiller = genObject.get("lineWithFiller").getAsBoolean();
 			}
 			return r;
 		} else if ("geode".equals(template)) {
@@ -264,6 +266,66 @@ public class UniformParser implements IFeatureParser {
 					r.largeSpikeHeightVariance = genObject.get("largeSpikeHeightVariance").getAsInt();
 				if (genObject.has("largeSpikeFillerSize"))
 					r.largeSpikeFillerSize = genObject.get("largeSpikeFillerSize").getAsInt();
+			}
+			return r;
+		} else if ("stalagmite".equals(template)) {
+			ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
+			if (!entry.has("genBody")) {
+				log.info("Entry does not specify genBody for 'stalagmite' generator. Using air.");
+				list.add(new WeightedRandomBlock(Blocks.air));
+			} else {
+				if (!FeatureParser.parseResList(entry.get("genBody"), list)) {
+					log.warn("Entry specifies invalid genBody for 'stalagmite' generator! Using air!");
+					list.clear();
+					list.add(new WeightedRandomBlock(Blocks.air));
+				}
+			}
+			WorldGenStalagmite r = new WorldGenStalagmite(resList, matList, list);
+			{
+				if (genObject.has("minHeight"))
+					r.minHeight = genObject.get("minHeight").getAsInt();
+				if (genObject.has("heightVariance"))
+					r.heightVariance = genObject.get("heightVariance").getAsInt();
+				if (genObject.has("sizeVariance"))
+					r.sizeVariance = genObject.get("sizeVariance").getAsInt();
+				if (genObject.has("heightMod"))
+					r.heightMod = genObject.get("heightMod").getAsInt();
+				if (genObject.has("genSize"))
+					r.genSize = genObject.get("genSize").getAsInt();
+				if (genObject.has("smooth"))
+					r.smooth = genObject.get("smooth").getAsBoolean();
+				if (genObject.has("fat"))
+					r.fat = genObject.get("fat").getAsBoolean();
+			}
+			return r;
+		} else if ("stalactite".equals(template)) {
+			ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
+			if (!entry.has("genBody")) {
+				log.info("Entry does not specify genBody for 'stalactite' generator. Using air.");
+				list.add(new WeightedRandomBlock(Blocks.air));
+			} else {
+				if (!FeatureParser.parseResList(entry.get("genBody"), list)) {
+					log.warn("Entry specifies invalid genBody for 'stalactite' generator! Using air!");
+					list.clear();
+					list.add(new WeightedRandomBlock(Blocks.air));
+				}
+			}
+			WorldGenStalactite r = new WorldGenStalactite(resList, matList, list);
+			{
+				if (genObject.has("minHeight"))
+					r.minHeight = genObject.get("minHeight").getAsInt();
+				if (genObject.has("heightVariance"))
+					r.heightVariance = genObject.get("heightVariance").getAsInt();
+				if (genObject.has("sizeVariance"))
+					r.sizeVariance = genObject.get("sizeVariance").getAsInt();
+				if (genObject.has("heightMod"))
+					r.heightMod = genObject.get("heightMod").getAsInt();
+				if (genObject.has("genSize"))
+					r.genSize = genObject.get("genSize").getAsInt();
+				if (genObject.has("smooth"))
+					r.smooth = genObject.get("smooth").getAsBoolean();
+				if (genObject.has("fat"))
+					r.fat = genObject.get("fat").getAsBoolean();
 			}
 			return r;
 		} else if ("dungeon".equals(template)) {
