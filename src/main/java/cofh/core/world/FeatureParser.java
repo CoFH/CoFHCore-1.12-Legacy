@@ -55,6 +55,7 @@ public class FeatureParser {
 	private static final String vanillaGenInternal = "assets/cofh/world/Vanilla.json";
 	private static HashMap<String, IFeatureParser> templateHandlers = new HashMap<String, IFeatureParser>();
 	private static Logger log = LogManager.getLogger("CoFHWorld");
+	public static ArrayList<IFeatureGenerator> parsedFeatures = new ArrayList<IFeatureGenerator>();
 
 	private FeatureParser() {
 
@@ -274,6 +275,7 @@ public class FeatureParser {
 		if (template != null) {
 			IFeatureGenerator feature = template.parseFeature(featureName, genObject, log);
 			if (feature != null) {
+				parsedFeatures.add(feature);
 				return WorldHandler.addFeature(feature);
 			}
 			log.warn("Template '" + templateName + "' failed to parse its entry!");

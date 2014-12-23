@@ -32,6 +32,7 @@ public class CommandHandler extends CommandBase {
 		registerSubCommand(CommandClearBlock.instance);
 		registerSubCommand(CommandReplaceBlock.instance);
 		registerSubCommand(CommandUnloadChunk.instance);
+		registerSubCommand(CommandReloadWorldgen.instance);
 	}
 
 	public static void initCommands(FMLServerStartingEvent event) {

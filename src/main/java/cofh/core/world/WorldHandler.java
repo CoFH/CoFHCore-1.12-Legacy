@@ -101,6 +101,21 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		}
 	}
 
+	public boolean removeFeature(IFeatureGenerator feature) {
+
+		String featureName = feature.getFeatureName();
+		if (featureName == null) {
+			return false;
+		}
+		if (featureNames.contains(featureName)) {
+			featureNames.remove(featureName);
+			features.remove(feature);
+			genHash -= featureName.hashCode();
+		}
+
+		return true;
+	}
+
 	private WorldHandler() {
 
 	}
