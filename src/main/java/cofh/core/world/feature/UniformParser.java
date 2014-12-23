@@ -296,6 +296,8 @@ public class UniformParser implements IFeatureParser {
 					r.smooth = genObject.get("smooth").getAsBoolean();
 				if (genObject.has("fat"))
 					r.fat = genObject.get("fat").getAsBoolean();
+				if (genObject.has("altSinc"))
+					r.altSinc = genObject.get("altSinc").getAsBoolean();
 			}
 			return r;
 		} else if ("stalactite".equals(template)) {
@@ -326,6 +328,8 @@ public class UniformParser implements IFeatureParser {
 					r.smooth = genObject.get("smooth").getAsBoolean();
 				if (genObject.has("fat"))
 					r.fat = genObject.get("fat").getAsBoolean();
+				if (genObject.has("altSinc"))
+					r.altSinc = genObject.get("altSinc").getAsBoolean();
 			}
 			return r;
 		} else if ("dungeon".equals(template)) {
