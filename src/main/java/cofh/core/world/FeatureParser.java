@@ -2,8 +2,18 @@ package cofh.core.world;
 
 import cofh.api.world.IFeatureGenerator;
 import cofh.api.world.IFeatureParser;
+import cofh.api.world.IGeneratorParser;
 import cofh.core.CoFHProps;
 import cofh.core.util.CoreUtils;
+import cofh.core.world.decoration.BoulderParser;
+import cofh.core.world.decoration.ClusterParser;
+import cofh.core.world.decoration.DungeonParser;
+import cofh.core.world.decoration.GeodeParser;
+import cofh.core.world.decoration.LakeParser;
+import cofh.core.world.decoration.LargeVeinParser;
+import cofh.core.world.decoration.SpikeParser;
+import cofh.core.world.decoration.StalagmiteParser;
+import cofh.core.world.feature.CaveParser;
 import cofh.core.world.feature.DecorationParser;
 import cofh.core.world.feature.FractalParser;
 import cofh.core.world.feature.NormalParser;
@@ -42,6 +52,7 @@ import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.biome.BiomeGenBase.TempCategory;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DungeonHooks.DungeonMob;
 
@@ -54,6 +65,7 @@ public class FeatureParser {
 	private static File vanillaGen;
 	private static final String vanillaGenInternal = "assets/cofh/world/Vanilla.json";
 	private static HashMap<String, IFeatureParser> templateHandlers = new HashMap<String, IFeatureParser>();
+	private static HashMap<String, IGeneratorParser> generatorHandlers = new HashMap<String, IGeneratorParser>();
 	private static Logger log = LogManager.getLogger("CoFHWorld");
 	public static ArrayList<IFeatureGenerator> parsedFeatures = new ArrayList<IFeatureGenerator>();
 
@@ -69,6 +81,17 @@ public class FeatureParser {
 			return true;
 		}
 		log.error("Attempted to register duplicate template '" + template + "'!");
+		return false;
+	}
+
+	public static boolean registerGenerator(String template, IGeneratorParser handler) {
+
+		// TODO: provide this function through IFeatureHandler?
+		if (!generatorHandlers.containsKey(template)) {
+			generatorHandlers.put(template, handler);
+			return true;
+		}
+		log.error("Attempted to register duplicate generator '" + template + "'!");
 		return false;
 	}
 
@@ -101,6 +124,24 @@ public class FeatureParser {
 		registerTemplate("decoration", new DecorationParser());
 		registerTemplate("underfluid", new UnderfluidParser());
 		registerTemplate("underwater", new UnderfluidParser());
+		registerTemplate("cave", new CaveParser());
+
+		log.info("Registering default generators");
+		registerGenerator(null, new ClusterParser(false));
+		registerGenerator("", new ClusterParser(false));
+		registerGenerator("cluster", new ClusterParser(false));
+		registerGenerator("sparse-cluster", new ClusterParser(true));
+		registerGenerator("large-vein", new LargeVeinParser());
+		registerGenerator("decoration", new DecorationParser());
+		registerGenerator("lake", new LakeParser());
+		registerGenerator("geode", new GeodeParser());
+		registerGenerator("spike", new SpikeParser());
+		registerGenerator("boulder", new BoulderParser());
+		registerGenerator("dungeon", new DungeonParser());
+		registerGenerator("stalagmite", new StalagmiteParser(false));
+		registerGenerator("statactite", new StalagmiteParser(true));
+
+		log.info("Complete");
 	}
 
 	public static void complete() {
@@ -299,6 +340,28 @@ public class FeatureParser {
 	}
 
 	// TODO: move these helper functions outside core?
+
+	public static WorldGenerator parseGenerator(String def, JsonObject genObject, List<WeightedRandomBlock> resList,
+			int clusterSize, List<WeightedRandomBlock> matList) {
+
+		JsonElement genElement = genObject.get("template");
+		String name = def;
+		if (genElement.isJsonObject()) {
+			genObject = genElement.getAsJsonObject();
+			name = genObject.get("generator").getAsString();
+			if (!generatorHandlers.containsKey(name)) {
+				log.warn("Unknown generator '%s'! using '%s'", name, def);
+				name = def;
+			}
+		}
+
+		IGeneratorParser parser = generatorHandlers.get(name);
+		if (parser == null) {
+			throw new IllegalStateException("Generator " + name + " is not registered!");
+		}
+
+		return parser.parseGenerator(name, genObject, log, resList, clusterSize, matList);
+	}
 
 	public static BiomeInfoSet parseBiomeRestrictions(JsonObject genObject) {
 		BiomeInfoSet set = null;
