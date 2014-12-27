@@ -64,22 +64,38 @@ info.cofh.source=Источник
 info.cofh.transfer=Передача
 info.cofh.tutorial=Руководство
 info.cofh.unlocked=Открыто
+info.cofh.success=Успех!
 
-info.cofh.command.friend=Команда, чтобы добавить и удалить друзей из вашего списка друзей.
-info.cofh.command.help=Команда, чтобы помочь с другими командами!
-info.cofh.command.killall=Убивает всех существ данного имени и по умолчанию убивает всех враждебных мобов..
-info.cofh.command.tps=Получает такты в секунду на сервере. На прекрасном сервере это должно быть 20.
+info.cofh.command.friend=Команда для добавления и удаления друзей из Вашего списка друзей.
+info.cofh.command.help=Команда для помощи по другим командам!
+info.cofh.command.syntax=Команда для помощи по синтаксис командам!
+info.cofh.command.killall=Убивает всех существ с данным именем и по умолчанию убивает всех враждебных мобов.
+info.cofh.command.tps=Информация о тактах в секунду на сервере. На прекрасном сервере должно быть 20 тактов.
 info.cofh.command.tpx=Улучшенная версия команды /tp, которая работает между измерениями.
-info.cofh.command.version=Выдаёт версию этого мода.
+info.cofh.command.version=Показывает версию этого мода.
+info.cofh.command.enchant=Улучшенная команда /enchant. Нет ограничений по уровням или применениям.
+info.cofh.command.clearblocks=Убирает указанные блоки из указанной территории в мире.
+info.cofh.command.replaceblocks=Заменяет указанные блоки из указанной территории в мире.
+
+info.cofh.command.friend.syntax=/cofh friend {gui | add <имя пользователя> | remove <имя пользователя>}
+info.cofh.command.help.syntax=/cofh help [команда]
+info.cofh.command.syntax.syntax=/cofh syntax [команда]
+info.cofh.command.killall.syntax=/cofh killall [частичное имя]
+info.cofh.command.tps.syntax=/cofh tps [{o | a | <ID измерения>}]
+info.cofh.command.tpx.syntax=/cofh tpx [игрок] {(<игрок> | <измерение>) | <x> <y> <z> [измерение]}
+info.cofh.command.version.syntax=/cofh version
+info.cofh.command.enchant.syntax=/cofh enchant [игрок] <ID зачарования> [уровень]
+info.cofh.command.clearblocks.syntax=/cofh clearblocks {<user> <координата x> <координата y> <координата z> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} [block#meta] [block#meta] ...
+info.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<user> <координата x> <координата y> <координата z> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} <replaceBlock#meta> [block#meta] [block#meta] ...
 
 info.cofh.command.syntaxError=Неправильный синтаксис.
 
-info.cofh.command.friend.0=успшено добавлен в ваш список друзей.
+info.cofh.command.friend.0=успшено добавлен в Ваш список друзей.
 info.cofh.command.friend.1=Извините, возникла проблема при добавлении
-info.cofh.command.friend.2=в ваш список.
+info.cofh.command.friend.2=в Ваш список.
 info.cofh.command.friend.3=Извините, это имя не допустимо.
-info.cofh.command.friend.4=успешно удалён из вашего списка друзей.
-info.cofh.command.friend.5=не был вашим другом.
+info.cofh.command.friend.4=успешно удалён из Вашего списка друзей.
+info.cofh.command.friend.5=не был Вашим другом.
 info.cofh.command.help.0=Доступны следующие команды:
 info.cofh.command.killall.0=
 info.cofh.command.killall.1=
