@@ -40,11 +40,11 @@ public class DecorationParser extends SurfaceParser implements IGeneratorParser 
 		if (genObject.has("stackHeight"))
 			r.stackHeight = genObject.get("stackHeight").getAsInt();
 		if (genObject.has("xVariance"))
-			r.stackHeight = genObject.get("xVariance").getAsInt();
+			r.xVar = genObject.get("xVariance").getAsInt();
 		if (genObject.has("yVariance"))
-			r.stackHeight = genObject.get("yVariance").getAsInt();
+			r.yVar = genObject.get("yVariance").getAsInt();
 		if (genObject.has("zVariance"))
-			r.stackHeight = genObject.get("zVariance").getAsInt();
+			r.zVar = genObject.get("zVariance").getAsInt();
 		return r;
 	}
 
