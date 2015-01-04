@@ -1,4 +1,4 @@
-package irclib;
+package irclibj;
 
 public class Base64 {
 

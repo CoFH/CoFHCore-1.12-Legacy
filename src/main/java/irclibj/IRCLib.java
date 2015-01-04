@@ -1,4 +1,4 @@
-package irclib;
+package irclibj;
 
 import cofh.plugin.ForgeIRC;
 
@@ -149,9 +149,12 @@ public class IRCLib extends Thread {
 		return false;
 	}
 
+	private static String validNick = "[A-}][0-9A-}-]*";
+	private static String validUser = "(?:(?=[\u0001-\u00ff])[^\\s@])+";
+	private static Pattern mask = Pattern.compile(":("+validNick+")!("+validUser+")@("+validUser+')');
 	protected Matcher parseMask(String m) {
 
-		Matcher iUser = Pattern.compile(":(.*)!(.*)@(.*)").matcher(m);
+		Matcher iUser = mask.matcher(m);
 		return iUser.matches() ? iUser : null;
 	}
 
