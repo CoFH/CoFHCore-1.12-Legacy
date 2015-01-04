@@ -187,9 +187,12 @@ public class IRCLib extends Thread {
 			sendRaw("CAP END");
 		} else if (!sCommand.toUpperCase().trim().equals("432")) {
 			if (sCommand.toUpperCase().trim().equals("NICK")) {
-				this.sNick = sParsed[2].replaceFirst(":", "");
-				String snNick = sParsed[0].split("!")[0].replaceFirst(":", "");
-				onNick(snNick, this.sNick);
+				Matcher iUser = parseMask(sParsed[0]);
+				if (iUser != null && iUser.group(1).equals(this.sNick)) {
+					this.sNick = sParsed[2].replaceFirst(":", "");
+					String snNick = sParsed[0].split("!")[0].replaceFirst(":", "");
+					onNick(snNick, this.sNick);
+				}
 			} else if (sCommand.toUpperCase().trim().equals("JOIN")) {
 				Matcher iUser = parseMask(sParsed[0]);
 				String sOrigin = iUser == null ? sParsed[0].replaceFirst(":", "") : iUser.group(1);
