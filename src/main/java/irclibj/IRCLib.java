@@ -190,7 +190,7 @@ public class IRCLib extends Thread {
 				Matcher iUser = parseMask(sParsed[0]);
 				if (iUser != null && iUser.group(1).equals(this.sNick)) {
 					this.sNick = sParsed[2].replaceFirst(":", "");
-					String snNick = sParsed[0].split("!")[0].replaceFirst(":", "");
+					String snNick = iUser.group(1);
 					onNick(snNick, this.sNick);
 				}
 			} else if (sCommand.toUpperCase().trim().equals("JOIN")) {
