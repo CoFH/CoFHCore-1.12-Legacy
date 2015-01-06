@@ -30,9 +30,10 @@ public class LakeParser implements IGeneratorParser {
 						new WeightedRandomBlock(Blocks.stone, 0) : null;
 			}
 			if (genObject.has("outlineBlock"))
-				r.outlineBlock = FeatureParser.parseBlockEntry(genObject.get("outlineBlock"));
+				r.outlineBlock = FeatureParser.parseBlockEntry(genObject.get("outlineBlock"), true);
 			if (genObject.has("gapBlock"))
-				r.gapBlock = FeatureParser.parseBlockEntry(genObject.get("gapBlock"));
+				r.gapBlock = FeatureParser.parseBlockEntry(genObject.get("gapBlock"), true);
+			// TODO: convert the above to to lists
 			if (genObject.has("lineWithFiller"))
 				r.lineWithFiller = genObject.get("lineWithFiller").getAsBoolean();
 		}

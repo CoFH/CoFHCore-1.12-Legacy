@@ -455,8 +455,9 @@ public class FeatureParser {
 		return GameRegistry.findBlock(blockTokens.length > 1 ? blockTokens[i++] : "minecraft", blockTokens[i]);
 	}
 
-	public static WeightedRandomBlock parseBlockEntry(JsonElement genElement) {
+	public static WeightedRandomBlock parseBlockEntry(JsonElement genElement, boolean clamp) {
 
+		final int min = clamp ? 0 : -1;
 		if (genElement.isJsonNull()) {
 			log.warn("Null Block entry!");
 			return null;
@@ -471,7 +472,7 @@ public class FeatureParser {
 				log.error("Invalid block entry!");
 				return null;
 			}
-			int metadata = blockElement.has("metadata") ? MathHelper.clampI(blockElement.get("metadata").getAsInt(), 0, 15) : 0;
+			int metadata = blockElement.has("metadata") ? MathHelper.clampI(blockElement.get("metadata").getAsInt(), min, 15) : min;
 			int weight = blockElement.has("weight") ? MathHelper.clampI(blockElement.get("weight").getAsInt(), 1, 1000000) : 100;
 			return new WeightedRandomBlock(block, metadata, weight);
 		} else {
@@ -480,24 +481,24 @@ public class FeatureParser {
 				log.error("Invalid block entry!");
 				return null;
 			}
-			return new WeightedRandomBlock(block, 0);
+			return new WeightedRandomBlock(block, min);
 		}
 	}
 
-	public static boolean parseResList(JsonElement genElement, List<WeightedRandomBlock> resList) {
+	public static boolean parseResList(JsonElement genElement, List<WeightedRandomBlock> resList, boolean clamp) {
 
 		if (genElement.isJsonArray()) {
 			JsonArray blockList = genElement.getAsJsonArray();
 
 			for (int i = 0, e = blockList.size(); i < e; i++) {
-				WeightedRandomBlock entry = parseBlockEntry(blockList.get(i));
+				WeightedRandomBlock entry = parseBlockEntry(blockList.get(i), clamp);
 				if (entry == null) {
 					return false;
 				}
 				resList.add(entry);
 			}
 		} else {
-			WeightedRandomBlock entry = parseBlockEntry(genElement);
+			WeightedRandomBlock entry = parseBlockEntry(genElement, clamp);
 			if (entry == null) {
 				return false;
 			}

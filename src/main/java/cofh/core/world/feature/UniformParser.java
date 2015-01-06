@@ -39,7 +39,7 @@ public class UniformParser implements IFeatureParser {
 	public IFeatureGenerator parseFeature(String featureName, JsonObject genObject, Logger log) {
 
 		List<WeightedRandomBlock> resList = new ArrayList<WeightedRandomBlock>();
-		if (!FeatureParser.parseResList(genObject.get("block"), resList)) {
+		if (!FeatureParser.parseResList(genObject.get("block"), resList, true)) {
 			return null;
 		}
 
@@ -110,7 +110,7 @@ public class UniformParser implements IFeatureParser {
 		List<WeightedRandomBlock> matList = defaultMaterial;
 		if (genObject.has("material")) {
 			matList = new ArrayList<WeightedRandomBlock>();
-			if (!FeatureParser.parseResList(genObject.get("material"), matList)) {
+			if (!FeatureParser.parseResList(genObject.get("material"), matList, false)) {
 				log.warn("Invalid material list! Using default list.");
 				matList = defaultMaterial;
 			}

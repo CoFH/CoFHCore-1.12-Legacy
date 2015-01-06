@@ -26,7 +26,7 @@ public class DecorationParser extends SurfaceParser implements IGeneratorParser 
 			log.info("Entry does not specify genSurface for 'decoration' generator. Using grass.");
 			list.add(new WeightedRandomBlock(Blocks.grass));
 		} else {
-			if (!FeatureParser.parseResList(genObject.get("genSurface"), list)) {
+			if (!FeatureParser.parseResList(genObject.get("genSurface"), list, false)) {
 				log.warn("Entry specifies invalid genSurface for 'decoration' generator! Using grass!");
 				list.clear();
 				list.add(new WeightedRandomBlock(Blocks.grass));

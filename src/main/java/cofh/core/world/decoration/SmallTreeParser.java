@@ -25,7 +25,7 @@ public class SmallTreeParser implements IGeneratorParser {
 		if (genObject.has("leaves")) {
 			list = new ArrayList<WeightedRandomBlock>();
 			JsonElement entry = genObject.get("leaves");
-			if (!entry.isJsonNull() && !FeatureParser.parseResList(entry, list)) {
+			if (!entry.isJsonNull() && !FeatureParser.parseResList(entry, list, true)) {
 				log.warn("Entry specifies invalid leaves for 'smalltree' generator!");
 				list.clear();
 			}
@@ -50,7 +50,7 @@ public class SmallTreeParser implements IGeneratorParser {
 			if (genObject.has("genSurface")) {
 				list = new ArrayList<WeightedRandomBlock>();
 				JsonElement entry = genObject.get("genSurface");
-				if (!entry.isJsonNull() && !FeatureParser.parseResList(entry, list)) {
+				if (!entry.isJsonNull() && !FeatureParser.parseResList(entry, list, false)) {
 					log.warn("Entry specifies invalid genSurface for 'smalltree' generator! Using grass!");
 					list.clear();
 					list.add(new WeightedRandomBlock(Blocks.grass));

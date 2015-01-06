@@ -40,7 +40,7 @@ public class DungeonParser implements IGeneratorParser {
 		WorldGenDungeon r = new WorldGenDungeon(resList, matList, mobList);
 		if (genObject.has("spawnerFloor")) {
 			resList = new ArrayList<WeightedRandomBlock>();
-			if (FeatureParser.parseResList(genObject.get("spawnerFloor"), resList)) {
+			if (FeatureParser.parseResList(genObject.get("spawnerFloor"), resList, true)) {
 				r.floor = resList;
 			} else {
 				log.warn("Entry specifies invalid block list for 'spawnerFloor'! Using walls.");
