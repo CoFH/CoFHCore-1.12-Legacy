@@ -23,6 +23,8 @@ public class BoulderParser implements IGeneratorParser {
 				r.sizeVariance = genObject.get("sizeVariance").getAsInt();
 			if (genObject.has("count"))
 				r.clusters = genObject.get("count").getAsInt();
+			if (genObject.has("countVariance"))
+				r.clusterVariance = genObject.get("countVariance").getAsInt();
 		}
 		return r;
 	}
