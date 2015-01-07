@@ -6,6 +6,8 @@ import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.world.WorldGenAdvLakes;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.init.Blocks;
@@ -27,13 +29,28 @@ public class LakeParser implements IGeneratorParser {
 		{
 			if (genObject.has("outlineWithStone")) {
 				r.outlineBlock = genObject.get("outlineWithStone").getAsBoolean() ?
-						new WeightedRandomBlock(Blocks.stone, 0) : null;
+						Arrays.asList(new WeightedRandomBlock(Blocks.stone, 0)) : null;
 			}
-			if (genObject.has("outlineBlock"))
-				r.outlineBlock = FeatureParser.parseBlockEntry(genObject.get("outlineBlock"), true);
-			if (genObject.has("gapBlock"))
-				r.gapBlock = FeatureParser.parseBlockEntry(genObject.get("gapBlock"), true);
-			// TODO: convert the above to to lists
+			ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
+			if (genObject.has("outlineBlock")) {
+				if (!FeatureParser.parseResList(genObject.get("outlineBlock"), list, true)) {
+					log.warn("Entry specifies invalid outlineBlock for 'lake' generator! Not filling!");
+				} else {
+					r.gapBlock = list;
+				}
+				list = new ArrayList<WeightedRandomBlock>();
+			}
+			if (genObject.has("gapBlock")) {
+				if (!FeatureParser.parseResList(genObject.get("gapBlock"), list, true)) {
+					log.warn("Entry specifies invalid gapBlock for 'lake' generator! Not filling!");
+				} else {
+					r.gapBlock = list;
+				}
+			}
+			if (genObject.has("solidOutline"))
+				r.solidOutline = genObject.get("solidOutline").getAsBoolean();
+			if (genObject.has("totalOutline"))
+				r.totalOutline = genObject.get("totalOutline").getAsBoolean();
 		}
 		return r;
 	}
