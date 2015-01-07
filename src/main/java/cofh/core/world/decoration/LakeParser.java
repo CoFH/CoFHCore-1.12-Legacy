@@ -34,8 +34,6 @@ public class LakeParser implements IGeneratorParser {
 			if (genObject.has("gapBlock"))
 				r.gapBlock = FeatureParser.parseBlockEntry(genObject.get("gapBlock"), true);
 			// TODO: convert the above to to lists
-			if (genObject.has("lineWithFiller"))
-				r.lineWithFiller = genObject.get("lineWithFiller").getAsBoolean();
 		}
 		return r;
 	}
