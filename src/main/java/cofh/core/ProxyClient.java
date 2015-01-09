@@ -12,6 +12,7 @@ import cofh.core.gui.element.TabTutorial;
 import cofh.core.key.CoFHKey;
 import cofh.core.render.CoFHFontRender;
 import cofh.core.render.IconRegistry;
+import cofh.core.render.ShaderHelper;
 import cofh.core.util.KeyBindingEmpower;
 import cofh.core.util.SocialRegistry;
 import cofh.core.util.TickHandlerEnderRegistry;
@@ -166,6 +167,8 @@ public class ProxyClient extends Proxy {
 		TabRedstone.initialize();
 		TabSecurity.initialize();
 		TabTutorial.initialize();
+
+        ShaderHelper.initShaders();
 
 		String comment = "Set to false to disable any particles from spawning in minecraft.";
 		if (!CoFHCore.configClient.get(Configuration.CATEGORY_GENERAL, "EnableParticles", true, comment)) {
