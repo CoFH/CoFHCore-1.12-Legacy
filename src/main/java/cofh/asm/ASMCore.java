@@ -79,7 +79,7 @@ class ASMCore {
 		hashes.put("skyboy.core.world.WorldProxy", (byte) 3);
 		hashes.put("skyboy.core.world.WorldServerProxy", (byte) 4);
 		hashes.put("net.minecraft.block.BlockPane", (byte) 5);
-		hashes.put("net.minecraft.inventory.Container", (byte) 6);
+		// UNUSED: hashes.put("", (byte) 6);
 		hashes.put("net.minecraft.client.multiplayer.PlayerControllerMP", (byte) 7);
 		hashes.put("net.minecraft.util.LongHashMap", (byte) 8);
 		if (Boolean.parseBoolean(System.getProperty("cofh.lightedit", "true"))) {
@@ -175,8 +175,8 @@ class ASMCore {
 			return writeWorldServerProxy(name, bytes, cr);
 		case 5:
 			return alterBlockPane(name, transformedName, bytes, cr);
-		case 6:
-			return alterContainer(name, transformedName, bytes, cr);
+		case 6: // UNUSED
+			return bytes;
 		case 7:
 			return alterController(name, transformedName, bytes, cr);
 		case 8:
@@ -703,57 +703,6 @@ class ASMCore {
 					}
 				}
 			}
-
-			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-			cn.accept(cw);
-			bytes = cw.toByteArray();
-		}
-		return bytes;
-	}
-
-	private static byte[] alterContainer(String name, String transformedName, byte[] bytes, ClassReader cr) {
-
-		String[] names;
-		if (LoadingPlugin.runtimeDeobfEnabled) {
-			names = new String[] { "func_75135_a", "field_75151_b" };
-		} else {
-			names = new String[] { "mergeItemStack", "inventorySlots" };
-		}
-
-		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
-		cr.accept(cn, ClassReader.EXPAND_FRAMES);
-
-		final String sig = "(Lnet/minecraft/item/ItemStack;IIZ)Z";
-		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
-
-		l: {
-			MethodNode m = null;
-			for (MethodNode n : cn.methods) {
-				if (names[0].equals(remapper.mapMethodName(name, n.name, n.desc)) && sig.equals(remapper.mapMethodDesc(n.desc))) {
-					m = n;
-					break;
-				}
-			}
-
-			if (m == null) {
-				break l;
-			}
-
-			m.instructions.clear();
-			m.instructions.add(new VarInsnNode(ALOAD, 0));
-			m.instructions.add(new FieldInsnNode(GETFIELD, name, names[1], "Ljava/util/List;"));
-			m.instructions.add(new VarInsnNode(ALOAD, 1));
-			m.instructions.add(new VarInsnNode(ILOAD, 2));
-			m.instructions.add(new VarInsnNode(ILOAD, 3));
-			m.instructions.add(new VarInsnNode(ILOAD, 4));
-			m.instructions.add(new InsnNode(ICONST_0));
-			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/lib/util/helpers/InventoryHelper", "mergeItemStack",
-					"(Ljava/util/List;Lnet/minecraft/item/ItemStack;IIZZ)Z", false));
-			m.instructions.add(new InsnNode(IRETURN));
-
-			// this fixes a crash in dev and with cauldron
-			m.localVariables = null;
 
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 			cn.accept(cw);
