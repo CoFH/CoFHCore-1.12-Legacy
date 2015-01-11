@@ -168,21 +168,25 @@ public final class ShaderHelper {
 			return "";
 
 		try {
-			reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-
 			try {
-				String line;
-				while ((line = reader.readLine()) != null)
-					source.append(line).append('\n');
+				reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+
+				try {
+					String line;
+					while ((line = reader.readLine()) != null)
+						source.append(line).append('\n');
+				} catch (Exception exc) {
+					exception = exc;
+				}
 			} catch (Exception exc) {
 				exception = exc;
+			} finally {
+				in.close();
 			}
 		} finally {
 			try {
 				if (reader != null)
 					reader.close();
-				else
-					in.close();
 			} finally {
 				if (exception != null)
 					throw exception;
