@@ -97,7 +97,7 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
 
 	protected AxisAlignedBB getStatelessBoundingBox(World world, int x, int y, int z) {
 
-		return null;
+		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 
 	@Override
