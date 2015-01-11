@@ -1,13 +1,15 @@
 package cofh.repack.codechicken.lib.config;
 
-import cofh.repack.codechicken.lib.colour.Colour;
-import cofh.repack.codechicken.lib.colour.ColourRGBA;
-
 import java.io.PrintWriter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ConfigTag extends ConfigTagParent {
+
+	public interface IConfigType<T> {
+
+		public String configValue(T entry);
+
+		public T valueOf(String text) throws Exception;
+	}
 
 	public ConfigTag(ConfigTagParent parent, String name) {
 
@@ -69,13 +71,9 @@ public class ConfigTag extends ConfigTagParent {
 		setValue("0x" + Long.toString(((long) i) << 32 >>> 32, 16));
 	}
 
-	public void setColourRGB(Colour c) {
+	public <T> void set(IConfigType<T> type, T entry) {
 
-		String s = Long.toString(((long) c.rgb()) << 32 >>> 32, 16);
-		while (s.length() < 6) {
-			s = "0" + s;
-		}
-		setValue("0x" + s.toUpperCase());
+		setValue(type.configValue(entry));
 	}
 
 	public String getValue() {
@@ -96,15 +94,14 @@ public class ConfigTag extends ConfigTagParent {
 
 	public int getIntValue(int defaultvalue) {
 
-		if (value == null) {
-			setIntValue(defaultvalue);
-		}
 		try {
-			return getIntValue();
-		} catch (NumberFormatException nfe) {
-			setIntValue(defaultvalue);
-			return getIntValue();
-		}
+			if (value != null) {
+				return getIntValue();
+			}
+		} catch (NumberFormatException ignored) {}
+
+		setIntValue(defaultvalue);
+		return defaultvalue;
 	}
 
 	public boolean getBooleanValue() {
@@ -120,15 +117,14 @@ public class ConfigTag extends ConfigTagParent {
 
 	public boolean getBooleanValue(boolean defaultvalue) {
 
-		if (value == null) {
-			setBooleanValue(defaultvalue);
-		}
 		try {
-			return getBooleanValue();
-		} catch (NumberFormatException nfe) {
-			setBooleanValue(defaultvalue);
-			return getBooleanValue();
-		}
+			if (value != null) {
+				return getBooleanValue();
+			}
+		} catch (NumberFormatException ignored) {}
+
+		setBooleanValue(defaultvalue);
+		return defaultvalue;
 	}
 
 	public int getHexValue() {
@@ -138,40 +134,35 @@ public class ConfigTag extends ConfigTagParent {
 
 	public int getHexValue(int defaultvalue) {
 
-		if (value == null) {
-			setHexValue(defaultvalue);
-		}
 		try {
-			return getHexValue();
-		} catch (NumberFormatException nfe) {
-			setHexValue(defaultvalue);
-			return getHexValue();
+			if (value != null) {
+				return getHexValue();
+			}
+		} catch (NumberFormatException ignored) {}
+
+		setHexValue(defaultvalue);
+		return defaultvalue;
+	}
+
+	public <T> T get(IConfigType<T> type) {
+
+		try {
+			return type.valueOf(getValue());
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 
-	private static final Pattern patternRGB = Pattern.compile("(\\d+),(\\d+),(\\d+)");
-
-	public Colour getColourRGB() {
-
-		Matcher matcherRGB = patternRGB.matcher(getValue().replaceAll("\\s", ""));
-		if (matcherRGB.matches()) {
-			return new ColourRGBA(Integer.parseInt(matcherRGB.group(1)), Integer.parseInt(matcherRGB.group(2)), Integer.parseInt(matcherRGB.group(3)), 0xFF);
-		}
-
-		return new ColourRGBA(getHexValue() << 8 | 0xFF);
-	}
-
-	public Colour getColourRGB(Colour defaultvalue) {
-
-		if (value == null) {
-			setColourRGB(defaultvalue);
-		}
+	public <T> T get(IConfigType<T> type, T defaultValue) {
+		
 		try {
-			return getColourRGB();
-		} catch (NumberFormatException nfe) {
-			setColourRGB(defaultvalue);
-			return getColourRGB();
-		}
+			if (value != null) {
+				return get(type);
+			}
+		} catch (Exception ignored) {}
+
+		set(type, defaultValue);
+		return defaultValue;
 	}
 
 	public void save(PrintWriter writer, int tabs, String bracequalifier, boolean first) {

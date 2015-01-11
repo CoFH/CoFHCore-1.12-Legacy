@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.data.AnimationMetadataSection;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
 
@@ -26,6 +27,9 @@ public class TextureSpecial extends TextureAtlasSprite implements IIconSelfRegis
 
 	// textureFX fields
 	private TextureFX textureFX;
+	private int mipmapLevels;
+	private int rawWidth;
+	private int rawHeight;
 
 	private int blankSize = -1;
 	private ArrayList<TextureDataHolder> baseTextures;
@@ -65,7 +69,7 @@ public class TextureSpecial extends TextureAtlasSprite implements IIconSelfRegis
 
 		super.initSprite(sheetWidth, sheetHeight, originX, originY, rotated);
 		if (textureFX != null) {
-			textureFX.onTextureDimensionsUpdate(width, height);
+			textureFX.onTextureDimensionsUpdate(rawWidth, rawHeight);
 		}
 	}
 
@@ -75,9 +79,55 @@ public class TextureSpecial extends TextureAtlasSprite implements IIconSelfRegis
 		if (textureFX != null) {
 			textureFX.update();
 			if (textureFX.changed()) {
-				TextureUtil.uploadTextureMipmap(new int[][] { textureFX.imageData }, width, height, originX, originY, false, false);
+				int[][] mipmaps = new int[mipmapLevels + 1][];
+				mipmaps[0] = textureFX.imageData;
+				mipmaps = prepareAnisotropicFiltering(mipmaps);
+				mipmaps = TextureUtil.generateMipmapData(mipmapLevels, width, mipmaps);
+				TextureUtil.uploadTextureMipmap(mipmaps, width, height, originX, originY, false, false);
 			}
 		}
+	}
+
+	/**
+	 * Copy paste mojang code because it's private, and CCL can't have access transformers or reflection
+	 */
+	public int[][] prepareAnisotropicFiltering(int[][] mipmaps) {
+
+		if (Minecraft.getMinecraft().gameSettings.anisotropicFiltering <= 1) {
+			return mipmaps;
+		} else {
+
+			int[][] aint1 = new int[mipmaps.length][];
+
+			for (int k = 0; k < mipmaps.length; ++k) {
+
+				int[] aint2 = mipmaps[k];
+
+				if (aint2 != null) {
+
+					int[] aint3 = new int[(rawWidth + 16 >> k) * (rawHeight + 16 >> k)];
+					System.arraycopy(aint2, 0, aint3, 0, aint2.length);
+					aint1[k] = TextureUtil.prepareAnisotropicData(aint3, rawWidth >> k, rawHeight >> k, 8 >> k);
+				}
+			}
+
+			return aint1;
+		}
+	}
+
+	@Override
+	public void loadSprite(BufferedImage[] images, AnimationMetadataSection animationMeta, boolean anisotropicFiltering) {
+
+		rawWidth = images[0].getWidth();
+		rawHeight = images[0].getHeight();
+		super.loadSprite(images, animationMeta, anisotropicFiltering);
+	}
+
+	@Override
+	public void generateMipmaps(int p_147963_1_) {
+
+		super.generateMipmaps(p_147963_1_);
+		mipmapLevels = p_147963_1_;
 	}
 
 	@Override
@@ -86,14 +136,14 @@ public class TextureSpecial extends TextureAtlasSprite implements IIconSelfRegis
 		return true;
 	}
 
-	public void addFrame(int[] data) {
+	public void addFrame(int[] data, int width, int height) {
 
 		GameSettings settings = Minecraft.getMinecraft().gameSettings;
 		BufferedImage[] images = new BufferedImage[settings.mipmapLevels + 1];
 		images[0] = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		images[0].setRGB(0, 0, width, height, data, 0, width);
 
-		super.loadSprite(images, null, settings.anisotropicFiltering > 1);
+		loadSprite(images, null, settings.anisotropicFiltering > 1);
 	}
 
 	@Override
@@ -101,22 +151,13 @@ public class TextureSpecial extends TextureAtlasSprite implements IIconSelfRegis
 
 		if (baseTextures != null) {
 			for (TextureDataHolder tex : baseTextures) {
-				width = tex.width;
-				height = tex.height;
-				addFrame(tex.data);
+				addFrame(tex.data, tex.width, tex.height);
 			}
-		}
-
-		if (spriteSheet != null) {
+		} else if (spriteSheet != null) {
 			TextureDataHolder tex = spriteSheet.createSprite(spriteIndex);
-			width = tex.width;
-			height = tex.height;
-			addFrame(tex.data);
-		}
-
-		if (blankSize > 0) {
-			width = height = blankSize;
-			addFrame(new int[blankSize * blankSize]);
+			addFrame(tex.data, tex.width, tex.height);
+		} else if (blankSize > 0) {
+			addFrame(new int[blankSize * blankSize], blankSize, blankSize);
 		}
 
 		if (framesTextureData.isEmpty()) {
