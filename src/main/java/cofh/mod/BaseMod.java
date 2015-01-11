@@ -146,8 +146,8 @@ public abstract class BaseMod implements IUpdatableMod {
 			try {
 				loadClientLang();
 				return;
-			} catch (Throwable _) {
-				_log.error(AbstractLogger.CATCHING_MARKER, "???", _);
+			} catch (Throwable t) {
+				_log.error(AbstractLogger.CATCHING_MARKER, "???", t);
 			}
 		}
 
@@ -157,13 +157,13 @@ public abstract class BaseMod implements IUpdatableMod {
 		try {
 			is = Loader.getResource(path + lang + ".lang", null).openStream();
 			loadLanguageFile(lang, is);
-		} catch (Throwable _) {
-			_log.catching(Level.INFO, _);
+		} catch (Throwable t) {
+			_log.catching(Level.INFO, t);
 		} finally {
 			try {
 				is.close();
-			} catch (IOException _) {
-				_log.catching(Level.INFO, _);
+			} catch (IOException t) {
+				_log.catching(Level.INFO, t);
 			}
 		}
 	}
@@ -192,8 +192,8 @@ public abstract class BaseMod implements IUpdatableMod {
 			String l = null;
 			try {
 				l = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getLanguageCode();
-			} catch (Throwable _) {
-				_log.catching(Level.WARN, _);
+			} catch (Throwable t) {
+				_log.catching(Level.WARN, t);
 			}
 
 			for (String lang : Arrays.asList("en_US", l)) {
@@ -207,12 +207,12 @@ public abstract class BaseMod implements IUpdatableMod {
 							}
 							try {
 								loadLanguageFile(lang, file.getInputStream());
-							} catch (Throwable _) {
-								_log.warn(AbstractLogger.CATCHING_MARKER, "A resource pack has a file for language '" + lang + "' but the file is invalid.", _);
+							} catch (Throwable t) {
+								_log.warn(AbstractLogger.CATCHING_MARKER, "A resource pack has a file for language '" + lang + "' but the file is invalid.", t);
 							}
 						}
-					} catch (Throwable _) {
-						_log.info(AbstractLogger.CATCHING_MARKER, "No language data for '" + lang + "'", _);
+					} catch (Throwable t) {
+						_log.info(AbstractLogger.CATCHING_MARKER, "No language data for '" + lang + "'", t);
 					}
 				}
 			}
