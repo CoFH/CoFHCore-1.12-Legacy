@@ -76,6 +76,8 @@ info.cofh.command.version=Показывает версию этого мода.
 info.cofh.command.enchant=Улучшенная команда /enchant. Нет ограничений по уровням или применениям.
 info.cofh.command.clearblocks=Убирает указанные блоки из указанной территории в мире.
 info.cofh.command.replaceblocks=Заменяет указанные блоки из указанной территории в мире.
+info.cofh.command.reloadworldgen=Перезагружает мир с жёсткого диска.
+info.cofh.command.unloadchunk=Разгружает чанк, на которой смотрит игрок.
 
 info.cofh.command.friend.syntax=/cofh friend {gui | add <имя пользователя> | remove <имя пользователя>}
 info.cofh.command.help.syntax=/cofh help [команда]
@@ -87,8 +89,12 @@ info.cofh.command.version.syntax=/cofh version
 info.cofh.command.enchant.syntax=/cofh enchant [игрок] <ID зачарования> [уровень]
 info.cofh.command.clearblocks.syntax=/cofh clearblocks {<user> <координата x> <координата y> <координата z> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} [block#meta] [block#meta] ...
 info.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<user> <координата x> <координата y> <координата z> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} <replaceBlock#meta> [block#meta] [block#meta] ...
+info.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
+info.cofh.command.unloadchunk.syntax=/cofh unloadchunk
 
 info.cofh.command.syntaxError=Неправильный синтаксис.
+info.cofh.command.notFound=Неизвестная команда. Попробуйте /cofh help для получения списка команд
+info.cofh.command.world.notFound=Мир не существует.
 
 info.cofh.command.friend.0=успшено добавлен в Ваш список друзей.
 info.cofh.command.friend.1=Извините, возникла проблема при добавлении
@@ -96,11 +102,27 @@ info.cofh.command.friend.2=в Ваш список.
 info.cofh.command.friend.3=Извините, это имя не допустимо.
 info.cofh.command.friend.4=успешно удалён из Вашего списка друзей.
 info.cofh.command.friend.5=не был Вашим другом.
+
 info.cofh.command.help.0=Доступны следующие команды:
-info.cofh.command.killall.0=
-info.cofh.command.killall.1=
-info.cofh.command.killall.2=Не найдено враждебных мобов!
-info.cofh.command.version.0=Этот мод работает на версии
+info.cofh.command.version.0=Версия модификации
+
+info.cofh.command.killall.success=Удалено сущностей: %d. (%s)
+info.cofh.command.killall.successHostile=Удалено враждебных мобов: %d. (%s)
+info.cofh.command.killall.noMatch=Не найдено сущностей, соответствующих "§e%s§f"!
+info.cofh.command.killall.noHostile=Не найдено враждебных мобов!
+
+info.cofh.command.tpx.snark.0=Вы успешно телепортировали себя к себе!
+info.cofh.command.tpx.snark.1=%s успешно телепортирован сам к себе!
+
+info.cofh.command.reloadworldgen.success=Генерация мира успешно перезагружена.
+
+info.cofh.command.replaceblocks.failure=Нет блоков для замены.
+info.cofh.command.replaceblocks.success=Блоки успешно заменены.
+
+info.cofh.command.clearblocks.failure=Нет блоков для удаления.
+info.cofh.command.clearblocks.success=Блоки успешно удалены.
+
+info.cofh.command.unloadchunk.success=Разгрузка чанка в %s:%s
 
 info.cofh.tutorial.fluxRequired=Для работы необходим Redstone Flux.
 info.cofh.tutorial.tabAugment=Вкладка "Прирост" предоставляет модульные дополнения.
