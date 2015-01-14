@@ -11,6 +11,7 @@ import cofh.core.world.decoration.DungeonParser;
 import cofh.core.world.decoration.GeodeParser;
 import cofh.core.world.decoration.LakeParser;
 import cofh.core.world.decoration.LargeVeinParser;
+import cofh.core.world.decoration.SmallTreeParser;
 import cofh.core.world.decoration.SpikeParser;
 import cofh.core.world.decoration.StalagmiteParser;
 import cofh.core.world.feature.CaveParser;
@@ -140,6 +141,7 @@ public class FeatureParser {
 		registerGenerator("dungeon", new DungeonParser());
 		registerGenerator("stalagmite", new StalagmiteParser(false));
 		registerGenerator("statactite", new StalagmiteParser(true));
+		registerGenerator("small-tree", new SmallTreeParser());
 
 		log.info("Complete");
 	}
