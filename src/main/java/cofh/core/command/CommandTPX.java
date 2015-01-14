@@ -1,18 +1,16 @@
 package cofh.core.command;
 
-import cofh.core.util.CoreUtils;
 import cofh.lib.util.helpers.EntityHelper;
-import cofh.lib.util.helpers.StringHelper;
-import com.google.common.base.Throwables;
 
 import java.util.List;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.DimensionManager;
 
@@ -27,24 +25,23 @@ public class CommandTPX implements ISubCommand {
 	}
 
 	@Override
+	public int getPermissionLevel() {
+
+		return 2;
+	}
+
+	@Override
 	public void handleCommand(ICommandSender sender, String[] arguments) {
 
 		// TODO: allow selector commands to target anything (single player, all players[@a], specific entities [@e], etc.)
 		// where it makes sense to allow it (e.g., not allowing teleporting a single thing to many things)
 
-		// TODO: localize errors
-
-		if (!CoreUtils.isOpOrServer(sender.getCommandSenderName())) {
-			sender.addChatMessage(new ChatComponentText(CommandHandler.COMMAND_DISALLOWED));
-			return;
-		}
 		switch (arguments.length) {
 
 		case 0: // () ???? how did we get here again?
 		case 1: // (tpx) invalid command
 			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
-			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
-			break;
+			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
 		case 2: // (tpx {<player>|<dimension>}) teleporting player to self, or self to dimension
 			EntityPlayerMP playerSender = CommandBase.getCommandSenderAsPlayer(sender);
 			try {
@@ -58,21 +55,20 @@ public class CommandTPX implements ISubCommand {
 						player.setPositionAndUpdate(playerSender.posX, playerSender.posY, playerSender.posZ);
 					}
 				} else {
-					sender.addChatMessage(new ChatComponentText("Sucessfully teleported you to yourself!"));
+					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.tpx.snark.0"));
 				}
 				break;
-			} catch (Throwable t) {
+			} catch (CommandException t) {
 				int dimension = 0;
 				try {
 					dimension = CommandBase.parseInt(sender, arguments[1]);
-				} catch (Throwable p) { // not a number, assume they wanted a player
+				} catch (CommandException p) { // not a number, assume they wanted a player
 					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
 					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
-					Throwables.propagate(p);
+					throw p;
 				}
 				if (!DimensionManager.isDimensionRegistered(dimension)) {
-					sender.addChatMessage(new ChatComponentText(StringHelper.RED + "That dimension does not exist."));
-					break;
+					throw new CommandException("info.cofh.command.world.notFound");
 				}
 				playerSender.mountEntity((Entity) null);
 				if (playerSender.dimension != dimension) {
@@ -90,25 +86,25 @@ public class CommandTPX implements ISubCommand {
 					if (otherPlayer.dimension == player.dimension) {
 						player.setPositionAndUpdate(otherPlayer.posX, otherPlayer.posY, otherPlayer.posZ);
 					} else {
-						EntityHelper.transferPlayerToDimension(player, otherPlayer.dimension, otherPlayer.mcServer.getConfigurationManager());
+						EntityHelper.transferPlayerToDimension(player, otherPlayer.dimension,
+							otherPlayer.mcServer.getConfigurationManager());
 						player.setPositionAndUpdate(otherPlayer.posX, otherPlayer.posY, otherPlayer.posZ);
 					}
 				} else {
-					sender.addChatMessage(new ChatComponentText("Sucessfully teleported " + arguments[1] + " to themself!"));
+					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.tpx.snark.1", arguments[1]));
 				}
 				break;
-			} catch (Throwable t) {
+			} catch (CommandException t) {
 				int dimension = 0;
 				try {
 					dimension = CommandBase.parseInt(sender, arguments[2]);
-				} catch (Throwable p) { // not a number, assume they wanted a player
+				} catch (CommandException p) { // not a number, assume they wanted a player
 					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
 					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
-					Throwables.propagate(p);
+					throw p;
 				}
 				if (!DimensionManager.isDimensionRegistered(dimension)) {
-					sender.addChatMessage(new ChatComponentText(StringHelper.RED + "That dimension does not exist"));
-					break;
+					throw new CommandException("info.cofh.command.world.notFound");
 				}
 				player.mountEntity((Entity) null);
 				if (player.dimension != dimension) {
@@ -127,7 +123,8 @@ public class CommandTPX implements ISubCommand {
 			player = CommandBase.getPlayer(sender, arguments[1]);
 			player.mountEntity((Entity) null);
 			player.setPositionAndUpdate(CommandBase.func_110666_a(player, player.posX, arguments[2]),
-					CommandBase.func_110666_a(player, player.posY, arguments[3]), CommandBase.func_110666_a(player, player.posZ, arguments[4]));
+					CommandBase.func_110666_a(player, player.posY, arguments[3]),
+					CommandBase.func_110666_a(player, player.posZ, arguments[4]));
 			break;
 		case 6: // (tpx <player> <x> <y> <z> <dimension>) teleporting player to dimension and location
 		default: // ignore excess tokens. warn?
@@ -135,15 +132,15 @@ public class CommandTPX implements ISubCommand {
 			int dimension = CommandBase.parseInt(sender, arguments[5]);
 
 			if (!DimensionManager.isDimensionRegistered(dimension)) {
-				sender.addChatMessage(new ChatComponentText(StringHelper.RED + "That dimension does not exist"));
-				break;
+				throw new CommandException("info.cofh.command.world.notFound");
 			}
 			player.mountEntity((Entity) null);
 			if (player.dimension != dimension) {
 				EntityHelper.transferPlayerToDimension(player, dimension, player.mcServer.getConfigurationManager());
 			}
 			player.setPositionAndUpdate(CommandBase.func_110666_a(player, player.posX, arguments[2]),
-					CommandBase.func_110666_a(player, player.posY, arguments[3]), CommandBase.func_110666_a(player, player.posZ, arguments[4]));
+					CommandBase.func_110666_a(player, player.posY, arguments[3]),
+					CommandBase.func_110666_a(player, player.posZ, arguments[4]));
 			break;
 		}
 	}

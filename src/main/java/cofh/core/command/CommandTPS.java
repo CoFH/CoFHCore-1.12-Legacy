@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
@@ -52,6 +52,12 @@ public class CommandTPS implements ISubCommand {
 	public String getCommandName() {
 
 		return "tps";
+	}
+
+	@Override
+	public int getPermissionLevel() {
+
+		return 0;
 	}
 
 	@Override
@@ -111,7 +117,7 @@ public class CommandTPS implements ISubCommand {
 
 			World world = CoFHCore.server.worldServerForDimension(dim);
 			if (world == null) {
-				throw new PlayerNotFoundException("World not found", new Object[0]);
+				throw new CommandException("info.cofh.command.world.notFound");
 			}
 
 			double tickms = getTickMs(world);

@@ -76,6 +76,8 @@ info.cofh.command.version=Gives you the version of this mod.
 info.cofh.command.enchant=Improved /enchant. Has no limits on level or applicability.
 info.cofh.command.clearblocks=Clears specified blocks from a specified area in the world.
 info.cofh.command.replaceblocks=Replaces specified blocks from a specified area in the world.
+info.cofh.command.reloadworldgen=Reloads world generation from disk.
+info.cofh.command.unloadchunk=Unloads the chunk the player is looking at.
 
 info.cofh.command.friend.syntax=/cofh friend {gui | add <username> | remove <username>}
 info.cofh.command.help.syntax=/cofh help [command]
@@ -87,8 +89,12 @@ info.cofh.command.version.syntax=/cofh version
 info.cofh.command.enchant.syntax=/cofh enchant [player] <enchantment ID> [level]
 info.cofh.command.clearblocks.syntax=/cofh clearblocks {<user> <x radius> <y radius> <z radius> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} [block#meta] [block#meta] ...
 info.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<user> <x radius> <y radius> <z radius> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} <replaceBlock#meta> [block#meta] [block#meta] ...
+info.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
+info.cofh.command.unloadchunk.syntax=/cofh unloadchunk
 
 info.cofh.command.syntaxError=Invalid Syntax.
+info.cofh.command.notFound=Unknown command. Try /cofh help for a list of commands
+info.cofh.command.world.notFound=World does not exist.
 
 info.cofh.command.friend.0=successfully added to your friends list.
 info.cofh.command.friend.1=Sorry, there was a problem adding
@@ -96,11 +102,28 @@ info.cofh.command.friend.2=to your list.
 info.cofh.command.friend.3=Sorry, that is not a valid username.
 info.cofh.command.friend.4=successfully removed from your friends list.
 info.cofh.command.friend.5=was not your friend.
+
 info.cofh.command.help.0=Available commands are:
-info.cofh.command.killall.0=
-info.cofh.command.killall.1=
-info.cofh.command.killall.2=No hostile mobs found!
 info.cofh.command.version.0=This mod is on version
+
+info.cofh.command.killall.success=Removed %d entities. (%s)
+info.cofh.command.killall.successHostile=Removed %d hostile mobs. (%s)
+info.cofh.command.killall.noMatch=No entities found matching "§e%s§f"!
+info.cofh.command.killall.noHostile=No hostile mobs found!
+
+info.cofh.command.tpx.snark.0=Sucessfully teleported you to yourself!
+info.cofh.command.tpx.snark.1=Sucessfully teleported %s to themself!
+
+info.cofh.command.reloadworldgen.success=Successfully reloaded World Generators.
+
+info.cofh.command.replaceblocks.failure=No blocks to replace.
+info.cofh.command.replaceblocks.success=Successfully replaced blocks.
+
+info.cofh.command.clearblocks.failure=No blocks to clear.
+info.cofh.command.clearblocks.success=Successfully cleared blocks.
+
+info.cofh.command.unloadchunk.success=Unloading Chunk at %s:%s
+
 
 info.cofh.tutorial.fluxRequired=Requires Redstone Flux to operate.
 info.cofh.tutorial.tabAugment=The Augment tab allows for modular additions.

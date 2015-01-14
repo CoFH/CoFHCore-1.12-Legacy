@@ -1,6 +1,5 @@
 package cofh.core.command;
 
-import cofh.core.util.CoreUtils;
 import com.google.common.base.Throwables;
 
 import gnu.trove.iterator.hash.TObjectHashIterator;
@@ -12,14 +11,14 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.server.S21PacketChunkData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerManager;
 import net.minecraft.server.management.PlayerManager.PlayerInstance;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -35,30 +34,36 @@ public class CommandClearBlock implements ISubCommand {
 	}
 
 	@Override
+	public int getPermissionLevel() {
+
+		return 3;
+	}
+
+	@Override
 	public void handleCommand(ICommandSender sender, String[] args) {
 
-		if (!CoreUtils.isOpOrServer(sender.getCommandSenderName())) {
-			sender.addChatMessage(new ChatComponentText(CommandHandler.COMMAND_DISALLOWED));
-			return;
-		}
 		if (args.length < 6) {
 			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
-			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
-			return;
+			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
 		}
-		World world = CommandBase.getCommandSenderAsPlayer(sender).worldObj;
+		World world = sender.getEntityWorld();
 		if (world.isRemote) {
 			return;
 		}
 
-		EntityPlayer center = null;
+		ChunkCoordinates center = null;
 		int i = 1;
 		int xS, xL;
-		try {
-			xS = CommandBase.parseInt(sender, args[i++]);
-		} catch (Throwable t) {
-			center = CommandBase.getPlayer(sender, args[i - 1]);
-			xS = CommandBase.parseInt(sender, args[i++]);
+		if ("@".equals(args[i])) {
+			center = sender.getPlayerCoordinates();
+			xS = CommandBase.parseInt(sender, args[++i]);
+		} else {
+			try {
+				xS = CommandBase.parseInt(sender, args[i++]);
+			} catch (Throwable t) {
+				center = CommandBase.getPlayer(sender, args[i - 1]).getPlayerCoordinates();
+				xS = CommandBase.parseInt(sender, args[i++]);
+			}
 		}
 		int yS = CommandBase.parseInt(sender, args[i++]), yL;
 		int zS = CommandBase.parseInt(sender, args[i++]), zL;
@@ -79,13 +84,13 @@ public class CommandClearBlock implements ISubCommand {
 		}
 
 		if (center != null) {
-			xS = (int) center.posX - xS;
-			yS = (int) center.posY - yS;
-			zS = (int) center.posZ - zS;
+			xS = center.posX - xS;
+			yS = center.posY - yS;
+			zS = center.posZ - zS;
 
-			xL = (int) center.posX + xL;
-			yL = (int) center.posY + yL;
-			zL = (int) center.posZ + zL;
+			xL = center.posX + xL;
+			yL = center.posY + yL;
+			zL = center.posZ + zL;
 		}
 
 		yS &= ~yS >> 31; // max(yS, 0)
@@ -272,6 +277,11 @@ public class CommandClearBlock implements ISubCommand {
 					}
 				}
 			}
+		}
+		if (!set.isEmpty()) {
+			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.clearblocks.success");
+		} else {
+			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.clearblocks.failure"));
 		}
 
 		if (world instanceof WorldServer) {

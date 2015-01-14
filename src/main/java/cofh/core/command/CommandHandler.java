@@ -10,8 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.CommandNotFoundException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 
 public class CommandHandler extends CommandBase {
 
@@ -54,6 +55,23 @@ public class CommandHandler extends CommandBase {
 		return commands.keySet();
 	}
 
+	public static boolean getCommandExists(String command) {
+
+		return commands.containsKey(command);
+	}
+
+    @Override
+	public int getRequiredPermissionLevel() {
+        return -1;
+    }
+
+	private static DummyCommand dummy = new DummyCommand();
+	public static void logAdminCommand(ICommandSender sender, ISubCommand command, String info, Object... data) {
+
+		dummy.setFromCommand(command);
+		CommandBase.func_152373_a(sender, dummy, info, data);
+	}
+
 	@Override
 	public String getCommandName() {
 
@@ -73,7 +91,7 @@ public class CommandHandler extends CommandBase {
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender par1ICommandSender) {
+	public boolean canCommandSenderUseCommand(ICommandSender sender) {
 
 		return true;
 	}
@@ -81,14 +99,18 @@ public class CommandHandler extends CommandBase {
 	@Override
 	public void processCommand(ICommandSender sender, String[] arguments) {
 
-		if (arguments.length <= 0) {
-			throw new WrongUsageException("Type '" + getCommandUsage(sender) + "' for help.");
+		if (arguments.length < 1) {
+			arguments = new String[]{"help"};
 		}
-		if (commands.containsKey(arguments[0])) {
-			commands.get(arguments[0]).handleCommand(sender, arguments);
-			return;
+		ISubCommand command = commands.get(arguments[0]);
+		if (command != null) {
+			if (sender.canCommandSenderUseCommand(command.getPermissionLevel(), "cofh " + command.getCommandName())) {
+				command.handleCommand(sender, arguments);
+				return;
+			}
+			throw new CommandException("commands.generic.permission");
 		}
-		throw new WrongUsageException("Type '" + getCommandUsage(sender) + "' for help.");
+		throw new CommandNotFoundException("info.cofh.command.notFound");
 	}
 
 	@Override
@@ -102,4 +124,34 @@ public class CommandHandler extends CommandBase {
 		return null;
 	}
 
+	private static class DummyCommand extends CommandBase {
+
+		private int perm = 4;
+		private String name = "";
+
+		public void setFromCommand(ISubCommand command) {
+
+			name = command.getCommandName();
+			perm = command.getPermissionLevel();
+		}
+
+		@Override
+		public String getCommandName() {
+			return "cofh " + name;
+		}
+
+	    @Override
+		public int getRequiredPermissionLevel() {
+	        return perm;
+	    }
+
+		@Override
+		public String getCommandUsage(ICommandSender p_71518_1_) {
+			return "";
+		}
+
+		@Override
+		public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_) {}
+
+	}
 }

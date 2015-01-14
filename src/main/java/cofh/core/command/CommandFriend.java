@@ -9,9 +9,11 @@ import java.util.List;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 
 public class CommandFriend implements ISubCommand {
 
@@ -27,6 +29,12 @@ public class CommandFriend implements ISubCommand {
 	public String getCommandName() {
 
 		return "friend";
+	}
+
+	@Override
+	public int getPermissionLevel() {
+
+		return -1;
 	}
 
 	@Override
@@ -58,8 +66,8 @@ public class CommandFriend implements ISubCommand {
 					sender.addChatMessage(new ChatComponentText(StringHelper.RED + StringHelper.localize("info.cofh.command.friend.3")));
 				}
 			} else {
-				sender.addChatMessage(new ChatComponentText(StringHelper.localize("info.cofh.command.syntaxError") + " /cofh friend " + StringHelper.YELLOW
-						+ "|<gui|add|remove> " + StringHelper.PINK + "<username>"));
+				sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
+				throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
 			}
 		} else if (arguments.length > 1 && arguments[1].equalsIgnoreCase("gui")) {
 			if (sender instanceof EntityPlayerMP) {
@@ -69,8 +77,8 @@ public class CommandFriend implements ISubCommand {
 						(int) thePlayer.posZ);
 			}
 		} else {
-			sender.addChatMessage(new ChatComponentText(StringHelper.localize("info.cofh.command.syntaxError") + " /cofh friend " + StringHelper.YELLOW
-					+ "<gui|add|remove> " + StringHelper.PINK + "<username>"));
+			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
+			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
 		}
 	}
 

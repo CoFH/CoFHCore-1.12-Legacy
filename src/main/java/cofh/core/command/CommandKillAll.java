@@ -1,7 +1,6 @@
 package cofh.core.command;
 
 import cofh.CoFHCore;
-import cofh.core.util.CoreUtils;
 import cofh.lib.util.helpers.StringHelper;
 
 import gnu.trove.iterator.TObjectIntIterator;
@@ -14,7 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.WorldServer;
 
 public class CommandKillAll implements ISubCommand {
@@ -28,14 +27,16 @@ public class CommandKillAll implements ISubCommand {
 		return "killall";
 	}
 
+	@Override
+	public int getPermissionLevel() {
+
+		return 2;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void handleCommand(ICommandSender sender, String[] arguments) {
 
-		if (!CoreUtils.isOpOrServer(sender.getCommandSenderName())) {
-			sender.addChatMessage(new ChatComponentText(CommandHandler.COMMAND_DISALLOWED));
-			return;
-		}
 		int killCount = 0;
 		String curName;
 		TObjectIntHashMap<String> names = new TObjectIntHashMap<String>();
@@ -75,14 +76,15 @@ public class CommandKillAll implements ISubCommand {
 			TObjectIntIterator<String> it = names.iterator();
 			while (it.hasNext()) {
 				it.advance();
-				finalNames = finalNames + StringHelper.LIGHT_RED + it.value() + StringHelper.WHITE + "x" + StringHelper.YELLOW + it.key()
-						+ StringHelper.WHITE + ", ";
+				finalNames = finalNames + StringHelper.LIGHT_RED + it.value() + StringHelper.WHITE +
+						"x" + StringHelper.YELLOW + it.key() + StringHelper.WHITE + ", ";
 			}
 			finalNames = finalNames.substring(0, finalNames.length() - 2);
-			sender.addChatMessage(new ChatComponentText("Removed " + killCount + (arguments.length > 1 ? "" : " hostile") + " entities. (" + finalNames + ")"));
+			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.killall.success" +
+					(target != null ? "" : "Hostile"), killCount, finalNames);
 		} else {
-			sender.addChatMessage(new ChatComponentText(arguments.length > 1 ? "No entities found matching \"" + StringHelper.YELLOW + arguments[1]
-					+ StringHelper.WHITE + "\"!" : "No hostile mobs found!"));
+			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.killall.no" +
+					(target != null ? "Match" : "Hostile")));
 		}
 	}
 

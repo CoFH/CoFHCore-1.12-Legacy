@@ -20,6 +20,12 @@ public class CommandVersion implements ISubCommand {
 	}
 
 	@Override
+	public int getPermissionLevel() {
+
+		return -1;
+	}
+
+	@Override
 	public void handleCommand(ICommandSender sender, String[] arguments) {
 
 		sender.addChatMessage(new ChatComponentText(StringHelper.localize("info.cofh.command.version.0") + " " + CoFHCore.version + "."));

@@ -1,19 +1,16 @@
 package cofh.core.command;
 
-import cofh.core.util.CoreUtils;
-import com.google.common.base.Throwables;
-
 import java.util.List;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 
 public class CommandEnchant implements ISubCommand {
@@ -27,12 +24,14 @@ public class CommandEnchant implements ISubCommand {
 	}
 
 	@Override
+	public int getPermissionLevel() {
+
+		return 2;
+	}
+
+	@Override
 	public void handleCommand(ICommandSender sender, String[] args) {
 
-		if (!CoreUtils.isOpOrServer(sender.getCommandSenderName())) {
-			sender.addChatMessage(new ChatComponentText(CommandHandler.COMMAND_DISALLOWED));
-			return;
-		}
 		int l = args.length;
 		int i = 1;
 		EntityPlayerMP player = null;
@@ -41,18 +40,17 @@ public class CommandEnchant implements ISubCommand {
 		case 0:
 		case 1:
 			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
-			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
-			break;
+			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
 		default:
 		case 4:
 		case 3:
 			try {
 				player = CommandBase.getPlayer(sender, args[i++]);
-			} catch (Throwable t) {
+			} catch (CommandException t) {
 				if (l != 3) {
 					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
 					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
-					Throwables.propagate(t);
+					throw t;
 				}
 				--i;
 			}
@@ -77,7 +75,7 @@ public class CommandEnchant implements ISubCommand {
 				}
 
 				itemstack.addEnchantment(enchantment, level);
-				// CommandBase.func_152373_a(sender, this, "commands.enchant.success", new Object[0]);
+				CommandHandler.logAdminCommand(sender, this, "commands.enchant.success");
 			}
 		}
 	}

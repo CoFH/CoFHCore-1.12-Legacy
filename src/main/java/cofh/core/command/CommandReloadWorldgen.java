@@ -1,7 +1,6 @@
 package cofh.core.command;
 
 import cofh.api.world.IFeatureGenerator;
-import cofh.core.util.CoreUtils;
 import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
 import com.google.common.base.Throwables;
@@ -9,8 +8,6 @@ import com.google.common.base.Throwables;
 import java.util.List;
 
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
 
 public class CommandReloadWorldgen implements ISubCommand {
 
@@ -23,12 +20,13 @@ public class CommandReloadWorldgen implements ISubCommand {
 	}
 
 	@Override
-	public void handleCommand(ICommandSender sender, String[] args) {
+	public int getPermissionLevel() {
 
-		if (!CoreUtils.isOpOrServer(sender.getCommandSenderName())) {
-			sender.addChatMessage(new ChatComponentText(CommandHandler.COMMAND_DISALLOWED));
-			return;
-		}
+		return 3;
+	}
+
+	@Override
+	public void handleCommand(ICommandSender sender, String[] args) {
 
 		for (IFeatureGenerator g : FeatureParser.parsedFeatures)
 			WorldHandler.instance.removeFeature(g);
@@ -38,7 +36,7 @@ public class CommandReloadWorldgen implements ISubCommand {
 		} catch (Throwable t) {
 			Throwables.propagate(t);
 		}
-		sender.addChatMessage(new ChatComponentTranslation("info.cofh.success"));
+		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.reloadworldgen.success");
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package cofh.core.command;
 
-import cofh.core.util.CoreUtils;
 import cofh.repack.codechicken.lib.raytracer.RayTracer;
 import com.google.common.base.Throwables;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -11,7 +10,6 @@ import java.util.Set;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.chunk.Chunk;
@@ -27,15 +25,17 @@ public class CommandUnloadChunk implements ISubCommand {
 		return "unloadchunk";
 	}
 
+	@Override
+	public int getPermissionLevel() {
+
+		return 4;
+	}
+
 	Field chunksToUnload;
 
 	@Override
 	public void handleCommand(ICommandSender sender, String[] args) {
 
-		if (!CoreUtils.isOpOrServer(sender.getCommandSenderName())) {
-			sender.addChatMessage(new ChatComponentText(CommandHandler.COMMAND_DISALLOWED));
-			return;
-		}
 		if (!(sender instanceof EntityPlayerMP))
 			return;
 
@@ -55,7 +55,7 @@ public class CommandUnloadChunk implements ISubCommand {
 		}
 
 		o.add(ChunkCoordIntPair.chunkXZ2Int(chunk.xPosition, chunk.zPosition));
-		sender.addChatMessage(new ChatComponentText(String.format("Unloading %s,%s", chunk.xPosition, chunk.zPosition)));
+		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.unloadchunk.success", chunk.xPosition, chunk.zPosition);
 	}
 
 	@Override

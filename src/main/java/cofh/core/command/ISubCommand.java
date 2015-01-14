@@ -6,6 +6,8 @@ import net.minecraft.command.ICommandSender;
 
 public interface ISubCommand {
 
+	public int getPermissionLevel();
+
 	public String getCommandName();
 
 	public void handleCommand(ICommandSender sender, String[] arguments);

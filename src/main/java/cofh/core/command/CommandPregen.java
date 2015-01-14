@@ -1,6 +1,5 @@
 package cofh.core.command;
 
-import cofh.core.util.CoreUtils;
 import cofh.core.world.TickHandlerWorld;
 import cofh.lib.util.position.ChunkCoord;
 import com.google.common.base.Throwables;
@@ -12,7 +11,6 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
 public class CommandPregen implements ISubCommand {
@@ -26,17 +24,19 @@ public class CommandPregen implements ISubCommand {
 	}
 
 	@Override
+	public int getPermissionLevel() {
+
+		return 4;
+	}
+
+	@Override
 	public void handleCommand(ICommandSender sender, String[] args) {
 
-		if (!CoreUtils.isOpOrServer(sender.getCommandSenderName())) {
-			sender.addChatMessage(new ChatComponentText(CommandHandler.COMMAND_DISALLOWED));
-			return;
-		}
 		if (args.length < 6) {
 			// TODO: error
 			return;
 		}
-		World world = CommandBase.getCommandSenderAsPlayer(sender).worldObj;
+		World world = sender.getEntityWorld();
 		if (world.isRemote) {
 			return;
 		}
