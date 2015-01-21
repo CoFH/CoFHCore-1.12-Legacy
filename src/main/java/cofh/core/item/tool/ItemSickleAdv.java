@@ -40,12 +40,12 @@ public class ItemSickleAdv extends ItemToolAdv {
 	}
 
 	@Override
-	protected void harvestBlock(World world, int x, int y, int z, EntityPlayer player) {
+	protected boolean harvestBlock(World world, int x, int y, int z, EntityPlayer player) {
 
 		Block block = world.getBlock(x, y, z);
 
 		if (block.getBlockHardness(world, x, y, z) < 0 || block.equals(Blocks.waterlily)) {
-			return;
+			return false;
 		}
 		int bMeta = world.getBlockMetadata(x, y, z);
 
@@ -56,6 +56,7 @@ public class ItemSickleAdv extends ItemToolAdv {
 			CoreUtils.dropItemStackIntoWorldWithVelocity(new ItemStack(Blocks.vine), world, x, y, z);
 		}
 		world.setBlockToAir(x, y, z);
+		return true;
 	}
 
 	@Override
