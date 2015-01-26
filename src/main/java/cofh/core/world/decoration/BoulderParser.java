@@ -25,6 +25,12 @@ public class BoulderParser implements IGeneratorParser {
 				r.clusters = genObject.get("count").getAsInt();
 			if (genObject.has("countVariance"))
 				r.clusterVariance = genObject.get("countVariance").getAsInt();
+			if (genObject.has("hollow"))
+				r.hollow = genObject.get("hollow").getAsBoolean();
+			if (genObject.has("hollowSize"))
+				r.hollowAmt = genObject.get("hollowSize").getAsFloat();
+			if (genObject.has("hollowVariance"))
+				r.hollowVar = genObject.get("hollowVariance").getAsFloat();
 		}
 		return r;
 	}
