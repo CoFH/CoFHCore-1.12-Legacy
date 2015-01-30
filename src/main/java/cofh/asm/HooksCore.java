@@ -56,11 +56,11 @@ public class HooksCore {
 		Iterator iterator = entity.worldObj.getEntitiesWithinAABB(EntityItem.class, entity.boundingBox.expand(0.5D, 0.0D, 0.5D)).iterator();
 
 		while (iterator.hasNext())
-			entity.combineItems((EntityItem)iterator.next());
+			entity.combineItems((EntityItem) iterator.next());
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static List getEntityCollisonBoxes(World world, Entity entity, AxisAlignedBB bb) {
+	public static List getEntityCollisionBoxes(World world, Entity entity, AxisAlignedBB bb) {
 
 		if (!entity.canBePushed()) {
 			List collidingBoundingBoxes = world.collidingBoundingBoxes;
@@ -107,10 +107,8 @@ public class HooksCore {
 	public static boolean paneConnectsTo(IBlockAccess world, int x, int y, int z, ForgeDirection dir) {
 
 		Block block = world.getBlock(x, y, z);
-		return block.func_149730_j() ||
-				block.getMaterial() == Material.glass ||
-				block instanceof BlockPane ||
-				world.isSideSolid(x, y, z, dir.getOpposite(), false);
+		return block.func_149730_j() || block.getMaterial() == Material.glass || block instanceof BlockPane
+				|| world.isSideSolid(x, y, z, dir.getOpposite(), false);
 	}
 	// }
 

@@ -275,12 +275,12 @@ class ASMCore {
 			for (int i = 0, e = m.instructions.size(); i < e; ++i) {
 				AbstractInsnNode n = m.instructions.get(i);
 				if (n.getOpcode() == INVOKEVIRTUAL) {
-					MethodInsnNode mn = (MethodInsnNode)n;
+					MethodInsnNode mn = (MethodInsnNode) n;
 					if (mOwner.equals(remapper.map(mn.owner)) && names[1].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc))) {
 						mn.setOpcode(INVOKESTATIC);
 						mn.owner = "cofh/asm/HooksCore";
 						mn.desc = "(Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/AxisAlignedBB;)Ljava/util/List;";
-						mn.name = "getEntityCollisonBoxes";
+						mn.name = "getEntityCollisionBoxes";
 					}
 				}
 			}
@@ -294,7 +294,8 @@ class ASMCore {
 	}
 
 	private static byte[] alterRenderBlocks(String name, String transformedName, byte[] bytes, ClassReader cr) {
-		//.renderBlockStainedGlassPane(Block, int, int, int)
+
+		// .renderBlockStainedGlassPane(Block, int, int, int)
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
 			names = new String[] { "func_147733_k", "func_150098_a", "func_147439_a" };
@@ -328,18 +329,17 @@ class ASMCore {
 
 			m.localVariables = null;
 
-			final String[] dirs = {"NORTH", "NORTH", "SOUTH", "SOUTH", "WEST", "WEST", "EAST", "EAST"};
+			final String[] dirs = { "NORTH", "NORTH", "SOUTH", "SOUTH", "WEST", "WEST", "EAST", "EAST" };
 			int di = 0;
 
 			for (int i = 0, e = m.instructions.size(); i < e; ++i) {
 				AbstractInsnNode n = m.instructions.get(i);
 				if (n.getType() == AbstractInsnNode.METHOD_INSN) {
-					MethodInsnNode mn = (MethodInsnNode)n;
+					MethodInsnNode mn = (MethodInsnNode) n;
 					if (n.getOpcode() == INVOKEINTERFACE && n.getNext().getOpcode() == INVOKEVIRTUAL) {
 						if (names[2].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc))) {
-							if (Csig.equals(remapper.mapMethodDesc(mn.desc)) &&
-									Ssig.equals(remapper.mapMethodDesc(((MethodInsnNode)mn.getNext()).desc))) {
-								m.instructions.insertBefore(n, new FieldInsnNode(GETSTATIC, fd, dirs[di++], 'L'+fd+';'));
+							if (Csig.equals(remapper.mapMethodDesc(mn.desc)) && Ssig.equals(remapper.mapMethodDesc(((MethodInsnNode) mn.getNext()).desc))) {
+								m.instructions.insertBefore(n, new FieldInsnNode(GETSTATIC, fd, dirs[di++], 'L' + fd + ';'));
 								m.instructions.insertBefore(n, new MethodInsnNode(INVOKEVIRTUAL, cc, "canPaneConnectTo", Rsig, false));
 								m.instructions.remove(n.getNext());
 								m.instructions.remove(n);
@@ -350,7 +350,7 @@ class ASMCore {
 			}
 
 			if (di == 0)
-				 break l;
+				break l;
 
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 			cn.accept(cw);
@@ -525,11 +525,11 @@ class ASMCore {
 			q: for (int i = 0, e = m.instructions.size(); i < e; ++i) {
 				AbstractInsnNode n = m.instructions.get(i);
 				if (n.getOpcode() == GETSTATIC) {
-					if ("net/minecraftforge/common/ForgeModContainer".equals(((FieldInsnNode)n).owner)) {
+					if ("net/minecraftforge/common/ForgeModContainer".equals(((FieldInsnNode) n).owner)) {
 						for (; n != null; n = n.getNext()) {
 							if (n.getOpcode() != IF_ICMPNE)
 								continue;
-							((JumpInsnNode)n).setOpcode(IF_ICMPLT);
+							((JumpInsnNode) n).setOpcode(IF_ICMPLT);
 							break q;
 						}
 					}
@@ -732,7 +732,8 @@ class ASMCore {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
-			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F", "func_147448_a", "func_147455_a", "func_72939_s", "func_145830_o" };
+			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F", "func_147448_a", "func_147455_a", "func_72939_s",
+					"func_145830_o" };
 		} else {
 			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a", "setTileEntity", "updateEntities", "hasWorldObj" };
 		}
@@ -748,11 +749,11 @@ class ASMCore {
 		for (MethodNode m : cn.methods) {
 			if ("<init>".equals(m.name)) {
 				if (sig.equals(remapper.mapMethodDesc(m.desc)))
-						found = true;
+					found = true;
 				LabelNode a = new LabelNode(new Label());
 				AbstractInsnNode n = m.instructions.getFirst();
-				while (n.getOpcode() != INVOKESPECIAL ||
-						!((MethodInsnNode)n).name.equals("<init>")) n = n.getNext();
+				while (n.getOpcode() != INVOKESPECIAL || !((MethodInsnNode) n).name.equals("<init>"))
+					n = n.getNext();
 				m.instructions.insert(n, n = a);
 				m.instructions.insert(n, n = new LineNumberNode(-15000, a));
 				m.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
@@ -764,7 +765,8 @@ class ASMCore {
 				addTileEntity = m;
 			} else if (names[4].equals(remapper.mapMethodName(name, m.name, m.desc)) && "(Ljava/util/Collection;)V".equals(m.desc)) {
 				addTileEntities = m;
-			} else if (names[5].equals(remapper.mapMethodName(name, m.name, m.desc)) && "(IIILnet/minecraft/tileentity/TileEntity;)V".equals(remapper.mapMethodDesc(m.desc))) {
+			} else if (names[5].equals(remapper.mapMethodName(name, m.name, m.desc))
+					&& "(IIILnet/minecraft/tileentity/TileEntity;)V".equals(remapper.mapMethodDesc(m.desc))) {
 				setTileEntity = m;
 			} else if (names[6].equals(remapper.mapMethodName(name, m.name, m.desc)) && "()V".equals(remapper.mapMethodDesc(m.desc))) {
 				updateEntities = m;
@@ -778,7 +780,8 @@ class ASMCore {
 			addTileEntity.instructions.insert(n = a);
 			addTileEntity.instructions.insert(n, n = new LineNumberNode(-15001, a));
 			addTileEntity.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
-			addTileEntity.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
+			addTileEntity.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles",
+					"Lcofh/lib/util/LinkedHashList;"));
 			addTileEntity.instructions.insert(n, n = new VarInsnNode(ALOAD, 1));
 			addTileEntity.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
 			addTileEntity.instructions.insert(n, n = new InsnNode(POP));
@@ -787,12 +790,14 @@ class ASMCore {
 
 			LabelNode a = new LabelNode(new Label());
 			AbstractInsnNode n = setTileEntity.instructions.getLast();
-			while (n.getOpcode() != RETURN) n = n.getPrevious();
+			while (n.getOpcode() != RETURN)
+				n = n.getPrevious();
 			n = n.getPrevious();
 			setTileEntity.instructions.insert(n = a);
 			setTileEntity.instructions.insert(n, n = new LineNumberNode(-15002, a));
 			setTileEntity.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
-			setTileEntity.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
+			setTileEntity.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles",
+					"Lcofh/lib/util/LinkedHashList;"));
 			setTileEntity.instructions.insert(n, n = new VarInsnNode(ALOAD, 4));
 			setTileEntity.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
 			setTileEntity.instructions.insert(n, n = new InsnNode(POP));
@@ -801,25 +806,28 @@ class ASMCore {
 			LabelNode a = new LabelNode(new Label());
 			AbstractInsnNode n = addTileEntities.instructions.getFirst();
 			for (;;) {
-				while (n.getOpcode() != CHECKCAST) n = n.getNext();
-				if (remapper.mapType(((TypeInsnNode)n).desc).equals("net/minecraft/tileentity/TileEntity"))
+				while (n.getOpcode() != CHECKCAST)
+					n = n.getNext();
+				if (remapper.mapType(((TypeInsnNode) n).desc).equals("net/minecraft/tileentity/TileEntity"))
 					break;
 			}
 			addTileEntities.instructions.insert(n, n = a);
 			addTileEntities.instructions.insert(n, n = new LineNumberNode(-15003, a));
 			addTileEntities.instructions.insert(n, n = new InsnNode(DUP));
 			addTileEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
-			addTileEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
+			addTileEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles",
+					"Lcofh/lib/util/LinkedHashList;"));
 			addTileEntities.instructions.insert(n, n = new InsnNode(SWAP));
-			addTileEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
+			addTileEntities.instructions.insert(n,
+					n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
 			addTileEntities.instructions.insert(n, n = new InsnNode(POP));
 		}
 		if (updateEntities != null) {
 			AbstractInsnNode n = updateEntities.instructions.getFirst();
-			while (n.getOpcode() != INVOKEVIRTUAL ||
-					!"onChunkUnload".equals(((MethodInsnNode)n).name) ||
-					!"()V".equals(((MethodInsnNode)n).desc)) n = n.getNext();
-			while (n.getOpcode() != PUTFIELD) n = n.getNext();
+			while (n.getOpcode() != INVOKEVIRTUAL || !"onChunkUnload".equals(((MethodInsnNode) n).name) || !"()V".equals(((MethodInsnNode) n).desc))
+				n = n.getNext();
+			while (n.getOpcode() != PUTFIELD)
+				n = n.getNext();
 			n = n.getPrevious().getPrevious();
 			LabelNode lStart = new LabelNode(new Label());
 			LabelNode lCond = new LabelNode(new Label());
@@ -831,8 +839,10 @@ class ASMCore {
 			updateEntities.instructions.insert(n, n = lStart);
 			updateEntities.instructions.insert(n, n = new FrameNode(F_SAME, 0, null, 0, null));
 			updateEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
-			updateEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
-			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "shift", "()Ljava/lang/Object;", false));
+			updateEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles",
+					"Lcofh/lib/util/LinkedHashList;"));
+			updateEntities.instructions
+					.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "shift", "()Ljava/lang/Object;", false));
 			updateEntities.instructions.insert(n, n = new TypeInsnNode(CHECKCAST, "net/minecraft/tileentity/TileEntity"));
 			updateEntities.instructions.insert(n, n = new InsnNode(DUP));
 			updateEntities.instructions.insert(n, n = new JumpInsnNode(IFNULL, lGuard));
@@ -846,7 +856,8 @@ class ASMCore {
 			updateEntities.instructions.insert(n, n = lCond);
 			updateEntities.instructions.insert(n, n = new FrameNode(F_SAME, 0, null, 0, null));
 			updateEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
-			updateEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
+			updateEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles",
+					"Lcofh/lib/util/LinkedHashList;"));
 			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "size", "()I", false));
 			updateEntities.instructions.insert(n, n = new JumpInsnNode(IFNE, lStart));
 		}
@@ -874,7 +885,8 @@ class ASMCore {
 			mv.visitInsn(DUP);
 			mv.visitVarInsn(ALOAD, 4);
 			mv.visitVarInsn(ALOAD, 2);
-			mv.visitMethodInsn(INVOKESPECIAL, "net/minecraft/world/storage/WorldInfo", "<init>", "(Lnet/minecraft/world/WorldSettings;Ljava/lang/String;)V", false);
+			mv.visitMethodInsn(INVOKESPECIAL, "net/minecraft/world/storage/WorldInfo", "<init>", "(Lnet/minecraft/world/WorldSettings;Ljava/lang/String;)V",
+					false);
 			mv.visitFieldInsn(PUTFIELD, name, names[1], "Lnet/minecraft/world/storage/WorldInfo;");
 			mv.visitVarInsn(ALOAD, 3);
 			mv.visitFieldInsn(PUTFIELD, name, names[2], "Lnet/minecraft/world/WorldProvider;");
@@ -934,7 +946,8 @@ class ASMCore {
 					INVOKESPECIAL,
 					"net/minecraft/world/World",
 					"<init>",
-					"(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V", false);
+					"(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V",
+					false);
 			mv.visitVarInsn(ALOAD, 1);
 			mv.visitFieldInsn(PUTFIELD, name, names[0], "Lnet/minecraft/server/MinecraftServer;");
 			mv.visitInsn(ACONST_NULL);
@@ -958,8 +971,7 @@ class ASMCore {
 		{
 			FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 			try {
-				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(
-						remapper.unmap("net/minecraft/world/World").replace('/', '.')));
+				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(remapper.unmap("net/minecraft/world/World").replace('/', '.')));
 				reader.accept(new FMLRemappingAdapter(world), ClassReader.SKIP_CODE);
 			} catch (Throwable e) {
 				Throwables.propagate(e);
@@ -1007,8 +1019,7 @@ class ASMCore {
 		{
 			FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 			try {
-				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(
-						remapper.unmap("net/minecraft/world/WorldServer").replace('/', '.')));
+				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(remapper.unmap("net/minecraft/world/WorldServer").replace('/', '.')));
 				reader.accept(new FMLRemappingAdapter(worldServer), ClassReader.SKIP_CODE);
 			} catch (Throwable e) {
 				Throwables.propagate(e);
@@ -1018,8 +1029,7 @@ class ASMCore {
 		{
 			FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 			try {
-				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(
-						remapper.unmap("net/minecraft/world/World").replace('/', '.')));
+				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(remapper.unmap("net/minecraft/world/World").replace('/', '.')));
 				reader.accept(new FMLRemappingAdapter(world), ClassReader.SKIP_CODE);
 			} catch (Throwable e) {
 				Throwables.propagate(e);
@@ -1219,7 +1229,7 @@ class ASMCore {
 					if (clazz.startsWith("mod:")) {
 						int i = mod.indexOf('@');
 						if (i > 0) {
-							clazz = mod.substring(i+1);
+							clazz = mod.substring(i + 1);
 							mod = mod.substring(0, i);
 						}
 						needsRemoved = !Loader.isModLoaded(mod);
@@ -1238,7 +1248,7 @@ class ASMCore {
 					} else if (clazz.startsWith("api:")) {
 						int i = mod.indexOf('@');
 						if (i > 0) {
-							clazz = mod.substring(i+1);
+							clazz = mod.substring(i + 1);
 							mod = mod.substring(0, i);
 						}
 						needsRemoved = !ModAPIManager.INSTANCE.hasAPI(mod);
@@ -1275,6 +1285,7 @@ class ASMCore {
 	// }
 
 	private static Map<String, ModContainer> mods;
+
 	static Map<String, ModContainer> getLoadedMods() {
 
 		if (mods == null) {
@@ -1286,6 +1297,7 @@ class ASMCore {
 	}
 
 	private static Map<String, ModContainer> apis;
+
 	static Map<String, ModContainer> getLoadedAPIs() {
 
 		if (apis == null) {
