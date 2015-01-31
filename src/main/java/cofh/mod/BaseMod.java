@@ -125,13 +125,18 @@ public abstract class BaseMod implements IUpdatableMod {
 		return _log;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void loadLanguageFile(String lang, InputStream stream) throws Throwable {
+	private void loadLanguageFile(Properties lang, InputStream stream) throws Throwable {
 
 		InputStreamReader is = new InputStreamReader(stream, "UTF-8");
 
 		Properties langPack = new Properties();
 		langPack.load(is);
+
+		lang.putAll(langPack);
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void loadLanguageFile(String lang, Properties langPack) {
 
 		HashMap<String, String> parsedLangFile = new HashMap<String, String>();
 		parsedLangFile.putAll((Map) langPack); // lovely casting hack
@@ -156,7 +161,10 @@ public abstract class BaseMod implements IUpdatableMod {
 		String lang = "en_US";
 		try {
 			is = Loader.getResource(path + lang + ".lang", null).openStream();
-			loadLanguageFile(lang, is);
+			Properties langPack = new Properties();
+			loadLanguageFile(langPack, is);
+
+			loadLanguageFile(lang, langPack);
 		} catch (Throwable t) {
 			_log.catching(Level.INFO, t);
 		} finally {
@@ -198,6 +206,7 @@ public abstract class BaseMod implements IUpdatableMod {
 
 			for (String lang : Arrays.asList("en_US", l)) {
 				if (lang != null) {
+					Properties langPack = new Properties();
 					try {
 						List<IResource> files = manager.getAllResources(new ResourceLocation(_path + lang + ".lang"));
 						for (IResource file : files) {
@@ -206,7 +215,7 @@ public abstract class BaseMod implements IUpdatableMod {
 								continue;
 							}
 							try {
-								loadLanguageFile(lang, file.getInputStream());
+								loadLanguageFile(langPack, file.getInputStream());
 							} catch (Throwable t) {
 								_log.warn(AbstractLogger.CATCHING_MARKER, "A resource pack has a file for language '" + lang + "' but the file is invalid.", t);
 							}
@@ -214,8 +223,11 @@ public abstract class BaseMod implements IUpdatableMod {
 					} catch (Throwable t) {
 						_log.info(AbstractLogger.CATCHING_MARKER, "No language data for '" + lang + "'", t);
 					}
+					loadLanguageFile(lang, langPack);
 				}
 			}
+
+			Minecraft.getMinecraft().getLanguageManager().onResourceManagerReload(manager);
 		}
 	}
 }
