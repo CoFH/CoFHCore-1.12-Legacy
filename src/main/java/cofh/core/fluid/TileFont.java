@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
 
@@ -24,6 +25,8 @@ public class TileFont extends TileCoFHBase implements ISidedTexture {
 	Fluid fluid;
 	BlockFluidBase fluidBlock;
 	int amount = -1;
+	int productionDelay = 100;
+	long timeTracker;
 
 	public TileFont() {
 
@@ -78,18 +81,27 @@ public class TileFont extends TileCoFHBase implements ISidedTexture {
 		return 0;
 	}
 
-	@Override
-	public void onNeighborBlockChange() {
+	public void update() {
 
-		if (fluidBlock.canDisplace(worldObj, xCoord, yCoord + 1, zCoord)) {
-			worldObj.setBlock(xCoord, yCoord, zCoord, fluidBlock, 0, 2);
+		long worldTime = worldObj.getTotalWorldTime();
+		if (timeTracker >= worldTime) {
+			return;
+		}
+		timeTracker = worldTime + productionDelay;
+
+		int x = xCoord, y = yCoord, z = zCoord, meta = worldObj.getBlockMetadata(x, y, z);
+		ForgeDirection dir = ForgeDirection.getOrientation(meta ^ 1);
+
+		if (fluidBlock.canDisplace(worldObj, x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ)) {
+			worldObj.setBlock(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, fluidBlock, 0, 3);
+			worldObj.notifyBlockChange(x + dir.offsetX, y + dir.offsetY, z + dir.offsetZ, getBlockType());
 
 			if (amount > 0) {
 				amount--;
 			}
 			if (amount == 0) {
-				worldObj.setBlock(xCoord, yCoord, zCoord, baseBlock, 0, 2);
-				invalidate();
+				// if (worldObj.rand) TODO: depleted font state
+				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta | 8, 2);
 			}
 		}
 	}
@@ -113,6 +125,7 @@ public class TileFont extends TileCoFHBase implements ISidedTexture {
 	@Override
 	public IIcon getTexture(int side, int pass) {
 
+		// FIXME: overlay an icon on side we eject fluids?
 		return icon;
 	}
 
