@@ -719,7 +719,7 @@ class ASMCore {
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		cn.accept(cw);
 		cw.newMethod(name, "cofh_validate", "()V", true);
-		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "cofh_validate", "()V", null, null);
+		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC | ACC_SYNTHETIC, "cofh_validate", "()V", null, null);
 		mv.visitCode();
 		mv.visitInsn(RETURN);
 		mv.visitMaxs(0, 1);
@@ -772,7 +772,7 @@ class ASMCore {
 				updateEntities = m;
 			}
 		}
-		cn.fields.add(new FieldNode(ACC_PRIVATE, "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;", null, null));
+		cn.fields.add(new FieldNode(ACC_PRIVATE | ACC_SYNTHETIC, "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;", null, null));
 		if (addTileEntity != null) {
 
 			LabelNode a = new LabelNode(new Label());
@@ -833,11 +833,12 @@ class ASMCore {
 			LabelNode lCond = new LabelNode(new Label());
 			LabelNode lGuard = new LabelNode(new Label());
 			LabelNode a = new LabelNode(new Label());
-			updateEntities.instructions.insert(n, n = a);
+			updateEntities.instructions.insertBefore(n, n = a);
 			updateEntities.instructions.insert(n, n = new LineNumberNode(-15004, a));
 			updateEntities.instructions.insert(n, n = new JumpInsnNode(GOTO, lCond));
 			updateEntities.instructions.insert(n, n = lStart);
 			updateEntities.instructions.insert(n, n = new FrameNode(F_SAME, 0, null, 0, null));
+
 			updateEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
 			updateEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles",
 					"Lcofh/lib/util/LinkedHashList;"));
@@ -848,7 +849,7 @@ class ASMCore {
 			updateEntities.instructions.insert(n, n = new JumpInsnNode(IFNULL, lGuard));
 			updateEntities.instructions.insert(n, n = new InsnNode(DUP));
 			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity", names[7], "()Z", false));
-			updateEntities.instructions.insert(n, n = new JumpInsnNode(IFNE, lGuard));
+			updateEntities.instructions.insert(n, n = new JumpInsnNode(IFEQ, lGuard));
 			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity", "cofh_validate", "()V", false));
 			updateEntities.instructions.insert(n, n = new InsnNode(ACONST_NULL));
 			updateEntities.instructions.insert(n, n = lGuard);
