@@ -3,6 +3,7 @@ package cofh.core;
 import java.io.File;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidTankInfo;
 
 public class CoFHProps {
 
@@ -46,6 +47,10 @@ public class CoFHProps {
 			}
 		}
 	}
+
+	/* Dummy Inventories */
+	public static int[] EMPTY_INVENTORY = new int[] {};
+	public static FluidTankInfo[] EMPTY_TANK_INFO = new FluidTankInfo[] {};
 
 	/* Graphics */
 	public static final String PATH_GFX = "cofh:textures/";

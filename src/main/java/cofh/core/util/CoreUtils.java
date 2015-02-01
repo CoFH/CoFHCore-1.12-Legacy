@@ -4,6 +4,7 @@ import cofh.CoFHCore;
 import cofh.core.CoFHProps;
 import cofh.core.entity.EntityLightningBoltFake;
 import cofh.lib.util.position.BlockPosition;
+import cpw.mods.fml.common.registry.GameData;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +22,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -39,6 +41,13 @@ public class CoreUtils {
 
 		entityId++;
 		return entityId;
+	}
+
+	/* MOD UTILS */
+	public static String getModName(Item item) {
+
+		String s = GameData.getItemRegistry().getNameForObject(item);
+		return s.substring(0, s.indexOf(':'));
 	}
 
 	/* PLAYER UTILS */
@@ -117,7 +126,6 @@ public class CoreUtils {
 	}
 
 	/* FILE UTILS */
-	@SuppressWarnings("resource")
 	public static void copyFileUsingStream(String source, File dest) throws IOException {
 
 		InputStream is = null;
@@ -141,7 +149,6 @@ public class CoreUtils {
 		}
 	}
 
-	@SuppressWarnings("resource")
 	public static void copyFileUsingStream(String source, String dest) throws IOException {
 
 		InputStream is = null;
@@ -165,7 +172,6 @@ public class CoreUtils {
 		}
 	}
 
-	@SuppressWarnings("resource")
 	public static void copyFileUsingChannel(File source, File dest) throws IOException {
 
 		FileChannel sourceChannel = null;
