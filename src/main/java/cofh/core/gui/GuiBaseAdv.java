@@ -24,6 +24,7 @@ public abstract class GuiBaseAdv extends GuiBase {
 	public static final String TEX_SNOWFLAKE = GuiProps.PATH_ELEMENTS + "Scale_Snowflake.png";
 
 	public static final String TEX_TANK = GuiProps.PATH_ELEMENTS + "FluidTank.png";
+	public static final String TEX_TANK_GREY = GuiProps.PATH_ELEMENTS + "FluidTank_Grey.png";
 
 	public static final int PROGRESS = 24;
 	public static final int SPEED = 16;
