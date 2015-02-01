@@ -212,7 +212,7 @@ class ASMCore {
 		}
 
 		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
@@ -254,7 +254,7 @@ class ASMCore {
 		}
 
 		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
@@ -304,7 +304,7 @@ class ASMCore {
 		}
 
 		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		final String sig = "(Lnet/minecraft/block/Block;III)Z";
@@ -365,7 +365,7 @@ class ASMCore {
 		String names = "canPaneConnectTo"; // forge added
 
 		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		final String sig = "(Lnet/minecraft/world/IBlockAccess;IIILnet/minecraftforge/common/util/ForgeDirection;)Z";
@@ -412,7 +412,7 @@ class ASMCore {
 		}
 
 		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
@@ -459,7 +459,7 @@ class ASMCore {
 		}
 
 		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
@@ -503,7 +503,7 @@ class ASMCore {
 		}
 
 		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		String sig = "()V";
@@ -553,7 +553,7 @@ class ASMCore {
 		}
 
 		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
@@ -586,7 +586,7 @@ class ASMCore {
 
 			mc: if (containsItem != null) {
 				// { cloning methods to get a different set of instructions to avoid erasing getEntry
-				ClassNode clone = new ClassNode(ASM4);
+				ClassNode clone = new ClassNode(ASM5);
 				cr.accept(clone, ClassReader.EXPAND_FRAMES);
 				String sig = "(J)Lnet/minecraft/util/LongHashMap$Entry;";
 				for (MethodNode m : clone.methods) {
@@ -641,7 +641,7 @@ class ASMCore {
 		}
 
 		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		final String sig = "(III)Z";
@@ -714,7 +714,7 @@ class ASMCore {
 	private static byte[] alterTileEntity(String name, String transformedName, byte[] bytes, ClassReader cr) {
 
 		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, 0);
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		cn.accept(cw);
@@ -738,7 +738,7 @@ class ASMCore {
 			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a", "setTileEntity", "updateEntities", "hasWorldObj" };
 		}
 		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		final String sig = "(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
@@ -910,7 +910,7 @@ class ASMCore {
 			names = new String[] { "mcServer", "theEntityTracker", "thePlayerManager", "worldTeleporter" };
 		}
 		name = name.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 		final String sig = "(Lnet/minecraft/server/MinecraftServer;Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
@@ -967,7 +967,7 @@ class ASMCore {
 
 	private static byte[] writeWorldProxy(String name, byte[] bytes, ClassReader cr) {
 
-		ClassNode world = new ClassNode(ASM4);
+		ClassNode world = new ClassNode(ASM5);
 		{
 			FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 			try {
@@ -978,7 +978,7 @@ class ASMCore {
 			}
 		}
 
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.SKIP_FRAMES);
 
 		for (MethodNode m : world.methods) {
@@ -1015,7 +1015,7 @@ class ASMCore {
 
 	private static byte[] writeWorldServerProxy(String name, byte[] bytes, ClassReader cr) {
 
-		ClassNode worldServer = new ClassNode(ASM4);
+		ClassNode worldServer = new ClassNode(ASM5);
 		{
 			FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 			try {
@@ -1025,7 +1025,7 @@ class ASMCore {
 				Throwables.propagate(e);
 			}
 		}
-		ClassNode world = new ClassNode(ASM4);
+		ClassNode world = new ClassNode(ASM5);
 		{
 			FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 			try {
@@ -1036,7 +1036,7 @@ class ASMCore {
 			}
 		}
 
-		ClassNode cn = new ClassNode(ASM4);
+		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.SKIP_FRAMES);
 
 		cn.superName = "net/minecraft/world/WorldServer";
