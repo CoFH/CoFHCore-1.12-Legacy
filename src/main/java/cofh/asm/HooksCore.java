@@ -99,7 +99,7 @@ public class HooksCore {
 	@SideOnly(Side.CLIENT)
 	public static void tickTextures(ITickable obj) {
 
-		if (CoFHProps.enableAnimatedTexutres) {
+		if (CoFHProps.enableAnimatedTextures) {
 			obj.tick();
 		}
 	}

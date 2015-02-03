@@ -29,7 +29,7 @@ import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 
 public class Proxy {
 
-	public void preinit() {
+	public void preInit() {
 
 	}
 

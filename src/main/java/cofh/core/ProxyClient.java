@@ -41,10 +41,9 @@ public class ProxyClient extends Proxy {
 	public static CoFHFontRender fontRenderer;
 
 	@Override
-	public void preinit() {
+	public void preInit() {
 
 		Minecraft.memoryReserve = null;
-		// someone removed this from minecraft itself. lets fix that bug.
 	}
 
 	@Override
@@ -168,22 +167,22 @@ public class ProxyClient extends Proxy {
 		TabSecurity.initialize();
 		TabTutorial.initialize();
 
-        ShaderHelper.initShaders();
+		ShaderHelper.initShaders();
 
-		String comment = "Set to false to disable any particles from spawning in minecraft.";
+		String comment = "Set to false to disable any particles from spawning in Minecraft.";
 		if (!CoFHCore.configClient.get(Configuration.CATEGORY_GENERAL, "EnableParticles", true, comment)) {
 			CoFHCore.log.info("Replacing EffectRenderer");
 			Minecraft.getMinecraft().effectRenderer = new cofh.core.render.CustomEffectRenderer();
 		}
 
-		comment = "Set to false to disable rendering from sorting chunks";
+		comment = "Set to false to disable rendering from sorting chunks.";
 		if (!CoFHCore.configClient.get(Configuration.CATEGORY_GENERAL, "EnableRenderSorting", true, comment)) {
 			CoFHProps.enableRenderSorting = false;
 		}
 
-		comment = "Set to false to disable all animated texutres in minecraft";
+		comment = "Set to false to disable all animated textures in Minecraft.";
 		if (!CoFHCore.configClient.get(Configuration.CATEGORY_GENERAL, "EnableAnimatedTextures", true, comment)) {
-			CoFHProps.enableAnimatedTexutres = false;
+			CoFHProps.enableAnimatedTextures = false;
 		}
 
 		CoFHCore.configClient.save();
