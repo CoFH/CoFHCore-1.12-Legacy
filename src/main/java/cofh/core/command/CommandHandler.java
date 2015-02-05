@@ -13,6 +13,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandNotFoundException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public class CommandHandler extends CommandBase {
 
@@ -104,7 +105,9 @@ public class CommandHandler extends CommandBase {
 		}
 		ISubCommand command = commands.get(arguments[0]);
 		if (command != null) {
-			if (sender.canCommandSenderUseCommand(command.getPermissionLevel(), "cofh " + command.getCommandName())) {
+			if (sender.canCommandSenderUseCommand(command.getPermissionLevel(), "cofh " + command.getCommandName()) ||
+					// this check below is because mojang is incompetent, as always
+					(sender instanceof EntityPlayerMP && command.getPermissionLevel() <= 0)) {
 				command.handleCommand(sender, arguments);
 				return;
 			}
