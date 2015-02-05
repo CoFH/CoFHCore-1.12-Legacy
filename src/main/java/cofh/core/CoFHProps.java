@@ -1,6 +1,9 @@
 package cofh.core;
 
+import com.mojang.authlib.GameProfile;
+
 import java.io.File;
+import java.util.UUID;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -27,7 +30,7 @@ public class CoFHProps {
 	public static File configDir = null;
 
 	/* Global Constants */
-	public static final String DEFAULT_OWNER = "[None]";
+	public static final GameProfile DEFAULT_OWNER = new GameProfile(UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea"), "[None]");;
 
 	public static final int TIME_CONSTANT = 32;
 	public static final int TIME_CONSTANT_HALF = TIME_CONSTANT / 2;

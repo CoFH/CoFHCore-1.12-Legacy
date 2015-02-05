@@ -21,6 +21,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -121,10 +122,10 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
 
 		if (tile instanceof ISecurable) {
 			if (SecurityHelper.isSecure(stack)) {
-				String stackOwner = SecurityHelper.getOwnerName(stack);
+				UUID stackOwner = SecurityHelper.getOwner(stack);
 
-				if (!stackOwner.isEmpty()) {
-					((ISecurable) tile).setOwnerName(stackOwner);
+				if (0 != stackOwner.variant()) {
+					((ISecurable) tile).setOwner(stackOwner);
 				} else if (living instanceof ICommandSender) {
 					((ISecurable) tile).setOwnerName(living.getCommandSenderName());
 				}

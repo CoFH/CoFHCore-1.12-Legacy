@@ -18,7 +18,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 
 public class CoFHFakePlayer extends FakePlayer {
 
-	private static GameProfile NAME = new GameProfile(UUID.fromString("5ae51d0b-e8bc-5a02-89f4-b5dbb05963da"), "[CoFH]");
+	private static GameProfile NAME = new GameProfile(UUID.fromString("5ae51d0b-e8bc-5a02-09f4-b5dbb05963da"), "[CoFH]");
 
 	public boolean isSneaking = false;
 	public ItemStack previousItem = null;

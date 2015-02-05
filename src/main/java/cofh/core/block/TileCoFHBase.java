@@ -11,11 +11,14 @@ import cofh.core.util.SocialRegistry;
 import cofh.lib.util.helpers.ServerHelper;
 import cpw.mods.fml.relauncher.Side;
 
+import java.util.UUID;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.network.Packet;
+import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.tileentity.TileEntity;
 
 public abstract class TileCoFHBase extends TileEntity {
@@ -79,10 +82,16 @@ public abstract class TileCoFHBase extends TileEntity {
 			return true;
 		}
 		AccessMode access = ((ISecurable) this).getAccess();
-		String owner = ((ISecurable) this).getOwnerName();
+		UUID ownerID = ((ISecurable) this).getOwner();
+		if (access.isPublic() || ownerID.variant() == 0 || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name)))
+			return true;
 
-		return access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name)) || owner.equals(CoFHProps.DEFAULT_OWNER) || owner.equals(name)
-				|| access.isRestricted() && SocialRegistry.playerHasAccess(name, owner);
+		UUID otherID = UUID.fromString(PreYggdrasilConverter.func_152719_a(name));
+		if (ownerID.equals(otherID))
+			return true;
+
+		String owner = ((ISecurable) this).getOwnerName();
+		return access.isRestricted() && SocialRegistry.playerHasAccess(name, owner);
 	}
 
 	public boolean canPlayerDismantle(EntityPlayer player) {
