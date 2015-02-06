@@ -16,12 +16,12 @@ import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.RedstoneControlHelper;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.StringHelper;
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -122,10 +122,10 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
 
 		if (tile instanceof ISecurable) {
 			if (SecurityHelper.isSecure(stack)) {
-				UUID stackOwner = SecurityHelper.getOwner(stack);
+				GameProfile stackOwner = SecurityHelper.getOwner(stack);
 
-				if (0 != stackOwner.variant()) {
-					((ISecurable) tile).setOwner(stackOwner);
+				if (((ISecurable) tile).setOwner(stackOwner)) {
+					;
 				} else if (living instanceof ICommandSender) {
 					((ISecurable) tile).setOwnerName(living.getCommandSenderName());
 				}

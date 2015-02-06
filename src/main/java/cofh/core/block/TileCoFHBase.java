@@ -82,8 +82,10 @@ public abstract class TileCoFHBase extends TileEntity {
 			return true;
 		}
 		AccessMode access = ((ISecurable) this).getAccess();
-		UUID ownerID = ((ISecurable) this).getOwner();
-		if (access.isPublic() || ownerID.variant() == 0 || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name)))
+		if (access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name)))
+			return true;
+		UUID ownerID = ((ISecurable) this).getOwner().getId();
+		if (ownerID.variant() == 0)
 			return true;
 
 		UUID otherID = UUID.fromString(PreYggdrasilConverter.func_152719_a(name));

@@ -5,8 +5,10 @@ import com.google.common.eventbus.Subscribe;
 import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.LoadController;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.discovery.ASMDataTable;
+import cpw.mods.fml.common.discovery.ModCandidate;
 import cpw.mods.fml.common.event.FMLConstructionEvent;
 import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import cpw.mods.fml.common.versioning.VersionParser;
@@ -51,7 +53,8 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 			System.err.println(err);
 
 			JEditorPane ep = new JEditorPane("text/html", "<html>" + err
-					+ "<br>Remove it from your coremods folder and check <a href=\"http://teamcofh.com/\">here</a> for updates" + "</html>");
+				+ "<br>Remove it from your coremods or mods folder and check <a href=\"http://teamcofh.com/\">here</a> for updates"
+				+ "</html>");
 
 			ep.setEditable(false);
 			ep.setOpaque(false);
@@ -148,6 +151,13 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 
 			ASM_DATA = evt.getASMHarvestedData();
 			PCCASMTransformer.scrapeData(ASM_DATA);
+			for (ModCandidate t : ASM_DATA.getCandidatesFor("cofh.api.energy")) {
+				if (true) {
+					for (ModContainer mod : t.getContainedMods()) {
+						;
+					}
+				}
+			}
 		}
 
 		@Override
