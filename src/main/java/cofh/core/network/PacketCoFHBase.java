@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -42,6 +43,27 @@ public abstract class PacketCoFHBase extends PacketBase {
 
 		try {
 			dataout.writeUTF(theString);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
+
+	public PacketCoFHBase addUUID(UUID theUUID) {
+
+		try {
+			dataout.writeLong(theUUID.getMostSignificantBits());
+			dataout.writeLong(theUUID.getLeastSignificantBits());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
+
+	public PacketCoFHBase addLong(long theLong) {
+
+		try {
+			dataout.writeLong(theLong);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -159,6 +181,28 @@ public abstract class PacketCoFHBase extends PacketBase {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	public UUID getUUID() {
+
+		try {
+			long msb = datain.readLong();
+			long lsb = datain.readLong();
+			return new UUID(msb, lsb);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public long getLong() {
+
+		try {
+			return datain.readLong();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return 0;
 		}
 	}
 
