@@ -16,7 +16,7 @@ public class SocialRegistry {
 
 	public static void initialize() {
 
-		friendConf = new Configuration(new File(CoFHProps.configDir, "/cofh/CoFHSocial-Friends.cfg"));
+		friendConf = new Configuration(new File(CoFHProps.configDir, "/cofh/core/friends.cfg"));
 		friendConf.load();
 	}
 

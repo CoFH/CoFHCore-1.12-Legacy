@@ -55,8 +55,8 @@ import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies,
-customProperties = @CustomProperty(k = "cofhversion", v = "true"))
+@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, customProperties = @CustomProperty(
+		k = "cofhversion", v = "true"))
 public class CoFHCore extends BaseMod {
 
 	public static final String modId = "CoFHCore";
@@ -80,9 +80,10 @@ public class CoFHCore extends BaseMod {
 
 	public static MinecraftServer server;
 
-	private ArrayList<IBakeable> oven = new ArrayList<IBakeable>();
+	private final ArrayList<IBakeable> oven = new ArrayList<IBakeable>();
 
 	public static void registerBakeable(IBakeable a) {
+
 		instance.oven.add(a);
 	}
 
@@ -100,8 +101,8 @@ public class CoFHCore extends BaseMod {
 		// loadLang();
 
 		UpdateManager.registerUpdater(new UpdateManager(this, releaseURL, CoFHProps.DOWNLOAD_URL));
-		configCore.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/CoFHCore.cfg")));
-		configClient.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/Client.cfg")));
+		configCore.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/common.cfg")));
+		configClient.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/client.cfg")));
 		MinecraftForge.EVENT_BUS.register(proxy);
 		proxy.preInit();
 
@@ -244,7 +245,7 @@ public class CoFHCore extends BaseMod {
 
 	private boolean moduleLoot() {
 
-		configLoot.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/CoFHLoot.cfg")));
+		configLoot.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/loot.cfg")));
 
 		String category = "general";
 		String comment = null;
