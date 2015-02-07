@@ -119,7 +119,7 @@ public class TabAugment extends TabBase {
 		mouseX -= currentShiftX;
 		mouseY -= currentShiftY;
 
-		if (mouseX < slotsBorderX1 + offset() || mouseX >= slotsBorderX2 + offset() || mouseY < slotsBorderY1 || mouseY >= slotsBorderY2) {
+		if (mouseX < slotsBorderX1 + sideOffset() || mouseX >= slotsBorderX2 + sideOffset() || mouseY < slotsBorderY1 || mouseY >= slotsBorderY2) {
 			return false;
 		}
 
