@@ -8,9 +8,9 @@ import net.minecraftforge.fluids.IFluidTank;
 
 /**
  * Reference implementation of {@link IFluidTank}. Use/extend this or implement your own.
- * 
+ *
  * @author King Lemming, cpw (LiquidTank)
- * 
+ *
  */
 public class FluidTankAdv implements IFluidTank {
 
@@ -36,14 +36,13 @@ public class FluidTankAdv implements IFluidTank {
 
 	public FluidTankAdv readFromNBT(NBTTagCompound nbt) {
 
+		FluidStack fluid = null;
+		locked = false;
 		if (!nbt.hasKey("Empty")) {
-			FluidStack fluid = FluidStack.loadFluidStackFromNBT(nbt);
+			fluid = FluidStack.loadFluidStackFromNBT(nbt);
 			locked = nbt.getBoolean("Lock") && fluid != null;
-
-			if (fluid != null) {
-				setFluid(fluid);
-			}
 		}
+		setFluid(fluid);
 		return this;
 	}
 
@@ -78,7 +77,7 @@ public class FluidTankAdv implements IFluidTank {
 
 	/**
 	 * Only ever call this on a locked tank. Be really sure you know WTF you are doing.
-	 * 
+	 *
 	 * @param amount
 	 */
 	public void modifyFluidStored(int amount) {
