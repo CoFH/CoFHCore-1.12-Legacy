@@ -23,7 +23,7 @@ public class TabEnergy extends TabBase {
 
 	public static void initialize() {
 
-		String category = "tab.energy";
+		String category = "Tab.Energy";
 		// enable = CoFHCore.configClient.get(category, "Enable", true);
 		defaultSide = MathHelper.clampI(CoFHCore.configClient.get(category, "Side", defaultSide), 0, 1);
 		defaultHeaderColor = MathHelper.clampI(CoFHCore.configClient.get(category, "ColorHeader", defaultHeaderColor), 0, 0xffffff);

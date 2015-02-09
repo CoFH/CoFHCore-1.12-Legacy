@@ -8,9 +8,9 @@ import net.minecraftforge.common.config.Property;
 
 /**
  * This is effectively a wrapper for Forge Configurations. It allows for easier manipulation of Config files.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class ConfigHandler {
 
@@ -42,7 +42,7 @@ public class ConfigHandler {
 
 	public String getConfigVersion() {
 
-		return get("version", "Version", modVersion);
+		return get("Version", "Identifier", modVersion);
 	}
 
 	public boolean isOldConfig() {
@@ -162,6 +162,45 @@ public class ConfigHandler {
 		return modConfiguration.hasKey(category, key);
 	}
 
+	public boolean copyProperty(String category, String key, String newCategory, String newKey, boolean forceValue) {
+
+		if (modConfiguration.hasKey(category, key)) {
+			Property prop = modConfiguration.getCategory(category).get(key);
+
+			if (prop.isIntValue()) {
+				int value = modConfiguration.getCategory(category).getValues().get(key).getInt();
+
+				if (forceValue) {
+					removeProperty(newCategory, newKey);
+				}
+				modConfiguration.get(newCategory, newKey, value);
+			} else if (prop.isBooleanValue()) {
+				boolean value = modConfiguration.getCategory(category).getValues().get(key).getBoolean(false);
+
+				if (forceValue) {
+					removeProperty(newCategory, newKey);
+				}
+				modConfiguration.get(newCategory, newKey, value);
+			} else if (prop.isDoubleValue()) {
+				double value = modConfiguration.getCategory(category).getValues().get(key).getDouble(0.0);
+
+				if (forceValue) {
+					removeProperty(newCategory, newKey);
+				}
+				modConfiguration.get(newCategory, newKey, value);
+			} else {
+				String value = modConfiguration.getCategory(category).getValues().get(key).getString();
+
+				if (forceValue) {
+					removeProperty(newCategory, newKey);
+				}
+				modConfiguration.get(newCategory, newKey, value);
+			}
+			return true;
+		}
+		return false;
+	}
+
 	public boolean renameProperty(String category, String key, String newCategory, String newKey, boolean forceValue) {
 
 		if (modConfiguration.hasKey(category, key)) {
@@ -219,8 +258,9 @@ public class ConfigHandler {
 		if (!modConfiguration.hasCategory(category)) {
 			return false;
 		}
+		modConfiguration.getCategory(category);
 		for (Property prop : modConfiguration.getCategory(category).values()) {
-			renameProperty(category, prop.getName(), newCategory, prop.getName(), true);
+			copyProperty(category, prop.getName(), newCategory, prop.getName(), true);
 		}
 		removeCategory(category);
 		return true;
@@ -241,6 +281,7 @@ public class ConfigHandler {
 		removeProperty("version", "Version");
 		removeProperty("general", "version");
 		removeProperty("general", "Version");
+		removeProperty("Version", "Identifier");
 
 		if (saveVersion) {
 			getConfigVersion();

@@ -89,4 +89,9 @@ public class CoFHProps {
 	public static boolean enableRenderSorting = true;
 	public static boolean enableAnimatedTextures = true;
 
+	public static boolean enableShaderEffects = true;
+
+	public static boolean enableColorBlindTextures = false;
+	public static boolean enableGUISlotBorders = true;
+
 }

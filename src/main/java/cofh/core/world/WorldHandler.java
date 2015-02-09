@@ -73,7 +73,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 
 	public static void initialize() {
 
-		String category = "world";
+		String category = "World";
 		String comment = null;
 
 		comment = "This allows for vanilla Minecraft ore generation to be REPLACED. Configure in the Vanilla.json file; vanilla defaults have been provided. If you rename the Vanilla.json file, this option WILL NOT WORK.";

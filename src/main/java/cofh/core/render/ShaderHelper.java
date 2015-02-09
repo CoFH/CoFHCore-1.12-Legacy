@@ -1,6 +1,7 @@
 package cofh.core.render;
 
 import cofh.CoFHCore;
+import cofh.core.CoFHProps;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -14,7 +15,6 @@ import java.io.InputStreamReader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraftforge.common.config.Configuration;
 
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
@@ -22,6 +22,7 @@ import org.lwjgl.opengl.ARBVertexShader;
 import org.lwjgl.opengl.GL11;
 
 public final class ShaderHelper {
+
 	private static final int VERT = ARBVertexShader.GL_VERTEX_SHADER_ARB;
 	private static final int FRAG = ARBFragmentShader.GL_FRAGMENT_SHADER_ARB;
 
@@ -39,7 +40,8 @@ public final class ShaderHelper {
 	@SubscribeEvent
 	public void clientTick(TickEvent.ClientTickEvent event) {
 
-		if (event.phase == TickEvent.Phase.END) return;
+		if (event.phase == TickEvent.Phase.END)
+			return;
 		GuiScreen gui = Minecraft.getMinecraft().currentScreen;
 		if (gui == null || !gui.doesGuiPauseGame()) {
 			gameTicks++;
@@ -49,7 +51,8 @@ public final class ShaderHelper {
 	@SubscribeEvent
 	public void renderTick(TickEvent.RenderTickEvent event) {
 
-		if (event.phase == TickEvent.Phase.END) return;
+		if (event.phase == TickEvent.Phase.END)
+			return;
 		midGameTick = event.renderTickTime;
 	}
 
@@ -89,7 +92,7 @@ public final class ShaderHelper {
 
 	public static boolean useShaders() {
 
-		return OpenGlHelper.shadersSupported && CoFHCore.configClient.get(Configuration.CATEGORY_GENERAL, "EnabledShaders", true);
+		return OpenGlHelper.shadersSupported && CoFHProps.enableShaderEffects;
 	}
 
 	// Most of the code taken from the LWJGL wiki
@@ -202,4 +205,5 @@ public final class ShaderHelper {
 
 		public abstract void call(int shader, boolean newFrame);
 	}
+
 }

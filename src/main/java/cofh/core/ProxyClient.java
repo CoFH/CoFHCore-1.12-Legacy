@@ -16,6 +16,7 @@ import cofh.core.render.ShaderHelper;
 import cofh.core.util.KeyBindingEmpower;
 import cofh.core.util.SocialRegistry;
 import cofh.core.util.TickHandlerEnderRegistry;
+import cofh.lib.util.helpers.StringHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -33,7 +34,6 @@ import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.config.Configuration;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy {
@@ -44,6 +44,66 @@ public class ProxyClient extends Proxy {
 	public void preInit() {
 
 		Minecraft.memoryReserve = null;
+
+		/* GLOBAL */
+		String category = "Global";
+		CoFHCore.configClient.getCategory(category).setComment("The options in this section change core Minecraft behavior and are not limited to CoFH mods.");
+
+		String comment = "Set to false to disable any particles from spawning in Minecraft.";
+		if (!CoFHCore.configClient.get(category, "EnableParticles", true, comment)) {
+			CoFHCore.log.info("Replacing EffectRenderer");
+			Minecraft.getMinecraft().effectRenderer = new cofh.core.render.CustomEffectRenderer();
+		}
+
+		comment = "Set to false to disable chunk sorting during rendering.";
+		if (!CoFHCore.configClient.get(category, "EnableRenderSorting", true, comment)) {
+			CoFHProps.enableRenderSorting = false;
+		}
+
+		comment = "Set to false to disable all animated textures in Minecraft.";
+		if (!CoFHCore.configClient.get(category, "EnableAnimatedTextures", true, comment)) {
+			CoFHProps.enableAnimatedTextures = false;
+		}
+
+		/* GENERAL */
+		category = "General";
+		comment = "Set to false to disable shader effects in CoFH Mods.";
+		if (!CoFHCore.configClient.get(category, "EnableShaderEffects", true, comment)) {
+			CoFHProps.enableShaderEffects = false;
+		}
+		comment = "Set to true to use Color Blind Textures in CoFH Mods, where applicable.";
+		if (!CoFHCore.configClient.get(category, "EnableColorBlindTextures", false, comment)) {
+			CoFHProps.enableColorBlindTextures = true;
+		}
+
+		/* INTERFACE */
+		category = "Interface";
+		comment = "Set to true to draw borders on GUI slots in CoFH Mods, where applicable.";
+		if (!CoFHCore.configClient.get(category, "EnableGUISlotBorders", true, comment)) {
+			CoFHProps.enableGUISlotBorders = false;
+		}
+
+		/* INTERFACE - TOOLTIPS */
+		category = "Interface.Tooltips";
+		comment = "Set to false to hide a tooltip prompting you to press Shift for more details on various items.";
+		if (!CoFHCore.configClient.get(category, "DisplayHoldShiftForDetail", true, comment)) {
+			StringHelper.displayShiftForDetail = false;
+		}
+
+		comment = "Set to true to display large item counts as stacks rather than a single quantity.";
+		if (!CoFHCore.configClient.get(category, "DisplayContainedItemsAsStackCount", false, comment)) {
+			StringHelper.displayStackCount = true;
+		}
+
+		/* SECURITY */
+		category = "Security";
+
+		comment = "Set to false to disable warnings about Ops having access to 'secure' blocks upon logging on to a server.";
+		if (!CoFHCore.configClient.get(category, "OpsCanAccessSecureBlocksWarning", true, comment)) {
+			CoFHProps.enableOpSecureAccessWarning = false;
+		}
+
+		CoFHCore.configClient.save();
 	}
 
 	@Override
@@ -168,24 +228,6 @@ public class ProxyClient extends Proxy {
 		TabTutorial.initialize();
 
 		ShaderHelper.initShaders();
-
-		String comment = "Set to false to disable any particles from spawning in Minecraft.";
-		if (!CoFHCore.configClient.get(Configuration.CATEGORY_GENERAL, "EnableParticles", true, comment)) {
-			CoFHCore.log.info("Replacing EffectRenderer");
-			Minecraft.getMinecraft().effectRenderer = new cofh.core.render.CustomEffectRenderer();
-		}
-
-		comment = "Set to false to disable rendering from sorting chunks.";
-		if (!CoFHCore.configClient.get(Configuration.CATEGORY_GENERAL, "EnableRenderSorting", true, comment)) {
-			CoFHProps.enableRenderSorting = false;
-		}
-
-		comment = "Set to false to disable all animated textures in Minecraft.";
-		if (!CoFHCore.configClient.get(Configuration.CATEGORY_GENERAL, "EnableAnimatedTextures", true, comment)) {
-			CoFHProps.enableAnimatedTextures = false;
-		}
-
-		CoFHCore.configClient.save();
 
 		fontRenderer = new CoFHFontRender(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"),
 				Minecraft.getMinecraft().renderEngine, false);

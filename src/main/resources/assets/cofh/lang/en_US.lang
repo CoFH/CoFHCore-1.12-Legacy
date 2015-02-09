@@ -1,5 +1,11 @@
 #en_US
 
+# Config GUI Tooltips
+config.Client.tooltip=Configure client-side only options.
+config.Common.tooltip=Configure general options.
+config.Core.tooltip=Configure Core module options.
+config.Loot.tooltip=Configure Loot module options.
+
 chat.cofh.secure.0=Notice: Server Ops are able to freely access 'secure' blocks on this server.
 chat.cofh.secure.1=This is private and belongs to
 chat.cofh.secure.2=You could have lost your hand!

@@ -24,7 +24,6 @@ import cofh.core.util.fluid.BucketHandler;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
-import cofh.lib.util.helpers.StringHelper;
 import cofh.mod.BaseMod;
 import cofh.mod.updater.UpdateManager;
 import cpw.mods.fml.common.Mod;
@@ -55,15 +54,16 @@ import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, customProperties = @CustomProperty(
-		k = "cofhversion", v = "true"))
+@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, guiFactory = CoFHCore.modGuiFactory,
+customProperties = @CustomProperty(k = "cofhversion", v = "true"))
 public class CoFHCore extends BaseMod {
 
 	public static final String modId = "CoFHCore";
 	public static final String modName = "CoFH Core";
 	public static final String version = CoFHProps.VERSION;
 	public static final String dependencies = CoFHProps.DEPENDENCIES;
-	public static final String releaseURL = "https://raw.github.com/CoFH/CoFHCore/master/VERSION";
+	public static final String releaseURL = "https://raw.github.com/CoFH/Version/master/CoFHCore";
+	public static final String modGuiFactory = "cofh.core.gui.GuiConfigCoreFactory";
 
 	@Instance(modId)
 	public static CoFHCore instance;
@@ -98,11 +98,22 @@ public class CoFHCore extends BaseMod {
 
 		CoFHProps.configDir = event.getModConfigurationDirectory();
 
-		// loadLang();
-
 		UpdateManager.registerUpdater(new UpdateManager(this, releaseURL, CoFHProps.DOWNLOAD_URL));
-		configCore.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/common.cfg")));
-		configClient.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/client.cfg")));
+		configCore.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/common.cfg"), true));
+		configClient.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/client.cfg"), true));
+
+		// BEGIN TEMP CODE
+		// TODO: Remove after 3.1
+		configCore.renameCategory("general", "General");
+		configCore.renameCategory("enchantment", "Enchantment");
+		configCore.renameCategory("security", "Security");
+		configCore.renameCategory("world", "World");
+
+		configClient.removeCategory("tab");
+		configClient.removeCategory("general");
+
+		// END TEMP CODE
+
 		MinecraftForge.EVENT_BUS.register(proxy);
 		proxy.preInit();
 
@@ -201,62 +212,66 @@ public class CoFHCore extends BaseMod {
 
 	private boolean moduleCore() {
 
-		String category = "general";
+		String comment;
+		/* GENERAL */
+		String category = "General";
 
-		String comment = "Enable this to be informed of non-critical updates. You will still receive critical update notifications.";
-		CoFHProps.enableUpdateNotice = configCore.get(category, "EnableUpdateNotifications", true, comment);
+		comment = "Set to true to be informed of non-critical updates. You will still receive critical update notifications.";
+		if (!configCore.get(category, "EnableUpdateNotifications", true, comment)) {
+			CoFHProps.enableUpdateNotice = false;
+		}
 
-		comment = "Enable this to log when a block is dismantled.";
-		CoFHProps.enableDismantleLogging = configCore.get(category, "EnableDismantleLogging", CoFHProps.enableDismantleLogging, comment);
+		comment = "Set to true this to log when a block is dismantled.";
+		if (!configCore.get(category, "EnableDismantleLogging", false, comment)) {
+			CoFHProps.enableDismantleLogging = true;
+		}
 
 		comment = "Set to true to display death messages for any named entity.";
-		CoFHProps.enableLivingEntityDeathMessages = configCore.get(category, "EnableGenericDeathMessage", true, comment);
+		if (!configCore.get(category, "EnableGenericDeathMessage", true, comment)) {
+			CoFHProps.enableLivingEntityDeathMessages = false;
+		}
 
 		comment = "Set to false to disable items on the ground from trying to stack. This can improve server performance.";
-		CoFHProps.enableItemStacking = configCore.get(category, "EnableItemStacking", true, comment);
+		if (!configCore.get(category, "EnableItemStacking", true, comment)) {
+			CoFHProps.enableItemStacking = false;
+		}
 
-		category = "gui.tooltips";
-		comment = "This adds a tooltip prompting you to press Shift for more details on various items.";
-		StringHelper.displayShiftForDetail = configCore.get(category, "DisplayHoldShiftForDetail", true, comment);
+		/* SECURITY */
+		category = "Security";
 
-		comment = "This option determines if items contained in other items are displayed as a single quantity or a stack count.";
-		StringHelper.displayStackCount = configCore.get(category, "DisplayStackCountInInventory", false, comment);
+		comment = "Set to true to allow for Server Ops to access 'secure' blocks. Your players will be warned upon server connection.";
+		if (!configCore.get(category, "OpsCanAccessSecureBlocks", false, comment)) {
+			CoFHProps.enableOpSecureAccess = true;
+		}
 
-		category = "security";
-		comment = "Enable this to allow for Server Ops to access 'secure' blocks. Your players will be warned upon server connection. (Default: false)";
-		CoFHProps.enableOpSecureAccess = configCore.get(category, "OpsCanAccessSecureBlocks", false, comment);
+		/* WORLD TWEAKS */
+		category = "World.Tweaks";
 
-		comment = "Enable this to be warned about Ops having access to 'secure' blocks when connecting to a server. (Default: true)";
-		CoFHProps.enableOpSecureAccessWarning = configCore.get(category, "OpsCanAccessSecureBlocksWarning", true, comment);
-
-		category = "tweaks";
-		comment = "Set this to a value >1 to make trees grow more infrequently. Rate is 1/this value.";
+		comment = "Set this to a value > 1 to make trees grow more infrequently. Rate is 1 in N. Example: If this value is set to 3, trees will grow 3x as fast, on average.";
 		CoFHProps.treeGrowthChance = configCore.get(category, "TreeGrowthChance", 1, comment);
 
 		configCore.save();
-
-		// CLIENT ONLY
-		// CoFHProps.soundVolume = MathHelper.clampF((float) configClient.get("sound", "Volume", 1.0F), 0.0F, 1.0F);
-
-		configClient.save();
 
 		return true;
 	}
 
 	private boolean moduleLoot() {
 
-		configLoot.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/loot.cfg")));
+		configLoot.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/loot.cfg"), true));
 
-		String category = "general";
-		String comment = null;
+		String comment;
+		/* GENERAL */
+		String category = "General";
 
-		boolean enable = configLoot.get(category, "EnableModule", true);
+		comment = "Set to false to disable this entire module.";
+		boolean enable = configLoot.get(category, "EnableModule", true, comment);
 
 		if (!enable) {
 			configLoot.save();
 			return false;
 		}
-		category = "feature.heads";
+		/* HEADS */
+		category = "Heads";
 
 		comment = "If enabled, mobs only drop heads when killed by players.";
 		DropHandler.mobPvEOnly = configLoot.get(category, "MobsDropOnPvEOnly", DropHandler.mobPvEOnly, comment);
@@ -264,21 +279,25 @@ public class CoFHCore extends BaseMod {
 		comment = "If enabled, players only drop heads when killed by other players.";
 		DropHandler.playerPvPOnly = configLoot.get(category, "PlayersDropOnPvPOnly", DropHandler.playerPvPOnly, comment);
 
-		category = "feature.heads.enable";
+		category = "Heads.Players";
+		DropHandler.playersEnabled = configLoot.get(category, "Enabled", DropHandler.playersEnabled);
+		DropHandler.playerChance = configLoot.get(category, "Chance", DropHandler.playerChance);
 
-		DropHandler.playersEnabled = configLoot.get(category, "PlayersDropHeads", DropHandler.playersEnabled);
-		DropHandler.creeperEnabled = configLoot.get(category, "CreepersDropHeads", DropHandler.creeperEnabled);
-		DropHandler.skeletonEnabled = configLoot.get(category, "SkeletonsDropHeads", DropHandler.skeletonEnabled);
-		DropHandler.skeletonEnabled = configLoot.get(category, "WitherSkeletonsDropHeads", DropHandler.witherSkeletonEnabled);
-		DropHandler.zombieEnabled = configLoot.get(category, "ZombiesDropHeads", DropHandler.zombieEnabled);
+		category = "Heads.Creepers";
+		DropHandler.creeperEnabled = configLoot.get(category, "Enabled", DropHandler.creeperEnabled);
+		DropHandler.creeperChance = configLoot.get(category, "Chance", DropHandler.creeperChance);
 
-		category = "feature.heads.chance";
+		category = "Heads.Skeletons";
+		DropHandler.skeletonEnabled = configLoot.get(category, "Enabled", DropHandler.skeletonEnabled);
+		DropHandler.skeletonChance = configLoot.get(category, "Chance", DropHandler.skeletonChance);
 
-		DropHandler.playerChance = configLoot.get(category, "PlayerDropChance", DropHandler.playerChance);
-		DropHandler.creeperChance = configLoot.get(category, "CreeperDropChance", DropHandler.creeperChance);
-		DropHandler.skeletonChance = configLoot.get(category, "SkeletonDropChance", DropHandler.skeletonChance);
-		DropHandler.witherSkeletonChance = configLoot.get(category, "WitherSkeletonDropChance", DropHandler.witherSkeletonChance);
-		DropHandler.zombieChance = configLoot.get(category, "ZombieDropChance", DropHandler.zombieChance);
+		category = "Heads.WitherSkeletons";
+		DropHandler.skeletonEnabled = configLoot.get(category, "Enabled", DropHandler.witherSkeletonEnabled);
+		DropHandler.witherSkeletonChance = configLoot.get(category, "Chance", DropHandler.witherSkeletonChance);
+
+		category = "Heads.Zombies";
+		DropHandler.zombieEnabled = configLoot.get(category, "Enabled", DropHandler.zombieEnabled);
+		DropHandler.zombieChance = configLoot.get(category, "Chance", DropHandler.zombieChance);
 
 		configLoot.save();
 
