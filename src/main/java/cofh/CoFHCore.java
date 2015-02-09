@@ -55,7 +55,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, guiFactory = CoFHCore.modGuiFactory,
-customProperties = @CustomProperty(k = "cofhversion", v = "true"))
+		customProperties = @CustomProperty(k = "cofhversion", v = "true"))
 public class CoFHCore extends BaseMod {
 
 	public static final String modId = "CoFHCore";

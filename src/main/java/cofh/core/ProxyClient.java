@@ -72,7 +72,7 @@ public class ProxyClient extends Proxy {
 			CoFHProps.enableShaderEffects = false;
 		}
 		comment = "Set to true to use Color Blind Textures in CoFH Mods, where applicable.";
-		if (!CoFHCore.configClient.get(category, "EnableColorBlindTextures", false, comment)) {
+		if (CoFHCore.configClient.get(category, "EnableColorBlindTextures", false, comment)) {
 			CoFHProps.enableColorBlindTextures = true;
 		}
 
@@ -91,7 +91,7 @@ public class ProxyClient extends Proxy {
 		}
 
 		comment = "Set to true to display large item counts as stacks rather than a single quantity.";
-		if (!CoFHCore.configClient.get(category, "DisplayContainedItemsAsStackCount", false, comment)) {
+		if (CoFHCore.configClient.get(category, "DisplayContainedItemsAsStackCount", false, comment)) {
 			StringHelper.displayStackCount = true;
 		}
 
