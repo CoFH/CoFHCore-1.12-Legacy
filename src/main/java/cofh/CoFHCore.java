@@ -20,6 +20,7 @@ import cofh.core.util.SocialRegistry;
 import cofh.core.util.crafting.RecipeAugmentable;
 import cofh.core.util.crafting.RecipeSecure;
 import cofh.core.util.crafting.RecipeUpgrade;
+import cofh.core.util.crafting.RecipeUpgradeOverride;
 import cofh.core.util.fluid.BucketHandler;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.core.world.FeatureParser;
@@ -55,7 +56,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, guiFactory = CoFHCore.modGuiFactory,
-		customProperties = @CustomProperty(k = "cofhversion", v = "true"))
+customProperties = @CustomProperty(k = "cofhversion", v = "true"))
 public class CoFHCore extends BaseMod {
 
 	public static final String modId = "CoFHCore";
@@ -128,6 +129,7 @@ public class CoFHCore extends BaseMod {
 		RecipeSorter.register("cofh:augment", RecipeAugmentable.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 		RecipeSorter.register("cofh:secure", RecipeSecure.class, RecipeSorter.Category.SHAPED, "before:cofh:upgrade");
 		RecipeSorter.register("cofh:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
+		RecipeSorter.register("cofh:upgradeoverride", RecipeUpgradeOverride.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 
 		registerOreDictionaryEntries();
 	}
