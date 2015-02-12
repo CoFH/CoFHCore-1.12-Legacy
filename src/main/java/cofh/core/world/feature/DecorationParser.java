@@ -3,6 +3,7 @@ package cofh.core.world.feature;
 import cofh.api.world.IGeneratorParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.WorldGenDecoration;
 import com.google.gson.JsonObject;
 
@@ -40,11 +41,11 @@ public class DecorationParser extends SurfaceParser implements IGeneratorParser 
 		if (genObject.has("stackHeight"))
 			r.stackHeight = genObject.get("stackHeight").getAsInt();
 		if (genObject.has("xVariance"))
-			r.xVar = genObject.get("xVariance").getAsInt();
+			r.xVar = MathHelper.clampI(genObject.get("xVariance").getAsInt(), 1, 15);
 		if (genObject.has("yVariance"))
-			r.yVar = genObject.get("yVariance").getAsInt();
+			r.yVar = MathHelper.clampI(genObject.get("yVariance").getAsInt(), 0, 15);
 		if (genObject.has("zVariance"))
-			r.zVar = genObject.get("zVariance").getAsInt();
+			r.zVar = MathHelper.clampI(genObject.get("zVariance").getAsInt(), 1, 15);
 		return r;
 	}
 

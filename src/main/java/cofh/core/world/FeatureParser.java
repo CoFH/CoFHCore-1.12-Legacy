@@ -350,10 +350,12 @@ public class FeatureParser {
 		String name = def;
 		if (genElement.isJsonObject()) {
 			genObject = genElement.getAsJsonObject();
-			name = genObject.get("generator").getAsString();
-			if (!generatorHandlers.containsKey(name)) {
-				log.warn("Unknown generator '%s'! using '%s'", name, def);
-				name = def;
+			if (genObject.has("generator")) {
+				name = genObject.get("generator").getAsString();
+				if (!generatorHandlers.containsKey(name)) {
+					log.warn("Unknown generator '%s'! using '%s'", name, def);
+					name = def;
+				}
 			}
 		}
 
