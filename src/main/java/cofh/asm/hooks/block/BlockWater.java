@@ -31,7 +31,7 @@ public class BlockWater extends BlockStaticLiquid {
 	@Override
 	public boolean isAssociatedBlock(Block block) {
 
-		return super.isAssociatedBlock(block) || block == Blocks.water;
+		return super.isAssociatedBlock(block) || block == Blocks.flowing_water;
 	}
 
 }
