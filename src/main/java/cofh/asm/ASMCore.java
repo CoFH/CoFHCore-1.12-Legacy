@@ -43,6 +43,7 @@ import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.IntInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
@@ -79,7 +80,7 @@ class ASMCore {
 		hashes.put("skyboy.core.world.WorldProxy", (byte) 3);
 		hashes.put("skyboy.core.world.WorldServerProxy", (byte) 4);
 		hashes.put("net.minecraft.block.BlockPane", (byte) 5);
-		// UNUSED: hashes.put("", (byte) 6);
+		hashes.put("net.minecraft.block.Block", (byte) 6);
 		hashes.put("net.minecraft.client.multiplayer.PlayerControllerMP", (byte) 7);
 		hashes.put("net.minecraft.util.LongHashMap", (byte) 8);
 		if (Boolean.parseBoolean(System.getProperty("cofh.lightedit", "true"))) {
@@ -175,8 +176,8 @@ class ASMCore {
 			return writeWorldServerProxy(name, bytes, cr);
 		case 5:
 			return alterBlockPane(name, transformedName, bytes, cr);
-		case 6: // UNUSED
-			return bytes;
+		case 6:
+			return alterBlock(name, transformedName, bytes, cr);
 		case 7:
 			return alterController(name, transformedName, bytes, cr);
 		case 8:
@@ -202,6 +203,59 @@ class ASMCore {
 	}
 
 	// { Improve Vanilla
+	private static byte[] alterBlock(String name, String transformedName, byte[] bytes, ClassReader cr) {
+
+		String[] names;
+		if (LoadingPlugin.runtimeDeobfEnabled) {
+			names = new String[] { "func_149671_p", "", "" };
+		} else {
+			names = new String[] { "registerBlocks", "t", "" };
+		}
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM5);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+
+		l: {
+			MethodNode m = null;
+			for (MethodNode n : cn.methods) {
+				if (names[0].equals(n.name)) {
+					m = n;
+					break;
+				}
+			}
+
+			if (m == null)
+				break l;
+
+			for (AbstractInsnNode n = m.instructions.getFirst(); n != null; n = n.getNext()) {
+				if (n.getOpcode() == NEW) {
+					AbstractInsnNode p = n.getPrevious().getPrevious();
+					if (p.getOpcode() != BIPUSH)
+						continue;
+					TypeInsnNode node = ((TypeInsnNode) n);
+					switch (((IntInsnNode)p).operand) {
+					case 8: // flowing water
+						node.desc = "cofh/asm/hooks/block/BlockTickingWater";
+						break;
+					case 9: // still water
+						node.desc = "cofh/asm/hooks/block/BlockWater";
+						break;
+					default:
+						node = null;
+					}
+					if (node != null)
+						((MethodInsnNode) n.getNext().getNext().getNext()).owner = node.desc;
+				}
+			}
+
+			ClassWriter cw = new ClassWriter(0);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+		}
+		return bytes;
+	}
+
 	private static byte[] alterEntityItem(String name, String transformedName, byte[] bytes, ClassReader cr) {
 
 		String[] names;
@@ -233,7 +287,7 @@ class ASMCore {
 
 			m.instructions.clear();
 			m.instructions.add(new VarInsnNode(ALOAD, 0));
-			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asm/HooksCore", "stackItems", "(Lnet/minecraft/entity/item/EntityItem;)V", false));
+			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asm/hooks/HooksCore", "stackItems", "(Lnet/minecraft/entity/item/EntityItem;)V", false));
 			m.instructions.add(new InsnNode(RETURN));
 
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -278,7 +332,7 @@ class ASMCore {
 					MethodInsnNode mn = (MethodInsnNode) n;
 					if (mOwner.equals(remapper.map(mn.owner)) && names[1].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc))) {
 						mn.setOpcode(INVOKESTATIC);
-						mn.owner = "cofh/asm/HooksCore";
+						mn.owner = "cofh/asm/hooks/HooksCore";
 						mn.desc = "(Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/AxisAlignedBB;)Ljava/util/List;";
 						mn.name = "getEntityCollisionBoxes";
 					}
@@ -390,7 +444,7 @@ class ASMCore {
 			m.instructions.add(new VarInsnNode(ILOAD, 3));
 			m.instructions.add(new VarInsnNode(ILOAD, 4));
 			m.instructions.add(new VarInsnNode(ALOAD, 5));
-			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asm/HooksCore", "paneConnectsTo", sig, false));
+			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asm/hooks/HooksCore", "paneConnectsTo", sig, false));
 			m.instructions.add(new InsnNode(IRETURN));
 
 			m.localVariables = null;
@@ -429,7 +483,7 @@ class ASMCore {
 						if (n.getOpcode() == INVOKEVIRTUAL) {
 							MethodInsnNode mn = (MethodInsnNode) n;
 							if (mOwner.equals(mn.owner) && names[1].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc)) && "()V".equals(mn.desc)) {
-								m.instructions.set(mn, new MethodInsnNode(INVOKESTATIC, "cofh/asm/HooksCore", "tickTextures",
+								m.instructions.set(mn, new MethodInsnNode(INVOKESTATIC, "cofh/asm/hooks/HooksCore", "tickTextures",
 										"(Lnet/minecraft/client/renderer/texture/ITickable;)V", false));
 								break mc;
 							}
@@ -693,7 +747,7 @@ class ASMCore {
 						// presently on stack: player.getHeldItem()
 						m.instructions.insertBefore(mn, new VarInsnNode(ALOAD, 0));
 						m.instructions.insertBefore(mn, new FieldInsnNode(GETFIELD, name, names[1], 'L' + itemstack + ';'));
-						final String clazz = "cofh/asm/HooksCore";
+						final String clazz = "cofh/asm/hooks/HooksCore";
 						final String method = "areItemsEqualHook";
 						final String sign = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z";
 						m.instructions.insertBefore(mn, new MethodInsnNode(INVOKESTATIC, clazz, method, sign, false));
