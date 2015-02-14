@@ -41,9 +41,10 @@ public class CommandFriend implements ISubCommand {
 	public void handleCommand(ICommandSender sender, String[] arguments) {
 
 		if (arguments.length > 2) {
+			EntityPlayerMP player = CommandBase.getCommandSenderAsPlayer(sender);
 			if (arguments[1].equalsIgnoreCase("add")) {
 				if (validUsername(arguments[2])) {
-					if (SocialRegistry.addFriend(sender.getCommandSenderName(), arguments[2])) {
+					if (SocialRegistry.addFriend(player.getGameProfile(), arguments[2])) {
 						sender.addChatMessage(new ChatComponentText(StringHelper.YELLOW + arguments[2] + StringHelper.GREEN + " "
 								+ StringHelper.localize("info.cofh.command.friend.0")));
 					} else {
@@ -55,7 +56,7 @@ public class CommandFriend implements ISubCommand {
 				}
 			} else if (arguments[1].equalsIgnoreCase("remove")) {
 				if (validUsername(arguments[2])) {
-					if (SocialRegistry.removeFriend(sender.getCommandSenderName(), arguments[2])) {
+					if (SocialRegistry.removeFriend(player.getGameProfile(), arguments[2])) {
 						sender.addChatMessage(new ChatComponentText(StringHelper.YELLOW + arguments[2] + StringHelper.GREEN + " "
 								+ StringHelper.localize("info.cofh.command.friend.4")));
 					} else {

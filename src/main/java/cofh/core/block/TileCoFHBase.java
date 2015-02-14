@@ -9,6 +9,7 @@ import cofh.core.network.PacketTile;
 import cofh.core.util.CoreUtils;
 import cofh.core.util.SocialRegistry;
 import cofh.lib.util.helpers.ServerHelper;
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 
 import java.util.UUID;
@@ -84,7 +85,8 @@ public abstract class TileCoFHBase extends TileEntity {
 		AccessMode access = ((ISecurable) this).getAccess();
 		if (access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name)))
 			return true;
-		UUID ownerID = ((ISecurable) this).getOwner().getId();
+		GameProfile profile = ((ISecurable) this).getOwner();
+		UUID ownerID = profile.getId();
 		if (ownerID.variant() == 0)
 			return true;
 
@@ -92,8 +94,7 @@ public abstract class TileCoFHBase extends TileEntity {
 		if (ownerID.equals(otherID))
 			return true;
 
-		String owner = ((ISecurable) this).getOwnerName();
-		return access.isRestricted() && SocialRegistry.playerHasAccess(name, owner);
+		return access.isRestricted() && SocialRegistry.playerHasAccess(name, profile);
 	}
 
 	public boolean canPlayerDismantle(EntityPlayer player) {

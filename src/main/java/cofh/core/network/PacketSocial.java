@@ -33,11 +33,11 @@ public class PacketSocial extends PacketCoFHBase {
 			CoFHCore.proxy.updateFriendListGui();
 			return;
 		case ADD_FRIEND:
-			SocialRegistry.addFriend(player.getCommandSenderName(), getString());
+			SocialRegistry.addFriend(((EntityPlayerMP) player).getGameProfile(), getString());
 			SocialRegistry.sendFriendsToPlayer((EntityPlayerMP) player);
 			return;
 		case REMOVE_FRIEND:
-			SocialRegistry.removeFriend(player.getCommandSenderName(), getString());
+			SocialRegistry.removeFriend(((EntityPlayerMP) player).getGameProfile(), getString());
 			SocialRegistry.sendFriendsToPlayer((EntityPlayerMP) player);
 			return;
 		}
