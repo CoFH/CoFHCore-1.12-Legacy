@@ -85,7 +85,8 @@ public class ItemBowAdv extends ItemBow {
 		if (event.isCanceled()) {
 			return event.result;
 		}
-		if (player.capabilities.isCreativeMode || player.inventory.hasItem(Items.arrow)) {
+		if (player.capabilities.isCreativeMode || player.inventory.hasItem(Items.arrow)
+				|| EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0) {
 			player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
 		}
 		return stack;
