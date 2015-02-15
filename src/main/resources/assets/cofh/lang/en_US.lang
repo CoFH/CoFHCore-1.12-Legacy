@@ -11,6 +11,7 @@ chat.cofh.secure.1=This is private and belongs to
 chat.cofh.secure.2=You could have lost your hand!
 
 enchant.cofh.holding=Holding
+enchant.cofh.multishot=Multishot
 
 info.cofh.access=Access
 info.cofh.accessMode=Access Mode

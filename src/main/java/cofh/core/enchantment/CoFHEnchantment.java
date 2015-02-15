@@ -19,13 +19,25 @@ public class CoFHEnchantment {
 
 		for (int i = enchantId; i < 256; i++) {
 			try {
-				enchantmentHolding = new EnchantmentHolding(i);
+				holding = new EnchantmentHolding(i);
 				break;
 			} catch (IllegalArgumentException e) {
 
 			}
 		}
-		CoFHCore.configCore.set("Enchantment", "Holding", enchantmentHolding.effectId);
+		CoFHCore.configCore.set("Enchantment", "Holding", holding.effectId);
+
+		enchantId = CoFHCore.configCore.get("Enchantment", "Multishot", 101);
+
+		for (int i = enchantId; i < 256; i++) {
+			try {
+				multishot = new EnchantmentMultishot(i);
+				break;
+			} catch (IllegalArgumentException e) {
+
+			}
+		}
+		CoFHCore.configCore.set("Enchantment", "Multishot", multishot.effectId);
 	}
 
 	public static NBTTagList getEnchantmentTagList(NBTTagCompound nbt) {
@@ -66,6 +78,7 @@ public class CoFHEnchantment {
 		addEnchantment(stack.stackTagCompound, id, level);
 	}
 
-	public static Enchantment enchantmentHolding;
+	public static Enchantment holding;
+	public static Enchantment multishot;
 
 }

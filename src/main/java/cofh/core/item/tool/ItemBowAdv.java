@@ -1,5 +1,6 @@
 package cofh.core.item.tool;
 
+import cofh.core.enchantment.CoFHEnchantment;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.ServerHelper;
 
@@ -107,42 +108,68 @@ public class ItemBowAdv extends ItemBow {
 		boolean flag = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
 
 		if (flag || player.inventory.hasItem(Items.arrow)) {
-			float f = draw / 20.0F;
-			f = (f * f + f * 2.0F) / 3.0F;
+			float drawStrength = draw / 20.0F;
+			drawStrength = (drawStrength * drawStrength + drawStrength * 2.0F) / 3.0F;
 
-			if (f > 1.0F) {
-				f = 1.0F;
-			} else if (f < 0.1F) {
+			if (drawStrength > 1.0F) {
+				drawStrength = 1.0F;
+			} else if (drawStrength < 0.1F) {
 				return;
 			}
-			EntityArrow arrow = new EntityArrow(world, player, f * arrowSpeedMultiplier);
+			int enchantPower = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
+			int enchantKnockback = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
+			int enchantFire = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack);
+			int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoFHEnchantment.multishot.effectId, stack);
 
+			if (enchantMultishot > 0) {
+				for (int i = 0; i < enchantMultishot; i++) {
+					EntityArrow arrow = new EntityArrow(world, player, drawStrength * arrowSpeedMultiplier);
+					double damage = arrow.getDamage() * arrowDamageMultiplier;
+					arrow.setDamage(damage);
+
+					if (drawStrength == 1.0F) {
+						arrow.setIsCritical(true);
+					}
+					if (enchantPower > 0) {
+						arrow.setDamage(damage + enchantPower * 0.5D + 0.5D);
+					}
+					if (enchantKnockback > 0) {
+						arrow.setKnockbackStrength(enchantKnockback);
+					}
+					if (enchantFire > 0) {
+						arrow.setFire(100);
+					}
+					arrow.canBePickedUp = 2;
+					world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + drawStrength * 0.5F);
+
+					if (ServerHelper.isServerWorld(world)) {
+						world.spawnEntityInWorld(arrow);
+					}
+				}
+			}
+			EntityArrow arrow = new EntityArrow(world, player, drawStrength * arrowSpeedMultiplier);
 			double damage = arrow.getDamage() * arrowDamageMultiplier;
 			arrow.setDamage(damage);
 
-			if (f == 1.0F) {
+			if (drawStrength == 1.0F) {
 				arrow.setIsCritical(true);
 			}
-			int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
-
-			if (k > 0) {
-				arrow.setDamage(damage + k * 0.5D + 0.5D);
+			if (enchantPower > 0) {
+				arrow.setDamage(damage + enchantPower * 0.5D + 0.5D);
 			}
-			int l = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
-
-			if (l > 0) {
-				arrow.setKnockbackStrength(l);
+			if (enchantKnockback > 0) {
+				arrow.setKnockbackStrength(enchantKnockback);
 			}
-			if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0) {
+			if (enchantFire > 0) {
 				arrow.setFire(100);
 			}
-			world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-
 			if (flag) {
 				arrow.canBePickedUp = 2;
 			} else {
 				player.inventory.consumeInventoryItem(Items.arrow);
 			}
+			world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + drawStrength * 0.5F);
+
 			if (ServerHelper.isServerWorld(world)) {
 				world.spawnEntityInWorld(arrow);
 			}
