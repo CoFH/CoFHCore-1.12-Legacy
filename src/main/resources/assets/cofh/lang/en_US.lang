@@ -141,6 +141,9 @@ info.cofh.tutorial.tabSecurity=The Security tab allows the owner to control who 
 
 item.invalid.name=Invalid Item (Destroy)
 
+tab.cofh.friend.0=Add/Remove Friends!
+tab.cofh.friend.1=Friends not provided.
+
 #Fluid Name Fixes
 
 fluid.tile.water=Water

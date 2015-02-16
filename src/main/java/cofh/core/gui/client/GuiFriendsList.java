@@ -27,7 +27,6 @@ public class GuiFriendsList extends GuiBaseAdv {
 
 	static final String TEXTURE_PATH = GuiProps.PATH_GUI + "FriendsList.png";
 	static final ResourceLocation TEXTURE = new ResourceLocation(TEXTURE_PATH);
-	static final String INFO = "Add/Remove Friends!\n\nFriends not provided.\n\nMom/Dad does not count as a friend.";
 
 	static final int TB_HEIGHT = 12;
 
@@ -59,13 +58,15 @@ public class GuiFriendsList extends GuiBaseAdv {
 		name = "info.cofh.friendsList";
 		drawInventory = false;
 		ySize = 188;
+
+		generateInfo("tab.cofh.friend", 2);
 	}
 
 	@Override
 	public void initGui() {
 
 		super.initGui();
-		addTab(new TabInfo(this, INFO));
+		addTab(new TabInfo(this, myInfo));
 
 		tbNameX = guiLeft + 8 + 4;
 		tbNameY = guiTop + 15 + 2;

@@ -3,6 +3,7 @@ package cofh.core.gui;
 import cofh.core.render.IconRegistry;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
+import cofh.lib.util.helpers.StringHelper;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.util.IIcon;
@@ -30,6 +31,8 @@ public abstract class GuiBaseAdv extends GuiBase {
 	public static final int PROGRESS = 24;
 	public static final int SPEED = 16;
 
+	protected String myInfo = "";
+
 	public GuiBaseAdv(Container container) {
 
 		super(container);
@@ -38,6 +41,14 @@ public abstract class GuiBaseAdv extends GuiBase {
 	public GuiBaseAdv(Container container, ResourceLocation texture) {
 
 		super(container, texture);
+	}
+
+	protected void generateInfo(String tileString, int lines) {
+
+		myInfo = StringHelper.localize(tileString + "." + 0);
+		for (int i = 1; i < lines; i++) {
+			myInfo += "\n\n" + StringHelper.localize(tileString + "." + i);
+		}
 	}
 
 	/* HELPERS */
