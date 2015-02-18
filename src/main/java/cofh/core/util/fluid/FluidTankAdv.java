@@ -46,6 +46,15 @@ public class FluidTankAdv implements IFluidTank {
 		return this;
 	}
 
+	public FluidTankAdv setLock(Fluid fluid) {
+
+		locked = fluid != null;
+		if (locked) {
+			this.fluid = new FluidStack(fluid, 0);
+		}
+		return this;
+	}
+
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 
 		if (fluid != null) {
@@ -55,14 +64,6 @@ public class FluidTankAdv implements IFluidTank {
 			nbt.setString("Empty", "");
 		}
 		return nbt;
-	}
-
-	public void setLock(Fluid fluid) {
-
-		locked = fluid != null;
-		if (locked) {
-			this.fluid = new FluidStack(fluid, 0);
-		}
 	}
 
 	public void setFluid(FluidStack fluid) {
@@ -125,6 +126,34 @@ public class FluidTankAdv implements IFluidTank {
 	public FluidTankInfo getInfo() {
 
 		return new FluidTankInfo(this);
+	}
+
+	/**
+	 * This is used internally ONLY, when the tank is LOCKED.
+	 *
+	 * @param maxFill
+	 *            Amount of fluid to fill the tank with.
+	 * @param doFill
+	 *            If false, the fill will only be simulated.
+	 * @return Amount of fluid that was accepted by the tank.
+	 */
+	public int fillLocked(int maxFill, boolean doFill) {
+
+		if (maxFill <= 0 || fluid == null) {
+			return 0;
+		}
+		if (!doFill) {
+			return Math.min(capacity - maxFill, maxFill);
+		}
+		int filled = capacity - fluid.amount;
+
+		if (maxFill < filled) {
+			fluid.amount += maxFill;
+			filled = maxFill;
+		} else {
+			fluid.amount = capacity;
+		}
+		return filled;
 	}
 
 	@Override
