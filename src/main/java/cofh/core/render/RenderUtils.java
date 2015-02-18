@@ -258,7 +258,8 @@ public class RenderUtils {
 		}
 	}
 
-	public static void renderItemStackAtScale(float xPos, float yPos, float tickPlace, ItemStack stack, Minecraft mc, float scale, boolean renderStackSize) {
+	public static void renderItemStackAtScale(float xPos, float yPos, float tickPlace, ItemStack stack, Minecraft mc,
+			float scale, boolean renderStackSize) {
 
 		if (stack != null) {
 			if (!renderStackSize) {
@@ -286,16 +287,19 @@ public class RenderUtils {
 		}
 	}
 
-	public static void renderItemAndEffectIntoGUI(FontRenderer font, TextureManager texture, ItemStack stack, float xPos, float yPos) {
+	public static void renderItemAndEffectIntoGUI(FontRenderer font, TextureManager texture, ItemStack stack, float xPos,
+			float yPos) {
 
 		if (stack != null) {
-			if (!ForgeHooksClient.renderInventoryItem(renderBlocks, texture, stack, renderItem.renderWithColor, renderItem.zLevel, xPos, yPos)) {
+			if (!ForgeHooksClient.renderInventoryItem(renderBlocks, texture, stack, renderItem.renderWithColor,
+				renderItem.zLevel, xPos, yPos)) {
 				RenderUtils.renderItemIntoGUI(font, texture, stack, xPos, yPos, true);
 			}
 		}
 	}
 
-	public static void renderItemIntoGUI(FontRenderer font, TextureManager manager, ItemStack stack, float xPos, float yPos, boolean renderEffect) {
+	public static void renderItemIntoGUI(FontRenderer font, TextureManager manager, ItemStack stack, float xPos, float yPos,
+			boolean renderEffect) {
 
 		Item item = stack.getItem();
 		int meta = stack.getItemDamage();
@@ -334,7 +338,8 @@ public class RenderUtils {
 		} else if (item.requiresMultipleRenderPasses()) {
 			GL11.glDisable(GL11.GL_LIGHTING);
 
-			ResourceLocation texture = stack.getItemSpriteNumber() == 0 ? TextureMap.locationBlocksTexture : TextureMap.locationItemsTexture;
+			ResourceLocation texture = stack.getItemSpriteNumber() == 0 ? TextureMap.locationBlocksTexture
+					: TextureMap.locationItemsTexture;
 			manager.bindTexture(texture);
 			for (int pass = 0, e = item.getRenderPasses(meta); pass < e; ++pass) {
 				icon = item.getIcon(stack, pass);
@@ -363,7 +368,8 @@ public class RenderUtils {
 			manager.bindTexture(resourcelocation);
 
 			if (icon == null) {
-				icon = ((TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture(resourcelocation)).getAtlasSprite("missingno");
+				icon = ((TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture(resourcelocation))
+						.getAtlasSprite("missingno");
 			}
 
 			if (renderItem.renderWithColor) {
@@ -465,9 +471,10 @@ public class RenderUtils {
 		if (!ForgeHooksClient.renderInventoryItem(renderBlocks, RenderHelper.engine(), stack, true, 0.0F, 0.0F, 0.0F)) {
 			renderItem.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, RenderHelper.engine(), stack, 0, 0);
 		}
-        GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-        GL11.glEnable(GL11.GL_BLEND);
-        OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+		GL11.glEnable(GL11.GL_BLEND);
+		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 		GL11.glPopMatrix();
 		net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
 	}
