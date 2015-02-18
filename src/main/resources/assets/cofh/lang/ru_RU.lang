@@ -1,10 +1,17 @@
 #ru_RU
 
+# Config GUI Tooltips
+config.Client.tooltip=Настройка опций клиента.
+config.Common.tooltip=Настройка главных опций.
+config.Core.tooltip=Настройка опций ядра.
+config.Loot.tooltip=Настройка опций добычи.
+
 chat.cofh.secure.0=Примечание: Операторы сервера могут свободно получить доступ к "защищённым" блокам на этом сервере.
 chat.cofh.secure.1=Это личная вещь и принадлежит
 chat.cofh.secure.2=Вы могли потерять руку!
 
 enchant.cofh.holding=Удержание
+enchant.cofh.multishot=Мульти-выстрел
 
 info.cofh.access=Доступ
 info.cofh.accessMode=Режим доступа
@@ -13,6 +20,8 @@ info.cofh.accessRestricted=Ограниченный
 info.cofh.accessPrivate=Приватный
 info.cofh.all=Все
 info.cofh.amount=Количество
+info.cofh.angle=Угол
+info.cofh.anotherplayer=Другой игрок
 info.cofh.augmentation=Прирост
 info.cofh.blank=Пусто
 info.cofh.capacity=Ёмкость
@@ -23,7 +32,9 @@ info.cofh.controlStatus=Режим управления
 info.cofh.damageAttack=Урон
 info.cofh.damageFlux=Флаксовый урон
 info.cofh.disabled=Выключен
+info.cofh.distance=Дистанция
 info.cofh.dry=Сухая
+info.cofh.duration=Длительность
 info.cofh.empty=Пусто
 info.cofh.enabled=Включен
 info.cofh.energy=Энергия
@@ -31,6 +42,7 @@ info.cofh.energyConsume=Расход энергии
 info.cofh.energyProduce=Выходная энергия
 info.cofh.energyStored=Хранимая энергия
 info.cofh.fluid=Жидкость
+info.cofh.force=Принудительно
 info.cofh.forDetails=для деталей
 info.cofh.frequency=Частота
 info.cofh.friendsList=Список друзей
@@ -61,6 +73,7 @@ info.cofh.signal=Сигнал
 info.cofh.signalRequired=Требуется сигнал
 info.cofh.soaked=Смоченная
 info.cofh.source=Источник
+info.cofh.strength=Сила
 info.cofh.transfer=Передача
 info.cofh.tutorial=Руководство
 info.cofh.unlocked=Открыто
@@ -132,6 +145,9 @@ info.cofh.tutorial.tabRedstone=Вкладка "Красный контроль" 
 info.cofh.tutorial.tabSecurity=Вкладка "Безопасность" позволяет владельцу контролировать, кто может управлять этим устройством.
 
 item.invalid.name=Неизвестный предмет (Уничтожить)
+
+tab.cofh.friend.0=Добавить/удалить друзей!
+tab.cofh.friend.1=Друзей нет.
 
 #Fluid Name Fixes
 
