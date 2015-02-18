@@ -44,6 +44,10 @@ public abstract class TileCoFHBase extends TileEntity {
 		blockBroken();
 	}
 
+	public void blockPlaced() {
+
+	}
+
 	public void markChunkDirty() {
 
 		worldObj.markTileEntityChunkModified(this.xCoord, this.yCoord, this.zCoord, this);

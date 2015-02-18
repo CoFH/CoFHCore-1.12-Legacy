@@ -6,7 +6,6 @@ import cofh.api.block.IDismantleable;
 import cofh.api.core.IInitializer;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.inventory.IInventoryRetainer;
-import cofh.api.tileentity.IPlacedTile;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IRedstoneControl;
 import cofh.api.tileentity.ISecurable;
@@ -167,9 +166,7 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
 		}
 		if (tile instanceof TileCoFHBase) {
 			((TileCoFHBase) tile).onNeighborBlockChange();
-		}
-		if (tile instanceof IPlacedTile) {
-			((IPlacedTile) tile).tilePlaced();
+			((TileCoFHBase) tile).blockPlaced();
 		}
 	}
 
