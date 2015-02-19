@@ -23,6 +23,13 @@ import org.apache.logging.log4j.Logger;
 
 public class UnderfluidParser extends UniformParser {
 
+	private boolean isUnderwater;
+
+	public UnderfluidParser(boolean water) {
+
+		isUnderwater = water;
+	}
+
 	@Override
 	protected List<WeightedRandomBlock> generateDefaultMaterial() {
 
@@ -55,6 +62,12 @@ public class UnderfluidParser extends UniformParser {
 			return new FeatureGenUnderfluid(featureName, gen, matList, numClusters, biomeRes, retrogen, dimRes);
 		else
 			return new FeatureGenUnderfluid(featureName, gen, matList, fluidList, numClusters, biomeRes, retrogen, dimRes);
+	}
+
+	@Override
+	protected String getDefaultTemplate() {
+
+		return isUnderwater ? "plate" : super.getDefaultTemplate();
 	}
 
 }

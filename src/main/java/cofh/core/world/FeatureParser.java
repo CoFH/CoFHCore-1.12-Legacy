@@ -11,6 +11,7 @@ import cofh.core.world.decoration.DungeonParser;
 import cofh.core.world.decoration.GeodeParser;
 import cofh.core.world.decoration.LakeParser;
 import cofh.core.world.decoration.LargeVeinParser;
+import cofh.core.world.decoration.PlateParser;
 import cofh.core.world.decoration.SmallTreeParser;
 import cofh.core.world.decoration.SpikeParser;
 import cofh.core.world.decoration.StalagmiteParser;
@@ -123,8 +124,8 @@ public class FeatureParser {
 		registerTemplate("surface", new SurfaceParser());
 		registerTemplate("fractal", new FractalParser());
 		registerTemplate("decoration", new DecorationParser());
-		registerTemplate("underfluid", new UnderfluidParser());
-		registerTemplate("underwater", new UnderfluidParser());
+		registerTemplate("underwater", new UnderfluidParser(true));
+		registerTemplate("underfluid", new UnderfluidParser(false));
 		registerTemplate("cave", new CaveParser());
 
 		log.info("Registering default generators");
@@ -135,6 +136,7 @@ public class FeatureParser {
 		registerGenerator("large-vein", new LargeVeinParser());
 		registerGenerator("decoration", new DecorationParser());
 		registerGenerator("lake", new LakeParser());
+		registerGenerator("plate", new PlateParser());
 		registerGenerator("geode", new GeodeParser());
 		registerGenerator("spike", new SpikeParser());
 		registerGenerator("boulder", new BoulderParser());
