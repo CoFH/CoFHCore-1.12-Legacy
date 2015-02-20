@@ -56,7 +56,8 @@ public class CommandReplaceBlock implements ISubCommand {
 		int xS, xL;
 		if ("@".equals(args[i])) {
 			center = sender.getPlayerCoordinates();
-			xS = CommandBase.parseInt(sender, args[++i]);
+			++i;
+			xS = CommandBase.parseInt(sender, args[i++]);
 		} else {
 			try {
 				xS = CommandBase.parseInt(sender, args[i++]);
@@ -122,9 +123,11 @@ public class CommandReplaceBlock implements ISubCommand {
 
 		Block replBlock;
 		int replMeta;
+		String blockReplRaw;
 		{
 			int meta = 0;
 			String blockRaw = args[i];
+			blockReplRaw = blockRaw;
 			t = blockRaw.indexOf('#');
 			if (t > 0) {
 				meta = CommandBase.parseInt(sender, blockRaw.substring(t + 1));
@@ -141,8 +144,13 @@ public class CommandReplaceBlock implements ISubCommand {
 			replMeta = meta;
 		}
 
+		long blockCounter = ((long)xL - xS) * ((long)yL - yS) * ((long)zL - zS);
+		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.start",
+			blockCounter, xS, yS, zS, xL, yL, zL, blockReplRaw);
+
 		THashSet<Chunk> set = new THashSet<Chunk>();
 
+		blockCounter = 0;
 		for (int e = args.length; i < e; ++i) {
 			String blockRaw = args[i];
 			if (blockRaw.charAt(0) == '*') {
@@ -155,6 +163,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								Block block = chunk.getBlock(cX, y, cZ);
 								if (block.getMaterial().isLiquid()) {
 									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
+										++blockCounter;
 										set.add(chunk);
 									}
 								}
@@ -170,6 +179,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								Block block = chunk.getBlock(cX, y, cZ);
 								if (block.isWood(world, x, y, z) || block.isLeaves(world, x, y, z)) {
 									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
+										++blockCounter;
 										set.add(chunk);
 									}
 								}
@@ -185,6 +195,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								Block block = chunk.getBlock(cX, y, cZ);
 								if (block.isReplaceable(world, x, y, z)) {
 									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
+										++blockCounter;
 										set.add(chunk);
 									}
 								}
@@ -198,8 +209,27 @@ public class CommandReplaceBlock implements ISubCommand {
 							int cX = x & 15, cZ = z & 15;
 							for (int y = yS; y <= yL; ++y) {
 								Block block = chunk.getBlock(cX, y, cZ);
+								if (block.isReplaceableOreGen(world, x, y, z, Blocks.stone) ||
+										block.isReplaceableOreGen(world, x, y, z, Blocks.netherrack) ||
+										block.isReplaceableOreGen(world, x, y, z, Blocks.end_stone)) {
+									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
+										++blockCounter;
+										set.add(chunk);
+									}
+								}
+							}
+						}
+					}
+				} else if (blockRaw.equals("*rock")) {
+					for (int x = xS; x <= xL; ++x) {
+						for (int z = zS; z <= zL; ++z) {
+							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							int cX = x & 15, cZ = z & 15;
+							for (int y = yS; y <= yL; ++y) {
+								Block block = chunk.getBlock(cX, y, cZ);
 								if (block.getMaterial() == Material.rock) {
 									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
+										++blockCounter;
 										set.add(chunk);
 									}
 								}
@@ -215,6 +245,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								Block block = chunk.getBlock(cX, y, cZ);
 								if (block.getMaterial() == Material.sand) {
 									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
+										++blockCounter;
 										set.add(chunk);
 									}
 								}
@@ -232,6 +263,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								if (m == Material.grass || m == Material.ground || m == Material.clay || m == Material.snow
 										|| m == Material.craftedSnow || m == Material.ice || m == Material.packedIce) {
 									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
+										++blockCounter;
 										set.add(chunk);
 									}
 								}
@@ -248,6 +280,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								Material m = block.getMaterial();
 								if (m == Material.plants || m == Material.vine || m == Material.cactus || m == Material.leaves) {
 									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
+										++blockCounter;
 										set.add(chunk);
 									}
 								}
@@ -264,6 +297,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								Material m = block.getMaterial();
 								if (m == Material.fire || m == Material.lava || block.isBurning(world, x, y, z)) {
 									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
+										++blockCounter;
 										set.add(chunk);
 									}
 								}
@@ -292,6 +326,7 @@ public class CommandReplaceBlock implements ISubCommand {
 						boolean v = meta == -1 || chunk.getBlockMetadata(cX, y, cZ) == meta;
 						if (v && chunk.getBlock(cX, y, cZ) == block) {
 							if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
+								++blockCounter;
 								set.add(chunk);
 							}
 						}
@@ -300,9 +335,10 @@ public class CommandReplaceBlock implements ISubCommand {
 			}
 		}
 		if (!set.isEmpty()) {
-			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.success");
+			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.success",
+				blockCounter, xS, yS, zS, xL, yL, zL, blockReplRaw);
 		} else {
-			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.replaceblocks.failure"));
+			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.failure");
 		}
 
 		if (world instanceof WorldServer) {

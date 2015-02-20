@@ -126,14 +126,24 @@ info.cofh.command.killall.noHostile=No hostile mobs found!
 
 info.cofh.command.tpx.snark.0=Successfully teleported you to yourself!
 info.cofh.command.tpx.snark.1=Successfully teleported %s to themself!
+info.cofh.command.tpx.self=Successfully teleported to %.2f %.2f %.2f
+info.cofh.command.tpx.dimensionSelf=Successfully teleported to The %1$s at %2$.2f %3$.2f %4$.2f
+info.cofh.command.tpx.other=Successfully teleported %s to %.2f %.2f %.2f
+info.cofh.command.tpx.otherTo=Successfully teleported %s to %s at %.2f %.2f %.2f
+info.cofh.command.tpx.dimensionOther=Successfully teleported %s to The %2$s at %3$.2f %4$.2f %5$.2f
+info.cofh.command.tpx.dimensionOtherTo=Successfully teleported %s to %s in %3$s at %4$.2f %5$.2f %6$.2f
+info.cofh.command.tpx.otherToSelf=Successfully teleported %s to themself at %.2f %.2f %.2f
+info.cofh.command.tpx.dimensionOtherToSelf=Successfully teleported %s to themself in %2$s at %3$.2f %4$.2f %5$.2f
 
 info.cofh.command.reloadworldgen.success=Successfully reloaded World Generators.
 
 info.cofh.command.replaceblocks.failure=No blocks to replace.
-info.cofh.command.replaceblocks.success=Successfully replaced blocks.
+info.cofh.command.replaceblocks.start=Replacing %s blocks from %s:%s:%s to %s:%s:%s with %s.
+info.cofh.command.replaceblocks.success=Successfully replaced %s blocks from %s:%s:%s to %s:%s:%s with %s.
 
 info.cofh.command.clearblocks.failure=No blocks to clear.
-info.cofh.command.clearblocks.success=Successfully cleared blocks.
+info.cofh.command.clearblocks.start=Clearing %s blocks from %s:%s:%s to %s:%s:%s.
+info.cofh.command.clearblocks.success=Successfully cleared %s blocks from %s:%s:%s to %s:%s:%s.
 
 info.cofh.command.unloadchunk.success=Unloading Chunk at %s:%s
 

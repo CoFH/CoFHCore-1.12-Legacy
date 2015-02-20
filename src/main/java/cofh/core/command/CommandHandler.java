@@ -70,6 +70,17 @@ public class CommandHandler extends CommandBase {
 	public static void logAdminCommand(ICommandSender sender, ISubCommand command, String info, Object... data) {
 
 		dummy.setFromCommand(command);
+		for (int i = 0, e = data.length; i < e; ++i) {
+			Object entry = data[i];
+			if (entry instanceof Number) {
+				Number d = (Number) entry;
+				int a = d.intValue();
+				float f = d.floatValue();
+				if (a != f) {
+					data[i] = String.format("%.2f", f);
+				}
+			}
+		}
 		CommandBase.func_152373_a(sender, dummy, info, data);
 	}
 
