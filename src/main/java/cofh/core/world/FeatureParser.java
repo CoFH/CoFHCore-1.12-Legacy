@@ -142,7 +142,7 @@ public class FeatureParser {
 		registerGenerator("boulder", new BoulderParser());
 		registerGenerator("dungeon", new DungeonParser());
 		registerGenerator("stalagmite", new StalagmiteParser(false));
-		registerGenerator("statactite", new StalagmiteParser(true));
+		registerGenerator("stalactite", new StalagmiteParser(true));
 		registerGenerator("small-tree", new SmallTreeParser());
 
 		log.info("Complete");
