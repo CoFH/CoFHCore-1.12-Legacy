@@ -24,7 +24,7 @@ public class SmallTreeParser implements IGeneratorParser {
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
 		ArrayList<WeightedRandomBlock> blocks = new ArrayList<WeightedRandomBlock>();
 		if (genObject.has("genMaterial")) {
-			JsonElement entry = genObject.get("genSurface");
+			JsonElement entry = genObject.get("genMaterial");
 			if (!entry.isJsonNull() && !FeatureParser.parseResList(entry, list, false)) {
 				log.warn("Entry specifies invalid genMaterial for 'smalltree' generator! Using air!");
 				list.clear();
