@@ -22,6 +22,18 @@ public class SmallTreeParser implements IGeneratorParser {
 			List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
 
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
+		ArrayList<WeightedRandomBlock> blocks = new ArrayList<WeightedRandomBlock>();
+		if (genObject.has("genMaterial")) {
+			JsonElement entry = genObject.get("genSurface");
+			if (!entry.isJsonNull() && !FeatureParser.parseResList(entry, list, false)) {
+				log.warn("Entry specifies invalid genMaterial for 'smalltree' generator! Using air!");
+				list.clear();
+				list.add(new WeightedRandomBlock(Blocks.air));
+			}
+		} else {
+			log.info("Entry does not specify genMaterial for 'smalltree' generator! There are no restrictions!");
+		}
+
 		if (genObject.has("leaves")) {
 			list = new ArrayList<WeightedRandomBlock>();
 			JsonElement entry = genObject.get("leaves");
@@ -33,8 +45,10 @@ public class SmallTreeParser implements IGeneratorParser {
 			log.info("Entry does not specify leaves for 'smalltree' generator! There are none!");
 		}
 
-		WorldGenSmallTree r = new WorldGenSmallTree(resList, list, matList);
+		WorldGenSmallTree r = new WorldGenSmallTree(resList, list, blocks);
 		{
+			r.genSurface = matList.toArray(new WeightedRandomBlock[matList.size()]);
+
 			if (genObject.has("minHeight"))
 				r.minHeight = genObject.get("minHeight").getAsInt();
 			if (genObject.has("heightVariance"))
@@ -46,21 +60,6 @@ public class SmallTreeParser implements IGeneratorParser {
 				r.relaxedGrowth = genObject.get("relaxedGrowth").getAsBoolean();
 			if (genObject.has("waterLoving"))
 				r.waterLoving = genObject.get("waterLoving").getAsBoolean();
-
-			if (genObject.has("genSurface")) {
-				list = new ArrayList<WeightedRandomBlock>();
-				JsonElement entry = genObject.get("genSurface");
-				if (!entry.isJsonNull() && !FeatureParser.parseResList(entry, list, false)) {
-					log.warn("Entry specifies invalid genSurface for 'smalltree' generator! Using grass!");
-					list.clear();
-					list.add(new WeightedRandomBlock(Blocks.grass));
-					list.add(new WeightedRandomBlock(Blocks.dirt, -1));
-				}
-				if (list.size() > 0)
-					r.genSurface = list.toArray(new WeightedRandomBlock[list.size()]);
-			} else {
-				log.info("Entry does not specify genSurface for 'smalltree' generator! There are no restrictions!");
-			}
 		}
 		return r;
 	}

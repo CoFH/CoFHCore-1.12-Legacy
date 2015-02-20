@@ -493,6 +493,9 @@ public class FeatureParser {
 
 	public static boolean parseResList(JsonElement genElement, List<WeightedRandomBlock> resList, boolean clamp) {
 
+		if (genElement == null)
+			return false;
+
 		if (genElement.isJsonArray()) {
 			JsonArray blockList = genElement.getAsJsonArray();
 
