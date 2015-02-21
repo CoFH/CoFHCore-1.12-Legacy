@@ -12,6 +12,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class GuiConfigCore extends GuiConfig {
 
 	public GuiConfigCore(GuiScreen parentScreen) {
@@ -23,7 +24,6 @@ public class GuiConfigCore extends GuiConfig {
 	public static final String[] CATEGORIES_CORE = {};
 	public static final String[] CATEGORIES_LOOT = { "General", "Heads" };
 
-	@SuppressWarnings("rawtypes")
 	private static List<IConfigElement> getConfigElements(GuiScreen parent) {
 
 		List<IConfigElement> list = new ArrayList<IConfigElement>();
