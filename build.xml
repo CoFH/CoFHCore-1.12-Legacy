@@ -154,6 +154,7 @@
 				<attribute name="FMLCorePlugin" value="cofh.asm.LoadingPlugin"/>
 				<attribute name="FMLCorePluginContainsFMLMod" value="true"/>
 			</manifest>
+			<echo file="${classes.dir}/vers.prop">${build.full}${build.number}</echo>
 			<jar destfile="${dist.dir}/${build.name}${build.full}@{build}.jar"
 				compress="true" level="9" basedir="${classes.dir}"
 				manifest="${classes.dir}/MANIFEST.MF">
@@ -196,12 +197,23 @@
 		</java>
 	</target>
 
-	<target name="copy-sources" depends="package-api">
+	<target name="copy-sources" depends="package-api,get-build-number">
 		<!-- Copy source -->
 		<mkdir dir="${sources.dir}"/>
 		<sync todir="${sources.dir}">
 			<fileset dir="${src.dir}"/>
 		</sync>
+
+		<script language="javascript"><![CDATA[
+			
+			var mainClass = new java.io.File(project.getProperty("verclass.dir"), project.getProperty("verclass.name"));
+			mainClass = new java.util.Scanner(mainClass, "UTF-8").useDelimiter("\\Z");
+			var text = mainClass.next();
+			mainClass.close();
+			
+			var matches = /[0-9.]+R[0-9.]+((RC|B)[0-9]+)?/.exec(text);
+			
+		]]></script>
 	</target>
 
 	<target name="package-api" depends="get-version" if="has.api">
