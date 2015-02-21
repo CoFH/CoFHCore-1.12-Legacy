@@ -29,6 +29,7 @@ public abstract class GuiBaseAdv extends GuiBase {
 	public static final String TEX_INFO_DISTANCE = GuiProps.PATH_ELEMENTS + "Info_Distance.png";
 	public static final String TEX_INFO_DURATION = GuiProps.PATH_ELEMENTS + "Info_Duration.png";
 	public static final String TEX_INFO_FORCE = GuiProps.PATH_ELEMENTS + "Info_Force.png";
+	public static final String TEX_INFO_SIGNAL = GuiProps.PATH_ELEMENTS + "Info_Signal.png";
 
 	public static final String TEX_TANK = GuiProps.PATH_ELEMENTS + "FluidTank.png";
 	public static final String TEX_TANK_GREY = GuiProps.PATH_ELEMENTS + "FluidTank_Grey.png";
