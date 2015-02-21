@@ -270,7 +270,7 @@ public class CommandReplaceBlock implements ISubCommand {
 							}
 						}
 					}
-				} else if (blockRaw.equals("*plants")) {
+				} else if (blockRaw.startsWith("*plant")) {
 					for (int x = xS; x <= xL; ++x) {
 						for (int z = zS; z <= zL; ++z) {
 							Chunk chunk = world.getChunkFromBlockCoords(x, z);

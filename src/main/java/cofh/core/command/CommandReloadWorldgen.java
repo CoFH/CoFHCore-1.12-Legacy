@@ -31,6 +31,8 @@ public class CommandReloadWorldgen implements ISubCommand {
 		for (IFeatureGenerator g : FeatureParser.parsedFeatures)
 			WorldHandler.instance.removeFeature(g);
 
+		FeatureParser.parsedFeatures.clear();
+
 		try {
 			FeatureParser.parseGenerationFile();
 		} catch (Throwable t) {
