@@ -3,6 +3,8 @@ package cofh.core;
 import cofh.CoFHCore;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import java.io.File;
 import java.util.UUID;
@@ -27,6 +29,7 @@ public class CoFHProps {
 	public static final String DEPENDENCIES = "required-after:FML@[" + CoFHProps.FML_REQ + "," + CoFHProps.FML_REQ_MAX + ");" + "required-after:Forge@["
 			+ CoFHProps.FORGE_REQ + "," + CoFHProps.FORGE_REQ_MAX + ");";
 
+	@SideOnly(Side.CLIENT)
 	@Mod(modid = "CoFHCoreClient", name = CoFHCore.modName, version = CoFHCore.version, dependencies = "Forge@[1013.2.1291,10.14)")
 	private static class ClientVersion {}
 
