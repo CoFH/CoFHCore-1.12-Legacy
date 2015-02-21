@@ -4,7 +4,10 @@ import cofh.mod.updater.IUpdatableMod;
 import cofh.mod.updater.ModRange;
 import cofh.mod.updater.ModVersion;
 import com.google.common.base.Strings;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.ICrashCallable;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.versioning.InvalidVersionSpecificationException;
@@ -12,6 +15,7 @@ import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.jar.JarFile;
+import java.util.zip.ZipEntry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
@@ -46,6 +52,7 @@ public abstract class BaseMod implements IUpdatableMod {
 		String name = getModId();
 		_modid = name.toLowerCase();
 		_log = log;
+		init();
 	}
 
 	protected BaseMod() {
@@ -53,6 +60,31 @@ public abstract class BaseMod implements IUpdatableMod {
 		String name = getModId();
 		_modid = name.toLowerCase();
 		_log = LogManager.getLogger(name);
+		init();
+	}
+
+	private void init() {
+
+		ModContainer container = cpw.mods.fml.common.Loader.instance().activeModContainer();
+		if (container.getSource().isDirectory()) {
+			FMLCommonHandler.instance().registerCrashCallable(new CrashCallable("Loaded from a directory"));
+		} else {
+			try {
+				JarFile jar = new JarFile(container.getSource());
+				ZipEntry file = jar.getEntry("vers.prop");
+				if (file != null) {
+					BufferedReader reader = new BufferedReader(new InputStreamReader(jar.getInputStream(file)));
+					String data = reader.readLine();
+					FMLCommonHandler.instance().registerCrashCallable(new CrashCallable(data));
+				} else {
+					FMLCommonHandler.instance().registerCrashCallable(new CrashCallable("Lacking version information."));
+				}
+				jar.close();
+			} catch (IOException e) {
+				FMLCommonHandler.instance().registerCrashCallable(new CrashCallable("Error reading version information." +
+						e.getMessage()));
+			}
+		}
 	}
 
 	@NetworkCheckHandler
@@ -211,13 +243,15 @@ public abstract class BaseMod implements IUpdatableMod {
 						List<IResource> files = manager.getAllResources(new ResourceLocation(_path + lang + ".lang"));
 						for (IResource file : files) {
 							if (file.getInputStream() == null) {
-								_log.warn("A resource pack defines an entry for language '" + lang + "' but the InputStream is null.");
+								_log.warn("A resource pack defines an entry for language '" + lang +
+										"' but the InputStream is null.");
 								continue;
 							}
 							try {
 								loadLanguageFile(langPack, file.getInputStream());
 							} catch (Throwable t) {
-								_log.warn(AbstractLogger.CATCHING_MARKER, "A resource pack has a file for language '" + lang + "' but the file is invalid.", t);
+								_log.warn(AbstractLogger.CATCHING_MARKER, "A resource pack has a file for language '" + lang +
+										"' but the file is invalid.", t);
 							}
 						}
 					} catch (Throwable t) {
@@ -230,4 +264,28 @@ public abstract class BaseMod implements IUpdatableMod {
 			Minecraft.getMinecraft().getLanguageManager().onResourceManagerReload(manager);
 		}
 	}
+
+	private class CrashCallable implements ICrashCallable {
+
+		private String data;
+
+		private CrashCallable(String data) {
+
+			this.data = data;
+		}
+
+		@Override
+		public String call() throws Exception {
+
+			return data;
+		}
+
+		@Override
+		public String getLabel() {
+
+			return getModId();
+		}
+
+	}
+
 }
