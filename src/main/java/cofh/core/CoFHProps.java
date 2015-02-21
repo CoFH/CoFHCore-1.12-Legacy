@@ -30,7 +30,7 @@ public class CoFHProps {
 			+ CoFHProps.FORGE_REQ + "," + CoFHProps.FORGE_REQ_MAX + ");";
 
 	@SideOnly(Side.CLIENT)
-	@Mod(modid = "CoFHCoreClient", name = CoFHCore.modName, version = CoFHCore.version, dependencies = "Forge@[1013.2.1291,10.14)")
+	@Mod(modid = "CoFHCoreClient", name = CoFHCore.modName, version = CoFHCore.version, dependencies = "Forge@[10.13.2.1291,10.14)")
 	private static class ClientVersion {}
 
 	public static final String DOWNLOAD_URL = "http://teamcofh.com/downloads/";
