@@ -25,6 +25,8 @@ public class PlateParser implements IGeneratorParser {
 				r.variation = (byte) MathHelper.clampI(genObject.get("sizeVariance").getAsInt(), 0, 16);
 			if (genObject.has("height"))
 				r.height = (byte) MathHelper.clampI(genObject.get("height").getAsInt(), 0, 64);
+			if (genObject.has("slim"))
+				r.slim = genObject.get("slim").getAsBoolean();
 		}
 		return r;
 	}

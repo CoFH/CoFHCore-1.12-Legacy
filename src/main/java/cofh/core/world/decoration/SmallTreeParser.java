@@ -60,6 +60,8 @@ public class SmallTreeParser implements IGeneratorParser {
 				r.relaxedGrowth = genObject.get("relaxedGrowth").getAsBoolean();
 			if (genObject.has("waterLoving"))
 				r.waterLoving = genObject.get("waterLoving").getAsBoolean();
+			if (genObject.has("leafVariance"))
+				r.leafVariance = genObject.get("leafVariance").getAsBoolean();
 		}
 		return r;
 	}
