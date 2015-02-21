@@ -1,6 +1,8 @@
 package cofh.core;
 
+import cofh.CoFHCore;
 import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.common.Mod;
 
 import java.io.File;
 import java.util.UUID;
@@ -16,14 +18,17 @@ public class CoFHProps {
 
 	public static final String VERSION = "1.7.10R3.0.0B9";
 
-	private static final String BUILD = "1291";
+	private static final String BUILD = "1217";
 	public static final String FML_REQ = "7.10.0." + BUILD;
 	public static final String FML_REQ_MAX = "7.11";
-	public static final String FORGE_REQ = "10.13.2." + BUILD;
+	public static final String FORGE_REQ = "10.13.1." + BUILD;
 	public static final String FORGE_REQ_MAX = "10.14";
 
 	public static final String DEPENDENCIES = "required-after:FML@[" + CoFHProps.FML_REQ + "," + CoFHProps.FML_REQ_MAX + ");" + "required-after:Forge@["
 			+ CoFHProps.FORGE_REQ + "," + CoFHProps.FORGE_REQ_MAX + ");";
+
+	@Mod(modid = "CoFHCoreClient", name = CoFHCore.modName, version = CoFHCore.version, dependencies = "Forge@[1013.2.1291,10.14)")
+	private static class ClientVersion {}
 
 	public static final String DOWNLOAD_URL = "http://teamcofh.com/downloads/";
 
