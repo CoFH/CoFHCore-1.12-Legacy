@@ -20,6 +20,7 @@ import cofh.lib.util.helpers.StringHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -29,10 +30,12 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 @SideOnly(Side.CLIENT)
@@ -104,9 +107,14 @@ public class ProxyClient extends Proxy {
 		}
 
 		CoFHCore.configClient.save();
-
-		if (!Minecraft.getMinecraft().getFramebuffer().isStencilEnabled()) {
-			Minecraft.getMinecraft().getFramebuffer().enableStencil();
+		if (!Boolean.parseBoolean(System.getProperty("forge.forceDisplayStencil", "false"))) {
+			try {
+				ReflectionHelper.findField(ForgeHooksClient.class, "stencilBits").setInt(null, 2);
+				Framebuffer b = Minecraft.getMinecraft().getFramebuffer();
+				b.createBindFramebuffer(b.framebufferWidth, b.framebufferHeight);
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

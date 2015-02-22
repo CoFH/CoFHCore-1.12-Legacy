@@ -18,8 +18,8 @@
 	<property name="mc.version"  value="1.7.10"/>
 	<property name="forge.major" value="10"/>
 	<property name="forge.minor" value="13"/>
-	<property name="forge.patch" value="1"/>
-	<property name="forge.build" value="1226"/>
+	<property name="forge.patch" value="2"/>
+	<property name="forge.build" value="1291"/>
 	
 	<!-- Packaging -->
 	<property name="dist.dir" value="${build.dir}/dist"/>
