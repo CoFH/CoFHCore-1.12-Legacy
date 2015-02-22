@@ -117,6 +117,10 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase living, ItemStack stack) {
 
+		if (world.isRemote) {
+			return;
+		}
+
 		TileEntity tile = world.getTileEntity(x, y, z);
 
 		if (tile instanceof ISecurable) {
