@@ -93,8 +93,8 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 	@Override
 	public void registerIcons(IIconRegister ir) {
 
-		this.normalIcons[0] = ir.registerIcon(this.getIconString() + "_Uncast");
-		this.normalIcons[1] = ir.registerIcon(this.getIconString() + "_Cast");
+		this.normalIcons[0] = ir.registerIcon(this.getIconString() + "_uncast");
+		this.normalIcons[1] = ir.registerIcon(this.getIconString() + "_cast");
 	}
 
 }
