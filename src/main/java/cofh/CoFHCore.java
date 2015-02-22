@@ -27,10 +27,16 @@ import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
 import cofh.mod.BaseMod;
 import cofh.mod.updater.UpdateManager;
+import com.google.common.collect.Sets;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.MissingModsException;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.CustomProperty;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
@@ -38,9 +44,14 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.versioning.ArtifactVersion;
+import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
+import cpw.mods.fml.common.versioning.VersionRange;
+import cpw.mods.fml.relauncher.Side;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Set;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -55,8 +66,9 @@ import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, guiFactory = CoFHCore.modGuiFactory,
-customProperties = @CustomProperty(k = "cofhversion", v = "true"))
+@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies,
+		guiFactory = CoFHCore.modGuiFactory,
+		customProperties = @CustomProperty(k = "cofhversion", v = "true"))
 public class CoFHCore extends BaseMod {
 
 	public static final String modId = "CoFHCore";
@@ -92,6 +104,18 @@ public class CoFHCore extends BaseMod {
 	public CoFHCore() {
 
 		super(log);
+
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			ModContainer forge = Loader.instance().getIndexedModList().get("Forge");
+			Set<ArtifactVersion> versionMissingMods = Sets.newHashSet();
+			VersionRange range = cpw.mods.fml.common.versioning.VersionParser.parseRange("[10.13.2.1291,10.14)");
+			ArtifactVersion fVersion = new DefaultArtifactVersion("Forge", range);
+			if (fVersion.containsVersion(forge.getProcessedVersion()))
+				return;
+			versionMissingMods.add(fVersion);
+			FMLLog.severe("The mod %s (%s) requires mod versions %s to be available", modId, modName, versionMissingMods);
+			throw new MissingModsException(versionMissingMods);
+		}
 	}
 
 	@EventHandler
@@ -129,7 +153,8 @@ public class CoFHCore extends BaseMod {
 		RecipeSorter.register("cofh:augment", RecipeAugmentable.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 		RecipeSorter.register("cofh:secure", RecipeSecure.class, RecipeSorter.Category.SHAPED, "before:cofh:upgrade");
 		RecipeSorter.register("cofh:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
-		RecipeSorter.register("cofh:upgradeoverride", RecipeUpgradeOverride.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
+		RecipeSorter.register("cofh:upgradeoverride", RecipeUpgradeOverride.class, RecipeSorter.Category.SHAPED,
+			"before:forge:shapedore");
 
 		registerOreDictionaryEntries();
 	}
@@ -174,7 +199,8 @@ public class CoFHCore extends BaseMod {
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 
-		RegistryEnderAttuned.linkConf = new Configuration(new File(DimensionManager.getCurrentSaveRootDirectory(), "/cofh/EnderFrequencies.cfg"));
+		RegistryEnderAttuned.linkConf = new Configuration(new File(DimensionManager.getCurrentSaveRootDirectory(),
+				"/cofh/EnderFrequencies.cfg"));
 		RegistryEnderAttuned.linkConf.load();
 		OreDictionaryArbiter.initialize();
 		CommandHandler.initCommands(event);
