@@ -104,6 +104,10 @@ public class ProxyClient extends Proxy {
 		}
 
 		CoFHCore.configClient.save();
+
+		if (!Minecraft.getMinecraft().getFramebuffer().isStencilEnabled()) {
+			Minecraft.getMinecraft().getFramebuffer().enableStencil();
+		}
 	}
 
 	@Override
