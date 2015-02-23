@@ -29,6 +29,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,6 +39,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
+import org.lwjgl.opengl.EXTFramebufferObject;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -115,6 +117,19 @@ public class ProxyClient extends Proxy {
 				ReflectionHelper.findField(ForgeHooksClient.class, "stencilBits").setInt(null, i);
 				Framebuffer b = Minecraft.getMinecraft().getFramebuffer();
 				b.createBindFramebuffer(b.framebufferWidth, b.framebufferHeight);
+				switch (ReflectionHelper.findField(OpenGlHelper.class, "field_153212_w").getInt(null)) {
+				case 2:
+					switch (EXTFramebufferObject.glCheckFramebufferStatusEXT(b.framebufferObject)) {
+					case EXTFramebufferObject.GL_FRAMEBUFFER_COMPLETE_EXT:
+						break;
+					default: // stencil buffer is not supported
+						ReflectionHelper.findField(ForgeHooksClient.class, "stencilBits").setInt(null, 0);
+						b.createBindFramebuffer(b.framebufferWidth, b.framebufferHeight);
+					}
+					break;
+				default:
+					break;
+				}
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
