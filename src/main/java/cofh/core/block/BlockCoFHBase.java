@@ -147,22 +147,22 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
 			switch (quadrant) {
 			case 0:
 				reconfig.setFacing(2);
-				return;
+				break;
 			case 1:
 				reconfig.setFacing(5);
-				return;
+				break;
 			case 2:
 				reconfig.setFacing(3);
-				return;
+				break;
 			case 3:
 				reconfig.setFacing(4);
-				return;
+				break;
 			case 4:
 				reconfig.setFacing(1);
-				return;
+				break;
 			case 5:
 				reconfig.setFacing(0);
-				return;
+				break;
 			}
 		}
 		if (tile instanceof TileCoFHBase) {
