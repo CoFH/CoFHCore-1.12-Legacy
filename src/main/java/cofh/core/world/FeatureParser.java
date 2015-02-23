@@ -40,6 +40,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -248,12 +249,20 @@ public class FeatureParser {
 
 	private static void addFiles(ArrayList<File> list, File folder) {
 
-		File[] fList = folder.listFiles();
+		File[] fList = folder.listFiles(new FilenameFilter() {
 
-		if (fList == null) {
+			@Override
+			public boolean accept(File file, String name) {
+
+				return file != null && name != null && name.toLowerCase().endsWith(".json");
+			}
+		});
+
+		if (fList == null || fList.length <= 0) {
 			log.error("There are no World Generation files present in " + folder + ".");
 			return;
 		}
+		log.info("CoFH Core found " + fList.length + " World Generation files present in " + folder + "/.");
 		list.addAll(Arrays.asList(fList));
 	}
 
@@ -345,8 +354,8 @@ public class FeatureParser {
 
 	// TODO: move these helper functions outside core?
 
-	public static WorldGenerator parseGenerator(String def, JsonObject genObject, List<WeightedRandomBlock> resList,
-			int clusterSize, List<WeightedRandomBlock> matList) {
+	public static WorldGenerator parseGenerator(String def, JsonObject genObject, List<WeightedRandomBlock> resList, int clusterSize,
+			List<WeightedRandomBlock> matList) {
 
 		JsonElement genElement = genObject.get("template");
 		String name = def;
@@ -370,6 +379,7 @@ public class FeatureParser {
 	}
 
 	public static BiomeInfoSet parseBiomeRestrictions(JsonObject genObject) {
+
 		BiomeInfoSet set = null;
 		if (genObject.has("biomes")) {
 			JsonArray restrictionList = genObject.getAsJsonArray("biomes");
@@ -526,7 +536,7 @@ public class FeatureParser {
 			NBTTagCompound data;
 			if (genObject.has("spawnerTag")) {
 				try {
-					data = (NBTTagCompound)JsonToNBT.func_150315_a(genObject.get("spawnerTag").toString());
+					data = (NBTTagCompound) JsonToNBT.func_150315_a(genObject.get("spawnerTag").toString());
 				} catch (NBTException e) {
 					log.error("Invalid entity entry!", e);
 					return null;
