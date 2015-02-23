@@ -38,6 +38,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
+import org.lwjgl.opengl.GL11;
+
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy {
 
@@ -109,7 +111,8 @@ public class ProxyClient extends Proxy {
 		CoFHCore.configClient.save();
 		if (!Boolean.parseBoolean(System.getProperty("forge.forceDisplayStencil", "false"))) {
 			try {
-				ReflectionHelper.findField(ForgeHooksClient.class, "stencilBits").setInt(null, 2);
+				int i = GL11.glGetInteger(GL11.GL_STENCIL_BITS);
+				ReflectionHelper.findField(ForgeHooksClient.class, "stencilBits").setInt(null, i);
 				Framebuffer b = Minecraft.getMinecraft().getFramebuffer();
 				b.createBindFramebuffer(b.framebufferWidth, b.framebufferHeight);
 			} catch (Throwable e) {
