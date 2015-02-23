@@ -14,6 +14,7 @@ import cofh.core.util.CoreUtils;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.RedstoneControlHelper;
 import cofh.lib.util.helpers.SecurityHelper;
+import cofh.lib.util.helpers.ServerHelper;
 import cofh.lib.util.helpers.StringHelper;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
@@ -117,18 +118,14 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase living, ItemStack stack) {
 
-		if (world.isRemote) {
-			return;
-		}
-
 		TileEntity tile = world.getTileEntity(x, y, z);
 
-		if (tile instanceof ISecurable) {
+		if (ServerHelper.isServerWorld(world) && tile instanceof ISecurable) {
 			if (SecurityHelper.isSecure(stack)) {
 				GameProfile stackOwner = SecurityHelper.getOwner(stack);
 
 				if (((ISecurable) tile).setOwner(stackOwner)) {
-					;
+					; // cool, set the owner
 				} else if (living instanceof ICommandSender) {
 					((ISecurable) tile).setOwnerName(living.getCommandSenderName());
 				}
