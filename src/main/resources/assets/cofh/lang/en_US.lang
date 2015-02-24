@@ -41,6 +41,7 @@ info.cofh.energy=Energy
 info.cofh.energyConsume=Power Usage
 info.cofh.energyProduce=Power Output
 info.cofh.energyStored=Energy Stored
+info.cofh.stored=Stored
 info.cofh.fluid=Fluid
 info.cofh.fluids=Fluids
 info.cofh.force=Force
