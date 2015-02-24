@@ -254,7 +254,9 @@ public class FeatureParser {
 			@Override
 			public boolean accept(File file, String name) {
 
-				return file != null && name != null && file.isDirectory() || name.toLowerCase().endsWith(".json");
+				if (name == null)
+					return false;
+				return name.toLowerCase().endsWith(".json") || new File(file, name).isDirectory();
 			}
 		});
 
