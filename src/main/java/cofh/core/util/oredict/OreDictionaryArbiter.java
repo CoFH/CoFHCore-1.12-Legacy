@@ -2,6 +2,7 @@ package cofh.core.util.oredict;
 
 import cofh.lib.util.ItemWrapper;
 import cofh.lib.util.helpers.ItemHelper;
+import com.google.common.base.Strings;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import cpw.mods.fml.common.Loader;
@@ -76,6 +77,9 @@ public class OreDictionaryArbiter {
 
 		if (stack.getItem() == null)
 			throw new RuntimeException("Null item being registered! Active mod: " + Loader.instance().activeModContainer());
+
+		if (Strings.isNullOrEmpty(name))
+			throw new RuntimeException("Null ore name being registered! Active mod: " + Loader.instance().activeModContainer());
 
 		int id = OreDictionary.getOreID(name);
 
