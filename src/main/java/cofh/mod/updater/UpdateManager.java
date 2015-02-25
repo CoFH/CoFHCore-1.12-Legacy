@@ -1,12 +1,9 @@
 package cofh.mod.updater;
 
-import static net.minecraft.util.EnumChatFormatting.AQUA;
-import static net.minecraft.util.EnumChatFormatting.GOLD;
-import static net.minecraft.util.EnumChatFormatting.GRAY;
-import static net.minecraft.util.EnumChatFormatting.GREEN;
-import static net.minecraft.util.EnumChatFormatting.WHITE;
+import static net.minecraft.util.EnumChatFormatting.*;
 
 import cofh.core.CoFHProps;
+import cofh.lib.util.helpers.StringHelper;
 import com.google.common.base.Strings;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -81,15 +78,17 @@ public class UpdateManager {
 				ModVersion newVersion = _updateThread.newVersion();
 
 				EntityPlayer player = evt.player;
-				player.addChatMessage(new ChatComponentText(GOLD + "[" + _mod.getModName() + "]").appendText(WHITE + " A new version is available:"));
+				player.addChatMessage(new ChatComponentText(GOLD + "[" + _mod.getModName() + "]").appendText(WHITE + " "
+						+ StringHelper.localize("info.cofh.updater.version") + ":"));
 				IChatComponent chat;
 				String text = newVersion.modVersion().toString();
 				if (Strings.isNullOrEmpty(_downloadUrl)) {
 					chat = new ChatComponentText(text).setChatStyle(version);
 				} else {
 					chat = IChatComponent.Serializer.func_150699_a("[{\"text\":\"" + text + "\",\"color\":\"aqua\"}," + "{\"text\":\" " + WHITE + "[" + GREEN
-							+ "Download" + WHITE + "]\"," + "\"color\":\"green\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":"
-							+ "{\"text\":\"Click this to download the latest version\",\"color\":\"yellow\"}},"
+							+ StringHelper.localize("info.cofh.updater.download") + WHITE + "]\","
+							+ "\"color\":\"green\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":" + "{\"text\":\""
+							+ StringHelper.localize("info.cofh.updater.tooltip") + ".\",\"color\":\"yellow\"}},"
 							+ "\"clickEvent\":{\"action\":\"open_url\",\"value\":\"" + _downloadUrl + "\"}}]");
 				}
 				player.addChatMessage(chat);

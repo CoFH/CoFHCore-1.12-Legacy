@@ -149,6 +149,10 @@ info.cofh.command.clearblocks.success=Successfully cleared %s blocks from %s:%s:
 
 info.cofh.command.unloadchunk.success=Unloading Chunk at %s:%s
 
+info.cofh.updater.download=Download
+info.cofh.updater.tooltip=Click to download the latest version
+info.cofh.updater.version=A new version is available
+
 info.cofh.tutorial.fluxRequired=Requires Redstone Flux to operate.
 info.cofh.tutorial.tabAugment=The Augment tab allows for modular additions.
 info.cofh.tutorial.tabConfiguration.0=The Configuration tab determines how items enter and leave this device.
