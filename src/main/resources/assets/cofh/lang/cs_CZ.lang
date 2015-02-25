@@ -1,8 +1,7 @@
 #en_US
 
-chat.cofh.secure.0=Upozornění: OPerátoři serveru maji volný přístup k 'uzamčeným' blokům na tomto serveru.
-chat.cofh.secure.1=Toto je soukromé a patří hráči
-chat.cofh.secure.2=Mohl by jsi přijít o ruku!
+chat.cofh.secure=Toto je soukromé a patří hráči %s! Mohl by jsi přijít o ruku!
+chat.cofh.secureNotice=Upozornění: OPerátoři serveru maji volný přístup k 'uzamčeným' blokům na tomto serveru.
 
 enchant.cofh.holding=Držení
 

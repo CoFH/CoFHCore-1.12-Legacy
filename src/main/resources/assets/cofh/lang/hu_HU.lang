@@ -1,8 +1,7 @@
 #en_US
 
-chat.cofh.secure.0=Megjegyzés: A szerveroperátorok szabadon hozzáférnek a 'levédett' blokkokhoz.
-chat.cofh.secure.1=Ez egy privát blokk, a tulajdonosa 
-chat.cofh.secure.2=Nagyon megütheted a bokád!
+chat.cofh.secure=Ez egy privát blokk, a tulajdonosa %s! Nagyon megütheted a bokád!
+chat.cofh.secureNotice=Megjegyzés: A szerveroperátorok szabadon hozzáférnek a 'levédett' blokkokhoz.
 
 enchant.cofh.holding=Holding
 

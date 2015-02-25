@@ -1,8 +1,7 @@
 #it_IT
 
-chat.cofh.secure.0=Nota: Op del Server possono accedere a blocchi "sicuri" su questo server.
-chat.cofh.secure.1=Questo è privato e appartiene a te
-chat.cofh.secure.2=Potevi perdere la mano!
+chat.cofh.secure=Questo è privato e appartiene a te %s! Potevi perdere la mano!
+chat.cofh.secureNotice=Nota: Op del Server possono accedere a blocchi "sicuri" su questo server.
 
 enchant.cofh.holding=Spazio in più
 

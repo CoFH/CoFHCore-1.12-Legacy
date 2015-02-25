@@ -1,8 +1,7 @@
 #de_DE
 
-chat.cofh.secure.0=Anmerkung: Auf diesem Server sind Server Ops fähig, auf 'sichere' Blöcke frei zuzugreifen.
-chat.cofh.secure.1=Dies ist privat und gehört
-chat.cofh.secure.2=Du hättest deine Hand verlieren können!
+chat.cofh.secure=Dies ist privat und gehört %s! Du hättest deine Hand verlieren können!
+chat.cofh.secureNotice=Anmerkung: Auf diesem Server sind Server Ops fähig, auf 'sichere' Blöcke frei zuzugreifen.
 
 enchant.cofh.holding=Hält
 

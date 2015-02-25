@@ -1,8 +1,7 @@
 #pl_PL
 
-chat.cofh.secure.0=Ogłoszenie: Operatorzy mają dostęp do 'zabezpieczonych' bloków na tym serwerze.
-chat.cofh.secure.1=To jest prywatne i należy do
-chat.cofh.secure.2=Mogłeś stracić rękę!
+chat.cofh.secure=To jest prywatne i należy do %s! Mogłeś stracić rękę!
+chat.cofh.secureNotice=Ogłoszenie: Operatorzy mają dostęp do 'zabezpieczonych' bloków na tym serwerze.
 
 enchant.cofh.holding=Trzymanie
 
