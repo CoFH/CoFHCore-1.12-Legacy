@@ -1,9 +1,6 @@
 package cofh.asm;
 
-import static cofh.asm.ASMCore.HACK;
-import static cofh.asm.ASMCore.hashes;
-import static cofh.asm.ASMCore.parsables;
-import static cofh.asm.ASMCore.parse;
+import static cofh.asm.ASMCore.*;
 
 import cpw.mods.fml.common.discovery.ASMDataTable;
 

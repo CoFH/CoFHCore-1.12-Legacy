@@ -1,14 +1,14 @@
-package cofh.asm.hooks.block;
+package cofh.asmhooks.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDynamicLiquid;
+import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
-public class BlockTickingWater extends BlockDynamicLiquid {
+public class BlockWater extends BlockStaticLiquid {
 
-	public BlockTickingWater(Material mat) {
+	public BlockWater(Material mat) {
 
 		super(mat);
 	}
@@ -31,7 +31,7 @@ public class BlockTickingWater extends BlockDynamicLiquid {
 	@Override
 	public boolean isAssociatedBlock(Block block) {
 
-		return super.isAssociatedBlock(block) || block == Blocks.water;
+		return super.isAssociatedBlock(block) || block == Blocks.flowing_water;
 	}
 
 }

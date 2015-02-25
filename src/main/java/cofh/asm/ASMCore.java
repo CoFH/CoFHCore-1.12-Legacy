@@ -57,7 +57,7 @@ class ASMCore {
 
 	static Logger log = LogManager.getLogger("CoFH ASM");
 
-	static TObjectByteHashMap<String> hashes = new TObjectByteHashMap<String>(20, 1, (byte) 0);
+	static TObjectByteHashMap<String> hashes = new TObjectByteHashMap<String>(30, 1, (byte) 0);
 	static THashSet<String> parsables, implementables, strippables;
 	static final String implementableDesc, strippableDesc;
 	static String side;
@@ -92,6 +92,7 @@ class ASMCore {
 		hashes.put("net.minecraft.server.management.PlayerManager$PlayerInstance", (byte) 13);
 		hashes.put("net.minecraft.entity.Entity", (byte) 14);
 		hashes.put("net.minecraft.entity.item.EntityItem", (byte) 15);
+		hashes.put("cofh.asmhooks.HooksCore", (byte) 16);
 	}
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
@@ -196,6 +197,8 @@ class ASMCore {
 			return alterEntity(name, transformedName, bytes, cr);
 		case 15:
 			return alterEntityItem(name, transformedName, bytes, cr);
+		case 16:
+			return alterHooksCore(name, bytes, cr);
 
 		default:
 			return bytes;
@@ -236,10 +239,10 @@ class ASMCore {
 					TypeInsnNode node = ((TypeInsnNode) n);
 					switch (((IntInsnNode)p).operand) {
 					case 8: // flowing water
-						node.desc = "cofh/asm/hooks/block/BlockTickingWater";
+						node.desc = "cofh/asmhooks/block/BlockTickingWater";
 						break;
 					case 9: // still water
-						node.desc = "cofh/asm/hooks/block/BlockWater";
+						node.desc = "cofh/asmhooks/block/BlockWater";
 						break;
 					default:
 						node = null;
@@ -287,7 +290,7 @@ class ASMCore {
 
 			m.instructions.clear();
 			m.instructions.add(new VarInsnNode(ALOAD, 0));
-			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asm/hooks/HooksCore", "stackItems", "(Lnet/minecraft/entity/item/EntityItem;)V", false));
+			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asmhooks/HooksCore", "stackItems", "(Lnet/minecraft/entity/item/EntityItem;)V", false));
 			m.instructions.add(new InsnNode(RETURN));
 
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -302,9 +305,9 @@ class ASMCore {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
-			names = new String[] { "func_70091_d", "func_72945_a", "" };
+			names = new String[] { "func_70091_d", "func_72945_a", "func_70104_M" };
 		} else {
-			names = new String[] { "moveEntity", "getCollidingBoundingBoxes", "" };
+			names = new String[] { "moveEntity", "getCollidingBoundingBoxes", "canBePushed" };
 		}
 
 		name = name.replace('.', '/');
@@ -332,17 +335,61 @@ class ASMCore {
 					MethodInsnNode mn = (MethodInsnNode) n;
 					if (mOwner.equals(remapper.map(mn.owner)) && names[1].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc))) {
 						mn.setOpcode(INVOKESTATIC);
-						mn.owner = "cofh/asm/hooks/HooksCore";
+						mn.owner = "cofh/asmhooks/HooksCore";
 						mn.desc = "(Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/AxisAlignedBB;)Ljava/util/List;";
 						mn.name = "getEntityCollisionBoxes";
 					}
 				}
 			}
 
+			m = new MethodNode(ACC_PUBLIC, "cofh_collideCheck", "()Z", null, null);
+			cn.methods.add(m);
+			m.instructions.insert(new InsnNode(IRETURN));
+			m.instructions.insert(new MethodInsnNode(INVOKEVIRTUAL, name, names[2], "()Z", false));
+			m.instructions.insert(new VarInsnNode(ALOAD, 0));
+
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 			cn.accept(cw);
 			bytes = cw.toByteArray();
 		}
+
+		return bytes;
+	}
+
+	private static byte[] alterHooksCore(String name, byte[] bytes, ClassReader cr) {
+
+		String[] names;
+		if (LoadingPlugin.runtimeDeobfEnabled) {
+			names = new String[] { "func_70104_M" };
+		} else {
+			names = new String[] { "canBePushed" };
+		}
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM5);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+
+		MethodNode m = null;
+		for (MethodNode n : cn.methods) {
+			if ("getEntityCollisionBoxes".equals(n.name)) {
+				m = n;
+				break;
+			}
+		}
+
+		for (int i = 0, e = m.instructions.size(); i < e; ++i) {
+			AbstractInsnNode n = m.instructions.get(i);
+			if (n.getOpcode() == INVOKEVIRTUAL) {
+				MethodInsnNode mn = (MethodInsnNode) n;
+				if (names[0].equals(mn.name)) {
+					mn.name = "cofh_collideCheck";
+				}
+			}
+		}
+
+		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		cn.accept(cw);
+		bytes = cw.toByteArray();
 
 		return bytes;
 	}
@@ -444,7 +491,7 @@ class ASMCore {
 			m.instructions.add(new VarInsnNode(ILOAD, 3));
 			m.instructions.add(new VarInsnNode(ILOAD, 4));
 			m.instructions.add(new VarInsnNode(ALOAD, 5));
-			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asm/hooks/HooksCore", "paneConnectsTo", sig, false));
+			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asmhooks/HooksCore", "paneConnectsTo", sig, false));
 			m.instructions.add(new InsnNode(IRETURN));
 
 			m.localVariables = null;
@@ -483,7 +530,7 @@ class ASMCore {
 						if (n.getOpcode() == INVOKEVIRTUAL) {
 							MethodInsnNode mn = (MethodInsnNode) n;
 							if (mOwner.equals(mn.owner) && names[1].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc)) && "()V".equals(mn.desc)) {
-								m.instructions.set(mn, new MethodInsnNode(INVOKESTATIC, "cofh/asm/hooks/HooksCore", "tickTextures",
+								m.instructions.set(mn, new MethodInsnNode(INVOKESTATIC, "cofh/asmhooks/HooksCore", "tickTextures",
 										"(Lnet/minecraft/client/renderer/texture/ITickable;)V", false));
 								break mc;
 							}
@@ -747,7 +794,7 @@ class ASMCore {
 						// presently on stack: player.getHeldItem()
 						m.instructions.insertBefore(mn, new VarInsnNode(ALOAD, 0));
 						m.instructions.insertBefore(mn, new FieldInsnNode(GETFIELD, name, names[1], 'L' + itemstack + ';'));
-						final String clazz = "cofh/asm/hooks/HooksCore";
+						final String clazz = "cofh/asmhooks/HooksCore";
 						final String method = "areItemsEqualHook";
 						final String sign = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z";
 						m.instructions.insertBefore(mn, new MethodInsnNode(INVOKESTATIC, clazz, method, sign, false));

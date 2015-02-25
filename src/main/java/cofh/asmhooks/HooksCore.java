@@ -1,4 +1,4 @@
-package cofh.asm.hooks;
+package cofh.asmhooks;
 
 import cofh.core.CoFHProps;
 import cofh.core.item.IEqualityOverrideItem;
