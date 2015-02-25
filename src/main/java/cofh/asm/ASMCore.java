@@ -12,7 +12,6 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
-import cpw.mods.fml.common.asm.transformers.deobf.FMLRemappingAdapter;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 import cpw.mods.fml.common.discovery.ASMDataTable.ASMData;
 import cpw.mods.fml.common.versioning.InvalidVersionSpecificationException;
@@ -21,6 +20,8 @@ import cpw.mods.fml.common.versioning.VersionRange;
 import gnu.trove.map.hash.TObjectByteHashMap;
 import gnu.trove.set.hash.THashSet;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1069,42 +1070,39 @@ class ASMCore {
 
 	private static byte[] writeWorldProxy(String name, byte[] bytes, ClassReader cr) {
 
-		ClassNode world = new ClassNode(ASM5);
-		{
-			FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
-			try {
-				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(remapper.unmap("net/minecraft/world/World").replace('/', '.')));
-				reader.accept(new FMLRemappingAdapter(world), ClassReader.SKIP_CODE);
-			} catch (Throwable e) {
-				Throwables.propagate(e);
-			}
+		Method[] world = null;
+		try {
+			world = net.minecraft.world.World.class.getDeclaredMethods();
+		} catch (Throwable e) {
+			Throwables.propagate(e);
 		}
 
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.SKIP_FRAMES);
 
-		for (MethodNode m : world.methods) {
-			if (m.name.indexOf('<') != 0 && (m.access & ACC_STATIC) == 0) {
+		for (Method m : world) {
+			if (!Modifier.isStatic(m.getModifiers())) {
+				String desc = Type.getMethodDescriptor(m);
 				{
 					Iterator<MethodNode> i = cn.methods.iterator();
 					while (i.hasNext()) {
 						MethodNode m2 = i.next();
-						if (m2.name.equals(m.name) && m2.desc.equals(m.desc)) {
+						if (m2.name.equals(m.getName()) && m2.desc.equals(desc)) {
 							i.remove();
 						}
 					}
 				}
-				MethodVisitor mv = cn.visitMethod(getAccess(m), m.name, m.desc, m.signature, m.exceptions.toArray(new String[0]));
+				MethodVisitor mv = cn.visitMethod(getAccess(m), m.getName(), desc, null, getExceptions(m));
 				mv.visitCode();
 				mv.visitVarInsn(ALOAD, 0);
 				mv.visitFieldInsn(GETFIELD, "skyboy/core/world/WorldProxy", "proxiedWorld", "Lnet/minecraft/world/World;");
-				Type[] types = Type.getArgumentTypes(m.desc);
+				Type[] types = Type.getArgumentTypes(m);
 				for (int i = 0, w = 1, e = types.length; i < e; i++) {
 					mv.visitVarInsn(types[i].getOpcode(ILOAD), w);
 					w += types[i].getSize();
 				}
-				mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/World", m.name, m.desc, false);
-				mv.visitInsn(Type.getReturnType(m.desc).getOpcode(IRETURN));
+				mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/World", m.getName(), desc, false);
+				mv.visitInsn(Type.getReturnType(m).getOpcode(IRETURN));
 				mv.visitMaxs(1, 1);
 				mv.visitEnd();
 			}
@@ -1117,25 +1115,17 @@ class ASMCore {
 
 	private static byte[] writeWorldServerProxy(String name, byte[] bytes, ClassReader cr) {
 
-		ClassNode worldServer = new ClassNode(ASM5);
-		{
-			FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
-			try {
-				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(remapper.unmap("net/minecraft/world/WorldServer").replace('/', '.')));
-				reader.accept(new FMLRemappingAdapter(worldServer), ClassReader.SKIP_CODE);
-			} catch (Throwable e) {
-				Throwables.propagate(e);
-			}
+		Method[] worldServer = null;
+		try {
+			worldServer = net.minecraft.world.WorldServer.class.getDeclaredMethods();
+		} catch (Throwable e) {
+			Throwables.propagate(e);
 		}
-		ClassNode world = new ClassNode(ASM5);
-		{
-			FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
-			try {
-				ClassReader reader = new ClassReader(LoadingPlugin.loader.getClassBytes(remapper.unmap("net/minecraft/world/World").replace('/', '.')));
-				reader.accept(new FMLRemappingAdapter(world), ClassReader.SKIP_CODE);
-			} catch (Throwable e) {
-				Throwables.propagate(e);
-			}
+		Method[] world = null;
+		try {
+			world = net.minecraft.world.World.class.getDeclaredMethods();
+		} catch (Throwable e) {
+			Throwables.propagate(e);
 		}
 
 		ClassNode cn = new ClassNode(ASM5);
@@ -1158,55 +1148,57 @@ class ASMCore {
 			}
 		}
 
-		for (MethodNode m : world.methods) {
-			if (m.name.indexOf('<') != 0 && (m.access & ACC_STATIC) == 0) {
+		for (Method m : world) {
+			if (!Modifier.isStatic(m.getModifiers())) {
+				String desc = Type.getMethodDescriptor(m);
 				{
 					Iterator<MethodNode> i = cn.methods.iterator();
 					while (i.hasNext()) {
 						MethodNode m2 = i.next();
-						if (m2.name.equals(m.name) && m2.desc.equals(m.desc)) {
+						if (m2.name.equals(m.getName()) && m2.desc.equals(desc)) {
 							i.remove();
 						}
 					}
 				}
-				MethodVisitor mv = cn.visitMethod(getAccess(m), m.name, m.desc, m.signature, m.exceptions.toArray(new String[0]));
+				MethodVisitor mv = cn.visitMethod(getAccess(m), m.getName(), desc, null, getExceptions(m));
 				mv.visitCode();
 				mv.visitVarInsn(ALOAD, 0);
 				mv.visitFieldInsn(GETFIELD, "skyboy/core/world/WorldServerProxy", "proxiedWorld", "Lnet/minecraft/world/WorldServer;");
-				Type[] types = Type.getArgumentTypes(m.desc);
+				Type[] types = Type.getArgumentTypes(m);
 				for (int i = 0, w = 1, e = types.length; i < e; i++) {
 					mv.visitVarInsn(types[i].getOpcode(ILOAD), w);
 					w += types[i].getSize();
 				}
-				mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/World", m.name, m.desc, false);
-				mv.visitInsn(Type.getReturnType(m.desc).getOpcode(IRETURN));
+				mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/World", m.getName(), desc, false);
+				mv.visitInsn(Type.getReturnType(m).getOpcode(IRETURN));
 				mv.visitMaxs(1, 1);
 				mv.visitEnd();
 			}
 		}
 
-		for (MethodNode m : worldServer.methods) {
-			if (m.name.indexOf('<') != 0 && (m.access & ACC_STATIC) == 0) {
+		for (Method m : worldServer) {
+			if (!Modifier.isStatic(m.getModifiers())) {
+				String desc = Type.getMethodDescriptor(m);
 				{
 					Iterator<MethodNode> i = cn.methods.iterator();
 					while (i.hasNext()) {
 						MethodNode m2 = i.next();
-						if (m2.name.equals(m.name) && m2.desc.equals(m.desc)) {
+						if (m2.name.equals(m.getName()) && m2.desc.equals(desc)) {
 							i.remove();
 						}
 					}
 				}
-				MethodVisitor mv = cn.visitMethod(getAccess(m), m.name, m.desc, m.signature, m.exceptions.toArray(new String[0]));
+				MethodVisitor mv = cn.visitMethod(getAccess(m), m.getName(), desc, null, getExceptions(m));
 				mv.visitCode();
 				mv.visitVarInsn(ALOAD, 0);
 				mv.visitFieldInsn(GETFIELD, "skyboy/core/world/WorldServerProxy", "proxiedWorld", "Lnet/minecraft/world/WorldServer;");
-				Type[] types = Type.getArgumentTypes(m.desc);
+				Type[] types = Type.getArgumentTypes(m);
 				for (int i = 0, w = 1, e = types.length; i < e; i++) {
 					mv.visitVarInsn(types[i].getOpcode(ILOAD), w);
 					w += types[i].getSize();
 				}
-				mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/WorldServer", m.name, m.desc, false);
-				mv.visitInsn(Type.getReturnType(m.desc).getOpcode(IRETURN));
+				mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/world/WorldServer", m.getName(), desc, false);
+				mv.visitInsn(Type.getReturnType(m).getOpcode(IRETURN));
 				mv.visitMaxs(1, 1);
 				mv.visitEnd();
 			}
@@ -1218,11 +1210,22 @@ class ASMCore {
 		return bytes;
 	}
 
-	private static int getAccess(MethodNode m) {
+	private static int getAccess(Method m) {
 
-		int r = m.access;
+		int r = m.getModifiers();
 		r &= ~(ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED | ACC_FINAL | ACC_BRIDGE | ACC_ABSTRACT);
 		r |= ACC_PUBLIC | ACC_SYNTHETIC;
+		return r;
+	}
+
+	private static String[] getExceptions(Method m) {
+
+		Class<?>[] d = m.getExceptionTypes();
+		if (d == null)
+			return null;
+		String[] r = new String[d.length];
+		for (int i = 0; i < d.length; ++i)
+			r[i] = Type.getInternalName(d[i]);
 		return r;
 	}
 
