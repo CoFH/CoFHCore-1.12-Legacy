@@ -154,7 +154,7 @@ class ASMCore {
 					if (!workingPath.contains(node.name)) {
 						try {
 							Class.forName(node.name, false, ASMCore.class.getClassLoader());
-						} catch (Throwable _) {
+						} catch (Throwable $) {
 						}
 					}
 				}
@@ -1252,7 +1252,7 @@ class ASMCore {
 							}
 							cn.interfaces.add(cz);
 							interfaces = true;
-						} catch (Throwable _) {
+						} catch (Throwable $) {
 						}
 					}
 				}
@@ -1280,7 +1280,7 @@ class ASMCore {
 									Class.forName(clazz, false, ASMCore.class.getClassLoader());
 									remove = false;
 								}
-							} catch (Throwable _) {
+							} catch (Throwable $) {
 							}
 							if (remove) {
 								cn.interfaces.remove(cz);
@@ -1370,7 +1370,7 @@ class ASMCore {
 							if (!workingPath.contains(clazz)) {
 								Class.forName(clazz, false, ASMCore.class.getClassLoader());
 							}
-						} catch (Throwable _) {
+						} catch (Throwable $) {
 							needsRemoved = true;
 						}
 					}
