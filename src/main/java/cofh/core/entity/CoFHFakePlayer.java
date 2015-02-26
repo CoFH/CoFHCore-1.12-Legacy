@@ -89,7 +89,7 @@ public class CoFHFakePlayer extends FakePlayer {
 		theItemInWorldManager.updateBlockRemoving();
 
 		if (itemInUse != null) {
-			//tickItemInUse(itemstack);
+			// tickItemInUse(itemstack);
 		}
 	}
 
@@ -98,9 +98,9 @@ public class CoFHFakePlayer extends FakePlayer {
 		if (updateItem != null && ItemHelper.itemsEqualWithMetadata(previousItem, itemInUse)) {
 
 			itemInUseCount = ForgeEventFactory.onItemUseTick(this, itemInUse, itemInUseCount);
-            if (itemInUseCount <= 0) {
-                onItemUseFinish();
-            } else {
+			if (itemInUseCount <= 0) {
+				onItemUseFinish();
+			} else {
 				itemInUse.getItem().onUsingTick(itemInUse, this, itemInUseCount);
 				if (itemInUseCount <= 25 && itemInUseCount % 4 == 0) {
 					updateItemUse(updateItem, 5);
@@ -108,7 +108,7 @@ public class CoFHFakePlayer extends FakePlayer {
 				if (--itemInUseCount == 0 && !worldObj.isRemote) {
 					onItemUseFinish();
 				}
-            }
+			}
 		} else {
 			clearItemInUse();
 		}
