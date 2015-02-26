@@ -834,10 +834,11 @@ class ASMCore {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
-			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F", "func_147448_a", "func_147455_a", "func_72939_s",
-					"func_145830_o" };
+			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F", "func_147448_a",
+					"func_147455_a", "func_72939_s", "func_145830_o", "field_147481_N" };
 		} else {
-			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a", "setTileEntity", "updateEntities", "hasWorldObj" };
+			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a",
+					"setTileEntity", "updateEntities", "hasWorldObj", "field_147481_N" };
 		}
 		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
@@ -928,9 +929,9 @@ class ASMCore {
 			AbstractInsnNode n = updateEntities.instructions.getFirst();
 			while (n.getOpcode() != INVOKEVIRTUAL || !"onChunkUnload".equals(((MethodInsnNode) n).name) || !"()V".equals(((MethodInsnNode) n).desc))
 				n = n.getNext();
-			while (n.getOpcode() != PUTFIELD)
-				n = n.getNext();
-			n = n.getPrevious().getPrevious();
+			while (n.getOpcode() != PUTFIELD || !names[8].equals(((FieldInsnNode) n).name))
+				n = n.getPrevious();
+			n = n.getNext();
 			LabelNode lStart = new LabelNode(new Label());
 			LabelNode lCond = new LabelNode(new Label());
 			LabelNode lGuard = new LabelNode(new Label());
