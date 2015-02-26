@@ -121,8 +121,9 @@ public abstract class ItemToolAdv extends ItemTool {
 		if (!ForgeHooks.canHarvestBlock(block, player, meta))
 			return false;
 		// send the blockbreak event
+		BreakEvent event = null;
 		if (playerMP != null) {
-			BreakEvent event = ForgeHooks.onBlockBreakEvent(world, playerMP.theItemInWorldManager.getGameType(), playerMP, x, y, z);
+			event = ForgeHooks.onBlockBreakEvent(world, playerMP.theItemInWorldManager.getGameType(), playerMP, x, y, z);
 			if (event.isCanceled())
 				return false;
 		}
@@ -152,6 +153,8 @@ public abstract class ItemToolAdv extends ItemTool {
 			if (block.removedByPlayer(world, player, x, y, z, true)) {
 				block.onBlockDestroyedByPlayer(world, x, y, z, meta);
 				block.harvestBlock(world, player, x, y, z, meta);
+				if (event != null)
+					block.dropXpOnBlockBreak(world, x, y, z, event.getExpToDrop());
 			}
 			// always send block update to client
 			playerMP.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
