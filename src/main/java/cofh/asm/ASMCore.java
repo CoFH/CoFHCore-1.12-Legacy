@@ -929,7 +929,8 @@ class ASMCore {
 			AbstractInsnNode n = updateEntities.instructions.getFirst();
 			while (n.getOpcode() != INVOKEVIRTUAL || !"onChunkUnload".equals(((MethodInsnNode) n).name) || !"()V".equals(((MethodInsnNode) n).desc))
 				n = n.getNext();
-			while (n.getOpcode() != PUTFIELD || !names[8].equals(((FieldInsnNode) n).name))
+			while (n.getOpcode() != PUTFIELD ||
+					!names[8].equals(remapper.mapFieldName(name, ((FieldInsnNode) n).name, ((FieldInsnNode) n).desc)))
 				n = n.getPrevious();
 			n = n.getNext();
 			LabelNode lStart = new LabelNode(new Label());
