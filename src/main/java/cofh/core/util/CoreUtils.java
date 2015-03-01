@@ -126,6 +126,7 @@ public class CoreUtils {
 	}
 
 	/* FILE UTILS */
+	@SuppressWarnings("resource")
 	public static void copyFileUsingStream(String source, File dest) throws IOException {
 
 		InputStream is = null;
@@ -149,6 +150,7 @@ public class CoreUtils {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	public static void copyFileUsingStream(String source, String dest) throws IOException {
 
 		InputStream is = null;
@@ -172,6 +174,7 @@ public class CoreUtils {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	public static void copyFileUsingChannel(File source, File dest) throws IOException {
 
 		FileChannel sourceChannel = null;
