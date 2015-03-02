@@ -1,9 +1,16 @@
 #ko_KR
 
+# Config GUI Tooltips
+config.Client.tooltip=클라이언트 전용 옵션
+config.Common.tooltip=일반 옵션
+config.Core.tooltip=코어 모듈 옵션
+config.Loot.tooltip=루트 모듈 옵션
+
 chat.cofh.secure=이것은 개인용이며 소유권이 타인에게 있습니다 %s! 손이 미끄러졌습니다!
 chat.cofh.secureNotice=알림: 서버의 모든 OP는 제한없이 보안 설정된 블록을 접근 할 수 있습니다.
 
 enchant.cofh.holding=수송량증가
+enchant.cofh.multishot=다중슬롯
 
 info.cofh.access=보안
 info.cofh.accessMode=보안 설정
@@ -84,6 +91,70 @@ info.cofh.command.help.0=사용 가능한 명령어:
 #info.cofh.command.killall.1=
 info.cofh.command.killall.2=적대적인 몬스터를 찾을 수 없습니다.
 info.cofh.command.version.0=현재 모드 버전
+info.cofh.command.enchant=Improved /enchant. Has no limits on level or applicability.
+info.cofh.command.clearblocks=Clears specified blocks from a specified area in the world.
+info.cofh.command.replaceblocks=Replaces specified blocks from a specified area in the world.
+info.cofh.command.reloadworldgen=Reloads world generation from disk.
+info.cofh.command.unloadchunk=Unloads the chunk the player is looking at.
+
+info.cofh.command.friend.syntax=/cofh friend {gui | add <username> | remove <username>}
+info.cofh.command.help.syntax=/cofh help [command]
+info.cofh.command.syntax.syntax=/cofh syntax [command]
+info.cofh.command.killall.syntax=/cofh killall [partial name]
+info.cofh.command.tps.syntax=/cofh tps [{o | a | <dim ID>}]
+info.cofh.command.tpx.syntax=/cofh tpx [player] {(<player> | <dimension>) | <x> <y> <z> [dimension]}
+info.cofh.command.version.syntax=/cofh version
+info.cofh.command.enchant.syntax=/cofh enchant [player] <enchantment ID> [level]
+info.cofh.command.clearblocks.syntax=/cofh clearblocks {<user> <x radius> <y radius> <z radius> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} [block#meta] [block#meta] ...
+info.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<user> <x radius> <y radius> <z radius> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} <replaceBlock#meta> [block#meta] [block#meta] ...
+info.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
+info.cofh.command.unloadchunk.syntax=/cofh unloadchunk
+
+info.cofh.command.syntaxError=Invalid Syntax.
+info.cofh.command.notFound=Unknown command. Try /cofh help for a list of commands
+info.cofh.command.world.notFound=World does not exist.
+
+info.cofh.command.friend.0=successfully added to your friends list.
+info.cofh.command.friend.1=Sorry, there was a problem adding
+info.cofh.command.friend.2=to your list.
+info.cofh.command.friend.3=Sorry, that is not a valid username.
+info.cofh.command.friend.4=successfully removed from your friends list.
+info.cofh.command.friend.5=was not your friend.
+
+info.cofh.command.help.0=작동중인 명령어:
+info.cofh.command.version.0=이 모드의 버전은
+
+info.cofh.command.killall.success=Removed %d entities. (%s)
+info.cofh.command.killall.successHostile=Removed %d hostile mobs. (%s)
+info.cofh.command.killall.noMatch=No entities found matching "§e%s§f"!
+info.cofh.command.killall.noHostile=No hostile mobs found!
+
+info.cofh.command.tpx.snark.0=Successfully teleported you to yourself!
+info.cofh.command.tpx.snark.1=Successfully teleported %s to themself!
+info.cofh.command.tpx.self=Successfully teleported to %.2f %.2f %.2f
+info.cofh.command.tpx.dimensionSelf=Successfully teleported to The %1$s at %2$.2f %3$.2f %4$.2f
+info.cofh.command.tpx.other=Successfully teleported %s to %.2f %.2f %.2f
+info.cofh.command.tpx.otherTo=Successfully teleported %s to %s at %.2f %.2f %.2f
+info.cofh.command.tpx.dimensionOther=Successfully teleported %s to The %2$s at %3$.2f %4$.2f %5$.2f
+info.cofh.command.tpx.dimensionOtherTo=Successfully teleported %s to %s in %3$s at %4$.2f %5$.2f %6$.2f
+info.cofh.command.tpx.otherToSelf=Successfully teleported %s to themself at %.2f %.2f %.2f
+info.cofh.command.tpx.dimensionOtherToSelf=Successfully teleported %s to themself in %2$s at %3$.2f %4$.2f %5$.2f
+
+info.cofh.command.reloadworldgen.success=월드젠을 리로드하였습니다.
+
+info.cofh.command.replaceblocks.failure=재설치할 블럭이 없습니다.
+info.cofh.command.replaceblocks.start=%s 블럭을 %s:%s:%s 그리고 %s:%s:%s  %s 에 재설치 합니다..
+info.cofh.command.replaceblocks.success=Successfully replaced %s blocks from %s:%s:%s to %s:%s:%s with %s.
+
+info.cofh.command.clearblocks.failure=제거 할 블럭이 없습니다.
+info.cofh.command.clearblocks.start=%s 블럭을 %s:%s:%s 그리고 %s:%s:%s에서 제거 합니다.
+info.cofh.command.clearblocks.success= %s 블럭을 %s:%s:%s 그리고 %s:%s:%s에서 제거 했습니다.
+
+info.cofh.command.unloadchunk.success=%s:%s 청크를 언로드 합니다.
+
+info.cofh.updater.download=다운로드
+info.cofh.updater.tooltip=클릭으로 최신 버전을 다운로드하세요!
+info.cofh.updater.version=새로운 버전이 있습니다
 
 info.cofh.tutorial.fluxRequired=기계가 동작하는데 RF가 필요합니다.
 info.cofh.tutorial.tabAugment=강화 탭에서 모듈을 통해서 기기를 업그레이드 할 수있습니다.
@@ -93,6 +164,9 @@ info.cofh.tutorial.tabRedstone=레드스톤 제어 탭에서 레드스톤 신호
 info.cofh.tutorial.tabSecurity=보안 탭에서 블록에 접근 가능한 사용자를 설정할 수 있습니다.
 
 item.invalid.name=사용불가 아이템
+
+tab.cofh.friend.0=친구 추가/제거!
+tab.cofh.friend.1=Friends not provided.
 
 #액체 이름 수정
 
