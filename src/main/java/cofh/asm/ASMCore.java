@@ -827,6 +827,14 @@ class ASMCore {
 		mv.visitMaxs(0, 1);
 		mv.visitEnd();
 		cw.visitEnd();
+
+		cw.newMethod(name, "cofh_invalidate", "()V", true);
+		mv = cw.visitMethod(ACC_PUBLIC | ACC_SYNTHETIC, "cofh_invalidate", "()V", null, null);
+		mv.visitCode();
+		mv.visitInsn(RETURN);
+		mv.visitMaxs(0, 1);
+		mv.visitEnd();
+		cw.visitEnd();
 		return cw.toByteArray();
 	}
 
@@ -835,10 +843,10 @@ class ASMCore {
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
 			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F", "func_147448_a",
-					"func_147455_a", "func_72939_s", "func_145830_o", "field_147481_N" };
+					"func_147455_a", "func_72939_s", "func_145830_o", "field_147481_N", "func_147457_a" };
 		} else {
 			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a",
-					"setTileEntity", "updateEntities", "hasWorldObj", "field_147481_N" };
+					"setTileEntity", "updateEntities", "hasWorldObj", "field_147481_N", "func_147457_a" };
 		}
 		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
@@ -847,7 +855,8 @@ class ASMCore {
 		final String sig = "(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
 		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 
-		MethodNode addTileEntity = null, addTileEntities = null, setTileEntity = null, updateEntities = null;
+		MethodNode addTileEntity = null, addTileEntities = null, setTileEntity = null, updateEntities = null,
+				unloadTile = null;
 		boolean found = false;
 		for (MethodNode m : cn.methods) {
 			if ("<init>".equals(m.name)) {
@@ -873,9 +882,24 @@ class ASMCore {
 				setTileEntity = m;
 			} else if (names[6].equals(remapper.mapMethodName(name, m.name, m.desc)) && "()V".equals(remapper.mapMethodDesc(m.desc))) {
 				updateEntities = m;
+			} else if (names[9].equals(remapper.mapMethodName(name, m.name, m.desc)) &&
+					"(Lnet/minecraft/tileentity/TileEntity;)V".equals(remapper.mapMethodDesc(m.desc))) {
+				unloadTile = m;
 			}
 		}
+
 		cn.fields.add(new FieldNode(ACC_PRIVATE | ACC_SYNTHETIC, "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;", null, null));
+
+		if (unloadTile != null) {
+
+			LabelNode a = new LabelNode(new Label());
+			AbstractInsnNode n;
+			unloadTile.instructions.insert(n = a);
+			unloadTile.instructions.insert(n, n = new LineNumberNode(-15005, a));
+			unloadTile.instructions.insert(n, n = new VarInsnNode(ALOAD, 1));
+			unloadTile.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity", "cofh_invalidate", "()V", false));
+		}
+
 		if (addTileEntity != null) {
 
 			LabelNode a = new LabelNode(new Label());
@@ -889,6 +913,7 @@ class ASMCore {
 			addTileEntity.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
 			addTileEntity.instructions.insert(n, n = new InsnNode(POP));
 		}
+
 		if (setTileEntity != null) {
 
 			LabelNode a = new LabelNode(new Label());
@@ -905,6 +930,7 @@ class ASMCore {
 			setTileEntity.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
 			setTileEntity.instructions.insert(n, n = new InsnNode(POP));
 		}
+
 		if (addTileEntities != null) {
 			LabelNode a = new LabelNode(new Label());
 			AbstractInsnNode n = addTileEntities.instructions.getFirst();
@@ -925,6 +951,7 @@ class ASMCore {
 					n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
 			addTileEntities.instructions.insert(n, n = new InsnNode(POP));
 		}
+
 		if (updateEntities != null) {
 			AbstractInsnNode n = updateEntities.instructions.getFirst();
 			while (n.getOpcode() != INVOKEVIRTUAL || !"onChunkUnload".equals(((MethodInsnNode) n).name) || !"()V".equals(((MethodInsnNode) n).desc))
