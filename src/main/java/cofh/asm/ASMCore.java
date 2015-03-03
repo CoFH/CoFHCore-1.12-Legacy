@@ -1269,7 +1269,7 @@ class ASMCore {
 		boolean interfaces = false;
 		for (AnnotationNode n : cn.visibleAnnotations) {
 			AnnotationInfo node = parseAnnotation(n, implementableDesc);
-			if (node != null && side == node.side) {
+			if (node != null && (node.side == "NONE" || side == node.side)) {
 				String[] value = node.values;
 				for (int j = 0, l = value.length; j < l; ++j) {
 					String clazz = value[j].trim();
