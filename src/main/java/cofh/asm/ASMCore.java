@@ -110,12 +110,12 @@ class ASMCore {
 		workingPath.add(transformedName);
 
 		if (implementables.contains(name)) {
-			log.info("Adding runtime interfaces to " + transformedName);
+			log.debug("Adding runtime interfaces to " + transformedName);
 			ClassReader cr = new ClassReader(bytes);
 			ClassNode cn = new ClassNode();
 			cr.accept(cn, 0);
 			if (implement(cn)) {
-				ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+				ClassWriter cw = new ClassWriter(0);
 				cn.accept(cw);
 				bytes = cw.toByteArray();
 			} else {
@@ -124,12 +124,12 @@ class ASMCore {
 		}
 
 		if (strippables.contains(name)) {
-			log.info("Stripping methods and fields from " + transformedName);
+			log.debug("Stripping methods and fields from " + transformedName);
 			ClassReader cr = new ClassReader(bytes);
 			ClassNode cn = new ClassNode();
 			cr.accept(cn, 0);
 			if (strip(cn)) {
-				ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+				ClassWriter cw = new ClassWriter(0);
 				cn.accept(cw);
 				bytes = cw.toByteArray();
 			} else {
