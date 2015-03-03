@@ -8,6 +8,7 @@ import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.lwjgl.opengl.GL11;
 
@@ -35,14 +36,14 @@ public class TabSecurity extends TabBase {
 	}
 
 	ISecurable myContainer;
-	String myPlayer;
+	UUID myPlayer;
 
-	public TabSecurity(GuiBase gui, ISecurable container, String playerName) {
+	public TabSecurity(GuiBase gui, ISecurable container, UUID playerName) {
 
 		this(gui, defaultSide, container, playerName);
 	}
 
-	public TabSecurity(GuiBase gui, int side, ISecurable container, String playerName) {
+	public TabSecurity(GuiBase gui, int side, ISecurable container, UUID playerName) {
 
 		super(gui, side);
 
@@ -118,7 +119,7 @@ public class TabSecurity extends TabBase {
 	@Override
 	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
 
-		if (!myPlayer.equals(myContainer.getOwnerName())) {
+		if (!myPlayer.equals(myContainer.getOwner().getId())) {
 			return true;
 		}
 		if (!isFullyOpened()) {
@@ -171,7 +172,7 @@ public class TabSecurity extends TabBase {
 	@Override
 	public void setFullyOpen() {
 
-		if (!myPlayer.equals(myContainer.getOwnerName())) {
+		if (!myPlayer.equals(myContainer.getOwner().getId())) {
 			return;
 		}
 		super.setFullyOpen();

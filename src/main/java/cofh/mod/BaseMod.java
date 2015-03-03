@@ -8,6 +8,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ICrashCallable;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.network.NetworkCheckHandler;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.versioning.InvalidVersionSpecificationException;
@@ -34,6 +35,7 @@ import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StringTranslate;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -176,7 +178,7 @@ public abstract class BaseMod implements IUpdatableMod {
 		LanguageRegistry.instance().injectLanguage(lang.intern(), parsedLangFile);
 	}
 
-	@SuppressWarnings("resource")
+	@SuppressWarnings({ "unchecked", "rawtypes", "resource"})
 	protected void loadLang() {
 
 		if (FMLLaunchHandler.side() == Side.CLIENT) {
@@ -196,7 +198,9 @@ public abstract class BaseMod implements IUpdatableMod {
 			Properties langPack = new Properties();
 			loadLanguageFile(langPack, is);
 
-			loadLanguageFile(lang, langPack);
+			StringTranslate i = ObfuscationReflectionHelper.getPrivateValue(StringTranslate.class, null, "instance", "field_74817_a");
+			Map m = ObfuscationReflectionHelper.getPrivateValue(StringTranslate.class, i, "field_74816_c", "languageList");
+			m.putAll(langPack);
 		} catch (Throwable t) {
 			_log.catching(Level.INFO, t);
 		} finally {
