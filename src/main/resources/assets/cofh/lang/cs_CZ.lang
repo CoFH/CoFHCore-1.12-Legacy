@@ -88,7 +88,7 @@ info.cofh.command.version.0=Tento mód má verzi
 info.cofh.tutorial.fluxRequired=Potřebuje ruditový flux pro funkci.
 info.cofh.tutorial.tabAugment=Panel rozšíření umožňuje modulární přídavky.
 info.cofh.tutorial.tabConfiguration.0=Konfigurační panel popisuje, jak předměty vstupují a opouští toto zařízení.
-info.cofh.tutorial.tabConfiguration.1=Konfigurační panel popisuje operační kroky pro toto zařízení.
+info.cofh.tutorial.tabConfiguration.2=Konfigurační panel popisuje operační kroky pro toto zařízení.
 info.cofh.tutorial.tabRedstone=Ruditový ovládací panel nastavuje, jak reaguje toto zařízení na ruditové signály.
 info.cofh.tutorial.tabSecurity=Bezpečnostní panel umožňuje majiteli nastavit kdo bude mít přístup do tohoto zařízení.
 

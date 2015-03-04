@@ -156,7 +156,8 @@ info.cofh.updater.version=A new version is available
 info.cofh.tutorial.fluxRequired=Requires Redstone Flux to operate.
 info.cofh.tutorial.tabAugment=The Augment tab allows for modular additions.
 info.cofh.tutorial.tabConfiguration.0=The Configuration tab determines how items enter and leave this device.
-info.cofh.tutorial.tabConfiguration.1=The Configuration tab determines the operation modes for this device.
+info.cofh.tutorial.tabConfiguration.1=The Configuration tab determines how energy is transferred to and from this device.
+info.cofh.tutorial.tabConfiguration.2=The Configuration tab determines the operation modes for this device.
 info.cofh.tutorial.tabRedstone=The Redstone Control tab configures how this device reacts to redstone signals.
 info.cofh.tutorial.tabSecurity=The Security tab allows the owner to control who can access this device.
 

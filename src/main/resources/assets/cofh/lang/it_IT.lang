@@ -67,7 +67,7 @@ info.cofh.unlocked=Sblocca
 info.cofh.tutorial.fluxRequired=Richiede Redstone Flux per funzionare.
 info.cofh.tutorial.tabAugment=Il tab Potenziamento permette aggiunte modulari.
 info.cofh.tutorial.tabConfiguration.0=Il tab Configurazioni determina come gli oggetti entrano e escono da questo dispositivo.
-info.cofh.tutorial.tabConfiguration.1=Il tab Configurazioni determina le modalità di operazione di questo dispositivo.
+info.cofh.tutorial.tabConfiguration.2=Il tab Configurazioni determina le modalità di operazione di questo dispositivo.
 info.cofh.tutorial.tabRedstone=Il tab Controllo pietrarossa configura come quest dispositivo reagisce a segnali di pietrarossa.
 info.cofh.tutorial.tabSecurity=Il tab Sicurezza permette al proprietario di controllare chi ha accesso a quest dispositivo.
 

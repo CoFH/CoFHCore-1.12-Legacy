@@ -103,7 +103,7 @@ info.cofh.command.version.0=Ten mod ma wersję
 info.cofh.tutorial.fluxRequired=Wymaga redstone'owego flux'u do operacji.
 info.cofh.tutorial.tabAugment=Karta powiększeń zezwala na modularne dodatki.
 info.cofh.tutorial.tabConfiguration.0=Karta konfiguracji determinuje to, jak przedmioty wchodzą i wychodzą z tego urządzenia.
-info.cofh.tutorial.tabConfiguration.1=Karta konfiguracji determinuje tryby operacji tego urządzeia.
+info.cofh.tutorial.tabConfiguration.2=Karta konfiguracji determinuje tryby operacji tego urządzeia.
 info.cofh.tutorial.tabRedstone=Karta kontroli redstone'a konfiguruje to, jak to urządzenie reaguje na sygnały redstone'a.
 info.cofh.tutorial.tabSecurity=Karta bezpieczeństwa zezwala na kontrolowanie tego, kto ma prawo dostępu do tego urządzenia.
 

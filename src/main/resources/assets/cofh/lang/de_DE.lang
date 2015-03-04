@@ -88,7 +88,7 @@ info.cofh.command.version.0=Diese Mod ist auf Version
 info.cofh.tutorial.fluxRequired=Benötigt Redstone-Flux zum Arbeiten.
 info.cofh.tutorial.tabAugment=Der Erweiteungs-Tab ermöglicht das Hinzufügen von Modulen.
 info.cofh.tutorial.tabConfiguration.0=Der Konfigurations-Tab bestimmt, wie Items dieses Gerät erreichen und verlassen.
-info.cofh.tutorial.tabConfiguration.1=Der Konfigurations-Tab bestimmt die Operations-Modi dieses Gerätes.
+info.cofh.tutorial.tabConfiguration.2=Der Konfigurations-Tab bestimmt die Operations-Modi dieses Gerätes.
 info.cofh.tutorial.tabRedstone=Der Redstone-Kontroll-Tab konfiguriert, wie dieses Gerät auf Redstone-Signale reagiert.
 info.cofh.tutorial.tabSecurity=Der Sicherheits-Tab ermöglicht dem Besitzer Kontrolle darüber, wer auf dieses Gerät zugreifen darf.
 

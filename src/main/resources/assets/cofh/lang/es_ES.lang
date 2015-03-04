@@ -60,8 +60,8 @@ info.cofh.tutorial=Tutorial
 info.cofh.unlocked=Desbloqueado
 
 info.cofh.tutorial.fluxRequired=Necesita un flujo de redstone para funcionar.
-info.cofh.tutorial.tabConfiguration=La pestaña de configuración determina de que manera los objetos entran y salen de este dispositivo.
-info.cofh.tutorial.tabConfiguration2=La pestaña de configuración determina los modos de funcionamiento de este dispositivo.
+info.cofh.tutorial.tabConfiguration.0=La pestaña de configuración determina de que manera los objetos entran y salen de este dispositivo.
+info.cofh.tutorial.tabConfiguration.2=La pestaña de configuración determina los modos de funcionamiento de este dispositivo.
 info.cofh.tutorial.tabRedstone=La pestaña de control de redstone configura cómo este dispositivo reacciona a las señales de redstone.
 
 item.invalid.name=Objeto Invalido (Destruir)

@@ -60,8 +60,8 @@ info.cofh.tutorial=Tutoriel
 info.cofh.unlocked=Déverrouillé
 
 info.cofh.tutorial.fluxRequired=A besoin d'un signal de redstone pour fonctionner.
-info.cofh.tutorial.tabConfiguration=L'onglet de configuration détermine la façon dont les objets entrent et sortent de cette machine.
-info.cofh.tutorial.tabConfiguration2=L'onglet de configuration détermine les modes de fonctionnement de cette machine.
+info.cofh.tutorial.tabConfiguration.0=L'onglet de configuration détermine la façon dont les objets entrent et sortent de cette machine.
+info.cofh.tutorial.tabConfiguration.2=L'onglet de configuration détermine les modes de fonctionnement de cette machine.
 info.cofh.tutorial.tabRedstone=L'onglet de Contrôle Redstone configure la façon dont cette machine réagit à la Redstone.
 
 item.invalid.name=Objet Invalide (Détruire)

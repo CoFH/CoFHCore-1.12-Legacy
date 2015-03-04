@@ -159,7 +159,7 @@ info.cofh.updater.version=새로운 버전이 있습니다
 info.cofh.tutorial.fluxRequired=기계가 동작하는데 RF가 필요합니다.
 info.cofh.tutorial.tabAugment=강화 탭에서 모듈을 통해서 기기를 업그레이드 할 수있습니다.
 info.cofh.tutorial.tabConfiguration.0=설정 탭에서 블록의 입력/출력 방향을 설정할 수 있습니다.
-info.cofh.tutorial.tabConfiguration.1=설정 탭에서 블록의 전송/수송 상태를 설정할 수 있습니다.
+info.cofh.tutorial.tabConfiguration.2=설정 탭에서 블록의 전송/수송 상태를 설정할 수 있습니다.
 info.cofh.tutorial.tabRedstone=레드스톤 제어 탭에서 레드스톤 신호 세기에따른 동작 여부를 설정할 수 있습니다.
 info.cofh.tutorial.tabSecurity=보안 탭에서 블록에 접근 가능한 사용자를 설정할 수 있습니다.
 

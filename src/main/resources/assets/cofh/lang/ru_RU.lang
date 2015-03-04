@@ -138,8 +138,8 @@ info.cofh.command.unloadchunk.success=Разгрузка чанка в %s:%s
 
 info.cofh.tutorial.fluxRequired=Для работы необходим Redstone Flux.
 info.cofh.tutorial.tabAugment=Вкладка "Прирост" предоставляет модульные дополнения.
-info.cofh.tutorial.tabConfiguration=Эта вкладка конфигурации определяет, как предметы попадают и покидают устройство.
-info.cofh.tutorial.tabConfiguration2=Эта вкладка конфигурации определяет режим работы этого устройства.
+info.cofh.tutorial.tabConfiguration.0=Эта вкладка конфигурации определяет, как предметы попадают и покидают устройство.
+info.cofh.tutorial.tabConfiguration.2=Эта вкладка конфигурации определяет режим работы этого устройства.
 info.cofh.tutorial.tabRedstone=Вкладка "Красный контроль" настраивает поведение устройства на сигнал красного камня.
 info.cofh.tutorial.tabSecurity=Вкладка "Безопасность" позволяет владельцу контролировать, кто может управлять этим устройством.
 

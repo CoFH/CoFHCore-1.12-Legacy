@@ -88,7 +88,7 @@ info.cofh.command.version.0=A mod verziószáma
 info.cofh.tutorial.fluxRequired=Redstone Flux kell a működéséhez.
 info.cofh.tutorial.tabAugment=A Kiegészítők fül lehetővé teszi a moduláris kiegészítők telepítését.
 info.cofh.tutorial.tabConfiguration.0=A Beállítások fülön megadhatod, hogy a tárgyak hogyan jöjjenek be és távozzanak ebből az eszközből.
-info.cofh.tutorial.tabConfiguration.1=A Beállítások fülön az eszköz működési módját szabhatod testre.
+info.cofh.tutorial.tabConfiguration.2=A Beállítások fülön az eszköz működési módját szabhatod testre.
 info.cofh.tutorial.tabRedstone=A Vöröskő vezérlés fülön beállíthatod, hogyan reagáljon az eszköz a vöröskő jelre.
 info.cofh.tutorial.tabSecurity=A Biztonság fül lehetőséget ad a tulajdonosnak, hogy megadja: mások milyen módon férhetnek hozzá az eszközhöz.
 
