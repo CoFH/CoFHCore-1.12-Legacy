@@ -115,7 +115,7 @@ public abstract class ItemToolAdv extends ItemTool {
 		Block block = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		// only effective materials
-		if (!toolClasses.contains(block.getHarvestTool(meta)) || !canHarvestBlock(block, player.getCurrentEquippedItem()))
+		if (!(toolClasses.contains(block.getHarvestTool(meta)) || canHarvestBlock(block, player.getCurrentEquippedItem())))
 			return false;
 
 		if (!ForgeHooks.canHarvestBlock(block, player, meta))
@@ -146,6 +146,7 @@ public abstract class ItemToolAdv extends ItemTool {
 			return true;
 		}
 
+		world.playAuxSFXAtEntity(player, 2001, x, y, z, Block.getIdFromBlock(block) | (meta << 12));
 		if (!world.isRemote) {
 			// serverside we reproduce ItemInWorldManager.tryHarvestBlock
 			// ItemInWorldManager.removeBlock
@@ -163,7 +164,6 @@ public abstract class ItemToolAdv extends ItemTool {
 			// clientside we do a "this block has been clicked on long enough to be broken" call. This should not send any new packets
 			// the code above, executed on the server, sends a block-updates that give us the correct state of the block we destroy.
 			// following code can be found in PlayerControllerMP.onPlayerDestroyBlock
-			world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) | (meta << 12));
 			if (block.removedByPlayer(world, player, x, y, z, true)) {
 				block.onBlockDestroyedByPlayer(world, x, y, z, meta);
 			}
