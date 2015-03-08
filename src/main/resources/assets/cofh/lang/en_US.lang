@@ -90,6 +90,7 @@ info.cofh.command.tpx=A improved version of the /tp command that works in betwee
 info.cofh.command.version=Gives you the version of this mod.
 info.cofh.command.enchant=Improved /enchant. Has no limits on level or applicability.
 info.cofh.command.clearblocks=Clears specified blocks from a specified area in the world.
+info.cofh.command.countblocks=Counts specified blocks from a specified area in the world.
 info.cofh.command.replaceblocks=Replaces specified blocks from a specified area in the world.
 info.cofh.command.reloadworldgen=Reloads world generation from disk.
 info.cofh.command.unloadchunk=Unloads the chunk the player is looking at.
@@ -103,6 +104,7 @@ info.cofh.command.tpx.syntax=/cofh tpx [player] {(<player> | <dimension>) | <x> 
 info.cofh.command.version.syntax=/cofh version
 info.cofh.command.enchant.syntax=/cofh enchant [player] <enchantment ID> [level]
 info.cofh.command.clearblocks.syntax=/cofh clearblocks {<user> <x radius> <y radius> <z radius> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} [block#meta] [block#meta] ...
+info.cofh.command.countblocks.syntax=/cofh countblocks {<user> <x radius> <y radius> <z radius> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} [block#meta] [block#meta] ...
 info.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<user> <x radius> <y radius> <z radius> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} <replaceBlock#meta> [block#meta] [block#meta] ...
 info.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
 info.cofh.command.unloadchunk.syntax=/cofh unloadchunk
@@ -146,6 +148,10 @@ info.cofh.command.replaceblocks.success=Successfully replaced %s blocks from %s:
 info.cofh.command.clearblocks.failure=No blocks to clear.
 info.cofh.command.clearblocks.start=Clearing %s blocks from %s:%s:%s to %s:%s:%s.
 info.cofh.command.clearblocks.success=Successfully cleared %s blocks from %s:%s:%s to %s:%s:%s.
+
+info.cofh.command.countblocks.failure=No blocks exist in the area.
+info.cofh.command.countblocks.start=Counting %s blocks from %s:%s:%s to %s:%s:%s.
+info.cofh.command.countblocks.success=Found %s blocks from %s:%s:%s to %s:%s:%s.
 
 info.cofh.command.unloadchunk.success=Unloading Chunk at %s:%s
 
