@@ -123,8 +123,8 @@ info.cofh.command.friend.5=不是你的朋友.
 info.cofh.command.help.0=可用命令:
 info.cofh.command.version.0=模組版本
 
-info.cofh.command.killall.success=移除 %d 的實體. (%s)
-info.cofh.command.killall.successHostile=移除 %d 敵方怪物. (%s)
+info.cofh.command.killall.success=移除 %d 個實體. (%s)
+info.cofh.command.killall.successHostile=移除 %d 個敵方怪物. (%s)
 info.cofh.command.killall.noMatch=找不到實體可以配對"§e%s§f"!
 info.cofh.command.killall.noHostile=找不到敵方怪物!
 
