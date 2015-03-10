@@ -15,6 +15,8 @@ public class ItemAxeAdv extends ItemToolAdv {
 		effectiveMaterials.add(Material.wood);
 		effectiveMaterials.add(Material.plants);
 		effectiveMaterials.add(Material.vine);
+		effectiveMaterials.add(Material.cactus);
+		effectiveMaterials.add(Material.gourd);
 	}
 
 }

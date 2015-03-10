@@ -14,6 +14,10 @@ public class ItemPickaxeAdv extends ItemToolAdv {
 		effectiveMaterials.add(Material.iron);
 		effectiveMaterials.add(Material.anvil);
 		effectiveMaterials.add(Material.rock);
+		effectiveMaterials.add(Material.ice);
+		effectiveMaterials.add(Material.packedIce);
+		effectiveMaterials.add(Material.glass);
+		effectiveMaterials.add(Material.redstoneLight);
 	}
 
 }
