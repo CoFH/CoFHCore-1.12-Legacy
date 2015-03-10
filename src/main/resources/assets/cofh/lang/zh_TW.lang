@@ -10,8 +10,8 @@ chat.cofh.secure=這是私人的並屬於%s!
 chat.cofh.secureItem=現在這東西是屬於你的了.
 chat.cofh.secureNotice=注意：伺服器上的OP能夠自由訪問所有的"安全"方塊
 
-enchant.cofh.holding=Holding
-enchant.cofh.multishot=Multishot
+enchant.cofh.holding=保持
+enchant.cofh.multishot=多重射擊
 
 info.cofh.access=訪問
 info.cofh.accessMode=訪問模式
@@ -64,11 +64,11 @@ info.cofh.owner=主人
 info.cofh.perUse=每次使用
 info.cofh.press=按下
 info.cofh.receive=接收
-info.cofh.receiving=接收中...
+info.cofh.receiving=接收中
 info.cofh.redstoneControl=紅石控制
 info.cofh.security=安全
 info.cofh.send=發送
-info.cofh.sending=發送中...
+info.cofh.sending=發送中
 info.cofh.shift=Shift
 info.cofh.signal=信號
 info.cofh.signalRequired=需要信號
@@ -90,6 +90,7 @@ info.cofh.command.tpx=一個改進版本的/tp,可以在維度(世界)間使用.
 info.cofh.command.version=顯示這個模組的版本.
 info.cofh.command.enchant=改進版本的/enchant.對等級和適用性沒有限制.
 info.cofh.command.clearblocks=清除在世界中指定地區的指定方塊.
+info.cofh.command.countblocks=計算在世界中指定地區的指定方塊.
 info.cofh.command.replaceblocks=取代在世界中指定地區的指定方塊.
 info.cofh.command.reloadworldgen=重新讀取世界生成器.
 info.cofh.command.unloadchunk=卸載玩家正看著的區塊.
@@ -103,6 +104,7 @@ info.cofh.command.tpx.syntax=/cofh tpx [玩家] {(<玩家> | <維度(世界)>) |
 info.cofh.command.version.syntax=/cofh version
 info.cofh.command.enchant.syntax=/cofh enchant [玩家] <賦魔 ID> [等級]
 info.cofh.command.clearblocks.syntax=/cofh clearblocks {<玩家> <x 半徑> <y 半徑> <z 半徑> | <x 開頭> <y 開頭> <z 開頭> <x 結尾> <y 結尾> <z 結尾>} [方塊#中繼資料] [方塊#中繼資料] ...
+info.cofh.command.countblocks.syntax=/cofh countblocks {<玩家> <x 半徑> <y 半徑> <z 半徑> | <x 開頭> <y 開頭> <z 開頭> <x 結尾> <y 結尾> <z 結尾>} [方塊#中繼資料] [方塊#中繼資料] ...
 info.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<玩家> <x 半徑> <y 半徑> <z 半徑> | <x 開頭> <y 開頭> <z 開頭> <x 結尾> <y 結尾> <z 結尾>} [取代方塊#中繼資料] [方塊#中繼資料] [方塊#中繼資料] ...
 info.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
 info.cofh.command.unloadchunk.syntax=/cofh unloadchunk
@@ -122,7 +124,7 @@ info.cofh.command.help.0=可用命令:
 info.cofh.command.version.0=模組版本
 
 info.cofh.command.killall.success=移除 %d 的實體. (%s)
-info.cofh.command.killall.successHostile=移除  %d 敵方怪物. (%s)
+info.cofh.command.killall.successHostile=移除 %d 敵方怪物. (%s)
 info.cofh.command.killall.noMatch=找不到實體可以配對"§e%s§f"!
 info.cofh.command.killall.noHostile=找不到敵方怪物!
 
@@ -140,12 +142,16 @@ info.cofh.command.tpx.dimensionOtherToSelf=成功傳送 %s 他自己到 %2$s 在
 info.cofh.command.reloadworldgen.success=成功重新讀取世界生成器.
 
 info.cofh.command.replaceblocks.failure=沒有可取代方塊.
-info.cofh.command.replaceblocks.start=取代 %s 範圍從 %s:%s:%s 到 %s:%s:%s 成為 %s.
-info.cofh.command.replaceblocks.success=成功取代 %s 範圍從 %s:%s:%s 到 %s:%s:%s 成為 %s.
+info.cofh.command.replaceblocks.start=取代 %s 方塊範圍從 %s:%s:%s 到 %s:%s:%s 成為 %s.
+info.cofh.command.replaceblocks.success=成功取代 %s 方塊範圍從 %s:%s:%s 到 %s:%s:%s 成為 %s.
 
 info.cofh.command.clearblocks.failure=沒有方塊可以清除.
-info.cofh.command.clearblocks.start=清除 %s 範圍從 %s:%s:%s 到 %s:%s:%s.
-info.cofh.command.clearblocks.success=成功清除 %s 範圍從 %s:%s:%s 到 %s:%s:%s.
+info.cofh.command.clearblocks.start=清除 %s 方塊範圍從 %s:%s:%s 到 %s:%s:%s.
+info.cofh.command.clearblocks.success=成功清除 %s 方塊範圍從 %s:%s:%s 到 %s:%s:%s.
+
+info.cofh.command.countblocks.failure=在該範圍內沒有存在該方塊.
+info.cofh.command.countblocks.start=計算 %s 方塊範圍從 %s:%s:%s 到 %s:%s:%s.
+info.cofh.command.countblocks.success=找到 %s 方塊範圍從 %s:%s:%s 到 %s:%s:%s.
 
 info.cofh.command.unloadchunk.success=卸載區塊(chunk)於 %s:%s
 
