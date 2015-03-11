@@ -100,7 +100,7 @@ class ASMCore {
 
 	static class AnnotationInfo {
 
-		public String side;
+		public String side = "NONE";
 		public String[] values = emptyList;
 	}
 
