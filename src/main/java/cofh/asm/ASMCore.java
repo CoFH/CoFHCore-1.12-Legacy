@@ -11,7 +11,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 import cpw.mods.fml.common.discovery.ASMDataTable.ASMData;
 import cpw.mods.fml.common.versioning.InvalidVersionSpecificationException;
@@ -273,12 +272,10 @@ class ASMCore {
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
-		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
-
 		l: {
 			MethodNode m = null;
 			for (MethodNode n : cn.methods) {
-				if (names[0].equals(remapper.mapMethodName(name, n.name, n.desc))) {
+				if (names[0].equals(n.name)) {
 					m = n;
 					break;
 				}
@@ -315,13 +312,12 @@ class ASMCore {
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
-		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 		String mOwner = "net/minecraft/world/World";
 
 		l: {
 			MethodNode m = null;
 			for (MethodNode n : cn.methods) {
-				if (names[0].equals(remapper.mapMethodName(name, n.name, n.desc))) {
+				if (names[0].equals(n.name)) {
 					m = n;
 					break;
 				}
@@ -334,7 +330,7 @@ class ASMCore {
 				AbstractInsnNode n = m.instructions.get(i);
 				if (n.getOpcode() == INVOKEVIRTUAL) {
 					MethodInsnNode mn = (MethodInsnNode) n;
-					if (mOwner.equals(remapper.map(mn.owner)) && names[1].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc))) {
+					if (mOwner.equals(mn.owner) && names[1].equals(mn.name)) {
 						mn.setOpcode(INVOKESTATIC);
 						mn.owner = "cofh/asmhooks/HooksCore";
 						mn.desc = "(Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/AxisAlignedBB;)Ljava/util/List;";
@@ -415,12 +411,11 @@ class ASMCore {
 		final String Csig = "(III)Lnet/minecraft/block/Block;";
 		final String cc = "net/minecraft/block/BlockPane";
 		final String fd = "net/minecraftforge/common/util/ForgeDirection";
-		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 
 		l: {
 			MethodNode m = null;
 			for (MethodNode n : cn.methods) {
-				if (names[0].equals(remapper.mapMethodName(name, n.name, n.desc)) && sig.equals(remapper.mapMethodDesc(n.desc))) {
+				if (names[0].equals(n.name) && sig.equals(n.desc)) {
 					m = n;
 					break;
 				}
@@ -439,8 +434,8 @@ class ASMCore {
 				if (n.getType() == AbstractInsnNode.METHOD_INSN) {
 					MethodInsnNode mn = (MethodInsnNode) n;
 					if (n.getOpcode() == INVOKEINTERFACE && n.getNext().getOpcode() == INVOKEVIRTUAL) {
-						if (names[2].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc))) {
-							if (Csig.equals(remapper.mapMethodDesc(mn.desc)) && Ssig.equals(remapper.mapMethodDesc(((MethodInsnNode) mn.getNext()).desc))) {
+						if (names[2].equals(mn.name)) {
+							if (Csig.equals(mn.desc) && Ssig.equals(((MethodInsnNode) mn.getNext()).desc)) {
 								m.instructions.insertBefore(n, new FieldInsnNode(GETSTATIC, fd, dirs[di++], 'L' + fd + ';'));
 								m.instructions.insertBefore(n, new MethodInsnNode(INVOKEVIRTUAL, cc, "canPaneConnectTo", Rsig, false));
 								m.instructions.remove(n.getNext());
@@ -471,12 +466,11 @@ class ASMCore {
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		final String sig = "(Lnet/minecraft/world/IBlockAccess;IIILnet/minecraftforge/common/util/ForgeDirection;)Z";
-		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 
 		l: {
 			MethodNode m = null;
 			for (MethodNode n : cn.methods) {
-				if (names.equals(remapper.mapMethodName(name, n.name, n.desc)) && sig.equals(remapper.mapMethodDesc(n.desc))) {
+				if (names.equals(n.name) && sig.equals(n.desc)) {
 					m = n;
 					break;
 				}
@@ -517,20 +511,19 @@ class ASMCore {
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
-		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
-		String mOwner = remapper.unmap("net/minecraft/client/renderer/texture/TextureManager");
+		String mOwner = "net/minecraft/client/renderer/texture/TextureManager";
 
 		l: {
 			boolean updated = false;
 			mc: for (MethodNode m : cn.methods) {
-				String mName = remapper.mapMethodName(name, m.name, m.desc);
+				String mName = m.name;
 				if (names[0].equals(mName) && "()V".equals(m.desc)) {
 					updated = true;
 					for (int i = 0, e = m.instructions.size(); i < e; ++i) {
 						AbstractInsnNode n = m.instructions.get(i);
 						if (n.getOpcode() == INVOKEVIRTUAL) {
 							MethodInsnNode mn = (MethodInsnNode) n;
-							if (mOwner.equals(mn.owner) && names[1].equals(remapper.mapMethodName(mn.owner, mn.name, mn.desc)) && "()V".equals(mn.desc)) {
+							if (mOwner.equals(mn.owner) && names[1].equals(mn.name) && "()V".equals(mn.desc)) {
 								m.instructions.set(mn, new MethodInsnNode(INVOKESTATIC, "cofh/asmhooks/HooksCore", "tickTextures",
 										"(Lnet/minecraft/client/renderer/texture/ITickable;)V", false));
 								break mc;
@@ -564,12 +557,10 @@ class ASMCore {
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
-		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
-
 		l: {
 			boolean updated = false;
 			for (MethodNode m : cn.methods) {
-				String mName = remapper.mapMethodName(name, m.name, m.desc);
+				String mName = m.name;
 				if (names[0].equals(mName) && "(Z)V".equals(m.desc)) {
 					updated = true;
 					for (int i = 0, e = m.instructions.size(); i < e; ++i) {
@@ -609,12 +600,11 @@ class ASMCore {
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		String sig = "()V";
-		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 
 		l: {
 			MethodNode m = null;
 			for (MethodNode n : cn.methods) {
-				if (names.equals(remapper.mapMethodName(name, n.name, n.desc)) && sig.equals(n.desc)) {
+				if (names.equals(n.name) && sig.equals(n.desc)) {
 					m = n;
 					break;
 				}
@@ -658,13 +648,11 @@ class ASMCore {
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
-		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
-
 		l: {
 			boolean updated = false;
 			MethodNode getEntry = null, containsItem = null;
 			for (MethodNode m : cn.methods) {
-				String mName = remapper.mapMethodName(name, m.name, m.desc);
+				String mName = m.name;
 				if (names[0].equals(mName) && "(J)I".equals(m.desc)) {
 					updated = true;
 					for (int i = 0, e = m.instructions.size(); i < e; ++i) {
@@ -692,8 +680,8 @@ class ASMCore {
 				cr.accept(clone, ClassReader.EXPAND_FRAMES);
 				String sig = "(J)Lnet/minecraft/util/LongHashMap$Entry;";
 				for (MethodNode m : clone.methods) {
-					String mName = remapper.mapMethodName(name, m.name, m.desc);
-					if (names[1].equals(mName) && sig.equals(remapper.mapMethodDesc(m.desc))) {
+					String mName =  m.name;
+					if (names[1].equals(mName) && sig.equals(m.desc)) {
 						getEntry = m;
 						break;
 					}
@@ -747,13 +735,12 @@ class ASMCore {
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		final String sig = "(III)Z";
-		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
-		final String itemstack = remapper.unmap("net/minecraft/item/ItemStack");
+		final String itemstack = "net/minecraft/item/ItemStack";
 
 		l: {
 			MethodNode m = null;
 			for (MethodNode n : cn.methods) {
-				if (names[0].equals(remapper.mapMethodName(name, n.name, n.desc)) && sig.equals(n.desc)) {
+				if (names[0].equals(n.name) && sig.equals(n.desc)) {
 					m = n;
 					break;
 				}
@@ -853,14 +840,13 @@ class ASMCore {
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
 		final String sig = "(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
-		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 
 		MethodNode addTileEntity = null, addTileEntities = null, setTileEntity = null, updateEntities = null,
 				unloadTile = null;
 		boolean found = false;
 		for (MethodNode m : cn.methods) {
 			if ("<init>".equals(m.name)) {
-				if (sig.equals(remapper.mapMethodDesc(m.desc)))
+				if (sig.equals(m.desc))
 					found = true;
 				LabelNode a = new LabelNode(new Label());
 				AbstractInsnNode n = m.instructions.getFirst();
@@ -873,17 +859,17 @@ class ASMCore {
 				m.instructions.insert(n, n = new InsnNode(DUP));
 				m.instructions.insert(n, n = new MethodInsnNode(INVOKESPECIAL, "cofh/lib/util/LinkedHashList", "<init>", "()V", false));
 				m.instructions.insert(n, n = new FieldInsnNode(PUTFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
-			} else if ("addTileEntity".equals(m.name) && "(Lnet/minecraft/tileentity/TileEntity;)V".equals(remapper.mapMethodDesc(m.desc))) {
+			} else if ("addTileEntity".equals(m.name) && "(Lnet/minecraft/tileentity/TileEntity;)V".equals(m.desc)) {
 				addTileEntity = m;
-			} else if (names[4].equals(remapper.mapMethodName(name, m.name, m.desc)) && "(Ljava/util/Collection;)V".equals(m.desc)) {
+			} else if (names[4].equals(m.name) && "(Ljava/util/Collection;)V".equals(m.desc)) {
 				addTileEntities = m;
-			} else if (names[5].equals(remapper.mapMethodName(name, m.name, m.desc))
-					&& "(IIILnet/minecraft/tileentity/TileEntity;)V".equals(remapper.mapMethodDesc(m.desc))) {
+			} else if (names[5].equals(m.name)
+					&& "(IIILnet/minecraft/tileentity/TileEntity;)V".equals(m.desc)) {
 				setTileEntity = m;
-			} else if (names[6].equals(remapper.mapMethodName(name, m.name, m.desc)) && "()V".equals(remapper.mapMethodDesc(m.desc))) {
+			} else if (names[6].equals(m.name) && "()V".equals(m.desc)) {
 				updateEntities = m;
-			} else if (names[9].equals(remapper.mapMethodName(name, m.name, m.desc)) &&
-					"(Lnet/minecraft/tileentity/TileEntity;)V".equals(remapper.mapMethodDesc(m.desc))) {
+			} else if (names[9].equals(m.name) &&
+					"(Lnet/minecraft/tileentity/TileEntity;)V".equals(m.desc)) {
 				unloadTile = m;
 			}
 		}
@@ -937,7 +923,7 @@ class ASMCore {
 			for (;;) {
 				while (n.getOpcode() != CHECKCAST)
 					n = n.getNext();
-				if (remapper.mapType(((TypeInsnNode) n).desc).equals("net/minecraft/tileentity/TileEntity"))
+				if ((((TypeInsnNode) n).desc).equals("net/minecraft/tileentity/TileEntity"))
 					break;
 			}
 			addTileEntities.instructions.insert(n, n = a);
@@ -957,7 +943,7 @@ class ASMCore {
 			while (n.getOpcode() != INVOKEVIRTUAL || !"onChunkUnload".equals(((MethodInsnNode) n).name) || !"()V".equals(((MethodInsnNode) n).desc))
 				n = n.getNext();
 			while (n.getOpcode() != PUTFIELD ||
-					!names[8].equals(remapper.mapFieldName(name, ((FieldInsnNode) n).name, ((FieldInsnNode) n).desc)))
+					!names[8].equals(((FieldInsnNode) n).name))
 				n = n.getPrevious();
 			n = n.getNext();
 			LabelNode lStart = new LabelNode(new Label());
@@ -1045,11 +1031,10 @@ class ASMCore {
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 		final String sig = "(Lnet/minecraft/server/MinecraftServer;Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
-		FMLDeobfuscatingRemapper remapper = FMLDeobfuscatingRemapper.INSTANCE;
 
 		l: {
 			for (MethodNode m : cn.methods) {
-				if ("<init>".equals(m.name) && sig.equals(remapper.mapMethodDesc(m.desc))) {
+				if ("<init>".equals(m.name) && sig.equals(m.desc)) {
 					break l;
 				}
 			}

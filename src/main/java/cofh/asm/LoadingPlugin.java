@@ -29,6 +29,7 @@ import javax.swing.event.HyperlinkListener;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
 @IFMLLoadingPlugin.TransformerExclusions({ "cofh.asm." })
+@IFMLLoadingPlugin.SortingIndex(1001)
 public class LoadingPlugin implements IFMLLoadingPlugin {
 
 	public static final String MC_VERSION = "[1.7.10]";
