@@ -4,7 +4,7 @@ import cofh.api.block.IBlockDebug;
 import cofh.api.block.IBlockInfo;
 import cofh.api.block.IDismantleable;
 import cofh.api.core.IInitializer;
-import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
 import cofh.api.inventory.IInventoryRetainer;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IRedstoneControl;
@@ -309,13 +309,13 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
 		if (tile instanceof ITileInfo) {
 			((ITileInfo) tile).getTileInfo(info, side, player, debug);
 		} else {
-			if (tile instanceof IEnergyHandler) {
-				IEnergyHandler eHandler = (IEnergyHandler) tile;
-				if (eHandler.getMaxEnergyStored(side) <= 0) {
+			if (tile instanceof IEnergyReceiver) {
+				IEnergyReceiver eReceiver = (IEnergyReceiver) tile;
+				if (eReceiver.getMaxEnergyStored(side) <= 0) {
 					return;
 				}
-				info.add(new ChatComponentText(StringHelper.localize("info.cofh.energy") + ": " + eHandler.getEnergyStored(side) + "/"
-						+ eHandler.getMaxEnergyStored(side) + " RF."));
+				info.add(new ChatComponentText(StringHelper.localize("info.cofh.energy") + ": " + eReceiver.getEnergyStored(side) + "/"
+						+ eReceiver.getMaxEnergyStored(side) + " RF."));
 			}
 		}
 	}
