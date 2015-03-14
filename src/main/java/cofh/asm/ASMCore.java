@@ -855,9 +855,9 @@ class ASMCore {
 				m.instructions.insert(n, n = a);
 				m.instructions.insert(n, n = new LineNumberNode(-15000, a));
 				m.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
-				m.instructions.insert(n, n = new TypeInsnNode(NEW, "cofh/lib/util/LinkedHashList"));
+				m.instructions.insert(n, n = new TypeInsnNode(NEW, "cofh/lib/util/IdentityLinkedHashList"));
 				m.instructions.insert(n, n = new InsnNode(DUP));
-				m.instructions.insert(n, n = new MethodInsnNode(INVOKESPECIAL, "cofh/lib/util/LinkedHashList", "<init>", "()V", false));
+				m.instructions.insert(n, n = new MethodInsnNode(INVOKESPECIAL, "cofh/lib/util/IdentityLinkedHashList", "<init>", "()V", false));
 				m.instructions.insert(n, n = new FieldInsnNode(PUTFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
 			} else if ("addTileEntity".equals(m.name) && "(Lnet/minecraft/tileentity/TileEntity;)V".equals(m.desc)) {
 				addTileEntity = m;
