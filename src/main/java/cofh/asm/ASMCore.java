@@ -215,7 +215,6 @@ class ASMCore {
 			names = new String[] { "registerBlocks", "t", "" };
 		}
 
-		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -268,7 +267,6 @@ class ASMCore {
 			names = new String[] { "searchForOtherItemsNearby", "", "" };
 		}
 
-		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -308,7 +306,7 @@ class ASMCore {
 			names = new String[] { "moveEntity", "getCollidingBoundingBoxes", "canBePushed" };
 		}
 
-		name = name.replace('.', '/');
+		name = transformedName.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -362,7 +360,6 @@ class ASMCore {
 			names = new String[] { "canBePushed" };
 		}
 
-		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -401,7 +398,6 @@ class ASMCore {
 			names = new String[] { "renderBlockStainedGlassPane", "canPaneConnectToBlock", "getBlock" };
 		}
 
-		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -461,7 +457,6 @@ class ASMCore {
 
 		String names = "canPaneConnectTo"; // forge added
 
-		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -507,7 +502,6 @@ class ASMCore {
 			names = new String[] { "runTick", "tick" };
 		}
 
-		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -553,7 +547,7 @@ class ASMCore {
 			names = new String[] { "recheckGaps", "isGapLightingUpdated" };
 		}
 
-		name = name.replace('.', '/');
+		name = transformedName.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -595,7 +589,6 @@ class ASMCore {
 			names = "sendChunkUpdate";
 		}
 
-		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -644,7 +637,6 @@ class ASMCore {
 			names = new String[] { "getHashedKey", "getEntry", "containsItem" };
 		}
 
-		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -730,7 +722,7 @@ class ASMCore {
 			names = new String[] { "sameToolAndBlock", "currentItemHittingBlock" };
 		}
 
-		name = name.replace('.', '/');
+		name = transformedName.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -802,7 +794,7 @@ class ASMCore {
 
 	private static byte[] alterTileEntity(String name, String transformedName, byte[] bytes, ClassReader cr) {
 
-		name = name.replace('.', '/');
+		name = transformedName.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, 0);
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -835,7 +827,7 @@ class ASMCore {
 			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a",
 					"setTileEntity", "updateEntities", "hasWorldObj", "field_147481_N", "func_147457_a" };
 		}
-		name = name.replace('.', '/');
+		name = transformedName.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -1027,7 +1019,7 @@ class ASMCore {
 		} else {
 			names = new String[] { "mcServer", "theEntityTracker", "thePlayerManager", "worldTeleporter" };
 		}
-		name = name.replace('.', '/');
+		name = transformedName.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 		final String sig = "(Lnet/minecraft/server/MinecraftServer;Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
