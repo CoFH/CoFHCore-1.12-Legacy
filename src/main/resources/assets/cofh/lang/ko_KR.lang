@@ -20,8 +20,8 @@ info.cofh.accessRestricted=한정됨
 info.cofh.accessPrivate=비공개
 info.cofh.all=모두
 info.cofh.amount=수량
-info.cofh.angle=Angle
-info.cofh.anotherplayer=Another player
+#info.cofh.angle=Angle
+info.cofh.anotherplayer=다른 플레이어
 info.cofh.augmentation=강화
 info.cofh.blank=비어있음
 info.cofh.capacity=용량
@@ -74,18 +74,18 @@ info.cofh.signal=신호
 info.cofh.signalRequired=요구 신호 세기
 info.cofh.soaked=빨아들임
 info.cofh.source=소스
-info.cofh.stored=Stored
-info.cofh.strength=Strength
+#info.cofh.stored=Stored
+#info.cofh.strength=Strength
 info.cofh.transfer=전송
 info.cofh.tutorial=도움말
 info.cofh.unlocked=잠김해제
-info.cofh.success=Success!
+info.cofh.success=성공!
 
-info.cofh.command.friend=친구 목록에 친구를 추가, 삭제 하는 명령어입니다.
+info.cofh.command.friend=친구 목록에 친구를 추가, 삭제하는 명령어입니다.
 info.cofh.command.help=다른 명령어의 정보를 알려주는 명령어입니다.
-info.cofh.command.syntax=The command to help you out with the syntax other commands!
-info.cofh.command.killall=지정된 엔티티를 제거하는 명령어입니다. 지정하지 않을경우 적대적인 엔티티만 제거합니다.
-info.cofh.command.tps=서버의 TPS를 출력하는 명령어입니다. TPS가 20일때 최적의 상태입니다.
+info.cofh.command.syntax=다른 명령어의 구문을 알려주는 명령어입니다.
+info.cofh.command.killall=지정된 엔티티를 제거하는 명령어입니다. 지정하지 않을 경우 적대적인 엔티티만 제거합니다.
+info.cofh.command.tps=서버의 TPS를 출력하는 명령어입니다. TPS가 20일 때 최적의 상태입니다.
 info.cofh.command.tpx=차원간 이동이 가능한 향상된 /tp 명령어입니다.
 info.cofh.command.version=버전 정보를 알려주는 명령어입니다.
 info.cofh.command.enchant=레벨 제한이 없는 향상된 /enchant 명령어입니다.
@@ -110,12 +110,12 @@ info.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
 info.cofh.command.unloadchunk.syntax=/cofh unloadchunk
 
 info.cofh.command.syntaxError=잘못된 구문입니다.
-info.cofh.command.notFound=Unknown command. Try /cofh help for a list of commands
-info.cofh.command.world.notFound=World does not exist.
+info.cofh.command.notFound=알 수 없는 명령어입니다. /cofh help 명령어로 구문을 확인하시기 바랍니다.
+info.cofh.command.world.notFound=해당하는 세계가 존재하지 않습니다.
 
 info.cofh.command.friend.0=플레이어를 성공적으로 친구 목록에 등록하였습니다.
 info.cofh.command.friend.1=추가 과정에서 문제가 생겼습니다.
-info.cofh.command.friend.2=to your list.
+#info.cofh.command.friend.2=to your list.
 info.cofh.command.friend.3=올바르지 않은 유저 이름입니다.
 info.cofh.command.friend.4=플레이어를 성공적으로 친구 목록에서 제거하였습니다.
 info.cofh.command.friend.5=플레이어는 친구 목록에 등록되어있지 않습니다.
@@ -123,35 +123,35 @@ info.cofh.command.friend.5=플레이어는 친구 목록에 등록되어있지 �
 info.cofh.command.help.0=활성화된 명령어:
 info.cofh.command.version.0=이 모드의 버전은
 
-info.cofh.command.killall.success=Removed %d entities. (%s)
-info.cofh.command.killall.successHostile=Removed %d hostile mobs. (%s)
-info.cofh.command.killall.noMatch=No entities found matching "§e%s§f"!
+info.cofh.command.killall.success=%d 마리의 몬스터를 제거하였습니다. (%s)
+info.cofh.command.killall.successHostile=%d 마리의 적대적인 몬스터를 제거하였습니다. (%s)
+info.cofh.command.killall.noMatch=해당 몬스터를 찾을 수 없습니다. "§e%s§f"
 info.cofh.command.killall.noHostile=적대적인 몬스터를 찾을 수 없습니다.
 
-info.cofh.command.tpx.snark.0=Successfully teleported you to yourself!
-info.cofh.command.tpx.snark.1=Successfully teleported %s to themself!
-info.cofh.command.tpx.self=Successfully teleported to %.2f %.2f %.2f
-info.cofh.command.tpx.dimensionSelf=Successfully teleported to The %1$s at %2$.2f %3$.2f %4$.2f
-info.cofh.command.tpx.other=Successfully teleported %s to %.2f %.2f %.2f
-info.cofh.command.tpx.otherTo=Successfully teleported %s to %s at %.2f %.2f %.2f
-info.cofh.command.tpx.dimensionOther=Successfully teleported %s to The %2$s at %3$.2f %4$.2f %5$.2f
-info.cofh.command.tpx.dimensionOtherTo=Successfully teleported %s to %s in %3$s at %4$.2f %5$.2f %6$.2f
-info.cofh.command.tpx.otherToSelf=Successfully teleported %s to themself at %.2f %.2f %.2f
-info.cofh.command.tpx.dimensionOtherToSelf=Successfully teleported %s to themself in %2$s at %3$.2f %4$.2f %5$.2f
+info.cofh.command.tpx.snark.0=성공적으로 자신에게 순간이동을 하였습니다.
+info.cofh.command.tpx.snark.1=성공적으로 %s에게 순간이동을 하였습니다.
+info.cofh.command.tpx.self=성공적으로 %.2f %.2f %.2f 좌표로 순간이동을 하였습니다.
+info.cofh.command.tpx.dimensionSelf=성공적으로 %1$s 세계의 %2$.2f %3$.2f %4$.2f 좌표로 순간이동을 하였습니다.
+info.cofh.command.tpx.other=성공적으로 %s 을(를) %.2f %.2f %.2f 좌표로 순간이동을 하였습니다.
+info.cofh.command.tpx.other성공적으로 %s 을(를) %s 세계의 %.2f %.2f %.2f 좌표로 순간이동을 하였습니다.
+info.cofh.command.tpx.dimensionOther=성공적으로 %s 을(를) %2$s 세계의 %3$.2f %4$.2f %5$.2f 좌표로 순간이동을 하였습니다.
+#info.cofh.command.tpx.dimensionOtherTo=Successfully teleported %s to %s in %3$s at %4$.2f %5$.2f %6$.2f
+#info.cofh.command.tpx.otherToSelf=Successfully teleported %s to themself at %.2f %.2f %.2f
+#info.cofh.command.tpx.dimensionOtherToSelf=Successfully teleported %s to themself in %2$s at %3$.2f %4$.2f %5$.2f
 
 info.cofh.command.reloadworldgen.success=월드젠을 리로드하였습니다.
 
-info.cofh.command.replaceblocks.failure=재설치할 블럭이 없습니다.
-info.cofh.command.replaceblocks.start=%s 블럭을 %s:%s:%s 그리고 %s:%s:%s  %s 에 재설치 합니다..
-info.cofh.command.replaceblocks.success=Successfully replaced %s blocks from %s:%s:%s to %s:%s:%s with %s.
+info.cofh.command.replaceblocks.failure=재설치할 블록이 없습니다.
+info.cofh.command.replaceblocks.start=%s 블록을 %s:%s:%s 그리고 %s:%s:%s  %s 에 재설치 합니다.
+info.cofh.command.replaceblocks.success=성공적으로 %s 블록을 %s:%s:%s 에서 %s:%s:%s 까지 %s 로 재설치하였습니다.
 
-info.cofh.command.clearblocks.failure=제거 할 블럭이 없습니다.
-info.cofh.command.clearblocks.start=%s 블럭을 %s:%s:%s 그리고 %s:%s:%s에서 제거 합니다.
-info.cofh.command.clearblocks.success= %s 블럭을 %s:%s:%s 그리고 %s:%s:%s에서 제거 했습니다.
+info.cofh.command.clearblocks.failure=제거 할 블록이 없습니다.
+info.cofh.command.clearblocks.start=%s 블록을 %s:%s:%s 그리고 %s:%s:%s에서 제거 합니다.
+info.cofh.command.clearblocks.success= %s 블록을 %s:%s:%s 그리고 %s:%s:%s에서 제거 했습니다.
 
-info.cofh.command.countblocks.failure=No blocks exist in the area.
-info.cofh.command.countblocks.start=Counting %s blocks from %s:%s:%s to %s:%s:%s.
-info.cofh.command.countblocks.success=Found %s blocks from %s:%s:%s to %s:%s:%s.
+info.cofh.command.countblocks.failure=블록이 없습니다.
+info.cofh.command.countblocks.start=총 %s 개의 블록을 %s:%s:%s 부터 %s:%s:%s 에서 발견하였습니다.
+info.cofh.command.countblocks.success=%s 개의 해당하는 블록을 %s:%s:%s 부터  %s:%s:%s 에서 발견하였습니다.
 
 info.cofh.command.unloadchunk.success=%s:%s 청크를 언로드 합니다.
 
@@ -162,15 +162,15 @@ info.cofh.updater.version=새로운 버전이 있습니다
 info.cofh.tutorial.fluxRequired=기계가 동작하는데 RF가 필요합니다.
 info.cofh.tutorial.tabAugment=강화 탭에서 모듈을 통해서 기기를 업그레이드 할 수있습니다.
 info.cofh.tutorial.tabConfiguration.0=설정 탭에서 블록의 입력/출력 방향을 설정할 수 있습니다.
-info.cofh.tutorial.tabConfiguration.1=The Configuration tab determines how energy is transferred to and from this device.
-info.cofh.tutorial.tabConfiguration.2=설정 탭에서 블록의 전송/수송 상태를 설정할 수 있습니다.
+info.cofh.tutorial.tabConfiguration.1=설텅 탭에서 블록의 전송/수송 상태를 설정할 수 있습니다.
+info.cofh.tutorial.tabConfiguration.2=설정 탭에서 블록의 작동 상태를 설정할 수 있습니다.
 info.cofh.tutorial.tabRedstone=레드스톤 제어 탭에서 레드스톤 신호 세기에따른 동작 여부를 설정할 수 있습니다.
 info.cofh.tutorial.tabSecurity=보안 탭에서 블록에 접근 가능한 사용자를 설정할 수 있습니다.
 
 item.invalid.name=사용불가 아이템
 
 tab.cofh.friend.0=친구 추가/제거!
-tab.cofh.friend.1=Friends not provided.
+#tab.cofh.friend.1=Friends not provided.
 
 #액체 이름 수정
 
