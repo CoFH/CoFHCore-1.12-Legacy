@@ -40,7 +40,6 @@ import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 import org.lwjgl.opengl.EXTFramebufferObject;
-import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy {
@@ -113,13 +112,13 @@ public class ProxyClient extends Proxy {
 		CoFHCore.configClient.save();
 		if (!Boolean.parseBoolean(System.getProperty("forge.forceDisplayStencil", "false"))) {
 			try {
-				int i = GL11.glGetInteger(GL11.GL_STENCIL_BITS);
+				int i = 8;
 				ReflectionHelper.findField(ForgeHooksClient.class, "stencilBits").setInt(null, i);
 				Framebuffer b = Minecraft.getMinecraft().getFramebuffer();
 				b.createBindFramebuffer(b.framebufferWidth, b.framebufferHeight);
 				switch (ReflectionHelper.findField(OpenGlHelper.class, "field_153212_w").getInt(null)) {
 				case 2:
-					switch (EXTFramebufferObject.glCheckFramebufferStatusEXT(b.framebufferObject)) {
+					switch (EXTFramebufferObject.glCheckFramebufferStatusEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT)) {
 					case EXTFramebufferObject.GL_FRAMEBUFFER_COMPLETE_EXT:
 						break;
 					default: // stencil buffer is not supported
