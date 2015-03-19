@@ -7,6 +7,7 @@ import cofh.lib.util.helpers.ServerHelper;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
@@ -33,6 +34,15 @@ public class ItemBowAdv extends ItemBow {
 		super();
 		this.toolMaterial = toolMaterial;
 		setMaxDamage(toolMaterial.getMaxUses());
+	}
+
+	public int cofh_canEnchantApply(ItemStack stack, Enchantment ench) {
+
+		if (ench.effectId == Enchantment.looting.effectId)
+			return 1;
+		if (ench.type == EnumEnchantmentType.bow)
+			return 1;
+		return -1;
 	}
 
 	public ItemBowAdv setRepairIngot(String repairIngot) {
