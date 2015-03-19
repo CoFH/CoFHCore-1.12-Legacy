@@ -93,6 +93,8 @@ class ASMCore {
 		hashes.put("net.minecraft.entity.Entity", (byte) 14);
 		hashes.put("net.minecraft.entity.item.EntityItem", (byte) 15);
 		hashes.put("cofh.asmhooks.HooksCore", (byte) 16);
+		hashes.put("net.minecraft.enchantment.Enchantment", (byte) 17);
+		hashes.put("net.minecraft.item.Item", (byte) 18);
 	}
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
@@ -168,37 +170,41 @@ class ASMCore {
 
 		switch (index) {
 		case 1:
-			return writeWorldServer(name, transformedName, bytes, cr);
+			return writeWorldServer(transformedName, bytes, cr);
 		case 2:
-			return writeWorld(name, transformedName, bytes, cr);
+			return writeWorld(transformedName, bytes, cr);
 		case 3:
 			return writeWorldProxy(name, bytes, cr);
 		case 4:
 			return writeWorldServerProxy(name, bytes, cr);
 		case 5:
-			return alterBlockPane(name, transformedName, bytes, cr);
+			return alterBlockPane(transformedName, bytes, cr);
 		case 6:
-			return alterBlock(name, transformedName, bytes, cr);
+			return alterBlock(transformedName, bytes, cr);
 		case 7:
-			return alterController(name, transformedName, bytes, cr);
+			return alterController(transformedName, bytes, cr);
 		case 8:
-			return alterLongHashMap(name, transformedName, bytes, cr);
+			return alterLongHashMap(transformedName, bytes, cr);
 		case 9:
-			return alterChunk(name, transformedName, bytes, cr);
+			return alterChunk(transformedName, bytes, cr);
 		case 10:
-			return alterMinecraft(name, transformedName, bytes, cr);
+			return alterMinecraft(transformedName, bytes, cr);
 		case 11:
-			return alterRenderBlocks(name, transformedName, bytes, cr);
+			return alterRenderBlocks(transformedName, bytes, cr);
 		case 12:
-			return alterTileEntity(name, transformedName, bytes, cr);
+			return alterTileEntity(transformedName, bytes, cr);
 		case 13:
-			return fixWorldGenLag(name, transformedName, bytes, cr);
+			return fixWorldGenLag(transformedName, bytes, cr);
 		case 14:
-			return alterEntity(name, transformedName, bytes, cr);
+			return alterEntity(transformedName, bytes, cr);
 		case 15:
-			return alterEntityItem(name, transformedName, bytes, cr);
+			return alterEntityItem(transformedName, bytes, cr);
 		case 16:
 			return alterHooksCore(name, bytes, cr);
+		case 17:
+			return alterEnchantment(transformedName, bytes, cr);
+		case 18:
+			return alterItem(transformedName, bytes, cr);
 
 		default:
 			return bytes;
@@ -206,7 +212,76 @@ class ASMCore {
 	}
 
 	// { Improve Vanilla
-	private static byte[] alterBlock(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] alterEnchantment(String name, byte[] bytes, ClassReader cr) {
+
+		String[] names;
+		if (LoadingPlugin.runtimeDeobfEnabled) {
+			names = new String[] { "func_92089_a", "func_77973_b", "" };
+		} else {
+			names = new String[] { "canApply", "getItem", "" };
+		}
+
+		ClassNode cn = new ClassNode(ASM5);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+
+		l: {
+			MethodNode m = null;
+			for (MethodNode n : cn.methods) {
+				if (names[0].equals(n.name)) {
+					m = n;
+					break;
+				}
+			}
+
+			if (m == null)
+				break l;
+
+			AbstractInsnNode n = m.instructions.getFirst();
+			LabelNode end = new LabelNode(), out = new LabelNode();
+			m.instructions.insertBefore(n, n = new VarInsnNode(ALOAD, 1));
+			m.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/item/ItemStack", names[1],
+				"()Lnet/minecraft/item/Item;", false));
+			m.instructions.insert(n, n = new VarInsnNode(ALOAD, 1));
+			m.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
+			m.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/item/Item", "cofh_canEnchantApply",
+				"(Lnet/minecraft/item/ItemStack;Lnet/minecraft/enchantment/Enchantment;)I", false));
+			m.instructions.insert(n, n = new InsnNode(DUP));
+			m.instructions.insert(n, n = new JumpInsnNode(IFLT, end));
+			m.instructions.insert(n, n = new JumpInsnNode(IFEQ, out));
+			m.instructions.insert(n, n = new InsnNode(ICONST_1));
+			m.instructions.insert(n, n = new InsnNode(IRETURN));
+			m.instructions.insert(n, n = out);
+			m.instructions.insert(n, n = new InsnNode(ICONST_0));
+			m.instructions.insert(n, n = new InsnNode(IRETURN));
+			m.instructions.insert(n, n = end);
+			m.instructions.insert(n, n = new InsnNode(POP));
+
+			ClassWriter cw = new ClassWriter(0);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+		}
+		return bytes;
+	}
+
+	private static byte[] alterItem(String name, byte[] bytes, ClassReader cr) {
+
+		name = name.replace('.', '/');
+		ClassWriter cw = new ClassWriter(0);
+		cr.accept(cw, 0);
+		String sig = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/enchantment/Enchantment;)I";
+		cw.newMethod(name, "cofh_canEnchantApply", sig, true);
+		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC | ACC_SYNTHETIC, "cofh_canEnchantApply", sig, null, null);
+		mv.visitCode();
+		mv.visitInsn(ICONST_M1);
+		mv.visitInsn(IRETURN);
+		mv.visitMaxs(1, 2);
+		mv.visitEnd();
+		cw.visitEnd();
+		bytes = cw.toByteArray();
+		return bytes;
+	}
+
+	private static byte[] alterBlock(String name, byte[] bytes, ClassReader cr) {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
@@ -258,7 +333,7 @@ class ASMCore {
 		return bytes;
 	}
 
-	private static byte[] alterEntityItem(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] alterEntityItem(String name, byte[] bytes, ClassReader cr) {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
@@ -297,7 +372,7 @@ class ASMCore {
 		return bytes;
 	}
 
-	private static byte[] alterEntity(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] alterEntity(String name, byte[] bytes, ClassReader cr) {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
@@ -306,7 +381,7 @@ class ASMCore {
 			names = new String[] { "moveEntity", "getCollidingBoundingBoxes", "canBePushed" };
 		}
 
-		name = transformedName.replace('.', '/');
+		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -388,7 +463,7 @@ class ASMCore {
 		return bytes;
 	}
 
-	private static byte[] alterRenderBlocks(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] alterRenderBlocks(String name, byte[] bytes, ClassReader cr) {
 
 		// .renderBlockStainedGlassPane(Block, int, int, int)
 		String[] names;
@@ -453,7 +528,7 @@ class ASMCore {
 		return bytes;
 	}
 
-	private static byte[] alterBlockPane(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] alterBlockPane(String name, byte[] bytes, ClassReader cr) {
 
 		String names = "canPaneConnectTo"; // forge added
 
@@ -493,7 +568,7 @@ class ASMCore {
 		return bytes;
 	}
 
-	private static byte[] alterMinecraft(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] alterMinecraft(String name, byte[] bytes, ClassReader cr) {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
@@ -538,7 +613,7 @@ class ASMCore {
 		return bytes;
 	}
 
-	private static byte[] alterChunk(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] alterChunk(String name, byte[] bytes, ClassReader cr) {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
@@ -547,7 +622,7 @@ class ASMCore {
 			names = new String[] { "recheckGaps", "isGapLightingUpdated" };
 		}
 
-		name = transformedName.replace('.', '/');
+		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -580,7 +655,7 @@ class ASMCore {
 		return bytes;
 	}
 
-	private static byte[] fixWorldGenLag(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] fixWorldGenLag(String name, byte[] bytes, ClassReader cr) {
 
 		String names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
@@ -628,7 +703,7 @@ class ASMCore {
 		return bytes;
 	}
 
-	private static byte[] alterLongHashMap(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] alterLongHashMap(String name, byte[] bytes, ClassReader cr) {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
@@ -713,7 +788,7 @@ class ASMCore {
 		return bytes;
 	}
 
-	private static byte[] alterController(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] alterController(String name, byte[] bytes, ClassReader cr) {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
@@ -722,7 +797,7 @@ class ASMCore {
 			names = new String[] { "sameToolAndBlock", "currentItemHittingBlock" };
 		}
 
-		name = transformedName.replace('.', '/');
+		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -792,13 +867,11 @@ class ASMCore {
 		return bytes;
 	}
 
-	private static byte[] alterTileEntity(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] alterTileEntity(String name, byte[] bytes, ClassReader cr) {
 
-		name = transformedName.replace('.', '/');
-		ClassNode cn = new ClassNode(ASM5);
-		cr.accept(cn, 0);
+		name = name.replace('.', '/');
 		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-		cn.accept(cw);
+		cr.accept(cw, 0);
 		cw.newMethod(name, "cofh_validate", "()V", true);
 		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC | ACC_SYNTHETIC, "cofh_validate", "()V", null, null);
 		mv.visitCode();
@@ -817,7 +890,7 @@ class ASMCore {
 		return cw.toByteArray();
 	}
 
-	private static byte[] writeWorld(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] writeWorld(String name, byte[] bytes, ClassReader cr) {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
@@ -827,7 +900,7 @@ class ASMCore {
 			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a",
 					"setTileEntity", "updateEntities", "hasWorldObj", "field_147481_N", "func_147457_a" };
 		}
-		name = transformedName.replace('.', '/');
+		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 
@@ -1011,7 +1084,7 @@ class ASMCore {
 		return bytes;
 	}
 
-	private static byte[] writeWorldServer(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] writeWorldServer(String name, byte[] bytes, ClassReader cr) {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
@@ -1019,7 +1092,7 @@ class ASMCore {
 		} else {
 			names = new String[] { "mcServer", "theEntityTracker", "thePlayerManager", "worldTeleporter" };
 		}
-		name = transformedName.replace('.', '/');
+		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
 		cr.accept(cn, ClassReader.EXPAND_FRAMES);
 		final String sig = "(Lnet/minecraft/server/MinecraftServer;Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
