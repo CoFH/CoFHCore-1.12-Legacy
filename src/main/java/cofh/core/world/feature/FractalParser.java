@@ -18,6 +18,21 @@ public class FractalParser extends UniformParser {
 	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen,
 			GenRestriction dimRes, Logger log) {
 
+		if (!(genObject.has("minHeight") && genObject.has("veinHeight"))) {
+			log.error("Height parameters for 'fractal' template not specified in \"" + featureName + "\"");
+			return null;
+		}
+
+		if (!(genObject.has("veinDiameter"))) {
+			log.error("veinDiameter parameter for 'fractal' template not specified in \"" + featureName + "\"");
+			return null;
+		}
+
+		if (!(genObject.has("verticalDensity") && genObject.has("horizontalDensity"))) {
+			log.error("Density parameters for 'fractal' template not specified in \"" + featureName + "\"");
+			return null;
+		}
+
 		int minY = genObject.get("minHeight").getAsInt();
 		int h = genObject.get("veinHeight").getAsInt();
 		int d = genObject.get("veinDiameter").getAsInt();

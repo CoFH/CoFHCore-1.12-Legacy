@@ -78,17 +78,23 @@ public class UniformParser implements IFeatureParser {
 		WorldGenerator generator = FeatureParser.parseGenerator(getDefaultTemplate(), genObject, resList, clusterSize, matList);
 		FeatureBase feature = getFeature(featureName, genObject, generator, matList, numClusters, biomeRes, retrogen, dimRes, log);
 
-		if (genObject.has("chunkChance")) {
-			int rarity = MathHelper.clampI(genObject.get("chunkChance").getAsInt(), 1, 1000000);
-			feature.setRarity(rarity);
-		}
-		if (feature != null)
+		if (feature != null) {
+			if (genObject.has("chunkChance")) {
+				int rarity = MathHelper.clampI(genObject.get("chunkChance").getAsInt(), 1, 1000000);
+				feature.setRarity(rarity);
+			}
 			addFeatureRestrictions(feature, genObject);
+		}
 		return feature;
 	}
 
 	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen,
 			GenRestriction dimRes, Logger log) {
+
+		if (!(genObject.has("minHeight") && genObject.has("maxHeight"))) {
+			log.error("Height parameters for 'uniform' template not specified in \"" + featureName + "\"");
+			return null;
+		}
 
 		int minHeight = genObject.get("minHeight").getAsInt();
 		int maxHeight = genObject.get("maxHeight").getAsInt();
