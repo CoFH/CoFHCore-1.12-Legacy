@@ -131,32 +131,6 @@ public class ItemBowAdv extends ItemBow {
 			int enchantFire = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack);
 			int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoFHEnchantment.multishot.effectId, stack);
 
-			if (enchantMultishot > 0) {
-				for (int i = 0; i < enchantMultishot; i++) {
-					EntityArrow arrow = new EntityArrow(world, player, drawStrength * arrowSpeedMultiplier);
-					double damage = arrow.getDamage() * arrowDamageMultiplier;
-					arrow.setDamage(damage);
-
-					if (drawStrength == 1.0F) {
-						arrow.setIsCritical(true);
-					}
-					if (enchantPower > 0) {
-						arrow.setDamage(damage + enchantPower * 0.5D + 0.5D);
-					}
-					if (enchantKnockback > 0) {
-						arrow.setKnockbackStrength(enchantKnockback);
-					}
-					if (enchantFire > 0) {
-						arrow.setFire(100);
-					}
-					arrow.canBePickedUp = 2;
-					world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + drawStrength * 0.5F);
-
-					if (ServerHelper.isServerWorld(world)) {
-						world.spawnEntityInWorld(arrow);
-					}
-				}
-			}
 			EntityArrow arrow = new EntityArrow(world, player, drawStrength * arrowSpeedMultiplier);
 			double damage = arrow.getDamage() * arrowDamageMultiplier;
 			arrow.setDamage(damage);
@@ -183,6 +157,31 @@ public class ItemBowAdv extends ItemBow {
 			if (ServerHelper.isServerWorld(world)) {
 				world.spawnEntityInWorld(arrow);
 			}
+
+			for (int i = 0; i < enchantMultishot; i++) {
+				arrow = new EntityArrow(world, player, drawStrength * arrowSpeedMultiplier);
+				damage = arrow.getDamage() * arrowDamageMultiplier;
+				arrow.setDamage(damage);
+
+				if (drawStrength == 1.0F) {
+					arrow.setIsCritical(true);
+				}
+				if (enchantPower > 0) {
+					arrow.setDamage(damage + enchantPower * 0.5D + 0.5D);
+				}
+				if (enchantKnockback > 0) {
+					arrow.setKnockbackStrength(enchantKnockback);
+				}
+				if (enchantFire > 0) {
+					arrow.setFire(100);
+				}
+				arrow.canBePickedUp = 2;
+
+				if (ServerHelper.isServerWorld(world)) {
+					world.spawnEntityInWorld(arrow);
+				}
+			}
+
 			if (!player.capabilities.isCreativeMode) {
 				stack.damageItem(1, player);
 			}
