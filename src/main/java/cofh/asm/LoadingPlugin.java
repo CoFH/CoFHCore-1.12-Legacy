@@ -40,10 +40,8 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 
 	// Initialize SubMod transformers
 	static {
-
 		versionCheck(MC_VERSION, "CoFHCore");
-		attemptClassLoad("cofh.asm.TransformerCore", "Failed to find Main Transformer! Critical Issue!");
-		attemptClassLoad("cofh.asm.PCCASMTransformer", "Failed to find Secondary Transformer! Critical Issue!");
+		attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
 	}
 
 	public static void versionCheck(String reqVersion, String mod) {
@@ -54,8 +52,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 			System.err.println(err);
 
 			JEditorPane ep = new JEditorPane("text/html", "<html>" + err
-				+ "<br>Remove it from your coremods or mods folder and check <a href=\"http://teamcofh.com/\">here</a> for updates"
-				+ "</html>");
+					+ "<br>Remove it from your coremods or mods folder and check <a href=\"http://teamcofh.com/\">here</a> for updates" + "</html>");
 
 			ep.setEditable(false);
 			ep.setOpaque(false);
@@ -69,6 +66,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 							Desktop.getDesktop().browse(event.getURL().toURI());
 						}
 					} catch (Exception e) {
+						// pokemon!
 					}
 				}
 			});
@@ -95,7 +93,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	@Override
 	public String getAccessTransformerClass() {
 
-		return "cofh.asm.PCCAccessTransformer";
+		return "cofh.asm.CoFHAccessTransformer";
 	}
 
 	@Override
@@ -151,7 +149,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 		public void construction(FMLConstructionEvent evt) {
 
 			ASM_DATA = evt.getASMHarvestedData();
-			PCCASMTransformer.scrapeData(ASM_DATA);
+			CoFHClassTransformer.scrapeData(ASM_DATA);
 			for (ModCandidate t : ASM_DATA.getCandidatesFor("cofh.api.energy")) {
 				if (true) {
 					for (ModContainer mod : t.getContainedMods()) {

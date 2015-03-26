@@ -233,18 +233,18 @@ class ASMCore {
 				}
 			}
 
-			if (m == null)
+			if (m == null) {
 				break l;
+			}
 
 			AbstractInsnNode n = m.instructions.getFirst();
 			LabelNode end = new LabelNode(), out = new LabelNode();
 			m.instructions.insertBefore(n, n = new VarInsnNode(ALOAD, 1));
-			m.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/item/ItemStack", names[1],
-				"()Lnet/minecraft/item/Item;", false));
+			m.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/item/ItemStack", names[1], "()Lnet/minecraft/item/Item;", false));
 			m.instructions.insert(n, n = new VarInsnNode(ALOAD, 1));
 			m.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
 			m.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/item/Item", "cofh_canEnchantApply",
-				"(Lnet/minecraft/item/ItemStack;Lnet/minecraft/enchantment/Enchantment;)I", false));
+					"(Lnet/minecraft/item/ItemStack;Lnet/minecraft/enchantment/Enchantment;)I", false));
 			m.instructions.insert(n, n = new InsnNode(DUP));
 			m.instructions.insert(n, n = new JumpInsnNode(IFLT, end));
 			m.instructions.insert(n, n = new JumpInsnNode(IFEQ, out));
@@ -302,16 +302,18 @@ class ASMCore {
 				}
 			}
 
-			if (m == null)
+			if (m == null) {
 				break l;
+			}
 
 			for (AbstractInsnNode n = m.instructions.getFirst(); n != null; n = n.getNext()) {
 				if (n.getOpcode() == NEW) {
 					AbstractInsnNode p = n.getPrevious().getPrevious();
-					if (p.getOpcode() != BIPUSH)
+					if (p.getOpcode() != BIPUSH) {
 						continue;
+					}
 					TypeInsnNode node = ((TypeInsnNode) n);
-					switch (((IntInsnNode)p).operand) {
+					switch (((IntInsnNode) p).operand) {
 					case 8: // flowing water
 						node.desc = "cofh/asmhooks/block/BlockTickingWater";
 						break;
@@ -321,8 +323,9 @@ class ASMCore {
 					default:
 						node = null;
 					}
-					if (node != null)
+					if (node != null) {
 						((MethodInsnNode) n.getNext().getNext().getNext()).owner = node.desc;
+					}
 				}
 			}
 
@@ -354,8 +357,9 @@ class ASMCore {
 				}
 			}
 
-			if (m == null)
+			if (m == null) {
 				break l;
+			}
 
 			m.localVariables = null;
 
@@ -396,8 +400,9 @@ class ASMCore {
 				}
 			}
 
-			if (m == null)
+			if (m == null) {
 				break l;
+			}
 
 			for (int i = 0, e = m.instructions.size(); i < e; ++i) {
 				AbstractInsnNode n = m.instructions.get(i);
@@ -492,8 +497,9 @@ class ASMCore {
 				}
 			}
 
-			if (m == null)
+			if (m == null) {
 				break l;
+			}
 
 			m.localVariables = null;
 
@@ -517,8 +523,9 @@ class ASMCore {
 				}
 			}
 
-			if (di == 0)
+			if (di == 0) {
 				break l;
+			}
 
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 			cn.accept(cw);
@@ -687,8 +694,9 @@ class ASMCore {
 				if (n.getOpcode() == GETSTATIC) {
 					if ("net/minecraftforge/common/ForgeModContainer".equals(((FieldInsnNode) n).owner)) {
 						for (; n != null; n = n.getNext()) {
-							if (n.getOpcode() != IF_ICMPNE)
+							if (n.getOpcode() != IF_ICMPNE) {
 								continue;
+							}
 							((JumpInsnNode) n).setOpcode(IF_ICMPLT);
 							break q;
 						}
@@ -747,7 +755,7 @@ class ASMCore {
 				cr.accept(clone, ClassReader.EXPAND_FRAMES);
 				String sig = "(J)Lnet/minecraft/util/LongHashMap$Entry;";
 				for (MethodNode m : clone.methods) {
-					String mName =  m.name;
+					String mName = m.name;
 					if (names[1].equals(mName) && sig.equals(m.desc)) {
 						getEntry = m;
 						break;
@@ -894,11 +902,11 @@ class ASMCore {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
-			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F", "func_147448_a",
-					"func_147455_a", "func_72939_s", "func_145830_o", "field_147481_N", "func_147457_a" };
+			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F", "func_147448_a", "func_147455_a", "func_72939_s",
+					"func_145830_o", "field_147481_N", "func_147457_a" };
 		} else {
-			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a",
-					"setTileEntity", "updateEntities", "hasWorldObj", "field_147481_N", "func_147457_a" };
+			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a", "setTileEntity", "updateEntities", "hasWorldObj",
+					"field_147481_N", "func_147457_a" };
 		}
 		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
@@ -906,17 +914,18 @@ class ASMCore {
 
 		final String sig = "(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V";
 
-		MethodNode addTileEntity = null, addTileEntities = null, setTileEntity = null, updateEntities = null,
-				unloadTile = null;
+		MethodNode addTileEntity = null, addTileEntities = null, setTileEntity = null, updateEntities = null, unloadTile = null;
 		boolean found = false;
 		for (MethodNode m : cn.methods) {
 			if ("<init>".equals(m.name)) {
-				if (sig.equals(m.desc))
+				if (sig.equals(m.desc)) {
 					found = true;
+				}
 				LabelNode a = new LabelNode(new Label());
 				AbstractInsnNode n = m.instructions.getFirst();
-				while (n.getOpcode() != INVOKESPECIAL || !((MethodInsnNode) n).name.equals("<init>"))
+				while (n.getOpcode() != INVOKESPECIAL || !((MethodInsnNode) n).name.equals("<init>")) {
 					n = n.getNext();
+				}
 				m.instructions.insert(n, n = a);
 				m.instructions.insert(n, n = new LineNumberNode(-15000, a));
 				m.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
@@ -928,13 +937,11 @@ class ASMCore {
 				addTileEntity = m;
 			} else if (names[4].equals(m.name) && "(Ljava/util/Collection;)V".equals(m.desc)) {
 				addTileEntities = m;
-			} else if (names[5].equals(m.name)
-					&& "(IIILnet/minecraft/tileentity/TileEntity;)V".equals(m.desc)) {
+			} else if (names[5].equals(m.name) && "(IIILnet/minecraft/tileentity/TileEntity;)V".equals(m.desc)) {
 				setTileEntity = m;
 			} else if (names[6].equals(m.name) && "()V".equals(m.desc)) {
 				updateEntities = m;
-			} else if (names[9].equals(m.name) &&
-					"(Lnet/minecraft/tileentity/TileEntity;)V".equals(m.desc)) {
+			} else if (names[9].equals(m.name) && "(Lnet/minecraft/tileentity/TileEntity;)V".equals(m.desc)) {
 				unloadTile = m;
 			}
 		}
@@ -969,8 +976,9 @@ class ASMCore {
 
 			LabelNode a = new LabelNode(new Label());
 			AbstractInsnNode n = setTileEntity.instructions.getLast();
-			while (n.getOpcode() != RETURN)
+			while (n.getOpcode() != RETURN) {
 				n = n.getPrevious();
+			}
 			n = n.getPrevious();
 			setTileEntity.instructions.insert(n = a);
 			setTileEntity.instructions.insert(n, n = new LineNumberNode(-15002, a));
@@ -986,10 +994,12 @@ class ASMCore {
 			LabelNode a = new LabelNode(new Label());
 			AbstractInsnNode n = addTileEntities.instructions.getFirst();
 			for (;;) {
-				while (n.getOpcode() != CHECKCAST)
+				while (n.getOpcode() != CHECKCAST) {
 					n = n.getNext();
-				if ((((TypeInsnNode) n).desc).equals("net/minecraft/tileentity/TileEntity"))
+				}
+				if ((((TypeInsnNode) n).desc).equals("net/minecraft/tileentity/TileEntity")) {
 					break;
+				}
 			}
 			addTileEntities.instructions.insert(n, n = a);
 			addTileEntities.instructions.insert(n, n = new LineNumberNode(-15003, a));
@@ -1005,11 +1015,12 @@ class ASMCore {
 
 		if (updateEntities != null) {
 			AbstractInsnNode n = updateEntities.instructions.getFirst();
-			while (n.getOpcode() != INVOKEVIRTUAL || !"onChunkUnload".equals(((MethodInsnNode) n).name) || !"()V".equals(((MethodInsnNode) n).desc))
+			while (n.getOpcode() != INVOKEVIRTUAL || !"onChunkUnload".equals(((MethodInsnNode) n).name) || !"()V".equals(((MethodInsnNode) n).desc)) {
 				n = n.getNext();
-			while (n.getOpcode() != PUTFIELD ||
-					!names[8].equals(((FieldInsnNode) n).name))
+			}
+			while (n.getOpcode() != PUTFIELD || !names[8].equals(((FieldInsnNode) n).name)) {
 				n = n.getPrevious();
+			}
 			n = n.getNext();
 			LabelNode lStart = new LabelNode(new Label());
 			LabelNode lCond = new LabelNode(new Label());
@@ -1300,11 +1311,13 @@ class ASMCore {
 	private static String[] getExceptions(Method m) {
 
 		Class<?>[] d = m.getExceptionTypes();
-		if (d == null)
+		if (d == null) {
 			return null;
+		}
 		String[] r = new String[d.length];
-		for (int i = 0; i < d.length; ++i)
+		for (int i = 0; i < d.length; ++i) {
 			r[i] = Type.getInternalName(d[i]);
+		}
 		return r;
 	}
 
@@ -1474,8 +1487,9 @@ class ASMCore {
 
 		if (mods == null) {
 			mods = new HashMap<String, ModContainer>();
-			for (ModContainer m : Loader.instance().getModList())
+			for (ModContainer m : Loader.instance().getModList()) {
 				mods.put(m.getModId(), m);
+			}
 		}
 		return mods;
 	}
@@ -1486,8 +1500,9 @@ class ASMCore {
 
 		if (apis == null) {
 			apis = new HashMap<String, ModContainer>();
-			for (ModContainer m : ModAPIManager.INSTANCE.getAPIList())
+			for (ModContainer m : ModAPIManager.INSTANCE.getAPIList()) {
 				apis.put(m.getModId(), m);
+			}
 		}
 		return apis;
 	}
@@ -1532,7 +1547,6 @@ class ASMCore {
 			implementables.add(name);
 			implementables.add(name + "$class");
 		}
-
 		for (ASMData data : table.getAll(Strippable.class.getName())) {
 			String name = data.getClassName();
 			parsables.add(name);
@@ -1540,7 +1554,7 @@ class ASMCore {
 			strippables.add(name);
 			strippables.add(name + "$class");
 		}
-
 		log.debug("Found " + implementables.size() + " @Implementable and " + strippables.size() + " @Strippable");
 	}
+
 }

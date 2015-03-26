@@ -6,12 +6,12 @@ import cpw.mods.fml.common.discovery.ASMDataTable;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
-public class PCCASMTransformer implements IClassTransformer {
+public class CoFHClassTransformer implements IClassTransformer {
 
 	private static boolean scrappedData = false;
 	private static final boolean ENABLE_HACK = Boolean.valueOf(System.getProperty("cofh.classloadinghack", "false"));
 
-	public PCCASMTransformer() {
+	public CoFHClassTransformer() {
 
 		ASMCore.init();
 	}

@@ -7,12 +7,12 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PCCAccessTransformer extends AccessTransformer {
+public class CoFHAccessTransformer extends AccessTransformer {
 
-	private static PCCAccessTransformer instance;
+	private static CoFHAccessTransformer instance;
 	private static List<String> mapFileList = new LinkedList<String>();
 
-	public PCCAccessTransformer() throws IOException {
+	public CoFHAccessTransformer() throws IOException {
 
 		super();
 		instance = this;
