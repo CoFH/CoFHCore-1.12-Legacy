@@ -53,10 +53,12 @@ public class SocialRegistry {
 
 	public static boolean playerHasAccess(String playerName, GameProfile owner) {
 
-		if (owner == null || playerName == null)
+		if (owner == null || playerName == null) {
 			return false;
-		if (playerName.equals(owner.getName()))
+		}
+		if (playerName.equals(owner.getName())) {
 			return true;
+		}
 		String id = owner.getId().toString();
 		return (friendConf.hasCategory(id) && friendConf.getCategory(id).containsKey(playerName.toLowerCase()));
 	}

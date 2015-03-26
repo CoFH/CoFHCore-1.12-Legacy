@@ -28,8 +28,9 @@ public final class ShaderHelper {
 
 	public static void initShaders() {
 
-		if (!useShaders())
+		if (!useShaders()) {
 			return;
+		}
 
 		FMLCommonHandler.instance().bus().register(new ShaderHelper());
 	}
@@ -40,8 +41,9 @@ public final class ShaderHelper {
 	@SubscribeEvent
 	public void clientTick(TickEvent.ClientTickEvent event) {
 
-		if (event.phase == TickEvent.Phase.END)
+		if (event.phase == TickEvent.Phase.END) {
 			return;
+		}
 		GuiScreen gui = Minecraft.getMinecraft().currentScreen;
 		if (gui == null || !gui.doesGuiPauseGame()) {
 			gameTicks++;
@@ -51,8 +53,9 @@ public final class ShaderHelper {
 	@SubscribeEvent
 	public void renderTick(TickEvent.RenderTickEvent event) {
 
-		if (event.phase == TickEvent.Phase.END)
+		if (event.phase == TickEvent.Phase.END) {
 			return;
+		}
 		midGameTick = event.renderTickTime;
 	}
 
@@ -60,8 +63,9 @@ public final class ShaderHelper {
 
 	public static void useShader(int shader, ShaderCallback callback) {
 
-		if (!useShaders())
+		if (!useShaders()) {
 			return;
+		}
 
 		ARBShaderObjects.glUseProgramObjectARB(shader);
 
@@ -75,8 +79,9 @@ public final class ShaderHelper {
 				prevTime.put(shader, frameTime);
 			}
 
-			if (callback != null)
+			if (callback != null) {
 				callback.call(shader, newFrame);
+			}
 		}
 	}
 
@@ -100,19 +105,24 @@ public final class ShaderHelper {
 	public static int createProgram(String vert, String frag) {
 
 		int vertId = 0, fragId = 0, program = 0;
-		if (vert != null)
+		if (vert != null) {
 			vertId = createShader(vert, VERT);
-		if (frag != null)
+		}
+		if (frag != null) {
 			fragId = createShader(frag, FRAG);
+		}
 
 		program = ARBShaderObjects.glCreateProgramObjectARB();
-		if (program == 0)
+		if (program == 0) {
 			return 0;
+		}
 
-		if (vert != null)
+		if (vert != null) {
 			ARBShaderObjects.glAttachObjectARB(program, vertId);
-		if (frag != null)
+		}
+		if (frag != null) {
 			ARBShaderObjects.glAttachObjectARB(program, fragId);
+		}
 
 		ARBShaderObjects.glLinkProgramARB(program);
 		if (ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_LINK_STATUS_ARB) == GL11.GL_FALSE) {
@@ -140,14 +150,16 @@ public final class ShaderHelper {
 		try {
 			shader = ARBShaderObjects.glCreateShaderObjectARB(shaderType);
 
-			if (shader == 0)
+			if (shader == 0) {
 				return 0;
+			}
 
 			ARBShaderObjects.glShaderSourceARB(shader, readFileAsString(filename));
 			ARBShaderObjects.glCompileShaderARB(shader);
 
-			if (ARBShaderObjects.glGetObjectParameteriARB(shader, ARBShaderObjects.GL_OBJECT_COMPILE_STATUS_ARB) == GL11.GL_FALSE)
+			if (ARBShaderObjects.glGetObjectParameteriARB(shader, ARBShaderObjects.GL_OBJECT_COMPILE_STATUS_ARB) == GL11.GL_FALSE) {
 				throw new RuntimeException("Error creating shader: " + getLogInfo(shader));
+			}
 
 			return shader;
 		} catch (Exception e) {
@@ -169,8 +181,9 @@ public final class ShaderHelper {
 		Exception exception = null;
 		BufferedReader reader = null;
 
-		if (in == null)
+		if (in == null) {
 			return "";
+		}
 
 		try {
 			try {
@@ -178,8 +191,9 @@ public final class ShaderHelper {
 
 				try {
 					String line;
-					while ((line = reader.readLine()) != null)
+					while ((line = reader.readLine()) != null) {
 						source.append(line).append('\n');
+					}
 				} catch (Exception exc) {
 					exception = exc;
 				}
@@ -190,11 +204,13 @@ public final class ShaderHelper {
 			}
 		} finally {
 			try {
-				if (reader != null)
+				if (reader != null) {
 					reader.close();
+				}
 			} finally {
-				if (exception != null)
+				if (exception != null) {
 					throw exception;
+				}
 			}
 		}
 

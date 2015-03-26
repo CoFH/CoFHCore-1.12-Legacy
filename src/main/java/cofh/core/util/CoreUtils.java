@@ -286,8 +286,9 @@ public class CoreUtils {
 		if (cooldown) {
 			NBTTagCompound tag = entity.getEntityData();
 			long time = entity.worldObj.getTotalWorldTime();
-			if (tag.getLong("cofh:tD") > time)
+			if (tag.getLong("cofh:tD") > time) {
 				return false;
+			}
 			tag.setLong("cofh:tD", time + 35);
 		}
 

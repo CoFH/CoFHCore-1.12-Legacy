@@ -8,9 +8,9 @@ import net.minecraft.util.IIcon;
 
 /**
  * Convenient String to Icon map. Allows easy reuse of Icons.
- * 
+ *
  * @author King Lemming
- * 
+ *
  */
 public class IconRegistry {
 

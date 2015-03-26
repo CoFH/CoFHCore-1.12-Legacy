@@ -62,12 +62,14 @@ public class CommandHandler extends CommandBase {
 		return commands.containsKey(command);
 	}
 
-    @Override
+	@Override
 	public int getRequiredPermissionLevel() {
-        return -1;
-    }
+
+		return -1;
+	}
 
 	private static DummyCommand dummy = new DummyCommand();
+
 	public static void logAdminCommand(ICommandSender sender, ISubCommand command, String info, Object... data) {
 
 		dummy.setFromCommand(command);
@@ -113,12 +115,12 @@ public class CommandHandler extends CommandBase {
 	public void processCommand(ICommandSender sender, String[] arguments) {
 
 		if (arguments.length < 1) {
-			arguments = new String[]{"help"};
+			arguments = new String[] { "help" };
 		}
 		ISubCommand command = commands.get(arguments[0]);
 		if (command != null) {
 			if (sender.canCommandSenderUseCommand(command.getPermissionLevel(), "cofh " + command.getCommandName()) ||
-					// this check below is because mojang is incompetent, as always
+			// this check below is because mojang is incompetent, as always
 					(sender instanceof EntityPlayerMP && command.getPermissionLevel() <= 0)) {
 				command.handleCommand(sender, arguments);
 				return;
@@ -152,21 +154,26 @@ public class CommandHandler extends CommandBase {
 
 		@Override
 		public String getCommandName() {
+
 			return "cofh " + name;
 		}
 
-	    @Override
+		@Override
 		public int getRequiredPermissionLevel() {
-	        return perm;
-	    }
+
+			return perm;
+		}
 
 		@Override
 		public String getCommandUsage(ICommandSender p_71518_1_) {
+
 			return "";
 		}
 
 		@Override
-		public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_) {}
+		public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_) {
+
+		}
 
 	}
 }

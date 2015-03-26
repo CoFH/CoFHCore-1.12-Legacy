@@ -175,13 +175,17 @@ public class BlockRenderer {
 
 	/**
 	 * Renders faces of a block-like model based on a sideMask. Eg for side 2, verts 8-11 will be rendered
-	 * @param sideMask A mask of faces not to render
+	 * 
+	 * @param sideMask
+	 *            A mask of faces not to render
 	 */
 	public static void renderFaces(int sideMask) {
-    	
-		if(sideMask == 0x3F) return;
-		for(int s = 0; s < 6; s++) {
-			if((sideMask & 1 << s) == 0) {
+
+		if (sideMask == 0x3F) {
+			return;
+		}
+		for (int s = 0; s < 6; s++) {
+			if ((sideMask & 1 << s) == 0) {
 				CCRenderState.setVertexRange(s * 4, (s + 1) * 4);
 				CCRenderState.render();
 			}
@@ -192,7 +196,7 @@ public class BlockRenderer {
 
 	/**
 	 * Renders faces of a cuboid with texture coordinates mapped to match a standard minecraft block
-	 * 
+	 *
 	 * @param bounds
 	 *            The bounding cuboid to render
 	 * @param sideMask

@@ -1,12 +1,12 @@
 package cofh.core.gui.element;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.TabBase;
 import cofh.lib.util.helpers.MathHelper;
+
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
 
 public abstract class TabScrolledText extends TabBase {
 
@@ -68,10 +68,10 @@ public abstract class TabScrolledText extends TabBase {
 
 	@Override
 	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
-		
+
 		int shiftedMouseX = mouseX - this.posX();
 		int shiftedMouseY = mouseY - this.posY;
-		
+
 		if (!isFullyOpened()) {
 			return false;
 		}
@@ -79,9 +79,7 @@ public abstract class TabScrolledText extends TabBase {
 		if (shiftedMouseX < 108) {
 			return super.onMousePressed(mouseX, mouseY, mouseButton);
 		}
-		
-		
-		
+
 		if (shiftedMouseY < 52) {
 			firstLine = MathHelper.clampI(firstLine - 1, 0, maxFirstLine);
 		} else {

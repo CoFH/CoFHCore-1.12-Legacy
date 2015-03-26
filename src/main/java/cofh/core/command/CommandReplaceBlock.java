@@ -144,9 +144,8 @@ public class CommandReplaceBlock implements ISubCommand {
 			replMeta = meta;
 		}
 
-		long blockCounter = ((long)xL - xS) * ((long)yL - yS) * ((long)zL - zS);
-		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.start",
-			blockCounter, xS, yS, zS, xL, yL, zL, blockReplRaw);
+		long blockCounter = ((long) xL - xS) * ((long) yL - yS) * ((long) zL - zS);
+		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.start", blockCounter, xS, yS, zS, xL, yL, zL, blockReplRaw);
 
 		THashSet<Chunk> set = new THashSet<Chunk>();
 
@@ -209,9 +208,8 @@ public class CommandReplaceBlock implements ISubCommand {
 							int cX = x & 15, cZ = z & 15;
 							for (int y = yS; y <= yL; ++y) {
 								Block block = chunk.getBlock(cX, y, cZ);
-								if (block.isReplaceableOreGen(world, x, y, z, Blocks.stone) ||
-										block.isReplaceableOreGen(world, x, y, z, Blocks.netherrack) ||
-										block.isReplaceableOreGen(world, x, y, z, Blocks.end_stone)) {
+								if (block.isReplaceableOreGen(world, x, y, z, Blocks.stone) || block.isReplaceableOreGen(world, x, y, z, Blocks.netherrack)
+										|| block.isReplaceableOreGen(world, x, y, z, Blocks.end_stone)) {
 									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
 										++blockCounter;
 										set.add(chunk);
@@ -260,8 +258,8 @@ public class CommandReplaceBlock implements ISubCommand {
 							for (int y = yS; y <= yL; ++y) {
 								Block block = chunk.getBlock(cX, y, cZ);
 								Material m = block.getMaterial();
-								if (m == Material.grass || m == Material.ground || m == Material.clay || m == Material.snow
-										|| m == Material.craftedSnow || m == Material.ice || m == Material.packedIce) {
+								if (m == Material.grass || m == Material.ground || m == Material.clay || m == Material.snow || m == Material.craftedSnow
+										|| m == Material.ice || m == Material.packedIce) {
 									if (chunk.func_150807_a(cX, y, cZ, replBlock, replMeta)) {
 										++blockCounter;
 										set.add(chunk);
@@ -335,8 +333,7 @@ public class CommandReplaceBlock implements ISubCommand {
 			}
 		}
 		if (!set.isEmpty()) {
-			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.success",
-				blockCounter, xS, yS, zS, xL, yL, zL, blockReplRaw);
+			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.success", blockCounter, xS, yS, zS, xL, yL, zL, blockReplRaw);
 		} else {
 			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.failure");
 		}

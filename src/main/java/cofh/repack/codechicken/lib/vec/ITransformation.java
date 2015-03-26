@@ -2,7 +2,7 @@ package cofh.repack.codechicken.lib.vec;
 
 /**
  * Abstract supertype for any VectorN transformation
- * 
+ *
  * @param <Vector>
  *            The vector type
  * @param <Transformation>

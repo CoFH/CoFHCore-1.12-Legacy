@@ -14,8 +14,8 @@ import org.apache.logging.log4j.Logger;
 public class LargeVeinParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log,
-			List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
+			List<WeightedRandomBlock> matList) {
 
 		boolean sparse = true;
 		{

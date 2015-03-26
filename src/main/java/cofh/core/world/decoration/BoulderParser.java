@@ -14,23 +14,29 @@ import org.apache.logging.log4j.Logger;
 public class BoulderParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log,
-			List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
+			List<WeightedRandomBlock> matList) {
 
 		WorldGenBoulder r = new WorldGenBoulder(resList, clusterSize, matList);
 		{
-			if (genObject.has("sizeVariance"))
+			if (genObject.has("sizeVariance")) {
 				r.sizeVariance = genObject.get("sizeVariance").getAsInt();
-			if (genObject.has("count"))
+			}
+			if (genObject.has("count")) {
 				r.clusters = genObject.get("count").getAsInt();
-			if (genObject.has("countVariance"))
+			}
+			if (genObject.has("countVariance")) {
 				r.clusterVariance = genObject.get("countVariance").getAsInt();
-			if (genObject.has("hollow"))
+			}
+			if (genObject.has("hollow")) {
 				r.hollow = genObject.get("hollow").getAsBoolean();
-			if (genObject.has("hollowSize"))
+			}
+			if (genObject.has("hollowSize")) {
 				r.hollowAmt = genObject.get("hollowSize").getAsFloat();
-			if (genObject.has("hollowVariance"))
+			}
+			if (genObject.has("hollowVariance")) {
 				r.hollowVar = genObject.get("hollowVariance").getAsFloat();
+			}
 		}
 		return r;
 	}

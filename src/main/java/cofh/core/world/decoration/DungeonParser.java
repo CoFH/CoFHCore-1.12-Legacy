@@ -19,8 +19,8 @@ import org.apache.logging.log4j.Logger;
 public class DungeonParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log,
-			List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
+			List<WeightedRandomBlock> matList) {
 
 		ArrayList<WeightedRandomNBTTag> mobList = new ArrayList<WeightedRandomNBTTag>();
 		if (genObject.has("spawnEntity")) {
@@ -55,27 +55,36 @@ public class DungeonParser implements IGeneratorParser {
 					log.warn("Entry specifies invalid string list for 'lootTable'! Using default.");
 				}
 			}
-			if (genObject.has("maxChests"))
+			if (genObject.has("maxChests")) {
 				r.maxChests = genObject.get("maxChests").getAsInt();
+			}
 
-			if (genObject.has("minHoles"))
+			if (genObject.has("minHoles")) {
 				r.minHoles = genObject.get("minHoles").getAsInt();
-			if (genObject.has("maxHoles"))
+			}
+			if (genObject.has("maxHoles")) {
 				r.maxHoles = genObject.get("maxHoles").getAsInt();
+			}
 
-			if (genObject.has("minHeight"))
+			if (genObject.has("minHeight")) {
 				r.minHeight = genObject.get("minHeight").getAsInt();
-			if (genObject.has("maxHeight"))
+			}
+			if (genObject.has("maxHeight")) {
 				r.maxHeight = genObject.get("maxHeight").getAsInt();
+			}
 
-			if (genObject.has("minWidthX"))
+			if (genObject.has("minWidthX")) {
 				r.minWidthX = genObject.get("minWidthX").getAsInt();
-			if (genObject.has("maxWidthX"))
+			}
+			if (genObject.has("maxWidthX")) {
 				r.maxWidthX = genObject.get("maxWidthX").getAsInt();
-			if (genObject.has("minWidthZ"))
+			}
+			if (genObject.has("minWidthZ")) {
 				r.minWidthZ = genObject.get("minWidthZ").getAsInt();
-			if (genObject.has("maxWidthZ"))
+			}
+			if (genObject.has("maxWidthZ")) {
 				r.maxWidthZ = genObject.get("maxWidthZ").getAsInt();
+			}
 		}
 		return r;
 	}

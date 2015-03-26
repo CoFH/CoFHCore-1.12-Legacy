@@ -72,7 +72,7 @@ public class CCRenderState {
 	/**
 	 * Management class for a vertex attrute such as colour, normal etc This class should handle the loading of the attrute from an array provided by
 	 * IVertexSource.getAttributes or the computation of this attrute from others
-	 * 
+	 *
 	 * @param <T>
 	 *            The array type for this attrute eg. int[], Vector3[]
 	 */
@@ -124,7 +124,7 @@ public class CCRenderState {
 
 		/**
 		 * Gets an array of vertex attrutes
-		 * 
+		 *
 		 * @param attr
 		 *            The vertex attrute to get
 		 * @param <T>
@@ -455,7 +455,7 @@ public class CCRenderState {
 	}
 
 	public static void pushLightmap() {
-		
+
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brightness & 0xFFFF, brightness >>> 16);
 	}
 

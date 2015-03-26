@@ -254,8 +254,9 @@ public class FeatureParser {
 			@Override
 			public boolean accept(File file, String name) {
 
-				if (name == null)
+				if (name == null) {
 					return false;
+				}
 				return name.toLowerCase().endsWith(".json") || new File(file, name).isDirectory();
 			}
 		});
@@ -412,15 +413,17 @@ public class FeatureParser {
 							for (int k = 0, j = array.size(); k < j; k++) {
 								names.add(array.get(k).getAsString());
 							}
-							if (rarity > 0)
+							if (rarity > 0) {
 								info = new BiomeInfoRarity(names, 4, true, rarity);
-							else
+							} else {
 								info = new BiomeInfo(names, 4, true);
+							}
 						} else {
-							if (rarity > 0)
+							if (rarity > 0) {
 								info = new BiomeInfoRarity(entry, rarity);
-							else
+							} else {
 								info = new BiomeInfo(entry);
+							}
 						}
 					} else {
 						Object data = null;
@@ -442,8 +445,9 @@ public class FeatureParser {
 								ArrayList<Type> tags = new ArrayList<Type>();
 								for (int k = 0, j = array.size(); k < j; k++) {
 									Type a = Type.valueOf(array.get(k).getAsString());
-									if (a != null)
+									if (a != null) {
 										tags.add(a);
+									}
 								}
 								data = tags.toArray(new Type[tags.size()]);
 								t = 6;
@@ -456,17 +460,19 @@ public class FeatureParser {
 							break l;
 						}
 						if (data != null) {
-							if (rarity > 0)
+							if (rarity > 0) {
 								info = new BiomeInfoRarity(data, t, wl, rarity);
-							else
+							} else {
 								info = new BiomeInfo(data, t, wl);
+							}
 						}
 					}
 				} else {
 					info = new BiomeInfo(element.getAsString());
 				}
-				if (info != null)
+				if (info != null) {
 					set.add(info);
+				}
 			}
 		}
 		return set;
@@ -511,8 +517,9 @@ public class FeatureParser {
 
 	public static boolean parseResList(JsonElement genElement, List<WeightedRandomBlock> resList, boolean clamp) {
 
-		if (genElement == null)
+		if (genElement == null) {
 			return false;
+		}
 
 		if (genElement.isJsonArray()) {
 			JsonArray blockList = genElement.getAsJsonArray();

@@ -18,8 +18,8 @@ import org.apache.logging.log4j.Logger;
 public class SmallTreeParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log,
-			List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
+			List<WeightedRandomBlock> matList) {
 
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
 		ArrayList<WeightedRandomBlock> blocks = new ArrayList<WeightedRandomBlock>();
@@ -49,19 +49,25 @@ public class SmallTreeParser implements IGeneratorParser {
 		{
 			r.genSurface = matList.toArray(new WeightedRandomBlock[matList.size()]);
 
-			if (genObject.has("minHeight"))
+			if (genObject.has("minHeight")) {
 				r.minHeight = genObject.get("minHeight").getAsInt();
-			if (genObject.has("heightVariance"))
+			}
+			if (genObject.has("heightVariance")) {
 				r.heightVariance = genObject.get("heightVariance").getAsInt();
+			}
 
-			if (genObject.has("treeChecks"))
+			if (genObject.has("treeChecks")) {
 				r.treeChecks = genObject.get("treeChecks").getAsBoolean();
-			if (genObject.has("relaxedGrowth"))
+			}
+			if (genObject.has("relaxedGrowth")) {
 				r.relaxedGrowth = genObject.get("relaxedGrowth").getAsBoolean();
-			if (genObject.has("waterLoving"))
+			}
+			if (genObject.has("waterLoving")) {
 				r.waterLoving = genObject.get("waterLoving").getAsBoolean();
-			if (genObject.has("leafVariance"))
+			}
+			if (genObject.has("leafVariance")) {
 				r.leafVariance = genObject.get("leafVariance").getAsBoolean();
+			}
 		}
 		return r;
 	}

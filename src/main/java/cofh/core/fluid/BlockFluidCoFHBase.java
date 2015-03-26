@@ -67,8 +67,8 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 	}
 
 	@Override
-	public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z)
-	{
+	public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
+
 		return false;
 	}
 

@@ -114,9 +114,8 @@ public class CommandCountBlock implements ISubCommand {
 			yL = 255;
 		}
 
-		long blockCounter = ((long)xL - xS) * ((long)yL - yS) * ((long)zL - zS);
-		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.countblocks.start",
-			blockCounter, xS, yS, zS, xL, yL, zL);
+		long blockCounter = ((long) xL - xS) * ((long) yL - yS) * ((long) zL - zS);
+		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.countblocks.start", blockCounter, xS, yS, zS, xL, yL, zL);
 
 		blockCounter = 0;
 		for (int e = args.length; i < e; ++i) {
@@ -168,9 +167,8 @@ public class CommandCountBlock implements ISubCommand {
 							int cX = x & 15, cZ = z & 15;
 							for (int y = yS; y <= yL; ++y) {
 								Block block = chunk.getBlock(cX, y, cZ);
-								if (block.isReplaceableOreGen(world, x, y, z, Blocks.stone) ||
-										block.isReplaceableOreGen(world, x, y, z, Blocks.netherrack) ||
-										block.isReplaceableOreGen(world, x, y, z, Blocks.end_stone)) {
+								if (block.isReplaceableOreGen(world, x, y, z, Blocks.stone) || block.isReplaceableOreGen(world, x, y, z, Blocks.netherrack)
+										|| block.isReplaceableOreGen(world, x, y, z, Blocks.end_stone)) {
 									++blockCounter;
 								}
 							}
@@ -210,8 +208,8 @@ public class CommandCountBlock implements ISubCommand {
 							for (int y = yS; y <= yL; ++y) {
 								Block block = chunk.getBlock(cX, y, cZ);
 								Material m = block.getMaterial();
-								if (m == Material.grass || m == Material.ground || m == Material.clay || m == Material.snow
-										|| m == Material.craftedSnow || m == Material.ice || m == Material.packedIce) {
+								if (m == Material.grass || m == Material.ground || m == Material.clay || m == Material.snow || m == Material.craftedSnow
+										|| m == Material.ice || m == Material.packedIce) {
 									++blockCounter;
 								}
 							}
@@ -273,8 +271,7 @@ public class CommandCountBlock implements ISubCommand {
 			}
 		}
 		if (blockCounter != 0) {
-			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.countblocks.success",
-				blockCounter, xS, yS, zS, xL, yL, zL);
+			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.countblocks.success", blockCounter, xS, yS, zS, xL, yL, zL);
 		} else {
 			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.countblocks.failure");
 		}

@@ -133,8 +133,9 @@ public class Proxy {
 	@SubscribeEvent
 	public void onSaplingGrowTree(SaplingGrowTreeEvent event) {
 
-		if (CoFHProps.treeGrowthChance > 1 && event.world.rand.nextInt(CoFHProps.treeGrowthChance) != 0)
+		if (CoFHProps.treeGrowthChance > 1 && event.world.rand.nextInt(CoFHProps.treeGrowthChance) != 0) {
 			event.setResult(Result.DENY);
+		}
 	}
 
 	@SubscribeEvent

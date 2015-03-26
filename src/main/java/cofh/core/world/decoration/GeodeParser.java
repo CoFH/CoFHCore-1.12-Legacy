@@ -17,8 +17,8 @@ import org.apache.logging.log4j.Logger;
 public class GeodeParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log,
-			List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
+			List<WeightedRandomBlock> matList) {
 
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
 		if (!genObject.has("crust")) {

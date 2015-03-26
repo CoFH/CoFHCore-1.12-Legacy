@@ -38,10 +38,12 @@ public class ItemBowAdv extends ItemBow {
 
 	public int cofh_canEnchantApply(ItemStack stack, Enchantment ench) {
 
-		if (ench.effectId == Enchantment.looting.effectId)
+		if (ench.effectId == Enchantment.looting.effectId) {
 			return 1;
-		if (ench.type == EnumEnchantmentType.bow)
+		}
+		if (ench.type == EnumEnchantmentType.bow) {
 			return 1;
+		}
 		return -1;
 	}
 
@@ -157,10 +159,8 @@ public class ItemBowAdv extends ItemBow {
 			if (ServerHelper.isServerWorld(world)) {
 				world.spawnEntityInWorld(arrow);
 			}
-
 			for (int i = 0; i < enchantMultishot; i++) {
 				arrow = new EntityArrow(world, player, drawStrength * arrowSpeedMultiplier);
-				damage = arrow.getDamage() * arrowDamageMultiplier;
 				arrow.setDamage(damage);
 
 				if (drawStrength == 1.0F) {
@@ -181,7 +181,6 @@ public class ItemBowAdv extends ItemBow {
 					world.spawnEntityInWorld(arrow);
 				}
 			}
-
 			if (!player.capabilities.isCreativeMode) {
 				stack.damageItem(1, player);
 			}

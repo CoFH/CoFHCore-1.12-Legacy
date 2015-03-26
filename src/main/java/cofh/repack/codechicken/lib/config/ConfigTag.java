@@ -34,7 +34,7 @@ public class ConfigTag extends ConfigTagParent {
 
 	/**
 	 * Called when the tag is loaded from a config file as opposed to constructed by a mod
-	 * 
+	 *
 	 * @return this
 	 */
 	public ConfigTag onLoaded() {
@@ -98,7 +98,8 @@ public class ConfigTag extends ConfigTagParent {
 			if (value != null) {
 				return getIntValue();
 			}
-		} catch (NumberFormatException ignored) {}
+		} catch (NumberFormatException ignored) {
+		}
 
 		setIntValue(defaultvalue);
 		return defaultvalue;
@@ -121,7 +122,8 @@ public class ConfigTag extends ConfigTagParent {
 			if (value != null) {
 				return getBooleanValue();
 			}
-		} catch (NumberFormatException ignored) {}
+		} catch (NumberFormatException ignored) {
+		}
 
 		setBooleanValue(defaultvalue);
 		return defaultvalue;
@@ -138,7 +140,8 @@ public class ConfigTag extends ConfigTagParent {
 			if (value != null) {
 				return getHexValue();
 			}
-		} catch (NumberFormatException ignored) {}
+		} catch (NumberFormatException ignored) {
+		}
 
 		setHexValue(defaultvalue);
 		return defaultvalue;
@@ -154,12 +157,13 @@ public class ConfigTag extends ConfigTagParent {
 	}
 
 	public <T> T get(IConfigType<T> type, T defaultValue) {
-		
+
 		try {
 			if (value != null) {
 				return get(type);
 			}
-		} catch (Exception ignored) {}
+		} catch (Exception ignored) {
+		}
 
 		set(type, defaultValue);
 		return defaultValue;

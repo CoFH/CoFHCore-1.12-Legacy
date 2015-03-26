@@ -18,8 +18,9 @@ public class BlockWater extends BlockStaticLiquid {
 
 		super.onBlockAdded(world, x, y, z);
 
-		if (this.blockMaterial != Material.water)
+		if (this.blockMaterial != Material.water) {
 			return;
+		}
 
 		if (world.provider.isHellWorld) {
 			world.setBlockToAir(x, y, z);

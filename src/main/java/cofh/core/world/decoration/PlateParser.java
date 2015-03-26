@@ -12,21 +12,23 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 import org.apache.logging.log4j.Logger;
 
-
 public class PlateParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log,
-			List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
+			List<WeightedRandomBlock> matList) {
 
 		WorldGenMinablePlate r = new WorldGenMinablePlate(resList, MathHelper.clampI(clusterSize, 0, 32), matList);
 		{
-			if (genObject.has("sizeVariance"))
+			if (genObject.has("sizeVariance")) {
 				r.variation = (byte) MathHelper.clampI(genObject.get("sizeVariance").getAsInt(), 0, 16);
-			if (genObject.has("height"))
+			}
+			if (genObject.has("height")) {
 				r.height = (byte) MathHelper.clampI(genObject.get("height").getAsInt(), 0, 64);
-			if (genObject.has("slim"))
+			}
+			if (genObject.has("slim")) {
 				r.slim = genObject.get("slim").getAsBoolean();
+			}
 		}
 		return r;
 	}

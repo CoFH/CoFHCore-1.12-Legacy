@@ -88,8 +88,8 @@ public class UniformParser implements IFeatureParser {
 		return feature;
 	}
 
-	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen,
-			GenRestriction dimRes, Logger log) {
+	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters,
+			GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
 		if (!(genObject.has("minHeight") && genObject.has("maxHeight"))) {
 			log.error("Height parameters for 'uniform' template not specified in \"" + featureName + "\"");
@@ -108,6 +108,7 @@ public class UniformParser implements IFeatureParser {
 	}
 
 	protected String getDefaultTemplate() {
+
 		return "cluster";
 	}
 

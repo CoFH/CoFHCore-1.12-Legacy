@@ -33,7 +33,7 @@ import net.minecraft.world.World;
 
 /**
  * Packet pipeline class. Directs all registered packet data to be handled by the packets themselves.
- * 
+ *
  * @author sirgingalot, cpw, Zeldo
  */
 

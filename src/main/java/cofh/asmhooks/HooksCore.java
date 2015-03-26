@@ -45,18 +45,21 @@ public class HooksCore {
 
 	public static void stackItems(EntityItem entity) {
 
-		if (!CoFHProps.enableItemStacking)
+		if (!CoFHProps.enableItemStacking) {
 			return;
+		}
 
 		ItemStack stack = entity.getEntityItem();
-		if (stack == null || stack.stackSize >= stack.getMaxStackSize())
+		if (stack == null || stack.stackSize >= stack.getMaxStackSize()) {
 			return;
+		}
 
 		@SuppressWarnings("rawtypes")
 		Iterator iterator = entity.worldObj.getEntitiesWithinAABB(EntityItem.class, entity.boundingBox.expand(0.5D, 0.0D, 0.5D)).iterator();
 
-		while (iterator.hasNext())
+		while (iterator.hasNext()) {
 			entity.combineItems((EntityItem) iterator.next());
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -82,12 +85,15 @@ public class HooksCore {
 					if (!world.blockExists(x, 64, z)) {
 						continue;
 					}
-					if (def)
-						for (int y = k - 1; y < l; ++y)
+					if (def) {
+						for (int y = k - 1; y < l; ++y) {
 							world.getBlock(x, y, z).addCollisionBoxesToList(world, x, y, z, bb, collidingBoundingBoxes, entity);
-					else
-						for (int y = k - 1; y < l; ++y)
+						}
+					} else {
+						for (int y = k - 1; y < l; ++y) {
 							Blocks.bedrock.addCollisionBoxesToList(world, x, y, z, bb, collidingBoundingBoxes, entity);
+						}
+					}
 				}
 			}
 

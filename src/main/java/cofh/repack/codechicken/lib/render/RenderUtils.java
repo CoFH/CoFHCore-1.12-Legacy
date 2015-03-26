@@ -55,7 +55,7 @@ public class RenderUtils {
 
 	/**
 	 * Draws a tessellated quadrilateral bottom to top, left to right
-	 * 
+	 *
 	 * @param base
 	 *            The bottom left corner of the quad
 	 * @param wide
@@ -252,7 +252,7 @@ public class RenderUtils {
 	/**
 	 * Renders a fluid within a bounding box. If the fluid is a liquid it will render as a normal tank with height equal to density/bound.height. If the fluid
 	 * is a gas, it will render the full box with an alpha equal to density. Warning, bound will be mutated if the fluid is a liquid
-	 * 
+	 *
 	 * @param stack
 	 *            The fluid to render.
 	 * @param bound
@@ -314,7 +314,7 @@ public class RenderUtils {
 
 	/**
 	 * Renders items and blocks in the world at 0,0,0 with transformations that size them appropriately
-	 * 
+	 *
 	 * @param spin
 	 *            The spin angle of the item around the y axis in degrees
 	 */

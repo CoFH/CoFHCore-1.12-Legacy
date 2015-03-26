@@ -37,7 +37,7 @@ public class TransformationList extends Transformation {
 
 	/**
 	 * Returns a global space matrix as opposed to an object space matrix (reverse application order)
-	 * 
+	 *
 	 * @return
 	 */
 	public Matrix4 reverseCompile() {

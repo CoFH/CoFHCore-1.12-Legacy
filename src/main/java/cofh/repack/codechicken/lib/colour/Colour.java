@@ -31,12 +31,9 @@ public abstract class Colour implements Copyable<Colour> {
 		public Colour valueOf(String text) throws Exception {
 
 			Matcher matcherRGB = patternRGB.matcher(text.replaceAll("\\s", ""));
-			if(matcherRGB.matches())
-				return new ColourRGBA(
-						Integer.parseInt(matcherRGB.group(1)),
-						Integer.parseInt(matcherRGB.group(2)),
-						Integer.parseInt(matcherRGB.group(3)),
-						0xFF);
+			if (matcherRGB.matches()) {
+				return new ColourRGBA(Integer.parseInt(matcherRGB.group(1)), Integer.parseInt(matcherRGB.group(2)), Integer.parseInt(matcherRGB.group(3)), 0xFF);
+			}
 
 			int hex = (int) Long.parseLong(text.replace("0x", ""), 16);
 			return new ColourRGBA(hex << 8 | 0xFF);

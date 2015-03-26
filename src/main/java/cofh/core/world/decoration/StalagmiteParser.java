@@ -25,8 +25,8 @@ public class StalagmiteParser implements IGeneratorParser {
 	}
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log,
-			List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
+			List<WeightedRandomBlock> matList) {
 
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
 		if (!genObject.has("genBody")) {
@@ -39,25 +39,32 @@ public class StalagmiteParser implements IGeneratorParser {
 				list.add(new WeightedRandomBlock(Blocks.air));
 			}
 		}
-		WorldGenStalagmite r = stalactite ? new WorldGenStalactite(resList, matList, list) :
-			new WorldGenStalagmite(resList, matList, list);
+		WorldGenStalagmite r = stalactite ? new WorldGenStalactite(resList, matList, list) : new WorldGenStalagmite(resList, matList, list);
 		{
-			if (genObject.has("minHeight"))
+			if (genObject.has("minHeight")) {
 				r.minHeight = genObject.get("minHeight").getAsInt();
-			if (genObject.has("heightVariance"))
+			}
+			if (genObject.has("heightVariance")) {
 				r.heightVariance = genObject.get("heightVariance").getAsInt();
-			if (genObject.has("sizeVariance"))
+			}
+			if (genObject.has("sizeVariance")) {
 				r.sizeVariance = genObject.get("sizeVariance").getAsInt();
-			if (genObject.has("heightMod"))
+			}
+			if (genObject.has("heightMod")) {
 				r.heightMod = genObject.get("heightMod").getAsInt();
-			if (genObject.has("genSize"))
+			}
+			if (genObject.has("genSize")) {
 				r.genSize = genObject.get("genSize").getAsInt();
-			if (genObject.has("smooth"))
+			}
+			if (genObject.has("smooth")) {
 				r.smooth = genObject.get("smooth").getAsBoolean();
-			if (genObject.has("fat"))
+			}
+			if (genObject.has("fat")) {
 				r.fat = genObject.get("fat").getAsBoolean();
-			if (genObject.has("altSinc"))
+			}
+			if (genObject.has("altSinc")) {
 				r.altSinc = genObject.get("altSinc").getAsBoolean();
+			}
 		}
 		return r;
 	}

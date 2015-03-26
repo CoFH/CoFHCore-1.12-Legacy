@@ -22,8 +22,8 @@ public class ClusterParser implements IGeneratorParser {
 	}
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log,
-			List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
+			List<WeightedRandomBlock> matList) {
 
 		if (sparse) {
 			return new WorldGenSparseMinableCluster(resList, clusterSize, matList);

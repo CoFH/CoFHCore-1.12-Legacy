@@ -121,9 +121,8 @@ public class CommandClearBlock implements ISubCommand {
 			yL = 255;
 		}
 
-		long blockCounter = ((long)xL - xS) * ((long)yL - yS) * ((long)zL - zS);
-		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.clearblocks.start",
-			blockCounter, xS, yS, zS, xL, yL, zL);
+		long blockCounter = ((long) xL - xS) * ((long) yL - yS) * ((long) zL - zS);
+		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.clearblocks.start", blockCounter, xS, yS, zS, xL, yL, zL);
 
 		THashSet<Chunk> set = new THashSet<Chunk>();
 
@@ -186,9 +185,8 @@ public class CommandClearBlock implements ISubCommand {
 							int cX = x & 15, cZ = z & 15;
 							for (int y = yS; y <= yL; ++y) {
 								Block block = chunk.getBlock(cX, y, cZ);
-								if (block.isReplaceableOreGen(world, x, y, z, Blocks.stone) ||
-										block.isReplaceableOreGen(world, x, y, z, Blocks.netherrack) ||
-										block.isReplaceableOreGen(world, x, y, z, Blocks.end_stone)) {
+								if (block.isReplaceableOreGen(world, x, y, z, Blocks.stone) || block.isReplaceableOreGen(world, x, y, z, Blocks.netherrack)
+										|| block.isReplaceableOreGen(world, x, y, z, Blocks.end_stone)) {
 									++blockCounter;
 									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
 										set.add(chunk);
@@ -237,8 +235,8 @@ public class CommandClearBlock implements ISubCommand {
 							for (int y = yS; y <= yL; ++y) {
 								Block block = chunk.getBlock(cX, y, cZ);
 								Material m = block.getMaterial();
-								if (m == Material.grass || m == Material.ground || m == Material.clay || m == Material.snow
-										|| m == Material.craftedSnow || m == Material.ice || m == Material.packedIce) {
+								if (m == Material.grass || m == Material.ground || m == Material.clay || m == Material.snow || m == Material.craftedSnow
+										|| m == Material.ice || m == Material.packedIce) {
 									if (chunk.func_150807_a(cX, y, cZ, Blocks.air, 0)) {
 										++blockCounter;
 										set.add(chunk);
@@ -312,8 +310,7 @@ public class CommandClearBlock implements ISubCommand {
 			}
 		}
 		if (!set.isEmpty()) {
-			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.clearblocks.success",
-				blockCounter, xS, yS, zS, xL, yL, zL);
+			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.clearblocks.success", blockCounter, xS, yS, zS, xL, yL, zL);
 		} else {
 			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.clearblocks.failure");
 		}

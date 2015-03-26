@@ -27,8 +27,9 @@ public abstract class TileCoFHBase extends TileEntity {
 	@Override
 	public void onChunkUnload() {
 
-		if (!tileEntityInvalid)
+		if (!tileEntityInvalid) {
 			invalidate(); // this isn't called when a tile unloads. guard incase it is in the future
+		}
 	}
 
 	public abstract String getName();
@@ -87,16 +88,19 @@ public abstract class TileCoFHBase extends TileEntity {
 			return true;
 		}
 		AccessMode access = ((ISecurable) this).getAccess();
-		if (access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name)))
+		if (access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name))) {
 			return true;
+		}
 		GameProfile profile = ((ISecurable) this).getOwner();
 		UUID ownerID = profile.getId();
-		if (ownerID.variant() == 0)
+		if (ownerID.variant() == 0) {
 			return true;
+		}
 
 		UUID otherID = UUID.fromString(PreYggdrasilConverter.func_152719_a(name));
-		if (ownerID.equals(otherID))
+		if (ownerID.equals(otherID)) {
 			return true;
+		}
 
 		return access.isRestricted() && SocialRegistry.playerHasAccess(name, profile);
 	}

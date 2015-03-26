@@ -49,7 +49,7 @@ public class CommandKillAll implements ISubCommand {
 		for (WorldServer theWorld : CoFHCore.server.worldServers) {
 			synchronized (theWorld) {
 				List<Entity> list = theWorld.loadedEntityList;
-				for (int i = list.size(); i --> 0; ) {
+				for (int i = list.size(); i-- > 0;) {
 					Entity entity = list.get(i);
 					if (entity != null && !(entity instanceof EntityPlayer)) {
 						curName = EntityList.getEntityString(entity);
@@ -76,15 +76,13 @@ public class CommandKillAll implements ISubCommand {
 			TObjectIntIterator<String> it = names.iterator();
 			while (it.hasNext()) {
 				it.advance();
-				finalNames = finalNames + StringHelper.LIGHT_RED + it.value() + StringHelper.WHITE +
-						"x" + StringHelper.YELLOW + it.key() + StringHelper.WHITE + ", ";
+				finalNames = finalNames + StringHelper.LIGHT_RED + it.value() + StringHelper.WHITE + "x" + StringHelper.YELLOW + it.key() + StringHelper.WHITE
+						+ ", ";
 			}
 			finalNames = finalNames.substring(0, finalNames.length() - 2);
-			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.killall.success" +
-					(target != null ? "" : "Hostile"), killCount, finalNames);
+			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.killall.success" + (target != null ? "" : "Hostile"), killCount, finalNames);
 		} else {
-			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.killall.no" +
-					(target != null ? "Match" : "Hostile")));
+			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.killall.no" + (target != null ? "Match" : "Hostile")));
 		}
 	}
 

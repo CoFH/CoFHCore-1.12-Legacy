@@ -26,8 +26,8 @@ public class SurfaceParser extends UniformParser {
 	}
 
 	@Override
-	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen,
-			GenRestriction dimRes, Logger log) {
+	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters,
+			GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
 		if (genObject.has("followTerrain") && genObject.get("followTerrain").getAsBoolean()) {
 			return new FeatureGenTopBlock(featureName, gen, matList, numClusters, biomeRes, retrogen, dimRes);

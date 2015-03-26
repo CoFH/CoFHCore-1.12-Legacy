@@ -110,8 +110,9 @@ public class CoFHCore extends BaseMod {
 			Set<ArtifactVersion> versionMissingMods = Sets.newHashSet();
 			VersionRange range = cpw.mods.fml.common.versioning.VersionParser.parseRange("[10.13.2.1291,10.14)");
 			ArtifactVersion fVersion = new DefaultArtifactVersion("Forge", range);
-			if (fVersion.containsVersion(forge.getProcessedVersion()))
+			if (fVersion.containsVersion(forge.getProcessedVersion())) {
 				return;
+			}
 			versionMissingMods.add(fVersion);
 			FMLLog.severe("The mod %s (%s) requires mod versions %s to be available", modId, modName, versionMissingMods);
 			throw new MissingModsException(versionMissingMods);

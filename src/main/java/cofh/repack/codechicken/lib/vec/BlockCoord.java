@@ -232,7 +232,7 @@ public class BlockCoord implements Comparable<BlockCoord>, Copyable<BlockCoord> 
 	}
 
 	public BlockCoord set(TileEntity tile) {
-		
+
 		return set(tile.xCoord, tile.yCoord, tile.zCoord);
 	}
 

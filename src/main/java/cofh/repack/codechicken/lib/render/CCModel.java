@@ -117,7 +117,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Each pixel corresponds to one unit of position when generating the model
-	 * 
+	 *
 	 * @param i
 	 *            Vertex index to start generating at
 	 * @param x1
@@ -222,7 +222,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Generates a box, uv mapped to be the same as a minecraft block with the same bounds
-	 * 
+	 *
 	 * @param i
 	 *            The vertex index to start generating at
 	 * @param bounds
@@ -246,7 +246,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Generates a box, uv mapped to be the same as a minecraft block with the same bounds
-	 * 
+	 *
 	 * @param i
 	 *            The vertex index to start generating at
 	 * @param x1
@@ -345,7 +345,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Computes the normals of all faces in the model. Uses the cross product of the vectors along 2 sides of the face
-	 * 
+	 *
 	 * @param start
 	 *            The first vertex to generate normals for
 	 * @param length
@@ -374,7 +374,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Computes lighting using the normals add a light model If the model is rotated, the lighting will no longer be valid
-	 * 
+	 *
 	 * @return The model
 	 */
 	public CCModel computeLighting(LightModel light) {
@@ -400,7 +400,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Computes the minecraft lighting coordinates for use with a LightMatrix
-	 * 
+	 *
 	 * @return The model
 	 */
 	public CCModel computeLightCoords() {
@@ -415,7 +415,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Averages all normals at the same position to produce a smooth lighting effect.
-	 * 
+	 *
 	 * @return The model
 	 */
 	public CCModel smoothNormals() {
@@ -513,7 +513,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Renders vertices start through start+length-1 of the model
-	 * 
+	 *
 	 * @param start
 	 *            The first vertex index to render
 	 * @param end
@@ -583,7 +583,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Parses vertices, texture coords, normals and polygons from a WaveFront Obj file
-	 * 
+	 *
 	 * @param input
 	 *            An input stream to a obj file
 	 * @param vertexMode
@@ -704,7 +704,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Parses vertices, texture coords, normals and polygons from a WaveFront Obj file
-	 * 
+	 *
 	 * @param res
 	 *            The resource for the obj file
 	 * @return A map of group names to models
@@ -716,7 +716,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Parses vertices, texture coords, normals and polygons from a WaveFront Obj file
-	 * 
+	 *
 	 * @param res
 	 *            The resource for the obj file
 	 * @param coordSystem
@@ -734,7 +734,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Parses vertices, texture coords, normals and polygons from a WaveFront Obj file
-	 * 
+	 *
 	 * @param res
 	 *            The resource for the obj file
 	 * @param vertexMode
@@ -915,7 +915,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Generate models rotated to the other 5 sides of the block
-	 * 
+	 *
 	 * @param models
 	 *            An array of 6 models
 	 * @param side
@@ -936,7 +936,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Generate models rotated to the other 3 horizontal of the block
-	 * 
+	 *
 	 * @param models
 	 *            An array of 4 models
 	 * @param side
@@ -962,7 +962,7 @@ public class CCModel implements CCRenderState.IVertexSource, Copyable<CCModel> {
 
 	/**
 	 * Generates copies of faces with clockwise vertices
-	 * 
+	 *
 	 * @return The model
 	 */
 	public static CCModel generateBackface(CCModel src, int srcpos, CCModel dst, int destpos, int length) {

@@ -36,8 +36,9 @@ public class CommandUnloadChunk implements ISubCommand {
 	@Override
 	public void handleCommand(ICommandSender sender, String[] args) {
 
-		if (!(sender instanceof EntityPlayerMP))
+		if (!(sender instanceof EntityPlayerMP)) {
 			return;
+		}
 
 		if (chunksToUnload == null) {
 			chunksToUnload = ReflectionHelper.findField(ChunkProviderServer.class, "field_73248_b", "chunksToUnload");

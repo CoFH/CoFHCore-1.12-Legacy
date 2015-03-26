@@ -75,11 +75,13 @@ public class OreDictionaryArbiter {
 	 */
 	public static void registerOreDictionaryEntry(ItemStack stack, String name) {
 
-		if (stack.getItem() == null)
+		if (stack.getItem() == null) {
 			throw new RuntimeException("Null item being registered! Active mod: " + Loader.instance().activeModContainer());
+		}
 
-		if (Strings.isNullOrEmpty(name))
+		if (Strings.isNullOrEmpty(name)) {
 			throw new RuntimeException("Null ore name being registered! Active mod: " + Loader.instance().activeModContainer());
+		}
 
 		int id = OreDictionary.getOreID(name);
 

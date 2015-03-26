@@ -15,9 +15,9 @@ public class ForgeIRC {
 
 	public static List<String> onMessage(String n, String u, String h, String d, String m) {
 
-		//n = colorNick(n, u, h);
+		// n = colorNick(n, u, h);
 		if (CoreUtils.isServer()) {
-			String[] v = m.split(" ", 3); 
+			String[] v = m.split(" ", 3);
 			if (v[0].equals("!tps")) {
 				return commandTps(v);
 			}
@@ -49,8 +49,9 @@ public class ForgeIRC {
 
 	/* TPS */
 	private static DecimalFormat floatfmt = new DecimalFormat("##0.00");
-	//private static final int MAX_TPS = 20;
-	//private static final int MIN_TICKMS = 50;
+
+	// private static final int MAX_TPS = 20;
+	// private static final int MIN_TICKMS = 50;
 
 	public static List<String> commandTps(String[] arguments) {
 

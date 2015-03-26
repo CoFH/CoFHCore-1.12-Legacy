@@ -258,8 +258,7 @@ public class RenderUtils {
 		}
 	}
 
-	public static void renderItemStackAtScale(float xPos, float yPos, float tickPlace, ItemStack stack, Minecraft mc,
-			float scale, boolean renderStackSize) {
+	public static void renderItemStackAtScale(float xPos, float yPos, float tickPlace, ItemStack stack, Minecraft mc, float scale, boolean renderStackSize) {
 
 		if (stack != null) {
 			if (!renderStackSize) {
@@ -287,19 +286,16 @@ public class RenderUtils {
 		}
 	}
 
-	public static void renderItemAndEffectIntoGUI(FontRenderer font, TextureManager texture, ItemStack stack, float xPos,
-			float yPos) {
+	public static void renderItemAndEffectIntoGUI(FontRenderer font, TextureManager texture, ItemStack stack, float xPos, float yPos) {
 
 		if (stack != null) {
-			if (!ForgeHooksClient.renderInventoryItem(renderBlocks, texture, stack, renderItem.renderWithColor,
-				renderItem.zLevel, xPos, yPos)) {
+			if (!ForgeHooksClient.renderInventoryItem(renderBlocks, texture, stack, renderItem.renderWithColor, renderItem.zLevel, xPos, yPos)) {
 				RenderUtils.renderItemIntoGUI(font, texture, stack, xPos, yPos, true);
 			}
 		}
 	}
 
-	public static void renderItemIntoGUI(FontRenderer font, TextureManager manager, ItemStack stack, float xPos, float yPos,
-			boolean renderEffect) {
+	public static void renderItemIntoGUI(FontRenderer font, TextureManager manager, ItemStack stack, float xPos, float yPos, boolean renderEffect) {
 
 		Item item = stack.getItem();
 		int meta = stack.getItemDamage();
@@ -338,8 +334,7 @@ public class RenderUtils {
 		} else if (item.requiresMultipleRenderPasses()) {
 			GL11.glDisable(GL11.GL_LIGHTING);
 
-			ResourceLocation texture = stack.getItemSpriteNumber() == 0 ? TextureMap.locationBlocksTexture
-					: TextureMap.locationItemsTexture;
+			ResourceLocation texture = stack.getItemSpriteNumber() == 0 ? TextureMap.locationBlocksTexture : TextureMap.locationItemsTexture;
 			manager.bindTexture(texture);
 			for (int pass = 0, e = item.getRenderPasses(meta); pass < e; ++pass) {
 				icon = item.getIcon(stack, pass);
@@ -368,8 +363,7 @@ public class RenderUtils {
 			manager.bindTexture(resourcelocation);
 
 			if (icon == null) {
-				icon = ((TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture(resourcelocation))
-						.getAtlasSprite("missingno");
+				icon = ((TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture(resourcelocation)).getAtlasSprite("missingno");
 			}
 
 			if (renderItem.renderWithColor) {

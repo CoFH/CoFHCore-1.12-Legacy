@@ -143,7 +143,7 @@ public class MathHelper {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param value
 	 *            The value
 	 * @param min

@@ -15,8 +15,8 @@ import org.apache.logging.log4j.Logger;
 public class FractalParser extends UniformParser {
 
 	@Override
-	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen,
-			GenRestriction dimRes, Logger log) {
+	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters,
+			GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
 		if (!(genObject.has("minHeight") && genObject.has("veinHeight"))) {
 			log.error("Height parameters for 'fractal' template not specified in \"" + featureName + "\"");
@@ -44,6 +44,7 @@ public class FractalParser extends UniformParser {
 
 	@Override
 	protected String getDefaultTemplate() {
+
 		return "large-vein";
 	}
 

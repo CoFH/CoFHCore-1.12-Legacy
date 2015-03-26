@@ -15,7 +15,7 @@ public class RenderHitbox {
 
 	/**
 	 * Draws the selection box for the player. Args: entityPlayer, rayTraceHit, i, itemStack, partialTickTime
-	 * 
+	 *
 	 * @param customHitBox
 	 */
 	public static void drawSelectionBox(EntityPlayer thePlayer, MovingObjectPosition mop, float pTickTime, CustomHitBox customHitBox) {

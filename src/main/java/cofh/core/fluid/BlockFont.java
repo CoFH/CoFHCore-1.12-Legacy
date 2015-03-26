@@ -25,8 +25,9 @@ public class BlockFont extends BlockCoFHBase {
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
 
-		if (metadata >= 8)
+		if (metadata >= 8) {
 			return null;
+		}
 		return new TileFont();
 	}
 
@@ -42,7 +43,7 @@ public class BlockFont extends BlockCoFHBase {
 
 		TileEntity te = world.getTileEntity(x, y, z);
 		if (te instanceof TileFont) {
-			((TileFont)te).update();
+			((TileFont) te).update();
 		}
 	}
 

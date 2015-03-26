@@ -83,8 +83,7 @@ public abstract class BaseMod implements IUpdatableMod {
 				}
 				jar.close();
 			} catch (IOException e) {
-				FMLCommonHandler.instance().registerCrashCallable(new CrashCallable("Error reading version information." +
-						e.getMessage()));
+				FMLCommonHandler.instance().registerCrashCallable(new CrashCallable("Error reading version information." + e.getMessage()));
 			}
 		}
 	}
@@ -178,7 +177,7 @@ public abstract class BaseMod implements IUpdatableMod {
 		LanguageRegistry.instance().injectLanguage(lang.intern(), parsedLangFile);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "resource"})
+	@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 	protected void loadLang() {
 
 		if (FMLLaunchHandler.side() == Side.CLIENT) {
@@ -247,15 +246,13 @@ public abstract class BaseMod implements IUpdatableMod {
 						List<IResource> files = manager.getAllResources(new ResourceLocation(_path + lang + ".lang"));
 						for (IResource file : files) {
 							if (file.getInputStream() == null) {
-								_log.warn("A resource pack defines an entry for language '" + lang +
-										"' but the InputStream is null.");
+								_log.warn("A resource pack defines an entry for language '" + lang + "' but the InputStream is null.");
 								continue;
 							}
 							try {
 								loadLanguageFile(langPack, file.getInputStream());
 							} catch (Throwable t) {
-								_log.warn(AbstractLogger.CATCHING_MARKER, "A resource pack has a file for language '" + lang +
-										"' but the file is invalid.", t);
+								_log.warn(AbstractLogger.CATCHING_MARKER, "A resource pack has a file for language '" + lang + "' but the file is invalid.", t);
 							}
 						}
 					} catch (Throwable t) {

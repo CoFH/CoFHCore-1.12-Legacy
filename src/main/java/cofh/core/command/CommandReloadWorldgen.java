@@ -28,8 +28,9 @@ public class CommandReloadWorldgen implements ISubCommand {
 	@Override
 	public void handleCommand(ICommandSender sender, String[] args) {
 
-		for (IFeatureGenerator g : FeatureParser.parsedFeatures)
+		for (IFeatureGenerator g : FeatureParser.parsedFeatures) {
 			WorldHandler.instance.removeFeature(g);
+		}
 
 		FeatureParser.parsedFeatures.clear();
 
@@ -43,6 +44,7 @@ public class CommandReloadWorldgen implements ISubCommand {
 
 	@Override
 	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
+
 		return null;
 	}
 

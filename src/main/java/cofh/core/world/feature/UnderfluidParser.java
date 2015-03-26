@@ -37,8 +37,8 @@ public class UnderfluidParser extends UniformParser {
 	}
 
 	@Override
-	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen,
-			GenRestriction dimRes, Logger log) {
+	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters,
+			GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
 		boolean water = true;
 		int[] fluidList = null;
@@ -50,18 +50,20 @@ public class UnderfluidParser extends UniformParser {
 			water = false;
 			TIntHashSet ints = new TIntHashSet();
 			for (DungeonMob str : list) {
-				//ints.add(FluidRegistry.getFluidID(str.type));
+				// ints.add(FluidRegistry.getFluidID(str.type));
 				// NOPE. this NPEs.
 				Fluid fluid = FluidRegistry.getFluid(str.type);
-				if (fluid != null)
+				if (fluid != null) {
 					ints.add(fluid.getID());
+				}
 			}
 			fluidList = ints.toArray();
 		}
-		if (water)
+		if (water) {
 			return new FeatureGenUnderfluid(featureName, gen, matList, numClusters, biomeRes, retrogen, dimRes);
-		else
+		} else {
 			return new FeatureGenUnderfluid(featureName, gen, matList, fluidList, numClusters, biomeRes, retrogen, dimRes);
+		}
 	}
 
 	@Override

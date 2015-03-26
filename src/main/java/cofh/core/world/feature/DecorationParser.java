@@ -19,8 +19,8 @@ import org.apache.logging.log4j.Logger;
 public class DecorationParser extends SurfaceParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log,
-			List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
+			List<WeightedRandomBlock> matList) {
 
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
 		if (!genObject.has("genSurface")) {
@@ -34,18 +34,24 @@ public class DecorationParser extends SurfaceParser implements IGeneratorParser 
 			}
 		}
 		WorldGenDecoration r = new WorldGenDecoration(resList, clusterSize, matList, list);
-		if (genObject.has("genSky"))
+		if (genObject.has("genSky")) {
 			r.seeSky = genObject.get("genSky").getAsBoolean();
-		if (genObject.has("checkStay"))
+		}
+		if (genObject.has("checkStay")) {
 			r.checkStay = genObject.get("checkStay").getAsBoolean();
-		if (genObject.has("stackHeight"))
+		}
+		if (genObject.has("stackHeight")) {
 			r.stackHeight = genObject.get("stackHeight").getAsInt();
-		if (genObject.has("xVariance"))
+		}
+		if (genObject.has("xVariance")) {
 			r.xVar = MathHelper.clampI(genObject.get("xVariance").getAsInt(), 1, 15);
-		if (genObject.has("yVariance"))
+		}
+		if (genObject.has("yVariance")) {
 			r.yVar = MathHelper.clampI(genObject.get("yVariance").getAsInt(), 0, 15);
-		if (genObject.has("zVariance"))
+		}
+		if (genObject.has("zVariance")) {
 			r.zVar = MathHelper.clampI(genObject.get("zVariance").getAsInt(), 1, 15);
+		}
 		return r;
 	}
 
@@ -57,6 +63,7 @@ public class DecorationParser extends SurfaceParser implements IGeneratorParser 
 
 	@Override
 	protected String getDefaultTemplate() {
+
 		return "decoration";
 	}
 
