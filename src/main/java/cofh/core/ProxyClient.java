@@ -24,6 +24,7 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,6 +38,7 @@ import net.minecraft.init.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 import org.lwjgl.opengl.EXTFramebufferObject;
@@ -122,13 +124,15 @@ public class ProxyClient extends Proxy {
 					case EXTFramebufferObject.GL_FRAMEBUFFER_COMPLETE_EXT:
 						break;
 					default: // stencil buffer is not supported
-						ReflectionHelper.findField(ForgeHooksClient.class, "stencilBits").setInt(null, 0);
+						ReflectionHelper.findField(ForgeHooksClient.class, "stencilBits").setInt(null, i = 0);
 						b.createBindFramebuffer(b.framebufferWidth, b.framebufferHeight);
 					}
 					break;
 				default:
 					break;
 				}
+				BitSet stencilBits = ReflectionHelper.getPrivateValue(MinecraftForgeClient.class, null, "stencilBits");
+				stencilBits.set(0, i);
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
