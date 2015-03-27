@@ -25,7 +25,6 @@ import cofh.core.util.fluid.BucketHandler;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
-import cofh.lib.util.helpers.HolidayHelper;
 import cofh.mod.BaseMod;
 import cofh.mod.updater.UpdateManager;
 import com.google.common.collect.Sets;
@@ -121,8 +120,6 @@ public class CoFHCore extends BaseMod {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-
-		HolidayHelper.isUSThanksgiving();
 
 		CoFHProps.configDir = event.getModConfigurationDirectory();
 
