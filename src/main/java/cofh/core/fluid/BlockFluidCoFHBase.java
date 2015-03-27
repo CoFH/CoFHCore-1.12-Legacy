@@ -66,6 +66,12 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 		return this;
 	}
 
+	public BlockFluidCoFHBase setDisplaceFluids(boolean a) {
+
+		this.shouldDisplaceFluids = a;
+		return this;
+	}
+
 	@Override
 	public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
 
@@ -75,12 +81,6 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 	public boolean preInit() {
 
 		return true;
-	}
-
-	public BlockFluidCoFHBase setDisplaceFluids(boolean a) {
-
-		this.shouldDisplaceFluids = a;
-		return this;
 	}
 
 	@Override
