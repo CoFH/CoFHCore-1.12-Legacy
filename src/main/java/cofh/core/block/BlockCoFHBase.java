@@ -196,7 +196,7 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
 
 		TileEntity tile = world.getTileEntity(x, y, z);
 
-		if (tile instanceof ISecurable && !((ISecurable) tile).canPlayerAccess(player.getCommandSenderName())) {
+		if (tile instanceof ISecurable && !((ISecurable) tile).canPlayerAccess(player)) {
 			return -1;
 		}
 		return ForgeHooks.blockStrength(this, player, world, x, y, z);
@@ -333,7 +333,7 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
 		TileEntity tile = world.getTileEntity(x, y, z);
 
 		if (tile instanceof ISecurable) {
-			return ((ISecurable) tile).canPlayerAccess(player.getCommandSenderName());
+			return ((ISecurable) tile).canPlayerAccess(player);
 		} else if (tile instanceof TileCoFHBase) {
 			return ((TileCoFHBase) tile).canPlayerDismantle(player);
 		}

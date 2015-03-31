@@ -19,7 +19,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.network.Packet;
-import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.tileentity.TileEntity;
 
 public abstract class TileCoFHBase extends TileEntity {
@@ -82,12 +81,13 @@ public abstract class TileCoFHBase extends TileEntity {
 		return 0;
 	}
 
-	public boolean canPlayerAccess(String name) {
+	public boolean canPlayerAccess(EntityPlayer player) {
 
 		if (!(this instanceof ISecurable)) {
 			return true;
 		}
 		AccessMode access = ((ISecurable) this).getAccess();
+		String name = player.getCommandSenderName();
 		if (access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name))) {
 			return true;
 		}
@@ -97,7 +97,7 @@ public abstract class TileCoFHBase extends TileEntity {
 			return true;
 		}
 
-		UUID otherID = UUID.fromString(PreYggdrasilConverter.func_152719_a(name));
+		UUID otherID = player.getGameProfile().getId();
 		if (ownerID.equals(otherID)) {
 			return true;
 		}
