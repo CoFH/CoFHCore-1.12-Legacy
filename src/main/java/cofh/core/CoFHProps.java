@@ -37,6 +37,7 @@ public class CoFHProps {
 	public static final int TIME_CONSTANT_QUARTER = TIME_CONSTANT / 4;
 	public static final int TIME_CONSTANT_EIGHTH = TIME_CONSTANT / 8;
 	public static final int RF_PER_MJ = 10;
+	public static final int LAVA_RF = 200000;
 	public static final int ENTITY_TRACKING_DISTANCE = 64;
 
 	public static final int[] STORAGE_SIZE = { 1, 9, 18, 27, 36, 45, 54, 63, 72, 80, 88, 96, 104 };
@@ -79,7 +80,7 @@ public class CoFHProps {
 	public static int treeGrowthChance = 1;
 
 	public static boolean enableUpdateNotice = true;
-
+	public static boolean enableDebugOutput = false;
 	public static boolean enableDismantleLogging = false;
 	public static boolean enableOpSecureAccess = false;
 	public static boolean enableOpSecureAccessWarning = true;

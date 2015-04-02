@@ -119,7 +119,7 @@ public class FeatureParser {
 			t.printStackTrace();
 		}
 
-		log.info("Registering default templates");
+		log.info("Registering Default Templates.");
 		registerTemplate("normal", new NormalParser());
 		registerTemplate("uniform", new UniformParser());
 		registerTemplate("surface", new SurfaceParser());
@@ -154,7 +154,7 @@ public class FeatureParser {
 		if (!cofh.CoFHCore.configCore.isOldConfig()) {
 			return;
 		}
-		log.fatal("Warning: CoFHWorld will now scan and update your worldgen files. This will only occur once.");
+		log.fatal("Warning: CoFHWorld will now scan and update your world generation files. This will only occur once.");
 
 		JsonParser parser = new JsonParser();
 		Gson writer = new Gson();

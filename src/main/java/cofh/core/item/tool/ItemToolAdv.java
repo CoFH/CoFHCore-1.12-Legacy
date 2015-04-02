@@ -63,45 +63,6 @@ public abstract class ItemToolAdv extends ItemTool {
 		return effectiveMaterials;
 	}
 
-	protected boolean isClassValid(String toolClass, ItemStack stack) {
-
-		return true;
-	}
-
-	protected float getEfficiency(ItemStack stack) {
-
-		return efficiencyOnProperMaterial;
-	}
-
-	protected int getHarvestLevel(ItemStack stack, int level) {
-
-		return level;
-	}
-
-	@Override
-	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
-
-		return ItemHelper.isOreNameEqual(stack, repairIngot);
-	}
-
-	@Override
-	public boolean isItemTool(ItemStack stack) {
-
-		return true;
-	}
-
-	@Override
-	public float func_150893_a(ItemStack stack, Block block) {
-
-		return (getEffectiveMaterials(stack).contains(block.getMaterial()) || getEffectiveBlocks(stack).contains(block)) ? getEfficiency(stack) : 1.0F;
-	}
-
-	@Override
-	public boolean canHarvestBlock(Block block, ItemStack stack) {
-
-		return func_150893_a(stack, block) > 1.0f;
-	}
-
 	protected boolean harvestBlock(World world, int x, int y, int z, EntityPlayer player) {
 
 		if (world.isAirBlock(x, y, z)) {
@@ -179,9 +140,48 @@ public abstract class ItemToolAdv extends ItemTool {
 		return true;
 	}
 
+	protected boolean isClassValid(String toolClass, ItemStack stack) {
+
+		return true;
+	}
+
 	protected boolean isValidHarvestMaterial(ItemStack stack, World world, int x, int y, int z) {
 
 		return getEffectiveMaterials(stack).contains(world.getBlock(x, y, z).getMaterial());
+	}
+
+	protected int getHarvestLevel(ItemStack stack, int level) {
+
+		return level;
+	}
+
+	protected float getEfficiency(ItemStack stack) {
+
+		return efficiencyOnProperMaterial;
+	}
+
+	@Override
+	public String getToolMaterialName() {
+
+		return super.getToolMaterialName().contains(":") ? super.getToolMaterialName().split(":", 2)[1] : super.getToolMaterialName();
+	}
+
+	@Override
+	public boolean canHarvestBlock(Block block, ItemStack stack) {
+
+		return func_150893_a(stack, block) > 1.0f;
+	}
+
+	@Override
+	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
+
+		return ItemHelper.isOreNameEqual(stack, repairIngot);
+	}
+
+	@Override
+	public boolean isItemTool(ItemStack stack) {
+
+		return true;
 	}
 
 	@Override
@@ -198,9 +198,9 @@ public abstract class ItemToolAdv extends ItemTool {
 	}
 
 	@Override
-	public Set<String> getToolClasses(ItemStack stack) {
+	public float func_150893_a(ItemStack stack, Block block) {
 
-		return toolClasses.isEmpty() ? super.getToolClasses(stack) : immutableClasses;
+		return (getEffectiveMaterials(stack).contains(block.getMaterial()) || getEffectiveBlocks(stack).contains(block)) ? getEfficiency(stack) : 1.0F;
 	}
 
 	@Override
@@ -216,6 +216,12 @@ public abstract class ItemToolAdv extends ItemTool {
 			}
 		}
 		return super.getDigSpeed(stack, block, meta);
+	}
+
+	@Override
+	public Set<String> getToolClasses(ItemStack stack) {
+
+		return toolClasses.isEmpty() ? super.getToolClasses(stack) : immutableClasses;
 	}
 
 }
