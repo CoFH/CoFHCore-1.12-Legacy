@@ -170,6 +170,10 @@ info.cofh.tutorial.tabSecurity=The Security tab allows the owner to control who 
 
 item.invalid.name=Invalid Item (Destroy)
 
+key.cofh.category=CoFH Keys
+key.cofh.empower=Empower/Quell Item
+key.cofh.multimode=Cycle Item Mode
+
 tab.cofh.friend.0=Add/Remove Friends!
 tab.cofh.friend.1=Friends not provided.
 

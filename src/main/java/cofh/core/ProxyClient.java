@@ -9,15 +9,17 @@ import cofh.core.gui.element.TabInfo;
 import cofh.core.gui.element.TabRedstone;
 import cofh.core.gui.element.TabSecurity;
 import cofh.core.gui.element.TabTutorial;
-import cofh.core.key.CoFHKey;
+import cofh.core.key.CoFHKeyHandler;
 import cofh.core.render.CoFHFontRender;
 import cofh.core.render.IconRegistry;
 import cofh.core.render.ShaderHelper;
 import cofh.core.util.KeyBindingEmpower;
+import cofh.core.util.KeyBindingMultiMode;
 import cofh.core.util.SocialRegistry;
 import cofh.core.util.TickHandlerEnderRegistry;
 import cofh.lib.util.helpers.StringHelper;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -32,6 +34,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -41,12 +44,16 @@ import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.EXTFramebufferObject;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy {
 
 	public static CoFHFontRender fontRenderer;
+
+	public static final KeyBinding KEYBINDING_EMPOWER = new KeyBinding("key.cofh.empower", Keyboard.KEY_V, "key.cofh.category");
+	public static final KeyBinding KEYBINDING_MULTIMODE = new KeyBinding("key.cofh.multimode", Keyboard.KEY_C, "key.cofh.category");
 
 	@Override
 	public void preInit() {
@@ -140,6 +147,60 @@ public class ProxyClient extends Proxy {
 	}
 
 	@Override
+	public void registerKeyBinds() {
+
+		super.registerKeyBinds();
+		FMLCommonHandler.instance().bus().register(CoFHKeyHandler.instance);
+		CoFHKeyHandler.addKeyBind(KeyBindingEmpower.instance);
+		CoFHKeyHandler.addKeyBind(KeyBindingMultiMode.instance);
+
+		ClientRegistry.registerKeyBinding(KEYBINDING_EMPOWER);
+		ClientRegistry.registerKeyBinding(KEYBINDING_MULTIMODE);
+	}
+
+	@Override
+	public void registerRenderInformation() {
+
+		TabAugment.initialize();
+		TabConfiguration.initialize();
+		TabEnergy.initialize();
+		TabInfo.initialize();
+		TabRedstone.initialize();
+		TabSecurity.initialize();
+		TabTutorial.initialize();
+
+		ShaderHelper.initShaders();
+
+		fontRenderer = new CoFHFontRender(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"),
+				Minecraft.getMinecraft().renderEngine, false);
+
+		if (Minecraft.getMinecraft().gameSettings.language != null) {
+			fontRenderer.setUnicodeFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode());
+			fontRenderer.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
+		}
+		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(fontRenderer);
+	}
+
+	@Override
+	public void registerTickHandlers() {
+
+		super.registerTickHandlers();
+		FMLCommonHandler.instance().bus().register(TickHandlerEnderRegistry.instance);
+	}
+
+	@Override
+	public int getKeyBind(String key) {
+
+		if (key.equalsIgnoreCase("cofh.empower")) {
+			return KEYBINDING_EMPOWER.getKeyCode();
+		} else if (key.equalsIgnoreCase("cofh.multimode")) {
+			return KEYBINDING_MULTIMODE.getKeyCode();
+		}
+		return -1;
+	}
+
+	/* EVENT HANDLERS */
+	@Override
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void registerIcons(TextureStitchEvent.Pre event) {
@@ -185,6 +246,7 @@ public class ProxyClient extends Proxy {
 
 	}
 
+	/* SERVER UTILS */
 	@Override
 	public boolean isOp(String playerName) {
 
@@ -204,6 +266,13 @@ public class ProxyClient extends Proxy {
 	}
 
 	@Override
+	public World getClientWorld() {
+
+		return Minecraft.getMinecraft().theWorld;
+	}
+
+	/* PLAYER UTILS */
+	@Override
 	public EntityPlayer findPlayer(String playerName) {
 
 		for (Object a : FMLClientHandler.instance().getClient().theWorld.playerEntities) {
@@ -222,12 +291,6 @@ public class ProxyClient extends Proxy {
 	}
 
 	@Override
-	public World getClientWorld() {
-
-		return Minecraft.getMinecraft().theWorld;
-	}
-
-	@Override
 	public List<EntityPlayer> getPlayerList() {
 
 		return new LinkedList<EntityPlayer>();
@@ -239,44 +302,6 @@ public class ProxyClient extends Proxy {
 		if (Minecraft.getMinecraft().currentScreen != null) {
 			((GuiFriendsList) Minecraft.getMinecraft().currentScreen).taFriendsList.textLines = SocialRegistry.clientPlayerFriends;
 		}
-	}
-
-	@Override
-	public void registerKeyBinds() {
-
-		super.registerKeyBinds();
-		FMLCommonHandler.instance().bus().register(new CoFHKey());
-		CoFHKey.addKeyBind(KeyBindingEmpower.instance);
-	}
-
-	@Override
-	public void registerRenderInformation() {
-
-		TabAugment.initialize();
-		TabConfiguration.initialize();
-		TabEnergy.initialize();
-		TabInfo.initialize();
-		TabRedstone.initialize();
-		TabSecurity.initialize();
-		TabTutorial.initialize();
-
-		ShaderHelper.initShaders();
-
-		fontRenderer = new CoFHFontRender(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"),
-				Minecraft.getMinecraft().renderEngine, false);
-
-		if (Minecraft.getMinecraft().gameSettings.language != null) {
-			fontRenderer.setUnicodeFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode());
-			fontRenderer.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
-		}
-		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(fontRenderer);
-	}
-
-	@Override
-	public void registerTickHandlers() {
-
-		super.registerTickHandlers();
-		FMLCommonHandler.instance().bus().register(TickHandlerEnderRegistry.instance);
 	}
 
 	/* SOUND UTILS */

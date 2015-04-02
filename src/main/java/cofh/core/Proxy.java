@@ -1,11 +1,12 @@
 package cofh.core;
 
-import cofh.core.key.CoFHKey;
+import cofh.core.key.CoFHKeyHandler;
 import cofh.core.key.KeyPacket;
 import cofh.core.network.PacketSocial;
 import cofh.core.network.PacketTile;
 import cofh.core.network.PacketTileInfo;
 import cofh.core.util.KeyBindingEmpower;
+import cofh.core.util.KeyBindingMultiMode;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.Event.Result;
@@ -33,6 +34,60 @@ public class Proxy {
 
 	}
 
+	public void registerKeyBinds() {
+
+		CoFHKeyHandler.addServerKeyBind(KeyBindingEmpower.instance);
+		CoFHKeyHandler.addServerKeyBind(KeyBindingMultiMode.instance);
+	}
+
+	public void registerPacketInformation() {
+
+		PacketSocial.initialize();
+		KeyPacket.initialize();
+		PacketTileInfo.initialize();
+		PacketTile.initialize();
+	}
+
+	public void registerRenderInformation() {
+
+	}
+
+	public void registerTickHandlers() {
+
+		MinecraftForge.EVENT_BUS.register(this);
+		MinecraftForge.TERRAIN_GEN_BUS.register(this);
+	}
+
+	public int getKeyBind(String key) {
+
+		return -1;
+	}
+
+	/* EVENT HANDLERS */
+	@SubscribeEvent
+	public void onLivingDeathEvent(LivingDeathEvent event) {
+
+		if (!CoFHProps.enableLivingEntityDeathMessages || event.entity.worldObj.isRemote || !(event.entity instanceof EntityLiving)
+				|| !((EntityLiving) event.entityLiving).hasCustomNameTag()) {
+			return;
+		}
+		((WorldServer) event.entity.worldObj).func_73046_m().getConfigurationManager().sendChatMsg(event.entityLiving.func_110142_aN().func_151521_b());
+	}
+
+	@SubscribeEvent
+	public void onOreRegisterEvent(OreRegisterEvent event) {
+
+		OreDictionaryArbiter.registerOreDictionaryEntry(event.Ore, event.Name);
+	}
+
+	@SubscribeEvent
+	public void onSaplingGrowTreeEvent(SaplingGrowTreeEvent event) {
+
+		if (CoFHProps.treeGrowthChance > 1 && event.world.rand.nextInt(CoFHProps.treeGrowthChance) != 0) {
+			event.setResult(Result.DENY);
+		}
+	}
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void registerIcons(TextureStitchEvent.Pre event) {
@@ -45,12 +100,7 @@ public class Proxy {
 
 	}
 
-	@SubscribeEvent
-	public void handleOreRegisterEvent(OreRegisterEvent event) {
-
-		OreDictionaryArbiter.registerOreDictionaryEntry(event.Ore, event.Name);
-	}
-
+	/* SERVER UTILS */
 	public boolean isOp(String playerName) {
 
 		MinecraftServer theServer = FMLCommonHandler.instance().getMinecraftServerInstance();
@@ -73,21 +123,18 @@ public class Proxy {
 		return true;
 	}
 
-	public void playSound() {
+	public World getClientWorld() {
 
+		return null;
 	}
 
+	/* PLAYER UTILS */
 	public EntityPlayer findPlayer(String player) {
 
 		return null;
 	}
 
 	public EntityPlayer getClientPlayer() {
-
-		return null;
-	}
-
-	public World getClientWorld() {
 
 		return null;
 	}
@@ -105,47 +152,6 @@ public class Proxy {
 
 	public void updateFriendListGui() {
 
-	}
-
-	public void registerKeyBinds() {
-
-		CoFHKey.addServerKeyBind(KeyBindingEmpower.instance);
-	}
-
-	public void registerPacketInformation() {
-
-		PacketSocial.initialize();
-		KeyPacket.initialize();
-		PacketTileInfo.initialize();
-		PacketTile.initialize();
-	}
-
-	public void registerRenderInformation() {
-
-	}
-
-	public void registerTickHandlers() {
-
-		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.TERRAIN_GEN_BUS.register(this);
-	}
-
-	@SubscribeEvent
-	public void onSaplingGrowTree(SaplingGrowTreeEvent event) {
-
-		if (CoFHProps.treeGrowthChance > 1 && event.world.rand.nextInt(CoFHProps.treeGrowthChance) != 0) {
-			event.setResult(Result.DENY);
-		}
-	}
-
-	@SubscribeEvent
-	public void onLivingDeathEvent(LivingDeathEvent event) {
-
-		if (!CoFHProps.enableLivingEntityDeathMessages || event.entity.worldObj.isRemote || !(event.entity instanceof EntityLiving)
-				|| !((EntityLiving) event.entityLiving).hasCustomNameTag()) {
-			return;
-		}
-		((WorldServer) event.entity.worldObj).func_73046_m().getConfigurationManager().sendChatMsg(event.entityLiving.func_110142_aN().func_151521_b());
 	}
 
 	/* SOUND UTILS */
