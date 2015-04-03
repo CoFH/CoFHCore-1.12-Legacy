@@ -273,7 +273,7 @@ public class CoFHCore extends BaseMod {
 		/* WORLD TWEAKS */
 		category = "World.Tweaks";
 
-		comment = "Set this to a value > 1 to make trees grow more infrequently. Rate is 1 in N. Example: If this value is set to 3, trees will grow 3x as fast, on average.";
+		comment = "Set this to a value > 1 to make trees grow more infrequently. Rate is 1 in N. Example: If this value is set to 3, trees will take 3x the time to grow, on average.";
 		CoFHProps.treeGrowthChance = configCore.get(category, "TreeGrowthChance", 1, comment);
 
 		configCore.save();
