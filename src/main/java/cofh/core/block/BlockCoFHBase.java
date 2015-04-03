@@ -92,6 +92,11 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
 			return getStatelessBoundingBox(world, x, y, z); // see: net.minecraft.item.ItemBlock.func_150936_a (1.7.10 srg)
 		}
 
+		return getBoundingBox(world, x, y, z);
+	}
+
+	protected AxisAlignedBB getBoundingBox(World world, int x, int y, int z) {
+
 		this.setBlockBoundsBasedOnState(world, x, y, z); // BUGFIX: neither vanilla nor forge call this correctly
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
