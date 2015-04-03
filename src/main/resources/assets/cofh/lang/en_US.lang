@@ -26,6 +26,7 @@ info.cofh.augmentation=Augmentation
 info.cofh.blank=Blank
 info.cofh.capacity=Capacity
 info.cofh.charge=Charge
+info.cofh.cheater=Cheater
 info.cofh.configuration=Configuration
 info.cofh.contents=Contents
 info.cofh.controlStatus=Control Status
@@ -168,6 +169,10 @@ info.cofh.tutorial.tabRedstone=The Redstone Control tab configures how this devi
 info.cofh.tutorial.tabSecurity=The Security tab allows the owner to control who can access this device.
 
 item.invalid.name=Invalid Item (Destroy)
+
+key.cofh.category=CoFH Keys
+key.cofh.empower=Empower/Quell Item
+key.cofh.multimode=Cycle Item Mode
 
 tab.cofh.friend.0=Add/Remove Friends!
 tab.cofh.friend.1=Friends not provided.

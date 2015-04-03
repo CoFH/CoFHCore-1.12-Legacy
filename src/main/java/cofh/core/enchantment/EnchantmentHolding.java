@@ -41,6 +41,9 @@ public class EnchantmentHolding extends Enchantment {
 	@Override
 	public String getTranslatedName(int level) {
 
+		if (level > 10) {
+			return StringHelper.localize("info.cofh.cheater");
+		}
 		return StringHelper.localize(getName()) + " " + StringHelper.ROMAN_NUMERAL[level];
 	}
 

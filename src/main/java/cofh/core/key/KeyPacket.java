@@ -17,8 +17,8 @@ public class KeyPacket extends PacketCoFHBase {
 	public void handlePacket(EntityPlayer player, boolean isServer) {
 
 		String bindUUID = getString();
-		if (CoFHKey.serverBinds.containsKey(bindUUID)) {
-			CoFHKey.serverBinds.get(bindUUID).keyPressServer(player);
+		if (CoFHKeyHandler.serverBinds.containsKey(bindUUID)) {
+			CoFHKeyHandler.serverBinds.get(bindUUID).keyPressServer(player);
 		} else {
 			CoFHCore.log.error("Invalid Key Packet! Unregistered Server Key! UUID: " + bindUUID);
 		}

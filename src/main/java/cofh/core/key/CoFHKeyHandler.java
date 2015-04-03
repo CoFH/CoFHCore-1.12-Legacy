@@ -12,7 +12,9 @@ import java.util.Map.Entry;
 
 import org.lwjgl.input.Keyboard;
 
-public class CoFHKey {
+public class CoFHKeyHandler {
+
+	public static CoFHKeyHandler instance = new CoFHKeyHandler();
 
 	public static TMap<String, IKeyBinding> keybindModules = new THashMap<String, IKeyBinding>();
 	public static TMap<String, Boolean> keybindRepeat = new THashMap<String, Boolean>();

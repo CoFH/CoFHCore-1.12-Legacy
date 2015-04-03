@@ -96,12 +96,10 @@ public abstract class TileCoFHBase extends TileEntity {
 		if (ownerID.variant() == 0) {
 			return true;
 		}
-
 		UUID otherID = player.getGameProfile().getId();
 		if (ownerID.equals(otherID)) {
 			return true;
 		}
-
 		return access.isRestricted() && SocialRegistry.playerHasAccess(name, profile);
 	}
 

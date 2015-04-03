@@ -84,16 +84,18 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+
+		return side <= 1 ? IconRegistry.getIcon("Fluid" + name) : IconRegistry.getIcon("Fluid" + name, 1);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister ir) {
 
 		IconRegistry.addIcon("Fluid" + name, modName + ":fluid/Fluid_" + name + "_Still", ir);
 		IconRegistry.addIcon("Fluid" + name + "1", modName + ":fluid/Fluid_" + name + "_Flow", ir);
-	}
-
-	@Override
-	public IIcon getIcon(int side, int meta) {
-
-		return side <= 1 ? IconRegistry.getIcon("Fluid" + name) : IconRegistry.getIcon("Fluid" + name, 1);
 	}
 
 	@Override
