@@ -52,8 +52,22 @@ public class ProxyClient extends Proxy {
 
 	public static CoFHFontRender fontRenderer;
 
-	public static final KeyBinding KEYBINDING_EMPOWER = new KeyBinding("key.cofh.empower", Keyboard.KEY_V, "key.cofh.category");
-	public static final KeyBinding KEYBINDING_MULTIMODE = new KeyBinding("key.cofh.multimode", Keyboard.KEY_C, "key.cofh.category");
+	public static final KeyBind KEYBINDING_EMPOWER = new KeyBind("key.cofh.empower", Keyboard.KEY_V, "key.cofh.category");
+	public static final KeyBind KEYBINDING_MULTIMODE = new KeyBind("key.cofh.multimode", Keyboard.KEY_C, "key.cofh.category");
+
+	public static class KeyBind extends KeyBinding {
+
+		public KeyBind(String name, int key, String category) {
+
+			super(name, key, category);
+		}
+
+		public int cofh_conflictCode() {
+
+			return 0;
+		}
+
+	}
 
 	@Override
 	public void preInit() {
