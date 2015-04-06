@@ -100,7 +100,7 @@ class ASMCore {
 	}
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
-	private static final String[] emptyList = { };
+	private static final String[] emptyList = {};
 
 	static class AnnotationInfo {
 
@@ -246,8 +246,7 @@ class ASMCore {
 			AbstractInsnNode n = m.instructions.getFirst();
 			LabelNode end = new LabelNode(), out = new LabelNode();
 			m.instructions.insertBefore(n, n = new VarInsnNode(ALOAD, 1));
-			m.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/item/ItemStack", names[1],
-					"()Lnet/minecraft/item/Item;", false));
+			m.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/item/ItemStack", names[1], "()Lnet/minecraft/item/Item;", false));
 			m.instructions.insert(n, n = new VarInsnNode(ALOAD, 1));
 			m.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
 			m.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/item/Item", "cofh_canEnchantApply",
@@ -372,8 +371,7 @@ class ASMCore {
 
 			m.instructions.clear();
 			m.instructions.add(new VarInsnNode(ALOAD, 0));
-			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asmhooks/HooksCore", "stackItems",
-					"(Lnet/minecraft/entity/item/EntityItem;)V", false));
+			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/asmhooks/HooksCore", "stackItems", "(Lnet/minecraft/entity/item/EntityItem;)V", false));
 			m.instructions.add(new InsnNode(RETURN));
 
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -589,8 +587,7 @@ class ASMCore {
 						if (names[2].equals(mn.name)) {
 							if (Csig.equals(mn.desc) && Ssig.equals(((MethodInsnNode) mn.getNext()).desc)) {
 								m.instructions.insertBefore(n, new FieldInsnNode(GETSTATIC, fd, dirs[di++], 'L' + fd + ';'));
-								m.instructions.insertBefore(n, new MethodInsnNode(INVOKEVIRTUAL, cc, "canPaneConnectTo", Rsig,
-										false));
+								m.instructions.insertBefore(n, new MethodInsnNode(INVOKEVIRTUAL, cc, "canPaneConnectTo", Rsig, false));
 								m.instructions.remove(n.getNext());
 								m.instructions.remove(n);
 							}
@@ -676,8 +673,7 @@ class ASMCore {
 						if (n.getOpcode() == INVOKEVIRTUAL) {
 							MethodInsnNode mn = (MethodInsnNode) n;
 							if (mOwner.equals(mn.owner) && names[1].equals(mn.name) && "()V".equals(mn.desc)) {
-								m.instructions.set(mn, new MethodInsnNode(INVOKESTATIC, "cofh/asmhooks/HooksCore",
-										"tickTextures",
+								m.instructions.set(mn, new MethodInsnNode(INVOKESTATIC, "cofh/asmhooks/HooksCore", "tickTextures",
 										"(Lnet/minecraft/client/renderer/texture/ITickable;)V", false));
 								break mc;
 							}
@@ -846,9 +842,7 @@ class ASMCore {
 				containsItem.instructions.clear();
 				containsItem.instructions.add(getEntry.instructions);
 				/**
-				 * this looks counter intuitive (replacing getEntry != null
-				 * check with the full method) but due to how the JVM handles
-				 * inlining, this needs to
+				 * this looks counter intuitive (replacing getEntry != null check with the full method) but due to how the JVM handles inlining, this needs to
 				 * be done manually
 				 */
 				for (AbstractInsnNode n = containsItem.instructions.get(0); n != null; n = n.getNext()) {
@@ -981,12 +975,10 @@ class ASMCore {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
-			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F", "func_147448_a",
-					"func_147455_a", "func_72939_s",
+			names = new String[] { "field_73019_z", "field_72986_A", "field_73011_w", "field_72984_F", "func_147448_a", "func_147455_a", "func_72939_s",
 					"func_145830_o", "field_147481_N", "func_147457_a" };
 		} else {
-			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a", "setTileEntity",
-					"updateEntities", "hasWorldObj",
+			names = new String[] { "saveHandler", "worldInfo", "provider", "theProfiler", "func_147448_a", "setTileEntity", "updateEntities", "hasWorldObj",
 					"field_147481_N", "func_147457_a" };
 		}
 		name = name.replace('.', '/');
@@ -1012,10 +1004,8 @@ class ASMCore {
 				m.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
 				m.instructions.insert(n, n = new TypeInsnNode(NEW, "cofh/lib/util/IdentityLinkedHashList"));
 				m.instructions.insert(n, n = new InsnNode(DUP));
-				m.instructions.insert(n, n = new MethodInsnNode(INVOKESPECIAL, "cofh/lib/util/IdentityLinkedHashList", "<init>",
-						"()V", false));
-				m.instructions.insert(n, n = new FieldInsnNode(PUTFIELD, "net/minecraft/world/World", "cofh_recentTiles",
-						"Lcofh/lib/util/LinkedHashList;"));
+				m.instructions.insert(n, n = new MethodInsnNode(INVOKESPECIAL, "cofh/lib/util/IdentityLinkedHashList", "<init>", "()V", false));
+				m.instructions.insert(n, n = new FieldInsnNode(PUTFIELD, "net/minecraft/world/World", "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;"));
 			} else if ("addTileEntity".equals(m.name) && "(Lnet/minecraft/tileentity/TileEntity;)V".equals(m.desc)) {
 				addTileEntity = m;
 			} else if (names[4].equals(m.name) && "(Ljava/util/Collection;)V".equals(m.desc)) {
@@ -1029,8 +1019,7 @@ class ASMCore {
 			}
 		}
 
-		cn.fields
-				.add(new FieldNode(ACC_PRIVATE | ACC_SYNTHETIC, "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;", null, null));
+		cn.fields.add(new FieldNode(ACC_PRIVATE | ACC_SYNTHETIC, "cofh_recentTiles", "Lcofh/lib/util/LinkedHashList;", null, null));
 
 		if (unloadTile != null) {
 
@@ -1039,8 +1028,7 @@ class ASMCore {
 			unloadTile.instructions.insert(n = a);
 			unloadTile.instructions.insert(n, n = new LineNumberNode(-15005, a));
 			unloadTile.instructions.insert(n, n = new VarInsnNode(ALOAD, 1));
-			unloadTile.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity",
-					"cofh_invalidate", "()V", false));
+			unloadTile.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity", "cofh_invalidate", "()V", false));
 		}
 
 		if (addTileEntity != null) {
@@ -1053,8 +1041,7 @@ class ASMCore {
 			addTileEntity.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles",
 					"Lcofh/lib/util/LinkedHashList;"));
 			addTileEntity.instructions.insert(n, n = new VarInsnNode(ALOAD, 1));
-			addTileEntity.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push",
-					"(Ljava/lang/Object;)Z", false));
+			addTileEntity.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
 			addTileEntity.instructions.insert(n, n = new InsnNode(POP));
 		}
 
@@ -1072,8 +1059,7 @@ class ASMCore {
 			setTileEntity.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles",
 					"Lcofh/lib/util/LinkedHashList;"));
 			setTileEntity.instructions.insert(n, n = new VarInsnNode(ALOAD, 4));
-			setTileEntity.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push",
-					"(Ljava/lang/Object;)Z", false));
+			setTileEntity.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
 			setTileEntity.instructions.insert(n, n = new InsnNode(POP));
 		}
 
@@ -1092,19 +1078,17 @@ class ASMCore {
 			addTileEntities.instructions.insert(n, n = new LineNumberNode(-15003, a));
 			addTileEntities.instructions.insert(n, n = new InsnNode(DUP));
 			addTileEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
-			addTileEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World",
-					"cofh_recentTiles",
+			addTileEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles",
 					"Lcofh/lib/util/LinkedHashList;"));
 			addTileEntities.instructions.insert(n, n = new InsnNode(SWAP));
 			addTileEntities.instructions.insert(n,
-				n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
+					n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "push", "(Ljava/lang/Object;)Z", false));
 			addTileEntities.instructions.insert(n, n = new InsnNode(POP));
 		}
 
 		if (updateEntities != null) {
 			AbstractInsnNode n = updateEntities.instructions.getFirst();
-			while (n.getOpcode() != INVOKEVIRTUAL || !"onChunkUnload".equals(((MethodInsnNode) n).name) ||
-					!"()V".equals(((MethodInsnNode) n).desc)) {
+			while (n.getOpcode() != INVOKEVIRTUAL || !"onChunkUnload".equals(((MethodInsnNode) n).name) || !"()V".equals(((MethodInsnNode) n).desc)) {
 				n = n.getNext();
 			}
 			while (n.getOpcode() != PUTFIELD || !names[8].equals(((FieldInsnNode) n).name)) {
@@ -1122,32 +1106,26 @@ class ASMCore {
 			updateEntities.instructions.insert(n, n = new FrameNode(F_SAME, 0, null, 0, null));
 
 			updateEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
-			updateEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World",
-					"cofh_recentTiles",
+			updateEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles",
 					"Lcofh/lib/util/LinkedHashList;"));
 			updateEntities.instructions
-					.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "shift",
-							"()Ljava/lang/Object;", false));
+					.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "shift", "()Ljava/lang/Object;", false));
 			updateEntities.instructions.insert(n, n = new TypeInsnNode(CHECKCAST, "net/minecraft/tileentity/TileEntity"));
 			updateEntities.instructions.insert(n, n = new InsnNode(DUP));
 			updateEntities.instructions.insert(n, n = new JumpInsnNode(IFNULL, lGuard));
 			updateEntities.instructions.insert(n, n = new InsnNode(DUP));
-			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity",
-					names[7], "()Z", false));
+			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity", names[7], "()Z", false));
 			updateEntities.instructions.insert(n, n = new JumpInsnNode(IFEQ, lGuard));
-			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity",
-					"cofh_validate", "()V", false));
+			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity", "cofh_validate", "()V", false));
 			updateEntities.instructions.insert(n, n = new InsnNode(ACONST_NULL));
 			updateEntities.instructions.insert(n, n = lGuard);
 			updateEntities.instructions.insert(n, n = new InsnNode(POP));
 			updateEntities.instructions.insert(n, n = lCond);
 			updateEntities.instructions.insert(n, n = new FrameNode(F_SAME, 0, null, 0, null));
 			updateEntities.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
-			updateEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World",
-					"cofh_recentTiles",
+			updateEntities.instructions.insert(n, n = new FieldInsnNode(GETFIELD, "net/minecraft/world/World", "cofh_recentTiles",
 					"Lcofh/lib/util/LinkedHashList;"));
-			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "size",
-					"()I", false));
+			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "cofh/lib/util/LinkedHashList", "size", "()I", false));
 			updateEntities.instructions.insert(n, n = new JumpInsnNode(IFNE, lStart));
 		}
 
@@ -1155,9 +1133,7 @@ class ASMCore {
 		cn.accept(cw);
 		if (!found) {
 			/*
-			 * new World constructor World(ISaveHandler saveHandler, String
-			 * worldName, WorldProvider provider, WorldSettings worldSettings,
-			 * Profiler
+			 * new World constructor World(ISaveHandler saveHandler, String worldName, WorldProvider provider, WorldSettings worldSettings, Profiler
 			 * theProfiler)
 			 */
 			cw.newMethod(name, "<init>", sig, true);
@@ -1176,9 +1152,8 @@ class ASMCore {
 			mv.visitInsn(DUP);
 			mv.visitVarInsn(ALOAD, 4);
 			mv.visitVarInsn(ALOAD, 2);
-			mv.visitMethodInsn(INVOKESPECIAL, "net/minecraft/world/storage/WorldInfo", "<init>",
-				"(Lnet/minecraft/world/WorldSettings;Ljava/lang/String;)V",
-				false);
+			mv.visitMethodInsn(INVOKESPECIAL, "net/minecraft/world/storage/WorldInfo", "<init>", "(Lnet/minecraft/world/WorldSettings;Ljava/lang/String;)V",
+					false);
 			mv.visitFieldInsn(PUTFIELD, name, names[1], "Lnet/minecraft/world/storage/WorldInfo;");
 			mv.visitVarInsn(ALOAD, 3);
 			mv.visitFieldInsn(PUTFIELD, name, names[2], "Lnet/minecraft/world/WorldProvider;");
@@ -1216,9 +1191,7 @@ class ASMCore {
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 			cn.accept(cw);
 			/*
-			 * new WorldServer constructor WorldServer(MinecraftServer
-			 * minecraftServer, ISaveHandler saveHandler, String worldName,
-			 * WorldProvider provider,
+			 * new WorldServer constructor WorldServer(MinecraftServer minecraftServer, ISaveHandler saveHandler, String worldName, WorldProvider provider,
 			 * WorldSettings worldSettings, Profiler theProfiler)
 			 */
 			cw.newMethod(name, "<init>", sig, true);
@@ -1236,11 +1209,11 @@ class ASMCore {
 			mv.visitVarInsn(ALOAD, 6);
 			// [World] super(saveHandler, worldName, provider, worldSettings, theProfiler);
 			mv.visitMethodInsn(
-				INVOKESPECIAL,
-				"net/minecraft/world/World",
-				"<init>",
-				"(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V",
-				false);
+					INVOKESPECIAL,
+					"net/minecraft/world/World",
+					"<init>",
+					"(Lnet/minecraft/world/storage/ISaveHandler;Ljava/lang/String;Lnet/minecraft/world/WorldProvider;Lnet/minecraft/world/WorldSettings;Lnet/minecraft/profiler/Profiler;)V",
+					false);
 			mv.visitVarInsn(ALOAD, 1);
 			mv.visitFieldInsn(PUTFIELD, name, names[0], "Lnet/minecraft/server/MinecraftServer;");
 			mv.visitInsn(ACONST_NULL);
@@ -1353,8 +1326,7 @@ class ASMCore {
 				MethodVisitor mv = cn.visitMethod(getAccess(m), m.getName(), desc, null, getExceptions(m));
 				mv.visitCode();
 				mv.visitVarInsn(ALOAD, 0);
-				mv.visitFieldInsn(GETFIELD, "skyboy/core/world/WorldServerProxy", "proxiedWorld",
-					"Lnet/minecraft/world/WorldServer;");
+				mv.visitFieldInsn(GETFIELD, "skyboy/core/world/WorldServerProxy", "proxiedWorld", "Lnet/minecraft/world/WorldServer;");
 				Type[] types = Type.getArgumentTypes(m);
 				for (int i = 0, w = 1, e = types.length; i < e; i++) {
 					mv.visitVarInsn(types[i].getOpcode(ILOAD), w);
@@ -1382,8 +1354,7 @@ class ASMCore {
 				MethodVisitor mv = cn.visitMethod(getAccess(m), m.getName(), desc, null, getExceptions(m));
 				mv.visitCode();
 				mv.visitVarInsn(ALOAD, 0);
-				mv.visitFieldInsn(GETFIELD, "skyboy/core/world/WorldServerProxy", "proxiedWorld",
-					"Lnet/minecraft/world/WorldServer;");
+				mv.visitFieldInsn(GETFIELD, "skyboy/core/world/WorldServerProxy", "proxiedWorld", "Lnet/minecraft/world/WorldServer;");
 				Type[] types = Type.getArgumentTypes(m);
 				for (int i = 0, w = 1, e = types.length; i < e; i++) {
 					mv.visitVarInsn(types[i].getOpcode(ILOAD), w);
@@ -1536,11 +1507,9 @@ class ASMCore {
 							ModContainer modc = getLoadedMods().get(mod);
 							try {
 								if (Boolean.parseBoolean(modc.getCustomModProperties().get("cofhversion"))) {
-									needsRemoved = !ModRange.createFromVersionSpec(mod, clazz).containsVersion(
-										new ModVersion(mod, modc.getVersion()));
+									needsRemoved = !ModRange.createFromVersionSpec(mod, clazz).containsVersion(new ModVersion(mod, modc.getVersion()));
 								} else {
-									needsRemoved = !VersionRange.createFromVersionSpec(clazz).containsVersion(
-										modc.getProcessedVersion());
+									needsRemoved = !VersionRange.createFromVersionSpec(clazz).containsVersion(modc.getProcessedVersion());
 								}
 							} catch (InvalidVersionSpecificationException e) {
 								needsRemoved = true;
@@ -1556,8 +1525,7 @@ class ASMCore {
 						if (!needsRemoved && i > 0) {
 							ModContainer modc = getLoadedAPIs().get(mod);
 							try {
-								needsRemoved = !VersionRange.createFromVersionSpec(clazz).containsVersion(
-									modc.getProcessedVersion());
+								needsRemoved = !VersionRange.createFromVersionSpec(clazz).containsVersion(modc.getProcessedVersion());
 							} catch (InvalidVersionSpecificationException e) {
 								needsRemoved = true;
 							}

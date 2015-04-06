@@ -40,7 +40,7 @@ public class LightMatrix implements CCRenderState.IVertexOperation {
 
 	/*
 	 * static { int[][] os = new int[][]{ {0,-1,0}, {0, 1,0}, {0,0,-1}, {0,0, 1}, {-1,0,0}, { 1,0,0}};
-	 *
+	 * 
 	 * for(int s = 0; s < 12; s++) { int[] d0 = s < 6 ? new int[]{os[s][0]+1, os[s][1]+1, os[s][2]+1} : new int[]{1, 1, 1}; int[] d1 = os[((s&0xE)+3)%6]; int[]
 	 * d2 = os[((s&0xE)+5)%6]; for(int a = -1; a <= 1; a++) for(int b = -1; b <= 1; b++) ssamplem[s][(a+1)*3+b+1] =
 	 * (d0[1]+d1[1]*a+d2[1]*b)*9+(d0[2]+d1[2]*a+d2[2]*b)*3+(d0[0]+d1[0]*a+d2[0]*b); } System.out.println(Arrays.deepToString(ssamplem)); }

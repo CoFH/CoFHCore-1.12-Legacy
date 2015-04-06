@@ -175,7 +175,7 @@ public class BlockRenderer {
 
 	/**
 	 * Renders faces of a block-like model based on a sideMask. Eg for side 2, verts 8-11 will be rendered
-	 * 
+	 *
 	 * @param sideMask
 	 *            A mask of faces not to render
 	 */
