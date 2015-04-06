@@ -57,7 +57,6 @@ public class ItemSickleAdv extends ItemToolAdv {
 		if (!(getToolClasses(player.getCurrentEquippedItem()).contains(block.getHarvestTool(meta)) || canHarvestBlock(block, player.getCurrentEquippedItem()))) {
 			return false;
 		}
-
 		if (!ForgeHooks.canHarvestBlock(block, player, meta)) {
 			return false;
 		}
@@ -69,7 +68,6 @@ public class ItemSickleAdv extends ItemToolAdv {
 				return false;
 			}
 		}
-
 		if (player.capabilities.isCreativeMode) {
 			if (!world.isRemote) {
 				block.onBlockHarvested(world, x, y, z, meta, player);
@@ -87,7 +85,6 @@ public class ItemSickleAdv extends ItemToolAdv {
 			}
 			return true;
 		}
-
 		if (!world.isRemote) {
 			// serverside we reproduce ItemInWorldManager.tryHarvestBlock
 			// ItemInWorldManager.removeBlock

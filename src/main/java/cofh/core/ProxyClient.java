@@ -118,7 +118,6 @@ public class ProxyClient extends Proxy {
 		if (!CoFHCore.configClient.get(category, "DisplayHoldShiftForDetail", true, comment)) {
 			StringHelper.displayShiftForDetail = false;
 		}
-
 		comment = "Set to true to display large item counts as stacks rather than a single quantity.";
 		if (CoFHCore.configClient.get(category, "DisplayContainedItemsAsStackCount", false, comment)) {
 			StringHelper.displayStackCount = true;
@@ -131,7 +130,6 @@ public class ProxyClient extends Proxy {
 		if (!CoFHCore.configClient.get(category, "OpsCanAccessSecureBlocksWarning", true, comment)) {
 			CoFHProps.enableOpSecureAccessWarning = false;
 		}
-
 		CoFHCore.configClient.save();
 		if (!Boolean.parseBoolean(System.getProperty("forge.forceDisplayStencil", "false"))) {
 			try {

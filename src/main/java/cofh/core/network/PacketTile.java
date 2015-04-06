@@ -23,18 +23,6 @@ public class PacketTile extends PacketCoFHBase {
 	}
 
 	@Override
-	public void handleClientSide(EntityPlayer player) {
-
-		handlePacket(player, false);
-	}
-
-	@Override
-	public void handleServerSide(EntityPlayer player) {
-
-		handlePacket(player, true);
-	}
-
-	@Override
 	public void handlePacket(EntityPlayer player, boolean isServer) {
 
 		TileEntity tile = player.worldObj.getTileEntity(getInt(), getInt(), getInt());

@@ -361,12 +361,18 @@ public abstract class PacketCoFHBase extends PacketBase {
 	@Override
 	public void handleClientSide(EntityPlayer player) {
 
+		if (player == null) {
+			return;
+		}
 		handlePacket(player, false);
 	}
 
 	@Override
 	public void handleServerSide(EntityPlayer player) {
 
+		if (player == null) {
+			return;
+		}
 		handlePacket(player, true);
 	}
 

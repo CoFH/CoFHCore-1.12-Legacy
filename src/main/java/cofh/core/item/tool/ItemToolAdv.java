@@ -92,7 +92,6 @@ public abstract class ItemToolAdv extends ItemTool {
 				return false;
 			}
 		}
-
 		if (player.capabilities.isCreativeMode) {
 			if (!world.isRemote) {
 				block.onBlockHarvested(world, x, y, z, meta, player);
@@ -112,7 +111,6 @@ public abstract class ItemToolAdv extends ItemTool {
 			}
 			return true;
 		}
-
 		world.playAuxSFXAtEntity(player, 2001, x, y, z, Block.getIdFromBlock(block) | (meta << 12));
 		if (!world.isRemote) {
 			// serverside we reproduce ItemInWorldManager.tryHarvestBlock
