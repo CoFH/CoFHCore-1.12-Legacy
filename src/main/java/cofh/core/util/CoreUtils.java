@@ -76,11 +76,6 @@ public class CoreUtils {
 		return CoFHCore.proxy.isOp(playerName);
 	}
 
-	public static boolean isOpOrServer(String senderName) {
-
-		return CoFHCore.proxy.isOp(senderName) || senderName.equals("Server");
-	}
-
 	/* SERVER UTILS */
 	public static boolean isClient() {
 
