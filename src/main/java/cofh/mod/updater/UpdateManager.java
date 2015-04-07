@@ -3,7 +3,6 @@ package cofh.mod.updater;
 import static net.minecraft.util.EnumChatFormatting.*;
 
 import cofh.core.CoFHProps;
-import cofh.lib.util.helpers.StringHelper;
 import com.google.common.base.Strings;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -11,7 +10,11 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.event.HoverEvent;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
 
@@ -20,10 +23,23 @@ public class UpdateManager {
 	private static transient int pollOffset = 0;
 	private static final ChatStyle description = new ChatStyle();
 	private static final ChatStyle version = new ChatStyle();
+	private static final ChatStyle modname = new ChatStyle();
+	private static final ChatStyle download = new ChatStyle();
+	private static final ChatStyle white = new ChatStyle();
 	static {
 
 		description.setColor(GRAY);
 		version.setColor(AQUA);
+		modname.setColor(GOLD);
+		download.setColor(GREEN);
+		white.setColor(WHITE);
+
+		{
+			ChatStyle tooltip = new ChatStyle();
+			tooltip.setColor(YELLOW);
+			IChatComponent msg = new ChatComponentTranslation("info.cofh.updater.tooltip").setChatStyle(tooltip);
+			download.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, msg));
+		}
 	}
 
 	public static void registerUpdater(UpdateManager manager) {
@@ -62,6 +78,11 @@ public class UpdateManager {
 		if (evt.phase != Phase.START) {
 			return;
 		}
+		if (MinecraftServer.getServer() != null) {
+			if (!MinecraftServer.getServer().getConfigurationManager().func_152596_g(evt.player.getGameProfile())) {
+				return;
+			}
+		}
 		if (lastPoll > 0) {
 			--lastPoll;
 			return;
@@ -78,21 +99,26 @@ public class UpdateManager {
 				ModVersion newVersion = _updateThread.newVersion();
 
 				EntityPlayer player = evt.player;
-				player.addChatMessage(new ChatComponentText(GOLD + "[" + _mod.getModName() + "]").appendText(WHITE + " "
-						+ StringHelper.localize("info.cofh.updater.version") + ":"));
-				IChatComponent chat;
-				String text = newVersion.modVersion().toString();
-				if (Strings.isNullOrEmpty(_downloadUrl)) {
-					chat = new ChatComponentText(text).setChatStyle(version);
-				} else {
-					chat = IChatComponent.Serializer.func_150699_a("[{\"text\":\"" + text + "\",\"color\":\"aqua\"}," + "{\"text\":\" " + WHITE + "[" + GREEN
-							+ StringHelper.localize("info.cofh.updater.download") + WHITE + "]\","
-							+ "\"color\":\"green\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":" + "{\"text\":\""
-							+ StringHelper.localize("info.cofh.updater.tooltip") + ".\",\"color\":\"yellow\"}},"
-							+ "\"clickEvent\":{\"action\":\"open_url\",\"value\":\"" + _downloadUrl + "\"}}]");
+				IChatComponent chat = new ChatComponentText("");
+				{
+					ChatStyle data = modname.createShallowCopy();
+					IChatComponent msg = new ChatComponentText(newVersion.modVersion().toString()).setChatStyle(version);
+					data.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, msg));
+					chat.appendSibling(new ChatComponentText("[" + _mod.getModName() + "] ").setChatStyle(data));
 				}
+				chat.appendSibling(new ChatComponentTranslation("info.cofh.updater.version").setChatStyle(white));
+				chat.appendText(GOLD + ":");
 				player.addChatMessage(chat);
-				player.addChatMessage(new ChatComponentText(newVersion.description()).setChatStyle(description));
+				chat = new ChatComponentText("");
+				if (!Strings.isNullOrEmpty(_downloadUrl)) {
+					chat.appendText(WHITE + "[");
+					ChatStyle data = download.createShallowCopy();
+					data.setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, _downloadUrl));
+					chat.appendSibling(new ChatComponentTranslation("info.cofh.updater.download").setChatStyle(data));
+					chat.appendText(WHITE + "] ");
+				}
+				chat.appendSibling(new ChatComponentText(newVersion.description()).setChatStyle(description));
+				player.addChatMessage(chat);
 			}
 		}
 	}
