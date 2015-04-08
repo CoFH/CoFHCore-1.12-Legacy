@@ -5,11 +5,13 @@ import cofh.lib.util.helpers.ItemHelper;
 import gnu.trove.set.hash.THashSet;
 import gnu.trove.set.hash.TLinkedHashSet;
 
+import java.util.List;
 import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -30,6 +32,7 @@ public abstract class ItemToolAdv extends ItemTool {
 	protected THashSet<Block> effectiveBlocks = new THashSet<Block>();
 	protected THashSet<Material> effectiveMaterials = new THashSet<Material>();
 	protected int harvestLevel = -1;
+	protected boolean showInCreative = true;
 
 	public ItemToolAdv(float baseDamage, Item.ToolMaterial toolMaterial) {
 
@@ -46,6 +49,20 @@ public abstract class ItemToolAdv extends ItemTool {
 
 		this.repairIngot = repairIngot;
 		return this;
+	}
+
+	public ItemToolAdv setShowInCreative(boolean showInCreative) {
+
+		this.showInCreative = showInCreative;
+		return this;
+	}
+
+	@Override
+	public void getSubItems(Item item, CreativeTabs tab, List list) {
+
+		if (showInCreative) {
+			list.add(new ItemStack(item, 1, 0));
+		}
 	}
 
 	protected void addToolClass(String string) {

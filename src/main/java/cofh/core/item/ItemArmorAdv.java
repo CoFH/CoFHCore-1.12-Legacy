@@ -5,9 +5,12 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import java.util.Collection;
+import java.util.List;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
@@ -16,6 +19,7 @@ public class ItemArmorAdv extends ItemArmor {
 	public String repairIngot = "";
 	public String[] textures = new String[2];
 	protected Multimap<String, AttributeModifier> properties = HashMultimap.create();
+	protected boolean showInCreative = true;
 
 	public ItemArmorAdv(ArmorMaterial material, int type) {
 
@@ -32,6 +36,20 @@ public class ItemArmorAdv extends ItemArmor {
 
 		this.textures = textures;
 		return this;
+	}
+
+	public ItemArmorAdv setShowInCreative(boolean showInCreative) {
+
+		this.showInCreative = showInCreative;
+		return this;
+	}
+
+	@Override
+	public void getSubItems(Item item, CreativeTabs tab, List list) {
+
+		if (showInCreative) {
+			list.add(new ItemStack(item, 1, 0));
+		}
 	}
 
 	@Override

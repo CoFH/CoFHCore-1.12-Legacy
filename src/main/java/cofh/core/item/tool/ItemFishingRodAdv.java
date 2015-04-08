@@ -4,8 +4,12 @@ import cofh.core.entity.EntityCoFHFishHook;
 import cofh.core.util.CoreUtils;
 import cofh.lib.util.helpers.ItemHelper;
 
+import java.util.List;
+
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -15,8 +19,9 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 
 	protected IIcon normalIcons[] = new IIcon[2];
 
-	protected ToolMaterial toolMaterial;
 	public String repairIngot = "";
+	protected ToolMaterial toolMaterial;
+	protected boolean showInCreative = true;
 
 	public ItemFishingRodAdv(ToolMaterial toolMaterial) {
 
@@ -28,6 +33,20 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 
 		this.repairIngot = repairIngot;
 		return this;
+	}
+
+	public ItemFishingRodAdv setShowInCreative(boolean showInCreative) {
+
+		this.showInCreative = showInCreative;
+		return this;
+	}
+
+	@Override
+	public void getSubItems(Item item, CreativeTabs tab, List list) {
+
+		if (showInCreative) {
+			list.add(new ItemStack(item, 1, 0));
+		}
 	}
 
 	@Override
