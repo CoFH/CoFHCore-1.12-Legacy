@@ -23,6 +23,7 @@ import cofh.core.world.feature.SurfaceParser;
 import cofh.core.world.feature.UnderfluidParser;
 import cofh.core.world.feature.UniformParser;
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.util.WeightedRandomItemStack;
 import cofh.lib.util.WeightedRandomNBTTag;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.biome.BiomeInfo;
@@ -35,6 +36,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.stream.JsonWriter;
+import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import java.io.File;
@@ -51,7 +53,9 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.biome.BiomeGenBase.TempCategory;
@@ -174,7 +178,8 @@ public class FeatureParser {
 			try {
 				genList = (JsonObject) parser.parse(new FileReader(genFile));
 			} catch (Throwable t) {
-				log.error("Critical error reading from a world generation file: " + genFile + " > Please be sure the file is correct!", t);
+				log.error("Critical error reading from a world generation file: " + genFile +
+						" > Please be sure the file is correct!", t);
 				continue;
 			}
 			boolean saveFile = false;
@@ -297,7 +302,8 @@ public class FeatureParser {
 			try {
 				genList = (JsonObject) parser.parse(new FileReader(genFile));
 			} catch (Throwable t) {
-				log.error("Critical error reading from a world generation file: " + genFile + " > Please be sure the file is correct!", t);
+				log.error("Critical error reading from a world generation file: " + genFile +
+						" > Please be sure the file is correct!", t);
 				continue;
 			}
 
@@ -307,7 +313,8 @@ public class FeatureParser {
 					if (parseGenerationEntry(genEntry.getKey(), genEntry.getValue())) {
 						log.debug("Generation entry successfully parsed: \"" + genEntry.getKey() + "\"");
 					} else {
-						log.error("Error parsing generation entry: \"" + genEntry.getKey() + "\" > Please check the parameters. It *may* be a duplicate.");
+						log.error("Error parsing generation entry: \"" + genEntry.getKey() +
+								"\" > Please check the parameters. It *may* be a duplicate.");
 					}
 				} catch (Throwable t) {
 					log.fatal("There was a severe error parsing '" + genEntry.getKey() + "'!", t);
@@ -357,7 +364,8 @@ public class FeatureParser {
 
 	// TODO: move these helper functions outside core?
 
-	public static WorldGenerator parseGenerator(String def, JsonObject genObject, List<WeightedRandomBlock> resList, int clusterSize,
+	public static WorldGenerator parseGenerator(String def, JsonObject genObject, List<WeightedRandomBlock> resList,
+			int clusterSize,
 			List<WeightedRandomBlock> matList) {
 
 		JsonElement genElement = genObject.get("template");
@@ -502,7 +510,8 @@ public class FeatureParser {
 				log.error("Invalid block entry!");
 				return null;
 			}
-			int metadata = blockElement.has("metadata") ? MathHelper.clampI(blockElement.get("metadata").getAsInt(), min, 15) : min;
+			int metadata = blockElement.has("metadata") ? MathHelper.clampI(blockElement.get("metadata").getAsInt(), min, 15)
+					: min;
 			int weight = blockElement.has("weight") ? MathHelper.clampI(blockElement.get("weight").getAsInt(), 1, 1000000) : 100;
 			return new WeightedRandomBlock(block, metadata, weight);
 		} else {
@@ -645,6 +654,67 @@ public class FeatureParser {
 				return false;
 			}
 			list.add(entry);
+		}
+		return true;
+	}
+
+	public static WeightedRandomItemStack parseWeightedRandomItem(JsonElement genElement) {
+
+		if (genElement.isJsonNull()) {
+			return null;
+		}
+		int meta = 0, chance = 100;
+		ItemStack it;
+
+		if (genElement.isJsonPrimitive()) {
+			it = new ItemStack(GameData.getItemRegistry().getObject(genElement.getAsString()), 1, meta);
+		} else {
+			JsonObject item = genElement.getAsJsonObject();
+			if (item.has("meta"))
+				meta = item.get("meta").getAsInt();
+			if (item.has("weight"))
+				chance = item.get("weight").getAsInt();
+			it = new ItemStack(GameData.getItemRegistry().getObject(item.get("name").getAsString()), 1, meta);
+			if (item.has("nbt")) {
+				try {
+					NBTBase nbtbase = JsonToNBT.func_150315_a(item.get("nbt").getAsString());
+
+					if (!(nbtbase instanceof NBTTagCompound)) {
+						log.error("Item has invalid NBT data.");
+					}
+
+					it.setTagCompound((NBTTagCompound) nbtbase);
+				} catch (NBTException t) {
+					log.error("Item has invalid NBT data.", t);
+				}
+			}
+		}
+
+		if (it.getItem() == null) {
+			return null;
+		}
+
+		return new WeightedRandomItemStack(it, chance);
+	}
+
+	public static boolean parseWeightedItemList(JsonElement genElement, List<WeightedRandomItemStack> res) {
+
+		if (!genElement.isJsonArray()) {
+			WeightedRandomItemStack entry = parseWeightedRandomItem(genElement);
+			if (entry == null) {
+				return false;
+			}
+			res.add(entry);
+		} else {
+			JsonArray list = genElement.getAsJsonArray();
+
+			for (int i = 0, e = list.size(); i < e; ++i) {
+				WeightedRandomItemStack entry = parseWeightedRandomItem(list.get(i));
+				if (entry == null) {
+					return false;
+				}
+				res.add(entry);
+			}
 		}
 		return true;
 	}
