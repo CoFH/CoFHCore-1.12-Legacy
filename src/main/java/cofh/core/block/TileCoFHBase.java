@@ -8,6 +8,7 @@ import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketTile;
 import cofh.core.util.CoreUtils;
 import cofh.core.util.SocialRegistry;
+import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.ServerHelper;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
@@ -91,15 +92,18 @@ public abstract class TileCoFHBase extends TileEntity {
 		if (access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name))) {
 			return true;
 		}
+
 		GameProfile profile = ((ISecurable) this).getOwner();
 		UUID ownerID = profile.getId();
-		if (ownerID.variant() == 0) {
+		if (SecurityHelper.isDefaultUUID(ownerID)) {
 			return true;
 		}
+
 		UUID otherID = player.getGameProfile().getId();
 		if (ownerID.equals(otherID)) {
 			return true;
 		}
+
 		return access.isRestricted() && SocialRegistry.playerHasAccess(name, profile);
 	}
 
