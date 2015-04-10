@@ -26,6 +26,7 @@ info.cofh.augmentation=강화
 info.cofh.blank=비어있음
 info.cofh.capacity=용량
 info.cofh.charge=충전량
+info.cofh.cheater=Cheater!
 info.cofh.configuration=설정
 info.cofh.contents=내용
 info.cofh.controlStatus=활성화 상태
@@ -59,6 +60,7 @@ info.cofh.level=단계
 info.cofh.locked=잠김
 info.cofh.low=낮음
 info.cofh.maxEnergyPerTick=최대 전력
+info.cofh.modeChange=to Change Mode
 info.cofh.none=없음
 info.cofh.owner=소유주
 info.cofh.perUse=소모
@@ -168,6 +170,10 @@ info.cofh.tutorial.tabRedstone=레드스톤 제어 탭에서 레드스톤 신호
 info.cofh.tutorial.tabSecurity=보안 탭에서 블록에 접근 가능한 사용자를 설정할 수 있습니다.
 
 item.invalid.name=사용불가 아이템
+
+key.cofh.category=CoFH Keys
+key.cofh.empower=아이템 켜기/끄기
+key.cofh.multimode=아이템 모드 전환
 
 tab.cofh.friend.0=친구 추가/제거!
 #tab.cofh.friend.1=Friends not provided.
