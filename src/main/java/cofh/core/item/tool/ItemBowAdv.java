@@ -30,7 +30,7 @@ public class ItemBowAdv extends ItemBow {
 
 	public String repairIngot = "";
 	public float arrowSpeedMultiplier = 2.0F;
-	public float arrowDamageMultiplier = 1.0F;
+	public float arrowDamageMultiplier = 1.25F;
 	protected boolean showInCreative = true;
 
 	public ItemBowAdv(Item.ToolMaterial toolMaterial) {
