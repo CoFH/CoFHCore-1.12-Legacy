@@ -99,7 +99,7 @@ public abstract class TileCoFHBase extends TileEntity {
 			return true;
 		}
 
-		UUID otherID = player.getGameProfile().getId();
+		UUID otherID = SecurityHelper.getID(player);
 		if (ownerID.equals(otherID)) {
 			return true;
 		}
