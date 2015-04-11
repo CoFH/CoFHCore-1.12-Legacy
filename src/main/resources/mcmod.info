@@ -5,7 +5,7 @@
         "description": "Required for all CoFH Mods. Also provides some customization options for Minecraft.",
         "version": "${version}",
         "credits": "Team CoFH",
-        "logoFile": "/assets/cofh/textures/logo.png",
+        "logoFile": "assets/cofh/textures/logo.png",
         "mcversion": "${mcversion}",
         "url": "http://www.teamcofh.com",
         "updateUrl": "",
