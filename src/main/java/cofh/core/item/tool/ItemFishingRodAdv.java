@@ -22,6 +22,8 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 	public String repairIngot = "";
 	protected ToolMaterial toolMaterial;
 	protected boolean showInCreative = true;
+	protected int luckModifier = 0;
+	protected int speedModifier = 0;
 
 	public ItemFishingRodAdv(ToolMaterial toolMaterial) {
 
@@ -38,6 +40,18 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 	public ItemFishingRodAdv setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
+		return this;
+	}
+
+	public ItemFishingRodAdv setLuckModifier(int luckMod) {
+
+		luckModifier = luckMod;
+		return this;
+	}
+
+	public ItemFishingRodAdv setSpeedModifier(int speedMod) {
+
+		speedModifier = speedMod;
 		return this;
 	}
 
@@ -85,7 +99,7 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 			world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 			if (!world.isRemote) {
-				world.spawnEntityInWorld(new EntityCoFHFishHook(world, player));
+				world.spawnEntityInWorld(new EntityCoFHFishHook(world, player, luckModifier, speedModifier));
 			}
 			player.swingItem();
 		}

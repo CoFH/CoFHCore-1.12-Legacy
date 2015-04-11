@@ -8,10 +8,13 @@ import java.util.List;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -21,6 +24,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 public class EntityCoFHFishHook extends EntityFishHook {
+
+	int luckModifier = 0;
+	int speedModifier = 0;
 
 	public EntityCoFHFishHook(World world) {
 
@@ -34,10 +40,11 @@ public class EntityCoFHFishHook extends EntityFishHook {
 
 	}
 
-	public EntityCoFHFishHook(World world, EntityPlayer player) {
+	public EntityCoFHFishHook(World world, EntityPlayer player, int luckMod, int speedMod) {
 
 		super(world, player);
-
+		luckModifier = luckMod;
+		speedModifier = speedMod;
 	}
 
 	@Override
@@ -256,7 +263,7 @@ public class EntityCoFHFishHook extends EntityFishHook {
 								worldserver.func_147487_a("wake", d11, d5, d6, 0, f4, 0.01D, (-f3), 1.0D);
 								worldserver.func_147487_a("wake", d11, d5, d6, 0, (-f4), 0.01D, f3, 1.0D);
 							}
-						} else if (this.field_146040_ay > 0) {
+						} else if (this.field_146040_ay != 0) {
 							this.field_146040_ay -= k;
 							f1 = 0.15F;
 
@@ -277,14 +284,13 @@ public class EntityCoFHFishHook extends EntityFishHook {
 								worldserver.func_147487_a("splash", d11, d5, d6, 2 + this.rand.nextInt(2), 0.10000000149011612D, 0.0D, 0.10000000149011612D,
 										0.0D);
 							}
-
 							if (this.field_146040_ay <= 0) {
 								this.field_146054_aA = MathHelper.randomFloatClamp(this.rand, 0.0F, 360.0F);
 								this.field_146038_az = MathHelper.getRandomIntegerInRange(this.rand, 20, 80);
 							}
 						} else {
 							this.field_146040_ay = MathHelper.getRandomIntegerInRange(this.rand, 100, 900);
-							this.field_146040_ay -= EnchantmentHelper.func_151387_h(this.field_146042_b) * 20 * 5;
+							this.field_146040_ay -= (EnchantmentHelper.func_151387_h(this.field_146042_b) + speedModifier) * 20 * 5;
 						}
 					}
 
@@ -292,7 +298,6 @@ public class EntityCoFHFishHook extends EntityFishHook {
 						this.motionY -= this.rand.nextFloat() * this.rand.nextFloat() * this.rand.nextFloat() * 0.2D;
 					}
 				}
-
 				d2 = d10 * 2.0D - 1.0D;
 				this.motionY += 0.03999999910593033D * d2;
 
@@ -300,13 +305,76 @@ public class EntityCoFHFishHook extends EntityFishHook {
 					f6 = (float) (f6 * 0.9D);
 					this.motionY *= 0.8D;
 				}
-
 				this.motionX *= f6;
 				this.motionY *= f6;
 				this.motionZ *= f6;
 				this.setPosition(this.posX, this.posY, this.posZ);
 			}
 		}
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+
+		super.writeEntityToNBT(nbt);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+
+		super.readEntityFromNBT(nbt);
+	}
+
+	@Override
+	public int func_146034_e() {
+
+		if (this.worldObj.isRemote) {
+			return 0;
+		} else {
+			byte b0 = 0;
+
+			if (this.field_146043_c != null) {
+				double d0 = this.field_146042_b.posX - this.posX;
+				double d2 = this.field_146042_b.posY - this.posY;
+				double d4 = this.field_146042_b.posZ - this.posZ;
+				double d6 = MathHelper.sqrt_double(d0 * d0 + d2 * d2 + d4 * d4);
+				double d8 = 0.1D;
+				this.field_146043_c.motionX += d0 * d8;
+				this.field_146043_c.motionY += d2 * d8 + MathHelper.sqrt_double(d6) * 0.08D;
+				this.field_146043_c.motionZ += d4 * d8;
+				b0 = 3;
+			} else if (this.field_146045_ax > 0) {
+				EntityItem entityitem = new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, this.func_146033_f());
+				double d1 = this.field_146042_b.posX - this.posX;
+				double d3 = this.field_146042_b.posY - this.posY;
+				double d5 = this.field_146042_b.posZ - this.posZ;
+				double d7 = MathHelper.sqrt_double(d1 * d1 + d3 * d3 + d5 * d5);
+				double d9 = 0.1D;
+				entityitem.motionX = d1 * d9;
+				entityitem.motionY = d3 * d9 + MathHelper.sqrt_double(d7) * 0.08D;
+				entityitem.motionZ = d5 * d9;
+				this.worldObj.spawnEntityInWorld(entityitem);
+				this.field_146042_b.worldObj.spawnEntityInWorld(new EntityXPOrb(this.field_146042_b.worldObj, this.field_146042_b.posX,
+						this.field_146042_b.posY + 0.5D, this.field_146042_b.posZ + 0.5D, this.rand.nextInt(6) + 1));
+				b0 = 1;
+			}
+			if (this.field_146051_au) {
+				b0 = 2;
+			}
+			this.setDead();
+			this.field_146042_b.fishEntity = null;
+			return b0;
+		}
+	}
+
+	protected ItemStack func_146033_f() {
+
+		float f = this.worldObj.rand.nextFloat();
+		int i = EnchantmentHelper.func_151386_g(this.field_146042_b) + luckModifier;
+		int j = EnchantmentHelper.func_151387_h(this.field_146042_b) + speedModifier;
+
+		this.field_146042_b.addStat(net.minecraftforge.common.FishingHooks.getFishableCategory(f, i, j).stat, 1);
+		return net.minecraftforge.common.FishingHooks.getRandomFishable(this.rand, f, i, j);
 	}
 
 }
