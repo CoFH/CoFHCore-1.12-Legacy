@@ -1,6 +1,7 @@
 package cofh.core;
 
 import cofh.CoFHCore;
+import cofh.core.entity.EntityCoFHArrow;
 import cofh.core.gui.client.GuiFriendsList;
 import cofh.core.gui.element.TabAugment;
 import cofh.core.gui.element.TabConfiguration;
@@ -20,6 +21,7 @@ import cofh.core.util.TickHandlerEnderRegistry;
 import cofh.lib.util.helpers.StringHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -33,6 +35,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.entity.RenderArrow;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.shader.Framebuffer;
@@ -73,6 +76,8 @@ public class ProxyClient extends Proxy {
 	public void preInit() {
 
 		Minecraft.memoryReserve = null;
+
+		RenderingRegistry.registerEntityRenderingHandler(EntityCoFHArrow.class, new RenderArrow());
 
 		/* GLOBAL */
 		String category = "Global";

@@ -1,6 +1,7 @@
 package cofh.core.item.tool;
 
 import cofh.core.enchantment.CoFHEnchantment;
+import cofh.core.entity.EntityCoFHArrow;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.ServerHelper;
 
@@ -151,7 +152,7 @@ public class ItemBowAdv extends ItemBow {
 			int enchantFire = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack);
 			int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoFHEnchantment.multishot.effectId, stack);
 
-			EntityArrow arrow = new EntityArrow(world, player, drawStrength * arrowSpeedMultiplier);
+			EntityArrow arrow = new EntityCoFHArrow(world, player, drawStrength * arrowSpeedMultiplier);
 			double damage = arrow.getDamage() * arrowDamageMultiplier;
 			arrow.setDamage(damage);
 
@@ -178,7 +179,10 @@ public class ItemBowAdv extends ItemBow {
 				world.spawnEntityInWorld(arrow);
 			}
 			for (int i = 0; i < enchantMultishot; i++) {
-				arrow = new EntityArrow(world, player, drawStrength * arrowSpeedMultiplier);
+				arrow = new EntityCoFHArrow(world, player, drawStrength * arrowSpeedMultiplier);
+		        arrow.setThrowableHeading(arrow.motionX, arrow.motionY, arrow.motionZ,
+		        	1.5f * drawStrength * arrowSpeedMultiplier, 3.0F);
+
 				arrow.setDamage(damage);
 
 				if (drawStrength == 1.0F) {

@@ -1,7 +1,6 @@
 package cofh.core.enchantment;
 
 import cofh.core.item.tool.ItemBowAdv;
-import cofh.lib.util.helpers.StringHelper;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -36,12 +35,6 @@ public class EnchantmentMultishot extends Enchantment {
 	public String getName() {
 
 		return "enchant.cofh.multishot";
-	}
-
-	@Override
-	public String getTranslatedName(int level) {
-
-		return StringHelper.localize(getName()) + " " + StringHelper.ROMAN_NUMERAL[level];
 	}
 
 	@Override

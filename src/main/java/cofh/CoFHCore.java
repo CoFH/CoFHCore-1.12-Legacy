@@ -7,6 +7,7 @@ import cofh.core.command.CommandFriend;
 import cofh.core.command.CommandHandler;
 import cofh.core.enchantment.CoFHEnchantment;
 import cofh.core.entity.DropHandler;
+import cofh.core.entity.EntityCoFHArrow;
 import cofh.core.gui.GuiHandler;
 import cofh.core.network.PacketCoFHBase;
 import cofh.core.network.PacketCore;
@@ -25,6 +26,7 @@ import cofh.core.util.fluid.BucketHandler;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
+import cofh.lib.util.helpers.SecurityHelper;
 import cofh.mod.BaseMod;
 import cofh.mod.updater.UpdateManager;
 import com.google.common.collect.Sets;
@@ -44,6 +46,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.versioning.ArtifactVersion;
 import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import cpw.mods.fml.common.versioning.VersionRange;
@@ -139,6 +142,8 @@ public class CoFHCore extends BaseMod {
 
 		// END TEMP CODE
 
+		EntityRegistry.registerModEntity(EntityCoFHArrow.class, "Arrow", 0, this, 150, 1, false);
+
 		MinecraftForge.EVENT_BUS.register(proxy);
 		proxy.preInit();
 
@@ -167,6 +172,7 @@ public class CoFHCore extends BaseMod {
 		PacketCore.initialize();
 		PacketSocial.initialize();
 		SocialRegistry.initialize();
+		SecurityHelper.setup();
 	}
 
 	@EventHandler
@@ -243,32 +249,22 @@ public class CoFHCore extends BaseMod {
 		String category = "General";
 
 		comment = "Set to true to be informed of non-critical updates. You will still receive critical update notifications.";
-		if (!configCore.get(category, "EnableUpdateNotifications", true, comment)) {
-			CoFHProps.enableUpdateNotice = false;
-		}
+		CoFHProps.enableUpdateNotice = configCore.get(category, "EnableUpdateNotifications", true, comment);
 
 		comment = "Set to true this to log when a block is dismantled.";
-		if (!configCore.get(category, "EnableDismantleLogging", false, comment)) {
-			CoFHProps.enableDismantleLogging = true;
-		}
+		CoFHProps.enableDismantleLogging = configCore.get(category, "EnableDismantleLogging", false, comment);
 
 		comment = "Set to true to display death messages for any named entity.";
-		if (!configCore.get(category, "EnableGenericDeathMessage", true, comment)) {
-			CoFHProps.enableLivingEntityDeathMessages = false;
-		}
+		CoFHProps.enableLivingEntityDeathMessages = configCore.get(category, "EnableGenericDeathMessage", true, comment);
 
 		comment = "Set to false to disable items on the ground from trying to stack. This can improve server performance.";
-		if (!configCore.get(category, "EnableItemStacking", true, comment)) {
-			CoFHProps.enableItemStacking = false;
-		}
+		CoFHProps.enableItemStacking = configCore.get(category, "EnableItemStacking", true, comment);
 
 		/* SECURITY */
 		category = "Security";
 
 		comment = "Set to true to allow for Server Ops to access 'secure' blocks. Your players will be warned upon server connection.";
-		if (!configCore.get(category, "OpsCanAccessSecureBlocks", false, comment)) {
-			CoFHProps.enableOpSecureAccess = true;
-		}
+		CoFHProps.enableOpSecureAccess = configCore.get(category, "OpsCanAccessSecureBlocks", false, comment);
 
 		/* WORLD TWEAKS */
 		category = "World.Tweaks";

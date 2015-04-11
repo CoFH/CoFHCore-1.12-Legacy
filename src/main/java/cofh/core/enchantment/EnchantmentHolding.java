@@ -1,7 +1,6 @@
 package cofh.core.enchantment;
 
 import cofh.api.item.IInventoryContainerItem;
-import cofh.lib.util.helpers.StringHelper;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -36,15 +35,6 @@ public class EnchantmentHolding extends Enchantment {
 	public String getName() {
 
 		return "enchant.cofh.holding";
-	}
-
-	@Override
-	public String getTranslatedName(int level) {
-
-		if (level > 10) {
-			return StringHelper.localize("info.cofh.cheater");
-		}
-		return StringHelper.localize(getName()) + " " + StringHelper.ROMAN_NUMERAL[level];
 	}
 
 	@Override
