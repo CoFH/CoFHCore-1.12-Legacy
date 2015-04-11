@@ -33,9 +33,9 @@ public class EntityCoFHArrow extends EntityArrow implements IEntityAdditionalSpa
 	@Override
 	public void onUpdate() {
 
-		if (worldObj.isRemote)
+		if (worldObj.isRemote) {
 			return;
-
+		}
 		super.onUpdate();
 	}
 

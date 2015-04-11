@@ -7,7 +7,6 @@ import cofh.core.command.CommandFriend;
 import cofh.core.command.CommandHandler;
 import cofh.core.enchantment.CoFHEnchantment;
 import cofh.core.entity.DropHandler;
-import cofh.core.entity.EntityCoFHArrow;
 import cofh.core.gui.GuiHandler;
 import cofh.core.network.PacketCoFHBase;
 import cofh.core.network.PacketCore;
@@ -46,7 +45,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.versioning.ArtifactVersion;
 import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import cpw.mods.fml.common.versioning.VersionRange;
@@ -142,7 +140,7 @@ public class CoFHCore extends BaseMod {
 
 		// END TEMP CODE
 
-		EntityRegistry.registerModEntity(EntityCoFHArrow.class, "Arrow", 0, this, 150, 1, false);
+		// EntityRegistry.registerModEntity(EntityCoFHArrow.class, "Arrow", 0, this, 150, 1, false);
 
 		MinecraftForge.EVENT_BUS.register(proxy);
 		proxy.preInit();
