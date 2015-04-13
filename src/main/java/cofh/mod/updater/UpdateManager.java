@@ -78,7 +78,7 @@ public class UpdateManager {
 		if (evt.phase != Phase.START) {
 			return;
 		}
-		if (MinecraftServer.getServer() != null) {
+		if (MinecraftServer.getServer() != null && MinecraftServer.getServer().isServerRunning()) {
 			if (!MinecraftServer.getServer().getConfigurationManager().func_152596_g(evt.player.getGameProfile())) {
 				return;
 			}
