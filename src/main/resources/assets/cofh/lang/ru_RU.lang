@@ -123,7 +123,7 @@ info.cofh.command.version.0=Версия модификации
 
 info.cofh.command.killall.success=Удалено сущностей: %d. (%s)
 info.cofh.command.killall.successHostile=Удалено враждебных мобов: %d. (%s)
-info.cofh.command.killall.noMatch=Не найдено сущностей, соответствующих "§e%s§f"!
+info.cofh.command.killall.noMatch=Не найдено сущностей, соответствующих!
 info.cofh.command.killall.noHostile=Не найдено враждебных мобов!
 
 info.cofh.command.tpx.snark.0=Вы успешно телепортировали себя к себе!

@@ -125,7 +125,7 @@ info.cofh.command.version.0=模組版本
 
 info.cofh.command.killall.success=移除 %d 個實體. (%s)
 info.cofh.command.killall.successHostile=移除 %d 個敵方怪物. (%s)
-info.cofh.command.killall.noMatch=找不到實體可以配對"§e%s§f"!
+info.cofh.command.killall.noMatch=找不到實體可以配對!
 info.cofh.command.killall.noHostile=找不到敵方怪物!
 
 info.cofh.command.tpx.snark.0=成功傳送你自己!

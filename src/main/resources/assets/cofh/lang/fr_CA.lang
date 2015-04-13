@@ -125,7 +125,7 @@ info.cofh.command.version.0=Ce mod est en version
 
 info.cofh.command.killall.success=Retrait de %d entités. (%s)
 info.cofh.command.killall.successHostile=Retrait de %d mobs hostiles. (%s)
-info.cofh.command.killall.noMatch=Aucune entité de trouvée correspondant à "?e%s?f" !
+info.cofh.command.killall.noMatch=Aucune entité de trouvée correspondant!
 info.cofh.command.killall.noHostile=Aucun mob hostile de trouvé !
 
 info.cofh.command.tpx.snark.0=Téléportation sur vous-même avec succès !

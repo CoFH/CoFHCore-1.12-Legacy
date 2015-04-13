@@ -127,7 +127,7 @@ info.cofh.command.version.0=This mod is on version
 
 info.cofh.command.killall.success=Removed %d entities. (%s)
 info.cofh.command.killall.successHostile=Removed %d hostile mobs. (%s)
-info.cofh.command.killall.noMatch=No entities found matching "§e%s§f"!
+info.cofh.command.killall.noMatch=No matching entities found!
 info.cofh.command.killall.noHostile=No hostile mobs found!
 
 info.cofh.command.tpx.snark.0=Successfully teleported you to yourself!
@@ -177,10 +177,3 @@ key.cofh.multimode=Cycle Item Mode
 
 tab.cofh.friend.0=Add/Remove Friends!
 tab.cofh.friend.1=Friends not provided.
-
-#Fluid Name Fixes
-
-fluid.tile.water=Water
-fluid.tile.lava=Lava
-fluid.fuel=Fuel
-fluid.oil=Oil

@@ -125,7 +125,7 @@ info.cofh.command.version.0=Questa mod è sulla versione
 
 info.cofh.command.killall.success=Rimossi %d entità. (%s)
 info.cofh.command.killall.successHostile=Rimossi %d mob ostili. (%s)
-info.cofh.command.killall.noMatch=Nessuna entità trovata che combaciava con "§e%s§f"!
+info.cofh.command.killall.noMatch=Nessuna entità trovata che combaciava!
 info.cofh.command.killall.noHostile=Nessun mob ostile trovato!
 
 info.cofh.command.tpx.snark.0=Teletrasportato con successo te da te stesso!

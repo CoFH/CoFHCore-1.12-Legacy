@@ -127,7 +127,7 @@ info.cofh.command.version.0=이 모드의 버전은
 
 info.cofh.command.killall.success=%d 마리의 몬스터를 제거하였습니다. (%s)
 info.cofh.command.killall.successHostile=%d 마리의 적대적인 몬스터를 제거하였습니다. (%s)
-info.cofh.command.killall.noMatch=해당 몬스터를 찾을 수 없습니다. "§e%s§f"
+info.cofh.command.killall.noMatch=해당 몬스터를 찾을 수 없습니다.
 info.cofh.command.killall.noHostile=적대적인 몬스터를 찾을 수 없습니다.
 
 info.cofh.command.tpx.snark.0=성공적으로 자신에게 순간이동을 하였습니다.
