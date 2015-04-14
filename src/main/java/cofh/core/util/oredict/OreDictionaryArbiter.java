@@ -5,7 +5,6 @@ import cofh.lib.util.helpers.ItemHelper;
 import com.google.common.base.Strings;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import cpw.mods.fml.common.Loader;
 
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
@@ -75,14 +74,9 @@ public class OreDictionaryArbiter {
 	 */
 	public static void registerOreDictionaryEntry(ItemStack stack, String name) {
 
-		if (stack.getItem() == null) {
-			throw new RuntimeException("Null item being registered! Active mod: " + Loader.instance().activeModContainer());
+		if (stack.getItem() == null || Strings.isNullOrEmpty(name)) {
+			return;
 		}
-
-		if (Strings.isNullOrEmpty(name)) {
-			throw new RuntimeException("Null ore name being registered! Active mod: " + Loader.instance().activeModContainer());
-		}
-
 		int id = OreDictionary.getOreID(name);
 
 		oreIDs.put(name, id);
