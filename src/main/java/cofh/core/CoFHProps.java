@@ -14,7 +14,7 @@ public class CoFHProps {
 
 	}
 
-	public static final String VERSION = "1.7.10R3.0.1";
+	public static final String VERSION = "1.7.10R3.0.2B1";
 
 	private static final String BUILD = "1291";
 	public static final String FML_REQ = "7.10.0." + BUILD;
