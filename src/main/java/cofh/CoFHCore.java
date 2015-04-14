@@ -28,16 +28,10 @@ import cofh.core.world.WorldHandler;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.mod.BaseMod;
 import cofh.mod.updater.UpdateManager;
-import com.google.common.collect.Sets;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.MissingModsException;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.CustomProperty;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
@@ -45,14 +39,9 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.versioning.ArtifactVersion;
-import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
-import cpw.mods.fml.common.versioning.VersionRange;
-import cpw.mods.fml.relauncher.Side;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Set;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -84,8 +73,7 @@ public class CoFHCore extends BaseMod {
 	@SidedProxy(clientSide = "cofh.core.ProxyClient", serverSide = "cofh.core.Proxy")
 	public static Proxy proxy;
 
-	public static Logger log = LogManager.getLogger(modId);
-
+	public static final Logger log = LogManager.getLogger(modId);
 	public static final ConfigHandler configCore = new ConfigHandler(version);
 	public static final ConfigHandler configLoot = new ConfigHandler(version);
 	public static final ConfigHandler configClient = new ConfigHandler(version);
@@ -104,19 +92,6 @@ public class CoFHCore extends BaseMod {
 	public CoFHCore() {
 
 		super(log);
-
-		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			ModContainer forge = Loader.instance().getIndexedModList().get("Forge");
-			Set<ArtifactVersion> versionMissingMods = Sets.newHashSet();
-			VersionRange range = cpw.mods.fml.common.versioning.VersionParser.parseRange("[10.13.2.1291,10.14)");
-			ArtifactVersion fVersion = new DefaultArtifactVersion("Forge", range);
-			if (fVersion.containsVersion(forge.getProcessedVersion())) {
-				return;
-			}
-			versionMissingMods.add(fVersion);
-			FMLLog.severe("The mod %s (%s) requires mod versions %s to be available", modId, modName, versionMissingMods);
-			throw new MissingModsException(versionMissingMods);
-		}
 	}
 
 	@EventHandler
