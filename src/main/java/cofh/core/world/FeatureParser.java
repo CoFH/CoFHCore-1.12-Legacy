@@ -178,8 +178,7 @@ public class FeatureParser {
 			try {
 				genList = (JsonObject) parser.parse(new FileReader(genFile));
 			} catch (Throwable t) {
-				log.error("Critical error reading from a world generation file: " + genFile +
-						" > Please be sure the file is correct!", t);
+				log.error("Critical error reading from a world generation file: " + genFile + " > Please be sure the file is correct!", t);
 				continue;
 			}
 			boolean saveFile = false;
@@ -302,8 +301,7 @@ public class FeatureParser {
 			try {
 				genList = (JsonObject) parser.parse(new FileReader(genFile));
 			} catch (Throwable t) {
-				log.error("Critical error reading from a world generation file: " + genFile +
-						" > Please be sure the file is correct!", t);
+				log.error("Critical error reading from a world generation file: " + genFile + " > Please be sure the file is correct!", t);
 				continue;
 			}
 
@@ -313,8 +311,7 @@ public class FeatureParser {
 					if (parseGenerationEntry(genEntry.getKey(), genEntry.getValue())) {
 						log.debug("Generation entry successfully parsed: \"" + genEntry.getKey() + "\"");
 					} else {
-						log.error("Error parsing generation entry: \"" + genEntry.getKey() +
-								"\" > Please check the parameters. It *may* be a duplicate.");
+						log.error("Error parsing generation entry: \"" + genEntry.getKey() + "\" > Please check the parameters. It *may* be a duplicate.");
 					}
 				} catch (Throwable t) {
 					log.fatal("There was a severe error parsing '" + genEntry.getKey() + "'!", t);
@@ -364,8 +361,7 @@ public class FeatureParser {
 
 	// TODO: move these helper functions outside core?
 
-	public static WorldGenerator parseGenerator(String def, JsonObject genObject, List<WeightedRandomBlock> resList,
-			int clusterSize,
+	public static WorldGenerator parseGenerator(String def, JsonObject genObject, List<WeightedRandomBlock> resList, int clusterSize,
 			List<WeightedRandomBlock> matList) {
 
 		JsonElement genElement = genObject.get("template");
@@ -510,8 +506,7 @@ public class FeatureParser {
 				log.error("Invalid block entry!");
 				return null;
 			}
-			int metadata = blockElement.has("metadata") ? MathHelper.clampI(blockElement.get("metadata").getAsInt(), min, 15)
-					: min;
+			int metadata = blockElement.has("metadata") ? MathHelper.clampI(blockElement.get("metadata").getAsInt(), min, 15) : min;
 			int weight = blockElement.has("weight") ? MathHelper.clampI(blockElement.get("weight").getAsInt(), 1, 1000000) : 100;
 			return new WeightedRandomBlock(block, metadata, weight);
 		} else {
@@ -670,10 +665,15 @@ public class FeatureParser {
 			it = new ItemStack(GameData.getItemRegistry().getObject(genElement.getAsString()), 1, meta);
 		} else {
 			JsonObject item = genElement.getAsJsonObject();
-			if (item.has("meta"))
+
+			if (item.has("meta")) {
 				meta = item.get("meta").getAsInt();
-			if (item.has("weight"))
+			} else if (item.has("metadata")) {
+				meta = item.get("metadata").getAsInt();
+			}
+			if (item.has("weight")) {
 				chance = item.get("weight").getAsInt();
+			}
 			it = new ItemStack(GameData.getItemRegistry().getObject(item.get("name").getAsString()), 1, meta);
 			if (item.has("nbt")) {
 				try {
@@ -689,11 +689,9 @@ public class FeatureParser {
 				}
 			}
 		}
-
 		if (it.getItem() == null) {
 			return null;
 		}
-
 		return new WeightedRandomItemStack(it, chance);
 	}
 
