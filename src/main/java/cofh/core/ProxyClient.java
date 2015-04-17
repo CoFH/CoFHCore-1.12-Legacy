@@ -23,6 +23,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -81,7 +82,8 @@ public class ProxyClient extends Proxy {
 
 		/* GLOBAL */
 		String category = "Global";
-		CoFHCore.configClient.getCategory(category).setComment("The options in this section change core Minecraft behavior and are not limited to CoFH mods.");
+		CoFHCore.configClient.getCategory(category).setComment(
+			"The options in this section change core Minecraft behavior and are not limited to CoFH mods.");
 
 		String comment = "Set to false to disable any particles from spawning in Minecraft.";
 		if (!CoFHCore.configClient.get(category, "EnableParticles", true, comment)) {
@@ -136,8 +138,14 @@ public class ProxyClient extends Proxy {
 			CoFHProps.enableOpSecureAccessWarning = false;
 		}
 		CoFHCore.configClient.save();
-		if (!Boolean.parseBoolean(System.getProperty("forge.forceDisplayStencil", "false"))) {
+
+		l: if (!Boolean.parseBoolean(System.getProperty("forge.forceDisplayStencil", "false"))) {
 			try {
+				if (Loader.isModLoaded("OpenMods")) {
+					if (ReflectionHelper.findField(OpenGlHelper.class, "field_153212_w").getInt(null) == 2) {
+						break l;
+					}
+				}
 				int i = 8;
 				ReflectionHelper.findField(ForgeHooksClient.class, "stencilBits").setInt(null, i);
 				Framebuffer b = Minecraft.getMinecraft().getFramebuffer();
