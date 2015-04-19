@@ -26,6 +26,7 @@ info.cofh.augmentation=Прирост
 info.cofh.blank=Пусто
 info.cofh.capacity=Ёмкость
 info.cofh.charge=Заряд
+info.cofh.cheater=Жулик!
 info.cofh.configuration=Конфигурация
 info.cofh.contents=Содержит
 info.cofh.controlStatus=Режим управления
@@ -59,6 +60,7 @@ info.cofh.level=Уровень
 info.cofh.locked=Закрыто
 info.cofh.low=Низкий
 info.cofh.maxEnergyPerTick=Макс. энергия
+info.cofh.modeChange=чтобы изменить режим
 info.cofh.none=Нет
 info.cofh.owner=Владелец
 info.cofh.perUse=За использование
@@ -90,6 +92,7 @@ info.cofh.command.tpx=Улучшенная версия команды /tp, ко
 info.cofh.command.version=Показывает версию этого мода.
 info.cofh.command.enchant=Улучшенная команда /enchant. Нет ограничений по уровням или применениям.
 info.cofh.command.clearblocks=Убирает указанные блоки из указанной территории в мире.
+info.cofh.command.countblocks=Подсчитывает указанные блоки на указанной территории в мире.
 info.cofh.command.replaceblocks=Заменяет указанные блоки из указанной территории в мире.
 info.cofh.command.reloadworldgen=Перезагружает мир с жёсткого диска.
 info.cofh.command.unloadchunk=Разгружает чанк, на которой смотрит игрок.
@@ -103,6 +106,7 @@ info.cofh.command.tpx.syntax=/cofh tpx [игрок] {(<игрок> | <измер
 info.cofh.command.version.syntax=/cofh version
 info.cofh.command.enchant.syntax=/cofh enchant [игрок] <ID зачарования> [уровень]
 info.cofh.command.clearblocks.syntax=/cofh clearblocks {<user> <координата x> <координата y> <координата z> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} [block#meta] [block#meta] ...
+info.cofh.command.countblocks.syntax=/cofh countblocks {<user> <координата x> <координата y> <координата z> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} [block#meta] [block#meta] ...
 info.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<user> <координата x> <координата y> <координата z> | <xStart> <yStart> <zStart> <xEnd> <yEnd> <zEnd>} <replaceBlock#meta> [block#meta] [block#meta] ...
 info.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
 info.cofh.command.unloadchunk.syntax=/cofh unloadchunk
@@ -123,7 +127,7 @@ info.cofh.command.version.0=Версия модификации
 
 info.cofh.command.killall.success=Удалено сущностей: %d. (%s)
 info.cofh.command.killall.successHostile=Удалено враждебных мобов: %d. (%s)
-info.cofh.command.killall.noMatch=Не найдено сущностей, соответствующих!
+info.cofh.command.killall.noMatch=Не найдено подходящих сущностей!
 info.cofh.command.killall.noHostile=Не найдено враждебных мобов!
 
 info.cofh.command.tpx.snark.0=Вы успешно телепортировали себя к себе!
@@ -147,6 +151,10 @@ info.cofh.command.clearblocks.failure=Нет блоков для удалени�
 info.cofh.command.clearblocks.start=Удаление %s блоков с %s:%s:%s до %s:%s:%s.
 info.cofh.command.clearblocks.success=Успешно удалено %s блоков с %s:%s:%s до %s:%s:%s.
 
+info.cofh.command.countblocks.failure=На этой территории нет блоков.
+info.cofh.command.countblocks.start=Подсчёт %s блоков от %s:%s:%s до %s:%s:%s.
+info.cofh.command.countblocks.success=Найдено %s блоков(-а) от %s:%s:%s до %s:%s:%s.
+
 info.cofh.command.unloadchunk.success=Разгрузка чанка в %s:%s
 
 info.cofh.updater.download=Загрузить
@@ -163,12 +171,12 @@ info.cofh.tutorial.tabSecurity=Вкладка "Безопасность" поз�
 
 item.invalid.name=Неизвестный предмет (Уничтожить)
 
+key.cofh.category=Клавиши CoFH
+key.cofh.empower=Усилить/ослабить предмет
+key.cofh.multimode=Режим прокрутки предметов
+
 tab.cofh.friend.0=Добавить/удалить друзей!
 tab.cofh.friend.1=Друзей нет.
 
-#Fluid Name Fixes
-
 fluid.tile.water=Вода
 fluid.tile.lava=Лава
-fluid.fuel=Топливо
-fluid.oil=Нефть
