@@ -37,7 +37,7 @@ public class CoFHAccessTransformer extends AccessTransformer {
 
 	private void readMappingFile(String mapFile) {
 
-		System.out.println("Adding Accesstransformer map: " + mapFile);
+		ASMCore.log.debug("Adding Accesstransformer map: " + mapFile);
 		try {
 			Method parentMapFile = AccessTransformer.class.getDeclaredMethod("readMapFile", String.class);
 			parentMapFile.setAccessible(true);
