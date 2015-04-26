@@ -26,6 +26,7 @@ info.cofh.augmentation=Potenziamento
 info.cofh.blank=Vuoto
 info.cofh.capacity=Capacità
 info.cofh.charge=Carica
+info.cofh.cheater=Imbroglione!
 info.cofh.configuration=Configurazioni
 info.cofh.contents=Contenuto
 info.cofh.controlStatus=Controllo stato
@@ -59,6 +60,7 @@ info.cofh.level=Livello
 info.cofh.locked=Bloccato
 info.cofh.low=Basso
 info.cofh.maxEnergyPerTick=Corrente massima
+info.cofh.modeChange=per cambiare modalità
 info.cofh.none=Niente
 info.cofh.owner=Proprietario
 info.cofh.perUse=per uso
@@ -168,6 +170,10 @@ info.cofh.tutorial.tabRedstone=Il tab Controllo pietrarossa configura come quest
 info.cofh.tutorial.tabSecurity=Il tab Sicurezza permette al proprietario di controllare chi ha accesso a quest dispositivo.
 
 item.invalid.name=Oggetto invalido (elimina)
+
+key.cofh.category=Comandi CoFH
+key.cofh.empower=Attiva/disattiva oggetto
+key.cofh.multimode=Cicla modalità dell'oggetto
 
 tab.cofh.friend.0=Aggiungi/Rimuovi amici!
 tab.cofh.friend.1=Amici non aggiunti.
