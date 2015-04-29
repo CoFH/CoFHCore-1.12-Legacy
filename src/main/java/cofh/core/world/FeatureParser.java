@@ -545,42 +545,58 @@ public class FeatureParser {
 		return true;
 	}
 
-	public static WeightedRandomNBTTag parseEntityEntry(JsonElement genElement) {
+    public static WeightedRandomNBTTag parseEntityEntry(JsonElement genElement) {
 
-		if (genElement.isJsonNull()) {
-			log.warn("Null entity entry!");
-			return null;
-		} else if (genElement.isJsonObject()) {
-			JsonObject genObject = genElement.getAsJsonObject();
-			NBTTagCompound data;
-			if (genObject.has("spawnerTag")) {
-				try {
-					data = (NBTTagCompound) JsonToNBT.func_150315_a(genObject.get("spawnerTag").toString());
-				} catch (NBTException e) {
-					log.error("Invalid entity entry!", e);
-					return null;
-				}
-			} else {
-				data = new NBTTagCompound();
-				String type = genObject.get("entity").getAsString();
-				if (type == null) {
-					log.error("Invalid entity entry!");
-					return null;
-				}
-				data.setString("EntityId", type);
-			}
-			return new WeightedRandomNBTTag(genObject.get("weight").getAsInt(), data);
-		} else {
-			String type = genElement.getAsString();
-			if (type == null) {
-				log.error("Invalid entity entry!");
-				return null;
-			}
-			NBTTagCompound tag = new NBTTagCompound();
-			tag.setString("EntityId", type);
-			return new WeightedRandomNBTTag(100, tag);
-		}
-	}
+        if (genElement.isJsonNull()) {
+            log.warn("Null entity entry!");
+            return null;
+        } else if (genElement.isJsonObject()) {
+            JsonObject genObject = genElement.getAsJsonObject();
+            NBTTagCompound data;
+            if (genObject.has("spawnerTag")) {
+                try {
+                    // JsonToNBT.func_150315_a deserializes JSON data, but it expects illegally-formed JSON
+                    // that is not wrapping properties in double quotes.  Even if the user did not wrap their
+                    // property names in double quotes as expected, somewhere in the CoFH parsing process, they
+                    // can get injected (since it's the correct thing for them to have).
+                    //
+                    // The workaround here is to strip out all those double quotes for now.  This will become a problem
+                    // if there's ever some spawning data the user wants whose value is actually a string.
+
+                    String originalSpawnerTag = genObject.get("spawnerTag").toString();
+                    String cleansedSpawnerTag = originalSpawnerTag.replace("\"", "");
+
+                    data = (NBTTagCompound) JsonToNBT.func_150315_a(cleansedSpawnerTag);
+                } catch (NBTException e) {
+                    log.error("Invalid entity entry!", e);
+                    return null;
+                }
+            } else {
+                data = new NBTTagCompound();
+                String type = genObject.get("entity").getAsString();
+                if (type == null) {
+                    log.error("Invalid entity entry!");
+                    return null;
+                }
+                data.setString("EntityId", type);
+            }
+            if(genObject.has("weight")) {
+                return new WeightedRandomNBTTag(genObject.get("weight").getAsInt(), data);
+            } else {
+                return new WeightedRandomNBTTag(100, data);
+            }
+
+        } else {
+            String type = genElement.getAsString();
+            if (type == null) {
+                log.error("Invalid entity entry!");
+                return null;
+            }
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("EntityId", type);
+            return new WeightedRandomNBTTag(100, tag);
+        }
+    }
 
 	public static boolean parseEntityList(JsonElement genElement, List<WeightedRandomNBTTag> list) {
 
