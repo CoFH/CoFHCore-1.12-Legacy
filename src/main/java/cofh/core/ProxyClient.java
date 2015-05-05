@@ -140,6 +140,8 @@ public class ProxyClient extends Proxy {
 		CoFHCore.configClient.save();
 
 		l: if (!Boolean.parseBoolean(System.getProperty("forge.forceDisplayStencil", "false"))) {
+			if (Boolean.parseBoolean(System.getProperty("forge.forceNoStencil", "false")))
+				break l;
 			try {
 				if (Loader.isModLoaded("OpenMods")) {
 					if (ReflectionHelper.findField(OpenGlHelper.class, "field_153212_w").getInt(null) == 2) {
