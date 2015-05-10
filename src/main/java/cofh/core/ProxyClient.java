@@ -177,7 +177,6 @@ public class ProxyClient extends Proxy {
 	public void registerKeyBinds() {
 
 		super.registerKeyBinds();
-		FMLCommonHandler.instance().bus().register(CoFHKeyHandler.instance);
 		CoFHKeyHandler.addKeyBind(KeyBindingEmpower.instance);
 		CoFHKeyHandler.addKeyBind(KeyBindingMultiMode.instance);
 

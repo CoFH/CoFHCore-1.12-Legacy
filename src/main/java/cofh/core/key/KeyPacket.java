@@ -8,6 +8,20 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class KeyPacket extends PacketCoFHBase {
 
+	public static void sendToServer(String uuid) {
+
+		PacketHandler.sendToServer(new KeyPacket(uuid));
+	}
+
+	public KeyPacket() {
+
+	}
+
+	protected KeyPacket(String uuid) {
+
+		addString(uuid);
+	}
+
 	public static void initialize() {
 
 		PacketHandler.instance.registerPacket(KeyPacket.class);
