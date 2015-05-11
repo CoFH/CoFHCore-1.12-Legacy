@@ -60,7 +60,7 @@ public class Proxy {
 
 	public int getKeyBind(String key) {
 
-		return -1;
+		return 0;
 	}
 
 	/* EVENT HANDLERS */
