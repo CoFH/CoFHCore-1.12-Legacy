@@ -20,8 +20,7 @@ public class CoFHProps {
 	public static final String FORGE_REQ = "10.13.1." + BUILD;
 	public static final String FORGE_REQ_MAX = "10.14";
 
-	public static final String DEPENDENCIES = "required-after:required-after:Forge@["
-			+ CoFHProps.FORGE_REQ + "," + CoFHProps.FORGE_REQ_MAX + ");";
+	public static final String DEPENDENCIES = "required-after:Forge@[" + CoFHProps.FORGE_REQ + "," + CoFHProps.FORGE_REQ_MAX + ");";
 
 	public static final String DOWNLOAD_URL = "http://teamcofh.com/downloads/";
 
