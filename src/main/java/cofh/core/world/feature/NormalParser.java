@@ -22,7 +22,6 @@ public class NormalParser extends UniformParser {
 			log.error("Height parameters for 'normal' template not specified in \"" + featureName + "\"");
 			return null;
 		}
-
 		int meanHeight = genObject.get("meanHeight").getAsInt();
 		int maxVariance = genObject.get("maxVariance").getAsInt();
 

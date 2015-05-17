@@ -42,37 +42,30 @@ public class UniformParser implements IFeatureParser {
 		if (!FeatureParser.parseResList(genObject.get("block"), resList, true)) {
 			return null;
 		}
-
 		int clusterSize = 0;
 		if (genObject.has("clusterSize")) {
 			clusterSize = genObject.get("clusterSize").getAsInt();
 		}
-
 		int numClusters = 0;
 		if (genObject.has("numClusters")) {
 			numClusters = genObject.get("numClusters").getAsInt();
 		}
-
 		if (clusterSize < 0 || numClusters <= 0) {
 			log.error("Invalid cluster size or count specified in \"" + featureName + "\"");
 			return null;
 		}
-
 		boolean retrogen = false;
 		if (genObject.has("retrogen")) {
 			retrogen = genObject.get("retrogen").getAsBoolean();
 		}
-
 		GenRestriction biomeRes = GenRestriction.NONE;
 		if (genObject.has("biomeRestriction")) {
 			biomeRes = GenRestriction.get(genObject.get("biomeRestriction").getAsString());
 		}
-
 		GenRestriction dimRes = GenRestriction.NONE;
 		if (genObject.has("dimensionRestriction")) {
 			dimRes = GenRestriction.get(genObject.get("dimensionRestriction").getAsString());
 		}
-
 		List<WeightedRandomBlock> matList = parseMaterial(genObject, log);
 
 		WorldGenerator generator = FeatureParser.parseGenerator(getDefaultTemplate(), genObject, resList, clusterSize, matList);

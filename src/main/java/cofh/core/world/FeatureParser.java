@@ -25,6 +25,7 @@ import cofh.core.world.feature.UniformParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.WeightedRandomItemStack;
 import cofh.lib.util.WeightedRandomNBTTag;
+import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.biome.BiomeInfo;
 import cofh.lib.world.biome.BiomeInfoRarity;
@@ -62,6 +63,7 @@ import net.minecraft.world.biome.BiomeGenBase.TempCategory;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DungeonHooks.DungeonMob;
+import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -658,23 +660,43 @@ public class FeatureParser {
 		if (genElement.isJsonNull()) {
 			return null;
 		}
-		int meta = 0, chance = 100;
-		ItemStack it;
+		int metadata = 0, stackSize = 1, chance = 100;
+		ItemStack stack;
 
 		if (genElement.isJsonPrimitive()) {
-			it = new ItemStack(GameData.getItemRegistry().getObject(genElement.getAsString()), 1, meta);
+			stack = new ItemStack(GameData.getItemRegistry().getObject(genElement.getAsString()), 1, metadata);
 		} else {
 			JsonObject item = genElement.getAsJsonObject();
 
 			if (item.has("meta")) {
-				meta = item.get("meta").getAsInt();
+				metadata = item.get("meta").getAsInt();
 			} else if (item.has("metadata")) {
-				meta = item.get("metadata").getAsInt();
+				metadata = item.get("metadata").getAsInt();
+			}
+			if (item.has("stackSize")) {
+				stackSize = item.get("stackSize").getAsInt();
+			} else if (item.has("quantity")) {
+				stackSize = item.get("quantity").getAsInt();
+			} else if (item.has("amount")) {
+				stackSize = item.get("amount").getAsInt();
+			}
+			if (stackSize <= 0) {
+				stackSize = 1;
 			}
 			if (item.has("weight")) {
 				chance = item.get("weight").getAsInt();
+			} else if (item.has("chance")) {
+				chance = item.get("chance").getAsInt();
 			}
-			it = new ItemStack(GameData.getItemRegistry().getObject(item.get("name").getAsString()), 1, meta);
+			if (item.has("oreName") && ItemHelper.oreNameExists(item.get("oreName").getAsString())) {
+				ItemStack oreStack = OreDictionary.getOres(item.get("oreName").getAsString()).get(0);
+				stack = ItemHelper.cloneStack(oreStack, stackSize);
+			} else {
+				if (!item.has("name")) {
+					log.error("Item entry missing valid name or oreName!");
+				}
+				stack = new ItemStack(GameData.getItemRegistry().getObject(item.get("name").getAsString()), stackSize, metadata);
+			}
 			if (item.has("nbt")) {
 				try {
 					NBTBase nbtbase = JsonToNBT.func_150315_a(item.get("nbt").getAsString());
@@ -682,17 +704,16 @@ public class FeatureParser {
 					if (!(nbtbase instanceof NBTTagCompound)) {
 						log.error("Item has invalid NBT data.");
 					}
-
-					it.setTagCompound((NBTTagCompound) nbtbase);
+					stack.setTagCompound((NBTTagCompound) nbtbase);
 				} catch (NBTException t) {
 					log.error("Item has invalid NBT data.", t);
 				}
 			}
 		}
-		if (it.getItem() == null) {
+		if (stack.getItem() == null) {
 			return null;
 		}
-		return new WeightedRandomItemStack(it, chance);
+		return new WeightedRandomItemStack(stack, chance);
 	}
 
 	public static boolean parseWeightedItemList(JsonElement genElement, List<WeightedRandomItemStack> res) {

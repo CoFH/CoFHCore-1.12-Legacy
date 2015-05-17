@@ -21,4 +21,5 @@ public class CaveParser extends UniformParser {
 		boolean ceiling = genObject.has("ceiling") && genObject.get("ceiling").getAsBoolean();
 		return new FeatureGenCave(featureName, gen, ceiling, numClusters, biomeRes, retrogen, dimRes);
 	}
+
 }
