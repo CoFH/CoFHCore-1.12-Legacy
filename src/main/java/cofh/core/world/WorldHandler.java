@@ -300,10 +300,10 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		int offsetX = chunkX * 16;
 		int offsetZ = chunkZ * 16;
 
-		for (int blockX = 0; blockX < 16; blockX++) {
-			for (int blockZ = 0; blockZ < 16; blockZ++) {
+		for (int blockX = 0; blockX < 17; blockX++) {
+			for (int blockZ = 0; blockZ < 17; blockZ++) {
 				for (int blockY = 5; blockY > layersBedrock - 1; blockY--) {
-					if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ) == Blocks.bedrock) {
+					if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ).isAssociatedBlock(Blocks.bedrock)) {
 						world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, filler, meta, 2);
 					}
 				}
@@ -317,11 +317,11 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		/* Flatten bedrock on the top as well */
 		int worldHeight = world.getActualHeight();
 
-		if (world.getBlock(offsetX, worldHeight - 1, offsetZ) == Blocks.bedrock) {
-			for (int blockX = 0; blockX < 16; blockX++) {
-				for (int blockZ = 0; blockZ < 16; blockZ++) {
+		if (world.getBlock(offsetX, worldHeight - 1, offsetZ).isAssociatedBlock(Blocks.bedrock)) {
+			for (int blockX = 0; blockX < 17; blockX++) {
+				for (int blockZ = 0; blockZ < 17; blockZ++) {
 					for (int blockY = worldHeight - 2; blockY > worldHeight - 6; blockY--) {
-						if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ) == Blocks.bedrock) {
+						if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ).isAssociatedBlock(Blocks.bedrock)) {
 							world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, filler, meta, 2);
 						}
 					}
