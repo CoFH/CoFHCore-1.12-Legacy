@@ -276,6 +276,15 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		if (!genFlatBedrock | !newGen & !retroFlatBedrock) {
 			return;
 		}
+		int offsetX = chunkX * 16;
+		int offsetZ = chunkZ * 16;
+
+		/* Determine if this is a void age; halt if so. */
+		boolean isVoidAge = world.getBlock(offsetX, 0, offsetZ).isAir(world, offsetX, 0, offsetZ);
+
+		if (isVoidAge) {
+			return;
+		}
 		// TODO: pull out the ExtendedStorageArray and edit that directly. faster.
 		Block filler = world.getBiomeGenForCoords(chunkX, chunkZ).fillerBlock;
 		// NOTE: filler block is dirt by default, the actual filler block for the biome is part of a method body
@@ -296,19 +305,15 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			filler = Blocks.end_stone;
 			break;
 		}
-
-		int offsetX = chunkX * 16;
-		int offsetZ = chunkZ * 16;
-
 		for (int blockX = 0; blockX < 16; blockX++) {
 			for (int blockZ = 0; blockZ < 16; blockZ++) {
 				for (int blockY = 5; blockY > layersBedrock - 1; blockY--) {
-					if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ) == Blocks.bedrock) {
+					if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ).isAssociatedBlock(Blocks.bedrock)) {
 						world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, filler, meta, 2);
 					}
 				}
 				for (int blockY = layersBedrock - 1; blockY > 0; blockY--) {
-					if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ) != Blocks.air) {
+					if (!world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ).isAssociatedBlock(Blocks.bedrock)) {
 						world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, Blocks.bedrock, 0, 2);
 					}
 				}
@@ -326,7 +331,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 						}
 					}
 					for (int blockY = worldHeight - layersBedrock; blockY < worldHeight - 1; blockY++) {
-						if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ) != Blocks.air) {
+						if (!world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ).isAssociatedBlock(Blocks.bedrock)) {
 							world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, Blocks.bedrock, 0, 2);
 						}
 					}
