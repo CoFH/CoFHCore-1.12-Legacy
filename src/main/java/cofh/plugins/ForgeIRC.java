@@ -1,4 +1,4 @@
-package cofh.plugin;
+package cofh.plugins;
 
 import cofh.CoFHCore;
 import cofh.core.util.CoreUtils;

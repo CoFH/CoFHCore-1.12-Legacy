@@ -50,4 +50,5 @@ public class PacketTileInfo extends PacketCoFHBase {
 
 		return new PacketTileInfo(theTile);
 	}
+
 }
