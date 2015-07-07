@@ -1,5 +1,6 @@
 package cofh.core;
 
+import cofh.core.chat.PacketIndexedChat;
 import cofh.core.key.CoFHKeyHandler;
 import cofh.core.key.KeyPacket;
 import cofh.core.network.PacketSocial;
@@ -20,6 +21,7 @@ import java.util.List;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -42,6 +44,7 @@ public class Proxy {
 
 	public void registerPacketInformation() {
 
+        PacketIndexedChat.initialize();
 		PacketSocial.initialize();
 		KeyPacket.initialize();
 		PacketTileInfo.initialize();
@@ -159,5 +162,9 @@ public class Proxy {
 
 		return 0;
 	}
+
+    public void addIndexedChatMessage(IChatComponent chat, int index) {
+
+    }
 
 }
