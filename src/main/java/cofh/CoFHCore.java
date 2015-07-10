@@ -221,22 +221,22 @@ public class CoFHCore extends BaseMod {
 		/* GENERAL */
 		String category = "General";
 
-		comment = "Set to true to be informed of non-critical updates. You will still receive critical update notifications.";
+		comment = "Set to TRUE to be informed of non-critical updates. You will still receive critical update notifications.";
 		CoFHProps.enableUpdateNotice = configCore.get(category, "EnableUpdateNotifications", true, comment);
 
-		comment = "Set to true this to log when a block is dismantled.";
+		comment = "Set to TRUE for this to log when a block is dismantled.";
 		CoFHProps.enableDismantleLogging = configCore.get(category, "EnableDismantleLogging", false, comment);
 
-		comment = "Set to true to display death messages for any named entity.";
+		comment = "Set to TRUE to display death messages for any named entity.";
 		CoFHProps.enableLivingEntityDeathMessages = configCore.get(category, "EnableGenericDeathMessage", true, comment);
 
-		comment = "Set to false to disable items on the ground from trying to stack. This can improve server performance.";
+		comment = "Set to FALSE to disable items on the ground from trying to stack. This can improve server performance.";
 		CoFHProps.enableItemStacking = configCore.get(category, "EnableItemStacking", true, comment);
 
 		/* SECURITY */
 		category = "Security";
 
-		comment = "Set to true to allow for Server Ops to access 'secure' blocks. Your players will be warned upon server connection.";
+		comment = "Set to TRUE to allow for Server Ops to access 'secure' blocks. Your players will be warned upon server connection.";
 		CoFHProps.enableOpSecureAccess = configCore.get(category, "OpsCanAccessSecureBlocks", false, comment);
 
 		/* WORLD TWEAKS */

@@ -83,8 +83,7 @@ public class ProxyClient extends Proxy {
 
 		/* GLOBAL */
 		String category = "Global";
-		CoFHCore.configClient.getCategory(category).setComment(
-			"The options in this section change core Minecraft behavior and are not limited to CoFH mods.");
+		CoFHCore.configClient.getCategory(category).setComment("The options in this section change core Minecraft behavior and are not limited to CoFH mods.");
 
 		String comment = "Set to false to disable any particles from spawning in Minecraft.";
 		if (!CoFHCore.configClient.get(category, "EnableParticles", true, comment)) {
@@ -141,8 +140,9 @@ public class ProxyClient extends Proxy {
 		CoFHCore.configClient.save();
 
 		l: if (!Boolean.parseBoolean(System.getProperty("forge.forceDisplayStencil", "false"))) {
-			if (Boolean.parseBoolean(System.getProperty("forge.forceNoStencil", "false")))
+			if (Boolean.parseBoolean(System.getProperty("forge.forceNoStencil", "false"))) {
 				break l;
+			}
 			try {
 				if (Loader.isModLoaded("OpenMods")) {
 					if (ReflectionHelper.findField(OpenGlHelper.class, "field_153212_w").getInt(null) == 2) {
@@ -341,9 +341,9 @@ public class ProxyClient extends Proxy {
 		return FMLClientHandler.instance().getClient().gameSettings.getSoundLevel(SoundCategory.values()[category]);
 	}
 
+	@Override
+	public void addIndexedChatMessage(IChatComponent chat, int index) {
 
-    @Override
-    public void addIndexedChatMessage(IChatComponent chat, int index) {
-        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(chat, index);
-    }
+		Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(chat, index);
+	}
 }

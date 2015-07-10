@@ -44,7 +44,7 @@ public class Proxy {
 
 	public void registerPacketInformation() {
 
-        PacketIndexedChat.initialize();
+		PacketIndexedChat.initialize();
 		PacketSocial.initialize();
 		KeyPacket.initialize();
 		PacketTileInfo.initialize();
@@ -163,8 +163,8 @@ public class Proxy {
 		return 0;
 	}
 
-    public void addIndexedChatMessage(IChatComponent chat, int index) {
+	public void addIndexedChatMessage(IChatComponent chat, int index) {
 
-    }
+	}
 
 }

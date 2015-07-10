@@ -78,6 +78,7 @@
 				<istrue value="${forge.exists}"/>
 				<available file="${lib.dir}/codechickenlib.jar" type="file"/>
 				<available file="${lib.dir}/CoFHLib.jar" type="file"/>
+				<available file="${lib.dir}/NEI.jar" type="file"/>
 			</and>
 		</condition>
 	</target>
@@ -93,6 +94,10 @@
 
 		<echo message="Downloading CCL... "/>
 		<get src="http://files.minecraftforge.net/maven/codechicken/CodeChickenLib/1.7.10-1.1.1.88/CodeChickenLib-1.7.10-1.1.1.88-dev.jar" dest="${download.dir}/codechickenlib.jar"/>
+
+		<echo message="Downloading NEI API... "/>
+		<get src="http://chickenbones.net/maven/codechicken/NotEnoughItems/1.7.10-1.0.2.15/NotEnoughItems-1.7.10-1.0.2.15-dev.jar" dest="${download.dir}/NEI.jar"/>
+
 		<echo message="Downloading CoFHLib... "/>
 		<get src="https://github.com/CoFH/CoFHLib/archive/master.zip" dest="${download.dir}/CoFHLib.zip"/>
 		<!-- Begin hack -->
@@ -113,8 +118,13 @@
 	</target>
 
 	<target name="extract-dependencies" depends="setup-forge,get-dependencies" unless="have.libs">
+
 		<echo message="Extracting CCL... " />
 		<copy file="${download.dir}/codechickenlib.jar" todir="${lib.dir}"/>
+
+		<echo message="Extracting NEI API... "/>
+		<copy file="${download.dir}/NEI.jar" todir="${lib.dir}"/>
+
 		<echo message="Extracting CoFHLib... " />
 		<copy file="${download.dir}/CoFHLib.jar" todir="${lib.dir}"/>
 	</target>

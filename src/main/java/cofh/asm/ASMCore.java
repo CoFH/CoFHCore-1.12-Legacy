@@ -1121,8 +1121,7 @@ class ASMCore {
 			updateEntities.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "net/minecraft/tileentity/TileEntity", "cofh_validate", "()V", false));
 			updateEntities.instructions.insert(n, n = new InsnNode(ACONST_NULL));
 			updateEntities.instructions.insert(n, n = lGuard);
-			updateEntities.instructions.insert(n, n = new FrameNode(F_SAME1, 0, null, 0, new Object[] {
-					"Lnet/minecraft/tileentity/TileEntity;" }));
+			updateEntities.instructions.insert(n, n = new FrameNode(F_SAME1, 0, null, 0, new Object[] { "Lnet/minecraft/tileentity/TileEntity;" }));
 			updateEntities.instructions.insert(n, n = new InsnNode(POP));
 			updateEntities.instructions.insert(n, n = lCond);
 			updateEntities.instructions.insert(n, n = new FrameNode(F_SAME, 0, null, 0, null));
