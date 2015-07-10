@@ -27,7 +27,7 @@
 	<property name="apiclasses.dir" value="${build.dir}/api-packaging"/>
 	
 	<!-- Forge paths -->
-	<property name="forge.version" value="${mc.version}-${forge.major}.${forge.minor}.${forge.patch}.${forge.build}"/>
+	<property name="forge.version" value="${mc.version}-${forge.major}.${forge.minor}.${forge.patch}.${forge.build}-${mc.version}"/>
 	<property name="forge.dir" value="${build.dir}/forge"/>
 	<property name="forgebuild.dir" value="${forge.dir}/build"/>
 	<property name="compile.dir" value="${forgebuild.dir}/tmp/compile"/>
