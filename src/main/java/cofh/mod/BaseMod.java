@@ -177,7 +177,7 @@ public abstract class BaseMod implements IUpdatableMod {
 		LanguageRegistry.instance().injectLanguage(lang.intern(), parsedLangFile);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void loadLang() {
 
 		if (FMLLaunchHandler.side() == Side.CLIENT) {
@@ -268,7 +268,7 @@ public abstract class BaseMod implements IUpdatableMod {
 
 	private class CrashCallable implements ICrashCallable {
 
-		private String data;
+		private final String data;
 
 		private CrashCallable(String data) {
 
