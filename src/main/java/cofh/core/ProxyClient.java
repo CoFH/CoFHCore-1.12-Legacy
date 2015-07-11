@@ -226,6 +226,12 @@ public class ProxyClient extends Proxy {
 		return -1;
 	}
 
+	@Override
+	public void addIndexedChatMessage(IChatComponent chat, int index) {
+
+		Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(chat, index);
+	}
+
 	/* EVENT HANDLERS */
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -235,7 +241,6 @@ public class ProxyClient extends Proxy {
 		if (event.map.getTextureType() == 0) {
 
 		} else if (event.map.getTextureType() == 1) {
-
 			IconRegistry.addIcon("IconAccessFriends", "cofh:icons/Icon_Access_Friends", event.map);
 			IconRegistry.addIcon("IconAccessGuild", "cofh:icons/Icon_Access_Guild", event.map);
 			IconRegistry.addIcon("IconAccessPrivate", "cofh:icons/Icon_Access_Private", event.map);
@@ -341,9 +346,4 @@ public class ProxyClient extends Proxy {
 		return FMLClientHandler.instance().getClient().gameSettings.getSoundLevel(SoundCategory.values()[category]);
 	}
 
-	@Override
-	public void addIndexedChatMessage(IChatComponent chat, int index) {
-
-		Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(chat, index);
-	}
 }

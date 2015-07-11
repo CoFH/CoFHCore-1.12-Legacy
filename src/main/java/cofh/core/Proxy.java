@@ -66,6 +66,10 @@ public class Proxy {
 		return 0;
 	}
 
+	public void addIndexedChatMessage(IChatComponent chat, int index) {
+
+	}
+
 	/* EVENT HANDLERS */
 	@SubscribeEvent
 	public void onLivingDeathEvent(LivingDeathEvent event) {
@@ -161,10 +165,6 @@ public class Proxy {
 	public float getSoundVolume(int category) {
 
 		return 0;
-	}
-
-	public void addIndexedChatMessage(IChatComponent chat, int index) {
-
 	}
 
 }
