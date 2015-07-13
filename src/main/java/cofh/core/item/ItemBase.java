@@ -30,6 +30,7 @@ public class ItemBase extends Item {
 		public IIcon icon;
 		public int rarity = 0;
 		public int maxDamage = 0;
+		public boolean altName = false;
 
 		public ItemEntry(String name, int rarity, int maxDamage) {
 
@@ -47,6 +48,12 @@ public class ItemBase extends Item {
 		public ItemEntry(String name) {
 
 			this.name = name;
+		}
+
+		public ItemEntry useAltName(boolean altName) {
+
+			this.altName = altName;
+			return this;
 		}
 	}
 
@@ -167,7 +174,12 @@ public class ItemBase extends Item {
 		if (!itemMap.containsKey(Integer.valueOf(i))) {
 			return "item.invalid";
 		}
-		return new StringBuilder().append(getUnlocalizedName()).append('.').append(itemMap.get(i).name).toString();
+		ItemEntry item = itemMap.get(i);
+
+		if (item.altName) {
+			return new StringBuilder().append(getUnlocalizedName()).append('.').append(item.name).append("Alt").toString();
+		}
+		return new StringBuilder().append(getUnlocalizedName()).append('.').append(item.name).toString();
 	}
 
 	@Override

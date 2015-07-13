@@ -28,9 +28,9 @@ public class ItemBucket extends ItemBase {
 		setContainerItem(container);
 	}
 
-	public ItemBucket(Item container) {
+	public ItemBucket(String modName, Item container) {
 
-		super();
+		super(modName);
 		setMaxStackSize(1);
 		this.container = container;
 		setContainerItem(container);

@@ -3,6 +3,7 @@ package cofh.core.util;
 import cofh.core.CoFHProps;
 import cofh.core.network.PacketCore;
 import cofh.core.render.ItemRenderRegistry;
+import cofh.core.util.energy.FurnaceFuelHandler;
 import cofh.core.util.fluid.BucketHandler;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.lib.util.helpers.ServerHelper;
@@ -41,6 +42,7 @@ public class FMLEventHandler {
 	public void handleIdMappingEvent(FMLModIdMappingEvent event) {
 
 		BucketHandler.refreshMap();
+		FurnaceFuelHandler.refreshMap();
 		ItemRenderRegistry.refreshMap();
 		OreDictionaryArbiter.initialize();
 	}

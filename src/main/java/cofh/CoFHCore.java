@@ -21,6 +21,7 @@ import cofh.core.util.crafting.RecipeAugmentable;
 import cofh.core.util.crafting.RecipeSecure;
 import cofh.core.util.crafting.RecipeUpgrade;
 import cofh.core.util.crafting.RecipeUpgradeOverride;
+import cofh.core.util.energy.FurnaceFuelHandler;
 import cofh.core.util.fluid.BucketHandler;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.core.world.FeatureParser;
@@ -127,6 +128,7 @@ public class CoFHCore extends BaseMod {
 		WorldHandler.initialize();
 		FMLEventHandler.initialize();
 		BucketHandler.initialize();
+		FurnaceFuelHandler.initialize();
 		PacketHandler.instance.initialize();
 		RecipeSorter.register("cofh:augment", RecipeAugmentable.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 		RecipeSorter.register("cofh:secure", RecipeSecure.class, RecipeSorter.Category.SHAPED, "before:cofh:upgrade");
