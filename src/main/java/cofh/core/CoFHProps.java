@@ -14,7 +14,7 @@ public class CoFHProps {
 
 	}
 
-	public static final String VERSION = "1.7.10R3.0.3B4";
+	public static final String VERSION = "1.7.10R3.0.3";
 
 	private static final String BUILD = "1448";
 	public static final String FORGE_REQ = "10.13.3." + BUILD;
