@@ -49,7 +49,7 @@ public abstract class WorldProxy extends World {
 	}
 
 	@Override
-	protected IChunkProvider createChunkProvider() {
+	public IChunkProvider createChunkProvider() {
 
 		return null;
 	}
@@ -61,7 +61,7 @@ public abstract class WorldProxy extends World {
 	}
 
 	@Override
-	protected int func_152379_p() {
+	public int func_152379_p() {
 
 		return 0;
 	}
