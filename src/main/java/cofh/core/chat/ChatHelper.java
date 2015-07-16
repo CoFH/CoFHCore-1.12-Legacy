@@ -4,7 +4,6 @@ import cofh.CoFHCore;
 import cofh.core.network.PacketHandler;
 
 import java.util.List;
-import java.util.Objects;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
@@ -46,7 +45,7 @@ public class ChatHelper {
 		} else if (object instanceof ICommandSender) {
 			return ((ICommandSender) object).func_145748_c_();
 		} else {
-			return new ChatComponentText(Objects.toString(object));
+			return new ChatComponentText(String.valueOf(object));
 		}
 	}
 
