@@ -229,7 +229,10 @@ public class ProxyClient extends Proxy {
 	@Override
 	public void addIndexedChatMessage(IChatComponent chat, int index) {
 
-		Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(chat, index);
+        if(chat == null){
+            Minecraft.getMinecraft().ingameGUI.getChatGUI().deleteChatLine(index);
+        }else
+		    Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(chat, index);
 	}
 
 	/* EVENT HANDLERS */
