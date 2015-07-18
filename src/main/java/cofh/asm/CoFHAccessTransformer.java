@@ -69,7 +69,7 @@ public class CoFHAccessTransformer implements IClassTransformer {
 			superClasses.put(owner, classReader.getSuperName());
 
 			for (; owner != null; owner = superClasses.get(owner)) {
-				if (modifiers.containsKey(transformedName)) {
+				if (modifiers.containsKey(owner)) {
 					break l;
 				}
 			}
