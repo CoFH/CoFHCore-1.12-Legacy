@@ -219,7 +219,7 @@ public class CoFHAccessTransformer implements IClassTransformer {
 
 		public Modifier(String access, String name, String desc) {
 
-			targetAccess = 8;
+			targetAccess = ACC_PRIVATE;
 			setTargetAccess(access);
 			this.name = name;
 			this.desc = desc;
@@ -228,10 +228,7 @@ public class CoFHAccessTransformer implements IClassTransformer {
 		public void setTargetAccess(String name) {
 
 			switch (targetAccess) {
-			case 8:
-				if (name.startsWith("private"))
-					targetAccess = ACC_PRIVATE;
-				// continue
+			// there is no need to check to see if access mode is private, we can never lower visibility
 			case ACC_PRIVATE:
 				if (name.startsWith("default"))
 					targetAccess = 0;
@@ -246,10 +243,6 @@ public class CoFHAccessTransformer implements IClassTransformer {
 				// continue
 			case ACC_PUBLIC:
 				break;
-			}
-
-			if (targetAccess == 8) {
-				throw new RuntimeException("Invalid access modifier: " + name);
 			}
 
 			if (name.endsWith("-f")) {
