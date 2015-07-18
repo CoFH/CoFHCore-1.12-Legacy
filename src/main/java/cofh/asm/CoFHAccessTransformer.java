@@ -138,6 +138,9 @@ public class CoFHAccessTransformer implements IClassTransformer {
 				AbstractInsnNode insn = it.next();
 				if (insn.getOpcode() == INVOKESPECIAL) {
 					MethodInsnNode mInsn = (MethodInsnNode) insn;
+					if ("<init>".equals(mInsn.name)) {
+						continue;
+					}
 					for (MethodNode n : toReplace) {
 						if (n.name.equals(mInsn.name) && n.desc.equals(mInsn.desc)) {
 							mInsn.setOpcode(INVOKEVIRTUAL);
