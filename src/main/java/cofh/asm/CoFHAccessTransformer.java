@@ -128,7 +128,7 @@ public class CoFHAccessTransformer implements IClassTransformer {
 					access = m.getFixedAccess(access);
 				}
 			}
-			if ((mn.access & ACC_PRIVATE) == 1 && (access & ACC_PRIVATE) == 0) {
+			if ((mn.access & ACC_PRIVATE) != 0 && (access & ACC_PRIVATE) == 0) {
 				nowOverridable.add(mn);
 			}
 			mn.access = access;
