@@ -267,6 +267,7 @@
 		<mkdir dir="${lib.dir}"/>
 		<javac srcdir="${forgebuild.dir}/tmp/recompSrc" destdir="${compile.dir}" target="1.6" source="1.6"
 			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false"/>
+		<jar destfile="${forge.jar}1" compress="true" level="9" basedir="${compile.dir}"/>
 		
 		<echo message="Reobfuscating..."/>
 		<move-transformers/>
@@ -291,7 +292,6 @@
 		</java>
 		<delete file="${forge.jar}1" failonerror="false"/>
 		<delete file="${forge.jar}2" failonerror="false"/>
-		<jar destfile="${forge.jar}" compress="true" level="9" basedir="${compile.dir}"/>
 		<copy file="${forge.jar}" todir="${forgebuild.dir}/dirtyArtifacts/"/>
 		<delete dir="${compile.dir}"/>
 	</target>
