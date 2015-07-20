@@ -66,7 +66,7 @@ public class UpdateManager {
 	public UpdateManager(IUpdatableMod mod, String releaseUrl, String downloadUrl) {
 
 		_mod = mod;
-		_updateThread = new UpdateCheckThread(mod, releaseUrl);
+		_updateThread = new UpdateCheckThread(mod, releaseUrl, downloadUrl);
 		_updateThread.start();
 		_downloadUrl = downloadUrl;
 		lastPoll += (pollOffset += 140);

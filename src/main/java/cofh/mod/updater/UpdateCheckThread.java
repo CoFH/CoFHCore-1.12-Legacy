@@ -1,15 +1,20 @@
 package cofh.mod.updater;
 
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.event.FMLInterModComms;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+
+import net.minecraft.nbt.NBTTagCompound;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.spi.AbstractLogger;
 
 public class UpdateCheckThread extends Thread {
 
-	private final String _releaseUrl;
+	private final String _releaseUrl, _downloadUrl;
 	private final IUpdatableMod _mod;
 
 	private boolean _checkComplete = false;
@@ -24,12 +29,18 @@ public class UpdateCheckThread extends Thread {
 
 	public UpdateCheckThread(IUpdatableMod mod, String releaseUrl) {
 
+		this(mod, null, null);
+	}
+
+	public UpdateCheckThread(IUpdatableMod mod, String releaseUrl, String downloadUrl) {
+
 		super("CoFHUpdater:" + mod.getModId());
 		_mod = mod;
 		if (releaseUrl == null) {
 			releaseUrl = "https://raw.github.com/skyboy/" + mod.getModId() + "/master/VERSION";
 		}
 		_releaseUrl = releaseUrl;
+		_downloadUrl = downloadUrl;
 	}
 
 	@Override
@@ -67,6 +78,19 @@ public class UpdateCheckThread extends Thread {
 			}
 			if (_criticalUpdate) {
 				_mod.getLogger().info("This update has been marked as CRITICAL and will ignore notification suppression.");
+			}
+
+			if (Loader.isModLoaded("VersionChecker")) {
+				NBTTagCompound compound = new NBTTagCompound();
+				compound.setString("modDisplayName", _mod.getModName());
+				compound.setString("oldVersion", ourVer.toString());
+				compound.setString("newVersion", newVer.toString());
+				if (_downloadUrl != null) {
+					compound.setString("updateUrl", _downloadUrl);
+					compound.setBoolean("isDirectLink", false);
+				}
+				FMLInterModComms.sendRuntimeMessage(_mod.getModId(), "VersionChecker", "addUpdate", compound);
+				_newVerAvailable &= _criticalUpdate;
 			}
 		} catch (Exception e) {
 			Level level = Level.WARN;
