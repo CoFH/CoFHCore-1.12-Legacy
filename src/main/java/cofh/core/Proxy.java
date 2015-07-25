@@ -40,6 +40,7 @@ public class Proxy {
 
 		CoFHKeyHandler.addServerKeyBind(KeyBindingEmpower.instance);
 		CoFHKeyHandler.addServerKeyBind(KeyBindingMultiMode.instance);
+		// CoFHKeyHandler.addServerKeyBind(KeyBindingAugments.instance);
 	}
 
 	public void registerPacketInformation() {

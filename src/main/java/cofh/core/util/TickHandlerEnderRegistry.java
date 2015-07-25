@@ -16,7 +16,7 @@ public class TickHandlerEnderRegistry {
 
 	public boolean needsMenu = false;
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void tickEnd(GuiOpenEvent evt) {
 
 		if (evt.gui instanceof GuiMainMenu) {

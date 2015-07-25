@@ -22,7 +22,6 @@ import cofh.lib.util.helpers.StringHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -48,6 +47,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.EXTFramebufferObject;
@@ -59,6 +59,7 @@ public class ProxyClient extends Proxy {
 
 	public static final KeyBind KEYBINDING_EMPOWER = new KeyBind("key.cofh.empower", Keyboard.KEY_V, "key.cofh.category");
 	public static final KeyBind KEYBINDING_MULTIMODE = new KeyBind("key.cofh.multimode", Keyboard.KEY_C, "key.cofh.category");
+	public static final KeyBind KEYBINDING_AUGMENTS = new KeyBind("key.cofh.augments", Keyboard.KEY_G, "key.cofh.category");
 
 	public static class KeyBind extends KeyBinding {
 
@@ -180,9 +181,11 @@ public class ProxyClient extends Proxy {
 		super.registerKeyBinds();
 		CoFHKeyHandler.addKeyBind(KeyBindingEmpower.instance);
 		CoFHKeyHandler.addKeyBind(KeyBindingMultiMode.instance);
+		// CoFHKeyHandler.addKeyBind(KeyBindingAugments.instance);
 
 		ClientRegistry.registerKeyBinding(KEYBINDING_EMPOWER);
 		ClientRegistry.registerKeyBinding(KEYBINDING_MULTIMODE);
+		// ClientRegistry.registerKeyBinding(KEYBINDING_AUGMENTS);
 	}
 
 	@Override
@@ -212,7 +215,7 @@ public class ProxyClient extends Proxy {
 	public void registerTickHandlers() {
 
 		super.registerTickHandlers();
-		FMLCommonHandler.instance().bus().register(TickHandlerEnderRegistry.instance);
+		MinecraftForge.EVENT_BUS.register(TickHandlerEnderRegistry.instance);
 	}
 
 	@Override
@@ -222,6 +225,8 @@ public class ProxyClient extends Proxy {
 			return KEYBINDING_EMPOWER.getKeyCode();
 		} else if (key.equalsIgnoreCase("cofh.multimode")) {
 			return KEYBINDING_MULTIMODE.getKeyCode();
+		} else if (key.equalsIgnoreCase("cofh.augment")) {
+			return KEYBINDING_AUGMENTS.getKeyCode();
 		}
 		return -1;
 	}
@@ -229,10 +234,11 @@ public class ProxyClient extends Proxy {
 	@Override
 	public void addIndexedChatMessage(IChatComponent chat, int index) {
 
-        if(chat == null){
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().deleteChatLine(index);
-        }else
-		    Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(chat, index);
+		if (chat == null) {
+			Minecraft.getMinecraft().ingameGUI.getChatGUI().deleteChatLine(index);
+		} else {
+			Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(chat, index);
+		}
 	}
 
 	/* EVENT HANDLERS */
