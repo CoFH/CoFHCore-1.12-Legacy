@@ -1,5 +1,6 @@
 package cofh.asmhooks;
 
+import cofh.asmhooks.event.ModPopulateChunkEvent;
 import cofh.core.CoFHProps;
 import cofh.core.item.IEqualityOverrideItem;
 import cofh.lib.util.helpers.MathHelper;
@@ -22,9 +23,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class HooksCore {
+
+	// { Forge hooks
+
+	public static void preGenerateWorld(World world, int chunkX, int chunkZ) {
+
+		MinecraftForge.EVENT_BUS.post(new ModPopulateChunkEvent.Pre(world, chunkX, chunkZ));
+	}
+
+	public static void postGenerateWorld(World world, int chunkX, int chunkZ) {
+
+		MinecraftForge.EVENT_BUS.post(new ModPopulateChunkEvent.Post(world, chunkX, chunkZ));
+	}
+
+	// }
 
 	// { Vanilla hooks
 	public static boolean areItemsEqualHook(ItemStack held, ItemStack lastHeld) {

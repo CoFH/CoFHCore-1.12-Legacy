@@ -97,6 +97,7 @@ class ASMCore {
 		hashes.put("net.minecraft.item.Item", (byte) 18);
 		hashes.put("net.minecraft.client.gui.GuiKeyBindingList$KeyEntry", (byte) 19);
 		hashes.put("net.minecraft.client.settings.KeyBinding", (byte) 20);
+		hashes.put("cpw.mods.fml.common.registry.GameRegistry", (byte) 21);
 	}
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
@@ -211,11 +212,63 @@ class ASMCore {
 			return alterKeyEntry(transformedName, bytes, cr);
 		case 20:
 			return alterKeyBinding(transformedName, bytes, cr);
+		case 21:
+			return alterGameRegistry(name, bytes, cr);
 
 		default:
 			return bytes;
 		}
 	}
+
+	// { Fix Forge
+
+	private static byte[] alterGameRegistry(String name, byte[] bytes, ClassReader cr) {
+
+		// implements https://github.com/MinecraftForge/MinecraftForge/issues/2034
+		String names = "generateWorld";
+
+		ClassNode cn = new ClassNode(ASM5);
+		cr.accept(cn, 0);
+
+		l: {
+			MethodNode m = null;
+			for (MethodNode n : cn.methods) {
+				if (names.equals(n.name)) {
+					m = n;
+					break;
+				}
+			}
+
+			if (m == null) {
+				break l;
+			}
+
+			final String sig = "(Lnet/minecraft/world/World;II)V";
+
+			AbstractInsnNode n = m.instructions.getFirst();
+			m.instructions.insertBefore(n, n = new VarInsnNode(ALOAD, 2));
+			m.instructions.insert(n, n = new VarInsnNode(ILOAD, 0));
+			m.instructions.insert(n, n = new VarInsnNode(ILOAD, 1));
+			m.instructions.insert(n, new MethodInsnNode(INVOKESTATIC, "cofh/asmhooks/HooksCore", "preGenerateWorld", sig, false));
+
+			for (n = m.instructions.getFirst(); n != null; n = n.getNext()) {
+				if (n.getOpcode() == RETURN) {
+					m.instructions.insertBefore(n, new VarInsnNode(ALOAD, 2));
+					m.instructions.insertBefore(n, new VarInsnNode(ILOAD, 0));
+					m.instructions.insertBefore(n, new VarInsnNode(ILOAD, 1));
+					m.instructions.insertBefore(n, new MethodInsnNode(INVOKESTATIC, "cofh/asmhooks/HooksCore", "postGenerateWorld", sig, false));
+				}
+			}
+
+			ClassWriter cw = new ClassWriter(0);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+		}
+
+		return bytes;
+	}
+
+	// }
 
 	// { Improve Vanilla
 	private static byte[] alterEnchantment(String name, byte[] bytes, ClassReader cr) {
@@ -426,7 +479,7 @@ class ASMCore {
 			}
 
 			/*
-			 * 
+			 *
 			 * mv.visitFieldInsn(GETFIELD, "net/minecraft/entity/Entity", "boundingBox", "Lnet/minecraft/util/AxisAlignedBB;");
 			 * mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/util/AxisAlignedBB", "copy", "()Lnet/minecraft/util/AxisAlignedBB;"); mv.visitVarInsn(ASTORE,
 			 * 19); Label l27 = new Label(); mv.visitLabel(l27); mv.visitLineNumber(617, l27); mv.visitVarInsn(ALOAD, 0); mv.visitFieldInsn(GETFIELD,
@@ -1465,6 +1518,8 @@ class ASMCore {
 		return bytes;
 	}
 
+	// }
+
 	private static int getAccess(Method m) {
 
 		int r = m.getModifiers();
@@ -1485,8 +1540,6 @@ class ASMCore {
 		}
 		return r;
 	}
-
-	// }
 
 	// { Implement & Strip
 	static boolean implement(ClassNode cn) {
