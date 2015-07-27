@@ -240,16 +240,19 @@ public class CoFHAccessTransformer implements IClassTransformer {
 			switch (targetAccess) {
 			// there is no need to check to see if access mode is private, we can never lower visibility
 			case ACC_PRIVATE:
-				if (name.startsWith("default"))
+				if (name.startsWith("default")) {
 					targetAccess = 0;
+				}
 				// continue
 			case 0:
-				if (name.startsWith("protected"))
+				if (name.startsWith("protected")) {
 					targetAccess = ACC_PROTECTED;
+				}
 				// continue
 			case ACC_PROTECTED:
-				if (name.startsWith("public"))
+				if (name.startsWith("public")) {
 					targetAccess = ACC_PUBLIC;
+				}
 				// continue
 			case ACC_PUBLIC:
 				break;
@@ -333,8 +336,7 @@ public class CoFHAccessTransformer implements IClassTransformer {
 
 			while (true) {
 				if (inOff >= inLimit) {
-					inLimit = (inStream == null) ? reader.read(inCharBuf)
-							: inStream.read(inByteBuf);
+					inLimit = (inStream == null) ? reader.read(inCharBuf) : inStream.read(inByteBuf);
 					inOff = 0;
 					if (inLimit <= 0) {
 						if (len == 0 || isCommentLine) {
@@ -344,8 +346,8 @@ public class CoFHAccessTransformer implements IClassTransformer {
 					}
 				}
 				if (inStream != null) {
-					//The line below is equivalent to calling a
-					//ISO8859-1 decoder.
+					// The line below is equivalent to calling a
+					// ISO8859-1 decoder.
 					c = (char) (0xff & inByteBuf[inOff++]);
 				} else {
 					c = inCharBuf[inOff++];
@@ -385,14 +387,13 @@ public class CoFHAccessTransformer implements IClassTransformer {
 						System.arraycopy(lineBuf, 0, buf, 0, lineBuf.length);
 						lineBuf = buf;
 					}
-					//flip the preceding backslash flag
+					// flip the preceding backslash flag
 					if (c == '\\') {
 						precedingBackslash = !precedingBackslash;
 					} else {
 						precedingBackslash = false;
 					}
-				}
-				else {
+				} else {
 					// reached EOL
 					if (isCommentLine || len == 0) {
 						isCommentLine = false;
@@ -402,9 +403,7 @@ public class CoFHAccessTransformer implements IClassTransformer {
 						continue;
 					}
 					if (inOff >= inLimit) {
-						inLimit = (inStream == null)
-								? reader.read(inCharBuf)
-								: inStream.read(inByteBuf);
+						inLimit = (inStream == null) ? reader.read(inCharBuf) : inStream.read(inByteBuf);
 						inOff = 0;
 						if (inLimit <= 0) {
 							return new String(lineBuf, 0, len);
@@ -412,7 +411,7 @@ public class CoFHAccessTransformer implements IClassTransformer {
 					}
 					if (precedingBackslash) {
 						len -= 1;
-						//skip the leading whitespace characters in following line
+						// skip the leading whitespace characters in following line
 						skipWhiteSpace = true;
 						appendedLineBegin = true;
 						precedingBackslash = false;

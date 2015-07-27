@@ -479,7 +479,7 @@ class ASMCore {
 			}
 
 			/*
-			 *
+			 * 
 			 * mv.visitFieldInsn(GETFIELD, "net/minecraft/entity/Entity", "boundingBox", "Lnet/minecraft/util/AxisAlignedBB;");
 			 * mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/util/AxisAlignedBB", "copy", "()Lnet/minecraft/util/AxisAlignedBB;"); mv.visitVarInsn(ASTORE,
 			 * 19); Label l27 = new Label(); mv.visitLabel(l27); mv.visitLineNumber(617, l27); mv.visitVarInsn(ALOAD, 0); mv.visitFieldInsn(GETFIELD,
