@@ -38,7 +38,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
@@ -178,6 +178,12 @@ public class CoFHCore extends BaseMod {
 	}
 
 	@EventHandler
+	public void serverStarted(FMLServerAboutToStartEvent event) {
+
+		RegistryEnderAttuned.serverStart(event);
+	}
+
+	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 
 		OreDictionaryArbiter.initialize();
@@ -186,12 +192,6 @@ public class CoFHCore extends BaseMod {
 		for (IBakeable i : oven) {
 			i.bake();
 		}
-	}
-
-	@EventHandler
-	public void serverStarted(FMLServerStartedEvent event) {
-
-		RegistryEnderAttuned.serverStarted(event);
 	}
 
 	public void handleConfigSync(PacketCoFHBase payload) {
