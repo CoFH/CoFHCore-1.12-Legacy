@@ -17,7 +17,6 @@ import cofh.core.render.ShaderHelper;
 import cofh.core.util.KeyBindingEmpower;
 import cofh.core.util.KeyBindingMultiMode;
 import cofh.core.util.SocialRegistry;
-import cofh.core.util.TickHandlerEnderRegistry;
 import cofh.lib.util.helpers.StringHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -47,7 +46,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.EXTFramebufferObject;
@@ -215,7 +213,6 @@ public class ProxyClient extends Proxy {
 	public void registerTickHandlers() {
 
 		super.registerTickHandlers();
-		MinecraftForge.EVENT_BUS.register(TickHandlerEnderRegistry.instance);
 	}
 
 	@Override

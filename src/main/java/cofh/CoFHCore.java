@@ -1,8 +1,8 @@
 package cofh;
 
-import cofh.api.transport.RegistryEnderAttuned;
 import cofh.core.CoFHProps;
 import cofh.core.Proxy;
+import cofh.core.RegistryEnderAttuned;
 import cofh.core.command.CommandFriend;
 import cofh.core.command.CommandHandler;
 import cofh.core.enchantment.CoFHEnchantment;
@@ -38,6 +38,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
@@ -48,7 +49,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
@@ -144,10 +144,11 @@ public class CoFHCore extends BaseMod {
 		/* Register Handlers */
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
 		CommandHandler.registerSubCommand(CommandFriend.instance);
+		SecurityHelper.setup();
 		PacketCore.initialize();
 		PacketSocial.initialize();
 		SocialRegistry.initialize();
-		SecurityHelper.setup();
+		RegistryEnderAttuned.initialize();
 	}
 
 	@EventHandler
@@ -179,14 +180,18 @@ public class CoFHCore extends BaseMod {
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 
-		RegistryEnderAttuned.linkConf = new Configuration(new File(DimensionManager.getCurrentSaveRootDirectory(), "/cofh/EnderFrequencies.cfg"));
-		RegistryEnderAttuned.linkConf.load();
 		OreDictionaryArbiter.initialize();
 		CommandHandler.initCommands(event);
 		server = event.getServer();
 		for (IBakeable i : oven) {
 			i.bake();
 		}
+	}
+
+	@EventHandler
+	public void serverStarted(FMLServerStartedEvent event) {
+
+		RegistryEnderAttuned.serverStarted(event);
 	}
 
 	public void handleConfigSync(PacketCoFHBase payload) {
