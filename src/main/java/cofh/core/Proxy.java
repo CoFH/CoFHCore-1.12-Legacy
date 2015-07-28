@@ -28,6 +28,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
+import net.minecraftforge.event.world.WorldEvent.Save;
 import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 
 public class Proxy {
@@ -60,6 +61,14 @@ public class Proxy {
 
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.TERRAIN_GEN_BUS.register(this);
+	}
+
+	@SubscribeEvent
+	public void save(Save evt) {
+
+		if (evt.world.provider.dimensionId == 0) {
+			RegistryEnderAttuned.save();
+		}
 	}
 
 	public int getKeyBind(String key) {

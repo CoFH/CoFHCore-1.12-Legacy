@@ -58,6 +58,12 @@ public class RegistryEnderAttuned {
 		registry = new EnderRegistry(new Configuration(new File(DimensionManager.getCurrentSaveRootDirectory(), "/cofh/EnderDestinations.cfg")));
 	}
 
+	static void save() {
+
+		registry.save();
+		serverChannels.save();
+	}
+
 	public static EnderRegistry getRegistry() {
 
 		return registry;
