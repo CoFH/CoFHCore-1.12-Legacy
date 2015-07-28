@@ -4,6 +4,7 @@ import cofh.api.world.IGeneratorParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.WeightedRandomNBTTag;
+import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.WorldGenDungeon;
 import com.google.gson.JsonObject;
 
@@ -57,6 +58,9 @@ public class DungeonParser implements IGeneratorParser {
 			}
 			if (genObject.has("maxChests")) {
 				r.maxChests = genObject.get("maxChests").getAsInt();
+			}
+			if (genObject.has("chestAttempts")) {
+				r.maxChestTries = MathHelper.clampI(genObject.get("chestAttempts").getAsInt(), 1, 5);
 			}
 
 			if (genObject.has("minHoles")) {
