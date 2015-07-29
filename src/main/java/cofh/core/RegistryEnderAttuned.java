@@ -81,15 +81,15 @@ public class RegistryEnderAttuned {
 
 	public static void updateChannelFrequency(EntityPlayer player, String channel, int freq, String name) {
 
-		PacketHandler.sendTo(new Packet(channel, freq, name, null), player);
+		PacketHandler.sendTo(new Packet(channel, freq, name), player);
 	}
 
 	public static void removeChannelFrequency(EntityPlayer player, String channel, int freq) {
 
-		PacketHandler.sendTo(new Packet(channel, freq, (Void) null), player);
+		PacketHandler.sendTo(new Packet(channel, freq), player);
 	}
 
-	private static class Packet extends PacketBase {
+	public static class Packet extends PacketBase {
 
 		public ByteBuf data;
 
@@ -127,23 +127,6 @@ public class RegistryEnderAttuned {
 			data = Unpooled.directBuffer();
 			data.writeByte(0);
 			data.writeBytes(serverChannels.getFrequencyData(channel));
-		}
-
-		private Packet(String channel, int freq, Void v) {
-
-			data = Unpooled.directBuffer();
-			data.writeByte(2);
-			ByteBufHelper.writeString(channel, data);
-			ByteBufHelper.writeVarInt(freq, data);
-		}
-
-		private Packet(String channel, int freq, String name, Void v) {
-
-			data = Unpooled.directBuffer();
-			data.writeByte(1);
-			ByteBufHelper.writeString(channel, data);
-			ByteBufHelper.writeVarInt(freq, data);
-			ByteBufHelper.writeString(name, data);
 		}
 
 		@Override
