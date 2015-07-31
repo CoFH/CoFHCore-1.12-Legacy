@@ -19,7 +19,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.Configuration;
 
-
 public class RegistryEnderAttuned {
 
 	static EnderRegistry registry;
@@ -54,7 +53,8 @@ public class RegistryEnderAttuned {
 				return super.removeFrequency(hostedChannel, freq);
 			}
 		};
-		serverChannels = new ServerEnderChannelRegistry(new Configuration(new File(DimensionManager.getCurrentSaveRootDirectory(), "/cofh/EnderFrequencies.cfg")));
+		serverChannels = new ServerEnderChannelRegistry(new Configuration(
+				new File(DimensionManager.getCurrentSaveRootDirectory(), "/cofh/EnderFrequencies.cfg")));
 		registry = new EnderRegistry(new Configuration(new File(DimensionManager.getCurrentSaveRootDirectory(), "/cofh/EnderDestinations.cfg")));
 	}
 

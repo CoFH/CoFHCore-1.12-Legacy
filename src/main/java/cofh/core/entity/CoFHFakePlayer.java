@@ -34,6 +34,10 @@ public class CoFHFakePlayer extends FakePlayer {
 	public static boolean isBlockBreakable(CoFHFakePlayer myFakePlayer, World worldObj, int x, int y, int z) {
 
 		Block block = worldObj.getBlock(x, y, z);
+
+		if (block.isAir(worldObj, x, y, z)) {
+			return false;
+		}
 		if (myFakePlayer == null) {
 			return block.getBlockHardness(worldObj, x, y, z) > -1;
 		} else {

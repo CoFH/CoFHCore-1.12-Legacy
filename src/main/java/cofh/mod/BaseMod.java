@@ -106,7 +106,6 @@ public abstract class BaseMod implements IUpdatableMod {
 			if (Strings.isNullOrEmpty(remotes)) {
 				return getModVersion().equalsIgnoreCase(remote);
 			}
-
 			return ModRange.createFromVersionSpec(_modid, remotes).containsVersion(new ModVersion(_modid, remote));
 		}
 		return true;
