@@ -57,9 +57,23 @@ public class CommandHandler extends CommandBase {
 		return commands.keySet();
 	}
 
+	public static int getCommandPermission(String command) {
+
+		return getCommandExists(command) ? commands.get(command).getPermissionLevel() : Integer.MAX_VALUE;
+	}
+
 	public static boolean getCommandExists(String command) {
 
 		return commands.containsKey(command);
+	}
+
+	public static boolean canUseCommand(ICommandSender sender, int permission, String name) {
+
+		if (getCommandExists(name))
+			return sender.canCommandSenderUseCommand(permission, "cofh " + name) ||
+					// this check below is because mojang is incompetent, as always
+					(sender instanceof EntityPlayerMP && permission <= 0);
+		return false;
 	}
 
 	@Override
@@ -119,9 +133,7 @@ public class CommandHandler extends CommandBase {
 		}
 		ISubCommand command = commands.get(arguments[0]);
 		if (command != null) {
-			if (sender.canCommandSenderUseCommand(command.getPermissionLevel(), "cofh " + command.getCommandName()) ||
-			// this check below is because mojang is incompetent, as always
-					(sender instanceof EntityPlayerMP && command.getPermissionLevel() <= 0)) {
+			if (canUseCommand(sender, command.getPermissionLevel(), command.getCommandName())) {
 				command.handleCommand(sender, arguments);
 				return;
 			}
