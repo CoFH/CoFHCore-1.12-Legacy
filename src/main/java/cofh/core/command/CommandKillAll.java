@@ -7,6 +7,7 @@ import gnu.trove.iterator.TObjectIntIterator;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
@@ -43,7 +44,7 @@ public class CommandKillAll implements ISubCommand {
 		String target = null;
 		boolean all = false;
 		if (arguments.length > 1) {
-			target = arguments[1].toLowerCase();
+			target = arguments[1].toLowerCase(Locale.US);
 			all = "*".equals(target);
 		}
 		for (WorldServer theWorld : CoFHCore.server.worldServers) {
@@ -54,7 +55,7 @@ public class CommandKillAll implements ISubCommand {
 					if (entity != null && !(entity instanceof EntityPlayer)) {
 						curName = EntityList.getEntityString(entity);
 						if (target != null | all) {
-							if (all || curName != null && curName.toLowerCase().contains(target)) {
+							if (all || curName != null && curName.toLowerCase(Locale.US).contains(target)) {
 								names.adjustOrPutValue(curName, 1, 1);
 								killCount++;
 								theWorld.removeEntity(entity);

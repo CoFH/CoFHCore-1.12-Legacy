@@ -7,6 +7,7 @@ import cofh.lib.util.helpers.StringHelper;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.world.World;
@@ -27,16 +28,16 @@ public class ForgeIRC {
 
 	static String colorNick(String n, String u, String h) {
 
-		if (n.toLowerCase().equals("zeldokavira") || n.toLowerCase().equals("zeldo")) {
+		if (n.toLowerCase(Locale.US).equals("zeldokavira") || n.toLowerCase().equals("zeldo")) {
 			return StringHelper.WHITE + n + StringHelper.END;
 		}
-		if (n.toLowerCase().equals("kinglemmingcofh") || n.toLowerCase().equals("kinglemming") || n.toLowerCase().equals("king_lemming")) {
+		if (n.toLowerCase(Locale.US).equals("kinglemmingcofh") || n.toLowerCase().equals("kinglemming") || n.toLowerCase().equals("king_lemming")) {
 			return StringHelper.BLUE + n + StringHelper.END;
 		}
-		if (n.toLowerCase().equals("jadedcat")) {
+		if (n.toLowerCase(Locale.US).equals("jadedcat")) {
 			return StringHelper.PURPLE + n + StringHelper.END;
 		}
-		if (n.toLowerCase().equals("morvelaira")) {
+		if (n.toLowerCase(Locale.US).equals("morvelaira")) {
 			return StringHelper.PINK + n + StringHelper.END;
 		}
 		return n;
@@ -68,7 +69,7 @@ public class ForgeIRC {
 				toReturn.add(world.provider.getDimensionName() + " [" + world.provider.dimensionId + "]: " + floatfmt.format(tps) + " TPS/"
 						+ floatfmt.format(tickms) + "MS (" + (int) (tps / 20.0D * 100.0D) + "%)");
 			}
-		} else if (arguments[1].toLowerCase().charAt(0) == 'o') {
+		} else if (arguments[1].toLowerCase(Locale.US).charAt(0) == 'o') {
 			double tickms = getTickMs(null);
 			double tps = getTps(null);
 
@@ -77,7 +78,7 @@ public class ForgeIRC {
 					+ (int) (tps / 20.0D * 100.0D) + "%)");
 			toReturn.add(StringHelper.END + StringHelper.END + StringHelper.END + "Tick time: " + floatfmt.format(tickms) + " ms of " + floatfmt.format(50L)
 					+ " ms");
-		} else if (arguments[1].toLowerCase().charAt(0) == 'a') {
+		} else if (arguments[1].toLowerCase(Locale.US).charAt(0) == 'a') {
 			double tickms = getTickMs(null);
 			double tps = getTps(null);
 

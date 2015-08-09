@@ -30,6 +30,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
@@ -315,7 +316,7 @@ public class ProxyClient extends Proxy {
 
 		for (Object a : FMLClientHandler.instance().getClient().theWorld.playerEntities) {
 			EntityPlayer player = (EntityPlayer) a;
-			if (player.getCommandSenderName().toLowerCase().equals(playerName.toLowerCase())) {
+			if (player.getCommandSenderName().toLowerCase(Locale.US).equals(playerName.toLowerCase(Locale.US))) {
 				return player;
 			}
 		}

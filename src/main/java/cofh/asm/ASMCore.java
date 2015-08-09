@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
@@ -1756,7 +1757,7 @@ class ASMCore {
 
 		log.debug("Scraping data");
 
-		side = FMLCommonHandler.instance().getSide().toString().toUpperCase().intern();
+		side = FMLCommonHandler.instance().getSide().toString().toUpperCase(Locale.US).intern();
 
 		for (ASMData data : table.getAll(Implementable.class.getName())) {
 			String name = data.getClassName();

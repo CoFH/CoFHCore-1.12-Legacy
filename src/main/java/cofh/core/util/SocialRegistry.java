@@ -9,6 +9,7 @@ import com.mojang.authlib.GameProfile;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.config.Configuration;
@@ -29,7 +30,7 @@ public class SocialRegistry {
 		if (owner == null || friendName == null) {
 			return false;
 		}
-		friendConf.get(owner.getId().toString(), friendName.toLowerCase(), 1);
+		friendConf.get(owner.getId().toString(), friendName.toLowerCase(Locale.US), 1);
 		friendConf.save();
 		return true;
 	}
@@ -40,7 +41,7 @@ public class SocialRegistry {
 			return false;
 		}
 		String id = owner.getId().toString();
-		friendName = friendName.toLowerCase();
+		friendName = friendName.toLowerCase(Locale.US);
 		if (friendConf.hasCategory(id)) {
 			if (friendConf.getCategory(id).containsKey(friendName)) {
 				friendConf.getCategory(id).remove(friendName);
@@ -60,7 +61,7 @@ public class SocialRegistry {
 			return true;
 		}
 		String id = owner.getId().toString();
-		return (friendConf.hasCategory(id) && friendConf.getCategory(id).containsKey(playerName.toLowerCase()));
+		return (friendConf.hasCategory(id) && friendConf.getCategory(id).containsKey(playerName.toLowerCase(Locale.US)));
 	}
 
 	public synchronized static void sendFriendsToPlayer(EntityPlayerMP thePlayer) {

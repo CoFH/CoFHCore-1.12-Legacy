@@ -6,6 +6,7 @@ import com.google.common.base.Throwables;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -77,7 +78,7 @@ public class CommandTPS implements ISubCommand {
 				sender.addChatMessage(new ChatComponentText(world.provider.getDimensionName() + " [" + world.provider.dimensionId + "]: "
 						+ floatfmt.format(tps) + " TPS/" + floatfmt.format(tickms) + "MS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
 			}
-		} else if (arguments[1].toLowerCase().charAt(0) == 'o') {
+		} else if (arguments[1].toLowerCase(Locale.US).charAt(0) == 'o') {
 			double tickms = getTickMs(null);
 			double tps = getTps(null);
 
@@ -85,7 +86,7 @@ public class CommandTPS implements ISubCommand {
 			sender.addChatMessage(new ChatComponentText("TPS: " + floatfmt.format(tps) + " TPS of " + floatfmt.format(20L) + " TPS ("
 					+ (int) (tps / 20.0D * 100.0D) + "%)"));
 			sender.addChatMessage(new ChatComponentText("Tick time: " + floatfmt.format(tickms) + " ms of " + floatfmt.format(50L) + " ms"));
-		} else if (arguments[1].toLowerCase().charAt(0) == 'a') {
+		} else if (arguments[1].toLowerCase(Locale.US).charAt(0) == 'a') {
 			double tickms = getTickMs(null);
 			double tps = getTps(null);
 

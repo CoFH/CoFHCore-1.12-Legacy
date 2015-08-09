@@ -51,6 +51,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
@@ -263,7 +264,7 @@ public class FeatureParser {
 				if (name == null) {
 					return false;
 				}
-				return name.toLowerCase().endsWith(".json") || new File(file, name).isDirectory();
+				return name.toLowerCase(Locale.US).endsWith(".json") || new File(file, name).isDirectory();
 			}
 		});
 

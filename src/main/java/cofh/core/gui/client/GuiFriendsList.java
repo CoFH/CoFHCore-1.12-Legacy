@@ -13,6 +13,7 @@ import cofh.lib.gui.element.ElementButton;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPlayerInfo;
@@ -232,7 +233,7 @@ public class GuiFriendsList extends GuiBaseAdv {
 			olDown.setDisabled();
 		}
 
-		if (SocialRegistry.clientPlayerFriends.contains(tbName.getText().toLowerCase())) {
+		if (SocialRegistry.clientPlayerFriends.contains(tbName.getText().toLowerCase(Locale.US))) {
 			addName.setDisabled();
 			removeName.setActive();
 		} else {
