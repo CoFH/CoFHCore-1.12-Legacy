@@ -69,10 +69,11 @@ public class CommandHandler extends CommandBase {
 
 	public static boolean canUseCommand(ICommandSender sender, int permission, String name) {
 
-		if (getCommandExists(name))
+		if (getCommandExists(name)) {
 			return sender.canCommandSenderUseCommand(permission, "cofh " + name) ||
-					// this check below is because mojang is incompetent, as always
+			// this check below is because mojang is incompetent, as always
 					(sender instanceof EntityPlayerMP && permission <= 0);
+		}
 		return false;
 	}
 
