@@ -67,12 +67,17 @@ public class CoFHAccessTransformer implements IClassTransformer {
 		l: {
 			String owner = classReader.getClassName(), zuper = classReader.getSuperName();
 			superClasses.put(owner, zuper);
-			if (!superClasses.containsKey(zuper)) {
+			while (!superClasses.containsKey(zuper)) {
 				// ensure super gets loaded and passed through us, already loaded classes (mostly native)
 				// will just return and we'll have a null, which is fine
 				superClasses.put(zuper, null);
 				try {
-					Class.forName(zuper.replace('/', '.'), false, ASMCore.class.getClassLoader());
+					byte[] b = LoadingPlugin.loader.getClassBytes(zuper.replace('/', '.'));
+					if (b != null) {
+						String s = zuper;
+						zuper = new ClassReader(b).getSuperName();
+						superClasses.put(s, zuper);
+					}
 				} catch (Throwable e) {
 					throw new RuntimeException(e);
 				}
