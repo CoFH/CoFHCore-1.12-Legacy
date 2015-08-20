@@ -40,6 +40,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	// Initialize SubMod transformers
 	static {
 		versionCheck(MC_VERSION, "CoFHCore");
+		loader = (LaunchClassLoader)  LoadingPlugin.class.getClassLoader();
 		attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
 	}
 
@@ -51,7 +52,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 			System.err.println(err);
 
 			JEditorPane ep = new JEditorPane("text/html", "<html>" + err
-					+ "<br>Remove it from your coremods or mods folder and check <a href=\"http://teamcofh.com/\">here</a> for updates" + "</html>");
+					+ "<br>Remove it from your mods folder and check <a href=\"http://teamcofh.com/\">here</a> for updates" + "</html>");
 
 			ep.setEditable(false);
 			ep.setOpaque(false);
