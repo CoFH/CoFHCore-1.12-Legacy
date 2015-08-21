@@ -6,6 +6,9 @@ import cofh.core.key.KeyPacket;
 import cofh.core.network.PacketSocial;
 import cofh.core.network.PacketTile;
 import cofh.core.network.PacketTileInfo;
+import cofh.core.sided.IFunctionSided;
+import cofh.core.sided.IRunnableClient;
+import cofh.core.sided.IRunnableServer;
 import cofh.core.util.KeyBindingEmpower;
 import cofh.core.util.KeyBindingMultiMode;
 import cofh.core.util.oredict.OreDictionaryArbiter;
@@ -177,4 +180,15 @@ public class Proxy {
 		return 0;
 	}
 
+	public void runServer(IRunnableServer runnable){
+		runnable.runServer();
+	}
+
+	public void runClient(IRunnableClient runnable) {
+
+	}
+
+	public <F, T> T apply(IFunctionSided<F, T> function, F input) {
+		return function.applyServer(input);
+	}
 }

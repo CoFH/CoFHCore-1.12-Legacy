@@ -14,6 +14,9 @@ import cofh.core.key.CoFHKeyHandler;
 import cofh.core.render.CoFHFontRender;
 import cofh.core.render.IconRegistry;
 import cofh.core.render.ShaderHelper;
+import cofh.core.sided.IFunctionSided;
+import cofh.core.sided.IRunnableClient;
+import cofh.core.sided.IRunnableServer;
 import cofh.core.util.KeyBindingEmpower;
 import cofh.core.util.KeyBindingMultiMode;
 import cofh.core.util.SocialRegistry;
@@ -353,4 +356,18 @@ public class ProxyClient extends Proxy {
 		return FMLClientHandler.instance().getClient().gameSettings.getSoundLevel(SoundCategory.values()[category]);
 	}
 
+	@Override
+	public void runServer(IRunnableServer runnable){
+
+	}
+
+	@Override
+	public void runClient(IRunnableClient runnable){
+		runnable.runClient();
+	}
+
+	@Override
+	public <F, T> T apply(IFunctionSided<F, T> function, F input) {
+		return function.applyClient(input);
+	}
 }
