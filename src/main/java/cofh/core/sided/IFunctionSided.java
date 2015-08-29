@@ -23,6 +23,6 @@ public interface IFunctionSided<F, T> {
 	* Note: Implementations of this method will ALSO need the @SideOnly annotation
 	* to ensure server-only code is removed on the client.
 	*/
-	@SideOnly(Side.CLIENT)
+	@SideOnly(Side.SERVER)
 	T applyServer(F input);
 }
