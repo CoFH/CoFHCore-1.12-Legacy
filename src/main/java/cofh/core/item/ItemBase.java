@@ -1,16 +1,18 @@
 package cofh.core.item;
 
+import cofh.core.render.CoFHFontRender;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.StringHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -224,6 +226,13 @@ public class ItemBase extends Item {
 			ItemEntry item = itemMap.get(itemList.get(i));
 			item.icon = ir.registerIcon(modName + ":" + getUnlocalizedName().replace("item." + modName + ".", "") + "/" + StringHelper.titleCase(item.name));
 		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public FontRenderer getFontRenderer(ItemStack stack) {
+
+		return CoFHFontRender.loadFontRendererStack(stack);
 	}
 
 }

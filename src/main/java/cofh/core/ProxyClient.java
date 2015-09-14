@@ -211,6 +211,8 @@ public class ProxyClient extends Proxy {
 			fontRenderer.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
 		}
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(fontRenderer);
+
+		fontRenderer.initSpecialCharacters();
 	}
 
 	@Override
