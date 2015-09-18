@@ -3,18 +3,16 @@ package cofh.core.block;
 import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
 import cofh.core.CoFHProps;
+import cofh.core.RegistrySocial;
 import cofh.core.network.PacketCoFHBase;
 import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketTile;
 import cofh.core.util.CoreUtils;
-import cofh.core.util.SocialRegistry;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.ServerHelper;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
-
 import java.util.UUID;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -103,8 +101,7 @@ public abstract class TileCoFHBase extends TileEntity {
 		if (ownerID.equals(otherID)) {
 			return true;
 		}
-
-		return access.isRestricted() && SocialRegistry.playerHasAccess(name, profile);
+		return access.isRestricted() && RegistrySocial.playerHasAccess(name, profile);
 	}
 
 	public boolean canPlayerDismantle(EntityPlayer player) {

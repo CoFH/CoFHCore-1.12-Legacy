@@ -87,19 +87,6 @@ public class TabAugment extends TabBase {
 	}
 
 	@Override
-	public void draw() {
-
-		drawBackground();
-		drawTabIcon("IconAugment");
-		if (!isFullyOpened()) {
-			return;
-		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.augmentation"), posXOffset() + 18, posY + 6, headerColor);
-
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-	}
-
-	@Override
 	public void addTooltip(List<String> list) {
 
 		if (!isFullyOpened()) {
@@ -163,6 +150,17 @@ public class TabAugment extends TabBase {
 		default:
 			drawSlots(0, 0, numAugments);
 		}
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	}
+
+	@Override
+	protected void drawForeground() {
+
+		drawTabIcon("IconAugment");
+		if (!isFullyOpened()) {
+			return;
+		}
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.augmentation"), posXOffset() + 18, posY + 6, headerColor);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}

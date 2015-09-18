@@ -1,10 +1,8 @@
 package cofh.core.network;
 
 import cofh.CoFHCore;
-import cofh.core.util.SocialRegistry;
-
+import cofh.core.RegistrySocial;
 import java.util.LinkedList;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
@@ -25,20 +23,20 @@ public class PacketSocial extends PacketCoFHBase {
 		switch (PacketTypes.values()[getByte()]) {
 		case FRIEND_LIST:
 			int size = getInt();
-			SocialRegistry.clientPlayerFriends = new LinkedList<String>();
+			RegistrySocial.clientPlayerFriends = new LinkedList<String>();
 			for (int i = 0; i < size; i++) {
-				SocialRegistry.clientPlayerFriends.add(getString());
+				RegistrySocial.clientPlayerFriends.add(getString());
 			}
-			java.util.Collections.sort(SocialRegistry.clientPlayerFriends);
+			java.util.Collections.sort(RegistrySocial.clientPlayerFriends);
 			CoFHCore.proxy.updateFriendListGui();
 			return;
 		case ADD_FRIEND:
-			SocialRegistry.addFriend(((EntityPlayerMP) player).getGameProfile(), getString());
-			SocialRegistry.sendFriendsToPlayer((EntityPlayerMP) player);
+			RegistrySocial.addFriend(((EntityPlayerMP) player).getGameProfile(), getString());
+			RegistrySocial.sendFriendsToPlayer((EntityPlayerMP) player);
 			return;
 		case REMOVE_FRIEND:
-			SocialRegistry.removeFriend(((EntityPlayerMP) player).getGameProfile(), getString());
-			SocialRegistry.sendFriendsToPlayer((EntityPlayerMP) player);
+			RegistrySocial.removeFriend(((EntityPlayerMP) player).getGameProfile(), getString());
+			RegistrySocial.sendFriendsToPlayer((EntityPlayerMP) player);
 			return;
 		}
 	}

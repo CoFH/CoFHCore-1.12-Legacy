@@ -3,6 +3,7 @@ package cofh;
 import cofh.core.CoFHProps;
 import cofh.core.Proxy;
 import cofh.core.RegistryEnderAttuned;
+import cofh.core.RegistrySocial;
 import cofh.core.command.CommandFriend;
 import cofh.core.command.CommandHandler;
 import cofh.core.enchantment.CoFHEnchantment;
@@ -16,7 +17,6 @@ import cofh.core.network.PacketSocial;
 import cofh.core.util.ConfigHandler;
 import cofh.core.util.FMLEventHandler;
 import cofh.core.util.IBakeable;
-import cofh.core.util.SocialRegistry;
 import cofh.core.util.crafting.RecipeAugmentable;
 import cofh.core.util.crafting.RecipeSecure;
 import cofh.core.util.crafting.RecipeUpgrade;
@@ -147,7 +147,7 @@ public class CoFHCore extends BaseMod {
 		SecurityHelper.setup();
 		PacketCore.initialize();
 		PacketSocial.initialize();
-		SocialRegistry.initialize();
+		RegistrySocial.initialize();
 		RegistryEnderAttuned.initialize();
 	}
 
@@ -178,9 +178,10 @@ public class CoFHCore extends BaseMod {
 	}
 
 	@EventHandler
-	public void serverStarted(FMLServerAboutToStartEvent event) {
+	public void serverAboutToStart(FMLServerAboutToStartEvent event) {
 
-		RegistryEnderAttuned.serverStart(event);
+		RegistryEnderAttuned.createClientRegistry();
+		RegistryEnderAttuned.createServerRegistry();
 	}
 
 	@EventHandler
@@ -197,6 +198,8 @@ public class CoFHCore extends BaseMod {
 	public void handleConfigSync(PacketCoFHBase payload) {
 
 		FMLEventHandler.instance.handleIdMappingEvent(null);
+
+		RegistryEnderAttuned.createClientRegistry();
 	}
 
 	public PacketCoFHBase getConfigSync() {

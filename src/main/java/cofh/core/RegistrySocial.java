@@ -1,20 +1,17 @@
-package cofh.core.util;
+package cofh.core;
 
-import cofh.core.CoFHProps;
 import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketSocial;
 import cofh.core.network.PacketSocial.PacketTypes;
 import com.mojang.authlib.GameProfile;
-
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.config.Configuration;
 
-public class SocialRegistry {
+public class RegistrySocial {
 
 	public static void initialize() {
 

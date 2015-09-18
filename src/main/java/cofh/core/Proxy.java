@@ -17,10 +17,8 @@ import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.LinkedList;
 import java.util.List;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -180,7 +178,8 @@ public class Proxy {
 		return 0;
 	}
 
-	public void runServer(IRunnableServer runnable){
+	public void runServer(IRunnableServer runnable) {
+
 		runnable.runServer();
 	}
 
@@ -189,6 +188,7 @@ public class Proxy {
 	}
 
 	public <F, T> T apply(IFunctionSided<F, T> function, F input) {
+
 		return function.applyServer(input);
 	}
 }

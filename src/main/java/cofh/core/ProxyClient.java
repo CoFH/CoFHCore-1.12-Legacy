@@ -19,7 +19,6 @@ import cofh.core.sided.IRunnableClient;
 import cofh.core.sided.IRunnableServer;
 import cofh.core.util.KeyBindingEmpower;
 import cofh.core.util.KeyBindingMultiMode;
-import cofh.core.util.SocialRegistry;
 import cofh.lib.util.helpers.StringHelper;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -29,12 +28,10 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -50,7 +47,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.EXTFramebufferObject;
 
@@ -344,7 +340,7 @@ public class ProxyClient extends Proxy {
 	public void updateFriendListGui() {
 
 		if (Minecraft.getMinecraft().currentScreen != null) {
-			((GuiFriendsList) Minecraft.getMinecraft().currentScreen).taFriendsList.textLines = SocialRegistry.clientPlayerFriends;
+			((GuiFriendsList) Minecraft.getMinecraft().currentScreen).taFriendsList.textLines = RegistrySocial.clientPlayerFriends;
 		}
 	}
 
@@ -359,17 +355,19 @@ public class ProxyClient extends Proxy {
 	}
 
 	@Override
-	public void runServer(IRunnableServer runnable){
+	public void runServer(IRunnableServer runnable) {
 
 	}
 
 	@Override
-	public void runClient(IRunnableClient runnable){
+	public void runClient(IRunnableClient runnable) {
+
 		runnable.runClient();
 	}
 
 	@Override
 	public <F, T> T apply(IFunctionSided<F, T> function, F input) {
+
 		return function.applyClient(input);
 	}
 }

@@ -7,7 +7,6 @@ import cofh.lib.transport.ClientEnderChannelRegistry;
 import cofh.lib.transport.EnderRegistry;
 import cofh.lib.transport.IEnderChannelRegistry;
 import cofh.lib.transport.ServerEnderChannelRegistry;
-import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -31,7 +30,7 @@ public class RegistryEnderAttuned {
 		PacketHandler.instance.registerPacket(Packet.class);
 	}
 
-	public static void serverStart(FMLServerAboutToStartEvent event) {
+	public static void createClientRegistry() {
 
 		clientChannels = new ClientEnderChannelRegistry() {
 
@@ -53,6 +52,10 @@ public class RegistryEnderAttuned {
 				return super.removeFrequency(hostedChannel, freq);
 			}
 		};
+	}
+
+	public static void createServerRegistry() {
+
 		serverChannels = new ServerEnderChannelRegistry(new Configuration(
 				new File(DimensionManager.getCurrentSaveRootDirectory(), "/cofh/EnderFrequencies.cfg")));
 		registry = new EnderRegistry(new Configuration(new File(DimensionManager.getCurrentSaveRootDirectory(), "/cofh/EnderDestinations.cfg")));
@@ -93,7 +96,6 @@ public class RegistryEnderAttuned {
 
 		public ByteBuf data;
 
-		@SuppressWarnings("unused")
 		public Packet() {
 
 		}

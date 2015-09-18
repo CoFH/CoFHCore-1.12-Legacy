@@ -59,46 +59,6 @@ public class TabSecurity extends TabBase {
 	}
 
 	@Override
-	public void draw() {
-
-		if (!isVisible()) {
-			return;
-		}
-		drawBackground();
-
-		if (myContainer.getAccess().isPublic()) {
-			drawTabIcon("IconAccessPublic");
-		} else if (myContainer.getAccess().isRestricted()) {
-			drawTabIcon("IconAccessFriends");
-		} else if (myContainer.getAccess().isPrivate()) {
-			drawTabIcon("IconAccessPrivate");
-		}
-		if (!isFullyOpened()) {
-			return;
-		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.security"), posXOffset() + 18, posY + 6, headerColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.accessMode") + ":", posXOffset() + 6, posY + 42, subheaderColor);
-
-		if (myContainer.getAccess().isPublic()) {
-			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 1);
-			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 0);
-			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 0);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPublic"), posXOffset() + 14, posY + 54, textColor);
-		} else if (myContainer.getAccess().isRestricted()) {
-			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 0);
-			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 1);
-			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 0);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessRestricted"), posXOffset() + 14, posY + 54, textColor);
-		} else if (myContainer.getAccess().isPrivate()) {
-			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 0);
-			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 0);
-			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 1);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPrivate"), posXOffset() + 14, posY + 54, textColor);
-		}
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-	}
-
-	@Override
 	public void addTooltip(List<String> list) {
 
 		if (!isFullyOpened()) {
@@ -166,6 +126,41 @@ public class TabSecurity extends TabBase {
 		float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
 		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
 		gui.drawTexturedModalRect(posX() + 24, posY + 16, 16, 20, 64, 24);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	}
+
+	@Override
+	protected void drawForeground() {
+
+		if (myContainer.getAccess().isPublic()) {
+			drawTabIcon("IconAccessPublic");
+		} else if (myContainer.getAccess().isRestricted()) {
+			drawTabIcon("IconAccessFriends");
+		} else if (myContainer.getAccess().isPrivate()) {
+			drawTabIcon("IconAccessPrivate");
+		}
+		if (!isFullyOpened()) {
+			return;
+		}
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.security"), posXOffset() + 18, posY + 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.accessMode") + ":", posXOffset() + 6, posY + 42, subheaderColor);
+
+		if (myContainer.getAccess().isPublic()) {
+			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 1);
+			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 0);
+			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 0);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPublic"), posXOffset() + 14, posY + 54, textColor);
+		} else if (myContainer.getAccess().isRestricted()) {
+			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 0);
+			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 1);
+			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 0);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessRestricted"), posXOffset() + 14, posY + 54, textColor);
+		} else if (myContainer.getAccess().isPrivate()) {
+			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 0);
+			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 0);
+			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 1);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPrivate"), posXOffset() + 14, posY + 54, textColor);
+		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 

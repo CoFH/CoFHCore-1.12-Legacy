@@ -30,12 +30,8 @@ public abstract class TabScrolledText extends TabBase {
 	public abstract String getTitle();
 
 	@Override
-	public void draw() {
+	protected void drawForeground() {
 
-		if (!isVisible()) {
-			return;
-		}
-		drawBackground();
 		drawTabIcon(getIcon());
 		if (!isFullyOpened()) {
 			return;

@@ -1,12 +1,10 @@
 package cofh.core.command;
 
 import cofh.CoFHCore;
+import cofh.core.RegistrySocial;
 import cofh.core.gui.GuiHandler;
-import cofh.core.util.SocialRegistry;
 import cofh.lib.util.helpers.StringHelper;
-
 import java.util.List;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -44,7 +42,7 @@ public class CommandFriend implements ISubCommand {
 			EntityPlayerMP player = CommandBase.getCommandSenderAsPlayer(sender);
 			if (arguments[1].equalsIgnoreCase("add")) {
 				if (validUsername(arguments[2])) {
-					if (SocialRegistry.addFriend(player.getGameProfile(), arguments[2])) {
+					if (RegistrySocial.addFriend(player.getGameProfile(), arguments[2])) {
 						sender.addChatMessage(new ChatComponentText(StringHelper.YELLOW + arguments[2] + StringHelper.GREEN + " "
 								+ StringHelper.localize("info.cofh.command.friend.0")));
 					} else {
@@ -56,7 +54,7 @@ public class CommandFriend implements ISubCommand {
 				}
 			} else if (arguments[1].equalsIgnoreCase("remove")) {
 				if (validUsername(arguments[2])) {
-					if (SocialRegistry.removeFriend(player.getGameProfile(), arguments[2])) {
+					if (RegistrySocial.removeFriend(player.getGameProfile(), arguments[2])) {
 						sender.addChatMessage(new ChatComponentText(StringHelper.YELLOW + arguments[2] + StringHelper.GREEN + " "
 								+ StringHelper.localize("info.cofh.command.friend.4")));
 					} else {
@@ -73,7 +71,7 @@ public class CommandFriend implements ISubCommand {
 		} else if (arguments.length > 1 && arguments[1].equalsIgnoreCase("gui")) {
 			if (sender instanceof EntityPlayerMP) {
 				EntityPlayerMP thePlayer = (EntityPlayerMP) sender;
-				SocialRegistry.sendFriendsToPlayer(thePlayer);
+				RegistrySocial.sendFriendsToPlayer(thePlayer);
 				thePlayer.openGui(CoFHCore.instance, GuiHandler.FRIENDS_ID, thePlayer.worldObj, (int) thePlayer.posX, (int) thePlayer.posY,
 						(int) thePlayer.posZ);
 			}

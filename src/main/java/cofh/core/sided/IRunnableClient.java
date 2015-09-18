@@ -12,9 +12,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public interface IRunnableClient {
 
 	/*
-	* Note: Implementations of this method will ALSO need the @SideOnly annotation
-	* to ensure client-only code is removed on the server.
-	*/
+	 * Note: Implementations of this method will ALSO need the @SideOnly annotation to ensure client-only code is removed on the server.
+	 */
 	@SideOnly(Side.CLIENT)
 	public void runClient();
 }

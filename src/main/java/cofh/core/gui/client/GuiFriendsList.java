@@ -1,5 +1,6 @@
 package cofh.core.gui.client;
 
+import cofh.core.RegistrySocial;
 import cofh.core.gui.GuiBaseAdv;
 import cofh.core.gui.GuiTextList;
 import cofh.core.gui.container.ContainerFriendsList;
@@ -7,20 +8,16 @@ import cofh.core.gui.element.TabInfo;
 import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketSocial;
 import cofh.core.network.PacketSocial.PacketTypes;
-import cofh.core.util.SocialRegistry;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.gui.element.ElementButton;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiPlayerInfo;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
@@ -91,7 +88,7 @@ public class GuiFriendsList extends GuiBaseAdv {
 		// Setup Text Area
 
 		taFriendsList = new GuiTextList(this.fontRendererObj, taflX, taflY, 128, 10);
-		taFriendsList.textLines = SocialRegistry.clientPlayerFriends;
+		taFriendsList.textLines = RegistrySocial.clientPlayerFriends;
 		taFriendsList.drawBackground = false;
 		taFriendsList.drawBorder = false;
 
@@ -233,7 +230,7 @@ public class GuiFriendsList extends GuiBaseAdv {
 			olDown.setDisabled();
 		}
 
-		if (SocialRegistry.clientPlayerFriends.contains(tbName.getText().toLowerCase(Locale.US))) {
+		if (RegistrySocial.clientPlayerFriends.contains(tbName.getText().toLowerCase(Locale.US))) {
 			addName.setDisabled();
 			removeName.setActive();
 		} else {

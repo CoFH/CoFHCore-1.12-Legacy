@@ -54,42 +54,6 @@ public class TabRedstone extends TabBase {
 	}
 
 	@Override
-	public void draw() {
-
-		drawBackground();
-		drawTabIcon("IconRedstone");
-		if (!isFullyOpened()) {
-			return;
-		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.redstoneControl"), posXOffset() + 18, posY + 6, headerColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.controlStatus") + ":", posXOffset() + 6, posY + 42, subheaderColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", posXOffset() + 6, posY + 66, subheaderColor);
-
-		if (myContainer.getControl().isDisabled()) {
-			gui.drawButton("IconGunpowder", posX() + 28, posY + 20, 1, 1);
-			gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 0);
-			gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 0);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.disabled"), posXOffset() + 14, posY + 54, textColor);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.ignored"), posXOffset() + 14, posY + 78, textColor);
-		} else {
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.enabled"), posXOffset() + 14, posY + 54, textColor);
-
-			if (myContainer.getControl().isLow()) {
-				gui.drawButton("IconRedstone", posX() + 28, posY + 20, 1, 0);
-				gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 1);
-				gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 0);
-				getFontRenderer().drawString(StringHelper.localize("info.cofh.low"), posXOffset() + 14, posY + 78, textColor);
-			} else {
-				gui.drawButton("IconRedstone", posX() + 28, posY + 20, 1, 0);
-				gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 0);
-				gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 1);
-				getFontRenderer().drawString(StringHelper.localize("info.cofh.high"), posXOffset() + 14, posY + 78, textColor);
-			}
-		}
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-	}
-
-	@Override
 	public void addTooltip(List<String> list) {
 
 		if (!isFullyOpened()) {
@@ -161,6 +125,41 @@ public class TabRedstone extends TabBase {
 		float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
 		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
 		gui.drawTexturedModalRect(posX() + 24, posY + 16, 16, 20, 64, 24);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	}
+
+	@Override
+	protected void drawForeground() {
+
+		drawTabIcon("IconRedstone");
+		if (!isFullyOpened()) {
+			return;
+		}
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.redstoneControl"), posXOffset() + 18, posY + 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.controlStatus") + ":", posXOffset() + 6, posY + 42, subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", posXOffset() + 6, posY + 66, subheaderColor);
+
+		if (myContainer.getControl().isDisabled()) {
+			gui.drawButton("IconGunpowder", posX() + 28, posY + 20, 1, 1);
+			gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 0);
+			gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 0);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.disabled"), posXOffset() + 14, posY + 54, textColor);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.ignored"), posXOffset() + 14, posY + 78, textColor);
+		} else {
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.enabled"), posXOffset() + 14, posY + 54, textColor);
+
+			if (myContainer.getControl().isLow()) {
+				gui.drawButton("IconRedstone", posX() + 28, posY + 20, 1, 0);
+				gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 1);
+				gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 0);
+				getFontRenderer().drawString(StringHelper.localize("info.cofh.low"), posXOffset() + 14, posY + 78, textColor);
+			} else {
+				gui.drawButton("IconRedstone", posX() + 28, posY + 20, 1, 0);
+				gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 0);
+				gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 1);
+				getFontRenderer().drawString(StringHelper.localize("info.cofh.high"), posXOffset() + 14, posY + 78, textColor);
+			}
+		}
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 

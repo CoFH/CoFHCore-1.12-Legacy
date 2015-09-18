@@ -40,7 +40,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	// Initialize SubMod transformers
 	static {
 		versionCheck(MC_VERSION, "CoFHCore");
-		loader = (LaunchClassLoader)  LoadingPlugin.class.getClassLoader();
+		loader = (LaunchClassLoader) LoadingPlugin.class.getClassLoader();
 		attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
 	}
 

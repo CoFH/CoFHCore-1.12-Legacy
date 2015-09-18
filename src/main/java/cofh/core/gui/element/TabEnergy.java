@@ -58,9 +58,8 @@ public class TabEnergy extends TabBase {
 	}
 
 	@Override
-	public void draw() {
+	protected void drawForeground() {
 
-		drawBackground();
 		drawTabIcon("IconEnergy");
 		if (!isFullyOpened()) {
 			return;
