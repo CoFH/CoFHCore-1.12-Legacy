@@ -1,8 +1,10 @@
 package cofh.core.crash;
 
 import com.google.common.collect.HashBiMap;
+
 import java.util.Map;
 import java.util.concurrent.Callable;
+
 import net.minecraft.block.Block;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
@@ -14,19 +16,27 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class CrashHelper {
+
+	static final int range = 3;
+	static final char[] validLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!£$%^&*()`¬_+\"\\@'{}[]~/|<>,.?:;".toCharArray();
+	static final char[] metaLetters = "0123456789ABCDEF".toCharArray();
+
 	public static CrashReport makeDetailedCrashReport(Throwable throwable, String message, Object caller, Object... curState) {
+
 		CrashReport crashReport = CrashReport.makeCrashReport(throwable, message);
 
 		crashReport.makeCategory("Calling Thread").addCrashSectionCallable("Name", new Callable<String>() {
+
 			@Override
 			public String call() throws Exception {
+
 				return Thread.currentThread().getName();
 			}
 		});
 
-
-		if (caller != null)
+		if (caller != null) {
 			addCallSection(caller, crashReport, "Calling Object");
+		}
 
 		for (int i = 0; i < curState.length; i += 2) {
 			Object o = curState[i + 1];
@@ -37,6 +47,7 @@ public class CrashHelper {
 	}
 
 	public static CrashReport addSurroundingDetails(CrashReport report, String sectionName, TileEntity tile) {
+
 		if (tile == null) {
 			CrashReportCategory cat = report.makeCategory("Surroundings" + (sectionName == null ? "" : sectionName));
 			cat.addCrashSection("Tile?", "Null");
@@ -47,6 +58,7 @@ public class CrashHelper {
 	}
 
 	public static CrashReport addSurroundingDetails(CrashReport report, String sectionName, final World world, final int x, final int y, final int z) {
+
 		CrashReportCategory cat = report.makeCategory("Surroundings" + (sectionName == null ? "" : sectionName));
 
 		if (world == null) {
@@ -56,6 +68,7 @@ public class CrashHelper {
 		}
 
 		cat.addCrashSectionCallable("Dim", new Callable() {
+
 			@Override
 			public String call() throws Exception {
 
@@ -64,6 +77,7 @@ public class CrashHelper {
 		});
 
 		cat.addCrashSectionCallable("Dim_Name", new Callable() {
+
 			@Override
 			public String call() throws Exception {
 
@@ -74,6 +88,7 @@ public class CrashHelper {
 		cat.addCrashSection("Pos", x + "," + y + "," + z);
 
 		cat.addCrashSectionCallable("NeighbourBlocks", new Callable<String>() {
+
 			@Override
 			public String call() throws Exception {
 
@@ -87,10 +102,11 @@ public class CrashHelper {
 
 					for (int dx = -range; dx <= range; dx++) {
 						builder.append("\t\t");
-						if (dx == -range)
+						if (dx == -range) {
 							builder.append("dy = ").append(dy);
-						else
+						} else {
 							builder.append("\t");
+						}
 						builder.append("[ ");
 						for (int dz = -range; dz <= range; dz++) {
 							int x2 = x + dx, y2 = y + dy, z2 = z + dz;
@@ -100,9 +116,13 @@ public class CrashHelper {
 								builder.append(getNameForObject(block, map));
 
 								int meta = world.getBlockMetadata(x2, y2, z2);
-								if (meta < 0 || meta > 15) builder.append('!');
-								else if (meta == 0 && block == Blocks.air) builder.append(' ');
-								else builder.append(metaLetters[meta]);
+								if (meta < 0 || meta > 15) {
+									builder.append('!');
+								} else if (meta == 0 && block == Blocks.air) {
+									builder.append(' ');
+								} else {
+									builder.append(metaLetters[meta]);
+								}
 							} else {
 								map.put(null, "X");
 								builder.append("XX");
@@ -121,10 +141,11 @@ public class CrashHelper {
 					builder.append(entry.getValue());
 					builder.append("': ");
 					Block block = entry.getKey();
-					if (block == null)
+					if (block == null) {
 						builder.append("No Block Present");
-					else
+					} else {
 						builder.append(Block.blockRegistry.getNameForObject(block));
+					}
 					builder.append('\n');
 				}
 
@@ -132,15 +153,18 @@ public class CrashHelper {
 			}
 
 			public String getNameForObject(Block block, HashBiMap<Block, String> map) {
+
 				String s = map.get(block);
-				if (s != null)
+				if (s != null) {
 					return s;
+				}
 
 				String name = Block.blockRegistry.getNameForObject(block);
 				if (name != null && name.length() > 0) {
 					int i = name.indexOf(58);
-					if (i >= 0)
+					if (i >= 0) {
 						name = name.substring(i + 1, name.length());
+					}
 
 					String t = name.substring(0, 1).toUpperCase();
 					if (!map.containsValue(t)) {
@@ -181,11 +205,8 @@ public class CrashHelper {
 		return report;
 	}
 
-	static final int range = 3;
-	static final char[] validLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!£$%^&*()`¬_+\"\\@'{}[]~/|<>,.?:;".toCharArray();
-	static final char[] metaLetters = "0123456789ABCDEF".toCharArray();
-
 	public static void addCallSection(final Object object, CrashReport crashReport, String sectionName) {
+
 		CrashReportCategory category = crashReport.makeCategory(sectionName);
 		if (object == null) {
 			category.addCrashSection("Null?", "Null");
@@ -203,45 +224,50 @@ public class CrashHelper {
 		}
 
 		category.addCrashSectionCallable("Class", new Callable() {
-					@Override
-					public Object call() throws Exception {
-						return object.getClass().getName();
-					}
-				}
-		);
+
+			@Override
+			public Object call() throws Exception {
+
+				return object.getClass().getName();
+			}
+		});
 
 		category.addCrashSectionCallable("ToString", new Callable() {
-					@Override
-					public Object call() throws Exception {
-						return object.toString();
-					}
-				}
-		);
+
+			@Override
+			public Object call() throws Exception {
+
+				return object.toString();
+			}
+		});
 
 		if (object instanceof TileEntity) {
 			final TileEntity tile = (TileEntity) object;
 			tile.func_145828_a(category);
 			category.addCrashSectionCallable("Tile Pos", new Callable() {
-						@Override
-						public Object call() throws Exception {
-							return String.format("%d,%d,%d", tile.xCoord, tile.yCoord, tile.zCoord);
-						}
-					}
-			);
+
+				@Override
+				public Object call() throws Exception {
+
+					return String.format("%d,%d,%d", tile.xCoord, tile.yCoord, tile.zCoord);
+				}
+			});
 			category.addCrashSectionCallable("Tile NBT", new Callable() {
-						@Override
-						public Object call() throws Exception {
-							NBTTagCompound tag = new NBTTagCompound();
-							tile.writeToNBT(tag);
-							return tag.toString();
-						}
-					}
-			);
+
+				@Override
+				public Object call() throws Exception {
+
+					NBTTagCompound tag = new NBTTagCompound();
+					tile.writeToNBT(tag);
+					return tag.toString();
+				}
+			});
 		}
 
 	}
 
 	public static void addInventoryContents(CrashReport report, String categoryName, final IInventory inv) {
+
 		CrashReportCategory category = report.makeCategory(categoryName);
 
 		if (inv == null) {
@@ -250,8 +276,10 @@ public class CrashHelper {
 		}
 
 		category.addCrashSectionCallable("InventoryContents", new Callable<String>() {
+
 			@Override
 			public String call() throws Exception {
+
 				StringBuilder builder = new StringBuilder("\n\n");
 				builder.append(inv.toString()).append(" - ").append(inv.getSizeInventory());
 				for (int i = 0; i < inv.getSizeInventory(); i++) {
@@ -272,8 +300,9 @@ public class CrashHelper {
 		});
 	}
 
-
 	public static CrashReport makeDetailedCrashReport(Exception e, String inserting) {
+
 		return makeDetailedCrashReport(e, inserting, null);
 	}
+
 }
