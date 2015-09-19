@@ -11,7 +11,7 @@ import cofh.core.gui.element.TabRedstone;
 import cofh.core.gui.element.TabSecurity;
 import cofh.core.gui.element.TabTutorial;
 import cofh.core.key.CoFHKeyHandler;
-import cofh.core.render.CoFHFontRender;
+import cofh.core.render.CoFHFontRenderer;
 import cofh.core.render.IconRegistry;
 import cofh.core.render.ShaderHelper;
 import cofh.core.sided.IFunctionSided;
@@ -28,10 +28,12 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import java.util.BitSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -47,13 +49,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.TextureStitchEvent;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.EXTFramebufferObject;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends Proxy {
 
-	public static CoFHFontRender fontRenderer;
+	public static CoFHFontRenderer fontRenderer;
 
 	public static final KeyBind KEYBINDING_EMPOWER = new KeyBind("key.cofh.empower", Keyboard.KEY_V, "key.cofh.category");
 	public static final KeyBind KEYBINDING_MULTIMODE = new KeyBind("key.cofh.multimode", Keyboard.KEY_C, "key.cofh.category");
@@ -199,7 +202,7 @@ public class ProxyClient extends Proxy {
 
 		ShaderHelper.initShaders();
 
-		fontRenderer = new CoFHFontRender(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"),
+		fontRenderer = new CoFHFontRenderer(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"),
 				Minecraft.getMinecraft().renderEngine, false);
 
 		if (Minecraft.getMinecraft().gameSettings.language != null) {

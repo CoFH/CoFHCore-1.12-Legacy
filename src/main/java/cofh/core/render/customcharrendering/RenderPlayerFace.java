@@ -1,22 +1,26 @@
 package cofh.core.render.customcharrendering;
 
 import cofh.core.ProxyClient;
-import cofh.core.render.CoFHFontRender;
+import cofh.core.render.CoFHFontRenderer;
 import cofh.lib.util.helpers.SecurityHelper;
 import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.properties.Property;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 public class RenderPlayerFace implements ICustomCharRenderer {
+
 	static GameProfile profile;
 
 	// Cache the Texture data for the Game Profiles
@@ -24,7 +28,8 @@ public class RenderPlayerFace implements ICustomCharRenderer {
 
 	public final static char CHAR_FACE = '\u0378';
 
-	public static char init(CoFHFontRender render) {
+	public static char init(CoFHFontRenderer render) {
+
 		RenderPlayerFace renderPlayerFace = new RenderPlayerFace();
 		render.renderOverrides.put(CHAR_FACE, renderPlayerFace);
 		return CHAR_FACE;
@@ -32,11 +37,15 @@ public class RenderPlayerFace implements ICustomCharRenderer {
 
 	public static GameProfile loadTextures(GameProfile profile) {
 
-		if (profile == null) return null;
+		if (profile == null) {
+			return null;
+		}
 
 		if (profile.isComplete()) {
 			GameProfile newProfile = textureCache.get(profile);
-			if (newProfile != null) return newProfile;
+			if (newProfile != null) {
+				return newProfile;
+			}
 
 			if (!profile.getProperties().containsKey("textures")) {
 				Property property = (Property) Iterables.getFirst(profile.getProperties().get("textures"), (Object) null);
@@ -50,21 +59,25 @@ public class RenderPlayerFace implements ICustomCharRenderer {
 		return profile;
 	}
 
-	public static CoFHFontRender loadProfile(ItemStack item) {
+	public static CoFHFontRenderer loadProfile(ItemStack item) {
+
 		GameProfile profile = SecurityHelper.getOwner(item);
-		if (profile == SecurityHelper.UNKNOWN_GAME_PROFILE)
+		if (profile == SecurityHelper.UNKNOWN_GAME_PROFILE) {
 			profile = null;
+		}
 
 		return setProfile(profile);
 	}
 
-	private static CoFHFontRender setProfile(GameProfile gameProfile) {
+	private static CoFHFontRenderer setProfile(GameProfile gameProfile) {
+
 		profile = gameProfile != null ? loadTextures(gameProfile) : null;
 		return ProxyClient.fontRenderer;
 	}
 
 	@Override
-	public float renderChar(char letter, boolean italicFlag, float x, float y, CoFHFontRender coFHFontRender) {
+	public float renderChar(char letter, boolean italicFlag, float x, float y, CoFHFontRenderer fontRenderer) {
+
 		ResourceLocation resourcelocation = AbstractClientPlayer.locationStevePng;
 
 		if (profile != null) {
@@ -72,11 +85,12 @@ public class RenderPlayerFace implements ICustomCharRenderer {
 			Map map = minecraft.func_152342_ad().func_152788_a(profile);
 
 			if (map.containsKey(MinecraftProfileTexture.Type.SKIN)) {
-				resourcelocation = minecraft.func_152342_ad().func_152792_a((MinecraftProfileTexture) map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
+				resourcelocation = minecraft.func_152342_ad().func_152792_a((MinecraftProfileTexture) map.get(MinecraftProfileTexture.Type.SKIN),
+						MinecraftProfileTexture.Type.SKIN);
 			}
 		}
 
-		coFHFontRender.bindTexture(resourcelocation);
+		fontRenderer.bindTexture(resourcelocation);
 
 		GL11.glColor4f(1, 1, 1, 1);
 
@@ -107,14 +121,15 @@ public class RenderPlayerFace implements ICustomCharRenderer {
 		GL11.glVertex3f(x + 7.99F - italicOffset + outerFace, y + 7.99F + outerFace, hatZ);
 		GL11.glEnd();
 
-		coFHFontRender.resetColor();
-
+		fontRenderer.resetColor();
 
 		return 8.02F;
 	}
 
 	@Override
-	public int getCharWidth(char letter, CoFHFontRender coFHFontRender) {
+	public int getCharWidth(char letter, CoFHFontRenderer fontRenderer) {
+
 		return 8;
 	}
+
 }

@@ -1,17 +1,19 @@
 package cofh.core.item;
 
-import cofh.core.render.CoFHFontRender;
+import cofh.core.render.CoFHFontRenderer;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.StringHelper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -232,7 +234,7 @@ public class ItemBase extends Item {
 	@SideOnly(Side.CLIENT)
 	public FontRenderer getFontRenderer(ItemStack stack) {
 
-		return CoFHFontRender.loadFontRendererStack(stack);
+		return CoFHFontRenderer.loadFontRendererStack(stack);
 	}
 
 }

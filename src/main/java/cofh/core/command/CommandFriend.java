@@ -4,7 +4,9 @@ import cofh.CoFHCore;
 import cofh.core.RegistrySocial;
 import cofh.core.gui.GuiHandler;
 import cofh.lib.util.helpers.StringHelper;
+
 import java.util.List;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;

@@ -1,10 +1,11 @@
 package cofh.core.item;
 
-import cofh.core.render.CoFHFontRender;
+import cofh.core.render.CoFHFontRenderer;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.StringHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
@@ -61,6 +62,6 @@ public class ItemBlockBase extends ItemBlock {
 	@SideOnly(Side.CLIENT)
 	public FontRenderer getFontRenderer(ItemStack stack) {
 
-		return CoFHFontRender.loadFontRendererStack(stack);
+		return CoFHFontRenderer.loadFontRendererStack(stack);
 	}
 }

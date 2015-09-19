@@ -12,7 +12,9 @@ import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.ServerHelper;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
+
 import java.util.UUID;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

@@ -1,17 +1,21 @@
 package cofh.core.render.customcharrendering;
 
-import cofh.core.render.CoFHFontRender;
+import cofh.core.render.CoFHFontRenderer;
+
 import net.minecraft.util.ResourceLocation;
+
 import org.lwjgl.opengl.GL11;
 
 public class RenderSprite implements ICustomCharRenderer {
-	public final char underlyingCharacter;
-	private ResourceLocation textureSheet;
 
-	private float u, v, w, h, sw, rw;
-	private int bw;
+	public final char underlyingCharacter;
+	private final ResourceLocation textureSheet;
+
+	private final float u, v, w, h, sw, rw;
+	private final int bw;
 
 	public RenderSprite(char underlyingCharacter, ResourceLocation textureSheet, float u, float v, float w, float h) {
+
 		this.underlyingCharacter = underlyingCharacter;
 		this.textureSheet = textureSheet;
 		this.u = u;
@@ -25,9 +29,10 @@ public class RenderSprite implements ICustomCharRenderer {
 	}
 
 	@Override
-	public float renderChar(char letter, boolean italicFlag, float x, float y, CoFHFontRender coFHFontRender) {
+	public float renderChar(char letter, boolean italicFlag, float x, float y, CoFHFontRenderer fontRenderer) {
+
 		GL11.glColor4f(1, 1, 1, 1);
-		coFHFontRender.bindTexture(textureSheet);
+		fontRenderer.bindTexture(textureSheet);
 
 		float italicOffset = italicFlag ? 1.0F : 0.0F;
 		GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
@@ -41,19 +46,22 @@ public class RenderSprite implements ICustomCharRenderer {
 		GL11.glVertex3f(x + sw - italicOffset, y + 7.99F, 0.0F);
 		GL11.glEnd();
 
-		coFHFontRender.resetColor();
+		fontRenderer.resetColor();
 
 		return rw;
 	}
 
 	@Override
-	public int getCharWidth(char letter, CoFHFontRender coFHFontRender) {
+	public int getCharWidth(char letter, CoFHFontRenderer fontRenderer) {
+
 		return bw;
 	}
 
-	public static char addRenderer(char c, ResourceLocation texture, int u, int v, int w, int h, CoFHFontRender fontRender) {
+	public static char addRenderer(char c, ResourceLocation texture, int u, int v, int w, int h, CoFHFontRenderer fontRenderer) {
+
 		RenderSprite renderSprite = new RenderSprite(c, texture, u, v, w, h);
-		fontRender.renderOverrides.put(c, renderSprite);
+		fontRenderer.renderOverrides.put(c, renderSprite);
 		return c;
 	}
+
 }

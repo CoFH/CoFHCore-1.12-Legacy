@@ -2,7 +2,9 @@ package cofh.core.network;
 
 import cofh.CoFHCore;
 import cofh.core.RegistrySocial;
+
 import java.util.LinkedList;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
