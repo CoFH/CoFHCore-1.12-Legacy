@@ -103,6 +103,7 @@ public class CoFHFontRenderer extends FontRenderer {
 		}
 	}
 
+	@Override
 	public int sizeStringToWidth(String par1Str, int par2) {
 
 		int j = par1Str.length();
@@ -210,7 +211,7 @@ public class CoFHFontRenderer extends FontRenderer {
 	public final TCharObjectHashMap<ICustomCharRenderer> renderOverrides = new TCharObjectHashMap<ICustomCharRenderer>();
 
 	@Override
-	protected float renderUnicodeChar(char letter, boolean p_78277_2_) {
+	public float renderUnicodeChar(char letter, boolean p_78277_2_) {
 
 		ICustomCharRenderer iCustomCharRenderer = renderOverrides.get(letter);
 		if (iCustomCharRenderer != null) {
