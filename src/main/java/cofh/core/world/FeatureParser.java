@@ -390,7 +390,6 @@ public class FeatureParser {
 		if (parser == null) {
 			throw new IllegalStateException("Generator " + name + " is not registered!");
 		}
-
 		return parser.parseGenerator(name, genObject, log, resList, clusterSize, matList);
 	}
 

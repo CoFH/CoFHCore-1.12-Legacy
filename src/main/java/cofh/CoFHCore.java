@@ -63,10 +63,13 @@ public class CoFHCore extends BaseMod {
 
 	public static final String modId = "CoFHCore";
 	public static final String modName = "CoFH Core";
-	public static final String version = CoFHProps.VERSION;
-	public static final String dependencies = CoFHProps.DEPENDENCIES;
-	public static final String releaseURL = "https://raw.github.com/CoFH/Version/master/CoFHCore";
+	public static final String version = "1.7.10R3.1.0B1";
+	public static final String version_max = "1.7.10R3.2.0";
+	public static final String dependencies = CoFHProps.FORGE_DEP;
 	public static final String modGuiFactory = "cofh.core.gui.GuiConfigCoreFactory";
+
+	public static final String version_group = "required-after:" + modId + "@[" + version + "," + version_max + ");";
+	public static final String releaseURL = "https://raw.github.com/CoFH/VERSION/master/" + modId;
 
 	@Instance(modId)
 	public static CoFHCore instance;

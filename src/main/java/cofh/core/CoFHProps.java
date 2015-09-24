@@ -14,13 +14,11 @@ public class CoFHProps {
 
 	}
 
-	public static final String VERSION = "1.7.10R3.1.0B1";
-
 	private static final String BUILD = "1448";
 	public static final String FORGE_REQ = "10.13.4." + BUILD;
 	public static final String FORGE_REQ_MAX = "10.14";
 
-	public static final String DEPENDENCIES = "required-after:Forge@[" + CoFHProps.FORGE_REQ + "," + CoFHProps.FORGE_REQ_MAX + ");";
+	public static final String FORGE_DEP = "required-after:Forge@[" + FORGE_REQ + "," + FORGE_REQ_MAX + ");";
 
 	public static final String DOWNLOAD_URL = "http://teamcofh.com/downloads/";
 
