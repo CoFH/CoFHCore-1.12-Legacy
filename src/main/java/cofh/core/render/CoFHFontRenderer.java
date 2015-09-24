@@ -103,7 +103,6 @@ public class CoFHFontRenderer extends FontRenderer {
 		}
 	}
 
-	@Override
 	public int sizeStringToWidth(String par1Str, int par2) {
 
 		int j = par1Str.length();
