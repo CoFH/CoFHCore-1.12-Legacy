@@ -9,8 +9,10 @@ import java.util.List;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 
 public class CommandPregen implements ISubCommand {
@@ -32,23 +34,29 @@ public class CommandPregen implements ISubCommand {
 	@Override
 	public void handleCommand(ICommandSender sender, String[] args) {
 
-		if (args.length < 6) {
-			// TODO: error
-			return;
+		if (args.length < 4) {
+			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
+			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
 		}
 		World world = sender.getEntityWorld();
 		if (world.isRemote) {
 			return;
 		}
 
-		EntityPlayer center = null;
+		ChunkCoordinates center = null;
 		int i = 1;
 		int xS, xL;
-		try {
+		if ("@".equals(args[i])) {
+			center = sender.getPlayerCoordinates();
+			++i;
 			xS = CommandBase.parseInt(sender, args[i++]);
-		} catch (Throwable t) {
-			center = CommandBase.getPlayer(sender, args[i - 1]);
-			xS = CommandBase.parseInt(sender, args[i++]);
+		} else {
+			try {
+				xS = CommandBase.parseInt(sender, args[i++]);
+			} catch (Throwable t) {
+				center = CommandBase.getPlayer(sender, args[i - 1]).getPlayerCoordinates();
+				xS = CommandBase.parseInt(sender, args[i++]);
+			}
 		}
 		int zS = CommandBase.parseInt(sender, args[i++]), zL;
 		int t = i + 1;
@@ -66,11 +74,11 @@ public class CommandPregen implements ISubCommand {
 		}
 
 		if (center != null) {
-			xS = ((int) center.posX) / 16 - xS;
-			zS = ((int) center.posZ) / 16 - zS;
+			xS = (center.posX / 16) - xS;
+			zS = (center.posZ / 16) - zS;
 
-			xL = ((int) center.posX) / 16 + xL;
-			zL = ((int) center.posZ) / 16 + zL;
+			xL = (center.posX / 16) + xL;
+			zL = (center.posZ / 16) + zL;
 		}
 
 		if (xL < xS) {
@@ -96,6 +104,7 @@ public class CommandPregen implements ISubCommand {
 				}
 			}
 			TickHandlerWorld.chunksToPreGen.put(world.provider.dimensionId, chunks);
+			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.pregen.start", (xL - xS) * (zL - zS), xS, zS, xL, zL);
 		}
 	}
 
