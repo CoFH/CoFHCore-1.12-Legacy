@@ -26,6 +26,7 @@ public class TickHandlerWorld {
 	// FIXME: put adding to these behind a function so we can remove the tick handler when there's nothing to do
 	// size of the maps indicates how many dimensions are needing to gen/pregen, and will be 0 when no work is required
 
+	private static byte pregenC, retroC;
 	@SubscribeEvent
 	public void tickEnd(WorldTickEvent event) {
 
@@ -41,7 +42,12 @@ public class TickHandlerWorld {
 			if (chunks != null && chunks.size() > 0) {
 				RetroChunkCoord r = chunks.pollFirst();
 				ChunkCoord c = r.coord;
-				CoFHCore.log.info("RetroGening " + c.toString() + ".");
+				if (retroC++ == 0 || chunks.size() < 3) {
+					CoFHCore.log.info("RetroGening " + c.toString() + ".");
+				} else {
+					CoFHCore.log.debug("RetroGening " + c.toString() + ".");
+				}
+				retroC &= 31;
 				long worldSeed = world.getSeed();
 				Random rand = new Random(worldSeed);
 				long xSeed = rand.nextLong() >> 2 + 1L;
@@ -57,7 +63,12 @@ public class TickHandlerWorld {
 
 			if (chunks != null && chunks.size() > 0) {
 				ChunkCoord c = chunks.pollFirst();
-				CoFHCore.log.info("PreGening " + c.toString() + ".");
+				if (pregenC++ == 0 || chunks.size() < 5) {
+					CoFHCore.log.info("PreGening " + c.toString() + ".");
+				} else {
+					CoFHCore.log.debug("PreGening " + c.toString() + ".");
+				}
+				pregenC &= 31;
 				world.getChunkFromChunkCoords(c.chunkX, c.chunkZ);
 			} else if (chunks != null) {
 				chunksToPreGen.remove(dim);
@@ -83,6 +94,23 @@ public class TickHandlerWorld {
 					generatedFeatures.add(features.getStringTagAt(i));
 				}
 			}
+		}
+
+		@Override
+		public boolean equals(Object o) {
+
+			if (o instanceof RetroChunkCoord) {
+				return ((RetroChunkCoord) o).coord.equals(coord);
+			} else if (o instanceof ChunkCoord) {
+				return o.equals(coord);
+			}
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+
+			return coord.hashCode();
 		}
 	}
 

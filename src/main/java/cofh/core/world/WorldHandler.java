@@ -97,6 +97,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		MinecraftForge.ORE_GEN_BUS.register(instance);
 
 		if (genFlatBedrock & retroFlatBedrock | retroGeneration) {
+			// TODO: remove this condition when pregen works? (see handler for alternate)
 			FMLCommonHandler.instance().bus().register(TickHandlerWorld.instance);
 		}
 	}
@@ -123,6 +124,11 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	@SubscribeEvent
 	public void handleChunkSaveEvent(ChunkDataEvent.Save event) {
 
+		/*ArrayDeque<?> chunks = TickHandlerWorld.chunksToGen.get(event.world.provider.dimensionId);
+		if (chunks != null && chunks.contains(new ChunkCoord(event.getChunk()))) {
+			return;
+		}//*/
+		// FIXME: chunks save out before we gen
 		NBTTagCompound genTag = event.getData().getCompoundTag(TAG_NAME);
 
 		if (genFlatBedrock) {
@@ -134,7 +140,6 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		}
 		genTag.setTag("List", featureList);
 		genTag.setLong("Hash", genHash);
-		// FIXME: is it possible for a chunk to save out before we retrogen it?
 
 		event.getData().setTag(TAG_NAME, genTag);
 	}
@@ -161,11 +166,11 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			}
 
 			if (bedrock) {
-				CoFHCore.log.info("Queuing RetroGen for flattening bedrock for the chunk at " + cCoord.toString() + ".");
+				CoFHCore.log.debug("Queuing RetroGen for flattening bedrock for the chunk at " + cCoord.toString() + ".");
 				regen = true;
 			}
 			if (genFeatures) {
-				CoFHCore.log.info("Queuing RetroGen for features for the chunk at " + cCoord.toString() + ".");
+				CoFHCore.log.debug("Queuing RetroGen for features for the chunk at " + cCoord.toString() + ".");
 				regen = true;
 			}
 		} else {
