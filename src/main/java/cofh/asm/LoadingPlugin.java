@@ -5,10 +5,8 @@ import com.google.common.eventbus.Subscribe;
 import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.LoadController;
-import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.discovery.ASMDataTable;
-import cpw.mods.fml.common.discovery.ModCandidate;
 import cpw.mods.fml.common.event.FMLConstructionEvent;
 import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import cpw.mods.fml.common.versioning.VersionParser;
@@ -18,14 +16,21 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+import java.util.zip.ZipEntry;
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import net.minecraft.launchwrapper.LaunchClassLoader;
+
+import org.apache.logging.log4j.Level;
 
 @IFMLLoadingPlugin.TransformerExclusions({ "cofh.asm." })
 @IFMLLoadingPlugin.SortingIndex(1001)
@@ -37,16 +42,21 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	public static ASMDataTable ASM_DATA = null;
 	public static LaunchClassLoader loader = null;
 
+	public static final String currentMcVersion;
+	public static final File minecraftDir;
+
 	// Initialize SubMod transformers
 	static {
+		currentMcVersion = (String) FMLInjectionData.data()[4];
 		versionCheck(MC_VERSION, "CoFHCore");
+        minecraftDir = (File) FMLInjectionData.data()[6];
 		loader = (LaunchClassLoader) LoadingPlugin.class.getClassLoader();
 		attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
 	}
 
 	public static void versionCheck(String reqVersion, String mod) {
 
-		String mcVersion = (String) FMLInjectionData.data()[4];
+		String mcVersion = currentMcVersion;
 		if (!VersionParser.parseRange(reqVersion).containsVersion(new DefaultArtifactVersion(mcVersion))) {
 			String err = "This version of " + mod + " does not support Minecraft version " + mcVersion;
 			System.err.println(err);
@@ -93,7 +103,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	@Override
 	public String getAccessTransformerClass() {
 
-		return "cofh.asm.CoFHAccessTransformer";
+		return CoFHAccessTransformer.class.getName();
 	}
 
 	@Override
@@ -150,25 +160,77 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 
 			ASM_DATA = evt.getASMHarvestedData();
 			CoFHClassTransformer.scrapeData(ASM_DATA);
-			for (ModCandidate t : ASM_DATA.getCandidatesFor("cofh.api.energy")) {
-				if (true) {
-					for (ModContainer mod : t.getContainedMods()) {
-						;
-					}
-				}
-			}
-		}
 
-		@Override
-		public Void call() throws Exception {
+			//for (ModCandidate t : ASM_DATA.getCandidatesFor("cofh.api.energy"));
 
-			return null;
 		}
 
 		@Override
 		public void injectData(Map<String, Object> data) {
 
 			loader = (LaunchClassLoader) data.get("classLoader");
+		}
+
+		@Override
+		public Void call() throws Exception {
+
+			scanMods();
+			return null;
+		}
+
+		private void scanMods() {
+
+			File modsDir = new File(minecraftDir, "mods");
+			for (File file : modsDir.listFiles()) {
+				scanMod(file);
+			}
+			File versionModsDir = new File(minecraftDir, "mods/"+currentMcVersion);
+			if (versionModsDir.exists()) {
+				for (File file : versionModsDir.listFiles()) {
+					scanMod(file);
+				}
+			}
+		}
+
+		private void scanMod(File file) {
+
+			{
+				String name = file.getName().toLowerCase();
+				if (file.isDirectory() || !name.endsWith(".jar") && !name.endsWith(".zip")) {
+					return;
+				}
+			}
+
+			try {
+				JarFile jar = new JarFile(file);
+				try {
+					l: {
+					Manifest manifest = jar.getManifest();
+					if (manifest == null) {
+						break l;
+					}
+					Attributes attr = manifest.getMainAttributes();
+					if (attr == null) {
+						break l;
+					}
+
+					String transformers = attr.getValue("CoFHAT");
+					if (transformers != null) {
+						for (String t : transformers.split(" ")) {
+							ZipEntry at = jar.getEntry("META-INF/" + t);
+							if (at != null) {
+								FMLLog.log("CoFHASM", Level.DEBUG, "Adding CoFHAT: " + t + " from: " + file.getName());
+								CoFHAccessTransformer.processATFile(new InputStreamReader(jar.getInputStream(at)));
+							}
+						}
+					}
+				}
+				} finally {
+					jar.close();
+				}
+			} catch(Exception e) {
+				// todo log at debug?
+			}
 		}
 	}
 

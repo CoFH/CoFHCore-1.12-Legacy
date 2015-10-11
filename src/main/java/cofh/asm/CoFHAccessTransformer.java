@@ -175,7 +175,7 @@ public class CoFHAccessTransformer implements IClassTransformer {
 	private static HashMap<String, Modifier> fieldAccess = new HashMap<String, Modifier>();
 	private static HashMap<String, Modifier> methodAccess = new HashMap<String, Modifier>();
 
-	protected static void processATFile(Reader rules) throws IOException {
+	static void processATFile(Reader rules) throws IOException {
 
 		for (LineReader reader = new LineReader(rules);;) {
 
