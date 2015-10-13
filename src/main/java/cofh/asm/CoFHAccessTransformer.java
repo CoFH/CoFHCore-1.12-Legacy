@@ -2,6 +2,11 @@ package cofh.asm;
 
 import static org.objectweb.asm.Opcodes.*;
 
+import cofh.repack.codechicken.lib.asm.ObfMapping;
+import cofh.repack.immibis.bon.JoinMapping;
+import cofh.repack.immibis.bon.Mapping;
+import cofh.repack.immibis.bon.mcp.CsvFile;
+import cofh.repack.immibis.bon.mcp.SrgFile;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
@@ -12,9 +17,11 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
@@ -70,8 +77,6 @@ public class CoFHAccessTransformer implements IClassTransformer {
 			String owner = classReader.getClassName(), zuper = classReader.getSuperName();
 			superClasses.put(owner, zuper);
 			while (!superClasses.containsKey(zuper)) {
-				// ensure super gets loaded and passed through us, already loaded classes (mostly native)
-				// will just return and we'll have a null, which is fine
 				superClasses.put(zuper, null);
 				try {
 					byte[] b = LoadingPlugin.loader.getClassBytes(zuper.replace('/', '.'));
@@ -169,6 +174,108 @@ public class CoFHAccessTransformer implements IClassTransformer {
 		}
 	}
 
+	private static Mapping mapping = null;
+	static void initForDeobf() throws IOException {
+
+		File[] data = ObfMapping.MCPRemapper.getConfFiles();
+		Mapping forwardSRG = new Mapping();
+		Mapping forwardCSV = new Mapping();
+
+		SrgFile srg = new SrgFile(data[0], false);
+
+		forwardSRG.setDefaultPackage("net/minecraft/src/");
+
+		HashMap<String, HashSet<String>> srgMethodDescriptors = new HashMap<String, HashSet<String>>();
+		HashMap<String, HashSet<String>> srgMethodOwners = new HashMap<String, HashSet<String>>();
+		HashMap<String, HashSet<String>> srgFieldOwners = new HashMap<String, HashSet<String>>();
+
+		for (Map.Entry<String, String> entry : srg.classes.entrySet()) {
+			String obfClass = entry.getKey();
+			String srgClass = entry.getValue();
+
+			forwardSRG.setClass(obfClass, srgClass);
+		}
+
+		for (Map.Entry<String, String> entry : srg.fields.entrySet()) {
+			String obfOwnerAndName = entry.getKey();
+			String srgName = entry.getValue();
+
+			String obfOwner = obfOwnerAndName.substring(0, obfOwnerAndName.lastIndexOf('/'));
+			String obfName = obfOwnerAndName.substring(obfOwnerAndName.lastIndexOf('/') + 1);
+
+			String srgOwner = srg.classes.get(obfOwner);
+
+			// Enum values don't use the CSV and don't start with field_
+			if (srgName.startsWith("field_")) {
+				if (srgFieldOwners.containsKey(srgName))
+					System.out.println("SRG field "+srgName+" appears in multiple classes (at least "+srgFieldOwners.get(srgName)+" and "+srgOwner+")");
+
+				HashSet<String> owners = srgFieldOwners.get(srgName);
+				if (owners == null)
+					srgFieldOwners.put(srgName, owners = new HashSet<String>());
+				owners.add(srgOwner);
+			}
+
+			forwardSRG.setField(obfOwner, obfName, srgName);
+		}
+
+		for (Map.Entry<String, String> entry : srg.methods.entrySet()) {
+			String obfOwnerNameAndDesc = entry.getKey();
+			String srgName = entry.getValue();
+
+			String obfOwnerAndName = obfOwnerNameAndDesc.substring(0, obfOwnerNameAndDesc.indexOf('('));
+			String obfOwner = obfOwnerAndName.substring(0, obfOwnerAndName.lastIndexOf('/'));
+			String obfName = obfOwnerAndName.substring(obfOwnerAndName.lastIndexOf('/') + 1);
+			String obfDesc = obfOwnerNameAndDesc.substring(obfOwnerNameAndDesc.indexOf('('));
+
+			String srgDesc = forwardSRG.mapMethodDescriptor(obfDesc);
+			String srgOwner = srg.classes.get(obfOwner);
+
+			HashSet<String> srgMethodDescriptorsThis = srgMethodDescriptors.get(srgName);
+			if(srgMethodDescriptorsThis == null)
+				srgMethodDescriptors.put(srgName, srgMethodDescriptorsThis = new HashSet<String>());
+			srgMethodDescriptorsThis.add(srgDesc);
+
+			HashSet<String> srgMethodOwnersThis = srgMethodOwners.get(srgName);
+			if (srgMethodOwnersThis == null)
+				srgMethodOwners.put(srgName, srgMethodOwnersThis = new HashSet<String>());
+			srgMethodOwnersThis.add(srgOwner);
+
+			forwardSRG.setMethod(obfOwner, obfName, obfDesc, srgName);
+		}
+
+		int[] sideNumbers = {2, 1, 0};
+		Map<String, String> fieldNames = CsvFile.read(data[2], sideNumbers);
+		Map<String, String> methodNames = CsvFile.read(data[1], sideNumbers);
+
+		for (Map.Entry<String, String> entry : fieldNames.entrySet()) {
+			String srgName = entry.getKey();
+			String mcpName = entry.getValue();
+
+			if (srgFieldOwners.get(srgName) != null) {
+				for (String srgOwner : srgFieldOwners.get(srgName)) {
+
+					forwardCSV.setField(srgOwner, srgName, mcpName);
+				}
+			}
+		}
+
+		for (Map.Entry<String, String> entry : methodNames.entrySet()) {
+			String srgName = entry.getKey();
+			String mcpName = entry.getValue();
+
+			if (srgMethodOwners.get(srgName) != null) {
+				for (String srgOwner : srgMethodOwners.get(srgName)) {
+					for (String srgDesc : srgMethodDescriptors.get(srgName)) {
+						forwardCSV.setMethod(srgOwner, srgName, srgDesc, mcpName);
+					}
+				}
+			}
+		}
+
+		mapping = new JoinMapping(forwardSRG, forwardCSV);
+	}
+
 	private static HashMap<String, String> modifiers = new HashMap<String, String>();
 	private static HashMap<String, String> superClasses = new HashMap<String, String>();
 	private static HashMap<String, Modifier> classAccess = new HashMap<String, Modifier>();
@@ -195,7 +302,8 @@ public class CoFHAccessTransformer implements IClassTransformer {
 			}
 
 			String desc = "";
-			String lookupName = parts[1].replace('.', '/');
+			String lookupName = parts[1].replace('.', '/'), originalName = lookupName;
+			if (mapping != null) lookupName = mapping.getClass(lookupName);
 			modifiers.put(lookupName, null);
 
 			HashMap<String, Modifier> map;
@@ -204,6 +312,7 @@ public class CoFHAccessTransformer implements IClassTransformer {
 				map = classAccess;
 			} else {
 				String nameReference = parts[2];
+				if (mapping != null) nameReference = mapping.getField(originalName, nameReference, "V");
 				lookupName += '/' + nameReference;
 
 				int parenIdx = nameReference.indexOf('(');
@@ -211,6 +320,12 @@ public class CoFHAccessTransformer implements IClassTransformer {
 					map = methodAccess;
 					desc = nameReference.substring(parenIdx);
 					nameReference = nameReference.substring(0, parenIdx);
+					if (mapping != null) {
+						String newName = mapping.getMethod(originalName, nameReference, desc);
+						desc = mapping.mapMethodDescriptor(desc);
+						nameReference = newName;
+						lookupName = originalName + '/' + nameReference + desc;
+					}
 				} else {
 					map = fieldAccess;
 				}

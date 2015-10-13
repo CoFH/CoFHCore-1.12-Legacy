@@ -1,5 +1,6 @@
 package cofh.asm;
 
+import cofh.repack.codechicken.lib.asm.ASMInit;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import cpw.mods.fml.common.DummyModContainer;
@@ -16,6 +17,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Map;
@@ -28,6 +30,7 @@ import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
 import org.apache.logging.log4j.Level;
@@ -44,14 +47,29 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 
 	public static final String currentMcVersion;
 	public static final File minecraftDir;
+	public static final boolean obfuscated;
 
 	// Initialize SubMod transformers
 	static {
 		currentMcVersion = (String) FMLInjectionData.data()[4];
 		versionCheck(MC_VERSION, "CoFHCore");
         minecraftDir = (File) FMLInjectionData.data()[6];
-		loader = (LaunchClassLoader) LoadingPlugin.class.getClassLoader();
+		loader = Launch.classLoader;
 		attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
+		ASMInit.init();
+
+		boolean obf = true;
+		try {
+			obf = Launch.classLoader.getClassBytes("net.minecraft.world.World") == null;
+		} catch (IOException e) {
+		}
+		obfuscated = obf;
+		if (!obfuscated) {
+			try {
+				CoFHAccessTransformer.initForDeobf();
+			} catch (IOException e) {
+			}
+		}
 	}
 
 	public static void versionCheck(String reqVersion, String mod) {
