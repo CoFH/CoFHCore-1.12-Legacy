@@ -315,7 +315,7 @@ class ASMCore {
 			m.instructions.insert(n, n = new InsnNode(ICONST_0));
 			m.instructions.insert(n, n = new InsnNode(IRETURN));
 			m.instructions.insert(n, n = end);
-			m.instructions.insert(n, n = new FrameNode(F_SAME1, 0, null, 0, new Object[] { "I" }));
+			m.instructions.insert(n, n = new FrameNode(F_SAME1, 0, null, 0, new Object[] { INTEGER }));
 			m.instructions.insert(n, n = new InsnNode(POP));
 
 			ClassWriter cw = new ClassWriter(0);
@@ -480,7 +480,7 @@ class ASMCore {
 			}
 
 			/*
-			 * 
+			 *
 			 * mv.visitFieldInsn(GETFIELD, "net/minecraft/entity/Entity", "boundingBox", "Lnet/minecraft/util/AxisAlignedBB;");
 			 * mv.visitMethodInsn(INVOKEVIRTUAL, "net/minecraft/util/AxisAlignedBB", "copy", "()Lnet/minecraft/util/AxisAlignedBB;"); mv.visitVarInsn(ASTORE,
 			 * 19); Label l27 = new Label(); mv.visitLabel(l27); mv.visitLineNumber(617, l27); mv.visitVarInsn(ALOAD, 0); mv.visitFieldInsn(GETFIELD,
