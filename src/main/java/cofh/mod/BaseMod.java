@@ -190,10 +190,8 @@ public abstract class BaseMod implements IUpdatableMod {
 		}
 
 		String path = "assets/" + getAssetDir() + "/language/";
-		InputStream is = null;
 		String lang = "en_US";
-		try {
-			is = Loader.getResource(path + lang + ".lang", null).openStream();
+		try (InputStream is = Loader.getResource(path + lang + ".lang", null).openStream();) {
 			Properties langPack = new Properties();
 			loadLanguageFile(langPack, is);
 
@@ -202,12 +200,6 @@ public abstract class BaseMod implements IUpdatableMod {
 			m.putAll(langPack);
 		} catch (Throwable t) {
 			_log.catching(Level.INFO, t);
-		} finally {
-			try {
-				is.close();
-			} catch (IOException t) {
-				_log.catching(Level.INFO, t);
-			}
 		}
 	}
 

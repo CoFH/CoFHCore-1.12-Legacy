@@ -67,7 +67,7 @@ public class CrashHelper {
 			return report;
 		}
 
-		cat.addCrashSectionCallable("Dim", new Callable() {
+		cat.addCrashSectionCallable("Dim", new Callable<String>() {
 
 			@Override
 			public String call() throws Exception {
@@ -76,7 +76,7 @@ public class CrashHelper {
 			}
 		});
 
-		cat.addCrashSectionCallable("Dim_Name", new Callable() {
+		cat.addCrashSectionCallable("Dim_Name", new Callable<String>() {
 
 			@Override
 			public String call() throws Exception {
@@ -214,7 +214,7 @@ public class CrashHelper {
 		}
 
 		if (object instanceof Enum) {
-			category.addCrashSection("Value", object.toString() + " . " + ((Enum) object).ordinal());
+			category.addCrashSection("Value", object.toString() + " . " + ((Enum<?>) object).ordinal());
 			return;
 		}
 
@@ -223,7 +223,7 @@ public class CrashHelper {
 			return;
 		}
 
-		category.addCrashSectionCallable("Class", new Callable() {
+		category.addCrashSectionCallable("Class", new Callable<Object>() {
 
 			@Override
 			public Object call() throws Exception {
@@ -232,7 +232,7 @@ public class CrashHelper {
 			}
 		});
 
-		category.addCrashSectionCallable("ToString", new Callable() {
+		category.addCrashSectionCallable("ToString", new Callable<Object>() {
 
 			@Override
 			public Object call() throws Exception {
@@ -244,7 +244,7 @@ public class CrashHelper {
 		if (object instanceof TileEntity) {
 			final TileEntity tile = (TileEntity) object;
 			tile.func_145828_a(category);
-			category.addCrashSectionCallable("Tile Pos", new Callable() {
+			category.addCrashSectionCallable("Tile Pos", new Callable<Object>() {
 
 				@Override
 				public Object call() throws Exception {
@@ -252,7 +252,7 @@ public class CrashHelper {
 					return String.format("%d,%d,%d", tile.xCoord, tile.yCoord, tile.zCoord);
 				}
 			});
-			category.addCrashSectionCallable("Tile NBT", new Callable() {
+			category.addCrashSectionCallable("Tile NBT", new Callable<Object>() {
 
 				@Override
 				public Object call() throws Exception {

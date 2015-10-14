@@ -121,63 +121,32 @@ public class CoreUtils {
 	}
 
 	/* FILE UTILS */
-	public static void copyFileUsingStream(String source, File dest) throws IOException {
-
-		InputStream is = null;
-		OutputStream os = null;
-		try {
-			is = Loader.getResource(source, null).openStream();
-			os = new FileOutputStream(dest);
-
-			byte[] buffer = new byte[1024];
-			int length;
-			while ((length = is.read(buffer)) > 0) {
-				os.write(buffer, 0, length);
-			}
-		} finally {
-			if (is != null) {
-				is.close();
-			}
-			if (os != null) {
-				os.close();
-			}
-		}
-	}
-
 	public static void copyFileUsingStream(String source, String dest) throws IOException {
 
-		InputStream is = null;
-		OutputStream os = null;
-		try {
-			is = Loader.getResource(source, null).openStream();
-			os = new FileOutputStream(new File(dest));
+		copyFileUsingStream(source, new File(dest));
+	}
+
+	public static void copyFileUsingStream(String source, File dest) throws IOException {
+
+		try (
+				InputStream is = Loader.getResource(source, null).openStream();
+				OutputStream os = new FileOutputStream(dest);) {
 
 			byte[] buffer = new byte[1024];
 			int length;
 			while ((length = is.read(buffer)) > 0) {
 				os.write(buffer, 0, length);
-			}
-		} finally {
-			if (is != null) {
-				is.close();
-			}
-			if (os != null) {
-				os.close();
 			}
 		}
 	}
 
 	public static void copyFileUsingChannel(File source, File dest) throws IOException {
 
-		FileChannel sourceChannel = null;
-		FileChannel destChannel = null;
-		try {
-			sourceChannel = new FileInputStream(source).getChannel();
-			destChannel = new FileOutputStream(dest).getChannel();
-			destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-		} finally {
-			// sourceChannel.close();
-			// destChannel.close();
+		try (
+				FileInputStream sourceStream = new FileInputStream(source);
+				FileChannel sourceChannel = sourceStream.getChannel();
+				FileOutputStream outputStream = new FileOutputStream(dest);) {
+			outputStream.getChannel().transferFrom(sourceChannel, 0, sourceChannel.size());
 		}
 	}
 

@@ -11,11 +11,13 @@ public class EntitySelectorInRangeByType implements IEntitySelector {
 	private final double distance;
 	private final Class<? extends Entity> types[];
 
+	@SafeVarargs
 	public EntitySelectorInRangeByType(Entity origin, double distance, Class<? extends Entity>... types) {
 
 		this(origin.posX, origin.posY, origin.posZ, distance, types);
 	}
 
+	@SafeVarargs
 	public EntitySelectorInRangeByType(double originX, double originY, double originZ, double distance, Class<? extends Entity>... types) {
 
 		origX = originX;
