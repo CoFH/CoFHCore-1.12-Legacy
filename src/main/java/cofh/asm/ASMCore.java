@@ -90,7 +90,7 @@ class ASMCore {
 		hashes.put("net.minecraft.client.Minecraft", (byte) 10);
 		hashes.put("net.minecraft.client.renderer.RenderBlocks", (byte) 11);
 		hashes.put("net.minecraft.tileentity.TileEntity", (byte) 12);
-		hashes.put("net.minecraft.server.management.PlayerManager$PlayerInstance", (byte) 13);
+		// hashes.put("", (byte) 13); // unused
 		hashes.put("net.minecraft.entity.Entity", (byte) 14);
 		hashes.put("net.minecraft.entity.item.EntityItem", (byte) 15);
 		hashes.put("cofh.asmhooks.HooksCore", (byte) 16);
@@ -198,7 +198,7 @@ class ASMCore {
 		case 12:
 			return alterTileEntity(transformedName, bytes, cr);
 		case 13:
-			return fixWorldGenLag(transformedName, bytes, cr);
+			return bytes; // unused
 		case 14:
 			return alterEntity(transformedName, bytes, cr);
 		case 15:
@@ -871,55 +871,6 @@ class ASMCore {
 
 			if (!updated) {
 				break l;
-			}
-
-			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-			cn.accept(cw);
-			bytes = cw.toByteArray();
-		}
-		return bytes;
-	}
-
-	private static byte[] fixWorldGenLag(String name, byte[] bytes, ClassReader cr) {
-
-		String names;
-		if (LoadingPlugin.runtimeDeobfEnabled) {
-			names = "func_73254_a";
-		} else {
-			names = "sendChunkUpdate";
-		}
-
-		ClassNode cn = new ClassNode(ASM5);
-		cr.accept(cn, ClassReader.EXPAND_FRAMES);
-
-		String sig = "()V";
-
-		l: {
-			MethodNode m = null;
-			for (MethodNode n : cn.methods) {
-				if (names.equals(n.name) && sig.equals(n.desc)) {
-					m = n;
-					break;
-				}
-			}
-
-			if (m == null) {
-				break l;
-			}
-
-			q: for (int i = 0, e = m.instructions.size(); i < e; ++i) {
-				AbstractInsnNode n = m.instructions.get(i);
-				if (n.getOpcode() == GETSTATIC) {
-					if ("net/minecraftforge/common/ForgeModContainer".equals(((FieldInsnNode) n).owner)) {
-						for (; n != null; n = n.getNext()) {
-							if (n.getOpcode() != IF_ICMPNE) {
-								continue;
-							}
-							((JumpInsnNode) n).setOpcode(IF_ICMPLT);
-							break q;
-						}
-					}
-				}
 			}
 
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
