@@ -9,16 +9,14 @@ public class EntitySelectorInRangeByType implements IEntitySelector {
 	private final double origY;
 	private final double origZ;
 	private final double distance;
-	private final Class<? extends Entity> types[];
+	private final Class<?> types[];
 
-	@SafeVarargs
-	public EntitySelectorInRangeByType(Entity origin, double distance, Class<? extends Entity>... types) {
+	public EntitySelectorInRangeByType(Entity origin, double distance, Class<?>... types) {
 
 		this(origin.posX, origin.posY, origin.posZ, distance, types);
 	}
 
-	@SafeVarargs
-	public EntitySelectorInRangeByType(double originX, double originY, double originZ, double distance, Class<? extends Entity>... types) {
+	public EntitySelectorInRangeByType(double originX, double originY, double originZ, double distance, Class<?>... types) {
 
 		origX = originX;
 		origY = originY;
@@ -39,7 +37,7 @@ public class EntitySelectorInRangeByType implements IEntitySelector {
 			return true;
 		}
 		// Check types. Applicable if found and assignable...
-		for (Class<? extends Entity> type : types) {
+		for (Class<?> type : types) {
 			if (type.isAssignableFrom(entity.getClass())) {
 				return true;
 			}
