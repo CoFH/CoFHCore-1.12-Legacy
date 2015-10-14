@@ -12,10 +12,13 @@ import cpw.mods.fml.common.event.FMLConstructionEvent;
 import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import cpw.mods.fml.common.versioning.VersionParser;
 import cpw.mods.fml.relauncher.FMLInjectionData;
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import cpw.mods.fml.relauncher.IFMLCallHook;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import cpw.mods.fml.relauncher.Side;
 
 import java.awt.Desktop;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,6 +29,7 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 import javax.swing.JEditorPane;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
@@ -51,12 +55,6 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 
 	// Initialize SubMod transformers
 	static {
-		currentMcVersion = (String) FMLInjectionData.data()[4];
-		versionCheck(MC_VERSION, "CoFHCore");
-        minecraftDir = (File) FMLInjectionData.data()[6];
-		loader = Launch.classLoader;
-		attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
-		ASMInit.init();
 
 		boolean obf = true;
 		try {
@@ -70,6 +68,12 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 			} catch (IOException e) {
 			}
 		}
+		currentMcVersion = (String) FMLInjectionData.data()[4];
+		versionCheck(MC_VERSION, "CoFHCore");
+        minecraftDir = (File) FMLInjectionData.data()[6];
+		loader = Launch.classLoader;
+		attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
+		ASMInit.init();
 	}
 
 	public static void versionCheck(String reqVersion, String mod) {
@@ -100,6 +104,46 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 			});
 			JOptionPane.showMessageDialog(null, ep, "Fatal error", JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
+		}
+		l: if (obfuscated && System.class.getPackage().getSpecificationVersion().compareTo("1.8") < 0) {
+			// create always-on-top modal dialogue in a separate thread so initialization can continue (but the user has to respond anyway)
+			if (FMLLaunchHandler.side() == Side.SERVER) {
+				FMLLog.log(Level.WARN, "*************************************************************************");
+				for (int i = 0; i < 5; ++i) {
+					FMLLog.log(Level.WARN, "*************************************************************************");
+					FMLLog.log(Level.WARN, "* You are using an old Java version, and should update to 1.8 or newer. *");
+					FMLLog.log(Level.WARN, "*************************************************************************");
+				}
+				FMLLog.log(Level.WARN, "*************************************************************************");
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+				}
+				break l;
+			}
+			new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+
+					JEditorPane ep = new JEditorPane("text/html", "<html>You are using an old Java version, and should update to 1.8 or newer.</html>");
+
+					ep.setEditable(false);
+					ep.setOpaque(false);
+
+					final JFrame frame = new JFrame();
+					frame.setFocusable(false);
+					frame.setUndecorated(true);
+					frame.setAlwaysOnTop(true);
+					Rectangle rect = frame.getRootPane().getGraphicsConfiguration().getBounds();
+					frame.setLocation((int) rect.getCenterX(), (int) rect.getCenterY());
+					frame.setTitle("Warning");
+					frame.setVisible(true);
+					JOptionPane.showMessageDialog(frame, ep, "Warning", JOptionPane.WARNING_MESSAGE);
+					frame.setVisible(false);
+				}
+
+			}, "Message Thread").start();
 		}
 	}
 
