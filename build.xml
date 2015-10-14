@@ -104,7 +104,7 @@
 		<delete dir="${compile.dir}" failonerror="false"/>
 		<mkdir dir="${compile.dir}"/>
 		<javac srcdir="${download.dir}/CoFHLib-master/src/main/java" destdir="${compile.dir}"
-			target="1.6" source="1.6"
+			target="1.7" source="1.7"
 			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false">
 			<include name="**/*.java"/>
 		      <classpath>
@@ -182,7 +182,7 @@
 			cache="${forgebuild.dir}/tmp/depcache" closure="true">
 			<include name="**/*.java"/>
 		</depend>
-		<javac srcdir="${sources.dir}" destdir="${compile.dir}" target="1.6" source="1.6"
+		<javac srcdir="${sources.dir}" destdir="${compile.dir}" target="1.7" source="1.7"
 			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false">
 			<include name="**/*.java"/>
 		</javac>
@@ -265,7 +265,7 @@
 
 		<mkdir dir="${compile.dir}"/>
 		<mkdir dir="${lib.dir}"/>
-		<javac srcdir="${forgebuild.dir}/tmp/recompSrc" destdir="${compile.dir}" target="1.6" source="1.6"
+		<javac srcdir="${forgebuild.dir}/tmp/recompSrc" destdir="${compile.dir}" target="1.7" source="1.7"
 			classpathref="mcp.classpath" debug="true" debuglevel="lines,source" includeAntRuntime="false"/>
 		<jar destfile="${forge.jar}1" compress="true" level="9" basedir="${compile.dir}"/>
 		
