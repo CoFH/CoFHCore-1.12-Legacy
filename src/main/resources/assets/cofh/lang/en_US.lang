@@ -83,10 +83,10 @@ info.cofh.soaked=Soaked
 info.cofh.source=Source
 info.cofh.stored=Stored
 info.cofh.strength=Strength
+info.cofh.success=Success!
 info.cofh.transfer=Transfer
 info.cofh.tutorial=Tutorial
 info.cofh.unlocked=Unlocked
-info.cofh.success=Success!
 
 info.cofh.command.friend=The command to add and remove friends from your friend list.
 info.cofh.command.help=The command to help you out with other commands!
