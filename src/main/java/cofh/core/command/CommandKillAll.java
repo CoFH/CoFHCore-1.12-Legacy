@@ -12,7 +12,7 @@ import java.util.Locale;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.WorldServer;
@@ -60,7 +60,7 @@ public class CommandKillAll implements ISubCommand {
 								killCount++;
 								theWorld.removeEntity(entity);
 							}
-						} else if (entity instanceof EntityMob) {
+						} else if (entity instanceof IMob) {
 							if (curName == null) {
 								curName = entity.getClass().getName();
 							}
