@@ -890,7 +890,7 @@ class ASMCore {
 		}
 
 		ClassNode cn = new ClassNode(ASM5);
-		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+		cr.accept(cn, 0);
 
 		l: {
 			boolean updated = false;
@@ -976,7 +976,7 @@ class ASMCore {
 
 		name = name.replace('.', '/');
 		ClassNode cn = new ClassNode(ASM5);
-		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+		cr.accept(cn, 0);
 
 		final String sig = "(III)Z";
 		final String itemstack = "net/minecraft/item/ItemStack";
@@ -1037,7 +1037,7 @@ class ASMCore {
 				}
 			}
 
-			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 			cn.accept(cw);
 			bytes = cw.toByteArray();
 		}
