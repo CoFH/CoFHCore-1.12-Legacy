@@ -1,11 +1,11 @@
 package cofh.core.gui.container;
 
+import cofh.lib.gui.container.ContainerBase;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.item.ItemStack;
 
-public class ContainerFriendsList extends Container {
+public class ContainerFriendsList extends ContainerBase {
 
 	public ContainerFriendsList(InventoryPlayer inventory) {
 
@@ -18,9 +18,21 @@ public class ContainerFriendsList extends Container {
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
+	public boolean supportsShiftClick(int slotIndex) {
 
-		return null;
+		return false;
+	}
+
+	@Override
+	protected int getPlayerInventoryVerticalOffset() {
+
+		return 0;
+	}
+
+	@Override
+	protected int getSizeInventory() {
+
+		return 0;
 	}
 
 }
