@@ -63,6 +63,7 @@ info.cofh.items=Items
 info.cofh.legacy=Legacy
 info.cofh.level=Level
 info.cofh.locked=Locked
+info.cofh.loot=Loot
 info.cofh.low=Low
 info.cofh.maxEnergyPerTick=Maximum Power
 info.cofh.modeChange=to Change Mode
