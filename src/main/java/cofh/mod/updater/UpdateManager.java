@@ -18,7 +18,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
 
-public class UpdateManager {
+public final class UpdateManager {
 
 	private static transient int pollOffset = 0;
 	private static final ChatStyle description = new ChatStyle();
