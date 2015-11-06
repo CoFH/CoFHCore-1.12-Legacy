@@ -125,15 +125,40 @@ public class CoFHAccessTransformer implements IClassTransformer {
 		}
 
 		List<MethodNode> nowOverridable = Lists.newArrayList();
+		Modifier overrideAll = methodAccess.get(cn.name + "/*()V");
 		for (MethodNode mn : cn.methods) {
 
 			int access = mn.access;
+			if (overrideAll != null) {
+				String entry = cn.name + '/' + mn.name + mn.desc;
+				m = methodAccess.get(entry);
+				access = overrideAll.getFixedAccess(access);
+				if (m == null) {
+					methodAccess.put(entry, overrideAll);
+				} else {
+					switch (m.getFixedAccess(ACC_PRIVATE)) {
+					case ACC_PRIVATE:
+						if (overrideAll.getFixedAccess(ACC_PRIVATE) == 0) {
+							methodAccess.put(entry, overrideAll);
+							break;
+						}
+					case 0: // ACC_DEFAULT
+						if (overrideAll.getFixedAccess(0) == ACC_PROTECTED) {
+							methodAccess.put(entry, overrideAll);
+							break;
+						}
+					case ACC_PROTECTED:
+						if (overrideAll.getFixedAccess(ACC_PROTECTED) == ACC_PUBLIC) {
+							methodAccess.put(entry, overrideAll);
+							break;
+						}
+					case ACC_PUBLIC:
+						break;
+					}
+				}
+			}
 			for (String owner = cn.name; owner != null; owner = superClasses.get(owner)) {
 				m = methodAccess.get(owner + '/' + mn.name + mn.desc);
-				if (m != null) {
-					access = m.getFixedAccess(access);
-				}
-				m = methodAccess.get(owner + "/*()V");
 				if (m != null) {
 					access = m.getFixedAccess(access);
 				}
@@ -555,8 +580,12 @@ public class CoFHAccessTransformer implements IClassTransformer {
 			for (int i = classes.length; i-- > 1;) {
 				Class<?> a = classes[i], b = classes[i - 1];
 				ClassLoader loaderA = a.getClassLoader(), loaderB = b.getClassLoader();
-				if (loaderA != loaderB && loaderB != null && loaderB != source)
+				if (loaderA != loaderB) {
+					if (loaderB == null) {
+						return source;
+					}
 					return loaderB;
+				}
 			}
 
 			return source;
