@@ -8,6 +8,7 @@ import cofh.repack.immibis.bon.Mapping;
 import cofh.repack.immibis.bon.mcp.CsvFile;
 import cofh.repack.immibis.bon.mcp.SrgFile;
 import com.google.common.base.Charsets;
+import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 
@@ -65,6 +66,8 @@ public class CoFHAccessTransformer implements IClassTransformer {
 		processATFile(Resources.asCharSource(rulesResource, Charsets.UTF_8).openStream());
 	}
 
+	private static ClassHelper helper = new ClassHelper();
+
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes) {
 
@@ -76,17 +79,12 @@ public class CoFHAccessTransformer implements IClassTransformer {
 		l: {
 			String owner = classReader.getClassName(), zuper = classReader.getSuperName();
 			superClasses.put(owner, zuper);
-			while (!superClasses.containsKey(zuper)) {
+			if (!superClasses.containsKey(zuper)) {
 				superClasses.put(zuper, null);
 				try {
-					byte[] b = LoadingPlugin.loader.getClassBytes(zuper.replace('/', '.'));
-					if (b != null) {
-						String s = zuper;
-						zuper = new ClassReader(b).getSuperName();
-						superClasses.put(s, zuper);
-					}
+					Class.forName(zuper.replace('/', '.'), false, helper.getClassLoader());
 				} catch (Throwable e) {
-					throw new RuntimeException(e);
+					Throwables.propagate(e);
 				}
 			}
 
@@ -546,6 +544,24 @@ public class CoFHAccessTransformer implements IClassTransformer {
 				}
 			}
 		}
+	}
+
+	private static class ClassHelper extends SecurityManager {
+
+		public ClassLoader getClassLoader() {
+
+			Class<?>[] classes = getClassContext();
+			final ClassLoader source = LoadingPlugin.loader;
+			for (int i = classes.length; i-- > 1;) {
+				Class<?> a = classes[i], b = classes[i - 1];
+				ClassLoader loaderA = a.getClassLoader(), loaderB = b.getClassLoader();
+				if (loaderA != loaderB && loaderB != null && loaderB != source)
+					return loaderB;
+			}
+
+			return source;
+		}
+
 	}
 
 }
