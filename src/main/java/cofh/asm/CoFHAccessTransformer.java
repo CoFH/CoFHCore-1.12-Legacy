@@ -67,6 +67,7 @@ public class CoFHAccessTransformer implements IClassTransformer {
 	}
 
 	private static ClassHelper helper = new ClassHelper();
+	private static int depth = 0;
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] bytes) {
@@ -82,8 +83,11 @@ public class CoFHAccessTransformer implements IClassTransformer {
 			if (!superClasses.containsKey(zuper)) {
 				superClasses.put(zuper, null);
 				try {
+					++depth;
 					Class.forName(zuper.replace('/', '.'), false, helper.getClassLoader());
+					--depth;
 				} catch (Throwable e) {
+					depth = 0;
 					Throwables.propagate(e);
 				}
 			}
@@ -576,19 +580,17 @@ public class CoFHAccessTransformer implements IClassTransformer {
 		public ClassLoader getClassLoader() {
 
 			Class<?>[] classes = getClassContext();
-			final ClassLoader source = LoadingPlugin.loader;
-			for (int i = classes.length; i-- > 1;) {
-				Class<?> a = classes[i], b = classes[i - 1];
-				ClassLoader loaderA = a.getClassLoader(), loaderB = b.getClassLoader();
-				if (loaderA != loaderB) {
-					if (loaderB == null) {
-						return source;
-					}
-					return loaderB;
-				}
+			ClassLoader loader = null;
+			int l = depth * 6;
+			if (classes.length > l) {
+				Class<?> clazz = classes[l];
+				loader = clazz.getClassLoader();
+			}
+			if (loader != null) {
+				return loader;
 			}
 
-			return source;
+			return LoadingPlugin.loader;
 		}
 
 	}
