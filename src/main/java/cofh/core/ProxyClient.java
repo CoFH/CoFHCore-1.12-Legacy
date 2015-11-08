@@ -48,6 +48,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.RenderBlockOverlayEvent;
+import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 import org.lwjgl.input.Keyboard;
@@ -279,6 +281,14 @@ public class ProxyClient extends Proxy {
 			IconRegistry.addIcon("IconArrowDown1", "cofh:icons/Icon_ArrowDown", event.map);
 			IconRegistry.addIcon("IconArrowUp0", "cofh:icons/Icon_ArrowUp_Inactive", event.map);
 			IconRegistry.addIcon("IconArrowUp1", "cofh:icons/Icon_ArrowUp", event.map);
+		}
+	}
+
+	@SubscribeEvent
+	public void blockRenderBlockOverlay(RenderBlockOverlayEvent evt) {
+
+		if (evt.overlayType == OverlayType.BLOCK && !evt.blockForOverlay.isNormalCube()) {
+			evt.setCanceled(true);
 		}
 	}
 
