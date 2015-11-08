@@ -288,6 +288,7 @@ public class ProxyClient extends Proxy {
 	public void blockRenderBlockOverlay(RenderBlockOverlayEvent evt) {
 
 		if (evt.overlayType == OverlayType.BLOCK && !evt.blockForOverlay.isNormalCube()) {
+			// occasionally the overlay code screws up and tries to overlay a block that didn't pass the checks, this fixes that
 			evt.setCanceled(true);
 		}
 	}
