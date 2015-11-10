@@ -107,18 +107,6 @@ public class CoFHCore extends BaseMod {
 		configCore.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/common.cfg"), true));
 		configClient.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/client.cfg"), true));
 
-		// BEGIN TEMP CODE
-		// TODO: Remove after 3.1
-		configCore.renameCategory("general", "General");
-		configCore.renameCategory("enchantment", "Enchantment");
-		configCore.renameCategory("security", "Security");
-		configCore.renameCategory("world", "World");
-
-		configClient.removeCategory("tab");
-		configClient.removeCategory("general");
-
-		// END TEMP CODE
-
 		// EntityRegistry.registerModEntity(EntityCoFHArrow.class, "Arrow", 0, this, 150, 1, false);
 
 		MinecraftForge.EVENT_BUS.register(proxy);
@@ -245,6 +233,15 @@ public class CoFHCore extends BaseMod {
 
 		comment = "Set to FALSE to disable items on the ground from trying to stack. This can improve server performance.";
 		CoFHProps.enableItemStacking = configCore.get(category, "EnableItemStacking", true, comment);
+
+		/* HOLIDAY */
+		category = "Holiday";
+
+		comment = "Set this to TRUE to disable April Foolishness.";
+		CoFHProps.holidayAprilFools = !configCore.get(category, "IHateApril", false, comment);
+
+		comment = "Set this to TRUE to disable Christmas cheer. Scrooge. :(";
+		CoFHProps.holidayChristmas = !configCore.get(category, "HoHoNo", false, comment);
 
 		/* SECURITY */
 		category = "Security";

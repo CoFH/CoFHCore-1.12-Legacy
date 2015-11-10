@@ -30,26 +30,20 @@ import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.biome.BiomeInfo;
 import cofh.lib.world.biome.BiomeInfoRarity;
 import cofh.lib.world.biome.BiomeInfoSet;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.stream.JsonWriter;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
@@ -154,104 +148,6 @@ public class FeatureParser {
 		registerGenerator("small-tree", new SmallTreeParser());
 
 		log.info("Complete");
-	}
-
-	public static void complete() {
-
-		if (!cofh.CoFHCore.configCore.isOldConfig()) {
-			return;
-		}
-		log.fatal("Warning: CoFHWorld will now scan and update your world generation files. This will only occur once.");
-
-		JsonParser parser = new JsonParser();
-		Gson writer = new Gson();
-
-		ArrayList<File> worldGenList = new ArrayList<File>(5);
-		addFiles(worldGenList, worldGenFolder);
-
-		for (int i = 0; i < worldGenList.size(); ++i) {
-
-			File genFile = worldGenList.get(i);
-			if (genFile.isDirectory()) {
-				addFiles(worldGenList, genFile);
-				continue;
-			}
-
-			JsonObject genList;
-			try {
-				genList = (JsonObject) parser.parse(new FileReader(genFile));
-			} catch (Throwable t) {
-				log.error("Critical error reading from a world generation file: " + genFile + " > Please be sure the file is correct!", t);
-				continue;
-			}
-			boolean saveFile = false;
-			log.warn("Checking if " + genFile.getName() + " is from an old version.");
-			for (Iterator<Entry<String, JsonElement>> iter = genList.entrySet().iterator(); iter.hasNext();) {
-				Entry<String, JsonElement> genEntry = iter.next();
-
-				JsonObject genObject = genEntry.getValue().getAsJsonObject();
-				String templateName = parseTemplate(genObject);
-				if ("uniform".equals(templateName) || "normal".equals(templateName)) {
-					if (genObject.has("metadata")) {
-						saveFile = true;
-
-						JsonElement block = genObject.get("block");
-						if (block.isJsonArray()) {
-							JsonArray blocks = block.getAsJsonArray();
-							JsonArray metas = genObject.getAsJsonArray("metadata");
-							JsonArray weight = genObject.getAsJsonArray("weight");
-							int s = blocks.size();
-							if (s != metas.size() || s != weight.size()) {
-								log.error("The entry '" + genEntry.getKey() + "' is invalid and will be removed.");
-								iter.remove();
-								continue;
-							}
-							JsonArray arr = new JsonArray();
-							for (int j = 0; j < s; ++j) {
-								JsonObject obj = new JsonObject();
-								obj.add("name", new JsonPrimitive(blocks.get(j).getAsString()));
-								obj.add("metadata", new JsonPrimitive(metas.get(j).getAsInt()));
-								obj.add("weight", new JsonPrimitive(weight.get(j).getAsInt()));
-								arr.add(obj);
-							}
-							genObject.remove("metadata");
-							genObject.remove("weight");
-							genObject.add("block", arr);
-						} else {
-							JsonObject obj = new JsonObject();
-							obj.add("name", new JsonPrimitive(block.getAsString()));
-							obj.add("metadata", new JsonPrimitive(genObject.get("metadata").getAsInt()));
-							genObject.remove("metadata");
-							if (genObject.has("weight")) {
-								genObject.remove("weight");
-							}
-							genObject.add("block", obj);
-						}
-					}
-				}
-			}
-
-			if (saveFile) {
-				log.warn("File " + genFile + " is from an old version and will be converted to the new format.");
-
-				JsonWriter w = null;
-				try {
-					w = new JsonWriter(new FileWriter(genFile));
-					w.setIndent("    ");
-					writer.toJson(genList, w);
-				} catch (IOException e) {
-					log.error("There was an error updating " + genFile.getName() + "!", e);
-				} finally {
-					if (w != null) {
-						try {
-							w.close();
-						} catch (IOException e) {
-							log.error("There was an error updating " + genFile.getName() + "!", e);
-						}
-					}
-				}
-			}
-		}
 	}
 
 	private static void addFiles(ArrayList<File> list, File folder) {

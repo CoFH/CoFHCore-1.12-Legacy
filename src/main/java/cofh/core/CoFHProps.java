@@ -90,4 +90,8 @@ public class CoFHProps {
 	public static boolean enableColorBlindTextures = false;
 	public static boolean enableGUISlotBorders = true;
 
+	/* Holidays */
+	public static boolean holidayAprilFools = true;
+	public static boolean holidayChristmas = true;
+
 }
