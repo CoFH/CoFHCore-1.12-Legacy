@@ -1,11 +1,14 @@
 package cofh.asm;
 
+import cofh.mod.ChildMod;
+import cofh.mod.ChildModContainer;
 import cofh.repack.codechicken.lib.asm.ASMInit;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import cpw.mods.fml.common.DummyModContainer;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.LoadController;
+import cpw.mods.fml.common.ModContainerFactory;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.discovery.ASMDataTable;
 import cpw.mods.fml.common.event.FMLConstructionEvent;
@@ -38,6 +41,7 @@ import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 
 import org.apache.logging.log4j.Level;
+import org.objectweb.asm.Type;
 
 @IFMLLoadingPlugin.TransformerExclusions({ "cofh.asm." })
 @IFMLLoadingPlugin.SortingIndex(1001)
@@ -237,6 +241,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 		public Void call() throws Exception {
 
 			scanMods();
+			ModContainerFactory.instance().registerContainerType(Type.getType(ChildMod.class), ChildModContainer.class);
 			return null;
 		}
 
