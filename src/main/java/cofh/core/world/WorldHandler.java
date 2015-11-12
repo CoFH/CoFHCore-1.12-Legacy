@@ -3,7 +3,9 @@ package cofh.core.world;
 import cofh.CoFHCore;
 import cofh.api.world.IFeatureGenerator;
 import cofh.api.world.IFeatureHandler;
+import cofh.asmhooks.event.ModPopulateChunkEvent;
 import cofh.core.world.TickHandlerWorld.RetroChunkCoord;
+import cofh.lib.util.LinkedHashList;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.position.ChunkCoord;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -27,11 +29,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 
 public class WorldHandler implements IWorldGenerator, IFeatureHandler {
@@ -39,6 +43,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	private static List<IFeatureGenerator> features = new ArrayList<IFeatureGenerator>();
 	private static Set<String> featureNames = new THashSet<String>();
 	private static Set<EventType> vanillaGenEvents = new THashSet<EventType>();
+	private static LinkedHashList<ChunkReference> populatingChunks = new LinkedHashList<ChunkReference>();
 
 	private static long genHash = 0;
 
@@ -122,14 +127,26 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	}
 
 	@SubscribeEvent
+	public void populateChunkEvent(PopulateChunkEvent.Pre event) {
+
+		populatingChunks.add(new ChunkReference(event.world.provider.dimensionId, event.chunkX, event.chunkZ));
+	}
+
+	@SubscribeEvent
+	public void populateChunkEvent(ModPopulateChunkEvent.Post event) {
+
+		populatingChunks.remove(new ChunkReference(event.world.provider.dimensionId, event.chunkX, event.chunkZ));
+	}
+
+	@SubscribeEvent
 	public void handleChunkSaveEvent(ChunkDataEvent.Save event) {
 
-		/*ArrayDeque<?> chunks = TickHandlerWorld.chunksToGen.get(event.world.provider.dimensionId);
-		if (chunks != null && chunks.contains(new ChunkCoord(event.getChunk()))) {
-			return;
-		}//*/
-		// FIXME: chunks save out before we gen
 		NBTTagCompound genTag = event.getData().getCompoundTag(TAG_NAME);
+
+		if (populatingChunks.contains(event.getChunk())) {
+			genTag.setBoolean("Populating", true);
+			return;
+		}
 
 		if (genFlatBedrock) {
 			genTag.setBoolean("Bedrock", true);
@@ -151,6 +168,12 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 
 		boolean regen = false;
 		NBTTagCompound tag = (NBTTagCompound) event.getData().getTag(TAG_NAME);
+
+		if (tag != null && tag.getBoolean("Populating")) {
+			populatingChunks.add(new ChunkReference(dim, event.getChunk().xPosition, event.getChunk().zPosition));
+			return;
+		}
+
 		NBTTagList list = null;
 		ChunkCoord cCoord = new ChunkCoord(event.getChunk());
 
@@ -343,6 +366,41 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 				}
 			}
 		}
+	}
+
+	private static class ChunkReference {
+
+		public final int dimension;
+		public final int xPos;
+		public final int zPos;
+
+		public ChunkReference(int dim, int x, int z) {
+
+			dimension = dim;
+			xPos = x;
+			zPos = z;
+		}
+
+		@Override
+		public int hashCode() {
+
+			return xPos * 43 + zPos * 3 + dimension;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+
+			if (o == null || o.getClass() != getClass()) {
+				if (o instanceof Chunk) {
+					Chunk other = (Chunk) o;
+					return xPos == other.xPosition && zPos == other.zPosition && dimension == other.worldObj.provider.dimensionId;
+				}
+				return false;
+			}
+			ChunkReference other = (ChunkReference) o;
+			return other.dimension == dimension && other.xPos == xPos && other.zPos == zPos;
+		}
+
 	}
 
 }
