@@ -4,6 +4,7 @@ import static org.objectweb.asm.Opcodes.*;
 
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
+import cofh.asm.relauncher.Substitutable;
 import cofh.mod.updater.ModRange;
 import cofh.mod.updater.ModVersion;
 import com.google.common.base.Throwables;
@@ -59,8 +60,8 @@ class ASMCore {
 	static Logger log = LogManager.getLogger("CoFH ASM");
 
 	static TObjectByteHashMap<String> hashes = new TObjectByteHashMap<String>(30, 1, (byte) 0);
-	static THashSet<String> parsables, implementables, strippables;
-	static final String implementableDesc, strippableDesc;
+	static THashSet<String> parsables, implementables, strippables, substitutables;
+	static final String implementableDesc, strippableDesc, substitutableDesc;
 	static String side;
 
 	static void init() {
@@ -71,10 +72,12 @@ class ASMCore {
 
 		implementableDesc = Type.getDescriptor(Implementable.class);
 		strippableDesc = Type.getDescriptor(Strippable.class);
+		substitutableDesc = Type.getDescriptor(Substitutable.class);
 
-		parsables = new THashSet<String>(10);
+		parsables = new THashSet<String>(30);
 		implementables = new THashSet<String>(10);
 		strippables = new THashSet<String>(10);
+		substitutables = new THashSet<String>(10);
 
 		hashes.put("net.minecraft.world.WorldServer", (byte) 1);
 		hashes.put("net.minecraft.world.World", (byte) 2);
@@ -108,6 +111,7 @@ class ASMCore {
 
 		public String side = "NONE";
 		public String[] values = emptyList;
+		public String method = "!unmatchable!";
 	}
 
 	static byte[] parse(String name, String transformedName, byte[] bytes) {
@@ -125,6 +129,20 @@ class ASMCore {
 				bytes = cw.toByteArray();
 			} else {
 				log.debug("Nothing implemented on " + transformedName);
+			}
+		}
+
+		if (substitutables.contains(name)) {
+			log.debug("Substituting methods from " + transformedName);
+			ClassReader cr = new ClassReader(bytes);
+			ClassNode cn = new ClassNode();
+			cr.accept(cn, 0);
+			if (substitute(cn)) {
+				ClassWriter cw = new ClassWriter(0);
+				cn.accept(cw);
+				bytes = cw.toByteArray();
+			} else {
+				log.debug("Nothing substituted from " + transformedName);
 			}
 		}
 
@@ -1543,7 +1561,7 @@ class ASMCore {
 		return r;
 	}
 
-	// { Implement & Strip
+	// { Annotation parsing
 	static boolean implement(ClassNode cn) {
 
 		if (cn.visibleAnnotations == null) {
@@ -1571,6 +1589,94 @@ class ASMCore {
 			}
 		}
 		return interfaces;
+	}
+
+	static boolean substitute(ClassNode cn) {
+
+		boolean altered = false;
+		if (cn.methods != null) {
+			Iterator<MethodNode> iter = cn.methods.iterator();
+			while (iter.hasNext()) {
+				MethodNode mn = iter.next();
+				if (mn.visibleAnnotations != null) {
+					for (AnnotationNode node : mn.visibleAnnotations) {
+						AnnotationInfo info = parseAnnotation(node, substitutableDesc);
+						if (checkSub(info, mn)) {
+							altered = true;
+
+							mn.instructions.clear();
+							mn.localVariables = null;
+							l: {
+								for (MethodNode m : cn.methods) {
+									if (info.method.equals(m.name) && mn.desc.equals(m.desc)) {
+										mn.instructions.add(m.instructions);
+										break l;
+									}
+								}
+								Type rType = Type.getReturnType(mn.desc);
+								switch (rType.getSort()) {
+								case Type.METHOD:
+								case Type.ARRAY:
+								case Type.OBJECT:
+									mn.instructions.add(new InsnNode(ACONST_NULL));
+									break;
+								case Type.FLOAT:
+									mn.instructions.add(new InsnNode(FCONST_0));
+									break;
+								case Type.DOUBLE:
+									mn.instructions.add(new InsnNode(DCONST_0));
+									break;
+								case Type.LONG:
+									mn.instructions.add(new InsnNode(LCONST_0));
+									break;
+								default:
+									mn.instructions.add(new InsnNode(ICONST_0));
+									switch (rType.getSort()) {
+									case Type.SHORT:
+										mn.instructions.add(new InsnNode(I2S));
+										break;
+									case Type.CHAR:
+										mn.instructions.add(new InsnNode(I2C));
+										break;
+									case Type.BYTE:
+										mn.instructions.add(new InsnNode(I2B));
+										break;
+									}
+									break;
+								case Type.VOID:
+									break;
+								}
+								mn.instructions.add(new InsnNode(rType.getOpcode(IRETURN)));
+							}
+						}
+					}
+				}
+			}
+		}
+		return altered;
+	}
+
+	static boolean checkSub(AnnotationInfo node, MethodNode method) {
+
+		if (node != null) {
+			boolean needsReplaced = node.side == side;
+			if (!needsReplaced) {
+				String[] value = node.values;
+				for (int j = 0, l = value.length; j < l; ++j) {
+					needsReplaced = parseValue(value[j]);
+					if (needsReplaced) {
+						break;
+					}
+				}
+			}
+			if (needsReplaced) {
+				if (node.method.equals(method.name)) {
+					return false;
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 
 	static boolean strip(ClassNode cn) {
@@ -1641,51 +1747,7 @@ class ASMCore {
 			if (!needsRemoved) {
 				String[] value = node.values;
 				for (int j = 0, l = value.length; j < l; ++j) {
-					String clazz = value[j];
-					String mod = clazz.substring(4);
-					if (clazz.startsWith("mod:")) {
-						int i = mod.indexOf('@');
-						if (i > 0) {
-							clazz = mod.substring(i + 1);
-							mod = mod.substring(0, i);
-						}
-						needsRemoved = !Loader.isModLoaded(mod);
-						if (!needsRemoved && i > 0) {
-							ModContainer modc = getLoadedMods().get(mod);
-							try {
-								if (Boolean.parseBoolean(modc.getCustomModProperties().get("cofhversion"))) {
-									needsRemoved = !ModRange.createFromVersionSpec(mod, clazz).containsVersion(new ModVersion(mod, modc.getVersion()));
-								} else {
-									needsRemoved = !VersionRange.createFromVersionSpec(clazz).containsVersion(modc.getProcessedVersion());
-								}
-							} catch (InvalidVersionSpecificationException e) {
-								needsRemoved = true;
-							}
-						}
-					} else if (clazz.startsWith("api:")) {
-						int i = mod.indexOf('@');
-						if (i > 0) {
-							clazz = mod.substring(i + 1);
-							mod = mod.substring(0, i);
-						}
-						needsRemoved = !ModAPIManager.INSTANCE.hasAPI(mod);
-						if (!needsRemoved && i > 0) {
-							ModContainer modc = getLoadedAPIs().get(mod);
-							try {
-								needsRemoved = !VersionRange.createFromVersionSpec(clazz).containsVersion(modc.getProcessedVersion());
-							} catch (InvalidVersionSpecificationException e) {
-								needsRemoved = true;
-							}
-						}
-					} else {
-						try {
-							if (!workingPath.contains(clazz)) {
-								Class.forName(clazz, false, ASMCore.class.getClassLoader());
-							}
-						} catch (Throwable $) {
-							needsRemoved = true;
-						}
-					}
+					needsRemoved = parseValue(value[j]);
 					if (needsRemoved) {
 						break;
 					}
@@ -1697,6 +1759,56 @@ class ASMCore {
 			}
 		}
 		return false;
+	}
+
+	static boolean parseValue(String clazz) {
+
+		boolean ret = false;
+		String mod = clazz.length() > 4 ? clazz.substring(4) : clazz;
+		if (clazz.startsWith("mod:")) {
+			int i = mod.indexOf('@');
+			if (i > 0) {
+				clazz = mod.substring(i + 1);
+				mod = mod.substring(0, i);
+			}
+			ret = !Loader.isModLoaded(mod);
+			if (!ret && i > 0) {
+				ModContainer modc = getLoadedMods().get(mod);
+				try {
+					if (Boolean.parseBoolean(modc.getCustomModProperties().get("cofhversion"))) {
+						ret = !ModRange.createFromVersionSpec(mod, clazz).containsVersion(new ModVersion(mod, modc.getVersion()));
+					} else {
+						ret = !VersionRange.createFromVersionSpec(clazz).containsVersion(modc.getProcessedVersion());
+					}
+				} catch (InvalidVersionSpecificationException e) {
+					ret = true;
+				}
+			}
+		} else if (clazz.startsWith("api:")) {
+			int i = mod.indexOf('@');
+			if (i > 0) {
+				clazz = mod.substring(i + 1);
+				mod = mod.substring(0, i);
+			}
+			ret = !ModAPIManager.INSTANCE.hasAPI(mod);
+			if (!ret && i > 0) {
+				ModContainer modc = getLoadedAPIs().get(mod);
+				try {
+					ret = !VersionRange.createFromVersionSpec(clazz).containsVersion(modc.getProcessedVersion());
+				} catch (InvalidVersionSpecificationException e) {
+					ret = true;
+				}
+			}
+		} else {
+			try {
+				if (!workingPath.contains(clazz)) {
+					Class.forName(clazz, false, ASMCore.class.getClassLoader());
+				}
+			} catch (Throwable $) {
+				ret = true;
+			}
+		}
+		return ret;
 	}
 
 	// }
@@ -1742,11 +1854,10 @@ class ASMCore {
 							continue;
 						}
 						info.values = ((List<?>) v).toArray(emptyList);
-					} else if ("side".equals(k) && v instanceof String[]) {
-						String t = ((String[]) v)[1];
-						if (t != null) {
-							info.side = t.toUpperCase().intern();
-						}
+					} else if ("side".equals(k) && v instanceof String) {
+						info.side = ((String) v).toUpperCase().intern();
+					} else if ("method".equals(k) && v instanceof String) {
+						info.method = (String) v;
 					}
 				}
 			}
@@ -1774,7 +1885,14 @@ class ASMCore {
 			strippables.add(name);
 			strippables.add(name + "$class");
 		}
-		log.debug("Found " + implementables.size() + " @Implementable and " + strippables.size() + " @Strippable");
+		for (ASMData data : table.getAll(Substitutable.class.getName())) {
+			String name = data.getClassName();
+			parsables.add(name);
+			parsables.add(name + "$class");
+			substitutables.add(name);
+			substitutables.add(name + "$class");
+		}
+		log.debug("Found " + implementables.size()/2 + " @Implementable; " + strippables.size()/2 + " @Strippable; " + substitutables.size()/2 + " @Substitutable");
 	}
 
 }

@@ -6,11 +6,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+
 /**
- * This annotation will remove the annotated method, field, or class if the <tt>value</tt> condition is not met.
+ * This annotation will replace the bytecode of the annotated method with that of the named method if the <tt>value</tt> condition is not met.
  * <p>
- * When used on a class, methods from referenced interfaces will not be removed <br>
- * When using this annotation on methods, ensure you do not switch on an enum inside that method. JavaC implementation details means this will cause crashes.
+ * Ensure the named method has an identical signature (return type & parameters) to the annotated method. <br>
+ * Ensure you do not switch on an enum inside the annotated method. JavaC implementation details means this will cause crashes.
  * <p>
  * Takes a class name as the value. e.g., "cofh.lib.network.ByteBufHelper"; requiring that class be available <br>
  * Can also substitute on modid using e.g., "mod:CoFHCore" as a value; requiring that mod be available <br>
@@ -19,13 +20,16 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.TYPE })
-public @interface Strippable {
+@Target({ ElementType.METHOD })
+public @interface Substitutable {
 
 	public String[] value();
 
+	public String method();
+
 	/**
-	 * The side from which these interfaces will *always* be stripped.
+	 * The side from which this method will *always* be substituted.
 	 */
 	public CoFHSide side() default CoFHSide.NONE;
+
 }
