@@ -90,7 +90,7 @@ class ASMCore {
 		hashes.put("net.minecraft.client.Minecraft", (byte) 10);
 		hashes.put("net.minecraft.client.renderer.RenderBlocks", (byte) 11);
 		hashes.put("net.minecraft.tileentity.TileEntity", (byte) 12);
-		// hashes.put("", (byte) 13); // unused
+		hashes.put("net.minecraft.inventory.Container", (byte) 13);
 		hashes.put("net.minecraft.entity.Entity", (byte) 14);
 		hashes.put("net.minecraft.entity.item.EntityItem", (byte) 15);
 		hashes.put("cofh.asmhooks.HooksCore", (byte) 16);
@@ -198,7 +198,7 @@ class ASMCore {
 		case 12:
 			return alterTileEntity(transformedName, bytes, cr);
 		case 13:
-			return bytes; // unused
+			return alterContainer(name, transformedName, bytes, cr);
 		case 14:
 			return alterEntity(transformedName, bytes, cr);
 		case 15:
@@ -272,6 +272,56 @@ class ASMCore {
 	// }
 
 	// { Improve Vanilla
+	private static byte[] alterContainer(String name, String transformedName, byte[] bytes, ClassReader cr) {
+
+		String[] names;
+		if (LoadingPlugin.runtimeDeobfEnabled) {
+			names = new String[] { "func_75135_a", "field_75151_b" };
+		} else {
+			names = new String[] { "mergeItemStack", "inventorySlots" };
+		}
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM4);
+		cr.accept(cn, ClassReader.EXPAND_FRAMES);
+
+		final String sig = "(Lnet/minecraft/item/ItemStack;IIZ)Z";
+
+		l: {
+			MethodNode m = null;
+			for (MethodNode n : cn.methods) {
+				if (names[0].equals(n.name) && sig.equals(n.desc)) {
+					m = n;
+					break;
+				}
+			}
+
+			if (m == null) {
+				break l;
+			}
+
+			m.instructions.clear();
+			m.instructions.add(new VarInsnNode(ALOAD, 0));
+			m.instructions.add(new FieldInsnNode(GETFIELD, name, names[1], "Ljava/util/List;"));
+			m.instructions.add(new VarInsnNode(ALOAD, 1));
+			m.instructions.add(new VarInsnNode(ILOAD, 2));
+			m.instructions.add(new VarInsnNode(ILOAD, 3));
+			m.instructions.add(new VarInsnNode(ILOAD, 4));
+			m.instructions.add(new InsnNode(ICONST_0));
+			m.instructions.add(new MethodInsnNode(INVOKESTATIC, "cofh/lib/util/helpers/InventoryHelper", "mergeItemStack",
+					"(Ljava/util/List;Lnet/minecraft/item/ItemStack;IIZZ)Z", false));
+			m.instructions.add(new InsnNode(IRETURN));
+
+			// this fixes a crash in dev and with cauldron
+			m.localVariables = null;
+
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			cn.accept(cw);
+			bytes = cw.toByteArray();
+		}
+		return bytes;
+	}
+
 	private static byte[] alterEnchantment(String name, byte[] bytes, ClassReader cr) {
 
 		String[] names;
