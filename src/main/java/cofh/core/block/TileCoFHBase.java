@@ -21,6 +21,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.EnumSkyBlock;
 
 public abstract class TileCoFHBase extends TileEntity {
 
@@ -148,6 +149,14 @@ public abstract class TileCoFHBase extends TileEntity {
 		PacketHandler.sendToAllAround(getPacket(), this);
 	}
 
+	protected void updateLighting() {
+
+		int light2 = worldObj.getSavedLightValue(EnumSkyBlock.Block, xCoord, yCoord, zCoord), light1 = getLightValue();
+		if (light1 != light2 && worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord)) {
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		}
+	}
+
 	public void sendUpdatePacket(Side side) {
 
 		if (worldObj == null) {
@@ -155,8 +164,6 @@ public abstract class TileCoFHBase extends TileEntity {
 		}
 		if (side == Side.CLIENT && ServerHelper.isServerWorld(worldObj)) {
 			PacketHandler.sendToAllAround(getPacket(), this);
-			worldObj.func_147451_t(xCoord, yCoord, zCoord); // ???
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		} else if (side == Side.SERVER && ServerHelper.isClientWorld(worldObj)) {
 			PacketHandler.sendToServer(getPacket());
 		}
