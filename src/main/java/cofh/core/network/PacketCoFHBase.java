@@ -80,6 +80,28 @@ public abstract class PacketCoFHBase extends PacketBase {
 		return this;
 	}
 
+	public PacketCoFHBase addVarInt(int theInteger) {
+		try {
+			int v = 0x00;
+			if (theInteger < 0) {
+				v |= 0x40;
+				theInteger = ~theInteger;
+			}
+			if ((theInteger & ~0x3F) != 0) {
+				v |= 0x80;
+			}
+			dataout.writeByte(v | (theInteger & 0x3F));
+			theInteger >>>= 6;
+			while (theInteger != 0) {
+				dataout.writeByte((theInteger & 0x7F) | ((theInteger & ~0x7F) != 0 ? 0x80 : 0));
+				theInteger >>>= 7;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
+
 	public PacketCoFHBase addBool(boolean theBoolean) {
 
 		try {
@@ -210,6 +232,21 @@ public abstract class PacketCoFHBase extends PacketBase {
 
 		try {
 			return datain.readInt();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	public int getVarInt() {
+		try {
+			int v = datain.readByte(), r = v & 0x3F;
+			boolean n = (v & 0x40) != 0;
+			for (int i = 6; (v & 0x80) != 0; i += 7) {
+				v = datain.readByte();
+				r |= (v & 0x7F) << i;
+			}
+			return n ? ~r : r;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return 0;
