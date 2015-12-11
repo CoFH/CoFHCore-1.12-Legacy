@@ -42,7 +42,6 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.FrameNode;
-import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.IntInsnNode;
@@ -162,28 +161,6 @@ class ASMCore {
 
 		workingPath.remove(workingPath.size() - 1);
 		return bytes;
-	}
-
-	static synchronized void HACK(String name, byte[] bytes) {
-
-		synchronized (workingPath) {
-			workingPath.add(name);
-			ClassReader cr = new ClassReader(bytes);
-			ClassNode cn = new ClassNode();
-			cr.accept(cn, 0);
-			if (cn.innerClasses != null) {
-				for (InnerClassNode node : cn.innerClasses) {
-					log.debug("\tInner class: " + node.name);
-					if (!workingPath.contains(node.name)) {
-						try {
-							Class.forName(node.name, false, ASMCore.class.getClassLoader());
-						} catch (Throwable $) {
-						}
-					}
-				}
-			}
-			workingPath.remove(workingPath.size() - 1);
-		}
 	}
 
 	static byte[] transform(int index, String name, String transformedName, byte[] bytes) {

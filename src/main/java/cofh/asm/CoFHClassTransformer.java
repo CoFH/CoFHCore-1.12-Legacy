@@ -9,7 +9,6 @@ import net.minecraft.launchwrapper.IClassTransformer;
 public class CoFHClassTransformer implements IClassTransformer {
 
 	private static boolean scrappedData = false;
-	private static final boolean ENABLE_HACK = Boolean.valueOf(System.getProperty("cofh.classloadinghack", "false"));
 
 	public CoFHClassTransformer() {
 
@@ -36,10 +35,6 @@ public class CoFHClassTransformer implements IClassTransformer {
 		int index = hashes.get(transformedName);
 		if (index != 0) {
 			bytes = ASMCore.transform(index, name, transformedName, bytes);
-		}
-
-		if (ENABLE_HACK) {
-			HACK(name, bytes);
 		}
 
 		return bytes;
