@@ -193,7 +193,7 @@ class ASMCore {
 		case 12:
 			return alterTileEntity(transformedName, bytes, cr);
 		case 13:
-			return alterContainer(name, transformedName, bytes, cr);
+			return alterContainer(transformedName, bytes, cr);
 		case 14:
 			return alterEntity(transformedName, bytes, cr);
 		case 15:
@@ -267,7 +267,7 @@ class ASMCore {
 	// }
 
 	// { Improve Vanilla
-	private static byte[] alterContainer(String name, String transformedName, byte[] bytes, ClassReader cr) {
+	private static byte[] alterContainer(String name, byte[] bytes, ClassReader cr) {
 
 		String[] names;
 		if (LoadingPlugin.runtimeDeobfEnabled) {
