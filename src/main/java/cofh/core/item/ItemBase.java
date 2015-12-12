@@ -226,8 +226,13 @@ public class ItemBase extends Item {
 		}
 		for (int i = 0; i < itemList.size(); i++) {
 			ItemEntry item = itemMap.get(itemList.get(i));
-			item.icon = ir.registerIcon(modName + ":" + getUnlocalizedName().replace("item." + modName + ".", "") + "/" + StringHelper.titleCase(item.name));
+			item.icon = registerIcon(ir, item);
 		}
+	}
+
+	protected IIcon registerIcon(IIconRegister ir, ItemEntry item) {
+
+		return ir.registerIcon(modName + ":" + getUnlocalizedName().replace("item." + modName + ".", "") + "/" + StringHelper.titleCase(item.name));
 	}
 
 	@Override
