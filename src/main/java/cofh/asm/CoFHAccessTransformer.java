@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraft.launchwrapper.LaunchClassLoader;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -584,7 +585,9 @@ public class CoFHAccessTransformer implements IClassTransformer {
 			int l = depth * 6;
 			if (classes.length > l) {
 				Class<?> clazz = classes[l];
-				loader = clazz.getClassLoader();
+				if (clazz != LaunchClassLoader.class) {
+					loader = clazz.getClassLoader();
+				}
 			}
 			if (loader != null) {
 				return loader;
