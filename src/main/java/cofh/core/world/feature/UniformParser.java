@@ -73,7 +73,7 @@ public class UniformParser implements IFeatureParser {
 
 		if (feature != null) {
 			if (genObject.has("chunkChance")) {
-				int rarity = MathHelper.clampI(genObject.get("chunkChance").getAsInt(), 1, 1000000);
+				int rarity = MathHelper.clamp(genObject.get("chunkChance").getAsInt(), 1, 1000000);
 				feature.setRarity(rarity);
 			}
 			addFeatureRestrictions(feature, genObject);

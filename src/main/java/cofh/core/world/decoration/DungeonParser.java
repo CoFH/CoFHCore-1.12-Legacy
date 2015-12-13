@@ -60,7 +60,7 @@ public class DungeonParser implements IGeneratorParser {
 				r.maxChests = genObject.get("maxChests").getAsInt();
 			}
 			if (genObject.has("chestAttempts")) {
-				r.maxChestTries = MathHelper.clampI(genObject.get("chestAttempts").getAsInt(), 1, 5);
+				r.maxChestTries = MathHelper.clamp(genObject.get("chestAttempts").getAsInt(), 1, 5);
 			}
 
 			if (genObject.has("minHoles")) {

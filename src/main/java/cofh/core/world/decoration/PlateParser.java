@@ -18,13 +18,13 @@ public class PlateParser implements IGeneratorParser {
 	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
 			List<WeightedRandomBlock> matList) {
 
-		WorldGenMinablePlate r = new WorldGenMinablePlate(resList, MathHelper.clampI(clusterSize, 0, 32), matList);
+		WorldGenMinablePlate r = new WorldGenMinablePlate(resList, MathHelper.clamp(clusterSize, 0, 32), matList);
 		{
 			if (genObject.has("sizeVariance")) {
-				r.variation = (byte) MathHelper.clampI(genObject.get("sizeVariance").getAsInt(), 0, 16);
+				r.variation = (byte) MathHelper.clamp(genObject.get("sizeVariance").getAsInt(), 0, 16);
 			}
 			if (genObject.has("height")) {
-				r.height = (byte) MathHelper.clampI(genObject.get("height").getAsInt(), 0, 64);
+				r.height = (byte) MathHelper.clamp(genObject.get("height").getAsInt(), 0, 64);
 			}
 			if (genObject.has("slim")) {
 				r.slim = genObject.get("slim").getAsBoolean();

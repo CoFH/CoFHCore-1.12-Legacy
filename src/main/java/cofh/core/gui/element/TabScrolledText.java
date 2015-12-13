@@ -77,9 +77,9 @@ public abstract class TabScrolledText extends TabBase {
 		}
 
 		if (shiftedMouseY < 52) {
-			firstLine = MathHelper.clampI(firstLine - 1, 0, maxFirstLine);
+			firstLine = MathHelper.clamp(firstLine - 1, 0, maxFirstLine);
 		} else {
-			firstLine = MathHelper.clampI(firstLine + 1, 0, maxFirstLine);
+			firstLine = MathHelper.clamp(firstLine + 1, 0, maxFirstLine);
 		}
 		return true;
 	}
@@ -91,10 +91,10 @@ public abstract class TabScrolledText extends TabBase {
 			return false;
 		}
 		if (movement > 0) {
-			firstLine = MathHelper.clampI(firstLine - 1, 0, maxFirstLine);
+			firstLine = MathHelper.clamp(firstLine - 1, 0, maxFirstLine);
 			return true;
 		} else if (movement < 0) {
-			firstLine = MathHelper.clampI(firstLine + 1, 0, maxFirstLine);
+			firstLine = MathHelper.clamp(firstLine + 1, 0, maxFirstLine);
 			return true;
 		}
 		return false;

@@ -404,8 +404,8 @@ public class FeatureParser {
 				log.error("Invalid block entry!");
 				return null;
 			}
-			int metadata = blockElement.has("metadata") ? MathHelper.clampI(blockElement.get("metadata").getAsInt(), min, 15) : min;
-			int weight = blockElement.has("weight") ? MathHelper.clampI(blockElement.get("weight").getAsInt(), 1, 1000000) : 100;
+			int metadata = blockElement.has("metadata") ? MathHelper.clamp(blockElement.get("metadata").getAsInt(), min, 15) : min;
+			int weight = blockElement.has("weight") ? MathHelper.clamp(blockElement.get("weight").getAsInt(), 1, 1000000) : 100;
 			return new WeightedRandomBlock(block, metadata, weight);
 		} else {
 			Block block = parseBlockName(genElement.getAsString());

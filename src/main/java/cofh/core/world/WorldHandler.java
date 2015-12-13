@@ -89,7 +89,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 
 		comment = "The number of layers of bedrock to flatten to. (Max: " + MAX_BEDROCK_LAYERS + ")";
 		layersBedrock = CoFHCore.configCore.get(category, "FlatBedrockLayers", 1, comment);
-		layersBedrock = MathHelper.clampI(layersBedrock, 1, MAX_BEDROCK_LAYERS);
+		layersBedrock = MathHelper.clamp(layersBedrock, 1, MAX_BEDROCK_LAYERS);
 
 		comment = "If FlatBedrock is enabled, this will enforce it in previously generated chunks.";
 		retroFlatBedrock = CoFHCore.configCore.get(category, "RetroactiveFlatBedrock", false, comment);
