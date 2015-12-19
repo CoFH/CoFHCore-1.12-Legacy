@@ -1,0 +1,210 @@
+#ja_JP
+
+# Config GUI Tooltips
+config.Client.tooltip=Configure client-side only options.
+config.Common.tooltip=Configure general options.
+config.Core.tooltip=Configure Core module options.
+config.Loot.tooltip=Configure Loot module options.
+
+chat.cofh.secure=%sによって管理されています。
+chat.cofh.secureItem=このアイテムは現在あなたが所有しています。
+chat.cofh.secureNotice=注意：サーバー管理者は自由に鍵をかけられたブロックにアクセスすることができます。
+
+enchant.cofh.holding=拡張スロット
+enchant.cofh.multishot=多重射撃
+
+info.cofh.access=アクセス
+info.cofh.accessMode=アクセス権限
+info.cofh.accessPublic=公開
+info.cofh.accessRestricted=制限あり
+info.cofh.accessPrivate=所持者のみ
+info.cofh.addDestination=宛先追加
+info.cofh.addFrequency=周波数追加
+info.cofh.all=すべて
+info.cofh.amount=数値
+info.cofh.angle=角度
+info.cofh.anotherplayer=Another player
+info.cofh.augmentation=アップグレード
+info.cofh.blank=情報なし
+info.cofh.buffer=バッファ
+info.cofh.capacity=保有量
+info.cofh.charge=充電
+info.cofh.cheater=Cheater!
+info.cofh.configuration=基本設定
+info.cofh.contents=内容
+info.cofh.controlStatus=レッドストーン制御
+info.cofh.damageAttack=攻撃力
+info.cofh.damageFlux=追加攻撃力
+info.cofh.disable=無効
+info.cofh.disabled=無効
+info.cofh.distance=距離
+info.cofh.dry=乾いた
+info.cofh.duration=持続時間
+info.cofh.efficiency=効率
+info.cofh.empty=空
+info.cofh.enable=有効
+info.cofh.enabled=有効
+info.cofh.energy=エネルギー
+info.cofh.energyConsume=エネルギー消費
+info.cofh.energyProduce=エネルギー生産
+info.cofh.energyStored=充電量
+info.cofh.filter=フィルター
+info.cofh.fluid=液体
+info.cofh.fluids=液体
+info.cofh.folded=Folded
+info.cofh.force=強さ
+info.cofh.forDetails=キーを押すと詳細を表示します。
+info.cofh.frequency=周波数
+info.cofh.friendsList=友だちリスト
+info.cofh.hasInfo=情報あり
+info.cofh.high=高
+info.cofh.hold=
+info.cofh.idle=非稼働
+info.cofh.ignored=なし
+info.cofh.information=情報
+info.cofh.infinite=無限
+info.cofh.item=アイテム
+info.cofh.items=アイテム
+info.cofh.legacy=Legacy
+info.cofh.level=レベル
+info.cofh.locked=ロック
+info.cofh.loot=Loot
+info.cofh.low=低
+info.cofh.output=搬出
+info.cofh.maxEnergyPerTick=最大エネルギー消費
+info.cofh.modeChange=キーでモードチェンジします。
+info.cofh.none=なし
+info.cofh.owner=所有者
+info.cofh.perUse=/1回の使用
+info.cofh.preferences=Preferences
+info.cofh.press=
+info.cofh.receive=受信
+info.cofh.receiving=受信中
+info.cofh.redstoneControl=レッドストーン制御
+info.cofh.removeDestination=送信先の登録解除
+info.cofh.removeFrequency=周波数登録解除
+info.cofh.security=セキュリティ
+info.cofh.send=送信
+info.cofh.sending=送信中
+info.cofh.setDestination=送信先の登録
+info.cofh.setFrequency=周波数登録
+info.cofh.shift=Shift
+info.cofh.signal=レッドストーン制御
+info.cofh.signalRequired=レッドストーン入力
+info.cofh.soaked=濡れた
+info.cofh.source=Source
+info.cofh.stored=Stored
+info.cofh.strength=強度
+info.cofh.success=完了しました。
+info.cofh.template=テンプレート
+info.cofh.transfer=移送
+info.cofh.tutorial=使い方
+info.cofh.unlocked=未ロック
+info.cofh.work=Work
+
+#Command Talk
+info.cofh.command.friend=The command to add and remove friends from your friend list.
+info.cofh.command.help=The command to help you out with other commands!
+info.cofh.command.syntax=The command to help you out with the syntax other commands!
+info.cofh.command.killall=Kills all of the entities of the given name, and kills all hostile mobs by default.
+info.cofh.command.tps=Gets the Ticks Per Second on the server. On a perfect server this should be 20.
+info.cofh.command.tpx=A improved version of the /tp command that works in between dimensions.
+info.cofh.command.version=Gives you the version of this mod.
+info.cofh.command.enchant=Improved /enchant. Has no limits on level or applicability.
+info.cofh.command.clearblocks=Clears specified blocks from a specified area in the world.
+info.cofh.command.countblocks=Counts specified blocks from a specified area in the world.
+info.cofh.command.pregen=Pre-generates chunks in a specified area in the world.
+info.cofh.command.replaceblocks=Replaces specified blocks from a specified area in the world.
+info.cofh.command.reloadworldgen=Reloads world generation from disk.
+info.cofh.command.unloadchunk=Unloads the chunk the player is looking at.
+
+info.cofh.command.friend.syntax=/cofh friend {gui | add <username> | remove <username>}
+info.cofh.command.help.syntax=/cofh help [command]
+info.cofh.command.syntax.syntax=/cofh syntax [command]
+info.cofh.command.killall.syntax=/cofh killall [partial name]
+info.cofh.command.tps.syntax=/cofh tps [{o | a | <dim ID>}]
+info.cofh.command.tpx.syntax=/cofh tpx [player] {(<player> | <dimension>) | <x> <y> <z> [dimension]}
+info.cofh.command.version.syntax=/cofh version
+info.cofh.command.enchant.syntax=/cofh enchant [player] <enchantment ID> [level]
+info.cofh.command.clearblocks.syntax=/cofh clearblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} [block#meta] [block#meta] ...
+info.cofh.command.countblocks.syntax=/cofh countblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} [block#meta] [block#meta] ...
+info.cofh.command.pregen.syntax=/cofh pregen {<user> <x chunk radius> <z chunk radius> | <x chunk start> <z chunk start> <x chunk end> <z chunk end>}
+info.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} <replaceBlock#meta> [block#meta] [block#meta] ...
+info.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
+info.cofh.command.unloadchunk.syntax=/cofh unloadchunk
+
+info.cofh.command.syntaxError=Invalid Syntax.
+info.cofh.command.notFound=Unknown command. Try /cofh help for a list of commands
+info.cofh.command.world.notFound=World does not exist.
+
+info.cofh.command.friend.0=successfully added to your friends list.
+info.cofh.command.friend.1=Sorry, there was a problem adding
+info.cofh.command.friend.2=to your list.
+info.cofh.command.friend.3=Sorry, that is not a valid username.
+info.cofh.command.friend.4=successfully removed from your friends list.
+info.cofh.command.friend.5=was not your friend.
+
+info.cofh.command.help.0=Available commands are:
+info.cofh.command.version.0=This mod is on version
+
+info.cofh.command.killall.success=Removed %d entities. (%s)
+info.cofh.command.killall.successHostile=Removed %d hostile mobs. (%s)
+info.cofh.command.killall.noMatch=No matching entities found!
+info.cofh.command.killall.noHostile=No hostile mobs found!
+
+info.cofh.command.tpx.snark.0=Successfully teleported you to yourself!
+info.cofh.command.tpx.snark.1=Successfully teleported %s to themself!
+info.cofh.command.tpx.self=Successfully teleported to %.2f %.2f %.2f
+info.cofh.command.tpx.dimensionSelf=Successfully teleported to The %1$s at %2$.2f %3$.2f %4$.2f
+info.cofh.command.tpx.other=Successfully teleported %s to %.2f %.2f %.2f
+info.cofh.command.tpx.otherTo=Successfully teleported %s to %s at %.2f %.2f %.2f
+info.cofh.command.tpx.dimensionOther=Successfully teleported %s to The %2$s at %3$.2f %4$.2f %5$.2f
+info.cofh.command.tpx.dimensionOtherTo=Successfully teleported %s to %s in %3$s at %4$.2f %5$.2f %6$.2f
+info.cofh.command.tpx.otherToSelf=Successfully teleported %s to themself at %.2f %.2f %.2f
+info.cofh.command.tpx.dimensionOtherToSelf=Successfully teleported %s to themself in %2$s at %3$.2f %4$.2f %5$.2f
+
+info.cofh.command.reloadworldgen.success=Successfully reloaded World Generators.
+
+info.cofh.command.replaceblocks.failure=No blocks to replace.
+info.cofh.command.replaceblocks.start=Replacing %s blocks from %s:%s:%s to %s:%s:%s with %s.
+info.cofh.command.replaceblocks.success=Successfully replaced %s blocks from %s:%s:%s to %s:%s:%s with %s.
+
+info.cofh.command.clearblocks.failure=No blocks to clear.
+info.cofh.command.clearblocks.start=Clearing %s blocks from %s:%s:%s to %s:%s:%s.
+info.cofh.command.clearblocks.success=Successfully cleared %s blocks from %s:%s:%s to %s:%s:%s.
+
+info.cofh.command.countblocks.failure=No blocks exist in the area.
+info.cofh.command.countblocks.start=Counting %s blocks from %s:%s:%s to %s:%s:%s.
+info.cofh.command.countblocks.success=Found %s blocks from %s:%s:%s to %s:%s:%s.
+
+info.cofh.command.pregen.start=Pre-generating %s chunks from %s:%s to %s:%s.
+
+info.cofh.command.unloadchunk.success=Unloading Chunk at %s:%s
+
+#Download Guidance
+info.cofh.updater.download=ダウンロード
+info.cofh.updater.tooltip=ここをクリックすると最新版のダウンロードページにアクセスできます。
+info.cofh.updater.version=新しいバージョンを入手できます。
+
+#Machine Tab Tutorial
+info.cofh.tutorial.fluxRequired=機械の稼働にはRFが必要です。
+info.cofh.tutorial.tabAugment=アップグレードタブにて、機械にいろいろな機能を追加や取り外しができます。
+info.cofh.tutorial.tabConfiguration.0=基本設定タブにて、アイテムの搬入出の設定ができます。
+info.cofh.tutorial.tabConfiguration.1=基本設定タブにて、エネルギーの送受信の設定ができます。
+info.cofh.tutorial.tabConfiguration.2=基本設定タブにて、この機械の主要な機能の設定ができます。
+info.cofh.tutorial.tabRedstone=レッドストーン制御タブにて、レッドストーン信号による稼働制御を設定できます。
+info.cofh.tutorial.tabSecurity=セキュリティタブにて、誰がこのマシンを扱えるかを設定できます。
+
+item.invalid.name=Invalid Item (Destroy)
+
+key.cofh.category=CoFH Keys
+key.cofh.empower=Empower/Quell Item
+key.cofh.multimode=Cycle Item Mode
+key.cofh.augments=Open Player Augment GUI
+
+tab.cofh.friend.0=Add/Remove Friends!
+tab.cofh.friend.1=Friends not provided.
+
+# Fluid Localization
+fluid.tile.water=水
+fluid.tile.lava=溶岩
