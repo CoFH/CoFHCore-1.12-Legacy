@@ -9,8 +9,12 @@ import java.util.List;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandNotFoundException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
+import net.minecraft.command.NumberInvalidException;
+import net.minecraft.event.ClickEvent;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 
 public class CommandSyntax implements ISubCommand {
 
@@ -30,44 +34,41 @@ public class CommandSyntax implements ISubCommand {
 	}
 
 	@Override
-	public void handleCommand(ICommandSender sender, String[] arguments) {
+	public void handleCommand(ICommandSender sender, String[] args) {
 
-		switch (arguments.length) {
-		case 1:
-			StringBuilder output = new StringBuilder(StringHelper.localize("info.cofh.command.help.0") + " ");
-			List<String> commandList = new ArrayList<String>(CommandHandler.getCommandList());
-			Collections.sort(commandList, String.CASE_INSENSITIVE_ORDER);
+		List<String> commandList = new ArrayList<String>(CommandHandler.getCommandList());
+		Collections.sort(commandList, String.CASE_INSENSITIVE_ORDER);
+		commandList.remove(getCommandName());
+		for (int i = 0; i < commandList.size(); ++i) {
+			String name = commandList.get(i);
+			if (!CommandHandler.canUseCommand(sender, CommandHandler.getCommandPermission(name), name)) {
+				commandList.remove(i--);
+			}
+		}
+		final int pageSize = 7;
+		int maxPages = (commandList.size() - 1) / pageSize;
+		int page;
 
-			int commands = 0;
-			for (int i = 0; i < commandList.size() - 1; i++) {
-				String name = commandList.get(i);
-				if (CommandHandler.canUseCommand(sender, CommandHandler.getCommandPermission(name), name)) {
-					output.append("/cofh " + StringHelper.YELLOW + commandList.get(i) + StringHelper.WHITE + ", ");
-					commands++;
-				}
-			}
-			if (commands > 0) {
-				output.delete(output.length() - 2, output.length());
-			}
-			String name = commandList.get(commandList.size() - 1);
-			if (CommandHandler.canUseCommand(sender, CommandHandler.getCommandPermission(name), name)) {
-				if (commands > 0) {
-					output.append(" and ");
-				}
-				output.append("/cofh " + StringHelper.YELLOW + name + StringHelper.WHITE + ".");
-			}
-			// FIXME: properly format this such that commands are clickable for auto-fill. paginate?
-			sender.addChatMessage(new ChatComponentText(output.toString()));
-			break;
-		case 2:
-			String commandName = arguments[1];
+		try {
+			page = args.length == 1 ? 0 : CommandBase.parseIntBounded(sender, args[1], 1, maxPages + 1) - 1;
+		} catch (NumberInvalidException numberinvalidexception) {
+			String commandName = args[1];
 			if (!CommandHandler.getCommandExists(commandName)) {
 				throw new CommandNotFoundException("info.cofh.command.notFound");
 			}
-			sender.addChatMessage(new ChatComponentText(StringHelper.localize("info.cofh.command." + commandName + ".syntax")));
-			break;
-		default:
-			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
+			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + commandName + ".syntax"));
+			return;
+		}
+
+		int maxIndex = Math.min((page + 1) * pageSize, commandList.size());
+		IChatComponent chatcomponenttranslation1 = new ChatComponentTranslation("commands.help.header", page + 1, maxPages + 1);
+		chatcomponenttranslation1.getChatStyle().setColor(EnumChatFormatting.DARK_GREEN);
+		sender.addChatMessage(chatcomponenttranslation1);
+
+		for (int i = page * pageSize; i < maxIndex; ++i) {
+			IChatComponent chatcomponenttranslation = new ChatComponentText("/cofh " + StringHelper.YELLOW + commandList.get(i));
+			chatcomponenttranslation.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/cofh syntax " + commandList.get(i)));
+			sender.addChatMessage(chatcomponenttranslation);
 		}
 	}
 
