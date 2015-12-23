@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Resource;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.LaunchClassLoader;
@@ -36,6 +37,7 @@ import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+@Resource // magic annoation to avoid having sponge do special logic to us
 public class CoFHAccessTransformer implements IClassTransformer {
 
 	private static List<String> mapFileList = new LinkedList<String>();
