@@ -51,7 +51,7 @@ public class RenderPlayerFace implements ICustomCharRenderer {
 				Property property = (Property) Iterables.getFirst(profile.getProperties().get("textures"), (Object) null);
 
 				if (property == null) {
-					profile = MinecraftServer.getServer().func_147130_as().fillProfileProperties(profile, true);
+					profile = Minecraft.getMinecraft().func_152347_ac().fillProfileProperties(profile, true);
 					textureCache.put(profile, profile);
 				}
 			}
