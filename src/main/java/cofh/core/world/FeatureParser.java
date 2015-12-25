@@ -38,8 +38,9 @@ import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.FilenameFilter;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -198,7 +199,7 @@ public class FeatureParser {
 
 			JsonObject genList;
 			try {
-				genList = (JsonObject) parser.parse(new FileReader(genFile));
+				genList = (JsonObject) parser.parse(new InputStreamReader(new FileInputStream(genFile), "utf8"));
 			} catch (Throwable t) {
 				log.error("Critical error reading from a world generation file: " + genFile + " > Please be sure the file is correct!", t);
 				continue;
