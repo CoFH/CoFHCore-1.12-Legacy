@@ -16,6 +16,7 @@ import cofh.lib.util.helpers.RedstoneControlHelper;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.ServerHelper;
 import cofh.lib.util.helpers.StringHelper;
+import cofh.lib.util.position.BlockPosition;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -179,7 +180,7 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
 
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = BlockPosition.getTileEntityRaw(world, x, y, z);
 
 		if (tile instanceof TileCoFHBase) {
 			((TileCoFHBase) tile).onNeighborBlockChange();
@@ -189,7 +190,12 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
 	@Override
 	public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ) {
 
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile;
+		if (world instanceof World) {
+			tile = BlockPosition.getTileEntityRaw((World) world, x, y, z);
+		} else {
+			tile = world.getTileEntity(x, y, z);
+		}
 
 		if (tile instanceof TileCoFHBase) {
 			((TileCoFHBase) tile).onNeighborTileChange(tileX, tileY, tileZ);
