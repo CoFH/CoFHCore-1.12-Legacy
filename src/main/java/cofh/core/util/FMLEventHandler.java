@@ -16,6 +16,7 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 
 public class FMLEventHandler {
 
@@ -31,8 +32,7 @@ public class FMLEventHandler {
 
 		EntityPlayer player = event.player;
 		if (ServerHelper.isMultiPlayerServer() && CoFHProps.enableOpSecureAccess && CoFHProps.enableOpSecureAccessWarning) {
-			player.addChatMessage(new ChatComponentText(StringHelper.YELLOW + "[CoFH] " + StringHelper.WHITE + StringHelper.localize("chat.cofh.secureNotice")
-					+ StringHelper.END));
+			player.addChatMessage(new ChatComponentText(StringHelper.YELLOW + "[CoFH] ").appendSibling(new ChatComponentTranslation("chat.cofh.secureNotice")));
 		}
 		PacketCore.sendConfigSyncPacketToClient(event.player);
 		handleIdMappingEvent(null);
