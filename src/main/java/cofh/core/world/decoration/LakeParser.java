@@ -35,7 +35,7 @@ public class LakeParser implements IGeneratorParser {
 				if (!FeatureParser.parseResList(genObject.get("outlineBlock"), list, true)) {
 					log.warn("Entry specifies invalid outlineBlock for 'lake' generator! Not filling!");
 				} else {
-					r.gapBlock = list;
+					r.outlineBlock = list;
 				}
 				list = new ArrayList<WeightedRandomBlock>();
 			}
