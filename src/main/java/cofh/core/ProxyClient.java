@@ -62,7 +62,7 @@ public class ProxyClient extends Proxy {
 
 	public static final KeyBind KEYBINDING_EMPOWER = new KeyBind("key.cofh.empower", Keyboard.KEY_V, "key.cofh.category");
 	public static final KeyBind KEYBINDING_MULTIMODE = new KeyBind("key.cofh.multimode", Keyboard.KEY_C, "key.cofh.category");
-	public static final KeyBind KEYBINDING_AUGMENTS = new KeyBind("key.cofh.augments", Keyboard.KEY_G, "key.cofh.category");
+	public static final KeyBind KEYBINDING_AUGMENTS = null; //new KeyBind("key.cofh.augments", Keyboard.KEY_G, "key.cofh.category");
 
 	public static class KeyBind extends KeyBinding {
 
@@ -230,7 +230,7 @@ public class ProxyClient extends Proxy {
 		} else if (key.equalsIgnoreCase("cofh.multimode")) {
 			return KEYBINDING_MULTIMODE.getKeyCode();
 		} else if (key.equalsIgnoreCase("cofh.augment")) {
-			return KEYBINDING_AUGMENTS.getKeyCode();
+			//return KEYBINDING_AUGMENTS.getKeyCode();
 		}
 		return -1;
 	}
