@@ -80,7 +80,7 @@ public class UpdateCheckThread extends Thread {
 				_mod.getLogger().info("This update has been marked as CRITICAL and will ignore notification suppression.");
 			}
 
-			if (Loader.isModLoaded("VersionChecker")) {
+			if (Loader.isModLoaded("VersionChecker") && _newVerAvailable) {
 				NBTTagCompound compound = new NBTTagCompound();
 				compound.setString("modDisplayName", _mod.getModName());
 				compound.setString("oldVersion", ourVer.toString());
