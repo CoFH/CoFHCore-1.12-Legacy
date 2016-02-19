@@ -140,7 +140,6 @@ public class FeatureParser {
 		registerGenerator("large-vein", new LargeVeinParser());
 		registerGenerator("decoration", new DecorationParser());
 		registerGenerator("lake", new LakeParser());
-		registerGenerator("large-lake", new LargeLakeParser());
 		registerGenerator("plate", new PlateParser());
 		registerGenerator("geode", new GeodeParser());
 		registerGenerator("spike", new SpikeParser());
