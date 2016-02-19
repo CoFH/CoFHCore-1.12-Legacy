@@ -10,6 +10,7 @@ import cofh.core.world.decoration.ClusterParser;
 import cofh.core.world.decoration.DungeonParser;
 import cofh.core.world.decoration.GeodeParser;
 import cofh.core.world.decoration.LakeParser;
+import cofh.core.world.decoration.LargeLakeParser;
 import cofh.core.world.decoration.LargeVeinParser;
 import cofh.core.world.decoration.PlateParser;
 import cofh.core.world.decoration.SmallTreeParser;
@@ -139,6 +140,7 @@ public class FeatureParser {
 		registerGenerator("large-vein", new LargeVeinParser());
 		registerGenerator("decoration", new DecorationParser());
 		registerGenerator("lake", new LakeParser());
+		registerGenerator("large-lake", new LargeLakeParser());
 		registerGenerator("plate", new PlateParser());
 		registerGenerator("geode", new GeodeParser());
 		registerGenerator("spike", new SpikeParser());
