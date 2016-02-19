@@ -10,7 +10,6 @@ import cofh.core.world.decoration.ClusterParser;
 import cofh.core.world.decoration.DungeonParser;
 import cofh.core.world.decoration.GeodeParser;
 import cofh.core.world.decoration.LakeParser;
-import cofh.core.world.decoration.LargeLakeParser;
 import cofh.core.world.decoration.LargeVeinParser;
 import cofh.core.world.decoration.PlateParser;
 import cofh.core.world.decoration.SmallTreeParser;
