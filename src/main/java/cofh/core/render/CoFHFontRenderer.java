@@ -244,17 +244,17 @@ public class CoFHFontRenderer extends FontRenderer {
 
 	public void initSpecialCharacters() {
 
-		RenderSprite.addRenderer('♡', Gui.icons, 52, 0, 9, 9, this); // heart
-		RenderSprite.addRenderer('♥', Gui.icons, 124, 0, 9, 9, this); // wither heart
-		RenderSprite.addRenderer('⌔', Gui.icons, 34, 9, 9, 9, this); // shield
-		RenderSprite.addRenderer('○', Gui.icons, 16, 18, 9, 9, this); // bubble
-		RenderSprite.addRenderer('◌', Gui.icons, 25, 18, 9, 9, this); // bubble broken
-		RenderSprite.addRenderer('⧰', Gui.icons, 52, 27, 9, 9, this); // hunger
-		RenderSprite.addRenderer('❣', Gui.icons, 52, 45, 9, 9, this); // hardcore heart
+		RenderSprite.addRenderer('\u2661', Gui.icons, 52, 0, 9, 9, this); // heart
+		RenderSprite.addRenderer('\u2665', Gui.icons, 124, 0, 9, 9, this); // wither heart
+		RenderSprite.addRenderer('\u2314', Gui.icons, 34, 9, 9, 9, this); // shield
+		RenderSprite.addRenderer('\u25CB', Gui.icons, 16, 18, 9, 9, this); // bubble
+		RenderSprite.addRenderer('\u25CC', Gui.icons, 25, 18, 9, 9, this); // bubble broken
+		RenderSprite.addRenderer('\u29F0', Gui.icons, 52, 27, 9, 9, this); // hunger
+		RenderSprite.addRenderer('\u2763', Gui.icons, 52, 45, 9, 9, this); // hardcore heart
 
 		ResourceLocation beacon = new ResourceLocation("textures/gui/container/beacon.png");
-		RenderSprite.addRenderer('✕', beacon, 113, 222, 15, 15, this); // cross mark
-		RenderSprite.addRenderer('✔', beacon, 90, 223, 16, 14, this); // check mark
+		RenderSprite.addRenderer('\u2715', beacon, 113, 222, 15, 15, this); // cross mark
+		RenderSprite.addRenderer('\u2714', beacon, 90, 223, 16, 14, this); // check mark
 
 		RenderPlayerFace.init(this);
 	}
