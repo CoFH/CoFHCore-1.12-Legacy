@@ -498,7 +498,7 @@
 			if (file.exists())
 			{
 				var mcmod = new java.util.Scanner(file, "UTF-8").useDelimiter("\\Z");
-				var data = new com.google.gson.JsonParser().parse(mcmod.next()).getAsJsonArray();
+				var data = new Packages.com.google.gson.JsonParser().parse(mcmod.next()).getAsJsonArray();
 				mcmod.close();
 				
 				// update all version elements
@@ -509,9 +509,9 @@
 				}
 				
 				// write file back, pretty-printed
-				var output = new com.google.gson.stream.JsonWriter(new java.io.FileWriter(file));
+				var output = new Packages.com.google.gson.stream.JsonWriter(new java.io.FileWriter(file));
 				output.setIndent("    ");
-				new com.google.gson.Gson().toJson(data, output);
+				new Packages.com.google.gson.Gson().toJson(data, output);
 				output.close();
 			}
 		]]></script>
