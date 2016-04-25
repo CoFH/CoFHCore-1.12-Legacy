@@ -20,6 +20,9 @@ import cpw.mods.fml.common.versioning.VersionRange;
 import gnu.trove.map.hash.TObjectByteHashMap;
 import gnu.trove.set.hash.THashSet;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -101,6 +104,9 @@ class ASMCore {
 		hashes.put("net.minecraft.client.gui.GuiKeyBindingList$KeyEntry", (byte) 19);
 		hashes.put("net.minecraft.client.settings.KeyBinding", (byte) 20);
 		hashes.put("cpw.mods.fml.common.registry.GameRegistry", (byte) 21);
+		if (Boolean.parseBoolean(System.getProperty("cofh.profiler.debug", "false"))) {
+			hashes.put("net.minecraft.profiler.Profiler", (byte) 22);
+		}
 	}
 
 	static final ArrayList<String> workingPath = new ArrayList<String>();
@@ -210,6 +216,8 @@ class ASMCore {
 			return alterKeyBinding(transformedName, bytes, cr);
 		case 21:
 			return alterGameRegistry(name, bytes, cr);
+		case 22:
+			return alterProfiler(transformedName, bytes, cr);
 
 		default:
 			return bytes;
@@ -265,6 +273,141 @@ class ASMCore {
 	}
 
 	// }
+
+
+
+	private static byte[] alterProfiler(String name, byte[] bytes, ClassReader cr) {
+
+		String[] names;
+		if (LoadingPlugin.runtimeDeobfEnabled) {
+			names = new String[] { "func_76319_b", "func_76320_a", "func_76318_c", "func_76317_a" };
+		} else {
+			names = new String[] { "endSection", "startSection", "endStartSection", "clearProfiling" };
+		}
+
+		name = name.replace('.', '/');
+		ClassNode cn = new ClassNode(ASM5);
+		cr.accept(cn, 0);
+
+		cn.fields.add(new FieldNode(ACC_PRIVATE | ACC_SYNTHETIC, "cofh_stack", "Ljava/util/Deque;", null, null));
+		cn.fields.add(new FieldNode(ACC_PRIVATE | ACC_SYNTHETIC, "cofh_endStart", "Z", null, Boolean.FALSE));
+		for (MethodNode m : cn.methods) {
+			if ("<init>".equals(m.name)) {
+				LabelNode a = new LabelNode(new Label());
+				AbstractInsnNode n;
+				for (n = m.instructions.getFirst(); n != null; n = n.getNext()) {
+					if (n.getOpcode() == INVOKESPECIAL) {
+						break;
+					}
+				}
+				m.instructions.insert(n, n = a);
+				m.instructions.insert(n, n = new LineNumberNode(-15000, a));
+				m.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
+				m.instructions.insert(n, n = new TypeInsnNode(NEW, "java/util/LinkedList"));
+				m.instructions.insert(n, n = new InsnNode(DUP));
+				m.instructions.insert(n, n = new MethodInsnNode(INVOKESPECIAL, "java/util/LinkedList", "<init>", "()V", false));
+				m.instructions.insert(n, n = new FieldInsnNode(PUTFIELD, name, "cofh_stack", "Ljava/util/Deque;"));
+			} else if (names[0].equals(m.name)) {
+				int c = 0;
+				for (AbstractInsnNode n = m.instructions.getFirst(); n != null; n = n.getNext()) {
+					if (n.getOpcode() == ALOAD && ++c > 1) {
+						LabelNode lCond = new LabelNode(new Label());
+						LabelNode lGuard = new LabelNode(new Label());
+						m.instructions.insertBefore(n, n = new VarInsnNode(ALOAD, 0));
+						m.instructions.insert(n, n = new FieldInsnNode(GETFIELD, name, "cofh_endStart", "Z"));
+						m.instructions.insert(n, n = new JumpInsnNode(IFNE, lGuard));
+						m.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
+						m.instructions.insert(n, n = new FieldInsnNode(GETFIELD, name, "cofh_stack", "Ljava/util/Deque;"));
+						m.instructions.insert(n, n = new MethodInsnNode(INVOKEINTERFACE, "java/util/Deque", "pop", "()Ljava/lang/Object;", true));
+						m.instructions.insert(n, n = new TypeInsnNode(CHECKCAST, "java/lang/Throwable"));
+						m.instructions.insert(n, n = new InsnNode(DUP));
+						m.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "java/lang/Throwable", "getStackTrace", "()[Ljava/lang/StackTraceElement;", false));
+						m.instructions.insert(n, n = new InsnNode(ARRAYLENGTH));
+						m.instructions.insert(n, n = new TypeInsnNode(NEW, "java/lang/Throwable"));
+						m.instructions.insert(n, n = new InsnNode(DUP));
+						m.instructions.insert(n, n = new MethodInsnNode(INVOKESPECIAL, "java/lang/Throwable", "<init>", "()V", false));
+						m.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "java/lang/Throwable", "getStackTrace", "()[Ljava/lang/StackTraceElement;", false));
+						m.instructions.insert(n, n = new InsnNode(ARRAYLENGTH));
+						m.instructions.insert(n, n = new JumpInsnNode(IF_ICMPLE, lCond));
+						m.instructions.insert(n, n = new TypeInsnNode(NEW, "java/lang/Error"));
+						m.instructions.insert(n, n = new InsnNode(DUP));
+						m.instructions.insert(n, n = new LdcInsnNode("Detected bad stack depth call to endSection"));
+						m.instructions.insert(n, n = new MethodInsnNode(INVOKESPECIAL, "java/lang/Error", "<init>", "(Ljava/lang/String;)V", false));
+						m.instructions.insert(n, n = new InsnNode(SWAP));
+						m.instructions.insert(n, n = new MethodInsnNode(INVOKEVIRTUAL, "java/lang/Throwable", "initCause", "(Ljava/lang/Throwable;)Ljava/lang/Throwable;", false));
+						m.instructions.insert(n, n = new InsnNode(ATHROW));
+						m.instructions.insert(n, n = new FrameNode(F_SAME1, 0, null, 0, new Object[] { "java/lang/Throwable" }));
+						m.instructions.insert(n, n = lCond);
+						m.instructions.insert(n, n = new InsnNode(POP));
+						m.instructions.insert(n, n = new FrameNode(F_SAME, 0, null, 0, null));
+						m.instructions.insert(n, n = lGuard);
+						break;
+					}
+				}
+			} else if (names[1].equals(m.name)) {
+				int c = 0;
+				for (AbstractInsnNode n = m.instructions.getFirst(); n != null; n = n.getNext()) {
+					if (n.getOpcode() == ALOAD && ++c > 1) {
+						LabelNode lGuard = new LabelNode(new Label());
+						m.instructions.insertBefore(n, n = new VarInsnNode(ALOAD, 0));
+						m.instructions.insert(n, n = new FieldInsnNode(GETFIELD, name, "cofh_endStart", "Z"));
+						m.instructions.insert(n, n = new JumpInsnNode(IFNE, lGuard));
+						m.instructions.insert(n, n = new VarInsnNode(ALOAD, 0));
+						m.instructions.insert(n, n = new FieldInsnNode(GETFIELD, name, "cofh_stack", "Ljava/util/Deque;"));
+						m.instructions.insert(n, n = new TypeInsnNode(NEW, "java/lang/Error"));
+						m.instructions.insert(n, n = new InsnNode(DUP));
+						m.instructions.insert(n, n = new LdcInsnNode("Failed to call endSection after calling startSection"));
+						m.instructions.insert(n, n = new MethodInsnNode(INVOKESPECIAL, "java/lang/Error", "<init>", "(Ljava/lang/String;)V", false));
+						m.instructions.insert(n, n = new MethodInsnNode(INVOKEINTERFACE, "java/util/Deque", "push", "(Ljava/lang/Object;)V", true));
+						m.instructions.insert(n, n = new FrameNode(F_SAME, 0, null, 0, null));
+						m.instructions.insert(n, n = lGuard);
+						break;
+					}
+				}
+			} else if (names[2].equals(m.name)) {
+				AbstractInsnNode n;
+				m.instructions.insertBefore(m.instructions.getFirst(), n = new VarInsnNode(ALOAD, 0));
+				m.instructions.insert(n, n = new InsnNode(ICONST_1));
+				m.instructions.insert(n, n = new FieldInsnNode(PUTFIELD, name, "cofh_endStart", "Z"));
+				m.instructions.insertBefore(m.instructions.getLast(), n = new VarInsnNode(ALOAD, 0));
+				m.instructions.insert(n, n = new InsnNode(ICONST_0));
+				m.instructions.insert(n, n = new FieldInsnNode(PUTFIELD, name, "cofh_endStart", "Z"));
+			} else if (names[3].equals(m.name)) {
+				AbstractInsnNode n;
+				m.instructions.insertBefore(m.instructions.getFirst(), n = new VarInsnNode(ALOAD, 0));
+				m.instructions.insert(n, n = new FieldInsnNode(GETFIELD, name, "cofh_stack", "Ljava/util/Deque;"));
+				m.instructions.insert(n, n = new MethodInsnNode(INVOKEINTERFACE, "java/util/Deque", "clear", "()V", true));
+			}
+		}
+
+		ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+		cn.accept(cw);
+		bytes = cw.toByteArray();
+		//saveTransformedClass(bytes, name);
+
+		return bytes;
+	}
+
+    private static void saveTransformedClass(final byte[] data, final String transformedName) {
+
+        final File outFile = new File(new File("../decompClasses"), transformedName.replace('.', File.separatorChar) + ".class");
+        final File outDir = outFile.getParentFile();
+
+        if (!outDir.exists()) {
+            outDir.mkdirs();
+        }
+
+        if (outFile.exists()) {
+            outFile.delete();
+        }
+
+        try {
+            final FileOutputStream output = new FileOutputStream(outFile);
+            output.write(data);
+            output.close();
+        } catch (IOException ex) {
+        }
+    }
 
 	// { Improve Vanilla
 	private static byte[] alterContainer(String name, byte[] bytes, ClassReader cr) {

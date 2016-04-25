@@ -109,7 +109,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 			JOptionPane.showMessageDialog(null, ep, "Fatal error", JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}
-		l: if (obfuscated && System.class.getPackage().getSpecificationVersion().compareTo("1.8") < 0) {
+		l: if (obfuscated && System.getProperty("java.specification.version").compareTo("1.8") < 0) {
 			// create always-on-top modal dialogue in a separate thread so initialization can continue (but the user has to respond anyway)
 			if (FMLLaunchHandler.side() == Side.SERVER) {
 				FMLLog.log(Level.WARN, "*************************************************************************");
