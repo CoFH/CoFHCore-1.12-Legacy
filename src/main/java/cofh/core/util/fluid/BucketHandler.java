@@ -44,7 +44,20 @@ public class BucketHandler {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void onBucketFill(FillBucketEvent event) {
+	public void onPreBucketFill(FillBucketEvent event) {
+
+		// perform global permissions checks
+		onBucketFill(event, true);
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public void onPostBucketFill(FillBucketEvent event) {
+
+		// handle thusfar unhandled buckets
+		onBucketFill(event, false);
+	}
+
+	private void onBucketFill(FillBucketEvent event, boolean pre) {
 
 		if (ServerHelper.isClientWorld(event.world) | event.result != null || event.getResult() != Result.DEFAULT) {
 			return;
@@ -73,11 +86,14 @@ public class BucketHandler {
 			}
 			return;
 		}
-		if (event.entityPlayer != null) {
-			if ((fill && !event.world.canMineBlock(event.entityPlayer, x, y, z)) || !event.entityPlayer.canPlayerEdit(x, y, z, side, current)) {
-				event.setCanceled(true);
-				return;
+
+		if (pre) { // doing all of this in one pass will pre-empt other handlers. Split to two priorities.
+			if (event.entityPlayer != null) {
+				if ((fill && !event.world.canMineBlock(event.entityPlayer, x, y, z)) || !event.entityPlayer.canPlayerEdit(x, y, z, side, current)) {
+					event.setCanceled(true);
+				}
 			}
+			return;
 		}
 		ItemStack bucket = null;
 
