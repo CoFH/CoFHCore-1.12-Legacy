@@ -1,5 +1,6 @@
 package cofh.core.command;
 
+import cofh.asm.LoadingPlugin;
 import cofh.lib.util.helpers.StringHelper;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
@@ -37,6 +38,10 @@ public class CommandHandler extends CommandBase {
 		registerSubCommand(CommandReloadWorldgen.instance);
 		registerSubCommand(CommandCountBlock.instance);
 		registerSubCommand(CommandHand.instance);
+
+		if (!LoadingPlugin.obfuscated) { // in-dev commands
+			registerSubCommand(CommandFixMojangsShit.instance);
+		}
 	}
 
 	public static void initCommands(FMLServerStartingEvent event) {
