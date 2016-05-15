@@ -89,7 +89,7 @@ public class BucketHandler {
 
 		if (pre) { // doing all of this in one pass will pre-empt other handlers. Split to two priorities.
 			if (event.entityPlayer != null) {
-				if ((fill && !event.world.canMineBlock(event.entityPlayer, x, y, z)) || !event.entityPlayer.canPlayerEdit(x, y, z, side, current)) {
+				if (!event.world.canMineBlock(event.entityPlayer, x, y, z) || (fill && !event.entityPlayer.canPlayerEdit(x, y, z, side, current))) {
 					event.setCanceled(true);
 				}
 			}
