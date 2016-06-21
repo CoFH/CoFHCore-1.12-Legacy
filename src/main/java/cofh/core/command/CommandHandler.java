@@ -1,8 +1,6 @@
 package cofh.core.command;
 
-import cofh.asm.LoadingPlugin;
 import cofh.lib.util.helpers.StringHelper;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
@@ -15,6 +13,8 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandNotFoundException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.BlockPos;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 public class CommandHandler extends CommandBase {
 
@@ -25,23 +25,19 @@ public class CommandHandler extends CommandBase {
 	private static TMap<String, ISubCommand> commands = new THashMap<String, ISubCommand>();
 
 	static {
-		registerSubCommand(CommandHelp.instance);
-		registerSubCommand(CommandSyntax.instance);
+		//		registerSubCommand(CommandHelp.instance);
+		//		registerSubCommand(CommandSyntax.instance);
 		registerSubCommand(CommandVersion.instance);
 		registerSubCommand(CommandKillAll.instance);
-		registerSubCommand(CommandTPS.instance);
-		registerSubCommand(CommandTPX.instance);
-		registerSubCommand(CommandEnchant.instance);
-		registerSubCommand(CommandClearBlock.instance);
-		registerSubCommand(CommandReplaceBlock.instance);
-		registerSubCommand(CommandUnloadChunk.instance);
-		registerSubCommand(CommandReloadWorldgen.instance);
-		registerSubCommand(CommandCountBlock.instance);
-		registerSubCommand(CommandHand.instance);
-
-		if (!LoadingPlugin.obfuscated) { // in-dev commands
-			registerSubCommand(CommandFixMojangsShit.instance);
-		}
+		//		registerSubCommand(CommandTPS.instance);
+		//		registerSubCommand(CommandTPX.instance);
+		//		registerSubCommand(CommandEnchant.instance);
+		//		registerSubCommand(CommandClearBlock.instance);
+		//		registerSubCommand(CommandReplaceBlock.instance);
+		//		registerSubCommand(CommandUnloadChunk.instance);
+		//		registerSubCommand(CommandReloadWorldgen.instance);
+		//		registerSubCommand(CommandCountBlock.instance);
+		//		registerSubCommand(CommandHand.instance);
 	}
 
 	public static void initCommands(FMLServerStartingEvent event) {
@@ -105,7 +101,7 @@ public class CommandHandler extends CommandBase {
 				}
 			}
 		}
-		CommandBase.func_152373_a(sender, dummy, info, data);
+		CommandBase.notifyOperators(sender, dummy, info, data);
 	}
 
 	@Override
@@ -133,7 +129,7 @@ public class CommandHandler extends CommandBase {
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] arguments) {
+	public void processCommand(ICommandSender sender, String[] arguments) throws CommandException {
 
 		if (arguments.length < 1) {
 			arguments = new String[] { "help" };
@@ -150,12 +146,12 @@ public class CommandHandler extends CommandBase {
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 
-		if (par2ArrayOfStr.length == 1) {
-			return getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, commands.keySet());
-		} else if (commands.containsKey(par2ArrayOfStr[0])) {
-			return commands.get(par2ArrayOfStr[0]).addTabCompletionOptions(par1ICommandSender, par2ArrayOfStr);
+		if (args.length == 1) {
+			return getListOfStringsMatchingLastWord(args, commands.keySet());
+		} else if (commands.containsKey(args[0])) {
+			return commands.get(args[0]).addTabCompletionOptions(sender, args);
 		}
 		return null;
 	}

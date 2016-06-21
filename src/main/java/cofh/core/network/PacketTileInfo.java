@@ -2,6 +2,7 @@ package cofh.core.network;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 
 public class PacketTileInfo extends PacketCoFHBase {
 
@@ -12,14 +13,19 @@ public class PacketTileInfo extends PacketCoFHBase {
 
 	public PacketTileInfo() {
 
+		// Empty constructor must exist!
 	}
 
-	public PacketTileInfo(TileEntity theTile) {
+	public static PacketTileInfo newPacket(TileEntity tile) {
 
-		addInt(theTile.xCoord);
-		addInt(theTile.yCoord);
-		addInt(theTile.zCoord);
+		return new PacketTileInfo(tile);
+	}
 
+	public PacketTileInfo(TileEntity tile) {
+
+		addInt(tile.getPos().getX());
+		addInt(tile.getPos().getY());
+		addInt(tile.getPos().getZ());
 	}
 
 	@Override
@@ -37,18 +43,14 @@ public class PacketTileInfo extends PacketCoFHBase {
 	@Override
 	public void handlePacket(EntityPlayer player, boolean isServer) {
 
-		TileEntity tile = player.worldObj.getTileEntity(getInt(), getInt(), getInt());
+		BlockPos pos = new BlockPos(getInt(), getInt(), getInt());
+		TileEntity tile = player.worldObj.getTileEntity(pos);
 
 		if (tile instanceof ITileInfoPacketHandler) {
 			((ITileInfoPacketHandler) tile).handleTileInfoPacket(this, isServer, player);
 		} else {
 			// TODO: Throw error, bad packet
 		}
-	}
-
-	public static PacketTileInfo newPacket(TileEntity theTile) {
-
-		return new PacketTileInfo(theTile);
 	}
 
 }

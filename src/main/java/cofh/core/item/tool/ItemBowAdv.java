@@ -6,7 +6,6 @@ import cofh.lib.util.helpers.ServerHelper;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -17,7 +16,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
@@ -25,13 +23,12 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 
 public class ItemBowAdv extends ItemBow {
 
-	protected IIcon normalIcons[] = new IIcon[4];
 	protected ToolMaterial toolMaterial;
 
 	public String repairIngot = "";
+	protected boolean showInCreative = true;
 	public float arrowSpeedMultiplier = 2.0F;
 	public float arrowDamageMultiplier = 1.25F;
-	protected boolean showInCreative = true;
 
 	public ItemBowAdv(Item.ToolMaterial toolMaterial) {
 
@@ -45,7 +42,7 @@ public class ItemBowAdv extends ItemBow {
 		if (ench.effectId == Enchantment.looting.effectId) {
 			return 1;
 		}
-		if (ench.type == EnumEnchantmentType.bow) {
+		if (ench.type == EnumEnchantmentType.BOW) {
 			return 1;
 		}
 		return -1;
@@ -93,13 +90,6 @@ public class ItemBowAdv extends ItemBow {
 	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
 
 		return ItemHelper.isOreNameEqual(stack, repairIngot);
-	}
-
-	// TODO: This will need a custom render or something
-	@Override
-	public boolean isFull3D() {
-
-		return true;
 	}
 
 	@Override
@@ -204,45 +194,6 @@ public class ItemBowAdv extends ItemBow {
 			if (!player.capabilities.isCreativeMode) {
 				stack.damageItem(1, player);
 			}
-		}
-	}
-
-	@Override
-	public IIcon getIconIndex(ItemStack stack) {
-
-		return getIcon(stack, 0);
-	}
-
-	@Override
-	public IIcon getIcon(ItemStack stack, int pass) {
-
-		return this.normalIcons[0];
-	}
-
-	@Override
-	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-
-		if (useRemaining > 0) {
-			int draw = stack.getMaxItemUseDuration() - useRemaining;
-
-			if (draw > 17) {
-				return this.normalIcons[3];
-			} else if (draw > 13) {
-				return this.normalIcons[2];
-			} else if (draw > 0) {
-				return this.normalIcons[1];
-			}
-		}
-		return this.normalIcons[0];
-	}
-
-	@Override
-	public void registerIcons(IIconRegister ir) {
-
-		this.normalIcons[0] = ir.registerIcon(this.getIconString());
-
-		for (int i = 1; i < 4; i++) {
-			this.normalIcons[i] = ir.registerIcon(this.getIconString() + "_" + (i - 1));
 		}
 	}
 

@@ -1,14 +1,6 @@
 package cofh.core.network;
 
 import cofh.core.CoFHProps;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.FMLEmbeddedChannel;
-import cpw.mods.fml.common.network.FMLOutboundHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -28,8 +20,18 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.Packet;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
+import net.minecraftforge.fml.common.network.FMLOutboundHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Packet pipeline class. Directs all registered packet data to be handled by the packets themselves.
@@ -44,7 +46,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 
 	private EnumMap<Side, FMLEmbeddedChannel> channels;
 	private final LinkedList<Class<? extends PacketBase>> packets = new LinkedList<Class<? extends PacketBase>>();
-	private boolean isPostInitialised = false;
+	private boolean isPostInitialized = false;
 
 	public boolean registerPacket(Class<? extends PacketBase> packet) {
 
@@ -54,7 +56,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		if (this.packets.contains(packet)) {
 			return false;
 		}
-		if (this.isPostInitialised) {
+		if (this.isPostInitialized) {
 			// TODO: Resort or throw error
 			return false;
 		}
@@ -74,7 +76,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		byte discriminator = (byte) this.packets.indexOf(packetClass);
 		buffer.writeByte(discriminator);
 		msg.encodeInto(ctx, buffer);
-		FMLProxyPacket proxyPacket = new FMLProxyPacket(buffer.copy(), ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get());
+		FMLProxyPacket proxyPacket = new FMLProxyPacket(new PacketBuffer(buffer.copy()), ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get());
 		out.add(proxyPacket);
 	}
 
@@ -119,10 +121,10 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	// by using logical sorting
 	public void postInit() {
 
-		if (this.isPostInitialised) {
+		if (this.isPostInitialized) {
 			return;
 		}
-		this.isPostInitialised = true;
+		this.isPostInitialized = true;
 		Collections.sort(this.packets, new Comparator<Class<? extends PacketBase>>() {
 
 			@Override
@@ -170,21 +172,22 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
-	public static void sendToAllAround(PacketBase message, TileEntity theTile) {
+	public static void sendToAllAround(PacketBase message, TileEntity tile) {
 
 		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
 		instance.channels
-				.get(Side.SERVER)
-				.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
-				.set(new TargetPoint(theTile.getWorldObj().provider.dimensionId, theTile.xCoord, theTile.yCoord, theTile.zCoord, CoFHProps.NETWORK_UPDATE_RANGE));
+		.get(Side.SERVER)
+		.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
+		.set(new TargetPoint(tile.getWorld().provider.getDimensionId(), tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(),
+				CoFHProps.NETWORK_UPDATE_RANGE));
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
-	public static void sendToAllAround(PacketBase message, World world, int x, int y, int z) {
+	public static void sendToAllAround(PacketBase message, World world, BlockPos pos) {
 
 		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
 		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
-				.set(new TargetPoint(world.provider.dimensionId, x, y, z, CoFHProps.NETWORK_UPDATE_RANGE));
+		.set(new TargetPoint(world.provider.getDimensionId(), pos.getX(), pos.getY(), pos.getZ(), CoFHProps.NETWORK_UPDATE_RANGE));
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 

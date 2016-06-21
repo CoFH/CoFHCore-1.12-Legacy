@@ -1,7 +1,7 @@
 package cofh.core.fluid;
 
 import cofh.CoFHCore;
-import cofh.core.util.IBakeable;
+import cofh.api.core.IBakeable;
 import cofh.lib.util.BlockWrapper;
 
 import gnu.trove.map.TMap;
@@ -21,9 +21,9 @@ public class BlockFluidInteractive extends BlockFluidCoFHBase implements IBakeab
 		CoFHCore.registerBakeable(this);
 	}
 
-	public BlockFluidInteractive(String modName, Fluid fluid, Material material, String name) {
+	public BlockFluidInteractive(Fluid fluid, Material material, String modName, String name) {
 
-		super(modName, fluid, material, name);
+		super(fluid, material, modName, name);
 		CoFHCore.registerBakeable(this);
 	}
 

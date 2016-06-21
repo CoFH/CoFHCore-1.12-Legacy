@@ -1,7 +1,7 @@
 package cofh.core.network;
 
 import cofh.CoFHCore;
-import cofh.core.RegistrySocial;
+import cofh.core.util.RegistrySocial;
 
 import java.util.LinkedList;
 
@@ -16,7 +16,7 @@ public class PacketSocial extends PacketCoFHBase {
 	}
 
 	public enum PacketTypes {
-		FRIEND_LIST, ADD_FRIEND, REMOVE_FRIEND
+		FRIEND_LIST, ADD_FRIEND, REMOVE_FRIEND, GUILD_LIST
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class PacketSocial extends PacketCoFHBase {
 				RegistrySocial.clientPlayerFriends.add(getString());
 			}
 			java.util.Collections.sort(RegistrySocial.clientPlayerFriends);
-			CoFHCore.proxy.updateFriendListGui();
+			CoFHCore.proxy.updateSocialGui();
 			return;
 		case ADD_FRIEND:
 			RegistrySocial.addFriend(((EntityPlayerMP) player).getGameProfile(), getString());
@@ -39,6 +39,8 @@ public class PacketSocial extends PacketCoFHBase {
 		case REMOVE_FRIEND:
 			RegistrySocial.removeFriend(((EntityPlayerMP) player).getGameProfile(), getString());
 			RegistrySocial.sendFriendsToPlayer((EntityPlayerMP) player);
+			return;
+		case GUILD_LIST:
 			return;
 		}
 	}

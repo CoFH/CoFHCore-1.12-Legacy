@@ -1,5 +1,6 @@
 package cofh.core.network;
 
+import cofh.lib.util.CompressedStreamUtils;
 import cofh.lib.util.helpers.FluidHelper;
 import cofh.lib.util.helpers.ItemHelper;
 
@@ -16,10 +17,10 @@ import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 
 public abstract class PacketCoFHBase extends PacketBase {
@@ -81,6 +82,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 	}
 
 	public PacketCoFHBase addVarInt(int theInteger) {
+
 		try {
 			int v = 0x00;
 			if (theInteger < 0) {
@@ -182,11 +184,18 @@ public abstract class PacketCoFHBase extends PacketBase {
 		return this;
 	}
 
-	public PacketCoFHBase addCoords(TileEntity theTile) {
+	public PacketCoFHBase addCoords(TileEntity tile) {
 
-		addInt(theTile.xCoord);
-		addInt(theTile.yCoord);
-		return addInt(theTile.zCoord);
+		addInt(tile.getPos().getX());
+		addInt(tile.getPos().getY());
+		return addInt(tile.getPos().getZ());
+	}
+
+	public PacketCoFHBase addCoords(BlockPos pos) {
+
+		addInt(pos.getX());
+		addInt(pos.getY());
+		return addInt(pos.getZ());
 	}
 
 	public PacketCoFHBase addCoords(int x, int y, int z) {
@@ -239,6 +248,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 	}
 
 	public int getVarInt() {
+
 		try {
 			int v = datain.readByte(), r = v & 0x3F;
 			boolean n = (v & 0x40) != 0;
@@ -335,7 +345,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 			addShort(Item.getIdFromItem(theStack.getItem()));
 			addByte(theStack.stackSize);
 			addShort(ItemHelper.getItemDamage(theStack));
-			writeNBT(theStack.stackTagCompound);
+			writeNBT(theStack.getTagCompound());
 		}
 	}
 
@@ -348,7 +358,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 			byte stackSize = getByte();
 			short damage = getShort();
 			stack = new ItemStack(Item.getItemById(itemID), stackSize, damage);
-			stack.stackTagCompound = readNBT();
+			stack.setTagCompound(readNBT());
 		}
 
 		return stack;
@@ -359,7 +369,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 		if (nbt == null) {
 			addShort(-1);
 		} else {
-			byte[] abyte = CompressedStreamTools.compress(nbt);
+			byte[] abyte = CompressedStreamUtils.compress(nbt);
 			addShort((short) abyte.length);
 			addByteArray(abyte);
 		}
@@ -374,7 +384,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 		} else {
 			byte[] abyte = new byte[nbtLength];
 			getByteArray(abyte);
-			return CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L));
+			return CompressedStreamUtils.read(abyte, new NBTSizeTracker(2097152L));
 		}
 	}
 

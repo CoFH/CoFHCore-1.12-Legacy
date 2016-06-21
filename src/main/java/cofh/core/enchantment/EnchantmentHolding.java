@@ -5,12 +5,13 @@ import cofh.api.item.IInventoryContainerItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class EnchantmentHolding extends Enchantment {
 
 	public EnchantmentHolding(int id) {
 
-		super(id, 2, EnumEnchantmentType.all);
+		super(id, new ResourceLocation("cofh:holding"), 2, EnumEnchantmentType.ALL);
 	}
 
 	@Override

@@ -15,7 +15,7 @@ public class CoFHEnchantment {
 
 	public static void postInit() {
 
-		int enchantId = CoFHCore.configCore.get("Enchantment", "Holding", 100);
+		int enchantId = CoFHCore.CONFIG_CORE.get("Enchantment", "Holding", 100);
 
 		for (int i = enchantId; i < 256; i++) {
 			try {
@@ -25,9 +25,9 @@ public class CoFHEnchantment {
 
 			}
 		}
-		CoFHCore.configCore.set("Enchantment", "Holding", holding.effectId);
+		CoFHCore.CONFIG_CORE.set("Enchantment", "Holding", holding.effectId);
 
-		enchantId = CoFHCore.configCore.get("Enchantment", "Multishot", 101);
+		enchantId = CoFHCore.CONFIG_CORE.get("Enchantment", "Multishot", 101);
 
 		for (int i = enchantId; i < 256; i++) {
 			try {
@@ -37,7 +37,7 @@ public class CoFHEnchantment {
 
 			}
 		}
-		CoFHCore.configCore.set("Enchantment", "Multishot", multishot.effectId);
+		CoFHCore.CONFIG_CORE.set("Enchantment", "Multishot", multishot.effectId);
 	}
 
 	public static NBTTagList getEnchantmentTagList(NBTTagCompound nbt) {
@@ -75,7 +75,7 @@ public class CoFHEnchantment {
 
 	public static void addEnchantment(ItemStack stack, int id, int level) {
 
-		addEnchantment(stack.stackTagCompound, id, level);
+		addEnchantment(stack.getTagCompound(), id, level);
 	}
 
 	public static Enchantment holding;

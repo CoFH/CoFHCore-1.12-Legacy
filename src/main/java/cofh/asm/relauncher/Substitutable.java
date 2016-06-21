@@ -6,7 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
  * This annotation will replace the bytecode of the annotated method with that of the named method if the <tt>value</tt> condition is not met.
  * <p>
@@ -28,8 +27,8 @@ public @interface Substitutable {
 	public String method();
 
 	/**
-	 * The side from which this method will *always* be substituted.
+	 * The side from which this method will *always* be substituted. (DEFAULT: Both sides.)
 	 */
-	public CoFHSide side() default CoFHSide.NONE;
+	public CoFHSide side() default CoFHSide.DEFAULT;
 
 }

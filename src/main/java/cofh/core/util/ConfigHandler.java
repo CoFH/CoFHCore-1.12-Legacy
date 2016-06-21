@@ -55,7 +55,7 @@ public class ConfigHandler {
 		modConfiguration.save();
 	}
 
-	/* Shortcuts */
+	/* SHORTCUTS */
 	public double get(String category, String key, double defaultValue) {
 
 		return modConfiguration.get(category, key, defaultValue, null).getDouble(0);
@@ -116,7 +116,7 @@ public class ConfigHandler {
 		getProperty(category, key, value).set(value);
 	}
 
-	/* Properties */
+	/* PROPERTY MANIPULATION */
 	public Property getProperty(String category, String key, double defaultValue) {
 
 		return modConfiguration.get(category, key, defaultValue);

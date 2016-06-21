@@ -201,6 +201,3 @@ key.cofh.augments=Open Player Augment GUI
 
 tab.cofh.friend.0=Add/Remove Friends!
 tab.cofh.friend.1=Friends not provided.
-
-fluid.tile.water=Water
-fluid.tile.lava=Lava

@@ -3,39 +3,35 @@ package cofh.core.block;
 import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
 import cofh.core.CoFHProps;
-import cofh.core.RegistrySocial;
 import cofh.core.network.PacketCoFHBase;
 import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketTile;
+import cofh.core.network.PacketTileInfo;
 import cofh.core.util.CoreUtils;
+import cofh.core.util.RegistrySocial;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.ServerHelper;
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.relauncher.Side;
 
 import java.util.UUID;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
 
 public abstract class TileCoFHBase extends TileEntity {
 
-	@Override
-	public void onChunkUnload() {
-
-		if (!tileEntityInvalid) {
-			invalidate(); // this isn't called when a tile unloads. guard incase it is in the future
-		}
-	}
+	protected boolean inWorld = false;
 
 	public abstract String getName();
-
-	public abstract int getType();
 
 	public void blockBroken() {
 
@@ -52,28 +48,28 @@ public abstract class TileCoFHBase extends TileEntity {
 
 	public void markChunkDirty() {
 
-		worldObj.markTileEntityChunkModified(this.xCoord, this.yCoord, this.zCoord, this);
+		worldObj.markChunkDirty(this.pos, this);
 	}
 
-	public void callNeighborBlockChange() {
+	public void callNeighborStateChange() {
 
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+		worldObj.notifyNeighborsOfStateChange(pos, getBlockType());
 	}
 
 	public void callNeighborTileChange() {
 
-		worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
+		worldObj.updateComparatorOutputLevel(pos, getBlockType());
 	}
 
 	public void onNeighborBlockChange() {
 
 	}
 
-	public void onNeighborTileChange(int tileX, int tileY, int tileZ) {
+	public void onNeighborTileChange(BlockPos pos) {
 
 	}
 
-	public int getComparatorInput(int side) {
+	public int getComparatorInputOverride() {
 
 		return 0;
 	}
@@ -89,17 +85,15 @@ public abstract class TileCoFHBase extends TileEntity {
 			return true;
 		}
 		AccessMode access = ((ISecurable) this).getAccess();
-		String name = player.getCommandSenderName();
+		String name = player.getName();
 		if (access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name))) {
 			return true;
 		}
-
 		GameProfile profile = ((ISecurable) this).getOwner();
 		UUID ownerID = profile.getId();
 		if (SecurityHelper.isDefaultUUID(ownerID)) {
 			return true;
 		}
-
 		UUID otherID = SecurityHelper.getID(player);
 		if (ownerID.equals(otherID)) {
 			return true;
@@ -112,19 +106,47 @@ public abstract class TileCoFHBase extends TileEntity {
 		return true;
 	}
 
-	public boolean isUseable(EntityPlayer player) {
+	public boolean isUsable(EntityPlayer player) {
 
-		return player.getDistanceSq(xCoord, yCoord, zCoord) <= 64D && worldObj.getTileEntity(xCoord, yCoord, zCoord) == this;
+		return player.getDistanceSq(pos) <= 64D && worldObj.getTileEntity(pos) == this;
 	}
 
-	public boolean onWrench(EntityPlayer player, int hitSide) {
+	public boolean onWrench(EntityPlayer player, EnumFacing side) {
 
 		return false;
 	}
 
+	/* BLOCK STATE */
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+
+		return state;
+	}
+
+	/* COFH ASM */
+	public void cofh_validate() {
+
+		inWorld = true;
+	}
+
+	public void cofh_invalidate() {
+
+		inWorld = false;
+	}
+
+	/* TIME CHECKS */
 	protected final boolean timeCheck() {
 
 		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT == 0;
+	}
+
+	protected final boolean timeCheckHalf() {
+
+		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT_HALF == 0;
+	}
+
+	protected final boolean timeCheckQuarter() {
+
+		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT_QUARTER == 0;
 	}
 
 	protected final boolean timeCheckEighth() {
@@ -144,16 +166,54 @@ public abstract class TileCoFHBase extends TileEntity {
 		return new PacketTile(this);
 	}
 
+	public PacketCoFHBase getGuiPacket() {
+
+		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		payload.addByte(TilePacketID.GUI.ordinal());
+		return payload;
+	}
+
+	public PacketCoFHBase getFluidPacket() {
+
+		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		payload.addByte(TilePacketID.FLUID.ordinal());
+		return payload;
+	}
+
+	public PacketCoFHBase getModePacket() {
+
+		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		payload.addByte(TilePacketID.MODE.ordinal());
+		return payload;
+	}
+
+	protected void handleGuiPacket(PacketCoFHBase payload) {
+
+	}
+
+	protected void handleFluidPacket(PacketCoFHBase payload) {
+
+	}
+
+	protected void handleModePacket(PacketCoFHBase payload) {
+
+		markChunkDirty();
+	}
+
 	public void sendDescPacket() {
 
 		PacketHandler.sendToAllAround(getPacket(), this);
 	}
 
-	protected void updateLighting() {
+	public void sendFluidPacket() {
 
-		int light2 = worldObj.getSavedLightValue(EnumSkyBlock.Block, xCoord, yCoord, zCoord), light1 = getLightValue();
-		if (light1 != light2 && worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord)) {
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		PacketHandler.sendToDimension(getFluidPacket(), worldObj.provider.getDimensionId());
+	}
+
+	public void sendModePacket() {
+
+		if (ServerHelper.isClientWorld(worldObj)) {
+			PacketHandler.sendToServer(getModePacket());
 		}
 	}
 
@@ -167,6 +227,15 @@ public abstract class TileCoFHBase extends TileEntity {
 		} else if (side == Side.SERVER && ServerHelper.isClientWorld(worldObj)) {
 			PacketHandler.sendToServer(getPacket());
 		}
+	}
+
+	protected void updateLighting() {
+
+		// TODO: Is this necessary now?
+		//		int light2 = worldObj.getSavedLightValue(EnumSkyBlock.BLOCK, pos), light1 = getLightValue();
+		//		if (light1 != light2 && worldObj.updateLightByType(EnumSkyBlock.BLOCK, pos)) {
+		//			worldObj.markBlockForUpdate(pos);
+		//		}
 	}
 
 	/* GUI METHODS */
@@ -185,17 +254,27 @@ public abstract class TileCoFHBase extends TileEntity {
 		return 0;
 	}
 
+	public boolean hasGui() {
+
+		return false;
+	}
+
 	public boolean openGui(EntityPlayer player) {
 
 		return false;
 	}
 
-	public void receiveGuiNetworkData(int i, int j) {
+	public void receiveGuiNetworkData(int id, int data) {
 
 	}
 
-	public void sendGuiNetworkData(Container container, ICrafting player) {
+	public void sendGuiNetworkData(Container container, ICrafting iCrafting) {
 
+	}
+
+	/* PACKET ENUM */
+	public static enum TilePacketID {
+		GUI, FLUID, MODE
 	}
 
 }

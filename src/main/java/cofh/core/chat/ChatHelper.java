@@ -23,11 +23,11 @@ public class ChatHelper {
 
 	static {
 		String category = "gui.chat";
-		CoFHCore.configClient.getCategory(category).setComment("The options in this section change core Minecraft behavior and are not limited to CoFH mods.");
+		CoFHCore.CONFIG_CLIENT.getCategory(category).setComment("The options in this section change core Minecraft behavior and are not limited to CoFH mods.");
 
 		String comment = "Set to false to disable outdated CoFH info chat messages being removed from chat";
 
-		indexChat = CoFHCore.configClient.get(category, "RemoveOutdatedChat", true, comment);
+		indexChat = CoFHCore.CONFIG_CLIENT.get(category, "RemoveOutdatedChat", true, comment);
 	}
 
 	public static IChatComponent getChatComponent(Object object) {
@@ -37,13 +37,13 @@ public class ChatHelper {
 		} else if (object instanceof String) {
 			return new ChatComponentText((String) object);
 		} else if (object instanceof ItemStack) {
-			return ((ItemStack) object).func_151000_E();
+			return ((ItemStack) object).getChatComponent();
 		} else if (object instanceof StatBase) {
-			return ((StatBase) object).func_150951_e();
+			return ((StatBase) object).getStatName();
 		} else if (object instanceof Entity) {
-			return ((Entity) object).func_145748_c_();
+			return ((Entity) object).getDisplayName();
 		} else if (object instanceof ICommandSender) {
-			return ((ICommandSender) object).func_145748_c_();
+			return ((ICommandSender) object).getDisplayName();
 		} else {
 			return new ChatComponentText(String.valueOf(object));
 		}
@@ -67,12 +67,12 @@ public class ChatHelper {
 
 	public static String toJSON(IChatComponent chatComponent) {
 
-		return IChatComponent.Serializer.func_150696_a(chatComponent);
+		return IChatComponent.Serializer.componentToJson(chatComponent);
 	}
 
 	public static IChatComponent fromJSON(String string) {
 
-		return IChatComponent.Serializer.func_150699_a(string);
+		return IChatComponent.Serializer.jsonToComponent(string);
 	}
 
 	public static void sendIndexedChatMessageToPlayer(EntityPlayer player, IChatComponent message) {
@@ -80,7 +80,6 @@ public class ChatHelper {
 		if (player.worldObj == null || player instanceof FakePlayer) {
 			return;
 		}
-
 		if (indexChat) {
 			if (!player.worldObj.isRemote) {
 				PacketHandler.sendTo(new PacketIndexedChat(message, cofhTempChatIndexServer), player);
@@ -98,7 +97,6 @@ public class ChatHelper {
 		if (player.worldObj == null || player instanceof FakePlayer) {
 			return;
 		}
-
 		if (indexChat) {
 			for (int i = 0; i < messages.size(); i++) {
 				if (!player.worldObj.isRemote) {

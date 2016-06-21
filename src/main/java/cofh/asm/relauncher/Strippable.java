@@ -25,7 +25,8 @@ public @interface Strippable {
 	public String[] value();
 
 	/**
-	 * The side from which these interfaces will *always* be stripped.
+	 * The side from which these interfaces will *always* be stripped. (DEFAULT: Neither side.)
 	 */
-	public CoFHSide side() default CoFHSide.NONE;
+	public CoFHSide side() default CoFHSide.DEFAULT;
+
 }

@@ -17,7 +17,8 @@ public @interface Implementable {
 	public String[] value();
 
 	/**
-	 * The *only* side on which these interfaces will be implemented if present (NONE == BOTH)
+	 * The *only* side on which these interfaces will be implemented if present. (DEFAULT: Both sides.)
 	 */
-	public CoFHSide side() default CoFHSide.NONE;
+	public CoFHSide side() default CoFHSide.DEFAULT;
+
 }

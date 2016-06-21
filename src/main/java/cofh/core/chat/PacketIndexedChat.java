@@ -3,11 +3,11 @@ package cofh.core.chat;
 import cofh.CoFHCore;
 import cofh.core.network.PacketCoFHBase;
 import cofh.core.network.PacketHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketIndexedChat extends PacketCoFHBase {
 
@@ -18,6 +18,7 @@ public class PacketIndexedChat extends PacketCoFHBase {
 
 	public PacketIndexedChat() {
 
+		// Empty constructor must exist!
 	}
 
 	public PacketIndexedChat(IChatComponent chat) {
@@ -31,17 +32,17 @@ public class PacketIndexedChat extends PacketCoFHBase {
 	}
 
 	@Override
-	public void handlePacket(EntityPlayer player, boolean isServer) {
-
-	}
-
-	@Override
 	@SideOnly(Side.CLIENT)
 	public void handleClientSide(EntityPlayer player) {
 
 		String string = getString();
 		int offset = getInt();
 		CoFHCore.proxy.addIndexedChatMessage(ChatHelper.fromJSON(string), offset);
+	}
+
+	@Override
+	public void handlePacket(EntityPlayer player, boolean isServer) {
+
 	}
 
 }

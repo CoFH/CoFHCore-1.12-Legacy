@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public interface IKeyBinding {
 
-	public boolean keyPress();
+	public boolean keyPressClient();
 
 	public void keyPressServer(EntityPlayer player);
 

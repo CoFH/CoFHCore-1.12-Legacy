@@ -26,10 +26,10 @@ public class PacketCore extends PacketCoFHBase {
 				CoFHCore.instance.handleConfigSync(this);
 				return;
 			default:
-				CoFHCore.log.error("Unknown Packet! Internal: COFH, ID: " + type);
+				CoFHCore.LOG.error("Unknown Packet! Internal: COFH_PH, ID: " + type);
 			}
 		} catch (Exception e) {
-			CoFHCore.log.error("Packet payload failure! Please check your config files!");
+			CoFHCore.LOG.error("Packet payload failure! Please check your configuration!");
 			e.printStackTrace();
 		}
 

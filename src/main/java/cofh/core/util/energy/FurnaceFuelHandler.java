@@ -1,14 +1,14 @@
 package cofh.core.util.energy;
 
 import cofh.lib.util.ItemWrapper;
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 import gnu.trove.map.hash.THashMap;
 
 import java.util.Map.Entry;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class FurnaceFuelHandler implements IFuelHandler {
 
