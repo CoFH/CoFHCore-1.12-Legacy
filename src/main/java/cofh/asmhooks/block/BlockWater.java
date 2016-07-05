@@ -23,7 +23,7 @@ public class BlockWater extends BlockStaticLiquid {
 		}
 
 		if (world.provider.isHellWorld) {
-			world.setBlockToAir(x, y, z);
+			world.setBlock(x, y, z, Blocks.air, 0, 2);
 			world.playAuxSFX(1004, x, y, z, 0);
 			world.playAuxSFX(2000, x, y, z, 4);
 		}
