@@ -4,6 +4,7 @@ import com.google.common.eventbus.EventBus;
 import cpw.mods.fml.common.FMLModContainer;
 import cpw.mods.fml.common.LoadController;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModAPIManager;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.discovery.ModCandidate;
 import cpw.mods.fml.common.versioning.ArtifactVersion;
@@ -31,7 +32,7 @@ public class ChildModContainer extends FMLModContainer {
     			break l;
     		}
     		for (ArtifactVersion info : this.getMetadata().dependencies) {
-    			if (!list.containsKey(info.getLabel())) {
+    			if (!list.containsKey(info.getLabel()) && !ModAPIManager.INSTANCE.hasAPI(info.getLabel())) {
     				break l;
     			}
     		}
