@@ -314,22 +314,17 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			return;
 		}
 		// TODO: pull out the ExtendedStorageArray and edit that directly. faster.
-		Block filler = world.getBiomeGenForCoords(chunkX, chunkZ).fillerBlock;
-		// NOTE: filler block is dirt by default, the actual filler block for the biome is part of a method body
-		int meta = 0; // no meta field for filler
+		int meta = 0;
+		Block filler;
 		switch (world.provider.dimensionId) {
 		case -1:
-			/* This is a hack because Mojang coded the Nether wrong. Are you surprised? */
 			filler = Blocks.netherrack;
 			break;
 		case 0:
-			/*
-			 * Due to above note, overworld gets replaced with stone. other dimensions are on their own for helping us with the filler block
-			 */
+		default:
 			filler = Blocks.stone;
 			break;
 		case 1:
-			/* This is a hack because Mojang coded The End wrong. Are you surprised? */
 			filler = Blocks.end_stone;
 			break;
 		}
