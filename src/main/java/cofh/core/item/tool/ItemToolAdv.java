@@ -18,10 +18,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
-import net.minecraft.network.play.client.C07PacketPlayerDigging;
-import net.minecraft.network.play.client.C07PacketPlayerDigging.Action;
-import net.minecraft.network.play.server.S23PacketBlockChange;
-import net.minecraft.util.BlockPos;
+import net.minecraft.network.play.client.CPacketPlayerDigging;
+import net.minecraft.network.play.client.CPacketPlayerDigging.Action;
+import net.minecraft.network.play.server.SPacketBlockChange;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -36,14 +36,14 @@ public abstract class ItemToolAdv extends ItemTool {
 	protected int harvestLevel = -1;
 	protected boolean showInCreative = true;
 
-	public ItemToolAdv(float baseDamage, Item.ToolMaterial toolMaterial) {
+	public ItemToolAdv(float baseDamage, float attackSpeed, Item.ToolMaterial toolMaterial) {
 
-		super(baseDamage, toolMaterial, null);
+		super(baseDamage, attackSpeed, toolMaterial, null);
 	}
 
-	public ItemToolAdv(float baseDamage, Item.ToolMaterial toolMaterial, int harvestLevel) {
+	public ItemToolAdv(float baseDamage, float attackSpeed, Item.ToolMaterial toolMaterial, int harvestLevel) {
 
-		this(baseDamage, toolMaterial);
+		this(baseDamage, attackSpeed, toolMaterial);
 		this.harvestLevel = harvestLevel;
 	}
 
@@ -95,7 +95,7 @@ public abstract class ItemToolAdv extends ItemTool {
 		// or precious ores you can't harvest while mining stone
 		Block block = state.getBlock();
 		// only effective materials
-		if (!(toolClasses.contains(block.getHarvestTool(state)) || canHarvestBlock(block, player.getCurrentEquippedItem()))) {
+		if (!(toolClasses.contains(block.getHarvestTool(state)) || canHarvestBlock(state, player.getActiveItemStack()))) {
 			return false;
 		}
 
@@ -105,7 +105,7 @@ public abstract class ItemToolAdv extends ItemTool {
 		// send the blockbreak event
 		int exp = -1;
 		if (playerMP != null) {
-			exp = ForgeHooks.onBlockBreakEvent(world, playerMP.theItemInWorldManager.getGameType(), playerMP, pos);
+			exp = ForgeHooks.onBlockBreakEvent(world, playerMP.interactionManager.getGameType(), playerMP, pos);
 			if (exp == -1) {
 				return false;
 			}
@@ -114,45 +114,45 @@ public abstract class ItemToolAdv extends ItemTool {
 			if (!world.isRemote) {
 				block.onBlockHarvested(world, pos, state, player);
 			} else {
-				world.playAuxSFX(2001, pos, Block.getIdFromBlock(block));
+				world.playEvent(2001, pos, Block.getIdFromBlock(block));
 			}
-			if (block.removedByPlayer(world, pos, player, false)) {
+			if (block.removedByPlayer(state, world, pos, player, false)) {
 				block.onBlockDestroyedByPlayer(world, pos, state);
 			}
 			// send update to client
 			if (!world.isRemote) {
-				playerMP.playerNetServerHandler.sendPacket(new S23PacketBlockChange(world, pos));
+				playerMP.connection.sendPacket(new SPacketBlockChange(world, pos));
 			} else {
-				Minecraft.getMinecraft().getNetHandler()
-						.addToSendQueue(new C07PacketPlayerDigging(Action.STOP_DESTROY_BLOCK, pos, Minecraft.getMinecraft().objectMouseOver.sideHit));
+				Minecraft.getMinecraft().getConnection()
+						.sendPacket(new CPacketPlayerDigging(Action.STOP_DESTROY_BLOCK, pos, Minecraft.getMinecraft().objectMouseOver.sideHit));
 			}
 			return true;
 		}
-		world.playAuxSFXAtEntity(player, 2001, pos, Block.getIdFromBlock(block));
+		world.playEvent(player, 2001, pos, Block.getIdFromBlock(block));
 		if (!world.isRemote) {
 			// serverside we reproduce ItemInWorldManager.tryHarvestBlock
 			// ItemInWorldManager.removeBlock
 			block.onBlockHarvested(world, pos, state, player);
-			if (block.removedByPlayer(world, pos, player, true)) {
+			if (block.removedByPlayer(state, world, pos, player, true)) {
 				block.onBlockDestroyedByPlayer(world, pos, state);
-				block.harvestBlock(world, player, pos, state, world.getTileEntity(pos));
+				block.harvestBlock(world, player, pos, state, world.getTileEntity(pos), player.getActiveItemStack());
 
 				if (exp > 0) {
 					block.dropXpOnBlockBreak(world, pos, exp);
 				}
 			}
 			// always send block update to client
-			playerMP.playerNetServerHandler.sendPacket(new S23PacketBlockChange(world, pos));
+			playerMP.connection.sendPacket(new SPacketBlockChange(world, pos));
 		} else {
 			// PlayerControllerMP pcmp = Minecraft.getMinecraft().playerController;
 			// clientside we do a "this block has been clicked on long enough to be broken" call. This should not send any new packets
 			// the code above, executed on the server, sends a block-updates that give us the correct state of the block we destroy.
 			// following code can be found in PlayerControllerMP.onPlayerDestroyBlock
-			if (block.removedByPlayer(world, pos, player, true)) {
+			if (block.removedByPlayer(state, world, pos, player, true)) {
 				block.onBlockDestroyedByPlayer(world, pos, state);
 			}
-			Minecraft.getMinecraft().getNetHandler()
-					.addToSendQueue(new C07PacketPlayerDigging(Action.STOP_DESTROY_BLOCK, pos, Minecraft.getMinecraft().objectMouseOver.sideHit));
+			Minecraft.getMinecraft().getConnection()
+					.sendPacket(new CPacketPlayerDigging(Action.STOP_DESTROY_BLOCK, pos, Minecraft.getMinecraft().objectMouseOver.sideHit));
 		}
 		return true;
 	}
@@ -164,7 +164,7 @@ public abstract class ItemToolAdv extends ItemTool {
 
 	protected boolean isValidHarvestMaterial(ItemStack stack, World world, BlockPos pos) {
 
-		return getEffectiveMaterials(stack).contains(world.getBlockState(pos).getBlock().getMaterial());
+		return getEffectiveMaterials(stack).contains(world.getBlockState(pos).getMaterial());
 	}
 
 	protected int getHarvestLevel(ItemStack stack, int level) {
@@ -185,9 +185,9 @@ public abstract class ItemToolAdv extends ItemTool {
 	}
 
 	@Override
-	public boolean canHarvestBlock(Block block, ItemStack stack) {
+	public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
 
-		return getStrVsBlock(stack, block) > 1.0f;
+		return getStrVsBlock(stack, state) > 1.0f;
 	}
 
 	@Override
@@ -216,24 +216,9 @@ public abstract class ItemToolAdv extends ItemTool {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack stack, Block block) {
+	public float getStrVsBlock(ItemStack stack, IBlockState state) {
 
-		return (getEffectiveMaterials(stack).contains(block.getMaterial()) || getEffectiveBlocks(stack).contains(block)) ? getEfficiency(stack) : 1.0F;
-	}
-
-	@Override
-	public float getDigSpeed(ItemStack stack, IBlockState state) {
-
-		for (String type : getToolClasses(stack)) {
-			int level = getHarvestLevel(stack, type);
-
-			if (type.equals(state.getBlock().getHarvestTool(state))) {
-				if (state.getBlock().getHarvestLevel(state) < level) {
-					return getEfficiency(stack);
-				}
-			}
-		}
-		return super.getDigSpeed(stack, state);
+		return (getEffectiveMaterials(stack).contains(state.getMaterial()) || getEffectiveBlocks(stack).contains(state.getBlock())) ? getEfficiency(stack) : 1.0F;
 	}
 
 	@Override

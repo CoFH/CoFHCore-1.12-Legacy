@@ -6,6 +6,8 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CoFHEnchantment {
 
@@ -15,29 +17,8 @@ public class CoFHEnchantment {
 
 	public static void postInit() {
 
-		int enchantId = CoFHCore.CONFIG_CORE.get("Enchantment", "Holding", 100);
-
-		for (int i = enchantId; i < 256; i++) {
-			try {
-				holding = new EnchantmentHolding(i);
-				break;
-			} catch (IllegalArgumentException e) {
-
-			}
-		}
-		CoFHCore.CONFIG_CORE.set("Enchantment", "Holding", holding.effectId);
-
-		enchantId = CoFHCore.CONFIG_CORE.get("Enchantment", "Multishot", 101);
-
-		for (int i = enchantId; i < 256; i++) {
-			try {
-				multishot = new EnchantmentMultishot(i);
-				break;
-			} catch (IllegalArgumentException e) {
-
-			}
-		}
-		CoFHCore.CONFIG_CORE.set("Enchantment", "Multishot", multishot.effectId);
+		GameRegistry.register(new EnchantmentHolding(), new ResourceLocation("cofh:holding"));
+		GameRegistry.register(new EnchantmentMultishot(), new ResourceLocation("cofh:multishot"));
 	}
 
 	public static NBTTagList getEnchantmentTagList(NBTTagCompound nbt) {

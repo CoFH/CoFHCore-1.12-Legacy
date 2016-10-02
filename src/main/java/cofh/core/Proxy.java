@@ -14,7 +14,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -57,7 +57,7 @@ public class Proxy {
 	}
 
 	/* HELPERS */
-	public void addIndexedChatMessage(IChatComponent chat, int index) {
+	public void addIndexedChatMessage(ITextComponent chat, int index) {
 
 	}
 
@@ -71,7 +71,7 @@ public class Proxy {
 
 		MinecraftServer theServer = FMLCommonHandler.instance().getMinecraftServerInstance();
 		playerName = playerName.trim();
-		for (String a : theServer.getConfigurationManager().getOppedPlayerNames()) {
+		for (String a : theServer.getPlayerList().getOppedPlayerNames()) {
 			if (playerName.equalsIgnoreCase(a)) {
 				return true; // TODO: This is awful but likely no way to improve. Thanks Mojang.
 			}

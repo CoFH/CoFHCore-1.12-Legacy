@@ -5,7 +5,7 @@ import cofh.core.network.PacketCoFHBase;
 import cofh.core.network.PacketHandler;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -21,11 +21,11 @@ public class PacketIndexedChat extends PacketCoFHBase {
 		// Empty constructor must exist!
 	}
 
-	public PacketIndexedChat(IChatComponent chat) {
+	public PacketIndexedChat(ITextComponent chat) {
 
 	}
 
-	public PacketIndexedChat(IChatComponent chat, int index) {
+	public PacketIndexedChat(ITextComponent chat, int index) {
 
 		addString(ChatHelper.toJSON(chat));
 		addInt(index);

@@ -19,10 +19,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.network.Packet;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
@@ -156,9 +156,9 @@ public abstract class TileCoFHBase extends TileEntity {
 
 	/* NETWORK METHODS */
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
-		return PacketHandler.toMCPacket(getPacket());
+		return (SPacketUpdateTileEntity) PacketHandler.toMCPacket(getPacket());
 	}
 
 	public PacketCoFHBase getPacket() {
@@ -207,7 +207,7 @@ public abstract class TileCoFHBase extends TileEntity {
 
 	public void sendFluidPacket() {
 
-		PacketHandler.sendToDimension(getFluidPacket(), worldObj.provider.getDimensionId());
+		PacketHandler.sendToDimension(getFluidPacket(), worldObj.provider.getDimension());
 	}
 
 	public void sendModePacket() {
@@ -268,7 +268,7 @@ public abstract class TileCoFHBase extends TileEntity {
 
 	}
 
-	public void sendGuiNetworkData(Container container, ICrafting iCrafting) {
+	public void sendGuiNetworkData(Container container, IContainerListener containerListener) {
 
 	}
 

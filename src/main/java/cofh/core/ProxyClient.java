@@ -7,22 +7,49 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import cofh.core.render.FontRendererCoFH;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import org.lwjgl.input.Keyboard;
 
 public class ProxyClient extends Proxy {
+
+	public static FontRendererCoFH fontRenderer;
 
 	public static final KeyBindingCoFH KEYBINDING_MULTIMODE = new KeyBindingCoFH("key.cofh.multimode", Keyboard.KEY_V, "key.cofh.category");
 	public static final KeyBindingCoFH KEYBINDING_AUGMENTS = null; //new KeyBind("key.cofh.augments", Keyboard.KEY_G, "key.cofh.category");
 
 	/* INIT */
+
+	@Override
+	public void postInit(FMLPostInitializationEvent event) {
+		registerRenderInformation();
+	}
+
+	public void registerRenderInformation() {
+
+		fontRenderer = new FontRendererCoFH(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"),
+				Minecraft.getMinecraft().renderEngine, false);
+
+		if (Minecraft.getMinecraft().gameSettings.language != null) {
+			fontRenderer.setUnicodeFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode());
+			fontRenderer.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
+		}
+		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(fontRenderer);
+
+		fontRenderer.initSpecialCharacters();
+	}
+
+
 
 	/* REGISTRATION */
 	@Override
@@ -39,7 +66,7 @@ public class ProxyClient extends Proxy {
 
 	/* HELPERS */
 	@Override
-	public void addIndexedChatMessage(IChatComponent chat, int index) {
+	public void addIndexedChatMessage(ITextComponent chat, int index) {
 
 		if (chat == null) {
 			Minecraft.getMinecraft().ingameGUI.getChatGUI().deleteChatLine(index);

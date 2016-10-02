@@ -22,7 +22,7 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
@@ -178,7 +178,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		instance.channels
 		.get(Side.SERVER)
 		.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
-		.set(new TargetPoint(tile.getWorld().provider.getDimensionId(), tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(),
+		.set(new TargetPoint(tile.getWorld().provider.getDimension(), tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(),
 				CoFHProps.NETWORK_UPDATE_RANGE));
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
@@ -187,7 +187,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 
 		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
 		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
-		.set(new TargetPoint(world.provider.getDimensionId(), pos.getX(), pos.getY(), pos.getZ(), CoFHProps.NETWORK_UPDATE_RANGE));
+		.set(new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), CoFHProps.NETWORK_UPDATE_RANGE));
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 

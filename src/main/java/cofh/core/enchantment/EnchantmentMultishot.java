@@ -4,14 +4,15 @@ import cofh.core.item.tool.ItemBowAdv;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class EnchantmentMultishot extends Enchantment {
 
-	public EnchantmentMultishot(int id) {
+	public EnchantmentMultishot() {
 
-		super(id, new ResourceLocation("cofh:multishot"), 5, EnumEnchantmentType.BOW);
+		super(Rarity.UNCOMMON, EnumEnchantmentType.BOW, new EntityEquipmentSlot[] {EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
 	}
 
 	@Override
