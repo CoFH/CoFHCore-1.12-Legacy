@@ -12,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -74,10 +76,10 @@ public class CoreUtils {
 	}
 
 	/* SOUND UTILS */
-	public static final String getSoundName(String modId, String soundpath) {
+	public static final SoundEvent getSoundEvent(String modId, String soundpath) {
 
 		soundpath = soundpath.replaceAll("/", ".");
-		return String.format("%s:%s", modId, soundpath);
+		return new SoundEvent(new ResourceLocation(modId, soundpath));
 	}
 
 	/* ENTITY UTILS */

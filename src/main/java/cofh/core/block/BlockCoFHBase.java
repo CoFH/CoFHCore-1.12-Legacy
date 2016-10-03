@@ -4,7 +4,7 @@ import cofh.api.core.IInitializer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 
-public abstract class BlockCoFHBase extends Block implements IInitializer {
+public abstract class BlockCoFHBase extends Block {
 
 	protected String modName;
 	protected String name;
