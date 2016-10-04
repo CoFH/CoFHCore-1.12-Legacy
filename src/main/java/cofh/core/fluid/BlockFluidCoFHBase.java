@@ -128,12 +128,9 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic implements II
 	@SideOnly(Side.CLIENT)
 	public void registerModels() {
 
-		Item item = Item.getItemFromBlock(this);
+		//TODO item model registration was here - is it needed in some cases?
 		StateMapper mapper = new StateMapper(modName, "fluid", name);
 
-		// Item Model
-		ModelLoader.registerItemVariants(item);
-		ModelLoader.setCustomMeshDefinition(item, mapper);
 		// Block Model
 		ModelLoader.setCustomStateMapper(this, mapper);
 	}

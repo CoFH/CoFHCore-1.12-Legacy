@@ -19,6 +19,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+import org.apache.logging.log4j.core.helpers.Loader;
+
+import java.io.*;
 
 public class CoreUtils {
 
@@ -73,6 +76,26 @@ public class CoreUtils {
 	public static boolean isServer() {
 
 		return CoFHCore.proxy.isServer();
+	}
+
+	/* FILE UTILS */
+	public static void copyFileUsingStream(String source, String dest) throws IOException {
+
+		copyFileUsingStream(source, new File(dest));
+	}
+
+	public static void copyFileUsingStream(String source, File dest) throws IOException {
+
+		try (
+				InputStream is = Loader.getResource(source, null).openStream();
+				OutputStream os = new FileOutputStream(dest);) {
+
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = is.read(buffer)) > 0) {
+				os.write(buffer, 0, length);
+			}
+		}
 	}
 
 	/* SOUND UTILS */

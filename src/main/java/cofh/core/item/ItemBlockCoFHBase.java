@@ -1,5 +1,6 @@
 package cofh.core.item;
 
+import cofh.core.render.FontRendererCoFH;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.block.Block;
@@ -58,6 +59,6 @@ public abstract class ItemBlockCoFHBase extends ItemBlock {
 	@SideOnly(Side.CLIENT)
 	public FontRenderer getFontRenderer(ItemStack stack) {
 
-		return CoFHFontRenderer.loadFontRendererStack(stack);
+		return FontRendererCoFH.loadFontRendererStack(stack);
 	}
 }

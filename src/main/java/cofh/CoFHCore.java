@@ -36,8 +36,8 @@ public class CoFHCore {
 
 	public static final String modId = "cofhcore";
 	public static final String modName = "CoFH Core";
-	public static final String version = "1.8.9R3.2.0";
-	public static final String version_max = "1.8.9R4.3.0";
+	public static final String version = "1.10.2A0.0.1";
+	public static final String version_max = "1.10.2R2.0.0";
 	public static final String dependencies = CoFHProps.FORGE_DEP;
 	public static final String modGuiFactory = "cofh.core.gui.GuiConfigCoreFactory";
 
