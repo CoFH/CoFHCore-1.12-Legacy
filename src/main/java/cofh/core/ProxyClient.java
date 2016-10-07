@@ -32,6 +32,9 @@ public class ProxyClient extends Proxy {
 
 	@Override
 	public void postInit(FMLPostInitializationEvent event) {
+
+		super.postInit(event);
+
 		registerRenderInformation();
 	}
 

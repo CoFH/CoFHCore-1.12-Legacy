@@ -20,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -29,6 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public abstract class TileCoFHBase extends TileEntity {
 
+	private static final int METADATA_NOT_APPLICABLE = 0;
 	protected boolean inWorld = false;
 
 	public abstract String getName();
@@ -158,7 +160,14 @@ public abstract class TileCoFHBase extends TileEntity {
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 
-		return (SPacketUpdateTileEntity) PacketHandler.toMCPacket(getPacket());
+		return new SPacketUpdateTileEntity(this.pos, METADATA_NOT_APPLICABLE, getUpdateTag());
+	}
+
+	@Override
+	public NBTTagCompound getUpdateTag() {
+
+		//returning clean nbt from here instead of the one from TileEntity that's full of data we don't need
+		return new NBTTagCompound();
 	}
 
 	public PacketCoFHBase getPacket() {

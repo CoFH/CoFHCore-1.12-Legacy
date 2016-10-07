@@ -204,7 +204,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		instance.channels.get(Side.CLIENT).writeAndFlush(message);
 	}
 
-	public static Packet toMCPacket(PacketBase packet) {
+	public static Packet<?> toMCPacket(PacketBase packet) {
 
 		return instance.channels.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
 	}
