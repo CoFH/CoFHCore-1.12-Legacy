@@ -26,6 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 
 public abstract class TileCoFHBase extends TileEntity {
@@ -74,6 +75,12 @@ public abstract class TileCoFHBase extends TileEntity {
 	public int getComparatorInputOverride() {
 
 		return 0;
+	}
+
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+
+		return oldState.getBlock() != newState.getBlock();
 	}
 
 	public int getLightValue() {
@@ -160,14 +167,17 @@ public abstract class TileCoFHBase extends TileEntity {
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 
-		return new SPacketUpdateTileEntity(this.pos, METADATA_NOT_APPLICABLE, getUpdateTag());
+		return new SPacketUpdateTileEntity(this.pos, METADATA_NOT_APPLICABLE, new NBTTagCompound());
 	}
 
 	@Override
+	/**
+	 * Only used for initial load of tile entities and not the subsequent packet calls. Reason being it uses readFromNBT on client and thus needs
+	 * all data instead of just small packets
+	 */
 	public NBTTagCompound getUpdateTag() {
 
-		//returning clean nbt from here instead of the one from TileEntity that's full of data we don't need
-		return new NBTTagCompound();
+		return writeToNBT(super.getUpdateTag());
 	}
 
 	public PacketCoFHBase getPacket() {
