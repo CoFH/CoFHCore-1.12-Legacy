@@ -1,6 +1,7 @@
 package cofh.core.block;
 
 import cofh.api.block.IDismantleable;
+import cofh.api.tileentity.IInventoryRetainer;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IRedstoneControl;
 import cofh.api.tileentity.ISecurable;
@@ -16,6 +17,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -43,6 +45,7 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements IDismantlea
 
 	public abstract TileEntity createTileEntity(World world, IBlockState state);
 
+	//TODO add code calling this / may need to refactor the old breakblock method
 	public abstract ArrayList<ItemStack> dropDelegate(NBTTagCompound nbt, IBlockAccess world, BlockPos pos, int fortune);
 
 	public abstract ArrayList<ItemStack> dismantleDelegate(NBTTagCompound nbt, World world, BlockPos pos, EntityPlayer player, boolean returnDrops, boolean simulate);
@@ -65,6 +68,28 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements IDismantlea
 			return ((TileCoFHBase) tile).canPlayerDismantle(player);
 		}
 		return true;
+	}
+
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+
+		TileEntity tile = world.getTileEntity(pos);
+
+		if (tile instanceof TileCoFHBase) {
+			TileCoFHBase theTile = (TileCoFHBase) tile;
+			theTile.blockBroken();
+		}
+		if (tile instanceof IInventoryRetainer) {
+			// do nothing
+		} else if (tile instanceof IInventory) {
+			IInventory inv = (IInventory) tile;
+			for (int i = 0; i < inv.getSizeInventory(); i++) {
+				CoreUtils.dropItemStackIntoWorldWithVelocity(inv.getStackInSlot(i), world, pos);
+			}
+		}
+		if (tile != null) {
+			world.removeTileEntity(pos);
+		}
 	}
 
 	@Override
