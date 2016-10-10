@@ -11,6 +11,7 @@ import cofh.core.util.ConfigHandler;
 import java.io.File;
 import java.util.ArrayList;
 
+import cofh.core.util.OreDictionaryArbiter;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -88,6 +89,8 @@ public class CoFHCore {
 
 	@EventHandler
 	public void initialize(FMLInitializationEvent event) {
+
+		OreDictionaryArbiter.initialize();
 
 		proxy.initialize(event);
 	}
