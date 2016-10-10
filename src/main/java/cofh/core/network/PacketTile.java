@@ -37,7 +37,7 @@ public class PacketTile extends PacketCoFHBase {
 
 		if (tile instanceof ITilePacketHandler) {
 			((ITilePacketHandler) tile).handleTilePacket(this, isServer);
-			IBlockState state = tile.getWorld().getBlockState(pos);
+			IBlockState state = player.worldObj.getBlockState(pos);
 			tile.getWorld().notifyBlockUpdate(pos, state, state, 3);
 			if (isServer) {
 				tile.getWorld().updateComparatorOutputLevel(pos, tile.getBlockType());

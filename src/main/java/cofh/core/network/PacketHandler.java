@@ -93,20 +93,31 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		PacketBase pkt = packetClass.newInstance();
 		pkt.decodeInto(ctx, payload.slice());
 
+		Runnable task = () -> decodeThreadSafe(ctx, pkt);
+
+		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
+			FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(task);
+		} else {
+			Minecraft.getMinecraft().addScheduledTask(task);
+		}
+	}
+
+	private void decodeThreadSafe(ChannelHandlerContext ctx, PacketBase pkt) {
+
 		EntityPlayer player;
 		switch (FMLCommonHandler.instance().getEffectiveSide()) {
-		case CLIENT:
-			player = this.getClientPlayer();
-			pkt.handleClientSide(player);
-			break;
+			case CLIENT:
+				player = this.getClientPlayer();
+				pkt.handleClientSide(player);
+				break;
 
-		case SERVER:
-			INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-			player = ((NetHandlerPlayServer) netHandler).playerEntity;
-			pkt.handleServerSide(player);
-			break;
+			case SERVER:
+				INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
+				player = ((NetHandlerPlayServer) netHandler).playerEntity;
+				pkt.handleServerSide(player);
+				break;
 
-		default:
+			default:
 		}
 	}
 
