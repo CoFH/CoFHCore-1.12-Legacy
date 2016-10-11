@@ -1,5 +1,6 @@
 package cofh.core;
 
+import cofh.CoFHCore;
 import cofh.core.key.KeyBindingMultiMode;
 import cofh.core.key.KeyHandler;
 
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cofh.core.render.FontRendererCoFH;
+import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.settings.KeyBinding;
@@ -19,6 +21,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.lwjgl.input.Keyboard;
 
 public class ProxyClient extends Proxy {
@@ -29,6 +32,77 @@ public class ProxyClient extends Proxy {
 	public static final KeyBindingCoFH KEYBINDING_AUGMENTS = null; //new KeyBind("key.cofh.augments", Keyboard.KEY_G, "key.cofh.category");
 
 	/* INIT */
+
+	@Override
+	public void preInit(FMLPreInitializationEvent event) {
+
+		/* GLOBAL */
+		String category = "Global";
+		CoFHCore.CONFIG_CLIENT.getCategory(category).setComment("The options in this section change core Minecraft behavior and are not limited to CoFH mods.");
+
+		//TODO FIGURE OUT IF THIS IS NEEDED
+/*
+		String comment = "Set to false to disable any particles from spawning in Minecraft.";
+		if (!CoFHCore.CONFIG_CLIENT.get(category, "EnableParticles", true, comment)) {
+			CoFHCore.LOG.info("Replacing EffectRenderer");
+			Minecraft.getMinecraft().effectRenderer = new cofh.core.render.CustomEffectRenderer();
+		}
+
+		String comment = "Set to false to disable chunk sorting during rendering.";
+		if (!CoFHCore.CONFIG_CLIENT.get(category, "EnableRenderSorting", true, comment)) {
+			CoFHProps.enableRenderSorting = false;
+		}
+
+		comment = "Set to false to disable all animated textures in Minecraft.";
+		if (!CoFHCore.CONFIG_CLIENT.get(category, "EnableAnimatedTextures", true, comment)) {
+			CoFHProps.enableAnimatedTextures = false;
+		}
+
+*/
+
+		/* GENERAL */
+		category = "General";
+		String comment = "Set to false to disable shader effects in CoFH Mods.";
+		if (!CoFHCore.CONFIG_CLIENT.get(category, "EnableShaderEffects", true, comment)) {
+			CoFHProps.enableShaderEffects = false;
+		}
+		comment = "Set to true to use Color Blind Textures in CoFH Mods, where applicable.";
+		if (CoFHCore.CONFIG_CLIENT.get(category, "EnableColorBlindTextures", false, comment)) {
+			CoFHProps.enableColorBlindTextures = true;
+		}
+
+		/* INTERFACE */
+		category = "Interface";
+		comment = "Set to true to draw borders on GUI slots in CoFH Mods, where applicable.";
+		if (!CoFHCore.CONFIG_CLIENT.get(category, "EnableGUISlotBorders", true, comment)) {
+			CoFHProps.enableGUISlotBorders = false;
+		}
+
+		/* INTERFACE - TOOLTIPS */
+		category = "Interface.Tooltips";
+		comment = "Set to false to hide a tooltip prompting you to press Shift for more details on various items.";
+		if (!CoFHCore.CONFIG_CLIENT.get(category, "DisplayHoldShiftForDetail", true, comment)) {
+			StringHelper.displayShiftForDetail = false;
+		}
+		comment = "Set to true to display large item counts as stacks rather than a single quantity.";
+		if (CoFHCore.CONFIG_CLIENT.get(category, "DisplayContainedItemsAsStackCount", false, comment)) {
+			StringHelper.displayStackCount = true;
+		}
+
+		/* SECURITY */
+		category = "Security";
+
+		//TODO FIGURE OUT IF NEEDED
+/*
+		comment = "Set to false to disable warnings about Ops having access to 'secure' blocks upon logging on to a server.";
+		if (!CoFHCore.CONFIG_CLIENT.get(category, "OpsCanAccessSecureBlocksWarning", true, comment)) {
+			CoFHProps.enableOpSecureAccessWarning = false;
+		}
+*/
+		CoFHCore.CONFIG_CLIENT.save();
+
+		super.preInit(event);
+	}
 
 	@Override
 	public void postInit(FMLPostInitializationEvent event) {
