@@ -11,6 +11,7 @@ import cofh.lib.util.helpers.RedstoneControlHelper;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.ServerHelper;
 import com.mojang.authlib.GameProfile;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.ICommandSender;
@@ -145,6 +146,17 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements IDismantlea
 		if (tile instanceof TileCoFHBase) {
 			((TileCoFHBase) tile).onNeighborBlockChange();
 			((TileCoFHBase) tile).blockPlaced();
+		}
+	}
+
+	@Override
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
+
+		//TODO was BlockPosition.getTileEntityRaw(world, x, y, z) Needed for anything?
+		TileEntity tile = world.getTileEntity(pos);
+
+		if (tile instanceof TileCoFHBase) {
+			((TileCoFHBase) tile).onNeighborBlockChange();
 		}
 	}
 }
