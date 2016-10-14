@@ -12,6 +12,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 import cofh.core.util.OreDictionaryArbiter;
+import cofh.core.world.FeatureParser;
+import cofh.core.world.WorldHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -84,6 +86,9 @@ public class CoFHCore {
 		CONFIG_LOOT.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/loot.cfg"), true));
 		CONFIG_CLIENT.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/client.cfg"), true));
 
+		FeatureParser.initialize();
+		WorldHandler.initialize();
+
 		proxy.preInit(event);
 	}
 
@@ -107,6 +112,12 @@ public class CoFHCore {
 		CONFIG_CORE.cleanUp(false, true);
 		CONFIG_LOOT.cleanUp(false, true);
 		CONFIG_CLIENT.cleanUp(false, true);
+
+		try {
+			FeatureParser.parseGenerationFile();
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
 
 		LOG.info(modName + ": Load Complete.");
 	}
