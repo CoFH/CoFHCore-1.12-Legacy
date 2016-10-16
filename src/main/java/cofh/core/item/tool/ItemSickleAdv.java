@@ -24,7 +24,7 @@ public class ItemSickleAdv extends ItemToolAdv {
 	public ItemSickleAdv(Item.ToolMaterial toolMaterial) {
 
 		//TODO attack speed (currently at vanilla shovel level)
-		super(3.0F, -3.0F,  toolMaterial);
+		super(3.0F, -2.4F,  toolMaterial);
 		addToolClass("sickle");
 
 		effectiveMaterials.add(Material.LEAVES);
