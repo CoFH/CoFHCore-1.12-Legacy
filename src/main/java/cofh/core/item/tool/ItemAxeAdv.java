@@ -14,10 +14,9 @@ public class ItemAxeAdv extends ItemToolAdv {
 	protected static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(new Block[] { Blocks.PLANKS, Blocks.BOOKSHELF, Blocks.LOG, Blocks.LOG2, Blocks.CHEST,
 			Blocks.PUMPKIN, Blocks.LIT_PUMPKIN, Blocks.MELON_BLOCK, Blocks.LADDER });
 
-	public ItemAxeAdv(Item.ToolMaterial toolMaterial) {
+	public ItemAxeAdv(Item.ToolMaterial toolMaterial, float attackSpeed) {
 
-		//TODO attack speed (currently set to wooden axe speed)
-		super(3.0F, -3.2F, toolMaterial);
+		super(3.0F, attackSpeed, toolMaterial);
 		addToolClass("axe");
 
 		effectiveBlocks.addAll(EFFECTIVE_ON);
@@ -26,6 +25,9 @@ public class ItemAxeAdv extends ItemToolAdv {
 		effectiveMaterials.add(Material.VINE);
 		effectiveMaterials.add(Material.CACTUS);
 		effectiveMaterials.add(Material.GOURD);
+
+		//this is to get damage ratios between swords and axes similar to vanilla
+		damageVsEntity = damageVsEntity * 1.2F;
 	}
 
 }
