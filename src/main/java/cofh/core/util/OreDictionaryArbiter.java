@@ -115,6 +115,26 @@ public class OreDictionaryArbiter {
 	 *
 	 * Returns -1 if there is no corresponding oreID.
 	 */
+	public static int getOreID(ItemStack stack) {
+
+		if (stack == null) {
+			return UNKNOWN_ID;
+		}
+		ArrayList<Integer> ids = stackIDs.get(new ItemWrapper(stack));
+
+		if (ids == null) {
+			ids = stackIDs.get(new ItemWrapper(stack.getItem(), WILDCARD_VALUE));
+		}
+		return ids == null ? UNKNOWN_ID : ids.get(0);
+	}
+
+	/**
+	 * Retrieves the oreID, given an ItemStack.
+	 *
+	 * If an ItemStack has more than one oreID, this returns the first one - just like Forge's Ore Dictionary.
+	 *
+	 * Returns -1 if there is no corresponding oreID.
+	 */
 	public static List<Integer> getOreIDs(ItemStack stack) {
 
 		if (stack == null) {
@@ -124,7 +144,7 @@ public class OreDictionaryArbiter {
 
 		if (ids == null) {
 			ids = stackIDs.get(new ItemWrapper(stack.getItem(), WILDCARD_VALUE));
-		}
+	}
 		return ids == null ? Collections.singletonList(UNKNOWN_ID) : ids;
 	}
 
@@ -163,6 +183,20 @@ public class OreDictionaryArbiter {
 
 		String oreName = oreIDs.inverse().get(id);
 		return oreName == null ? UNKNOWN : oreName;
+	}
+
+	/**
+	 * Retrieves the oreName, given an ItemStack.
+	 *
+	 * If an ItemStack has more than one oreName, this returns the first one = just like Forge's Ore Dictionary.
+	 *
+	 * Returns "Unknown" if there is no corresponding oreName.
+	 */
+	public static String getOreName(ItemStack stack) {
+
+		int id = getOreID(stack);
+
+		return id == UNKNOWN_ID ? UNKNOWN : getOreName(id);
 	}
 
 	/**

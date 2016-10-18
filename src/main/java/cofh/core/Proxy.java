@@ -1,6 +1,7 @@
 package cofh.core;
 
 import cofh.core.chat.PacketIndexedChat;
+import cofh.core.key.KeyBindingEmpower;
 import cofh.core.key.KeyBindingMultiMode;
 import cofh.core.key.KeyHandler;
 import cofh.core.key.PacketKey;
@@ -36,6 +37,7 @@ public class Proxy {
 	public void postInit(FMLPostInitializationEvent event) {
 
 		registerPacketInformation();
+		registerKeyBinds();
 
 		PacketHandler.instance.postInit();
 	}
@@ -44,6 +46,7 @@ public class Proxy {
 	public void registerKeyBinds() {
 
 		KeyHandler.addServerKeyBind(KeyBindingMultiMode.instance);
+		KeyHandler.addServerKeyBind(KeyBindingEmpower.instance);
 		// KeyHandler.addServerKeyBind(KeyBindingAugments.instance);
 	}
 

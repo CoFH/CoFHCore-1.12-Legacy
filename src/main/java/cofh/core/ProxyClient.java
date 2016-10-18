@@ -1,6 +1,7 @@
 package cofh.core;
 
 import cofh.CoFHCore;
+import cofh.core.key.KeyBindingEmpower;
 import cofh.core.key.KeyBindingMultiMode;
 import cofh.core.key.KeyHandler;
 
@@ -31,7 +32,8 @@ public class ProxyClient extends Proxy {
 
 	public static FontRendererCoFH fontRenderer;
 
-	public static final KeyBindingCoFH KEYBINDING_MULTIMODE = new KeyBindingCoFH("key.cofh.multimode", Keyboard.KEY_V, "key.cofh.category");
+	public static final KeyBindingCoFH KEYBINDING_MULTIMODE = new KeyBindingCoFH("key.cofh.multimode", Keyboard.KEY_C, "key.cofh.category");
+	public static final KeyBindingCoFH KEYBINDING_EMPOWER = new KeyBindingCoFH("key.cofh.empower", Keyboard.KEY_V, "key.cofh.category");
 	public static final KeyBindingCoFH KEYBINDING_AUGMENTS = null; //new KeyBind("key.cofh.augments", Keyboard.KEY_G, "key.cofh.category");
 
 	/* INIT */
@@ -59,9 +61,11 @@ public class ProxyClient extends Proxy {
 		super.registerKeyBinds();
 
 		KeyHandler.addKeyBind(KeyBindingMultiMode.instance);
+		KeyHandler.addKeyBind(KeyBindingEmpower.instance);
 		// KeyHandler.addKeyBind(KeyBindingAugments.instance);
 
 		ClientRegistry.registerKeyBinding(KEYBINDING_MULTIMODE);
+		ClientRegistry.registerKeyBinding(KEYBINDING_EMPOWER);
 		// ClientRegistry.registerKeyBinding(KEYBINDING_AUGMENTS);
 	}
 
@@ -241,8 +245,16 @@ public class ProxyClient extends Proxy {
 	@Override
 	public int getKeyBind(String key) {
 
-		return 0;
+		if (key.equalsIgnoreCase("cofh.empower")) {
+			return KEYBINDING_EMPOWER.getKeyCode();
+		} else if (key.equalsIgnoreCase("cofh.multimode")) {
+			return KEYBINDING_MULTIMODE.getKeyCode();
+		} else if (key.equalsIgnoreCase("cofh.augment")) {
+			//return KEYBINDING_AUGMENTS.getKeyCode();
+		}
+		return -1;
 	}
+
 
 	/* SERVER UTILS */
 	@Override
