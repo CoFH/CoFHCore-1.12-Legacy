@@ -1,7 +1,7 @@
 package cofh.mod.updater;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

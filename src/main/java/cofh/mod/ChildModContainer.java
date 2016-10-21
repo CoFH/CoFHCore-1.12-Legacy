@@ -1,13 +1,13 @@
 package cofh.mod;
 
 import com.google.common.eventbus.EventBus;
-import cpw.mods.fml.common.FMLModContainer;
-import cpw.mods.fml.common.LoadController;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModAPIManager;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.discovery.ModCandidate;
-import cpw.mods.fml.common.versioning.ArtifactVersion;
+import net.minecraftforge.fml.common.FMLModContainer;
+import net.minecraftforge.fml.common.LoadController;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModAPIManager;
+import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.discovery.ModCandidate;
+import net.minecraftforge.fml.common.versioning.ArtifactVersion;
 
 import java.util.List;
 import java.util.Map;

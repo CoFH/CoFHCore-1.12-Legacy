@@ -1,7 +1,6 @@
 package cofh.core.enchantment;
 
 import cofh.CoFHCore;
-
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,76 +8,55 @@ import net.minecraft.nbt.NBTTagList;
 
 public class CoFHEnchantment {
 
-	private CoFHEnchantment() {
+    private CoFHEnchantment() {
 
-	}
+    }
 
-	public static void postInit() {
+    public static void postInit() {
 
-		int enchantId = CoFHCore.configCore.get("Enchantment", "Holding", 100);
+        holding = new EnchantmentHolding("holding");
+        multishot = new EnchantmentMultishot("multishot");
+    }
 
-		for (int i = enchantId; i < 256; i++) {
-			try {
-				holding = new EnchantmentHolding(i);
-				break;
-			} catch (IllegalArgumentException e) {
+    public static NBTTagList getEnchantmentTagList(NBTTagCompound nbt) {
 
-			}
-		}
-		CoFHCore.configCore.set("Enchantment", "Holding", holding.effectId);
+        return nbt == null ? null : nbt.getTagList("ench", 10);
+    }
 
-		enchantId = CoFHCore.configCore.get("Enchantment", "Multishot", 101);
+    public static void addEnchantment(NBTTagCompound nbt, int id, int level) {
 
-		for (int i = enchantId; i < 256; i++) {
-			try {
-				multishot = new EnchantmentMultishot(i);
-				break;
-			} catch (IllegalArgumentException e) {
+        if (nbt == null) {
+            nbt = new NBTTagCompound();
+        }
+        NBTTagList list = getEnchantmentTagList(nbt);
 
-			}
-		}
-		CoFHCore.configCore.set("Enchantment", "Multishot", multishot.effectId);
-	}
+        if (list == null) {
+            list = new NBTTagList();
+        }
+        boolean found = false;
+        for (int i = 0; i < list.tagCount() && !found; i++) {
+            NBTTagCompound tag = list.getCompoundTagAt(i);
+            if (tag.getShort("id") == id) {
+                tag.setShort("id", (short) id);
+                tag.setShort("lvl", (short) level);
+                found = true;
+            }
+        }
+        if (!found) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setShort("id", (short) id);
+            tag.setShort("lvl", (short) level);
+            list.appendTag(tag);
+        }
+        nbt.setTag("ench", list);
+    }
 
-	public static NBTTagList getEnchantmentTagList(NBTTagCompound nbt) {
+    public static void addEnchantment(ItemStack stack, int id, int level) {
 
-		return nbt == null ? null : nbt.getTagList("ench", 10);
-	}
+        addEnchantment(stack.getTagCompound(), id, level);
+    }
 
-	public static void addEnchantment(NBTTagCompound nbt, int id, int level) {
-
-		if (nbt == null) {
-			nbt = new NBTTagCompound();
-		}
-		NBTTagList list = getEnchantmentTagList(nbt);
-
-		if (list == null) {
-			list = new NBTTagList();
-		}
-		boolean found = false;
-		for (int i = 0; i < list.tagCount() && !found; i++) {
-			NBTTagCompound tag = list.getCompoundTagAt(i);
-			if (tag.getShort("id") == id) {
-				tag.setShort("id", (short) id);
-				tag.setShort("lvl", (short) level);
-				found = true;
-			}
-		}
-		if (!found) {
-			NBTTagCompound tag = new NBTTagCompound();
-			tag.setShort("id", (short) id);
-			tag.setShort("lvl", (short) level);
-			list.appendTag(tag);
-		}
-		nbt.setTag("ench", list);
-	}
-
-	public static void addEnchantment(ItemStack stack, int id, int level) {
-
-		addEnchantment(stack.stackTagCompound, id, level);
-	}
-
-	public static Enchantment holding;
-	public static Enchantment multishot;
+    public static Enchantment holding;
+    public static Enchantment multishot;
 
 }

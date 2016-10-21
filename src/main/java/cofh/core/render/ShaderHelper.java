@@ -2,9 +2,9 @@ package cofh.core.render;
 
 import cofh.CoFHCore;
 import cofh.core.CoFHProps;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import gnu.trove.map.hash.TIntFloatHashMap;
 

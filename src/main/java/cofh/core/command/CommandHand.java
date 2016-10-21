@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.UUID;
 
 import net.minecraft.command.CommandBase;
@@ -23,17 +22,19 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.event.HoverEvent;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.event.HoverEvent;
+import net.minecraft.util.text.translation.I18n;
 
 public class CommandHand implements ISubCommand {
 
@@ -51,13 +52,13 @@ public class CommandHand implements ISubCommand {
 		return 0;
 	}
 
-	private static HashMap<String, InfoType> infoMap = new HashMap<>();
+	private static HashMap<String, InfoType> infoMap = new HashMap<String, InfoType>();
 	static {
 		InfoType.values();
 	}
 
 	@Override
-	public void handleCommand(ICommandSender sender, String[] args) {
+	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
 		int l = args.length;
 		int i = 0;
@@ -66,13 +67,13 @@ public class CommandHand implements ISubCommand {
 
 		switch (l) {
 		case 0:
-			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
+			sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
 			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
 		default:
 		case 2:
 		case 3:
 			try {
-				player = CommandBase.getPlayer(sender, args[++i]);
+				player = CommandBase.getPlayer(server, sender, args[++i]);
 			} catch (CommandException t) {
 				if (!infoMap.containsKey(args[i])) {
 					throw t;
@@ -80,22 +81,25 @@ public class CommandHand implements ISubCommand {
 				--i;
 			}
 			if (player != null && player != sender && !CommandHandler.canUseCommand(sender, 1, getCommandName()) &&
-					!RegistrySocial.playerHasAccess(sender.getCommandSenderName(), player.getGameProfile())) {
+					!RegistrySocial.playerHasAccess(sender.getName(), player.getGameProfile())) {
 				throw new CommandException("commands.generic.permission");
 			}
 		case 1:
 			if (player == null) {
 				player = CommandBase.getCommandSenderAsPlayer(sender);
 			}
-			itemstack = player.getCurrentEquippedItem();
+			itemstack = player.getHeldItem(EnumHand.MAIN_HAND);
+            if (itemstack == null){
+                player.getHeldItem(EnumHand.OFF_HAND);
+            }
 		}
 
 		if (itemstack == null) {
-			sender.addChatMessage(new ChatComponentTranslation("commands.enchant.noItem"));
+			sender.addChatMessage(new TextComponentTranslation("commands.enchant.noItem"));
 			return;
 		}
 
-		ArrayList<InfoType> list = new ArrayList<>();
+		ArrayList<InfoType> list = new ArrayList<InfoType>();
 
 		if (++i == l) {
 			list.add(InfoType.Name);
@@ -103,15 +107,15 @@ public class CommandHand implements ISubCommand {
 			for (; i < l; ++i) {
 				InfoType type = infoMap.get(args[i].toLowerCase());
 				if (type == null) {
-					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
+					sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
 					throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
 				}
 				list.add(type);
 			}
 
 		for (InfoType type : list) {
-			IChatComponent[] data = type.getData(itemstack);
-			IChatComponent msg = new ChatComponentText(type.name() + ": ");
+			ITextComponent[] data = type.getData(itemstack);
+            ITextComponent msg = new TextComponentString(type.name() + ": ");
 			if (data.length >= 1 && data[0] != null) {
 				msg.appendSibling(data[0]);
 			}
@@ -124,29 +128,29 @@ public class CommandHand implements ISubCommand {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
+	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
 		if (args.length == 2) {
-			return CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames());
+			return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
 		}
-		return CommandBase.getListOfStringsFromIterableMatchingLastWord(args, infoMap.keySet());
+		return CommandBase.getListOfStringsMatchingLastWord(args, infoMap.keySet());
 	}
 
 	private static enum InfoType {
 		Name("generic") {
 
 			@Override
-			public IChatComponent processStack(ItemStack stack) {
+			public ITextComponent processStack(ItemStack stack) {
 
-				IChatComponent component = new ChatComponentText("");
-				component.appendSibling(stack.func_151000_E());
+                ITextComponent component = new TextComponentString("");
+				component.appendSibling(stack.getTextComponent());
 				if (stack.hasDisplayName()) {
 					String s = stack.getItem().getUnlocalizedName(stack);
-					if (!StatCollector.canTranslate(s)) {
+					if (!I18n.canTranslate(s)) {
 						s += ".name";
 					}
-					IChatComponent component2 = new ChatComponentTranslation(s);
-					component2.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(s)));
+                    ITextComponent component2 = new TextComponentTranslation(s);
+					component2.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(s)));
 					component.appendText(" (").appendSibling(component2).appendText(")");
 				}
 				return component;
@@ -155,43 +159,43 @@ public class CommandHand implements ISubCommand {
 		Id {
 
 			@Override
-			public IChatComponent processStack(ItemStack stack) {
+			public ITextComponent processStack(ItemStack stack) {
 
-				return new ChatComponentText(Item.itemRegistry.getNameForObject(stack.getItem()));
+				return new TextComponentString(Item.REGISTRY.getNameForObject(stack.getItem()).toString());
 			}
 		},
 		Size("amount", "count") {
 
 			@Override
-			public IChatComponent processStack(ItemStack stack) {
+			public ITextComponent processStack(ItemStack stack) {
 
-				return new ChatComponentText(String.valueOf(stack.stackSize));
+				return new TextComponentString(String.valueOf(stack.stackSize));
 			}
 		},
 		Metadata("damage", "alt") {
 
 			@Override
-			public IChatComponent processStack(ItemStack stack) {
+			public ITextComponent processStack(ItemStack stack) {
 
-				return new ChatComponentText(String.valueOf(ItemHelper.getItemDamage(stack)));
+				return new TextComponentString(String.valueOf(ItemHelper.getItemDamage(stack)));
 			}
 		},
 		toString("string", "text") {
 
 			@Override
-			public IChatComponent processStack(ItemStack stack) {
+			public ITextComponent processStack(ItemStack stack) {
 
-				return new ChatComponentText(stack.toString());
+				return new TextComponentString(stack.toString());
 			}
 		},
 		Action("use") {
 
 			@Override
-			public IChatComponent processStack(ItemStack stack) {
+			public ITextComponent processStack(ItemStack stack) {
 
 				EnumAction action = stack.getItemUseAction();
-				IChatComponent component = new ChatComponentText(action.name());
-				if (action != EnumAction.none) {
+                ITextComponent component = new TextComponentString(action.name());
+				if (action != EnumAction.NONE) {
 					component.appendText(" | Duration: " + stack.getMaxItemUseDuration());
 				}
 				return component;
@@ -200,37 +204,37 @@ public class CommandHand implements ISubCommand {
 		Lore("flavorText") {
 
 			@Override
-			public IChatComponent[] getData(ItemStack stack) {
+			public ITextComponent[] getData(ItemStack stack) {
 
-				LinkedList<IChatComponent> ret = new LinkedList<>();
+				LinkedList<ITextComponent> ret = new LinkedList<ITextComponent>();
 				ret.add(null);
 
-				if (stack.hasTagCompound() && stack.stackTagCompound.hasKey("display", 10)) {
-					NBTTagCompound nbttagcompound = stack.stackTagCompound.getCompoundTag("display");
+				if (stack.hasTagCompound() && stack.getTagCompound().hasKey("display", 10)) {
+					NBTTagCompound nbttagcompound = stack.getTagCompound().getCompoundTag("display");
 
-					if (nbttagcompound.func_150299_b("Lore") == 9) {
+					if (nbttagcompound.getTagId("Lore") == 9) {
 						NBTTagList nbttaglist1 = nbttagcompound.getTagList("Lore", 8);
 
 						if (nbttaglist1.tagCount() > 0) {
 							for (int j = 0; j < nbttaglist1.tagCount(); ++j) {
-								ret.add(new ChatComponentText(StringHelper.PURPLE + "      " + StringHelper.ITALIC + nbttaglist1.getStringTagAt(j)));
+								ret.add(new TextComponentString(StringHelper.PURPLE + "      " + StringHelper.ITALIC + nbttaglist1.getStringTagAt(j)));
 							}
 						}
 					}
 				} else {
-					ret.set(0, new ChatComponentText("none"));
+					ret.set(0, new TextComponentString("none"));
 				}
-				return ret.toArray(new IChatComponent[ret.size()]);
+				return ret.toArray(new ITextComponent[ret.size()]);
 			}
 		},
 		Enchants("enchant", "ench") {
 
 			@Override
-			public IChatComponent[] getData(ItemStack stack) {
+			public ITextComponent[] getData(ItemStack stack) {
 
 				NBTTagList nbttaglist = stack.getEnchantmentTagList();
 
-				LinkedList<IChatComponent> ret = new LinkedList<>();
+				LinkedList<ITextComponent> ret = new LinkedList<ITextComponent>();
 				ret.add(null);
 				if (nbttaglist != null && nbttaglist.tagCount() > 0) {
 					int i = 0;
@@ -238,49 +242,49 @@ public class CommandHand implements ISubCommand {
 						short short1 = nbttaglist.getCompoundTagAt(i).getShort("id");
 						short short2 = nbttaglist.getCompoundTagAt(i).getShort("lvl");
 
-						if (Enchantment.enchantmentsList[short1] != null) {
-							ret.add(new ChatComponentText(StringHelper.TEAL + "     " +
-									StatCollector.translateToLocal(Enchantment.enchantmentsList[short1].getName()) +
+						if (Enchantment.getEnchantmentByID(short1) != null) {
+							ret.add(new TextComponentString(StringHelper.TEAL + "     " +
+									I18n.translateToLocal(Enchantment.getEnchantmentByID(short1).getName()) +
 									" " + StringHelper.toNumerals(short2)));
 						} else {
-							ret.add(new ChatComponentText(StringHelper.RED + "     " + String.format("Invalid{id=%s,lvl=%s}", short1, short2)));
+							ret.add(new TextComponentString(StringHelper.RED + "     " + String.format("Invalid{id=%s,lvl=%s}", short1, short2)));
 						}
 					}
 				} else {
-					ret.set(0, new ChatComponentText("none"));
+					ret.set(0, new TextComponentString("none"));
 				}
-				return ret.toArray(new IChatComponent[ret.size()]);
+				return ret.toArray(new ITextComponent[ret.size()]);
 			}
 		},
 		NBT("tag", "stackTag", "compoundTag") {
 
 			@Override
-			public IChatComponent processStack(ItemStack stack) {
+			public ITextComponent processStack(ItemStack stack) {
 
-				return new ChatComponentText(Objects.toString(stack.getTagCompound(), "null"));
+				return new TextComponentString((stack.getTagCompound() != null) ? stack.getTagCompound().toString() : null);
 			}
 		},
 		OreDict("oreNames", "oreName", "ores", "ore") {
 
 			@Override
-			public IChatComponent processStack(ItemStack stack) {
+			public ITextComponent processStack(ItemStack stack) {
 
 				ArrayList<String> ores = OreDictionaryArbiter.getAllOreNames(stack);
 				int size = ores == null ? 0 : ores.size();
-				String arr = Objects.toString(ores, "[null]");
-				return new ChatComponentText(size + "> " + arr.substring(1, arr.length() - 1));
+				String arr = StringHelper.toString(ores, "[null]");
+				return new TextComponentString(size + "> " + arr.substring(1, arr.length() - 1));
 			}
 		},
 		Modifiers {
 		    protected final UUID field_111210_e = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
 
 			@Override
-			public IChatComponent[] getData(ItemStack stack) {
+			public ITextComponent[] getData(ItemStack stack) {
 
-				LinkedList<IChatComponent> ret = new LinkedList<>();
+				LinkedList<ITextComponent> ret = new LinkedList<ITextComponent>();
 				ret.add(null);
 
-		        Multimap<String, AttributeModifier> multimap = stack.getAttributeModifiers();
+		        Multimap<String, AttributeModifier> multimap = stack.getAttributeModifiers(EntityEquipmentSlot.HEAD);//TODO
 		        if (!multimap.isEmpty()) {
 
 		            for (Entry<String, AttributeModifier> entry : multimap.entries()) {
@@ -288,7 +292,7 @@ public class CommandHand implements ISubCommand {
 		                double d0 = attributemodifier.getAmount();
 
 		                if (field_111210_e.equals(attributemodifier.getID())) {
-		                    d0 += EnchantmentHelper.func_152377_a(stack, EnumCreatureAttribute.UNDEFINED);
+		                    d0 += EnchantmentHelper.getModifierForCreature(stack, EnumCreatureAttribute.UNDEFINED);
 		                }
 
 		                double d1;
@@ -300,16 +304,16 @@ public class CommandHand implements ISubCommand {
 		                }
 
 		                if (d0 > 0.0D) {
-		                    ret.add(new ChatComponentText("     " + StringHelper.LIGHT_BLUE + StatCollector.translateToLocalFormatted("attribute.modifier.plus." + attributemodifier.getOperation(), ItemStack.field_111284_a.format(d1), StatCollector.translateToLocal("attribute.name." + entry.getKey()))));
+		                    ret.add(new TextComponentString("     " + StringHelper.LIGHT_BLUE + I18n.translateToLocalFormatted("attribute.modifier.plus." + attributemodifier.getOperation(), ItemStack.DECIMALFORMAT.format(d1), I18n.translateToLocal("attribute.name." + entry.getKey()))));
 		                } else if (d0 < 0.0D) {
 		                    d1 = -d1;
-		                    ret.add(new ChatComponentText("     " + StringHelper.LIGHT_RED + StatCollector.translateToLocalFormatted("attribute.modifier.take." + attributemodifier.getOperation(), ItemStack.field_111284_a.format(d1), StatCollector.translateToLocal("attribute.name." + entry.getKey()))));
+		                    ret.add(new TextComponentString("     " + StringHelper.LIGHT_RED + I18n.translateToLocalFormatted("attribute.modifier.take." + attributemodifier.getOperation(), ItemStack.DECIMALFORMAT.format(d1), I18n.translateToLocal("attribute.name." + entry.getKey()))));
 		                }
 		            }
 		        } else {
-		        	ret.set(0, new ChatComponentText("none"));
+		        	ret.set(0, new TextComponentString("none"));
 		        }
-				return ret.toArray(new IChatComponent[ret.size()]);
+				return ret.toArray(new ITextComponent[ret.size()]);
 			}
 		};
 
@@ -326,14 +330,14 @@ public class CommandHand implements ISubCommand {
 			}
 		}
 
-		public IChatComponent processStack(ItemStack stack) {
+		public ITextComponent processStack(ItemStack stack) {
 
 			return null;
 		}
 
-		public IChatComponent[] getData(ItemStack stack) {
+		public ITextComponent[] getData(ItemStack stack) {
 
-			return new IChatComponent[] { processStack(stack) };
+			return new ITextComponent[] { processStack(stack) };
 		}
 	}
 

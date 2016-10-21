@@ -1,9 +1,9 @@
 package cofh.core.particles;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.util.ResourceLocation;
 
 public abstract class ParticleIcon extends ParticleBase {
@@ -13,11 +13,11 @@ public abstract class ParticleIcon extends ParticleBase {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void render(Tessellator tessellator, double partialTicks) {
-		IIcon icon = getIcon();
-		renderParticle(tessellator, partialTicks, size, icon.getMinU(), icon.getMaxU(), icon.getMinV(), icon.getMaxV());
+	public void render(VertexBuffer buffer, double partialTicks) {
+        TextureAtlasSprite icon = getIcon();
+		renderParticle(buffer, partialTicks, size, icon.getMinU(), icon.getMaxU(), icon.getMinV(), icon.getMaxV());
 	}
 
 	@SideOnly(Side.CLIENT)
-	public abstract IIcon getIcon();
+	public abstract TextureAtlasSprite getIcon();
 }

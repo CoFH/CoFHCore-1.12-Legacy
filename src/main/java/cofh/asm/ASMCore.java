@@ -8,14 +8,14 @@ import cofh.asm.relauncher.Substitutable;
 import cofh.mod.updater.ModRange;
 import cofh.mod.updater.ModVersion;
 import com.google.common.base.Throwables;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModAPIManager;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.discovery.ASMDataTable;
-import cpw.mods.fml.common.discovery.ASMDataTable.ASMData;
-import cpw.mods.fml.common.versioning.InvalidVersionSpecificationException;
-import cpw.mods.fml.common.versioning.VersionRange;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModAPIManager;
+import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.discovery.ASMDataTable;
+import net.minecraftforge.fml.common.discovery.ASMDataTable.ASMData;
+import net.minecraftforge.fml.common.versioning.InvalidVersionSpecificationException;
+import net.minecraftforge.fml.common.versioning.VersionRange;
 
 import gnu.trove.map.hash.TObjectByteHashMap;
 import gnu.trove.set.hash.THashSet;
@@ -103,7 +103,7 @@ class ASMCore {
 		hashes.put("net.minecraft.item.Item", (byte) 18);
 		hashes.put("net.minecraft.client.gui.GuiKeyBindingList$KeyEntry", (byte) 19);
 		hashes.put("net.minecraft.client.settings.KeyBinding", (byte) 20);
-		hashes.put("cpw.mods.fml.common.registry.GameRegistry", (byte) 21);
+		hashes.put("net.minecraftforge.fml.common.registry.GameRegistry", (byte) 21);
 		if (Boolean.parseBoolean(System.getProperty("cofh.profiler.debug", "false"))) {
 			hashes.put("net.minecraft.profiler.Profiler", (byte) 22);
 		}

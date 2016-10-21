@@ -1,14 +1,17 @@
 package cofh.core.network;
 
 import cofh.core.CoFHProps;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.FMLEmbeddedChannel;
-import cpw.mods.fml.common.network.FMLOutboundHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
-import cpw.mods.fml.common.network.internal.FMLProxyPacket;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.IThreadListener;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
+import net.minecraftforge.fml.common.network.FMLOutboundHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -74,7 +77,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		byte discriminator = (byte) this.packets.indexOf(packetClass);
 		buffer.writeByte(discriminator);
 		msg.encodeInto(ctx, buffer);
-		FMLProxyPacket proxyPacket = new FMLProxyPacket(buffer.copy(), ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get());
+		FMLProxyPacket proxyPacket = new FMLProxyPacket(new PacketBuffer(buffer.copy()), ctx.channel().attr(NetworkRegistry.FML_CHANNEL).get());
 		out.add(proxyPacket);
 	}
 
@@ -95,18 +98,45 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		switch (FMLCommonHandler.instance().getEffectiveSide()) {
 		case CLIENT:
 			player = this.getClientPlayer();
-			pkt.handleClientSide(player);
+			handlePacketClient(pkt, player);
 			break;
 
 		case SERVER:
 			INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
 			player = ((NetHandlerPlayServer) netHandler).playerEntity;
-			pkt.handleServerSide(player);
+			handlePacketServer(pkt, player);
 			break;
 
 		default:
 		}
 	}
+
+	private void handlePacketClient(final PacketBase packet, final EntityPlayer player){
+        if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()){
+            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    handlePacketClient(packet, player);
+                }
+            });
+        } else {
+            packet.handleClientSide(player);
+        }
+    }
+
+    private void handlePacketServer(final PacketBase packet, final EntityPlayer player){
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        if (!server.isCallingFromMinecraftThread()){
+            server.addScheduledTask(new Runnable() {
+                @Override
+                public void run() {
+                    handlePacketServer(packet, player);
+                }
+            });
+        } else {
+            packet.handleClientSide(player);
+        }
+    }
 
 	// Method to call from FMLInitializationEvent
 	public void initialize() {
@@ -176,7 +206,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		instance.channels
 				.get(Side.SERVER)
 				.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
-				.set(new TargetPoint(theTile.getWorldObj().provider.dimensionId, theTile.xCoord, theTile.yCoord, theTile.zCoord, CoFHProps.NETWORK_UPDATE_RANGE));
+				.set(new TargetPoint(theTile.getWorld().provider.getDimension(), theTile.getPos().getX(), theTile.getPos().getY(), theTile.getPos().getZ(), CoFHProps.NETWORK_UPDATE_RANGE));
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
@@ -184,7 +214,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 
 		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
 		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS)
-				.set(new TargetPoint(world.provider.dimensionId, x, y, z, CoFHProps.NETWORK_UPDATE_RANGE));
+				.set(new TargetPoint(world.provider.getDimension(), x, y, z, CoFHProps.NETWORK_UPDATE_RANGE));
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 

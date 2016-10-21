@@ -11,12 +11,12 @@ public class ItemAxeAdv extends ItemToolAdv {
 		super(3.0F, toolMaterial);
 		addToolClass("axe");
 
-		effectiveBlocks.addAll(ItemAxe.field_150917_c);
-		effectiveMaterials.add(Material.wood);
-		effectiveMaterials.add(Material.plants);
-		effectiveMaterials.add(Material.vine);
-		effectiveMaterials.add(Material.cactus);
-		effectiveMaterials.add(Material.gourd);
+		effectiveBlocks.addAll(ItemAxe.EFFECTIVE_ON);
+		effectiveMaterials.add(Material.WOOD);
+		effectiveMaterials.add(Material.PLANTS);
+		effectiveMaterials.add(Material.VINE);
+		effectiveMaterials.add(Material.CACTUS);
+		effectiveMaterials.add(Material.GOURD);
 	}
 
 }

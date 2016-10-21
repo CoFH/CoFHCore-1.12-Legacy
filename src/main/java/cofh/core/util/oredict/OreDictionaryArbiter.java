@@ -10,6 +10,7 @@ import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -51,7 +52,7 @@ public class OreDictionaryArbiter {
 		oreNames = OreDictionary.getOreNames();
 
 		for (int i = 0; i < oreNames.length; i++) {
-			ArrayList<ItemStack> ores = OreDictionary.getOres(oreNames[i]);
+			List<ItemStack> ores = OreDictionary.getOres(oreNames[i]);
 
 			for (int j = 0; j < ores.size(); j++) {
 				registerOreDictionaryEntry(ores.get(j), oreNames[i]);

@@ -5,8 +5,8 @@ import cofh.core.render.customcharrendering.ICustomCharRenderer;
 import cofh.core.render.customcharrendering.RenderPlayerFace;
 import cofh.core.render.customcharrendering.RenderSprite;
 import cofh.lib.util.helpers.SecurityHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import gnu.trove.map.hash.TCharObjectHashMap;
 
@@ -244,13 +244,13 @@ public class CoFHFontRenderer extends FontRenderer {
 
 	public void initSpecialCharacters() {
 
-		RenderSprite.addRenderer('\u2661', Gui.icons, 52, 0, 9, 9, this); // heart
-		RenderSprite.addRenderer('\u2665', Gui.icons, 124, 0, 9, 9, this); // wither heart
-		RenderSprite.addRenderer('\u2314', Gui.icons, 34, 9, 9, 9, this); // shield
-		RenderSprite.addRenderer('\u25CB', Gui.icons, 16, 18, 9, 9, this); // bubble
-		RenderSprite.addRenderer('\u25CC', Gui.icons, 25, 18, 9, 9, this); // bubble broken
-		RenderSprite.addRenderer('\u29F0', Gui.icons, 52, 27, 9, 9, this); // hunger
-		RenderSprite.addRenderer('\u2763', Gui.icons, 52, 45, 9, 9, this); // hardcore heart
+		RenderSprite.addRenderer('\u2661', Gui.ICONS, 52, 0, 9, 9, this); // heart
+		RenderSprite.addRenderer('\u2665', Gui.ICONS, 124, 0, 9, 9, this); // wither heart
+		RenderSprite.addRenderer('\u2314', Gui.ICONS, 34, 9, 9, 9, this); // shield
+		RenderSprite.addRenderer('\u25CB', Gui.ICONS, 16, 18, 9, 9, this); // bubble
+		RenderSprite.addRenderer('\u25CC', Gui.ICONS, 25, 18, 9, 9, this); // bubble broken
+		RenderSprite.addRenderer('\u29F0', Gui.ICONS, 52, 27, 9, 9, this); // hunger
+		RenderSprite.addRenderer('\u2763', Gui.ICONS, 52, 45, 9, 9, this); // hardcore heart
 
 		ResourceLocation beacon = new ResourceLocation("textures/gui/container/beacon.png");
 		RenderSprite.addRenderer('\u2715', beacon, 113, 222, 15, 15, this); // cross mark

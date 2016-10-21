@@ -1,263 +1,265 @@
 package cofh.core.render.hitbox;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MovingObjectPosition;
-
-import org.lwjgl.opengl.GL11;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
 
 public class RenderHitbox {
 
-	public static double extraSpace = 0.002;
+    public static double extraSpace = 0.002;
 
-	/**
-	 * Draws the selection box for the player. Args: entityPlayer, rayTraceHit, i, itemStack, partialTickTime
-	 *
-	 * @param customHitBox
-	 */
-	public static void drawSelectionBox(EntityPlayer thePlayer, MovingObjectPosition mop, float pTickTime, CustomHitBox customHitBox) {
+    /**
+     * Draws the selection box for the player. Args: entityPlayer, rayTraceHit, i, itemStack, partialTickTime
+     *
+     * @param customHitBox
+     */
+    public static void drawSelectionBox(EntityPlayer thePlayer, RayTraceResult rayTraceResult, float pTickTime, CustomHitBox customHitBox) {
 
-		if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
-			GL11.glEnable(GL11.GL_BLEND);
-			OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-			GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.4F);
-			GL11.glLineWidth(2.0F);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL11.glDepthMask(false);
-			Block block = thePlayer.worldObj.getBlock(mop.blockX, mop.blockY, mop.blockZ);
+        if (rayTraceResult.typeOfHit == Type.BLOCK) {
+            GlStateManager.enableBlend();
+            GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+            GlStateManager.color(0.0F, 0.0F, 0.0F, 0.4F);
+            GlStateManager.glLineWidth(2.0F);
+            GlStateManager.disableTexture2D();
+            GlStateManager.depthMask(false);
+            IBlockState state = thePlayer.worldObj.getBlockState(rayTraceResult.getBlockPos());
 
-			if (block.getMaterial() != Material.air) {
-				block.setBlockBoundsBasedOnState(thePlayer.worldObj, mop.blockX, mop.blockY, mop.blockZ);
-				double d0 = thePlayer.lastTickPosX + (thePlayer.posX - thePlayer.lastTickPosX) * pTickTime;
-				double d1 = thePlayer.lastTickPosY + (thePlayer.posY - thePlayer.lastTickPosY) * pTickTime;
-				double d2 = thePlayer.lastTickPosZ + (thePlayer.posZ - thePlayer.lastTickPosZ) * pTickTime;
-				drawOutlinedBoundingBox(customHitBox.addExtraSpace(extraSpace).offsetForDraw(-d0, -d1, -d2));
-			}
+            if (state.getMaterial() != Material.AIR) {
+                //block.setBlockBoundsBasedOnState(thePlayer.worldObj, rayTraceResult.blockX, rayTraceResult.blockY, rayTraceResult.blockZ);
+                double d0 = thePlayer.lastTickPosX + (thePlayer.posX - thePlayer.lastTickPosX) * pTickTime;
+                double d1 = thePlayer.lastTickPosY + (thePlayer.posY - thePlayer.lastTickPosY) * pTickTime;
+                double d2 = thePlayer.lastTickPosZ + (thePlayer.posZ - thePlayer.lastTickPosZ) * pTickTime;
+                drawOutlinedBoundingBox(customHitBox.addExtraSpace(extraSpace).offsetForDraw(-d0, -d1, -d2));
+            }
 
-			GL11.glDepthMask(true);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glDisable(GL11.GL_BLEND);
-		}
-	}
+            GlStateManager.depthMask(true);
+            GlStateManager.enableTexture2D();
+            GlStateManager.disableBlend();
+        }
+    }
 
-	/**
-	 * Draws lines for the edges of the bounding box.
-	 */
-	public static void drawOutlinedBoundingBox(CustomHitBox hitbox) {
+    /**
+     * Draws lines for the edges of the bounding box.
+     */
+    public static void drawOutlinedBoundingBox(CustomHitBox hitbox) {
 
-		Tessellator tessellator = Tessellator.instance;
-		tessellator.startDrawing(1);
+        Tessellator tessellator = Tessellator.getInstance();
+        VertexBuffer buffer = tessellator.getBuffer();
+        buffer.begin(1, DefaultVertexFormats.POSITION);
 
-		// Top and Bottom faces
-		addMainVertex(hitbox, 1, hitbox.middleHeight, tessellator);
-		addMainVertex(hitbox, 0, 0, tessellator);
+        // Top and Bottom faces
+        addMainVertex(hitbox, 1, hitbox.middleHeight, buffer);
+        addMainVertex(hitbox, 0, 0, buffer);
 
-		// Top and Bottom extensions
-		addTopBottomVertex(hitbox, 1, hitbox.sideLength[1], hitbox.middleHeight + hitbox.sideLength[1], tessellator);
-		addTopBottomVertex(hitbox, 0, -hitbox.sideLength[0], -hitbox.sideLength[0], tessellator);
+        // Top and Bottom extensions
+        addTopBottomVertex(hitbox, 1, hitbox.sideLength[1], hitbox.middleHeight + hitbox.sideLength[1], buffer);
+        addTopBottomVertex(hitbox, 0, -hitbox.sideLength[0], -hitbox.sideLength[0], buffer);
 
-		// Vertical Lines
-		addVerticalVertexs(hitbox, tessellator);
+        // Vertical Lines
+        addVerticalVertexs(hitbox, buffer);
 
-		tessellator.draw();
-	}
+        tessellator.draw();
+    }
 
-	public static void addVerticalVertexs(CustomHitBox hitbox, Tessellator tessellator) {
+    public static void addVerticalVertexs(CustomHitBox hitbox, VertexBuffer buffer) {
 
-		if (hitbox.drawSide[2]) {
-			tessellator.addVertex(hitbox.minX, hitbox.minY, hitbox.minZ - hitbox.sideLength[2]);
-			tessellator.addVertex(hitbox.minX, hitbox.minY + hitbox.middleHeight, hitbox.minZ - hitbox.sideLength[2]);
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY, hitbox.minZ - hitbox.sideLength[2]);
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + hitbox.middleHeight, hitbox.minZ - hitbox.sideLength[2]);
-		}
+        if (hitbox.drawSide[2]) {
+            buffer.pos(hitbox.minX, hitbox.minY, hitbox.minZ - hitbox.sideLength[2]).endVertex();
+            buffer.pos(hitbox.minX, hitbox.minY + hitbox.middleHeight, hitbox.minZ - hitbox.sideLength[2]).endVertex();
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY, hitbox.minZ - hitbox.sideLength[2]).endVertex();
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + hitbox.middleHeight, hitbox.minZ - hitbox.sideLength[2]).endVertex();
+        }
 
-		if (hitbox.drawSide[3]) {
-			tessellator.addVertex(hitbox.minX, hitbox.minY, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth);
-			tessellator.addVertex(hitbox.minX, hitbox.minY + hitbox.middleHeight, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth);
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth);
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + hitbox.middleHeight, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth);
-		}
+        if (hitbox.drawSide[3]) {
+            buffer.pos(hitbox.minX, hitbox.minY, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth).endVertex();
+            buffer.pos(hitbox.minX, hitbox.minY + hitbox.middleHeight, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth).endVertex();
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth).endVertex();
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + hitbox.middleHeight, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth).endVertex();
+        }
 
-		if (hitbox.drawSide[4]) {
-			tessellator.addVertex(hitbox.minX - hitbox.sideLength[4], hitbox.minY, hitbox.minZ);
-			tessellator.addVertex(hitbox.minX - hitbox.sideLength[4], hitbox.minY + hitbox.middleHeight, hitbox.minZ);
-			tessellator.addVertex(hitbox.minX - hitbox.sideLength[4], hitbox.minY, hitbox.minZ + hitbox.middleWidth);
-			tessellator.addVertex(hitbox.minX - hitbox.sideLength[4], hitbox.minY + hitbox.middleHeight, hitbox.minZ + hitbox.middleWidth);
-		}
-		if (hitbox.drawSide[5]) {
-			tessellator.addVertex(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY, hitbox.minZ);
-			tessellator.addVertex(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY + hitbox.middleHeight, hitbox.minZ);
-			tessellator.addVertex(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY, hitbox.minZ + hitbox.middleWidth);
-			tessellator.addVertex(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY + hitbox.middleHeight, hitbox.minZ + hitbox.middleWidth);
-		}
+        if (hitbox.drawSide[4]) {
+            buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY, hitbox.minZ).endVertex();
+            buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY + hitbox.middleHeight, hitbox.minZ).endVertex();
+            buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY, hitbox.minZ + hitbox.middleWidth).endVertex();
+            buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY + hitbox.middleHeight, hitbox.minZ + hitbox.middleWidth).endVertex();
+        }
+        if (hitbox.drawSide[5]) {
+            buffer.pos(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY, hitbox.minZ).endVertex();
+            buffer.pos(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY + hitbox.middleHeight, hitbox.minZ).endVertex();
+            buffer.pos(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY, hitbox.minZ + hitbox.middleWidth).endVertex();
+            buffer.pos(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY + hitbox.middleHeight, hitbox.minZ + hitbox.middleWidth).endVertex();
+        }
 
-		if (!hitbox.drawSide[2] && !hitbox.drawSide[5]) {
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY, hitbox.minZ);
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + hitbox.middleHeight, hitbox.minZ);
-		}
+        if (!hitbox.drawSide[2] && !hitbox.drawSide[5]) {
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY, hitbox.minZ).endVertex();
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + hitbox.middleHeight, hitbox.minZ).endVertex();
+        }
 
-		if (!hitbox.drawSide[3] && !hitbox.drawSide[5]) {
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY, hitbox.minZ + hitbox.middleWidth);
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + hitbox.middleHeight, hitbox.minZ + hitbox.middleWidth);
-		}
+        if (!hitbox.drawSide[3] && !hitbox.drawSide[5]) {
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY, hitbox.minZ + hitbox.middleWidth).endVertex();
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + hitbox.middleHeight, hitbox.minZ + hitbox.middleWidth).endVertex();
+        }
 
-		if (!hitbox.drawSide[2] && !hitbox.drawSide[4]) {
-			tessellator.addVertex(hitbox.minX, hitbox.minY, hitbox.minZ);
-			tessellator.addVertex(hitbox.minX, hitbox.minY + hitbox.middleHeight, hitbox.minZ);
-		}
+        if (!hitbox.drawSide[2] && !hitbox.drawSide[4]) {
+            buffer.pos(hitbox.minX, hitbox.minY, hitbox.minZ).endVertex();
+            buffer.pos(hitbox.minX, hitbox.minY + hitbox.middleHeight, hitbox.minZ).endVertex();
+        }
 
-		if (!hitbox.drawSide[3] && !hitbox.drawSide[4]) {
-			tessellator.addVertex(hitbox.minX, hitbox.minY, hitbox.minZ + hitbox.middleWidth);
-			tessellator.addVertex(hitbox.minX, hitbox.minY + hitbox.middleHeight, hitbox.minZ + hitbox.middleWidth);
-		}
+        if (!hitbox.drawSide[3] && !hitbox.drawSide[4]) {
+            buffer.pos(hitbox.minX, hitbox.minY, hitbox.minZ + hitbox.middleWidth).endVertex();
+            buffer.pos(hitbox.minX, hitbox.minY + hitbox.middleHeight, hitbox.minZ + hitbox.middleWidth).endVertex();
+        }
 
-	}
+    }
 
-	public static void addTopBottomVertex(CustomHitBox hitbox, int side, double sideLength, double heightToAdd, Tessellator tessellator) {
+    public static void addTopBottomVertex(CustomHitBox hitbox, int side, double sideLength, double heightToAdd, VertexBuffer buffer) {
 
-		if (hitbox.drawSide[side]) {
-			// Draw Square - I assume this is faster then drawing/changing modes/drawing/changing modes to go from line -> square -> line mode
-			tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ);
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ);
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-			tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
-			tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-			tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
+        if (hitbox.drawSide[side]) {
+            // Draw Square - I assume this is faster then drawing/changing modes/drawing/changing modes to go from line -> square -> line mode
+            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
 
-			// Draw vertical lines
-			tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
-			tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd - sideLength, hitbox.minZ);
+            // Draw vertical lines
+            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
+            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd - sideLength, hitbox.minZ);
 
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ);
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd - sideLength, hitbox.minZ);
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd - sideLength, hitbox.minZ).endVertex();
 
-			tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-			tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd - sideLength, hitbox.minZ + hitbox.middleWidth);
+            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd - sideLength, hitbox.minZ + hitbox.middleWidth).endVertex();
 
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-			tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd - sideLength, hitbox.minZ + hitbox.middleWidth);
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+            buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd - sideLength, hitbox.minZ + hitbox.middleWidth).endVertex();
 
-		}
-	}
+        }
+    }
 
-	public static void addMainVertex(CustomHitBox hitbox, int side, double heightToAdd, Tessellator tessellator) {
+    public static void addMainVertex(CustomHitBox hitbox, int side, double heightToAdd, VertexBuffer buffer) {
 
-		if (!hitbox.drawSide[side]) {
-			if (!hitbox.drawSide[4]) {
-				// Draw Main Line
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-			} else {
-				// Draw Main Line
-				tessellator.addVertex(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ);
-				tessellator.addVertex(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-				// Draw North Side Line
-				tessellator.addVertex(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ);
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
-				// Draw South Side Line
-				tessellator.addVertex(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-			}
-			if (!hitbox.drawSide[5]) {
-				// Draw Main Line
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-			} else {
-				// Draw Main Line
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth + hitbox.sideLength[5], hitbox.minY + heightToAdd, hitbox.minZ);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth + hitbox.sideLength[5], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-				// Draw North Side Line
-				tessellator.addVertex(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ);
-				// Draw South Side Line
-				tessellator.addVertex(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + +hitbox.middleWidth);
-			}
+        if (!hitbox.drawSide[side]) {
+            if (!hitbox.drawSide[4]) {
+                // Draw Main Line
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+            } else {
+                // Draw Main Line
+                buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+                // Draw North Side Line
+                buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                // Draw South Side Line
+                buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+            }
+            if (!hitbox.drawSide[5]) {
+                // Draw Main Line
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+            } else {
+                // Draw Main Line
+                buffer.pos(hitbox.minX + hitbox.middleDepth + hitbox.sideLength[5], hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth + hitbox.sideLength[5], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+                // Draw North Side Line
+                buffer.pos(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                // Draw South Side Line
+                buffer.pos(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + +hitbox.middleWidth).endVertex();
+            }
 
-			if (!hitbox.drawSide[2]) {
-				// Draw Main Line
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ);
-			} else {
-				// Draw Main Line
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]);
-				// Draw North Side Line
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]);
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
-				// Draw South Side Line
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ);
+            if (!hitbox.drawSide[2]) {
+                // Draw Main Line
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+            } else {
+                // Draw Main Line
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]).endVertex();
+                // Draw North Side Line
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]).endVertex();
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                // Draw South Side Line
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
 
-			}
-			if (!hitbox.drawSide[3]) {
-				// Draw Main Line
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-			} else {
-				// Draw Main Line
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth);
-				// Draw North Side Line
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth);
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-				// Draw South Side Line
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-			}
-		} else {
-			if (hitbox.drawSide[4]) {
-				// Draw Main Line
-				tessellator.addVertex(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ);
-				tessellator.addVertex(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-				// Draw North Side Line
-				tessellator.addVertex(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ);
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
-				// Draw South Side Line
-				tessellator.addVertex(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-			}
-			if (hitbox.drawSide[5]) {
-				// Draw Main Line
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth + hitbox.sideLength[5], hitbox.minY + heightToAdd, hitbox.minZ);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth + hitbox.sideLength[5], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-				// Draw North Side Line
-				tessellator.addVertex(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ);
-				// Draw South Side Line
-				tessellator.addVertex(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + +hitbox.middleWidth);
-			}
+            }
+            if (!hitbox.drawSide[3]) {
+                // Draw Main Line
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+            } else {
+                // Draw Main Line
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth).endVertex();
+                // Draw North Side Line
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth).endVertex();
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+                // Draw South Side Line
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+            }
+        } else {
+            if (hitbox.drawSide[4]) {
+                // Draw Main Line
+                buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+                // Draw North Side Line
+                buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
+                // Draw South Side Line
+                buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+            }
+            if (hitbox.drawSide[5]) {
+                // Draw Main Line
+                buffer.pos(hitbox.minX + hitbox.middleDepth + hitbox.sideLength[5], hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth + hitbox.sideLength[5], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+                // Draw North Side Line
+                buffer.pos(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+                // Draw South Side Line
+                buffer.pos(hitbox.minX + hitbox.sideLength[5] + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + +hitbox.middleWidth).endVertex();
+            }
 
-			if (hitbox.drawSide[2]) {
-				// Draw Main Line
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]);
-				// Draw North Side Line
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]);
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
-				// Draw South Side Line
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ);
+            if (hitbox.drawSide[2]) {
+                // Draw Main Line
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]).endVertex();
+                // Draw North Side Line
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]).endVertex();
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
+                // Draw South Side Line
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
 
-			}
-			if (hitbox.drawSide[3]) {
-				// Draw Main Line
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth);
-				// Draw North Side Line
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth);
-				tessellator.addVertex(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-				// Draw South Side Line
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth);
-				tessellator.addVertex(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth);
-			}
-		}
-	}
+            }
+            if (hitbox.drawSide[3]) {
+                // Draw Main Line
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth).endVertex();
+                // Draw North Side Line
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth).endVertex();
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+                // Draw South Side Line
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.sideLength[3] + hitbox.middleWidth).endVertex();
+                buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
+            }
+        }
+    }
 
 }

@@ -33,7 +33,7 @@ public class UnderfluidParser extends UniformParser {
 	@Override
 	protected List<WeightedRandomBlock> generateDefaultMaterial() {
 
-		return Arrays.asList(new WeightedRandomBlock(Blocks.dirt, -1), new WeightedRandomBlock(Blocks.grass, -1));
+		return Arrays.asList(new WeightedRandomBlock(Blocks.DIRT, -1), new WeightedRandomBlock(Blocks.GRASS, -1));
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class UnderfluidParser extends UniformParser {
 				// NOPE. this NPEs.
 				Fluid fluid = FluidRegistry.getFluid(str.type);
 				if (fluid != null) {
-					ints.add(fluid.getID());
+					ints.add(FluidRegistry.getFluidID(fluid));
 				}
 			}
 			fluidList = ints.toArray();

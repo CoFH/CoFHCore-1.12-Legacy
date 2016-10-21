@@ -1,9 +1,9 @@
 package cofh.core.gui;
 
 import cofh.CoFHCore;
-import cpw.mods.fml.client.config.DummyConfigElement.DummyCategoryElement;
-import cpw.mods.fml.client.config.GuiConfig;
-import cpw.mods.fml.client.config.IConfigElement;
+import net.minecraftforge.fml.client.config.DummyConfigElement.DummyCategoryElement;
+import net.minecraftforge.fml.client.config.GuiConfig;
+import net.minecraftforge.fml.client.config.IConfigElement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class GuiConfigCore extends GuiConfig {
 		List<IConfigElement> list = new ArrayList<IConfigElement>();
 
 		for (int i = 0; i < CATEGORIES_CLIENT.length; i++) {
-			list.add(new ConfigElement<ConfigCategory>(CoFHCore.configClient.getCategory(CATEGORIES_CLIENT[i])));
+			list.add(new ConfigElement(CoFHCore.configClient.getCategory(CATEGORIES_CLIENT[i])));
 		}
 		return list;
 	}
@@ -50,7 +50,7 @@ public class GuiConfigCore extends GuiConfig {
 		List<IConfigElement> list = new ArrayList<IConfigElement>();
 
 		for (int i = 0; i < CATEGORIES_CORE.length; i++) {
-			list.add(new ConfigElement<ConfigCategory>(CoFHCore.configCore.getCategory(CATEGORIES_CORE[i])));
+			list.add(new ConfigElement(CoFHCore.configCore.getCategory(CATEGORIES_CORE[i])));
 		}
 		return list;
 	}
@@ -60,7 +60,7 @@ public class GuiConfigCore extends GuiConfig {
 		List<IConfigElement> list = new ArrayList<IConfigElement>();
 
 		for (int i = 0; i < CATEGORIES_LOOT.length; i++) {
-			list.add(new ConfigElement<ConfigCategory>(CoFHCore.configLoot.getCategory(CATEGORIES_LOOT[i])));
+			list.add(new ConfigElement(CoFHCore.configLoot.getCategory(CATEGORIES_LOOT[i])));
 		}
 		return list;
 	}

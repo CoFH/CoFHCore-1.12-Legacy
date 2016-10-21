@@ -3,7 +3,7 @@ package cofh.core.render.customcharrendering;
 import cofh.core.render.CoFHFontRenderer;
 import cofh.core.render.IconRegistry;
 
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -24,7 +24,7 @@ public class RenderIcon implements ICustomCharRenderer {
 	@Override
 	public float renderChar(char letter, boolean italicFlag, float x, float y, CoFHFontRenderer fontRenderer) {
 
-		IIcon icon = IconRegistry.getIcon(this.icon);
+		TextureAtlasSprite icon = IconRegistry.getIcon(this.icon);
 		if (icon == null) {
 			return 0;
 		}
@@ -59,7 +59,7 @@ public class RenderIcon implements ICustomCharRenderer {
 	@Override
 	public int getCharWidth(char letter, CoFHFontRenderer coFHFontRender) {
 
-		IIcon icon = IconRegistry.getIcon(this.icon);
+		TextureAtlasSprite icon = IconRegistry.getIcon(this.icon);
 		if (icon == null) {
 			return 0;
 		}

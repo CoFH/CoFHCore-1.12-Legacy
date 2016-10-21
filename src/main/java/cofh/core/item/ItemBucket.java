@@ -4,8 +4,8 @@ import cofh.core.util.fluid.BucketHandler;
 import cofh.lib.render.IFluidOverlayItem;
 import cofh.lib.util.RegistryUtils;
 import cofh.lib.util.helpers.StringHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;

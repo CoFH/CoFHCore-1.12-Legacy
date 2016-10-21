@@ -1,6 +1,6 @@
 package cofh.core.gui;
 
-import cpw.mods.fml.client.IModGuiFactory;
+import net.minecraftforge.fml.client.IModGuiFactory;
 
 import java.util.Set;
 

@@ -1,11 +1,11 @@
 package cofh.core.render;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 
-public class RenderItemModular implements IItemRenderer {
+public class RenderItemModular //implements IItemRenderer
+{
 
-	@Override
+	/*@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 
 		if (ItemRenderRegistry.validItem(item)) {
@@ -29,6 +29,6 @@ public class RenderItemModular implements IItemRenderer {
 		if (ItemRenderRegistry.validItem(item)) {
 			ItemRenderRegistry.getItemRenderer(item).renderItem(type, item, data);
 		}
-	}
+	}*/
 
 }

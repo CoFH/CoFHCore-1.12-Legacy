@@ -5,8 +5,8 @@ import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.StringHelper;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.Container;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 public abstract class GuiBaseAdv extends GuiBase {
@@ -59,24 +59,24 @@ public abstract class GuiBaseAdv extends GuiBase {
 
 	/* HELPERS */
 	@Override
-	public void drawButton(IIcon icon, int x, int y, int spriteSheet, int mode) {
+	public void drawButton(TextureAtlasSprite icon, int x, int y, int mode) {
 
 		switch (mode) {
 		case 0:
-			drawIcon(IconRegistry.getIcon("IconButton"), x, y, 1);
+			drawIcon(IconRegistry.getIcon("IconButton"), x, y);
 			break;
 		case 1:
-			drawIcon(IconRegistry.getIcon("IconButtonHighlight"), x, y, 1);
+			drawIcon(IconRegistry.getIcon("IconButtonHighlight"), x, y);
 			break;
 		default:
-			drawIcon(IconRegistry.getIcon("IconButtonInactive"), x, y, 1);
+			drawIcon(IconRegistry.getIcon("IconButtonInactive"), x, y);
 			break;
 		}
-		drawIcon(icon, x, y, spriteSheet);
+		drawIcon(icon, x, y);
 	}
 
 	@Override
-	public IIcon getIcon(String name) {
+	public TextureAtlasSprite getIcon(String name) {
 
 		return IconRegistry.getIcon(name);
 	}

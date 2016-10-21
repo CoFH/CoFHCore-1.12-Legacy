@@ -1,11 +1,13 @@
 package cofh.core.util;
 
+import codechicken.lib.util.ItemUtils;
 import cofh.CoFHCore;
 import cofh.api.item.IEmpowerableItem;
 import cofh.core.key.IKeyBinding;
 import cofh.lib.util.helpers.ItemHelper;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class KeyBindingEmpower implements IKeyBinding {
 
@@ -28,7 +30,8 @@ public class KeyBindingEmpower implements IKeyBinding {
 	public void keyPressServer(EntityPlayer player) {
 
 		if (ItemHelper.isPlayerHoldingEmpowerableItem(player) && ItemHelper.toggleHeldEmpowerableItemState(player)) {
-			((IEmpowerableItem) player.getCurrentEquippedItem().getItem()).onStateChange(player, player.getCurrentEquippedItem());
+            ItemStack heldStack = ItemUtils.getHeldStack(player);
+			((IEmpowerableItem) heldStack.getItem()).onStateChange(player, heldStack);
 		}
 	}
 

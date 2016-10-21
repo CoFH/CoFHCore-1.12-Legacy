@@ -11,13 +11,14 @@ import cofh.core.network.PacketSocial.PacketTypes;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.gui.element.ElementButton;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiPlayerInfo;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
@@ -83,7 +84,7 @@ public class GuiFriendsList extends GuiBaseAdv {
 		if (tbName != null) { // Stops GUI resize deleting text.
 			temp = tbName.getText();
 		}
-		tbName = new GuiTextField(this.fontRendererObj, tbNameX, tbNameY, 128, TB_HEIGHT);
+		tbName = new GuiTextField(0, this.fontRendererObj, tbNameX, tbNameY, 128, TB_HEIGHT);
 		tbName.setMaxStringLength(20);
 		tbName.setText(temp);
 		tbName.setEnableBackgroundDrawing(false);
@@ -185,7 +186,7 @@ public class GuiFriendsList extends GuiBaseAdv {
 	}
 
 	@Override
-	protected void mouseClicked(int mX, int mY, int mButton) {
+	protected void mouseClicked(int mX, int mY, int mButton) throws IOException {
 
 		int textAreaX = taFriendsList.xPos - guiLeft;
 		int textAreaY = taFriendsList.yPos - guiTop;
@@ -244,7 +245,7 @@ public class GuiFriendsList extends GuiBaseAdv {
 	}
 
 	@Override
-	public void handleMouseInput() {
+	public void handleMouseInput() throws IOException {
 
 		super.handleMouseInput();
 
@@ -301,8 +302,8 @@ public class GuiFriendsList extends GuiBaseAdv {
 	public List<String> getOnlineNames() {
 
 		List<String> online = new LinkedList<String>();
-		for (Object curObj : Minecraft.getMinecraft().thePlayer.sendQueue.playerInfoList) {
-			online.add(((GuiPlayerInfo) curObj).name);
+		for (NetworkPlayerInfo playerInfo : Minecraft.getMinecraft().thePlayer.connection.getPlayerInfoMap()) {
+			online.add(playerInfo.getGameProfile().getName());
 		}
 		return online;
 	}

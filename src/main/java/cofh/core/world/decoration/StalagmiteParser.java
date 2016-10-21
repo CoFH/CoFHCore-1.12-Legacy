@@ -31,12 +31,12 @@ public class StalagmiteParser implements IGeneratorParser {
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
 		if (!genObject.has("genBody")) {
 			log.info("Entry does not specify genBody for 'stalagmite' generator. Using air.");
-			list.add(new WeightedRandomBlock(Blocks.air));
+			list.add(new WeightedRandomBlock(Blocks.AIR));
 		} else {
 			if (!FeatureParser.parseResList(genObject.get("genBody"), list, false)) {
 				log.warn("Entry specifies invalid genBody for 'stalagmite' generator! Using air!");
 				list.clear();
-				list.add(new WeightedRandomBlock(Blocks.air));
+				list.add(new WeightedRandomBlock(Blocks.AIR));
 			}
 		}
 		WorldGenStalagmite r = stalactite ? new WorldGenStalactite(resList, matList, list) : new WorldGenStalagmite(resList, matList, list);

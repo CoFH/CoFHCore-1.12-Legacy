@@ -29,18 +29,18 @@ import cofh.core.world.WorldHandler;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.mod.BaseMod;
 import cofh.mod.updater.UpdateManager;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.CustomProperty;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLLoadCompleteEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerAboutToStartEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.CustomProperty;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -202,9 +202,9 @@ public class CoFHCore extends BaseMod {
 
 	public void registerOreDictionaryEntries() {
 
-		registerOreDictionaryEntry("blockCloth", new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE));
-		registerOreDictionaryEntry("coal", new ItemStack(Items.coal, 1, 0));
-		registerOreDictionaryEntry("charcoal", new ItemStack(Items.coal, 1, 1));
+		registerOreDictionaryEntry("blockCloth", new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
+		registerOreDictionaryEntry("coal", new ItemStack(Items.COAL, 1, 0));
+		registerOreDictionaryEntry("charcoal", new ItemStack(Items.COAL, 1, 1));
 	}
 
 	private boolean registerOreDictionaryEntry(String oreName, ItemStack ore) {

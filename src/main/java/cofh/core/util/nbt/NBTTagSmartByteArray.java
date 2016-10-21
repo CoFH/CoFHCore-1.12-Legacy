@@ -183,7 +183,7 @@ public final class NBTTagSmartByteArray extends NBTTagByteArray {
 				addShort(Item.getIdFromItem(theStack.getItem()));
 				addByte(theStack.stackSize);
 				addShort(ItemHelper.getItemDamage(theStack));
-				addNBT(theStack.stackTagCompound);
+				addNBT(theStack.getTagCompound());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -196,7 +196,9 @@ public final class NBTTagSmartByteArray extends NBTTagByteArray {
 		if (nbt == null) {
 			addShort(-1);
 		} else {
-			byte[] abyte = CompressedStreamTools.compress(nbt);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            CompressedStreamTools.writeCompressed(nbt, baos);
+			byte[] abyte = baos.toByteArray();
 			addShort((short) abyte.length);
 			addByteArray(abyte);
 		}
@@ -214,9 +216,9 @@ public final class NBTTagSmartByteArray extends NBTTagByteArray {
 
 	public NBTTagSmartByteArray addCoords(TileEntity theTile) {
 
-		addInt(theTile.xCoord);
-		addInt(theTile.yCoord);
-		return addInt(theTile.zCoord);
+		addInt(theTile.getPos().getX());
+		addInt(theTile.getPos().getY());
+		return addInt(theTile.getPos().getZ());
 	}
 
 	public NBTTagSmartByteArray addCoords(int x, int y, int z) {
@@ -241,7 +243,7 @@ public final class NBTTagSmartByteArray extends NBTTagByteArray {
 	@Override
 	public NBTBase copy() {
 
-		return new NBTTagByteArray(func_150292_c());
+		return new NBTTagByteArray(getByteArray());
 	}
 
 	@Override
@@ -261,7 +263,7 @@ public final class NBTTagSmartByteArray extends NBTTagByteArray {
 	}
 
 	@Override
-	public byte[] func_150292_c() {
+	public byte[] getByteArray() {
 
 		return arrayout.toByteArray();
 	}

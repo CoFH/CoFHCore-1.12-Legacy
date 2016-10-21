@@ -6,15 +6,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandNotFoundException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.NumberInvalidException;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.command.*;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
 
 public class CommandHelp implements ISubCommand {
 
@@ -34,7 +32,7 @@ public class CommandHelp implements ISubCommand {
 	}
 
 	@Override
-	public void handleCommand(ICommandSender sender, String[] args) {
+	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
 		List<String> commandList = new ArrayList<String>(CommandHandler.getCommandList());
 		Collections.sort(commandList, String.CASE_INSENSITIVE_ORDER);
@@ -50,33 +48,33 @@ public class CommandHelp implements ISubCommand {
 		int page;
 
 		try {
-			page = args.length == 1 ? 0 : CommandBase.parseIntBounded(sender, args[1], 1, maxPages + 1) - 1;
+			page = args.length == 1 ? 0 : CommandBase.parseInt(args[1], 1, maxPages + 1) - 1;
 		} catch (NumberInvalidException numberinvalidexception) {
 			String commandName = args[1];
 			if (!CommandHandler.getCommandExists(commandName)) {
 				throw new CommandNotFoundException("info.cofh.command.notFound");
 			}
-			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + commandName));
+			sender.addChatMessage(new TextComponentTranslation("info.cofh.command." + commandName));
 			return;
 		}
 
 		int maxIndex = Math.min((page + 1) * pageSize, commandList.size());
-		IChatComponent chatcomponenttranslation1 = new ChatComponentTranslation("commands.help.header", page + 1, maxPages + 1);
-		chatcomponenttranslation1.getChatStyle().setColor(EnumChatFormatting.DARK_GREEN);
+		ITextComponent chatcomponenttranslation1 = new TextComponentTranslation("commands.help.header", page + 1, maxPages + 1);
+		chatcomponenttranslation1.getStyle().setColor(TextFormatting.DARK_GREEN);
 		sender.addChatMessage(chatcomponenttranslation1);
 
 		for (int i = page * pageSize; i < maxIndex; ++i) {
-			IChatComponent chatcomponenttranslation = new ChatComponentText("/cofh " + StringHelper.YELLOW + commandList.get(i));
-			chatcomponenttranslation.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/cofh " + commandList.get(i)));
+            ITextComponent chatcomponenttranslation = new TextComponentString("/cofh " + StringHelper.YELLOW + commandList.get(i));
+			chatcomponenttranslation.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/cofh " + commandList.get(i)));
 			sender.addChatMessage(chatcomponenttranslation);
 		}
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
+	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
 		if (args.length == 2) {
-			return CommandBase.getListOfStringsFromIterableMatchingLastWord(args, CommandHandler.getCommandList());
+			return CommandBase.getListOfStringsMatchingLastWord(args, CommandHandler.getCommandList());
 		}
 		return null;
 

@@ -10,6 +10,7 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,7 +37,7 @@ public abstract class ItemToolAdv extends ItemTool {
 
 	public ItemToolAdv(float baseDamage, Item.ToolMaterial toolMaterial) {
 
-		super(baseDamage, toolMaterial, null);
+		super(baseDamage, 0, toolMaterial, null);
 	}
 
 	public ItemToolAdv(float baseDamage, Item.ToolMaterial toolMaterial, int harvestLevel) {
@@ -181,11 +182,10 @@ public abstract class ItemToolAdv extends ItemTool {
 		return super.getToolMaterialName().contains(":") ? super.getToolMaterialName().split(":", 2)[1] : super.getToolMaterialName();
 	}
 
-	@Override
-	public boolean canHarvestBlock(Block block, ItemStack stack) {
-
-		return func_150893_a(stack, block) > 1.0f;
-	}
+    @Override
+    public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
+        return getStrVsBlock(stack, state) > 1.0F;
+    }
 
 	@Override
 	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
@@ -213,9 +213,9 @@ public abstract class ItemToolAdv extends ItemTool {
 	}
 
 	@Override
-	public float func_150893_a(ItemStack stack, Block block) {
+	public float getStrVsBlock(ItemStack stack, IBlockState state) {
 
-		return (getEffectiveMaterials(stack).contains(block.getMaterial()) || getEffectiveBlocks(stack).contains(block)) ? getEfficiency(stack) : 1.0F;
+		return (getEffectiveMaterials(stack).contains(state.getMaterial()) || getEffectiveBlocks(stack).contains(state)) ? getEfficiency(stack) : 1.0F;
 	}
 
 	@Override

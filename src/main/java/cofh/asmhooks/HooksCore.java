@@ -1,36 +1,10 @@
 package cofh.asmhooks;
 
-import cofh.asmhooks.event.ModPopulateChunkEvent;
-import cofh.core.CoFHProps;
-import cofh.core.item.IEqualityOverrideItem;
-import cofh.lib.util.helpers.MathHelper;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockPane;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.ITickable;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
-
 public class HooksCore {
 
-	// { Forge hooks
+    // { Forge hooks
 
-	public static void preGenerateWorld(World world, int chunkX, int chunkZ) {
+	/*public static void preGenerateWorld(World world, int chunkX, int chunkZ) {
 
 		MinecraftForge.EVENT_BUS.post(new ModPopulateChunkEvent.Pre(world, chunkX, chunkZ));
 	}
@@ -132,6 +106,6 @@ public class HooksCore {
 		return block.func_149730_j() || block.getMaterial() == Material.glass || block instanceof BlockPane
 				|| world.isSideSolid(x, y, z, dir.getOpposite(), false);
 	}
-	// }
+	// }*/
 
 }

@@ -1,161 +1,157 @@
 package cofh.core.entity;
 
-import cofh.lib.util.helpers.ItemHelper;
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.FMLCommonHandler;
-
-import java.util.UUID;
-
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import java.util.UUID;
 
 public class CoFHFakePlayer extends FakePlayer {
 
-	private static GameProfile NAME = new GameProfile(UUID.fromString("5ae51d0b-e8bc-5a02-09f4-b5dbb05963da"), "[CoFH]");
+    private static GameProfile NAME = new GameProfile(UUID.fromString("5ae51d0b-e8bc-5a02-09f4-b5dbb05963da"), "[CoFH]");
 
-	public boolean isSneaking = false;
-	public ItemStack previousItem = null;
-	public String myName = "[CoFH]";
+    public boolean isSneaking = false;
+    public ItemStack previousItem = null;
+    public String myName = "[CoFH]";
 
-	public CoFHFakePlayer(WorldServer world) {
+    public CoFHFakePlayer(WorldServer world) {
 
-		super(world, NAME);
-		playerNetServerHandler = new NetServerHandlerFake(FMLCommonHandler.instance().getMinecraftServerInstance(), this);
-		this.addedToChunk = false;
-	}
+        super(world, NAME);
+        connection = new NetServerHandlerFake(FMLCommonHandler.instance().getMinecraftServerInstance(), this);
+        this.addedToChunk = false;
+    }
 
-	public static boolean isBlockBreakable(CoFHFakePlayer myFakePlayer, World worldObj, int x, int y, int z) {
+    public static boolean isBlockBreakable(CoFHFakePlayer myFakePlayer, World worldObj, BlockPos pos) {
+        IBlockState state = worldObj.getBlockState(pos);
 
-		Block block = worldObj.getBlock(x, y, z);
+        if (state.getBlock().isAir(state, worldObj, pos)) {
+            return false;
+        }
+        if (myFakePlayer == null) {
+            return state.getBlockHardness(worldObj, pos) > -1;
+        } else {
+            return state.getPlayerRelativeBlockHardness(myFakePlayer, worldObj, pos) > -1;
+        }
+    }
 
-		if (block.isAir(worldObj, x, y, z)) {
-			return false;
-		}
-		if (myFakePlayer == null) {
-			return block.getBlockHardness(worldObj, x, y, z) > -1;
-		} else {
-			return block.getPlayerRelativeBlockHardness(myFakePlayer, worldObj, x, y, z) > -1;
-		}
-	}
+    public void setItemInHand(ItemStack m_item) {
 
-	public void setItemInHand(ItemStack m_item) {
+        this.inventory.currentItem = 0;
+        this.inventory.setInventorySlotContents(0, m_item);
+    }
 
-		this.inventory.currentItem = 0;
-		this.inventory.setInventorySlotContents(0, m_item);
-	}
+    public void setItemInHand(int slot) {
 
-	public void setItemInHand(int slot) {
+        this.inventory.currentItem = slot;
+    }
 
-		this.inventory.currentItem = slot;
-	}
+    @Override
+    public double getDistanceSq(double x, double y, double z) {
 
-	@Override
-	public double getDistanceSq(double x, double y, double z) {
+        return 0F;
+    }
 
-		return 0F;
-	}
+    @Override
+    public double getDistance(double x, double y, double z) {
 
-	@Override
-	public double getDistance(double x, double y, double z) {
+        return 0F;
+    }
 
-		return 0F;
-	}
+    @Override
+    public boolean isSneaking() {
 
-	@Override
-	public boolean isSneaking() {
+        return isSneaking;
+    }
 
-		return isSneaking;
-	}
+    @Override
+    public void onUpdate() {
 
-	@Override
-	public void onUpdate() {
+        ItemStack itemstack = previousItem;
+        ItemStack itemstack1 = getHeldItem(EnumHand.MAIN_HAND);
 
-		ItemStack itemstack = previousItem;
-		ItemStack itemstack1 = getHeldItem();
+        if (!ItemStack.areItemStacksEqual(itemstack1, itemstack)) {
+            if (itemstack != null) {
+                getAttributeMap().removeAttributeModifiers(itemstack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND));
+            }
+            if (itemstack1 != null) {
+                getAttributeMap().applyAttributeModifiers(itemstack1.getAttributeModifiers(EntityEquipmentSlot.MAINHAND));
+            }
+            myName = "[CoFH]" + (itemstack1 != null ? " using " + itemstack1.getDisplayName() : "");
+        }
+        previousItem = itemstack1 == null ? null : itemstack1.copy();
+        interactionManager.updateBlockRemoving();
 
-		if (!ItemStack.areItemStacksEqual(itemstack1, itemstack)) {
-			if (itemstack != null) {
-				getAttributeMap().removeAttributeModifiers(itemstack.getAttributeModifiers());
-			}
-			if (itemstack1 != null) {
-				getAttributeMap().applyAttributeModifiers(itemstack1.getAttributeModifiers());
-			}
-			myName = "[CoFH]" + (itemstack1 != null ? " using " + itemstack1.getDisplayName() : "");
-		}
-		previousItem = itemstack1 == null ? null : itemstack1.copy();
-		theItemInWorldManager.updateBlockRemoving();
+        //This was commented out beforehand fyi.
+        //if (itemInUse != null) {
+        // tickItemInUse(itemstack);
+        //}
+    }
 
-		if (itemInUse != null) {
-			// tickItemInUse(itemstack);
-		}
-	}
+    //public void tickItemInUse(ItemStack updateItem) {
+    //
+    //	if (updateItem != null && ItemHelper.itemsEqualWithMetadata(previousItem, itemInUse)) {
+    //
+    //		itemInUseCount = ForgeEventFactory.onItemUseTick(this, itemInUse, itemInUseCount);
+    //		if (itemInUseCount <= 0) {
+    //			onItemUseFinish();
+    //		} else {
+    //			itemInUse.getItem().onUsingTick(itemInUse, this, itemInUseCount);
+    //			if (itemInUseCount <= 25 && itemInUseCount % 4 == 0) {
+    //				updateItemUse(updateItem, 5);
+    //			}
+    //			if (--itemInUseCount == 0 && !worldObj.isRemote) {
+    //				onItemUseFinish();
+    //			}
+    //		}
+    //	} else {
+    //		clearItemInUse();
+    //	}
+    //}
 
-	public void tickItemInUse(ItemStack updateItem) {
+    @Override
+    protected void updateItemUse(ItemStack par1ItemStack, int par2) {
 
-		if (updateItem != null && ItemHelper.itemsEqualWithMetadata(previousItem, itemInUse)) {
+        if (par1ItemStack.getItemUseAction() == EnumAction.DRINK) {
+            this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+        }
 
-			itemInUseCount = ForgeEventFactory.onItemUseTick(this, itemInUse, itemInUseCount);
-			if (itemInUseCount <= 0) {
-				onItemUseFinish();
-			} else {
-				itemInUse.getItem().onUsingTick(itemInUse, this, itemInUseCount);
-				if (itemInUseCount <= 25 && itemInUseCount % 4 == 0) {
-					updateItemUse(updateItem, 5);
-				}
-				if (--itemInUseCount == 0 && !worldObj.isRemote) {
-					onItemUseFinish();
-				}
-			}
-		} else {
-			clearItemInUse();
-		}
-	}
+        if (par1ItemStack.getItemUseAction() == EnumAction.EAT) {
+            this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 0.5F + 0.5F * this.rand.nextInt(2), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+        }
+    }
 
-	@Override
-	protected void updateItemUse(ItemStack par1ItemStack, int par2) {
+    @Override
+    public ITextComponent getDisplayName() {
 
-		if (par1ItemStack.getItemUseAction() == EnumAction.drink) {
-			this.playSound("random.drink", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
-		}
+        return new TextComponentString(getName());
+    }
 
-		if (par1ItemStack.getItemUseAction() == EnumAction.eat) {
-			this.playSound("random.eat", 0.5F + 0.5F * this.rand.nextInt(2), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
-		}
-	}
+    @Override
+    public float getEyeHeight() {
 
-	@Override
-	public String getDisplayName() {
+        return 1.1F;
+    }
 
-		return getCommandSenderName();
-	}
 
-	@Override
-	public float getEyeHeight() {
+    //@Override TODO
+    public ItemStack getCurrentArmor(int par1) {
+        return new ItemStack(Items.DIAMOND_CHESTPLATE);
+    }
 
-		return 1.1F;
-	}
-
-	@Override
-	public ItemStack getCurrentArmor(int par1) {
-
-		return new ItemStack(Items.diamond_chestplate);
-	}
-
-	@Override
-	public void addChatMessage(IChatComponent chatmessagecomponent) {
-
-	}
-
-	@Override
-	public void addChatComponentMessage(IChatComponent chatmessagecomponent) {
-
-	}
+    @Override
+    public void addChatMessage(ITextComponent component) {
+    }
 
 }

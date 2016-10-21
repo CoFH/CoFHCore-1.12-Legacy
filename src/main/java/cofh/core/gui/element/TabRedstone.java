@@ -140,23 +140,23 @@ public class TabRedstone extends TabBase {
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", posXOffset() + 6, posY + 66, subheaderColor);
 
 		if (myContainer.getControl().isDisabled()) {
-			gui.drawButton("IconGunpowder", posX() + 28, posY + 20, 1, 1);
-			gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 0);
-			gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 0);
+			gui.drawButton("IconGunpowder", posX() + 28, posY + 20, 1);
+			gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1);
+			gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1);
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.disabled"), posXOffset() + 14, posY + 54, textColor);
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.ignored"), posXOffset() + 14, posY + 78, textColor);
 		} else {
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.enabled"), posXOffset() + 14, posY + 54, textColor);
 
 			if (myContainer.getControl().isLow()) {
-				gui.drawButton("IconRedstone", posX() + 28, posY + 20, 1, 0);
-				gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 1);
-				gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 0);
+				gui.drawButton("IconRedstone", posX() + 28, posY + 20, 1);
+				gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1);
+				gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1);
 				getFontRenderer().drawString(StringHelper.localize("info.cofh.low"), posXOffset() + 14, posY + 78, textColor);
 			} else {
-				gui.drawButton("IconRedstone", posX() + 28, posY + 20, 1, 0);
-				gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1, 0);
-				gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1, 1);
+				gui.drawButton("IconRedstone", posX() + 28, posY + 20, 1);
+				gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1);
+				gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1);
 				getFontRenderer().drawString(StringHelper.localize("info.cofh.high"), posXOffset() + 14, posY + 78, textColor);
 			}
 		}

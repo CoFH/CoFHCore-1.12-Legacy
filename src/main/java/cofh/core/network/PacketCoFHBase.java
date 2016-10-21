@@ -184,9 +184,9 @@ public abstract class PacketCoFHBase extends PacketBase {
 
 	public PacketCoFHBase addCoords(TileEntity theTile) {
 
-		addInt(theTile.xCoord);
-		addInt(theTile.yCoord);
-		return addInt(theTile.zCoord);
+		addInt(theTile.getPos().getX());
+		addInt(theTile.getPos().getY());
+		return addInt(theTile.getPos().getZ());
 	}
 
 	public PacketCoFHBase addCoords(int x, int y, int z) {
@@ -335,7 +335,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 			addShort(Item.getIdFromItem(theStack.getItem()));
 			addByte(theStack.stackSize);
 			addShort(ItemHelper.getItemDamage(theStack));
-			writeNBT(theStack.stackTagCompound);
+			writeNBT(theStack.getTagCompound());
 		}
 	}
 
@@ -348,7 +348,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 			byte stackSize = getByte();
 			short damage = getShort();
 			stack = new ItemStack(Item.getItemById(itemID), stackSize, damage);
-			stack.stackTagCompound = readNBT();
+            stack.setTagCompound(readNBT());
 		}
 
 		return stack;
@@ -359,7 +359,9 @@ public abstract class PacketCoFHBase extends PacketBase {
 		if (nbt == null) {
 			addShort(-1);
 		} else {
-			byte[] abyte = CompressedStreamTools.compress(nbt);
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            CompressedStreamTools.writeCompressed(nbt, byteArrayOutputStream);
+			byte[] abyte = byteArrayOutputStream.toByteArray();
 			addShort((short) abyte.length);
 			addByteArray(abyte);
 		}
@@ -374,7 +376,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 		} else {
 			byte[] abyte = new byte[nbtLength];
 			getByteArray(abyte);
-			return CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L));
+			return CompressedStreamTools.readCompressed(new ByteArrayInputStream(abyte));
 		}
 	}
 

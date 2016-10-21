@@ -1,22 +1,21 @@
 package cofh.core.render;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EffectRenderer;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class CustomEffectRenderer extends EffectRenderer {
+public class CustomEffectRenderer extends ParticleManager {
 
-	public CustomEffectRenderer() {
+    public CustomEffectRenderer() {
 
-		super(Minecraft.getMinecraft().theWorld, Minecraft.getMinecraft().renderEngine);
-	}
+        super(Minecraft.getMinecraft().theWorld, Minecraft.getMinecraft().renderEngine);
+    }
 
-	@Override
-	public void addEffect(EntityFX p) {
+    @Override
+    public void addEffect(Particle p) {
 
-	}
+    }
 }

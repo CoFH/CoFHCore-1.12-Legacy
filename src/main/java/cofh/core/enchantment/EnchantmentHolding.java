@@ -1,52 +1,52 @@
 package cofh.core.enchantment;
 
 import cofh.api.item.IInventoryContainerItem;
-
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
 public class EnchantmentHolding extends Enchantment {
 
-	public EnchantmentHolding(int id) {
+    public EnchantmentHolding(String id) {
+        super(Rarity.RARE, EnumEnchantmentType.ALL, EntityEquipmentSlot.values());
+        setRegistryName("CoFH:" + id);
+    }
 
-		super(id, 2, EnumEnchantmentType.all);
-	}
+    @Override
+    public int getMinEnchantability(int level) {
 
-	@Override
-	public int getMinEnchantability(int level) {
+        return 1 + (level - 1) * 10;
+    }
 
-		return 1 + (level - 1) * 10;
-	}
+    @Override
+    public int getMaxEnchantability(int level) {
 
-	@Override
-	public int getMaxEnchantability(int level) {
+        return getMinEnchantability(level) + 15;
+    }
 
-		return getMinEnchantability(level) + 15;
-	}
+    @Override
+    public int getMaxLevel() {
 
-	@Override
-	public int getMaxLevel() {
+        return 4;
+    }
 
-		return 4;
-	}
+    @Override
+    public String getName() {
 
-	@Override
-	public String getName() {
+        return "enchant.cofh.holding";
+    }
 
-		return "enchant.cofh.holding";
-	}
+    @Override
+    public boolean canApply(ItemStack stack) {
 
-	@Override
-	public boolean canApply(ItemStack stack) {
+        return (stack.getItem() instanceof IInventoryContainerItem);
+    }
 
-		return (stack.getItem() instanceof IInventoryContainerItem);
-	}
+    @Override
+    public boolean isAllowedOnBooks() {
 
-	@Override
-	public boolean isAllowedOnBooks() {
-
-		return false;
-	}
+        return false;
+    }
 
 }

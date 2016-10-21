@@ -2,6 +2,7 @@ package cofh.core.network;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 public class PacketTileInfo extends PacketCoFHBase {
 
@@ -16,9 +17,9 @@ public class PacketTileInfo extends PacketCoFHBase {
 
 	public PacketTileInfo(TileEntity theTile) {
 
-		addInt(theTile.xCoord);
-		addInt(theTile.yCoord);
-		addInt(theTile.zCoord);
+		addInt(theTile.getPos().getX());
+		addInt(theTile.getPos().getY());
+		addInt(theTile.getPos().getZ());
 
 	}
 
@@ -37,7 +38,7 @@ public class PacketTileInfo extends PacketCoFHBase {
 	@Override
 	public void handlePacket(EntityPlayer player, boolean isServer) {
 
-		TileEntity tile = player.worldObj.getTileEntity(getInt(), getInt(), getInt());
+		TileEntity tile = player.worldObj.getTileEntity(new BlockPos(getInt(), getInt(), getInt()));
 
 		if (tile instanceof ITileInfoPacketHandler) {
 			((ITileInfoPacketHandler) tile).handleTileInfoPacket(this, isServer, player);

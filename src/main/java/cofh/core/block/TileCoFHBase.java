@@ -1,5 +1,6 @@
 package cofh.core.block;
 
+import codechicken.lib.util.BlockUtils;
 import cofh.api.tileentity.ISecurable;
 import cofh.api.tileentity.ISecurable.AccessMode;
 import cofh.core.CoFHProps;
@@ -11,191 +12,191 @@ import cofh.core.util.CoreUtils;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.ServerHelper;
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.relauncher.Side;
-
-import java.util.UUID;
-
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.UUID;
 
 public abstract class TileCoFHBase extends TileEntity {
 
-	@Override
-	public void onChunkUnload() {
+    @Override
+    public void onChunkUnload() {
 
-		if (!tileEntityInvalid) {
-			invalidate(); // this isn't called when a tile unloads. guard incase it is in the future
-		}
-	}
+        if (!tileEntityInvalid) {
+            invalidate(); // this isn't called when a tile unloads. guard incase it is in the future
+        }
+    }
 
-	public abstract String getName();
+    public abstract String getName();
 
-	public abstract int getType();
+    public abstract int getType();
 
-	public void blockBroken() {
+    public void blockBroken() {
 
-	}
+    }
 
-	public void blockDismantled() {
+    public void blockDismantled() {
 
-		blockBroken();
-	}
+        blockBroken();
+    }
 
-	public void blockPlaced() {
+    public void blockPlaced() {
 
-	}
+    }
 
-	public void markChunkDirty() {
+    public void markChunkDirty() {
 
-		worldObj.markTileEntityChunkModified(this.xCoord, this.yCoord, this.zCoord, this);
-	}
+        worldObj.markChunkDirty(this.getPos(), this);
+    }
 
-	public void callNeighborBlockChange() {
+    public void callNeighborBlockChange() {
+        worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
+    }
 
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
-	}
+    public void callNeighborTileChange() {
+        worldObj.updateComparatorOutputLevel(this.getPos(), this.getBlockType());
+    }
 
-	public void callNeighborTileChange() {
+    public void onNeighborBlockChange() {
 
-		worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
-	}
+    }
 
-	public void onNeighborBlockChange() {
+    public void onNeighborTileChange(BlockPos pos) {
 
-	}
+    }
 
-	public void onNeighborTileChange(int tileX, int tileY, int tileZ) {
+    //TODO Side
+    public int getComparatorInput(/*int side*/) {
 
-	}
+        return 0;
+    }
 
-	public int getComparatorInput(int side) {
+    public int getLightValue() {
 
-		return 0;
-	}
+        return 0;
+    }
 
-	public int getLightValue() {
+    public boolean canPlayerAccess(EntityPlayer player) {
 
-		return 0;
-	}
+        if (!(this instanceof ISecurable)) {
+            return true;
+        }
+        AccessMode access = ((ISecurable) this).getAccess();
+        String name = player.getName();
+        if (access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name))) {
+            return true;
+        }
 
-	public boolean canPlayerAccess(EntityPlayer player) {
+        GameProfile profile = ((ISecurable) this).getOwner();
+        UUID ownerID = profile.getId();
+        if (SecurityHelper.isDefaultUUID(ownerID)) {
+            return true;
+        }
 
-		if (!(this instanceof ISecurable)) {
-			return true;
-		}
-		AccessMode access = ((ISecurable) this).getAccess();
-		String name = player.getCommandSenderName();
-		if (access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name))) {
-			return true;
-		}
+        UUID otherID = SecurityHelper.getID(player);
+        if (ownerID.equals(otherID)) {
+            return true;
+        }
+        return access.isRestricted() && RegistrySocial.playerHasAccess(name, profile);
+    }
 
-		GameProfile profile = ((ISecurable) this).getOwner();
-		UUID ownerID = profile.getId();
-		if (SecurityHelper.isDefaultUUID(ownerID)) {
-			return true;
-		}
+    public boolean canPlayerDismantle(EntityPlayer player) {
 
-		UUID otherID = SecurityHelper.getID(player);
-		if (ownerID.equals(otherID)) {
-			return true;
-		}
-		return access.isRestricted() && RegistrySocial.playerHasAccess(name, profile);
-	}
+        return true;
+    }
 
-	public boolean canPlayerDismantle(EntityPlayer player) {
+    public boolean isUseable(EntityPlayer player) {
 
-		return true;
-	}
+        return BlockUtils.isEntityInRange(getPos(), player, 64) && worldObj.getTileEntity(pos) == this;
+    }
 
-	public boolean isUseable(EntityPlayer player) {
+    public boolean onWrench(EntityPlayer player, int hitSide) {
 
-		return player.getDistanceSq(xCoord, yCoord, zCoord) <= 64D && worldObj.getTileEntity(xCoord, yCoord, zCoord) == this;
-	}
+        return false;
+    }
 
-	public boolean onWrench(EntityPlayer player, int hitSide) {
+    protected final boolean timeCheck() {
 
-		return false;
-	}
+        return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT == 0;
+    }
 
-	protected final boolean timeCheck() {
+    protected final boolean timeCheckEighth() {
 
-		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT == 0;
-	}
+        return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT_EIGHTH == 0;
+    }
 
-	protected final boolean timeCheckEighth() {
+    /* NETWORK METHODS */
+    //@Override//TODO
+    public Packet getDescriptionPacket() {
 
-		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT_EIGHTH == 0;
-	}
+        return PacketHandler.toMCPacket(getPacket());
+    }
 
-	/* NETWORK METHODS */
-	@Override
-	public Packet getDescriptionPacket() {
+    public PacketCoFHBase getPacket() {
 
-		return PacketHandler.toMCPacket(getPacket());
-	}
+        return new PacketTile(this);
+    }
 
-	public PacketCoFHBase getPacket() {
+    public void sendDescPacket() {
 
-		return new PacketTile(this);
-	}
+        PacketHandler.sendToAllAround(getPacket(), this);
+    }
 
-	public void sendDescPacket() {
+    protected void updateLighting() {
+        int light2 = worldObj.getLightFor(EnumSkyBlock.BLOCK, getPos()), light1 = getLightValue();
+        if (light1 != light2 && worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos())) {
+            IBlockState state = worldObj.getBlockState(getPos());
+            worldObj.notifyBlockUpdate(pos, state, state, 3);//TODO might me markBlocksForUpdate.
+        }
+    }
 
-		PacketHandler.sendToAllAround(getPacket(), this);
-	}
+    public void sendUpdatePacket(Side side) {
 
-	protected void updateLighting() {
+        if (worldObj == null) {
+            return;
+        }
+        if (side == Side.CLIENT && ServerHelper.isServerWorld(worldObj)) {
+            PacketHandler.sendToAllAround(getPacket(), this);
+        } else if (side == Side.SERVER && ServerHelper.isClientWorld(worldObj)) {
+            PacketHandler.sendToServer(getPacket());
+        }
+    }
 
-		int light2 = worldObj.getSavedLightValue(EnumSkyBlock.Block, xCoord, yCoord, zCoord), light1 = getLightValue();
-		if (light1 != light2 && worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord)) {
-			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		}
-	}
+    /* GUI METHODS */
+    public Object getGuiClient(InventoryPlayer inventory) {
 
-	public void sendUpdatePacket(Side side) {
+        return null;
+    }
 
-		if (worldObj == null) {
-			return;
-		}
-		if (side == Side.CLIENT && ServerHelper.isServerWorld(worldObj)) {
-			PacketHandler.sendToAllAround(getPacket(), this);
-		} else if (side == Side.SERVER && ServerHelper.isClientWorld(worldObj)) {
-			PacketHandler.sendToServer(getPacket());
-		}
-	}
+    public Object getGuiServer(InventoryPlayer inventory) {
 
-	/* GUI METHODS */
-	public Object getGuiClient(InventoryPlayer inventory) {
+        return null;
+    }
 
-		return null;
-	}
+    public int getInvSlotCount() {
 
-	public Object getGuiServer(InventoryPlayer inventory) {
+        return 0;
+    }
 
-		return null;
-	}
+    public boolean openGui(EntityPlayer player) {
 
-	public int getInvSlotCount() {
+        return false;
+    }
 
-		return 0;
-	}
+    public void receiveGuiNetworkData(int i, int j) {
 
-	public boolean openGui(EntityPlayer player) {
+    }
 
-		return false;
-	}
+    public void sendGuiNetworkData(Container container, IContainerListener player) {
 
-	public void receiveGuiNetworkData(int i, int j) {
-
-	}
-
-	public void sendGuiNetworkData(Container container, ICrafting player) {
-
-	}
+    }
 
 }

@@ -2,7 +2,7 @@ package cofh.asm;
 
 import static org.objectweb.asm.Opcodes.*;
 
-import cofh.repack.codechicken.lib.asm.ObfMapping;
+import codechicken.lib.asm.ObfMapping;
 import cofh.repack.immibis.bon.JoinMapping;
 import cofh.repack.immibis.bon.Mapping;
 import cofh.repack.immibis.bon.mcp.CsvFile;

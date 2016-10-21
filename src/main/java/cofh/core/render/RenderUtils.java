@@ -1,33 +1,30 @@
 package cofh.core.render;
 
-import cofh.lib.render.RenderHelper;
-import cofh.lib.util.helpers.BlockHelper;
-import cofh.repack.codechicken.lib.colour.Colour;
-import cofh.repack.codechicken.lib.colour.ColourRGBA;
-import cofh.repack.codechicken.lib.render.CCRenderState;
-import cofh.repack.codechicken.lib.render.uv.IconTransformation;
-import cofh.repack.codechicken.lib.render.uv.UV;
-import cofh.repack.codechicken.lib.vec.Vector3;
-
+import codechicken.lib.colour.Colour;
+import codechicken.lib.render.CCRenderState;
+import codechicken.lib.texture.TextureUtils;
+import codechicken.lib.vec.Vector3;
+import codechicken.lib.vec.uv.IconTransformation;
+import codechicken.lib.vec.uv.UV;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.lwjgl.opengl.GL11;
@@ -39,12 +36,12 @@ public class RenderUtils {
 		double su = 0.0F;
 		double sv = 0.0F;
 
-		public ScaledIconTransformation(IIcon icon) {
+		public ScaledIconTransformation(TextureAtlasSprite icon) {
 
 			super(icon);
 		}
 
-		public ScaledIconTransformation(IIcon icon, double scaleu, double scalev) {
+		public ScaledIconTransformation(TextureAtlasSprite icon, double scaleu, double scalev) {
 
 			super(icon);
 
@@ -60,8 +57,8 @@ public class RenderUtils {
 		}
 	}
 
-	public static final RenderItem renderItem = new RenderItem();
-	public static final RenderBlocks renderBlocks = new RenderBlocks();
+	public static final ItemRenderer renderItem = new ItemRenderer(Minecraft.getMinecraft());
+	//public static final RenderBlocks renderBlocks = new RenderBlocks();
 
 	public static float[][] angleBaseYNeg = new float[6][3];
 	public static float[][] angleBaseYPos = new float[6][3];
@@ -73,15 +70,15 @@ public class RenderUtils {
 	public static ScaledIconTransformation[] renderTransformations = new ScaledIconTransformation[4];
 
 	static {
-		renderTransformations[0] = new ScaledIconTransformation(Blocks.stone.getIcon(0, 0));
-		renderTransformations[1] = new ScaledIconTransformation(Blocks.stone.getIcon(0, 0), -1F, 0F);
-		renderTransformations[2] = new ScaledIconTransformation(Blocks.stone.getIcon(0, 0), 0F, -1F);
-		renderTransformations[3] = new ScaledIconTransformation(Blocks.stone.getIcon(0, 0), -1F, -1F);
+		renderTransformations[0] = new ScaledIconTransformation(TextureUtils.getBlockTexture("stone"));
+		renderTransformations[1] = new ScaledIconTransformation(TextureUtils.getBlockTexture("stone"), -1F, 0F);
+		renderTransformations[2] = new ScaledIconTransformation(TextureUtils.getBlockTexture("stone"), 0F, -1F);
+		renderTransformations[3] = new ScaledIconTransformation(TextureUtils.getBlockTexture("stone"), -1F, -1F);
 	}
 
 	public static Vector3 renderVector = new Vector3();
 
-	public static ScaledIconTransformation getIconTransformation(IIcon icon) {
+	public static ScaledIconTransformation getIconTransformation(TextureAtlasSprite icon) {
 
 		if (icon != null) {
 			renderTransformations[0].icon = icon;
@@ -132,35 +129,37 @@ public class RenderUtils {
 
 	public static void setFluidRenderColor(FluidStack fluid) {
 
-		CCRenderState.baseColour = (0xFF | (fluid.getFluid().getColor(fluid) << 8));
+		CCRenderState.instance().baseColour = (0xFF | (fluid.getFluid().getColor(fluid) << 8));
 	}
 
 	public static void preItemRender() {
 
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+        GlStateManager.enableBlend();
+        GlStateManager.enableAlpha();
+		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 
-		CCRenderState.reset();
-		CCRenderState.pullLightmap();
-		CCRenderState.useNormals = true;
+        CCRenderState ccrs = CCRenderState.instance();
+        ccrs.reset();
+        ccrs.pullLightmap();
+		//CCRenderState.useNormals = true;
 	}
 
 	public static void postItemRender() {
 
-		CCRenderState.useNormals = false;
+		//CCRenderState.useNormals = false;
 
-		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 	}
 
-	public static void preWorldRender(IBlockAccess world, int x, int y, int z) {
+	public static void preWorldRender(IBlockAccess world, BlockPos pos) {
+        CCRenderState ccrs = CCRenderState.instance();
 
-		CCRenderState.reset();
-		CCRenderState.setColour(0xFFFFFFFF);
-		CCRenderState.setBrightness(world, x, y, z);
+        ccrs.reset();
+        ccrs.colour = 0xFFFFFFFF;
+        ccrs.setBrightness(world, pos);
 	}
 
-	public static void renderMask(IIcon maskIcon, IIcon subIcon, Colour maskColor, ItemRenderType type) {
+	/*public static void renderMask(IIcon maskIcon, IIcon subIcon, Colour maskColor, ItemRenderType type) {
 
 		if (maskIcon == null || subIcon == null) {
 			return;
@@ -220,10 +219,9 @@ public class RenderUtils {
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glColor4f(1, 1, 1, 1);
-	}
+	}*/
 
-	public static void preRenderIconWorld(IIcon icon, double z) {
-
+	/*public static void preRenderIconWorld(TextureAtlasSprite icon, double z) {
 		Tessellator.instance.addVertexWithUV(0, 1, z, icon.getMinU(), icon.getMaxV());
 		Tessellator.instance.addVertexWithUV(1, 1, z, icon.getMaxU(), icon.getMaxV());
 		Tessellator.instance.addVertexWithUV(1, 0, z, icon.getMaxU(), icon.getMinV());
@@ -231,14 +229,13 @@ public class RenderUtils {
 	}
 
 	public static void preRenderIconInv(IIcon icon, double z) {
-
 		Tessellator.instance.addVertexWithUV(0, 16, z, icon.getMinU(), icon.getMaxV());
 		Tessellator.instance.addVertexWithUV(16, 16, z, icon.getMaxU(), icon.getMaxV());
 		Tessellator.instance.addVertexWithUV(16, 0, z, icon.getMaxU(), icon.getMinV());
 		Tessellator.instance.addVertexWithUV(0, 0, z, icon.getMinU(), icon.getMinV());
-	}
+	}*/
 
-	public static void renderItemStack(int xPos, int yPos, float tickPlace, ItemStack stack, Minecraft mc) {
+	/*public static void renderItemStack(int xPos, int yPos, float tickPlace, ItemStack stack, Minecraft mc) {
 
 		if (stack != null) {
 			float subTickAnimation = stack.animationsToGo - tickPlace;
@@ -256,9 +253,9 @@ public class RenderUtils {
 			}
 			renderItem.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, stack, xPos, yPos);
 		}
-	}
+	}*/
 
-	public static void renderItemStackAtScale(float xPos, float yPos, float tickPlace, ItemStack stack, Minecraft mc, float scale, boolean renderStackSize) {
+	/*public static void renderItemStackAtScale(float xPos, float yPos, float tickPlace, ItemStack stack, Minecraft mc, float scale, boolean renderStackSize) {
 
 		if (stack != null) {
 			if (!renderStackSize) {
@@ -284,18 +281,18 @@ public class RenderUtils {
 			GL11.glPopMatrix();
 			renderItem.zLevel = 0;
 		}
-	}
+	}*/
 
-	public static void renderItemAndEffectIntoGUI(FontRenderer font, TextureManager texture, ItemStack stack, float xPos, float yPos) {
+	/*public static void renderItemAndEffectIntoGUI(FontRenderer font, TextureManager texture, ItemStack stack, float xPos, float yPos) {
 
 		if (stack != null) {
 			if (!ForgeHooksClient.renderInventoryItem(renderBlocks, texture, stack, renderItem.renderWithColor, renderItem.zLevel, xPos, yPos)) {
 				RenderUtils.renderItemIntoGUI(font, texture, stack, xPos, yPos, true);
 			}
 		}
-	}
+	}*/
 
-	public static void renderItemIntoGUI(FontRenderer font, TextureManager manager, ItemStack stack, float xPos, float yPos, boolean renderEffect) {
+	/*public static void renderItemIntoGUI(FontRenderer font, TextureManager manager, ItemStack stack, float xPos, float yPos, boolean renderEffect) {
 
 		Item item = stack.getItem();
 		int meta = stack.getItemDamage();
@@ -384,9 +381,9 @@ public class RenderUtils {
 		}
 
 		GL11.glEnable(GL11.GL_CULL_FACE);
-	}
+	}*/
 
-	public static void renderEffect(TextureManager manager, float x, float y) {
+	/*public static void renderEffect(TextureManager manager, float x, float y) {
 
 		GL11.glDepthFunc(GL11.GL_GREATER);
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -404,9 +401,9 @@ public class RenderUtils {
 
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
-	}
+	}*/
 
-	public static void renderGlint(float x, float y, int u, int v) {
+	/*public static void renderGlint(float x, float y, int u, int v) {
 
 		Tessellator tessellator = RenderHelper.tessellator();
 		float uScale = 1 / 256f;
@@ -425,9 +422,9 @@ public class RenderUtils {
 			tessellator.draw();
 			s = -1.0F;
 		}
-	}
+	}*/
 
-	public static final void renderItemOnBlockSide(TileEntity tile, ItemStack stack, int side, double x, double y, double z) {
+	/*public static final void renderItemOnBlockSide(TileEntity tile, ItemStack stack, int side, double x, double y, double z) {
 
 		if (stack == null) {
 			return;
@@ -471,23 +468,20 @@ public class RenderUtils {
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 		GL11.glPopMatrix();
 		net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
-	}
+	}*/
 
-	public static void setupLight(TileEntity tile, int side) {
+	public static void setupLight(TileEntity tile, EnumFacing side) {
 
 		if (tile == null) {
 			return;
 		}
-		int x = tile.xCoord + BlockHelper.SIDE_COORD_MOD[side][0];
-		int y = tile.yCoord + BlockHelper.SIDE_COORD_MOD[side][1];
-		int z = tile.zCoord + BlockHelper.SIDE_COORD_MOD[side][2];
+		BlockPos pos = tile.getPos().offset(side);
+		World world = tile.getWorld();
 
-		World world = tile.getWorldObj();
-
-		if (world.getBlock(x, y, z).isOpaqueCube()) {
+		if (world.getBlockState(pos).isOpaqueCube()) {
 			return;
 		}
-		int br = world.getLightBrightnessForSkyBlocks(x, y, z, 4);
+		int br = world.getCombinedLight(pos, 4);
 		int brX = br & 65535;
 		int brY = br >>> 16;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brX, brY);

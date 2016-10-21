@@ -1,6 +1,7 @@
 package cofh.core.entity;
 
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 import io.netty.buffer.ByteBuf;
 
@@ -20,15 +21,15 @@ public class EntityCoFHArrow extends EntityArrow implements IEntityAdditionalSpa
 		super(world, x, y, z);
 	}
 
-	public EntityCoFHArrow(World world, EntityLivingBase shooter, EntityLivingBase target, float speed, float variance) {
-
-		super(world, shooter, target, speed, variance);
-	}
-
-	public EntityCoFHArrow(World world, EntityLivingBase shooter, float speed) {
-
-		super(world, shooter, speed);
-	}
+//	public EntityCoFHArrow(World world, EntityLivingBase shooter, EntityLivingBase target, float speed, float variance) {
+//
+//		super(world, shooter, target, speed, variance);
+//	}
+//
+//	public EntityCoFHArrow(World world, EntityLivingBase shooter, float speed) {
+//
+//		super(world, shooter, speed);
+//	}
 
 	@Override
 	public void onUpdate() {
@@ -39,7 +40,12 @@ public class EntityCoFHArrow extends EntityArrow implements IEntityAdditionalSpa
 		super.onUpdate();
 	}
 
-	/* IEntityAdditionalSpawnData */
+    @Override
+    protected ItemStack getArrowStack() {
+        return null;
+    }
+
+    /* IEntityAdditionalSpawnData */
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
 

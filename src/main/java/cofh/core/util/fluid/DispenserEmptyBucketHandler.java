@@ -6,6 +6,7 @@ import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public final class DispenserEmptyBucketHandler extends BehaviorDefaultDispenseItem {
@@ -15,20 +16,18 @@ public final class DispenserEmptyBucketHandler extends BehaviorDefaultDispenseIt
 	@Override
 	public ItemStack dispenseStack(IBlockSource blockSource, ItemStack stackBucket) {
 
-		EnumFacing facing = BlockDispenser.func_149937_b(blockSource.getBlockMetadata());
+		EnumFacing facing = blockSource.func_189992_e().getValue(BlockDispenser.FACING);
 		World world = blockSource.getWorld();
 
-		int x = blockSource.getXInt() + facing.getFrontOffsetX();
-		int y = blockSource.getYInt() + facing.getFrontOffsetY();
-		int z = blockSource.getZInt() + facing.getFrontOffsetZ();
+        BlockPos pos = blockSource.getBlockPos().offset(facing);
 
-		ItemStack filledBucket = BucketHandler.fillBucket(world, x, y, z);
+		ItemStack filledBucket = BucketHandler.fillBucket(world, pos);
 		if (filledBucket == null) {
 			return defaultDispenserItemBehavior.dispense(blockSource, stackBucket);
 		}
 		if (--stackBucket.stackSize == 0) {
 			stackBucket = filledBucket.copy();
-		} else if (((TileEntityDispenser) blockSource.getBlockTileEntity()).func_146019_a(filledBucket) < 0) {
+		} else if (((TileEntityDispenser) blockSource.getBlockTileEntity()).addItemStack(filledBucket) < 0) {
 			return defaultDispenserItemBehavior.dispense(blockSource, stackBucket);
 		}
 		return stackBucket;

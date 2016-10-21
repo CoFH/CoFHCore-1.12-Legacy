@@ -9,7 +9,7 @@ public class GuiLimitedTextField extends GuiTextField {
 
 	public GuiLimitedTextField(FontRenderer fontRenderer, int xPos, int yPos, int width, int height, String validChars) {
 
-		super(fontRenderer, xPos, yPos, width, height);
+		super(0, fontRenderer, xPos, yPos, width, height);
 		listOfValidCharacters = validChars;
 	}
 

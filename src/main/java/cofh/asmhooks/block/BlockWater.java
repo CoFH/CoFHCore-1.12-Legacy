@@ -3,7 +3,9 @@ package cofh.asmhooks.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStaticLiquid;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockWater extends BlockStaticLiquid {
@@ -14,25 +16,25 @@ public class BlockWater extends BlockStaticLiquid {
 	}
 
 	@Override
-	public void onBlockAdded(World world, int x, int y, int z) {
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
 
-		super.onBlockAdded(world, x, y, z);
+		super.onBlockAdded(world, pos, state);
 
-		if (this.blockMaterial != Material.water) {
+		if (this.blockMaterial != Material.WATER) {
 			return;
 		}
 
-		if (world.provider.isHellWorld) {
-			world.setBlock(x, y, z, Blocks.air, 0, 2);
-			world.playAuxSFX(1004, x, y, z, 0);
-			world.playAuxSFX(2000, x, y, z, 4);
+		if (world.provider.doesWaterVaporize()) {
+			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+			world.playEvent(1004, pos, 0);
+			world.playEvent(2000, pos, 4);
 		}
 	}
 
 	@Override
 	public boolean isAssociatedBlock(Block block) {
 
-		return super.isAssociatedBlock(block) || block == Blocks.flowing_water;
+		return super.isAssociatedBlock(block) || block == Blocks.FLOWING_WATER;
 	}
 
 }

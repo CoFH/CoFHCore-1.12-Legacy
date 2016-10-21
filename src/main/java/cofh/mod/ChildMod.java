@@ -1,6 +1,6 @@
 package cofh.mod;
 
-import cpw.mods.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod;
 
 
 public @interface ChildMod {

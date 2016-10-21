@@ -35,10 +35,10 @@ public class RecipeUpgradeOverride extends RecipeUpgrade {
 
 		ItemStack craftingResult = super.getCraftingResult(craftMatrix);
 
-		if (craftingResult.stackTagCompound != null) {
+		if (craftingResult.hasTagCompound()) {
 			for (Map.Entry<String, NBTBase[]> override : overrides.entrySet()) {
-				if (override.getValue()[0] == null || override.getValue()[0].equals(craftingResult.stackTagCompound.getTag(override.getKey()))) {
-					craftingResult.stackTagCompound.setTag(override.getKey(), override.getValue()[1].copy());
+				if (override.getValue()[0] == null || override.getValue()[0].equals(craftingResult.getTagCompound().getTag(override.getKey()))) {
+					craftingResult.getTagCompound().setTag(override.getKey(), override.getValue()[1].copy());
 				}
 			}
 		}

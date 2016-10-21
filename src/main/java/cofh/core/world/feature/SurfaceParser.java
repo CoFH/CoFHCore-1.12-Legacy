@@ -20,9 +20,9 @@ public class SurfaceParser extends UniformParser {
 	@Override
 	protected List<WeightedRandomBlock> generateDefaultMaterial() {
 
-		return Arrays.asList(new WeightedRandomBlock(Blocks.stone, -1), new WeightedRandomBlock(Blocks.dirt, -1), new WeightedRandomBlock(Blocks.grass, -1),
-				new WeightedRandomBlock(Blocks.sand, -1), new WeightedRandomBlock(Blocks.gravel, -1), new WeightedRandomBlock(Blocks.snow, -1),
-				new WeightedRandomBlock(Blocks.air, -1), new WeightedRandomBlock(Blocks.water, -1));
+		return Arrays.asList(new WeightedRandomBlock(Blocks.STONE, -1), new WeightedRandomBlock(Blocks.DIRT, -1), new WeightedRandomBlock(Blocks.GRASS, -1),
+				new WeightedRandomBlock(Blocks.SAND, -1), new WeightedRandomBlock(Blocks.GRAVEL, -1), new WeightedRandomBlock(Blocks.SNOW, -1),
+				new WeightedRandomBlock(Blocks.AIR, -1), new WeightedRandomBlock(Blocks.WATER, -1));
 	}
 
 	@Override

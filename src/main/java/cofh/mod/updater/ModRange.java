@@ -1,9 +1,9 @@
 package cofh.mod.updater;
 
-import cpw.mods.fml.common.versioning.ArtifactVersion;
-import cpw.mods.fml.common.versioning.InvalidVersionSpecificationException;
-import cpw.mods.fml.common.versioning.Restriction;
-import cpw.mods.fml.common.versioning.VersionRange;
+import net.minecraftforge.fml.common.versioning.ArtifactVersion;
+import net.minecraftforge.fml.common.versioning.InvalidVersionSpecificationException;
+import net.minecraftforge.fml.common.versioning.Restriction;
+import net.minecraftforge.fml.common.versioning.VersionRange;
 
 import java.util.ArrayList;
 import java.util.List;

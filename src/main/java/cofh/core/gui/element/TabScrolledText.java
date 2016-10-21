@@ -37,14 +37,14 @@ public abstract class TabScrolledText extends TabBase {
 			return;
 		}
 		if (firstLine > 0) {
-			gui.drawIcon("IconArrowUp1", posXOffset() + maxWidth - 20, posY + 16, 1);
+			gui.drawIcon("IconArrowUp1", posXOffset() + maxWidth - 20, posY + 16);
 		} else {
-			gui.drawIcon("IconArrowUp0", posXOffset() + maxWidth - 20, posY + 16, 1);
+			gui.drawIcon("IconArrowUp0", posXOffset() + maxWidth - 20, posY + 16);
 		}
 		if (firstLine < maxFirstLine) {
-			gui.drawIcon("IconArrowDown1", posXOffset() + maxWidth - 20, posY + 76, 1);
+			gui.drawIcon("IconArrowDown1", posXOffset() + maxWidth - 20, posY + 76);
 		} else {
-			gui.drawIcon("IconArrowDown0", posXOffset() + maxWidth - 20, posY + 76, 1);
+			gui.drawIcon("IconArrowDown0", posXOffset() + maxWidth - 20, posY + 76);
 		}
 		getFontRenderer().drawStringWithShadow(getTitle(), posXOffset() + 18, posY + 6, headerColor);
 		for (int i = firstLine; i < firstLine + numLines; i++) {

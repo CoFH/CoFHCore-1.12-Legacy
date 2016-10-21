@@ -3,11 +3,11 @@ package cofh.core.chat;
 import cofh.CoFHCore;
 import cofh.core.network.PacketCoFHBase;
 import cofh.core.network.PacketHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.IChatComponent;
 
 public class PacketIndexedChat extends PacketCoFHBase {
 
@@ -20,11 +20,11 @@ public class PacketIndexedChat extends PacketCoFHBase {
 
 	}
 
-	public PacketIndexedChat(IChatComponent chat) {
+	public PacketIndexedChat(ITextComponent chat) {
 
 	}
 
-	public PacketIndexedChat(IChatComponent chat, int index) {
+	public PacketIndexedChat(ITextComponent chat, int index) {
 
 		addString(ChatHelper.toJSON(chat));
 		addInt(index);

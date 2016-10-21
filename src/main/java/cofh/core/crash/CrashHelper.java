@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 
 public class CrashHelper {
 
-	static final int range = 3;
+	/*static final int range = 3;
 	static final char[] validLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!£$%^&*()`¬_+\"\\@'{}[]~/|<>,.?:;".toCharArray();
 	static final char[] metaLetters = "0123456789ABCDEF".toCharArray();
 
@@ -303,6 +303,6 @@ public class CrashHelper {
 	public static CrashReport makeDetailedCrashReport(Exception e, String inserting) {
 
 		return makeDetailedCrashReport(e, inserting, null);
-	}
+	}*/
 
 }

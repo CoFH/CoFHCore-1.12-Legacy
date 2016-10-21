@@ -1,7 +1,9 @@
 package cofh.core.network;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 public class PacketTile extends PacketCoFHBase {
 
@@ -16,22 +18,23 @@ public class PacketTile extends PacketCoFHBase {
 
 	public PacketTile(TileEntity theTile) {
 
-		addInt(theTile.xCoord);
-		addInt(theTile.yCoord);
-		addInt(theTile.zCoord);
+		addInt(theTile.getPos().getX());
+		addInt(theTile.getPos().getY());
+		addInt(theTile.getPos().getZ());
 
 	}
 
 	@Override
 	public void handlePacket(EntityPlayer player, boolean isServer) {
 
-		TileEntity tile = player.worldObj.getTileEntity(getInt(), getInt(), getInt());
+		TileEntity tile = player.worldObj.getTileEntity(new BlockPos(getInt(), getInt(), getInt()));
 
 		if (tile instanceof ITilePacketHandler) {
 			((ITilePacketHandler) tile).handleTilePacket(this, isServer);
-			tile.getWorldObj().markBlockForUpdate(tile.xCoord, tile.yCoord, tile.zCoord);
+            IBlockState state = tile.getWorld().getBlockState(tile.getPos());
+			tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 3);
 			if (isServer) {
-				tile.getWorldObj().func_147453_f(tile.xCoord, tile.yCoord, tile.zCoord, tile.getBlockType());
+				tile.getWorld().updateComparatorOutputLevel(tile.getPos(), tile.getBlockType());
 			}
 		} else {
 			// TODO: Throw error, bad packet

@@ -1,78 +1,63 @@
 package cofh.core.fluid;
 
-import cofh.CoFHCore;
 import cofh.core.util.IBakeable;
-import cofh.lib.util.BlockWrapper;
-
-import gnu.trove.map.TMap;
-import gnu.trove.map.hash.THashMap;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fluids.Fluid;
 
-public class BlockFluidInteractive extends BlockFluidCoFHBase implements IBakeable {
+import java.util.HashMap;
 
-	protected final TMap<BlockWrapper, BlockWrapper> collisionMap = new THashMap<BlockWrapper, BlockWrapper>();
+public class BlockFluidInteractive extends BlockFluidCoFHBase {
+    private final HashMap<IBlockState, IBlockState> collisionMap = new HashMap<IBlockState, IBlockState>();
+    private final HashMap<Block, IBlockState> anyState = new HashMap<Block, IBlockState>();
 
-	public BlockFluidInteractive(Fluid fluid, Material material, String name) {
+    public BlockFluidInteractive(Fluid fluid, Material material, String name) {
+        super(fluid, material, name);
+    }
 
-		super(fluid, material, name);
-		CoFHCore.registerBakeable(this);
-	}
+    public BlockFluidInteractive(String modName, Fluid fluid, Material material, String name) {
 
-	public BlockFluidInteractive(String modName, Fluid fluid, Material material, String name) {
+        super(modName, fluid, material, name);
+    }
 
-		super(modName, fluid, material, name);
-		CoFHCore.registerBakeable(this);
-	}
+    public boolean addInteraction(Block preBlock, Block postBlock) {
 
-	public boolean addInteraction(Block preBlock, Block postBlock) {
+        if (preBlock == null || postBlock == null) {
+            return false;
+        }
+        return addInteraction(preBlock.getDefaultState(), postBlock.getDefaultState(), true);
+    }
 
-		if (preBlock == null || postBlock == null) {
-			return false;
-		}
-		return addInteraction(preBlock, -1, postBlock, 0);
-	}
+    public boolean addInteraction(IBlockState pre, IBlockState post, boolean anyState) {
 
-	public boolean addInteraction(Block preBlock, int preMeta, Block postBlock, int postMeta) {
+        if (pre == null || post == null) {
+            return false;
+        }
+        if (anyState) {
+            this.anyState.put(pre.getBlock(), post);
+        } else {
+            collisionMap.put(pre, post);
+        }
+        return true;
+    }
 
-		if (preBlock == null || postBlock == null || postMeta < 0) {
-			return false;
-		}
-		if (preMeta < 0) {
-			collisionMap.put(new BlockWrapper(preBlock, preMeta), new BlockWrapper(postBlock, postMeta));
-		} else {
-			collisionMap.put(new BlockWrapper(preBlock, preMeta), new BlockWrapper(postBlock, postMeta));
-		}
-		return true;
-	}
+    public boolean addInteraction(IBlockState pre, Block postBlock) {
 
-	public boolean addInteraction(Block preBlock, int preMeta, Block postBlock) {
+        return addInteraction(pre, postBlock.getDefaultState(), false);
+    }
 
-		return addInteraction(preBlock, preMeta, postBlock, 0);
-	}
+    public boolean hasInteraction(IBlockState state) {
 
-	public boolean hasInteraction(Block preBlock, int preMeta) {
+        return collisionMap.containsKey(state) || anyState.containsKey(state.getBlock());
+    }
 
-		return collisionMap.containsKey(new BlockWrapper(preBlock, preMeta)) || collisionMap.containsKey(new BlockWrapper(preBlock, -1));
-	}
+    public IBlockState getInteraction(IBlockState state) {
 
-	public BlockWrapper getInteraction(Block preBlock, int preMeta) {
-
-		if (collisionMap.containsKey(new BlockWrapper(preBlock, preMeta))) {
-			return collisionMap.get(new BlockWrapper(preBlock, preMeta));
-		}
-		return collisionMap.get(new BlockWrapper(preBlock, -1));
-	}
-
-	@Override
-	public void bake() {
-
-		TMap<BlockWrapper, BlockWrapper> temp = new THashMap<BlockWrapper, BlockWrapper>();
-		temp.putAll(collisionMap);
-		collisionMap.clear();
-		collisionMap.putAll(temp);
-	}
+        if (collisionMap.containsKey(state)) {
+            return collisionMap.get(state);
+        }
+        return anyState.get(state.getBlock());
+    }
 
 }

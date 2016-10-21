@@ -24,7 +24,7 @@ public class RecipeUpgrade extends ShapedOreRecipe {
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting craftMatrix) {
 
-		if (craftMatrix.getStackInSlot(targetSlot) == null || craftMatrix.getStackInSlot(targetSlot).stackTagCompound == null) {
+		if (craftMatrix.getStackInSlot(targetSlot) == null || craftMatrix.getStackInSlot(targetSlot).getTagCompound() == null) {
 			return super.getCraftingResult(craftMatrix);
 		}
 		return ItemHelper.copyTag(getRecipeOutput().copy(), craftMatrix.getStackInSlot(targetSlot));

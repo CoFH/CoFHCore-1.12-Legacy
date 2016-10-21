@@ -28,7 +28,7 @@ public class LakeParser implements IGeneratorParser {
 		WorldGenAdvLakes r = new WorldGenAdvLakes(resList, useMaterial ? matList : null);
 		{
 			if (genObject.has("outlineWithStone")) {
-				r.outlineBlock = genObject.get("outlineWithStone").getAsBoolean() ? Arrays.asList(new WeightedRandomBlock(Blocks.stone, 0)) : null;
+				r.outlineBlock = genObject.get("outlineWithStone").getAsBoolean() ? Arrays.asList(new WeightedRandomBlock(Blocks.STONE, 0)) : null;
 			}
 			ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
 			if (genObject.has("outlineBlock")) {

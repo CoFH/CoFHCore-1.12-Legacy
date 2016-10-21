@@ -1,11 +1,13 @@
 package cofh.core.util;
 
+import codechicken.lib.util.ItemUtils;
 import cofh.CoFHCore;
 import cofh.api.item.IMultiModeItem;
 import cofh.core.key.IKeyBinding;
 import cofh.lib.util.helpers.ItemHelper;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
 public class KeyBindingMultiMode implements IKeyBinding {
 
@@ -28,7 +30,8 @@ public class KeyBindingMultiMode implements IKeyBinding {
 	public void keyPressServer(EntityPlayer player) {
 
 		if (ItemHelper.isPlayerHoldingMultiModeItem(player) && ItemHelper.incrHeldMultiModeItemState(player)) {
-			((IMultiModeItem) player.getCurrentEquippedItem().getItem()).onModeChange(player, player.getCurrentEquippedItem());
+            ItemStack heldItem = ItemUtils.getHeldStack(player);
+            ((IMultiModeItem) heldItem.getItem()).onModeChange(player, heldItem);
 		}
 	}
 

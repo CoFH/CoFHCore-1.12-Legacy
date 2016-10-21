@@ -5,7 +5,6 @@ import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.WeightedRandomNBTTag;
 import cofh.lib.util.helpers.MathHelper;
-import cofh.lib.world.WorldGenDungeon;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import net.minecraftforge.common.DungeonHooks.DungeonMob;
 
 import org.apache.logging.log4j.Logger;
 
+@Deprecated//TODO
 public class DungeonParser implements IGeneratorParser {
 
 	@Override
@@ -38,7 +38,7 @@ public class DungeonParser implements IGeneratorParser {
 			tag.setString("EntityId", "Pig");
 			mobList.add(new WeightedRandomNBTTag(100, tag));
 		}
-		WorldGenDungeon r = new WorldGenDungeon(resList, matList, mobList);
+		/*WorldGenDungeon r = new WorldGenDungeon(resList, matList, mobList);
 		if (genObject.has("spawnerFloor")) {
 			resList = new ArrayList<WeightedRandomBlock>();
 			if (FeatureParser.parseResList(genObject.get("spawnerFloor"), resList, true)) {
@@ -89,8 +89,8 @@ public class DungeonParser implements IGeneratorParser {
 			if (genObject.has("maxWidthZ")) {
 				r.maxWidthZ = genObject.get("maxWidthZ").getAsInt();
 			}
-		}
-		return r;
+		}*/
+		return null;
 	}
 
 }

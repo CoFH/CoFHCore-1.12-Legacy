@@ -32,7 +32,7 @@ public class UniformParser implements IFeatureParser {
 
 	protected List<WeightedRandomBlock> generateDefaultMaterial() {
 
-		return Arrays.asList(new WeightedRandomBlock(new ItemStack(Blocks.stone, 1, -1)));
+		return Arrays.asList(new WeightedRandomBlock(Blocks.STONE, -1));
 	}
 
 	@Override

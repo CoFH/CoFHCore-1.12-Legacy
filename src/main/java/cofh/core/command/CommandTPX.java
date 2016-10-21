@@ -7,12 +7,7 @@ import java.util.List;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerNotFoundException;
-import net.minecraft.command.WrongUsageException;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.DimensionManager;
 
 public class CommandTPX implements ISubCommand {
@@ -32,9 +27,9 @@ public class CommandTPX implements ISubCommand {
 	}
 
 	@Override
-	public void handleCommand(ICommandSender sender, String[] arguments) {
+	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] arguments) throws CommandException {
 
-		// TODO: allow selector commands to target anything (single player, all players[@a], specific entities [@e], etc.)
+		/*// TODO: allow selector commands to target anything (single player, all players[@a], specific entities [@e], etc.)
 		// where it makes sense to allow it (e.g., not allowing teleporting a single thing to many things)
 
 		switch (arguments.length) {
@@ -179,15 +174,15 @@ public class CommandTPX implements ISubCommand {
 			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.tpx.dimensionOther", player.getCommandSenderName(),
 					player.worldObj.provider.getDimensionName(), player.posX, player.posY, player.posZ);
 			break;
-		}
+		}*/
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
+	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
 		if (args.length == 2 || args.length == 3) {
-			return CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames());
+			return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
 		} else if (args.length >= 6) {
 			Integer[] ids = DimensionManager.getIDs();
 			String[] strings = new String[ids.length];

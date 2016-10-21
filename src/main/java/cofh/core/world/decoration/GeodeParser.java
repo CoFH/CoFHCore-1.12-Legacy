@@ -23,12 +23,12 @@ public class GeodeParser implements IGeneratorParser {
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
 		if (!genObject.has("crust")) {
 			log.info("Entry does not specify crust for 'geode' generator. Using stone.");
-			list.add(new WeightedRandomBlock(Blocks.stone));
+			list.add(new WeightedRandomBlock(Blocks.STONE));
 		} else {
 			if (!FeatureParser.parseResList(genObject.get("crust"), list, true)) {
 				log.warn("Entry specifies invalid crust for 'geode' generator! Using obsidian!");
 				list.clear();
-				list.add(new WeightedRandomBlock(Blocks.obsidian));
+				list.add(new WeightedRandomBlock(Blocks.OBSIDIAN));
 			}
 		}
 		WorldGenGeode r = new WorldGenGeode(resList, matList, list);

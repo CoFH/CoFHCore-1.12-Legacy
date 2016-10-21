@@ -2,7 +2,7 @@ package cofh.asm;
 
 import static cofh.asm.ASMCore.*;
 
-import cpw.mods.fml.common.discovery.ASMDataTable;
+import net.minecraftforge.fml.common.discovery.ASMDataTable;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 

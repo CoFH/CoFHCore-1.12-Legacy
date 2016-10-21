@@ -4,45 +4,29 @@ import cofh.mod.updater.IUpdatableMod;
 import cofh.mod.updater.ModRange;
 import cofh.mod.updater.ModVersion;
 import com.google.common.base.Strings;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.ICrashCallable;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.common.network.NetworkCheckHandler;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.common.versioning.InvalidVersionSpecificationException;
-import cpw.mods.fml.relauncher.FMLLaunchHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.ICrashCallable;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.network.NetworkCheckHandler;
+import net.minecraftforge.fml.common.versioning.InvalidVersionSpecificationException;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Properties;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StringTranslate;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.helpers.Loader;
-import org.apache.logging.log4j.spi.AbstractLogger;
 
 public abstract class BaseMod implements IUpdatableMod {
 
@@ -68,7 +52,7 @@ public abstract class BaseMod implements IUpdatableMod {
 
 	private void init() {
 
-		ModContainer container = cpw.mods.fml.common.Loader.instance().activeModContainer();
+		ModContainer container = net.minecraftforge.fml.common.Loader.instance().activeModContainer();
 		if (container.getSource().isDirectory()) {
 			FMLCommonHandler.instance().registerCrashCallable(new CrashCallable("Loaded from a directory"));
 		} else {
@@ -157,8 +141,8 @@ public abstract class BaseMod implements IUpdatableMod {
 
 		return _log;
 	}
-
-	private void loadLanguageFile(Properties lang, InputStream stream) throws Throwable {
+    //TODO Why.........
+	/*private void loadLanguageFile(Properties lang, InputStream stream) throws Throwable {
 
 		InputStreamReader is = new InputStreamReader(stream, "UTF-8");
 
@@ -175,10 +159,10 @@ public abstract class BaseMod implements IUpdatableMod {
 		parsedLangFile.putAll((Map) langPack); // lovely casting hack
 
 		LanguageRegistry.instance().injectLanguage(lang.intern(), parsedLangFile);
-	}
+	}*/
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected void loadLang() {
+	/*protected void loadLang() {
 
 		if (FMLLaunchHandler.side() == Side.CLIENT) {
 			try {
@@ -201,16 +185,16 @@ public abstract class BaseMod implements IUpdatableMod {
 		} catch (Throwable t) {
 			_log.catching(Level.INFO, t);
 		}
-	}
+	}*/
 
 	@SideOnly(Side.CLIENT)
 	private void loadClientLang() {
 
 		IReloadableResourceManager manager = (IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager();
-		manager.registerReloadListener(new LangManager(manager));
+		//manager.registerReloadListener(new LangManager(manager));
 	}
 
-	@SideOnly(Side.CLIENT)
+	/*@SideOnly(Side.CLIENT)
 	private class LangManager implements IResourceManagerReloadListener {
 
 		private final String _path;
@@ -256,7 +240,7 @@ public abstract class BaseMod implements IUpdatableMod {
 
 			Minecraft.getMinecraft().getLanguageManager().onResourceManagerReload(manager);
 		}
-	}
+	}*/
 
 	private class CrashCallable implements ICrashCallable {
 

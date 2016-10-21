@@ -8,12 +8,15 @@ import cofh.core.world.TickHandlerWorld.RetroChunkCoord;
 import cofh.lib.util.LinkedHashList;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.position.ChunkCoord;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.IWorldGenerator;
-import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import gnu.trove.set.hash.THashSet;
 
@@ -129,13 +132,13 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	@SubscribeEvent
 	public void populateChunkEvent(PopulateChunkEvent.Pre event) {
 
-		populatingChunks.add(new ChunkReference(event.world.provider.dimensionId, event.chunkX, event.chunkZ));
+		populatingChunks.add(new ChunkReference(event.getWorld().provider.getDimension(), event.getChunkX(), event.getChunkZ()));
 	}
 
 	@SubscribeEvent
 	public void populateChunkEvent(ModPopulateChunkEvent.Post event) {
 
-		populatingChunks.remove(new ChunkReference(event.world.provider.dimensionId, event.chunkX, event.chunkZ));
+		populatingChunks.remove(new ChunkReference(event.world.provider.getDimension(), event.chunkX, event.chunkZ));
 	}
 
 	@SubscribeEvent
@@ -164,7 +167,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	@SubscribeEvent
 	public void handleChunkLoadEvent(ChunkDataEvent.Load event) {
 
-		int dim = event.world.provider.dimensionId;
+		int dim = event.getWorld().provider.getDimension();
 
 		boolean regen = false;
 		NBTTagCompound tag = (NBTTagCompound) event.getData().getTag(TAG_NAME);
@@ -221,14 +224,14 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		if (!genReplaceVanilla) {
 			return;
 		}
-		if (vanillaGenEvents.contains(event.type)) {
+		if (vanillaGenEvents.contains(event.getType())) {
 			event.setResult(Result.DENY);
 		}
 	}
 
 	/* IWorldGenerator */
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 
 		generateWorld(random, chunkX, chunkZ, world, true);
 	}
@@ -308,41 +311,45 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		int offsetZ = chunkZ * 16;
 
 		/* Determine if this is a void age; halt if so. */
-		boolean isVoidAge = world.getBlock(offsetX, 0, offsetZ).isAir(world, offsetX, 0, offsetZ);
+		boolean isVoidAge = world.isAirBlock(new BlockPos(offsetX, 0, offsetZ));
 
 		if (isVoidAge) {
 			return;
 		}
 		// TODO: pull out the ExtendedStorageArray and edit that directly. faster.
-		Block filler = world.getBiomeGenForCoords(chunkX, chunkZ).fillerBlock;
+		IBlockState filler = world.getBiomeGenForCoords(new BlockPos(offsetX, 0, offsetZ)).fillerBlock;
 		// NOTE: filler block is dirt by default, the actual filler block for the biome is part of a method body
 		int meta = 0; // no meta field for filler
-		switch (world.provider.dimensionId) {
+		switch (world.provider.getDimension()) {
 		case -1:
 			/* This is a hack because Mojang coded the Nether wrong. Are you surprised? */
-			filler = Blocks.netherrack;
+			filler = Blocks.NETHERRACK.getDefaultState();
 			break;
 		case 0:
 			/*
 			 * Due to above note, overworld gets replaced with stone. other dimensions are on their own for helping us with the filler block
 			 */
-			filler = Blocks.stone;
+			filler = Blocks.STONE.getDefaultState();
 			break;
 		case 1:
 			/* This is a hack because Mojang coded The End wrong. Are you surprised? */
-			filler = Blocks.end_stone;
+			filler = Blocks.END_STONE.getDefaultState();
 			break;
 		}
 		for (int blockX = 0; blockX < 16; blockX++) {
 			for (int blockZ = 0; blockZ < 16; blockZ++) {
 				for (int blockY = 5; blockY > layersBedrock - 1; blockY--) {
-					if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ).isAssociatedBlock(Blocks.bedrock)) {
-						world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, filler, meta, 2);
+                    BlockPos pos = new BlockPos(offsetX + blockX, blockY, offsetZ + blockZ);
+                    IBlockState state = world.getBlockState(pos);
+					if (state.getBlock().isAssociatedBlock(Blocks.BEDROCK)) {
+						world.setBlockState(pos, filler, 2);
 					}
 				}
 				for (int blockY = layersBedrock - 1; blockY > 0; blockY--) {
-					if (!world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ).isAssociatedBlock(Blocks.bedrock)) {
-						world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, Blocks.bedrock, 0, 2);
+                    BlockPos pos = new BlockPos(offsetX + blockX, blockY, offsetZ + blockZ);
+                    IBlockState state = world.getBlockState(pos);
+					if (!state.getBlock().isAssociatedBlock(Blocks.BEDROCK)) {
+						world.setBlockState(pos, Blocks.BEDROCK.getDefaultState(), 2);
 					}
 				}
 			}
@@ -350,17 +357,21 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		/* Flatten bedrock on the top as well */
 		int worldHeight = world.getActualHeight();
 
-		if (world.getBlock(offsetX, worldHeight - 1, offsetZ) == Blocks.bedrock) {
+		if (world.getBlockState(new BlockPos(offsetX, worldHeight - 1, offsetZ)).getBlock().isAssociatedBlock(Blocks.BEDROCK)) {
 			for (int blockX = 0; blockX < 16; blockX++) {
 				for (int blockZ = 0; blockZ < 16; blockZ++) {
 					for (int blockY = worldHeight - 2; blockY > worldHeight - 6; blockY--) {
-						if (world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ) == Blocks.bedrock) {
-							world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, filler, meta, 2);
+                        BlockPos pos = new BlockPos(offsetX + blockX, blockY, offsetZ + blockZ);
+                        IBlockState state = world.getBlockState(pos);
+						if (state.getBlock().isAssociatedBlock(Blocks.BEDROCK)) {
+							world.setBlockState(pos, filler, 2);
 						}
 					}
 					for (int blockY = worldHeight - layersBedrock; blockY < worldHeight - 1; blockY++) {
-						if (!world.getBlock(offsetX + blockX, blockY, offsetZ + blockZ).isAssociatedBlock(Blocks.bedrock)) {
-							world.setBlock(offsetX + blockX, blockY, offsetZ + blockZ, Blocks.bedrock, 0, 2);
+                        BlockPos pos = new BlockPos(offsetX + blockX, blockY, offsetZ + blockZ);
+                        IBlockState state = world.getBlockState(pos);
+						if (!state.getBlock().isAssociatedBlock(Blocks.BEDROCK)) {
+							world.setBlockState(pos, Blocks.BEDROCK.getDefaultState(), 2);
 						}
 					}
 				}
@@ -393,7 +404,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			if (o == null || o.getClass() != getClass()) {
 				if (o instanceof Chunk) {
 					Chunk other = (Chunk) o;
-					return xPos == other.xPosition && zPos == other.zPosition && dimension == other.worldObj.provider.dimensionId;
+					return xPos == other.xPosition && zPos == other.zPosition && dimension == other.getWorld().provider.getDimension();
 				}
 				return false;
 			}

@@ -2,19 +2,13 @@ package cofh.core.render;
 
 import cofh.lib.util.ItemWrapper;
 
-import gnu.trove.map.hash.THashMap;
-
-import java.util.Map;
-import java.util.Map.Entry;
-
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.IItemRenderer;
 
 public class ItemRenderRegistry {
 
-	public static Map<ItemWrapper, IItemRenderer> itemRenders = new THashMap<ItemWrapper, IItemRenderer>();
+	//public static Map<ItemWrapper, IItemRenderer> itemRenders = new THashMap<ItemWrapper, IItemRenderer>();
 
-	public static boolean addItemRenderer(ItemStack stack, IItemRenderer renderer) {
+	/*public static boolean addItemRenderer(ItemStack stack, IItemRenderer renderer) {
 
 		if (validItem(stack)) {
 			return false;
@@ -43,6 +37,6 @@ public class ItemRenderRegistry {
 		}
 		itemRenders.clear();
 		itemRenders = tempMap;
-	}
+	}*/
 
 }
