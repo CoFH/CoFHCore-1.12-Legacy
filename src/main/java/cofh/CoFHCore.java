@@ -26,6 +26,7 @@ import cofh.core.util.fluid.BucketHandler;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
+import cofh.lib.util.helpers.SecurityHelper;
 import cofh.mod.BaseMod;
 import cofh.mod.updater.UpdateManager;
 import net.minecraft.init.Blocks;
@@ -126,7 +127,7 @@ public class CoFHCore extends BaseMod {
 		/* Register Handlers */
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
         CommandHandler.registerSubCommand(CommandFriend.instance);
-//        SecurityHelper.setup();
+        SecurityHelper.setup();
         PacketCore.initialize();
         PacketSocial.initialize();
         RegistrySocial.initialize();

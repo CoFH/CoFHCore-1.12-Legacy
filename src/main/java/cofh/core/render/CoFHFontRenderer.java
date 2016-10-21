@@ -264,7 +264,6 @@ public class CoFHFontRenderer extends FontRenderer {
     }
 
     public static FontRenderer loadFontRendererStack(ItemStack stack) {
-
         if (SecurityHelper.isSecure(stack)) {
             return RenderPlayerFace.loadProfile(stack);
         }

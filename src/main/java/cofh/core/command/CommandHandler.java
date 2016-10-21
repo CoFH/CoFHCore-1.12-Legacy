@@ -13,6 +13,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -117,8 +118,7 @@ public class CommandHandler extends CommandBase {
 
     @Override
     public List<String> getCommandAliases() {
-
-        return null;
+        return new ArrayList<String>();
     }
 
     @Override
