@@ -158,7 +158,7 @@ public class RenderUtils {
 		}
 		maskColor.glColour();
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		GL11.glDisable(GL11.GL_CULL_FACE);
 		Tessellator tessellator = Tessellator.instance;
@@ -204,7 +204,7 @@ public class RenderUtils {
 		tessellator.draw();
 
 		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glDepthMask(true);
+		GlStateManager.depthMask(true);
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glColor4f(1, 1, 1, 1);
@@ -238,7 +238,7 @@ public class RenderUtils {
 			}
 			renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, stack, xPos, yPos);
 			if (subTickAnimation > 0.0F) {
-				GL11.glPopMatrix();
+				GlStateManager.popMatrix();
 			}
 			renderItem.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, stack, xPos, yPos);
 		}
@@ -267,7 +267,7 @@ public class RenderUtils {
 			RenderUtils.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, stack, xPos, yPos);
 			// itemRenderer.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, stack, xPos, yPos);
 			renderItem.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, stack, (int) xPos, (int) yPos);
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 			renderItem.zLevel = 0;
 		}
 	}*/
@@ -316,9 +316,9 @@ public class RenderUtils {
 			renderBlocks.useInventoryTint = renderItem.renderWithColor;
 			renderBlocks.renderBlockAsItem(block, meta, 1.0F);
 			renderBlocks.useInventoryTint = true;
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 		} else if (item.requiresMultipleRenderPasses()) {
-			GL11.glDisable(GL11.GL_LIGHTING);
+			GlStateManager.disableLighting();
 
 			ResourceLocation texture = stack.getItemSpriteNumber() == 0 ? TextureMap.locationBlocksTexture : TextureMap.locationItemsTexture;
 			manager.bindTexture(texture);
@@ -344,7 +344,7 @@ public class RenderUtils {
 
 			GL11.glEnable(GL11.GL_LIGHTING);
 		} else {
-			GL11.glDisable(GL11.GL_LIGHTING);
+			GlStateManager.disableLighting();
 			ResourceLocation resourcelocation = manager.getResourceLocation(stack.getItemSpriteNumber());
 			manager.bindTexture(resourcelocation);
 
@@ -375,17 +375,17 @@ public class RenderUtils {
 	/*public static void renderEffect(TextureManager manager, float x, float y) {
 
 		GL11.glDepthFunc(GL11.GL_GREATER);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		GL11.glDepthMask(false);
 
 		manager.bindTexture(RenderHelper.MC_ITEM_GLINT);
 		renderItem.zLevel -= 50.0F;
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_DST_COLOR, GL11.GL_DST_COLOR);
+		GlStateManager.blendFunc(GL11.GL_DST_COLOR, GL11.GL_DST_COLOR);
 		GL11.glColor4f(0.5F, 0.25F, 0.8F, 1.0F);
 		RenderUtils.renderGlint(x - 2, y - 2, 20, 20);
 		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glDepthMask(true);
+		GlStateManager.depthMask(true);
 		renderItem.zLevel += 50.0F;
 
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -398,7 +398,7 @@ public class RenderUtils {
 		float uScale = 1 / 256f;
 		float vScale = 1 / 256f;
 		float s = 4.0F; // skew
-		GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+		GlStateManager.blendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
 		for (int i = 0; i < 2; i++) {
 			float uOffset = Minecraft.getSystemTime() % (3000 + i * 1873) / (3000F + i * 1873) * 256F;
 			float vOffset = 0.0F;
@@ -426,23 +426,23 @@ public class RenderUtils {
 		case 1:
 			break;
 		case 2:
-			GL11.glTranslated(x + 0.75, y + 0.875, z - RenderHelper.RENDER_OFFSET);
+			GlStateManager.translate(x + 0.75, y + 0.875, z - RenderHelper.RENDER_OFFSET);
 			break;
 		case 3:
-			GL11.glTranslated(x + 0.25, y + 0.875, z + 1 + RenderHelper.RENDER_OFFSET);
+			GlStateManager.translate(x + 0.25, y + 0.875, z + 1 + RenderHelper.RENDER_OFFSET);
 			GL11.glRotated(180, 0, 1, 0);
 			break;
 		case 4:
-			GL11.glTranslated(x - RenderHelper.RENDER_OFFSET, y + 0.875, z + 0.25);
+			GlStateManager.translate(x - RenderHelper.RENDER_OFFSET, y + 0.875, z + 0.25);
 			GL11.glRotated(90, 0, 1, 0);
 			break;
 		case 5:
-			GL11.glTranslated(x + 1 + RenderHelper.RENDER_OFFSET, y + 0.875, z + 0.75);
+			GlStateManager.translate(x + 1 + RenderHelper.RENDER_OFFSET, y + 0.875, z + 0.75);
 			GL11.glRotated(-90, 0, 1, 0);
 			break;
 		default:
 		}
-		GL11.glScaled(0.03125, 0.03125, -RenderHelper.RENDER_OFFSET);
+		GlStateManager.scale(0.03125, 0.03125, -RenderHelper.RENDER_OFFSET);
 		GL11.glRotated(180, 0, 0, 1);
 
 		setupLight(tile, side);
@@ -455,7 +455,7 @@ public class RenderUtils {
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 		GL11.glEnable(GL11.GL_BLEND);
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 		net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
 	}*/
 

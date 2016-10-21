@@ -128,7 +128,7 @@ public class TabConfiguration extends TabBase {
         RenderHelper.setBlockTextureSheet();
 
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         for (int i = 0; i < 2; i++) {
             gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_ABOVE[myTile.getFacing()], i), posX() + 40, posY + 24);

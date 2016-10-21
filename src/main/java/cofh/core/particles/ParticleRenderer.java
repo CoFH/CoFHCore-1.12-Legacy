@@ -110,7 +110,7 @@ public class ParticleRenderer {
 
                 tessellator.draw();
                 GL11.glDisable(GL11.GL_BLEND);
-                GL11.glDepthMask(true);
+                GlStateManager.depthMask(true);
                 GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
             }
         }
