@@ -34,7 +34,7 @@ public class TabAugment extends TabBase {
         CoFHCore.configClient.save();
     }
 
-    public static ResourceLocation GRID_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Slot_Grid_Augment.png");
+    public static ResourceLocation GRID_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "slot_grid_augment.png");
 
     IAugmentableContainer myContainer;
 

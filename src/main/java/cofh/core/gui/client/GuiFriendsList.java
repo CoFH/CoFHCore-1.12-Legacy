@@ -25,7 +25,7 @@ import java.util.Locale;
 
 public class GuiFriendsList extends GuiBaseAdv {
 
-    static final String TEXTURE_PATH = GuiProps.PATH_GUI + "FriendsList.png";
+    static final String TEXTURE_PATH = GuiProps.PATH_GUI + "friends_list.png";
     static final ResourceLocation TEXTURE = new ResourceLocation(TEXTURE_PATH);
 
     static final int TB_HEIGHT = 12;
