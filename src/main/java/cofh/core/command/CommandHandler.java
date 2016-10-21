@@ -118,7 +118,6 @@ public class CommandHandler extends CommandBase {
 
     @Override
     public List<String> getCommandAliases() {
-
         return new ArrayList<String>();
     }
 

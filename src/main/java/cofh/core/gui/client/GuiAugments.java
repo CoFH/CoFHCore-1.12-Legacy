@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiAugments extends GuiBaseAdv {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(GuiProps.PATH_GUI + "Augments.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(GuiProps.PATH_GUI + "augments.png");
 
     public GuiAugments(InventoryPlayer inventory) {
 
