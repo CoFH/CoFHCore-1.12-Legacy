@@ -5,19 +5,19 @@ import net.minecraft.item.ItemPickaxe;
 
 public class ItemPickaxeAdv extends ItemToolAdv {
 
-	public ItemPickaxeAdv(ToolMaterial toolMaterial) {
+    public ItemPickaxeAdv(ToolMaterial toolMaterial) {
 
-		super(2.0F, toolMaterial);
-		addToolClass("pickaxe");
+        super(2.0F, toolMaterial);
+        addToolClass("pickaxe");
 
-		effectiveBlocks.addAll(ItemPickaxe.field_150915_c);
-		effectiveMaterials.add(Material.iron);
-		effectiveMaterials.add(Material.anvil);
-		effectiveMaterials.add(Material.rock);
-		effectiveMaterials.add(Material.ice);
-		effectiveMaterials.add(Material.packedIce);
-		effectiveMaterials.add(Material.glass);
-		effectiveMaterials.add(Material.redstoneLight);
-	}
+        effectiveBlocks.addAll(ItemPickaxe.field_150915_c);
+        effectiveMaterials.add(Material.iron);
+        effectiveMaterials.add(Material.anvil);
+        effectiveMaterials.add(Material.rock);
+        effectiveMaterials.add(Material.ice);
+        effectiveMaterials.add(Material.packedIce);
+        effectiveMaterials.add(Material.glass);
+        effectiveMaterials.add(Material.redstoneLight);
+    }
 
 }

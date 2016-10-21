@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ISubSelectionBoxProvider {
 
-	public void addTraceableCuboids(List<IndexedCuboid6> cuboids);
+    public void addTraceableCuboids(List<IndexedCuboid6> cuboids);
 
 }

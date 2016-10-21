@@ -30,7 +30,7 @@ public class EntitySelectorInRangeByType implements Predicate<Entity> {
     @Override
     public boolean apply(@Nullable Entity entity) {
         // Out of range? Not applicable.
-        if (entity == null){
+        if (entity == null) {
             return false;
         }
         if (entity.getDistanceSq(origX, origY, origZ) > distance * distance) {

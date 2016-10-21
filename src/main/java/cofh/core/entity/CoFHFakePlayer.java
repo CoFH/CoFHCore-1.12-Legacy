@@ -144,7 +144,6 @@ public class CoFHFakePlayer extends FakePlayer {
         return 1.1F;
     }
 
-
     //@Override TODO
     public ItemStack getCurrentArmor(int par1) {
         return new ItemStack(Items.DIAMOND_CHESTPLATE);

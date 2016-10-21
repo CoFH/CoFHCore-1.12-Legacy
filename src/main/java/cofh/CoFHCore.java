@@ -29,311 +29,303 @@ import cofh.core.world.WorldHandler;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.mod.BaseMod;
 import cofh.mod.updater.UpdateManager;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.CustomProperty;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-
-import java.io.File;
-import java.util.ArrayList;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.CustomProperty;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, guiFactory = CoFHCore.modGuiFactory,
-		customProperties = @CustomProperty(k = "cofhversion", v = "true"))
+import java.io.File;
+import java.util.ArrayList;
+
+@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, guiFactory = CoFHCore.modGuiFactory, customProperties = @CustomProperty(k = "cofhversion", v = "true"))
 public class CoFHCore extends BaseMod {
 
-	public static final String modId = "CoFHCore";
-	public static final String modName = "CoFH Core";
-	public static final String version = "1.7.10R3.1.3B1";
-	public static final String version_max = "1.7.10R3.2.0";
-	public static final String dependencies = CoFHProps.FORGE_DEP;
-	public static final String modGuiFactory = "cofh.core.gui.GuiConfigCoreFactory";
+    public static final String modId = "CoFHCore";
+    public static final String modName = "CoFH Core";
+    public static final String version = "1.7.10R3.1.3B1";
+    public static final String version_max = "1.7.10R3.2.0";
+    public static final String dependencies = CoFHProps.FORGE_DEP;
+    public static final String modGuiFactory = "cofh.core.gui.GuiConfigCoreFactory";
 
-	public static final String version_group = "required-after:" + modId + "@[" + version + "," + version_max + ");";
-	public static final String releaseURL = "https://raw.github.com/CoFH/VERSION/master/" + modId;
+    public static final String version_group = "required-after:" + modId + "@[" + version + "," + version_max + ");";
+    public static final String releaseURL = "https://raw.github.com/CoFH/VERSION/master/" + modId;
 
-	@Instance(modId)
-	public static CoFHCore instance;
+    @Instance(modId)
+    public static CoFHCore instance;
 
-	@SidedProxy(clientSide = "cofh.core.ProxyClient", serverSide = "cofh.core.Proxy")
-	public static Proxy proxy;
+    @SidedProxy(clientSide = "cofh.core.ProxyClient", serverSide = "cofh.core.Proxy")
+    public static Proxy proxy;
 
-	public static final Logger log = LogManager.getLogger(modId);
-	public static final ConfigHandler configCore = new ConfigHandler(version);
-	public static final ConfigHandler configLoot = new ConfigHandler(version);
-	public static final ConfigHandler configClient = new ConfigHandler(version);
-	public static final GuiHandler guiHandler = new GuiHandler();
+    public static final Logger log = LogManager.getLogger(modId);
+    public static final ConfigHandler configCore = new ConfigHandler(version);
+    public static final ConfigHandler configLoot = new ConfigHandler(version);
+    public static final ConfigHandler configClient = new ConfigHandler(version);
+    public static final GuiHandler guiHandler = new GuiHandler();
 
-	public static MinecraftServer server;
+    public static MinecraftServer server;
 
-	private final ArrayList<IBakeable> oven = new ArrayList<IBakeable>();
+    private final ArrayList<IBakeable> oven = new ArrayList<IBakeable>();
 
-	public static void registerBakeable(IBakeable a) {
+    public static void registerBakeable(IBakeable a) {
 
-		instance.oven.add(a);
-	}
+        instance.oven.add(a);
+    }
 
-	/* INIT SEQUENCE */
-	public CoFHCore() {
+    /* INIT SEQUENCE */
+    public CoFHCore() {
 
-		super(log);
-	}
+        super(log);
+    }
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
 
-		CoFHProps.configDir = event.getModConfigurationDirectory();
+        CoFHProps.configDir = event.getModConfigurationDirectory();
 
-		UpdateManager.registerUpdater(new UpdateManager(this, releaseURL, CoFHProps.DOWNLOAD_URL));
-		configCore.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/common.cfg"), true));
-		configClient.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/client.cfg"), true));
+        UpdateManager.registerUpdater(new UpdateManager(this, releaseURL, CoFHProps.DOWNLOAD_URL));
+        configCore.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/common.cfg"), true));
+        configClient.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/client.cfg"), true));
 
-		// EntityRegistry.registerModEntity(EntityCoFHArrow.class, "Arrow", 0, this, 150, 1, false);
+        // EntityRegistry.registerModEntity(EntityCoFHArrow.class, "Arrow", 0, this, 150, 1, false);
 
-		MinecraftForge.EVENT_BUS.register(proxy);
-		proxy.preInit();
+        MinecraftForge.EVENT_BUS.register(proxy);
+        proxy.preInit();
 
-		moduleCore();
-		moduleLoot();
+        moduleCore();
+        moduleLoot();
 
-		FeatureParser.initialize();
-		WorldHandler.initialize();
-		FMLEventHandler.initialize();
-		BucketHandler.initialize();
-		FurnaceFuelHandler.initialize();
-		PacketHandler.instance.initialize();
-		RecipeSorter.register("cofh:augment", RecipeAugmentable.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
-		RecipeSorter.register("cofh:secure", RecipeSecure.class, RecipeSorter.Category.SHAPED, "before:cofh:upgrade");
-		RecipeSorter.register("cofh:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
-		RecipeSorter.register("cofh:upgradeoverride", RecipeUpgradeOverride.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
+        FeatureParser.initialize();
+        WorldHandler.initialize();
+        FMLEventHandler.initialize();
+        BucketHandler.initialize();
+        FurnaceFuelHandler.initialize();
+        PacketHandler.instance.initialize();
+        RecipeSorter.register("cofh:augment", RecipeAugmentable.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
+        RecipeSorter.register("cofh:secure", RecipeSecure.class, RecipeSorter.Category.SHAPED, "before:cofh:upgrade");
+        RecipeSorter.register("cofh:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
+        RecipeSorter.register("cofh:upgradeoverride", RecipeUpgradeOverride.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 
-		registerOreDictionaryEntries();
-	}
+        registerOreDictionaryEntries();
+    }
 
-	@EventHandler
-	public void initialize(FMLInitializationEvent event) {
+    @EventHandler
+    public void initialize(FMLInitializationEvent event) {
 
 		/* Register Handlers */
-		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
-		CommandHandler.registerSubCommand(CommandFriend.instance);
-		SecurityHelper.setup();
-		PacketCore.initialize();
-		PacketSocial.initialize();
-		RegistrySocial.initialize();
-		RegistryEnderAttuned.initialize();
-	}
+        NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
+        CommandHandler.registerSubCommand(CommandFriend.instance);
+        SecurityHelper.setup();
+        PacketCore.initialize();
+        PacketSocial.initialize();
+        RegistrySocial.initialize();
+        RegistryEnderAttuned.initialize();
+    }
 
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
 
-		OreDictionaryArbiter.initialize();
-		CoFHEnchantment.postInit();
+        OreDictionaryArbiter.initialize();
+        CoFHEnchantment.postInit();
 
-		proxy.registerKeyBinds();
-		proxy.registerRenderInformation();
-		proxy.registerTickHandlers();
-		proxy.registerPacketInformation();
+        proxy.registerKeyBinds();
+        proxy.registerRenderInformation();
+        proxy.registerTickHandlers();
+        proxy.registerPacketInformation();
 
-		PacketHandler.instance.postInit();
-	}
+        PacketHandler.instance.postInit();
+    }
 
-	@EventHandler
-	public void loadComplete(FMLLoadCompleteEvent event) {
+    @EventHandler
+    public void loadComplete(FMLLoadCompleteEvent event) {
 
-		configCore.cleanUp(false, true);
+        configCore.cleanUp(false, true);
 
-		try {
-			FeatureParser.parseGenerationFile();
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
-	}
+        try {
+            FeatureParser.parseGenerationFile();
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
 
-	@EventHandler
-	public void serverAboutToStart(FMLServerAboutToStartEvent event) {
+    @EventHandler
+    public void serverAboutToStart(FMLServerAboutToStartEvent event) {
 
-		RegistryEnderAttuned.createClientRegistry();
-		RegistryEnderAttuned.createServerRegistry();
-	}
+        RegistryEnderAttuned.createClientRegistry();
+        RegistryEnderAttuned.createServerRegistry();
+    }
 
-	@EventHandler
-	public void serverStarting(FMLServerStartingEvent event) {
+    @EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
 
-		OreDictionaryArbiter.initialize();
-		CommandHandler.initCommands(event);
-		server = event.getServer();
-		for (IBakeable i : oven) {
-			i.bake();
-		}
-	}
+        OreDictionaryArbiter.initialize();
+        CommandHandler.initCommands(event);
+        server = event.getServer();
+        for (IBakeable i : oven) {
+            i.bake();
+        }
+    }
 
-	public void handleConfigSync(PacketCoFHBase payload) {
+    public void handleConfigSync(PacketCoFHBase payload) {
 
-		FMLEventHandler.instance.handleIdMappingEvent(null);
+        FMLEventHandler.instance.handleIdMappingEvent(null);
 
-		RegistryEnderAttuned.createClientRegistry();
-	}
+        RegistryEnderAttuned.createClientRegistry();
+    }
 
-	public PacketCoFHBase getConfigSync() {
+    public PacketCoFHBase getConfigSync() {
 
-		PacketCoFHBase payload = PacketCore.getPacket(PacketTypes.CONFIG_SYNC);
+        PacketCoFHBase payload = PacketCore.getPacket(PacketTypes.CONFIG_SYNC);
 
-		return payload;
-	}
+        return payload;
+    }
 
-	public void registerOreDictionaryEntries() {
+    public void registerOreDictionaryEntries() {
 
-		registerOreDictionaryEntry("blockCloth", new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
-		registerOreDictionaryEntry("coal", new ItemStack(Items.COAL, 1, 0));
-		registerOreDictionaryEntry("charcoal", new ItemStack(Items.COAL, 1, 1));
-	}
+        registerOreDictionaryEntry("blockCloth", new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
+        registerOreDictionaryEntry("coal", new ItemStack(Items.COAL, 1, 0));
+        registerOreDictionaryEntry("charcoal", new ItemStack(Items.COAL, 1, 1));
+    }
 
-	private boolean registerOreDictionaryEntry(String oreName, ItemStack ore) {
+    private boolean registerOreDictionaryEntry(String oreName, ItemStack ore) {
 
-		if (OreDictionary.getOres(oreName).isEmpty()) {
-			OreDictionary.registerOre(oreName, ore);
-			return true;
-		}
-		return false;
-	}
+        if (OreDictionary.getOres(oreName).isEmpty()) {
+            OreDictionary.registerOre(oreName, ore);
+            return true;
+        }
+        return false;
+    }
 
-	private boolean moduleCore() {
+    private boolean moduleCore() {
 
-		String comment;
-		/* GENERAL */
-		String category = "General";
+        String comment;
+        /* GENERAL */
+        String category = "General";
 
-		comment = "Set to TRUE to be informed of non-critical updates. You will still receive critical update notifications.";
-		CoFHProps.enableUpdateNotice = configCore.get(category, "EnableUpdateNotifications", true, comment);
+        comment = "Set to TRUE to be informed of non-critical updates. You will still receive critical update notifications.";
+        CoFHProps.enableUpdateNotice = configCore.get(category, "EnableUpdateNotifications", true, comment);
 
-		comment = "Set to TRUE for this to log when a block is dismantled.";
-		CoFHProps.enableDismantleLogging = configCore.get(category, "EnableDismantleLogging", false, comment);
+        comment = "Set to TRUE for this to log when a block is dismantled.";
+        CoFHProps.enableDismantleLogging = configCore.get(category, "EnableDismantleLogging", false, comment);
 
-		comment = "Set to TRUE to display death messages for any named entity.";
-		CoFHProps.enableLivingEntityDeathMessages = configCore.get(category, "EnableGenericDeathMessage", true, comment);
+        comment = "Set to TRUE to display death messages for any named entity.";
+        CoFHProps.enableLivingEntityDeathMessages = configCore.get(category, "EnableGenericDeathMessage", true, comment);
 
-		comment = "Set to FALSE to disable items on the ground from trying to stack. This can improve server performance.";
-		CoFHProps.enableItemStacking = configCore.get(category, "EnableItemStacking", true, comment);
+        comment = "Set to FALSE to disable items on the ground from trying to stack. This can improve server performance.";
+        CoFHProps.enableItemStacking = configCore.get(category, "EnableItemStacking", true, comment);
 
 		/* HOLIDAY */
-		category = "Holiday";
+        category = "Holiday";
 
-		comment = "Set this to TRUE to disable April Foolishness.";
-		CoFHProps.holidayAprilFools = !configCore.get(category, "IHateApril", false, comment);
+        comment = "Set this to TRUE to disable April Foolishness.";
+        CoFHProps.holidayAprilFools = !configCore.get(category, "IHateApril", false, comment);
 
-		comment = "Set this to TRUE to disable Christmas cheer. Scrooge. :(";
-		CoFHProps.holidayChristmas = !configCore.get(category, "HoHoNo", false, comment);
+        comment = "Set this to TRUE to disable Christmas cheer. Scrooge. :(";
+        CoFHProps.holidayChristmas = !configCore.get(category, "HoHoNo", false, comment);
 
 		/* SECURITY */
-		category = "Security";
+        category = "Security";
 
-		comment = "Set to TRUE to allow for Server Ops to access 'secure' blocks. Your players will be warned upon server connection.";
-		CoFHProps.enableOpSecureAccess = configCore.get(category, "OpsCanAccessSecureBlocks", false, comment);
+        comment = "Set to TRUE to allow for Server Ops to access 'secure' blocks. Your players will be warned upon server connection.";
+        CoFHProps.enableOpSecureAccess = configCore.get(category, "OpsCanAccessSecureBlocks", false, comment);
 
 		/* WORLD TWEAKS */
-		category = "World.Tweaks";
+        category = "World.Tweaks";
 
-		comment = "Set this to a value > 1 to make trees grow more infrequently. Rate is 1 in N. Example: If this value is set to 3, trees will take 3x the time to grow, on average.";
-		CoFHProps.treeGrowthChance = configCore.get(category, "TreeGrowthChance", 1, comment);
+        comment = "Set this to a value > 1 to make trees grow more infrequently. Rate is 1 in N. Example: If this value is set to 3, trees will take 3x the time to grow, on average.";
+        CoFHProps.treeGrowthChance = configCore.get(category, "TreeGrowthChance", 1, comment);
 
-		configCore.save();
+        configCore.save();
 
-		return true;
-	}
+        return true;
+    }
 
-	private boolean moduleLoot() {
+    private boolean moduleLoot() {
 
-		configLoot.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/loot.cfg"), true));
+        configLoot.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/loot.cfg"), true));
 
-		String comment;
+        String comment;
 		/* GENERAL */
-		String category = "General";
+        String category = "General";
 
-		comment = "Set to false to disable this entire module.";
-		boolean enable = configLoot.get(category, "EnableModule", true, comment);
+        comment = "Set to false to disable this entire module.";
+        boolean enable = configLoot.get(category, "EnableModule", true, comment);
 
-		if (!enable) {
-			configLoot.save();
-			return false;
-		}
+        if (!enable) {
+            configLoot.save();
+            return false;
+        }
 		/* HEADS */
-		category = "Heads";
+        category = "Heads";
 
-		comment = "If enabled, mobs only drop heads when killed by players.";
-		DropHandler.mobPvEOnly = configLoot.get(category, "MobsDropOnPvEOnly", DropHandler.mobPvEOnly, comment);
+        comment = "If enabled, mobs only drop heads when killed by players.";
+        DropHandler.mobPvEOnly = configLoot.get(category, "MobsDropOnPvEOnly", DropHandler.mobPvEOnly, comment);
 
-		comment = "If enabled, players only drop heads when killed by other players.";
-		DropHandler.playerPvPOnly = configLoot.get(category, "PlayersDropOnPvPOnly", DropHandler.playerPvPOnly, comment);
+        comment = "If enabled, players only drop heads when killed by other players.";
+        DropHandler.playerPvPOnly = configLoot.get(category, "PlayersDropOnPvPOnly", DropHandler.playerPvPOnly, comment);
 
-		category = "Heads.Players";
-		DropHandler.playersEnabled = configLoot.get(category, "Enabled", DropHandler.playersEnabled);
-		DropHandler.playerChance = configLoot.get(category, "Chance", DropHandler.playerChance);
+        category = "Heads.Players";
+        DropHandler.playersEnabled = configLoot.get(category, "Enabled", DropHandler.playersEnabled);
+        DropHandler.playerChance = configLoot.get(category, "Chance", DropHandler.playerChance);
 
-		category = "Heads.Creepers";
-		DropHandler.creeperEnabled = configLoot.get(category, "Enabled", DropHandler.creeperEnabled);
-		DropHandler.creeperChance = configLoot.get(category, "Chance", DropHandler.creeperChance);
+        category = "Heads.Creepers";
+        DropHandler.creeperEnabled = configLoot.get(category, "Enabled", DropHandler.creeperEnabled);
+        DropHandler.creeperChance = configLoot.get(category, "Chance", DropHandler.creeperChance);
 
-		category = "Heads.Skeletons";
-		DropHandler.skeletonEnabled = configLoot.get(category, "Enabled", DropHandler.skeletonEnabled);
-		DropHandler.skeletonChance = configLoot.get(category, "Chance", DropHandler.skeletonChance);
+        category = "Heads.Skeletons";
+        DropHandler.skeletonEnabled = configLoot.get(category, "Enabled", DropHandler.skeletonEnabled);
+        DropHandler.skeletonChance = configLoot.get(category, "Chance", DropHandler.skeletonChance);
 
-		category = "Heads.WitherSkeletons";
-		DropHandler.skeletonEnabled = configLoot.get(category, "Enabled", DropHandler.witherSkeletonEnabled);
-		DropHandler.witherSkeletonChance = configLoot.get(category, "Chance", DropHandler.witherSkeletonChance);
+        category = "Heads.WitherSkeletons";
+        DropHandler.skeletonEnabled = configLoot.get(category, "Enabled", DropHandler.witherSkeletonEnabled);
+        DropHandler.witherSkeletonChance = configLoot.get(category, "Chance", DropHandler.witherSkeletonChance);
 
-		category = "Heads.Zombies";
-		DropHandler.zombieEnabled = configLoot.get(category, "Enabled", DropHandler.zombieEnabled);
-		DropHandler.zombieChance = configLoot.get(category, "Chance", DropHandler.zombieChance);
+        category = "Heads.Zombies";
+        DropHandler.zombieEnabled = configLoot.get(category, "Enabled", DropHandler.zombieEnabled);
+        DropHandler.zombieChance = configLoot.get(category, "Chance", DropHandler.zombieChance);
 
-		configLoot.save();
+        configLoot.save();
 
-		MinecraftForge.EVENT_BUS.register(DropHandler.instance);
+        MinecraftForge.EVENT_BUS.register(DropHandler.instance);
 
-		return true;
-	}
+        return true;
+    }
 
-	/* BaseMod */
-	@Override
-	public String getModId() {
+    /* BaseMod */
+    @Override
+    public String getModId() {
 
-		return modId;
-	}
+        return modId;
+    }
 
-	@Override
-	protected String getAssetDir() {
+    @Override
+    protected String getAssetDir() {
 
-		return "cofh";
-	}
+        return "cofh";
+    }
 
-	@Override
-	public String getModName() {
+    @Override
+    public String getModName() {
 
-		return modName;
-	}
+        return modName;
+    }
 
-	@Override
-	public String getModVersion() {
+    @Override
+    public String getModVersion() {
 
-		return version;
-	}
+        return version;
+    }
 
 }

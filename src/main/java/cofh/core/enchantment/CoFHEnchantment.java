@@ -1,6 +1,5 @@
 package cofh.core.enchantment;
 
-import cofh.CoFHCore;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

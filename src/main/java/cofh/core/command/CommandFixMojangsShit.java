@@ -109,7 +109,7 @@ public class CommandFixMojangsShit implements ISubCommand {
         blockCounter = 0;
         Block block = Blocks.CHEST, air = Blocks.AIR;
         /*try {
-			for (int x = xS; x <= xL; ++x) {
+            for (int x = xS; x <= xL; ++x) {
 				for (int z = zS; z <= zL; ++z) {
 					Chunk chunk = world.getChunkFromBlockCoords(x, z);
 					int cX = x & 15, cZ = z & 15;

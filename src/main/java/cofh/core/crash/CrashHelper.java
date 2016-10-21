@@ -1,24 +1,9 @@
 package cofh.core.crash;
 
-import com.google.common.collect.HashBiMap;
-
-import java.util.Map;
-import java.util.concurrent.Callable;
-
-import net.minecraft.block.Block;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 public class CrashHelper {
 
 	/*static final int range = 3;
-	static final char[] validLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!£$%^&*()`¬_+\"\\@'{}[]~/|<>,.?:;".toCharArray();
+    static final char[] validLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!£$%^&*()`¬_+\"\\@'{}[]~/|<>,.?:;".toCharArray();
 	static final char[] metaLetters = "0123456789ABCDEF".toCharArray();
 
 	public static CrashReport makeDetailedCrashReport(Throwable throwable, String message, Object caller, Object... curState) {

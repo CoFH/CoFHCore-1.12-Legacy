@@ -1,36 +1,34 @@
 package cofh.core.command;
 
-import cofh.lib.util.helpers.EntityHelper;
-
-import java.util.List;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
 
+import java.util.List;
+
 public class CommandTPX implements ISubCommand {
 
-	public static CommandTPX instance = new CommandTPX();
+    public static CommandTPX instance = new CommandTPX();
 
-	@Override
-	public String getCommandName() {
+    @Override
+    public String getCommandName() {
 
-		return "tpx";
-	}
+        return "tpx";
+    }
 
-	@Override
-	public int getPermissionLevel() {
+    @Override
+    public int getPermissionLevel() {
 
-		return 2;
-	}
+        return 2;
+    }
 
-	@Override
-	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] arguments) throws CommandException {
+    @Override
+    public void handleCommand(MinecraftServer server, ICommandSender sender, String[] arguments) throws CommandException {
 
 		/*// TODO: allow selector commands to target anything (single player, all players[@a], specific entities [@e], etc.)
-		// where it makes sense to allow it (e.g., not allowing teleporting a single thing to many things)
+        // where it makes sense to allow it (e.g., not allowing teleporting a single thing to many things)
 
 		switch (arguments.length) {
 
@@ -175,26 +173,26 @@ public class CommandTPX implements ISubCommand {
 					player.worldObj.provider.getDimensionName(), player.posX, player.posY, player.posZ);
 			break;
 		}*/
-	}
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
-		if (args.length == 2 || args.length == 3) {
-			return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
-		} else if (args.length >= 6) {
-			Integer[] ids = DimensionManager.getIDs();
-			String[] strings = new String[ids.length];
+        if (args.length == 2 || args.length == 3) {
+            return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+        } else if (args.length >= 6) {
+            Integer[] ids = DimensionManager.getIDs();
+            String[] strings = new String[ids.length];
 
-			for (int i = 0; i < ids.length; i++) {
-				strings[i] = ids[i].toString();
-			}
-			return CommandBase.getListOfStringsMatchingLastWord(args, strings);
-		}
+            for (int i = 0; i < ids.length; i++) {
+                strings[i] = ids[i].toString();
+            }
+            return CommandBase.getListOfStringsMatchingLastWord(args, strings);
+        }
 
-		return null;
+        return null;
 
-	}
+    }
 
 }

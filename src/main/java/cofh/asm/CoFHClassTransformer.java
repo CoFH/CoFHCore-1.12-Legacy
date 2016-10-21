@@ -1,42 +1,41 @@
 package cofh.asm;
 
-import static cofh.asm.ASMCore.*;
-
+import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 
-import net.minecraft.launchwrapper.IClassTransformer;
+import static cofh.asm.ASMCore.*;
 
 public class CoFHClassTransformer implements IClassTransformer {
 
-	private static boolean scrappedData = false;
+    private static boolean scrappedData = false;
 
-	public CoFHClassTransformer() {
+    public CoFHClassTransformer() {
 
-		ASMCore.init();
-	}
+        ASMCore.init();
+    }
 
-	public static void scrapeData(ASMDataTable table) {
+    public static void scrapeData(ASMDataTable table) {
 
-		ASMCore.scrapeData(table);
-		scrappedData = true;
-	}
+        ASMCore.scrapeData(table);
+        scrappedData = true;
+    }
 
-	@Override
-	public byte[] transform(String name, String transformedName, byte[] bytes) {
+    @Override
+    public byte[] transform(String name, String transformedName, byte[] bytes) {
 
-		if (bytes == null) {
-			return null;
-		}
+        if (bytes == null) {
+            return null;
+        }
 
-		if (scrappedData && parsables.contains(name)) {
-			bytes = parse(name, transformedName, bytes);
-		}
+        if (scrappedData && parsables.contains(name)) {
+            bytes = parse(name, transformedName, bytes);
+        }
 
-		int index = hashes.get(transformedName);
-		if (index != 0) {
-			bytes = ASMCore.transform(index, name, transformedName, bytes);
-		}
+        int index = hashes.get(transformedName);
+        if (index != 0) {
+            bytes = ASMCore.transform(index, name, transformedName, bytes);
+        }
 
-		return bytes;
-	}
+        return bytes;
+    }
 }

@@ -1,11 +1,6 @@
 package cofh.asm.relauncher;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
+import java.lang.annotation.*;
 
 /**
  * This annotation will replace the bytecode of the annotated method with that of the named method if the <tt>value</tt> condition is not met.
@@ -23,13 +18,13 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD })
 public @interface Substitutable {
 
-	public String[] value();
+    public String[] value();
 
-	public String method();
+    public String method();
 
-	/**
-	 * The side from which this method will *always* be substituted.
-	 */
-	public CoFHSide side() default CoFHSide.NONE;
+    /**
+     * The side from which this method will *always* be substituted.
+     */
+    public CoFHSide side() default CoFHSide.NONE;
 
 }

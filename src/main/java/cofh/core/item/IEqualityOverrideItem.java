@@ -4,6 +4,6 @@ import net.minecraft.item.ItemStack;
 
 public interface IEqualityOverrideItem {
 
-	public boolean isLastHeldItemEqual(ItemStack current, ItemStack previous);
+    public boolean isLastHeldItemEqual(ItemStack current, ItemStack previous);
 
 }

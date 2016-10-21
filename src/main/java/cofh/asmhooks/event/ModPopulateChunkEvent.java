@@ -1,37 +1,36 @@
 package cofh.asmhooks.event;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
-
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.Event;
 
 public class ModPopulateChunkEvent extends Event {
 
-	public final World world;
-	public final int chunkX;
-	public final int chunkZ;
+    public final World world;
+    public final int chunkX;
+    public final int chunkZ;
 
-	public ModPopulateChunkEvent(World world, int chunkX, int chunkZ) {
+    public ModPopulateChunkEvent(World world, int chunkX, int chunkZ) {
 
-		super();
-		this.world = world;
-		this.chunkX = chunkX;
-		this.chunkZ = chunkZ;
-	}
+        super();
+        this.world = world;
+        this.chunkX = chunkX;
+        this.chunkZ = chunkZ;
+    }
 
-	public static class Pre extends ModPopulateChunkEvent {
+    public static class Pre extends ModPopulateChunkEvent {
 
-		public Pre(World world, int chunkX, int chunkZ) {
+        public Pre(World world, int chunkX, int chunkZ) {
 
-			super(world, chunkX, chunkZ);
-		}
-	}
+            super(world, chunkX, chunkZ);
+        }
+    }
 
-	public static class Post extends ModPopulateChunkEvent {
+    public static class Post extends ModPopulateChunkEvent {
 
-		public Post(World world, int chunkX, int chunkZ) {
+        public Post(World world, int chunkX, int chunkZ) {
 
-			super(world, chunkX, chunkZ);
-		}
-	}
+            super(world, chunkX, chunkZ);
+        }
+    }
 
 }

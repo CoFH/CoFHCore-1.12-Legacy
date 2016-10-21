@@ -10,31 +10,31 @@ import net.minecraft.world.World;
 
 public class BlockWater extends BlockStaticLiquid {
 
-	public BlockWater(Material mat) {
+    public BlockWater(Material mat) {
 
-		super(mat);
-	}
+        super(mat);
+    }
 
-	@Override
-	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+    @Override
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
 
-		super.onBlockAdded(world, pos, state);
+        super.onBlockAdded(world, pos, state);
 
-		if (this.blockMaterial != Material.WATER) {
-			return;
-		}
+        if (this.blockMaterial != Material.WATER) {
+            return;
+        }
 
-		if (world.provider.doesWaterVaporize()) {
-			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
-			world.playEvent(1004, pos, 0);
-			world.playEvent(2000, pos, 4);
-		}
-	}
+        if (world.provider.doesWaterVaporize()) {
+            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+            world.playEvent(1004, pos, 0);
+            world.playEvent(2000, pos, 4);
+        }
+    }
 
-	@Override
-	public boolean isAssociatedBlock(Block block) {
+    @Override
+    public boolean isAssociatedBlock(Block block) {
 
-		return super.isAssociatedBlock(block) || block == Blocks.FLOWING_WATER;
-	}
+        return super.isAssociatedBlock(block) || block == Blocks.FLOWING_WATER;
+    }
 
 }

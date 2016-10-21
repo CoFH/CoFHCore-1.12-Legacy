@@ -6,23 +6,23 @@ import cofh.CoFHCore;
 
 public class NEICoFHConfig implements IConfigureNEI {
 
-	/* IConfigureNEI */
-	@Override
-	public void loadConfig() {
+    /* IConfigureNEI */
+    @Override
+    public void loadConfig() {
 
-		API.registerNEIGuiHandler(NEIGuiHandler.instance);
-	}
+        API.registerNEIGuiHandler(NEIGuiHandler.instance);
+    }
 
-	@Override
-	public String getName() {
+    @Override
+    public String getName() {
 
-		return CoFHCore.modName;
-	}
+        return CoFHCore.modName;
+    }
 
-	@Override
-	public String getVersion() {
+    @Override
+    public String getVersion() {
 
-		return CoFHCore.version;
-	}
+        return CoFHCore.version;
+    }
 
 }

@@ -1,36 +1,35 @@
 package cofh.core.gui;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.IModGuiFactory;
 
 import java.util.Set;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-
 public class GuiConfigCoreFactory implements IModGuiFactory {
 
-	/* IModGuiFactory */
-	@Override
-	public void initialize(Minecraft minecraftInstance) {
+    /* IModGuiFactory */
+    @Override
+    public void initialize(Minecraft minecraftInstance) {
 
-	}
+    }
 
-	@Override
-	public Class<? extends GuiScreen> mainConfigGuiClass() {
+    @Override
+    public Class<? extends GuiScreen> mainConfigGuiClass() {
 
-		return GuiConfigCore.class;
-	}
+        return GuiConfigCore.class;
+    }
 
-	@Override
-	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
+    @Override
+    public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
+    @Override
+    public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
 
-		return null;
-	}
+        return null;
+    }
 
 }

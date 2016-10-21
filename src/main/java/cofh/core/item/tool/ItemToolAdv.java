@@ -1,13 +1,8 @@
 package cofh.core.item.tool;
 
 import cofh.lib.util.helpers.ItemHelper;
-
 import gnu.trove.set.hash.THashSet;
 import gnu.trove.set.hash.TLinkedHashSet;
-
-import java.util.List;
-import java.util.Set;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -24,219 +19,221 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 
+import java.util.List;
+import java.util.Set;
+
 public abstract class ItemToolAdv extends ItemTool {
 
-	public String repairIngot = "";
-	private final TLinkedHashSet<String> toolClasses = new TLinkedHashSet<String>();
-	private final Set<String> immutableClasses = java.util.Collections.unmodifiableSet(toolClasses);
+    public String repairIngot = "";
+    private final TLinkedHashSet<String> toolClasses = new TLinkedHashSet<String>();
+    private final Set<String> immutableClasses = java.util.Collections.unmodifiableSet(toolClasses);
 
-	protected THashSet<Block> effectiveBlocks = new THashSet<Block>();
-	protected THashSet<Material> effectiveMaterials = new THashSet<Material>();
-	protected int harvestLevel = -1;
-	protected boolean showInCreative = true;
+    protected THashSet<Block> effectiveBlocks = new THashSet<Block>();
+    protected THashSet<Material> effectiveMaterials = new THashSet<Material>();
+    protected int harvestLevel = -1;
+    protected boolean showInCreative = true;
 
-	public ItemToolAdv(float baseDamage, Item.ToolMaterial toolMaterial) {
+    public ItemToolAdv(float baseDamage, Item.ToolMaterial toolMaterial) {
 
-		super(baseDamage, 0, toolMaterial, null);
-	}
+        super(baseDamage, 0, toolMaterial, null);
+    }
 
-	public ItemToolAdv(float baseDamage, Item.ToolMaterial toolMaterial, int harvestLevel) {
+    public ItemToolAdv(float baseDamage, Item.ToolMaterial toolMaterial, int harvestLevel) {
 
-		this(baseDamage, toolMaterial);
-		this.harvestLevel = harvestLevel;
-	}
+        this(baseDamage, toolMaterial);
+        this.harvestLevel = harvestLevel;
+    }
 
-	public ItemToolAdv setRepairIngot(String repairIngot) {
+    public ItemToolAdv setRepairIngot(String repairIngot) {
 
-		this.repairIngot = repairIngot;
-		return this;
-	}
+        this.repairIngot = repairIngot;
+        return this;
+    }
 
-	public ItemToolAdv setShowInCreative(boolean showInCreative) {
+    public ItemToolAdv setShowInCreative(boolean showInCreative) {
 
-		this.showInCreative = showInCreative;
-		return this;
-	}
+        this.showInCreative = showInCreative;
+        return this;
+    }
 
-	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
+    @Override
+    public void getSubItems(Item item, CreativeTabs tab, List list) {
 
-		if (showInCreative) {
-			list.add(new ItemStack(item, 1, 0));
-		}
-	}
+        if (showInCreative) {
+            list.add(new ItemStack(item, 1, 0));
+        }
+    }
 
-	protected void addToolClass(String string) {
+    protected void addToolClass(String string) {
 
-		toolClasses.add(string);
-	}
+        toolClasses.add(string);
+    }
 
-	protected THashSet<Block> getEffectiveBlocks(ItemStack stack) {
+    protected THashSet<Block> getEffectiveBlocks(ItemStack stack) {
 
-		return effectiveBlocks;
-	}
+        return effectiveBlocks;
+    }
 
-	protected THashSet<Material> getEffectiveMaterials(ItemStack stack) {
+    protected THashSet<Material> getEffectiveMaterials(ItemStack stack) {
 
-		return effectiveMaterials;
-	}
+        return effectiveMaterials;
+    }
 
-	protected boolean harvestBlock(World world, int x, int y, int z, EntityPlayer player) {
+    protected boolean harvestBlock(World world, int x, int y, int z, EntityPlayer player) {
 
-		if (world.isAirBlock(x, y, z)) {
-			return false;
-		}
-		EntityPlayerMP playerMP = null;
-		if (player instanceof EntityPlayerMP) {
-			playerMP = (EntityPlayerMP) player;
-		}
-		// check if the block can be broken, since extra block breaks shouldn't instantly break stuff like obsidian
-		// or precious ores you can't harvest while mining stone
-		Block block = world.getBlock(x, y, z);
-		int meta = world.getBlockMetadata(x, y, z);
-		// only effective materials
-		if (!(toolClasses.contains(block.getHarvestTool(meta)) || canHarvestBlock(block, player.getCurrentEquippedItem()))) {
-			return false;
-		}
+        if (world.isAirBlock(x, y, z)) {
+            return false;
+        }
+        EntityPlayerMP playerMP = null;
+        if (player instanceof EntityPlayerMP) {
+            playerMP = (EntityPlayerMP) player;
+        }
+        // check if the block can be broken, since extra block breaks shouldn't instantly break stuff like obsidian
+        // or precious ores you can't harvest while mining stone
+        Block block = world.getBlock(x, y, z);
+        int meta = world.getBlockMetadata(x, y, z);
+        // only effective materials
+        if (!(toolClasses.contains(block.getHarvestTool(meta)) || canHarvestBlock(block, player.getCurrentEquippedItem()))) {
+            return false;
+        }
 
-		if (!ForgeHooks.canHarvestBlock(block, player, meta)) {
-			return false;
-		}
-		// send the blockbreak event
-		BreakEvent event = null;
-		if (playerMP != null) {
-			event = ForgeHooks.onBlockBreakEvent(world, playerMP.theItemInWorldManager.getGameType(), playerMP, x, y, z);
-			if (event.isCanceled()) {
-				return false;
-			}
-		}
-		if (player.capabilities.isCreativeMode) {
-			if (!world.isRemote) {
-				block.onBlockHarvested(world, x, y, z, meta, player);
-			} else {
-				world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) | (meta << 12));
-			}
+        if (!ForgeHooks.canHarvestBlock(block, player, meta)) {
+            return false;
+        }
+        // send the blockbreak event
+        BreakEvent event = null;
+        if (playerMP != null) {
+            event = ForgeHooks.onBlockBreakEvent(world, playerMP.theItemInWorldManager.getGameType(), playerMP, x, y, z);
+            if (event.isCanceled()) {
+                return false;
+            }
+        }
+        if (player.capabilities.isCreativeMode) {
+            if (!world.isRemote) {
+                block.onBlockHarvested(world, x, y, z, meta, player);
+            } else {
+                world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) | (meta << 12));
+            }
 
-			if (block.removedByPlayer(world, player, x, y, z, false)) {
-				block.onBlockDestroyedByPlayer(world, x, y, z, meta);
-			}
-			// send update to client
-			if (!world.isRemote) {
-				playerMP.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
-			} else {
-				Minecraft.getMinecraft().getNetHandler()
-						.addToSendQueue(new C07PacketPlayerDigging(2, x, y, z, Minecraft.getMinecraft().objectMouseOver.sideHit));
-			}
-			return true;
-		}
-		world.playAuxSFXAtEntity(player, 2001, x, y, z, Block.getIdFromBlock(block) | (meta << 12));
-		if (!world.isRemote) {
-			// serverside we reproduce ItemInWorldManager.tryHarvestBlock
-			// ItemInWorldManager.removeBlock
-			block.onBlockHarvested(world, x, y, z, meta, player);
-			if (block.removedByPlayer(world, player, x, y, z, true)) {
-				block.onBlockDestroyedByPlayer(world, x, y, z, meta);
-				block.harvestBlock(world, player, x, y, z, meta);
-				if (event != null) {
-					block.dropXpOnBlockBreak(world, x, y, z, event.getExpToDrop());
-				}
-			}
-			// always send block update to client
-			playerMP.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
-		} else {
-			// PlayerControllerMP pcmp = Minecraft.getMinecraft().playerController;
-			// clientside we do a "this block has been clicked on long enough to be broken" call. This should not send any new packets
-			// the code above, executed on the server, sends a block-updates that give us the correct state of the block we destroy.
-			// following code can be found in PlayerControllerMP.onPlayerDestroyBlock
-			if (block.removedByPlayer(world, player, x, y, z, true)) {
-				block.onBlockDestroyedByPlayer(world, x, y, z, meta);
-			}
-			Minecraft.getMinecraft().getNetHandler().addToSendQueue(new C07PacketPlayerDigging(2, x, y, z, Minecraft.getMinecraft().objectMouseOver.sideHit));
-		}
-		return true;
-	}
+            if (block.removedByPlayer(world, player, x, y, z, false)) {
+                block.onBlockDestroyedByPlayer(world, x, y, z, meta);
+            }
+            // send update to client
+            if (!world.isRemote) {
+                playerMP.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
+            } else {
+                Minecraft.getMinecraft().getNetHandler().addToSendQueue(new C07PacketPlayerDigging(2, x, y, z, Minecraft.getMinecraft().objectMouseOver.sideHit));
+            }
+            return true;
+        }
+        world.playAuxSFXAtEntity(player, 2001, x, y, z, Block.getIdFromBlock(block) | (meta << 12));
+        if (!world.isRemote) {
+            // serverside we reproduce ItemInWorldManager.tryHarvestBlock
+            // ItemInWorldManager.removeBlock
+            block.onBlockHarvested(world, x, y, z, meta, player);
+            if (block.removedByPlayer(world, player, x, y, z, true)) {
+                block.onBlockDestroyedByPlayer(world, x, y, z, meta);
+                block.harvestBlock(world, player, x, y, z, meta);
+                if (event != null) {
+                    block.dropXpOnBlockBreak(world, x, y, z, event.getExpToDrop());
+                }
+            }
+            // always send block update to client
+            playerMP.playerNetServerHandler.sendPacket(new S23PacketBlockChange(x, y, z, world));
+        } else {
+            // PlayerControllerMP pcmp = Minecraft.getMinecraft().playerController;
+            // clientside we do a "this block has been clicked on long enough to be broken" call. This should not send any new packets
+            // the code above, executed on the server, sends a block-updates that give us the correct state of the block we destroy.
+            // following code can be found in PlayerControllerMP.onPlayerDestroyBlock
+            if (block.removedByPlayer(world, player, x, y, z, true)) {
+                block.onBlockDestroyedByPlayer(world, x, y, z, meta);
+            }
+            Minecraft.getMinecraft().getNetHandler().addToSendQueue(new C07PacketPlayerDigging(2, x, y, z, Minecraft.getMinecraft().objectMouseOver.sideHit));
+        }
+        return true;
+    }
 
-	protected boolean isClassValid(String toolClass, ItemStack stack) {
+    protected boolean isClassValid(String toolClass, ItemStack stack) {
 
-		return true;
-	}
+        return true;
+    }
 
-	protected boolean isValidHarvestMaterial(ItemStack stack, World world, int x, int y, int z) {
+    protected boolean isValidHarvestMaterial(ItemStack stack, World world, int x, int y, int z) {
 
-		return getEffectiveMaterials(stack).contains(world.getBlock(x, y, z).getMaterial());
-	}
+        return getEffectiveMaterials(stack).contains(world.getBlock(x, y, z).getMaterial());
+    }
 
-	protected int getHarvestLevel(ItemStack stack, int level) {
+    protected int getHarvestLevel(ItemStack stack, int level) {
 
-		return level;
-	}
+        return level;
+    }
 
-	protected float getEfficiency(ItemStack stack) {
+    protected float getEfficiency(ItemStack stack) {
 
-		return efficiencyOnProperMaterial;
-	}
+        return efficiencyOnProperMaterial;
+    }
 
-	@Override
-	public String getToolMaterialName() {
+    @Override
+    public String getToolMaterialName() {
 
-		return super.getToolMaterialName().contains(":") ? super.getToolMaterialName().split(":", 2)[1] : super.getToolMaterialName();
-	}
+        return super.getToolMaterialName().contains(":") ? super.getToolMaterialName().split(":", 2)[1] : super.getToolMaterialName();
+    }
 
     @Override
     public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
         return getStrVsBlock(stack, state) > 1.0F;
     }
 
-	@Override
-	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
+    @Override
+    public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
 
-		return ItemHelper.isOreNameEqual(stack, repairIngot);
-	}
+        return ItemHelper.isOreNameEqual(stack, repairIngot);
+    }
 
-	@Override
-	public boolean isItemTool(ItemStack stack) {
+    @Override
+    public boolean isItemTool(ItemStack stack) {
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public int getHarvestLevel(ItemStack stack, String toolClass) {
+    @Override
+    public int getHarvestLevel(ItemStack stack, String toolClass) {
 
-		if (harvestLevel != -1) {
-			return harvestLevel;
-		}
-		int level = super.getHarvestLevel(stack, toolClass);
-		if (level == -1 && isClassValid(toolClass, stack) && toolClasses.contains(toolClass)) {
-			level = toolMaterial.getHarvestLevel();
-		}
-		return getHarvestLevel(stack, level);
-	}
+        if (harvestLevel != -1) {
+            return harvestLevel;
+        }
+        int level = super.getHarvestLevel(stack, toolClass);
+        if (level == -1 && isClassValid(toolClass, stack) && toolClasses.contains(toolClass)) {
+            level = toolMaterial.getHarvestLevel();
+        }
+        return getHarvestLevel(stack, level);
+    }
 
-	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state) {
+    @Override
+    public float getStrVsBlock(ItemStack stack, IBlockState state) {
 
-		return (getEffectiveMaterials(stack).contains(state.getMaterial()) || getEffectiveBlocks(stack).contains(state)) ? getEfficiency(stack) : 1.0F;
-	}
+        return (getEffectiveMaterials(stack).contains(state.getMaterial()) || getEffectiveBlocks(stack).contains(state)) ? getEfficiency(stack) : 1.0F;
+    }
 
-	@Override
-	public float getDigSpeed(ItemStack stack, Block block, int meta) {
+    @Override
+    public float getDigSpeed(ItemStack stack, Block block, int meta) {
 
-		for (String type : getToolClasses(stack)) {
-			int level = getHarvestLevel(stack, type);
+        for (String type : getToolClasses(stack)) {
+            int level = getHarvestLevel(stack, type);
 
-			if (type.equals(block.getHarvestTool(meta))) {
-				if (block.getHarvestLevel(meta) < level) {
-					return getEfficiency(stack);
-				}
-			}
-		}
-		return super.getDigSpeed(stack, block, meta);
-	}
+            if (type.equals(block.getHarvestTool(meta))) {
+                if (block.getHarvestLevel(meta) < level) {
+                    return getEfficiency(stack);
+                }
+            }
+        }
+        return super.getDigSpeed(stack, block, meta);
+    }
 
-	@Override
-	public Set<String> getToolClasses(ItemStack stack) {
+    @Override
+    public Set<String> getToolClasses(ItemStack stack) {
 
-		return toolClasses.isEmpty() ? super.getToolClasses(stack) : immutableClasses;
-	}
+        return toolClasses.isEmpty() ? super.getToolClasses(stack) : immutableClasses;
+    }
 
 }

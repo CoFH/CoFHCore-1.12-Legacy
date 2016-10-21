@@ -1,163 +1,152 @@
 package cofh.core.render;
 
-import codechicken.lib.colour.Colour;
 import codechicken.lib.render.CCRenderState;
 import codechicken.lib.texture.TextureUtils;
 import codechicken.lib.vec.Vector3;
 import codechicken.lib.vec.uv.IconTransformation;
 import codechicken.lib.vec.uv.UV;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
-
 import org.lwjgl.opengl.GL11;
 
 public class RenderUtils {
 
-	public static class ScaledIconTransformation extends IconTransformation {
+    public static class ScaledIconTransformation extends IconTransformation {
 
-		double su = 0.0F;
-		double sv = 0.0F;
+        double su = 0.0F;
+        double sv = 0.0F;
 
-		public ScaledIconTransformation(TextureAtlasSprite icon) {
+        public ScaledIconTransformation(TextureAtlasSprite icon) {
 
-			super(icon);
-		}
+            super(icon);
+        }
 
-		public ScaledIconTransformation(TextureAtlasSprite icon, double scaleu, double scalev) {
+        public ScaledIconTransformation(TextureAtlasSprite icon, double scaleu, double scalev) {
 
-			super(icon);
+            super(icon);
 
-			su = scaleu;
-			sv = scalev;
-		}
+            su = scaleu;
+            sv = scalev;
+        }
 
-		@Override
-		public void apply(UV texcoord) {
+        @Override
+        public void apply(UV texcoord) {
 
-			texcoord.u = icon.getInterpolatedU(texcoord.u % 2 * 16) + su * (icon.getMaxU() - icon.getMinU());
-			texcoord.v = icon.getInterpolatedV(texcoord.v % 2 * 16) + sv * (icon.getMaxV() - icon.getMinV());
-		}
-	}
+            texcoord.u = icon.getInterpolatedU(texcoord.u % 2 * 16) + su * (icon.getMaxU() - icon.getMinU());
+            texcoord.v = icon.getInterpolatedV(texcoord.v % 2 * 16) + sv * (icon.getMaxV() - icon.getMinV());
+        }
+    }
 
-	public static final ItemRenderer renderItem = new ItemRenderer(Minecraft.getMinecraft());
-	//public static final RenderBlocks renderBlocks = new RenderBlocks();
+    public static final ItemRenderer renderItem = new ItemRenderer(Minecraft.getMinecraft());
+    //public static final RenderBlocks renderBlocks = new RenderBlocks();
 
-	public static float[][] angleBaseYNeg = new float[6][3];
-	public static float[][] angleBaseYPos = new float[6][3];
-	public static float[][] angleBaseXPos = new float[6][3];
-	public static final float factor = 1F / 16F;
+    public static float[][] angleBaseYNeg = new float[6][3];
+    public static float[][] angleBaseYPos = new float[6][3];
+    public static float[][] angleBaseXPos = new float[6][3];
+    public static final float factor = 1F / 16F;
 
-	public static final int[] facingAngle = { 0, 0, 180, 0, 90, -90 };
+    public static final int[] facingAngle = { 0, 0, 180, 0, 90, -90 };
 
-	public static ScaledIconTransformation[] renderTransformations = new ScaledIconTransformation[4];
+    public static ScaledIconTransformation[] renderTransformations = new ScaledIconTransformation[4];
 
-	static {
-		renderTransformations[0] = new ScaledIconTransformation(TextureUtils.getBlockTexture("stone"));
-		renderTransformations[1] = new ScaledIconTransformation(TextureUtils.getBlockTexture("stone"), -1F, 0F);
-		renderTransformations[2] = new ScaledIconTransformation(TextureUtils.getBlockTexture("stone"), 0F, -1F);
-		renderTransformations[3] = new ScaledIconTransformation(TextureUtils.getBlockTexture("stone"), -1F, -1F);
-	}
+    static {
+        renderTransformations[0] = new ScaledIconTransformation(TextureUtils.getBlockTexture("stone"));
+        renderTransformations[1] = new ScaledIconTransformation(TextureUtils.getBlockTexture("stone"), -1F, 0F);
+        renderTransformations[2] = new ScaledIconTransformation(TextureUtils.getBlockTexture("stone"), 0F, -1F);
+        renderTransformations[3] = new ScaledIconTransformation(TextureUtils.getBlockTexture("stone"), -1F, -1F);
+    }
 
-	public static Vector3 renderVector = new Vector3();
+    public static Vector3 renderVector = new Vector3();
 
-	public static ScaledIconTransformation getIconTransformation(TextureAtlasSprite icon) {
+    public static ScaledIconTransformation getIconTransformation(TextureAtlasSprite icon) {
 
-		if (icon != null) {
-			renderTransformations[0].icon = icon;
-		}
-		return renderTransformations[0];
-	}
+        if (icon != null) {
+            renderTransformations[0].icon = icon;
+        }
+        return renderTransformations[0];
+    }
 
-	// public static ScaledIconTransformation getIconTransformation(Icon icon, int scaleType) {
-	//
-	// renderTransformations[scaleType].icon = icon;
-	// return renderTransformations[scaleType];
-	// }
+    // public static ScaledIconTransformation getIconTransformation(Icon icon, int scaleType) {
+    //
+    // renderTransformations[scaleType].icon = icon;
+    // return renderTransformations[scaleType];
+    // }
 
-	public static Vector3 getRenderVector(double x, double y, double z) {
+    public static Vector3 getRenderVector(double x, double y, double z) {
 
-		renderVector.x = x;
-		renderVector.y = y;
-		renderVector.z = z;
+        renderVector.x = x;
+        renderVector.y = y;
+        renderVector.z = z;
 
-		return renderVector;
-	}
+        return renderVector;
+    }
 
-	static {
-		float pi = (float) Math.PI;
-		angleBaseYNeg[0][2] = pi;
-		angleBaseYNeg[2][0] = -pi / 2;
-		angleBaseYNeg[3][0] = pi / 2;
-		angleBaseYNeg[4][2] = pi / 2;
-		angleBaseYNeg[5][2] = -pi / 2;
+    static {
+        float pi = (float) Math.PI;
+        angleBaseYNeg[0][2] = pi;
+        angleBaseYNeg[2][0] = -pi / 2;
+        angleBaseYNeg[3][0] = pi / 2;
+        angleBaseYNeg[4][2] = pi / 2;
+        angleBaseYNeg[5][2] = -pi / 2;
 
-		angleBaseYPos[1][2] = pi;
-		angleBaseYPos[2][0] = pi / 2;
-		angleBaseYPos[3][0] = -pi / 2;
-		angleBaseYPos[4][2] = -pi / 2;
-		angleBaseYPos[5][2] = pi / 2;
+        angleBaseYPos[1][2] = pi;
+        angleBaseYPos[2][0] = pi / 2;
+        angleBaseYPos[3][0] = -pi / 2;
+        angleBaseYPos[4][2] = -pi / 2;
+        angleBaseYPos[5][2] = pi / 2;
 
-		angleBaseXPos[0][0] = -pi / 2;
-		angleBaseXPos[1][0] = pi / 2;
-		angleBaseXPos[2][1] = pi;
-		angleBaseXPos[4][1] = -pi / 2;
-		angleBaseXPos[5][1] = pi / 2;
-	}
+        angleBaseXPos[0][0] = -pi / 2;
+        angleBaseXPos[1][0] = pi / 2;
+        angleBaseXPos[2][1] = pi;
+        angleBaseXPos[4][1] = -pi / 2;
+        angleBaseXPos[5][1] = pi / 2;
+    }
 
-	public static int getFluidRenderColor(FluidStack fluid) {
+    public static int getFluidRenderColor(FluidStack fluid) {
 
-		return fluid.getFluid().getColor(fluid);
-	}
+        return fluid.getFluid().getColor(fluid);
+    }
 
-	public static void setFluidRenderColor(FluidStack fluid) {
+    public static void setFluidRenderColor(FluidStack fluid) {
 
-		CCRenderState.instance().baseColour = (0xFF | (fluid.getFluid().getColor(fluid) << 8));
-	}
+        CCRenderState.instance().baseColour = (0xFF | (fluid.getFluid().getColor(fluid) << 8));
+    }
 
-	public static void preItemRender() {
+    public static void preItemRender() {
 
         GlStateManager.enableBlend();
         GlStateManager.enableAlpha();
-		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 
         CCRenderState ccrs = CCRenderState.instance();
         ccrs.reset();
         ccrs.pullLightmap();
-		//CCRenderState.useNormals = true;
-	}
+        //CCRenderState.useNormals = true;
+    }
 
-	public static void postItemRender() {
+    public static void postItemRender() {
 
-		//CCRenderState.useNormals = false;
+        //CCRenderState.useNormals = false;
 
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
-	}
+    }
 
-	public static void preWorldRender(IBlockAccess world, BlockPos pos) {
+    public static void preWorldRender(IBlockAccess world, BlockPos pos) {
         CCRenderState ccrs = CCRenderState.instance();
 
         ccrs.reset();
         ccrs.colour = 0xFFFFFFFF;
         ccrs.setBrightness(world, pos);
-	}
+    }
 
 	/*public static void renderMask(IIcon maskIcon, IIcon subIcon, Colour maskColor, ItemRenderType type) {
 
@@ -222,7 +211,7 @@ public class RenderUtils {
 	}*/
 
 	/*public static void preRenderIconWorld(TextureAtlasSprite icon, double z) {
-		Tessellator.instance.addVertexWithUV(0, 1, z, icon.getMinU(), icon.getMaxV());
+        Tessellator.instance.addVertexWithUV(0, 1, z, icon.getMinU(), icon.getMaxV());
 		Tessellator.instance.addVertexWithUV(1, 1, z, icon.getMaxU(), icon.getMaxV());
 		Tessellator.instance.addVertexWithUV(1, 0, z, icon.getMaxU(), icon.getMinV());
 		Tessellator.instance.addVertexWithUV(0, 0, z, icon.getMinU(), icon.getMinV());
@@ -470,21 +459,21 @@ public class RenderUtils {
 		net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
 	}*/
 
-	public static void setupLight(TileEntity tile, EnumFacing side) {
+    public static void setupLight(TileEntity tile, EnumFacing side) {
 
-		if (tile == null) {
-			return;
-		}
-		BlockPos pos = tile.getPos().offset(side);
-		World world = tile.getWorld();
+        if (tile == null) {
+            return;
+        }
+        BlockPos pos = tile.getPos().offset(side);
+        World world = tile.getWorld();
 
-		if (world.getBlockState(pos).isOpaqueCube()) {
-			return;
-		}
-		int br = world.getCombinedLight(pos, 4);
-		int brX = br & 65535;
-		int brY = br >>> 16;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brX, brY);
-	}
+        if (world.getBlockState(pos).isOpaqueCube()) {
+            return;
+        }
+        int br = world.getCombinedLight(pos, 4);
+        int brX = br & 65535;
+        int brY = br >>> 16;
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, brX, brY);
+    }
 
 }

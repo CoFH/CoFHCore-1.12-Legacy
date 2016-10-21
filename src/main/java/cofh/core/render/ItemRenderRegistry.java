@@ -1,12 +1,8 @@
 package cofh.core.render;
 
-import cofh.lib.util.ItemWrapper;
-
-import net.minecraft.item.ItemStack;
-
 public class ItemRenderRegistry {
 
-	//public static Map<ItemWrapper, IItemRenderer> itemRenders = new THashMap<ItemWrapper, IItemRenderer>();
+    //public static Map<ItemWrapper, IItemRenderer> itemRenders = new THashMap<ItemWrapper, IItemRenderer>();
 
 	/*public static boolean addItemRenderer(ItemStack stack, IItemRenderer renderer) {
 
