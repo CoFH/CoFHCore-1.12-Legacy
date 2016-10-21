@@ -1,8 +1,24 @@
 package cofh.core.crash;
 
+import com.google.common.collect.HashBiMap;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import java.util.Map;
+import java.util.concurrent.Callable;
+
 public class CrashHelper {
 
-	/*static final int range = 3;
+    static final int range = 3;
     static final char[] validLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!£$%^&*()`¬_+\"\\@'{}[]~/|<>,.?:;".toCharArray();
 	static final char[] metaLetters = "0123456789ABCDEF".toCharArray();
 
@@ -10,7 +26,7 @@ public class CrashHelper {
 
 		CrashReport crashReport = CrashReport.makeCrashReport(throwable, message);
 
-		crashReport.makeCategory("Calling Thread").addCrashSectionCallable("Name", new Callable<String>() {
+		crashReport.makeCategory("Calling Thread").addCrashSection("Name", new Callable<String>() {
 
 			@Override
 			public String call() throws Exception {
@@ -38,7 +54,7 @@ public class CrashHelper {
 			cat.addCrashSection("Tile?", "Null");
 			return report;
 		} else {
-			return addSurroundingDetails(report, sectionName, tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
+			return addSurroundingDetails(report, sectionName, tile.getWorld(), tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ());
 		}
 	}
 
@@ -52,34 +68,34 @@ public class CrashHelper {
 			return report;
 		}
 
-		cat.addCrashSectionCallable("Dim", new Callable<String>() {
+		cat.addCrashSection("Dim", new Callable<String>() {
 
 			@Override
 			public String call() throws Exception {
 
-				return String.valueOf(world.provider.dimensionId);
+				return String.valueOf(world.provider.getDimension());
 			}
 		});
 
-		cat.addCrashSectionCallable("Dim_Name", new Callable<String>() {
+		cat.addCrashSection("Dim_Name", new Callable<String>() {
 
 			@Override
 			public String call() throws Exception {
 
-				return "" + world.provider.getDimensionName();
+				return "" + world.provider.getDimensionType().getName();
 			}
 		});
 
 		cat.addCrashSection("Pos", x + "," + y + "," + z);
 
-		cat.addCrashSectionCallable("NeighbourBlocks", new Callable<String>() {
+		cat.addCrashSection("NeighbourBlocks", new Callable<String>() {
 
 			@Override
 			public String call() throws Exception {
 
 				HashBiMap<Block, String> map = HashBiMap.create();
 
-				map.put(Blocks.air, " ");
+				map.put(Blocks.AIR, " ");
 
 				StringBuilder builder = new StringBuilder("\n\n");
 
@@ -96,14 +112,15 @@ public class CrashHelper {
 						for (int dz = -range; dz <= range; dz++) {
 							int x2 = x + dx, y2 = y + dy, z2 = z + dz;
 
-							if (world.blockExists(x2, y2, z2)) {
-								Block block = world.getBlock(x2, y2, z2);
+							if (world.isBlockLoaded(new BlockPos(x2, y2, z2))) {
+                                IBlockState state = world.getBlockState(new BlockPos(x2, y2, z2));
+								Block block = state.getBlock();
 								builder.append(getNameForObject(block, map));
 
-								int meta = world.getBlockMetadata(x2, y2, z2);
+								int meta = block.getMetaFromState(state);
 								if (meta < 0 || meta > 15) {
 									builder.append('!');
-								} else if (meta == 0 && block == Blocks.air) {
+								} else if (meta == 0 && block == Blocks.AIR) {
 									builder.append(' ');
 								} else {
 									builder.append(metaLetters[meta]);
@@ -129,7 +146,7 @@ public class CrashHelper {
 					if (block == null) {
 						builder.append("No Block Present");
 					} else {
-						builder.append(Block.blockRegistry.getNameForObject(block));
+						builder.append(Block.REGISTRY.getNameForObject(block));
 					}
 					builder.append('\n');
 				}
@@ -144,7 +161,7 @@ public class CrashHelper {
 					return s;
 				}
 
-				String name = Block.blockRegistry.getNameForObject(block);
+				String name = Block.REGISTRY.getNameForObject(block).toString();
 				if (name != null && name.length() > 0) {
 					int i = name.indexOf(58);
 					if (i >= 0) {
@@ -208,7 +225,7 @@ public class CrashHelper {
 			return;
 		}
 
-		category.addCrashSectionCallable("Class", new Callable<Object>() {
+		category.addCrashSection("Class", new Callable<Object>() {
 
 			@Override
 			public Object call() throws Exception {
@@ -217,7 +234,7 @@ public class CrashHelper {
 			}
 		});
 
-		category.addCrashSectionCallable("ToString", new Callable<Object>() {
+		category.addCrashSection("ToString", new Callable<Object>() {
 
 			@Override
 			public Object call() throws Exception {
@@ -228,16 +245,16 @@ public class CrashHelper {
 
 		if (object instanceof TileEntity) {
 			final TileEntity tile = (TileEntity) object;
-			tile.func_145828_a(category);
-			category.addCrashSectionCallable("Tile Pos", new Callable<Object>() {
+			tile.addInfoToCrashReport(category);
+			category.addCrashSection("Tile Pos", new Callable<Object>() {
 
 				@Override
 				public Object call() throws Exception {
 
-					return String.format("%d,%d,%d", tile.xCoord, tile.yCoord, tile.zCoord);
+					return String.format("%d,%d,%d", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ());
 				}
 			});
-			category.addCrashSectionCallable("Tile NBT", new Callable<Object>() {
+			category.addCrashSection("Tile NBT", new Callable<Object>() {
 
 				@Override
 				public Object call() throws Exception {
@@ -260,7 +277,7 @@ public class CrashHelper {
 			return;
 		}
 
-		category.addCrashSectionCallable("InventoryContents", new Callable<String>() {
+		category.addCrashSection("InventoryContents", new Callable<String>() {
 
 			@Override
 			public String call() throws Exception {
@@ -288,6 +305,6 @@ public class CrashHelper {
 	public static CrashReport makeDetailedCrashReport(Exception e, String inserting) {
 
 		return makeDetailedCrashReport(e, inserting, null);
-	}*/
+	}
 
 }

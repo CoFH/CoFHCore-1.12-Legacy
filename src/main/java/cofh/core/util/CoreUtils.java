@@ -207,6 +207,10 @@ public class CoreUtils {
         world.addWeatherEffect(bolt);
     }
 
+    public static boolean teleportEntityTo(Entity entity, BlockPos pos) {
+        return teleportEntityTo(entity, pos.getX(), pos.getY(), pos.getZ());
+    }
+
     public static boolean teleportEntityTo(Entity entity, double x, double y, double z) {
         if (entity instanceof EntityLivingBase) {
             return teleportEntityTo((EntityLivingBase) entity, x, y, z);

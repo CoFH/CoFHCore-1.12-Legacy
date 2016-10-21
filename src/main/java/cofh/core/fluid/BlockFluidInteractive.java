@@ -28,6 +28,10 @@ public class BlockFluidInteractive extends BlockFluidCoFHBase {
         return addInteraction(preBlock.getDefaultState(), postBlock.getDefaultState(), true);
     }
 
+    public boolean addInteraction(IBlockState pre, IBlockState post){
+        return addInteraction(pre, post, false);
+    }
+
     public boolean addInteraction(IBlockState pre, IBlockState post, boolean anyState) {
 
         if (pre == null || post == null) {
