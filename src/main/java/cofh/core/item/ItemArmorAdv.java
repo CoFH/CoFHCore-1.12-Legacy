@@ -4,8 +4,8 @@ import cofh.lib.util.helpers.ItemHelper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -20,7 +20,7 @@ public class ItemArmorAdv extends ItemArmor {
     protected Multimap<String, AttributeModifier> properties = HashMultimap.create();
     protected boolean showInCreative = true;
 
-    public ItemArmorAdv(ArmorMaterial material, int type) {
+    public ItemArmorAdv(ArmorMaterial material, EntityEquipmentSlot type) {
 
         super(material, 0, type);
     }
@@ -57,20 +57,19 @@ public class ItemArmorAdv extends ItemArmor {
         return ItemHelper.isOreNameEqual(stack, repairIngot);
     }
 
+//    @Override
+//    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
+//
+//        if (slot == 2) {
+//            return textures[1];
+//        }
+//        return textures[0];
+//    }
+
+
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-
-        if (slot == 2) {
-            return textures[1];
-        }
-        return textures[0];
-    }
-
-    @SuppressWarnings("rawtypes")
-    @Override
-    public Multimap getAttributeModifiers(ItemStack stack) {
-
-        Multimap<String, AttributeModifier> map = super.getAttributeModifiers(stack);
+    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+        Multimap<String, AttributeModifier> map = super.getAttributeModifiers(slot, stack);
         map.putAll(properties);
         return map;
     }

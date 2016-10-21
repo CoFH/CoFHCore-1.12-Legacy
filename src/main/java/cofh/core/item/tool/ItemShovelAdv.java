@@ -10,13 +10,13 @@ public class ItemShovelAdv extends ItemToolAdv {
         super(1.0F, toolMaterial);
         addToolClass("shovel");
 
-        effectiveBlocks.addAll(ItemSpade.field_150916_c);
-        effectiveMaterials.add(Material.ground);
-        effectiveMaterials.add(Material.grass);
-        effectiveMaterials.add(Material.sand);
-        effectiveMaterials.add(Material.snow);
-        effectiveMaterials.add(Material.craftedSnow);
-        effectiveMaterials.add(Material.clay);
+        effectiveBlocks.addAll(ItemSpade.EFFECTIVE_ON);
+        effectiveMaterials.add(Material.GROUND);
+        effectiveMaterials.add(Material.GRASS);
+        effectiveMaterials.add(Material.SAND);
+        effectiveMaterials.add(Material.SNOW);
+        effectiveMaterials.add(Material.CRAFTED_SNOW);
+        effectiveMaterials.add(Material.CLAY);
     }
 
 }

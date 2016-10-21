@@ -3,18 +3,15 @@ package cofh.core.item;
 import cofh.core.render.CoFHFontRenderer;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
-import cofh.lib.util.helpers.StringHelper;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,12 +21,13 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO Re-write item registration
 public class ItemBase extends Item {
 
     public class ItemEntry {
 
         public String name;
-        public IIcon icon;
+//        public IIcon icon;
         public int rarity = 0;
         public int maxDamage = 0;
         public boolean altName = false;
@@ -92,7 +90,7 @@ public class ItemBase extends Item {
 
         ItemStack item = new ItemStack(this, 1, number);
         if (register) {
-            GameRegistry.registerCustomItemStack(entry.name, item);
+//            GameRegistry.registerCustomItemStack(entry.name, item);
         }
         return item;
     }
@@ -142,21 +140,21 @@ public class ItemBase extends Item {
         return itemMap.get(i).name;
     }
 
-    @Override
-    public IIcon getIconFromDamage(int i) {
-
-        if (!itemMap.containsKey(i)) {
-            return null;
-        }
-        return itemMap.get(i).icon;
-    }
+//    @Override
+//    public IIcon getIconFromDamage(int i) {
+//
+//        if (!itemMap.containsKey(i)) {
+//            return null;
+//        }
+//        return itemMap.get(i).icon;
+//    }
 
     @Override
     public EnumRarity getRarity(ItemStack stack) {
 
         int i = stack.getItemDamage();
         if (!itemMap.containsKey(Integer.valueOf(i))) {
-            return EnumRarity.common;
+            return EnumRarity.COMMON;
         }
         return EnumRarity.values()[itemMap.get(stack.getItemDamage()).rarity];
     }
@@ -192,7 +190,6 @@ public class ItemBase extends Item {
 
     @Override
     public Entity createEntity(World world, Entity location, ItemStack stack) {
-
         if (SecurityHelper.isSecure(stack)) {
             location.invulnerable = true;
             location.isImmuneToFire = true;
@@ -216,22 +213,22 @@ public class ItemBase extends Item {
         return super.setUnlocalizedName(textureName);
     }
 
-    @Override
-    public void registerIcons(IIconRegister ir) {
-
-        if (!hasTextures) {
-            return;
-        }
-        for (int i = 0; i < itemList.size(); i++) {
-            ItemEntry item = itemMap.get(itemList.get(i));
-            item.icon = registerIcon(ir, item);
-        }
-    }
-
-    protected IIcon registerIcon(IIconRegister ir, ItemEntry item) {
-
-        return ir.registerIcon(modName + ":" + getUnlocalizedName().replace("item." + modName + ".", "") + "/" + StringHelper.titleCase(item.name));
-    }
+//    @Override
+//    public void registerIcons(IIconRegister ir) {
+//
+//        if (!hasTextures) {
+//            return;
+//        }
+//        for (int i = 0; i < itemList.size(); i++) {
+//            ItemEntry item = itemMap.get(itemList.get(i));
+//            item.icon = registerIcon(ir, item);
+//        }
+//    }
+//
+//    protected IIcon registerIcon(IIconRegister ir, ItemEntry item) {
+//
+//        return ir.registerIcon(modName + ":" + getUnlocalizedName().replace("item." + modName + ".", "") + "/" + StringHelper.titleCase(item.name));
+//    }
 
     @Override
     @SideOnly(Side.CLIENT)

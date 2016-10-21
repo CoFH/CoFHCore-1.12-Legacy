@@ -1,22 +1,27 @@
 package cofh.core.item.tool;
 
 import cofh.core.entity.EntityCoFHFishHook;
-import cofh.core.util.CoreUtils;
 import cofh.lib.util.helpers.ItemHelper;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 import java.util.List;
 
+//import net.minecraft.client.renderer.texture.IIconRegister;
+//import net.minecraft.util.IIcon;
+
 public class ItemFishingRodAdv extends ItemFishingRod {
 
-    protected IIcon normalIcons[] = new IIcon[2];
+//    protected IIcon normalIcons[] = new IIcon[2];
 
     public String repairIngot = "";
     protected ToolMaterial toolMaterial;
@@ -88,45 +93,46 @@ public class ItemFishingRodAdv extends ItemFishingRod {
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 
         if (player.fishEntity != null) {
-            int i = player.fishEntity.func_146034_e();
+            int i = player.fishEntity.handleHookRetraction();
             stack.damageItem(i, player);
-            player.swingItem();
+            player.swingArm(hand);
         } else {
-            world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+            world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
             if (!world.isRemote) {
                 world.spawnEntityInWorld(new EntityCoFHFishHook(world, player, luckModifier, speedModifier));
             }
-            player.swingItem();
+            player.swingArm(hand);
         }
-        return stack;
+
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 
-    @Override
-    public IIcon getIconIndex(ItemStack stack) {
-
-        return getIcon(stack, 0);
-    }
-
-    @Override
-    public IIcon getIcon(ItemStack stack, int pass) {
-
-        EntityPlayer player = CoreUtils.getClientPlayer();
-
-        if (player.inventory.getCurrentItem() == stack && player.fishEntity != null) {
-            return this.normalIcons[1];
-        }
-        return this.normalIcons[0];
-    }
-
-    @Override
-    public void registerIcons(IIconRegister ir) {
-
-        this.normalIcons[0] = ir.registerIcon(this.getIconString() + "_Uncast");
-        this.normalIcons[1] = ir.registerIcon(this.getIconString() + "_Cast");
-    }
+//    @Override
+//    public IIcon getIconIndex(ItemStack stack) {
+//
+//        return getIcon(stack, 0);
+//    }
+//
+//    @Override
+//    public IIcon getIcon(ItemStack stack, int pass) {
+//
+//        EntityPlayer player = CoreUtils.getClientPlayer();
+//
+//        if (player.inventory.getCurrentItem() == stack && player.fishEntity != null) {
+//            return this.normalIcons[1];
+//        }
+//        return this.normalIcons[0];
+//    }
+//
+//    @Override
+//    public void registerIcons(IIconRegister ir) {
+//
+//        this.normalIcons[0] = ir.registerIcon(this.getIconString() + "_Uncast");
+//        this.normalIcons[1] = ir.registerIcon(this.getIconString() + "_Cast");
+//    }
 
 }

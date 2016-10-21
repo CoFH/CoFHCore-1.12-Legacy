@@ -1,17 +1,15 @@
 package cofh.core.item.tool;
 
 import cofh.lib.util.helpers.BlockHelper;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ItemHammerAdv extends ItemToolAdv {
 
@@ -21,23 +19,22 @@ public class ItemHammerAdv extends ItemToolAdv {
         addToolClass("pickaxe");
         addToolClass("hammer");
 
-        effectiveBlocks.addAll(ItemPickaxe.field_150915_c);
-        effectiveMaterials.add(Material.iron);
-        effectiveMaterials.add(Material.anvil);
-        effectiveMaterials.add(Material.rock);
-        effectiveMaterials.add(Material.ice);
-        effectiveMaterials.add(Material.packedIce);
-        effectiveMaterials.add(Material.glass);
-        effectiveMaterials.add(Material.redstoneLight);
+        effectiveBlocks.addAll(ItemPickaxe.EFFECTIVE_ON);
+        effectiveMaterials.add(Material.IRON);
+        effectiveMaterials.add(Material.ANVIL);
+        effectiveMaterials.add(Material.ROCK);
+        effectiveMaterials.add(Material.ICE);
+        effectiveMaterials.add(Material.PACKED_ICE);
+        effectiveMaterials.add(Material.GLASS);
+        effectiveMaterials.add(Material.REDSTONE_LIGHT);
     }
 
     @Override
-    public boolean onBlockStartBreak(ItemStack stack, int x, int y, int z, EntityPlayer player) {
-
+    public boolean onBlockStartBreak(ItemStack stack, BlockPos hitPos, EntityPlayer player) {
         World world = player.worldObj;
-        Block block = world.getBlock(x, y, z);
+        IBlockState state = world.getBlockState(hitPos);
 
-        if (!canHarvestBlock(block, stack)) {
+        if (!canHarvestBlock(state, stack)) {
             if (!player.capabilities.isCreativeMode) {
                 stack.damageItem(1, player);
             }
@@ -45,54 +42,59 @@ public class ItemHammerAdv extends ItemToolAdv {
         }
         boolean used = false;
 
-        float refStrength = ForgeHooks.blockStrength(block, player, world, x, y, z);
-        if (refStrength != 0.0D && canHarvestBlock(block, stack)) {
-            MovingObjectPosition pos = BlockHelper.getCurrentMovingObjectPosition(player, true);
-            List<ItemStack> drops = new ArrayList<ItemStack>();
-            Block adjBlock;
+        float refStrength = ForgeHooks.blockStrength(state, player, world, hitPos);
+        if (refStrength != 0.0D && canHarvestBlock(state, stack)) {
+            RayTraceResult traceResult = BlockHelper.getCurrentMovingObjectPosition(player, true);
+            BlockPos tracePos = traceResult.blockPos;
+            IBlockState adjBlock;
             float strength;
 
-            int x2 = x;
-            int y2 = y;
-            int z2 = z;
+            int x2 = hitPos.getX();
+            int y2 = hitPos.getY();
+            int z2 = hitPos.getZ();
 
-            switch (pos.sideHit) {
-                case 0:
-                case 1:
-                    for (x2 = pos.blockX - 1; x2 <= pos.blockX + 1; x2++) {
-                        for (z2 = pos.blockZ - 1; z2 <= pos.blockZ + 1; z2++) {
-                            adjBlock = world.getBlock(x2, y2, z2);
-                            strength = ForgeHooks.blockStrength(adjBlock, player, world, x2, y2, z2);
+            switch (traceResult.sideHit) {
+                case DOWN:
+                case UP:
+                    for (x2 = tracePos.getX() - 1; x2 <= tracePos.getX() + 1; x2++) {
+                        for (z2 = tracePos.getZ() - 1; z2 <= tracePos.getZ() + 1; z2++) {
+                            BlockPos pos2 = new BlockPos(x2, y2, z2);
+                            adjBlock = world.getBlockState(pos2);
+                            strength = ForgeHooks.blockStrength(adjBlock, player, world, pos2);
                             if (strength > 0f && refStrength / strength <= 10f) {
-                                used |= harvestBlock(world, x2, y2, z2, player);
+                                used |= harvestBlock(world, pos2, player);
                             }
                         }
                     }
                     break;
-                case 2:
-                case 3:
-                    for (x2 = pos.blockX - 1; x2 <= pos.blockX + 1; x2++) {
-                        for (y2 = pos.blockY - 1; y2 <= pos.blockY + 1; y2++) {
-                            adjBlock = world.getBlock(x2, y2, z2);
-                            strength = ForgeHooks.blockStrength(adjBlock, player, world, x2, y2, z2);
+                case NORTH:
+                case SOUTH:
+                    for (x2 = tracePos.getX() - 1; x2 <= tracePos.getX() + 1; x2++) {
+                        for (y2 = tracePos.getY() - 1; y2 <= tracePos.getY() + 1; y2++) {
+                            BlockPos pos2 = new BlockPos(x2, y2, z2);
+                            adjBlock = world.getBlockState(pos2);
+                            strength = ForgeHooks.blockStrength(adjBlock, player, world, pos2);
                             if (strength > 0f && refStrength / strength <= 10f) {
-                                used |= harvestBlock(world, x2, y2, z2, player);
+                                used |= harvestBlock(world, pos2, player);
                             }
                         }
                     }
                     break;
-                default:
-                    for (y2 = pos.blockY - 1; y2 <= pos.blockY + 1; y2++) {
-                        for (z2 = pos.blockZ - 1; z2 <= pos.blockZ + 1; z2++) {
-                            adjBlock = world.getBlock(x2, y2, z2);
-                            strength = ForgeHooks.blockStrength(adjBlock, player, world, x2, y2, z2);
+                case WEST:
+                case EAST:
+                    for (y2 = tracePos.getY() - 1; y2 <= tracePos.getY() + 1; y2++) {
+                        for (z2 = tracePos.getZ() - 1; z2 <= tracePos.getZ() + 1; z2++) {
+                            BlockPos pos2 = new BlockPos(x2, y2, z2);
+                            adjBlock = world.getBlockState(pos2);
+                            strength = ForgeHooks.blockStrength(adjBlock, player, world, pos2);
                             if (strength > 0f && refStrength / strength <= 10f) {
-                                used |= harvestBlock(world, x2, y2, z2, player);
+                                used |= harvestBlock(world, pos2, player);
                             }
                         }
                     }
                     break;
             }
+
             if (used && !player.capabilities.isCreativeMode) {
                 stack.damageItem(1, player);
             }
