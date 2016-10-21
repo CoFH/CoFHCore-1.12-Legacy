@@ -61,41 +61,10 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
             }
         }
         currentMcVersion = (String) FMLInjectionData.data()[4];
-        versionCheck(MC_VERSION, "CoFHCore");
         minecraftDir = (File) FMLInjectionData.data()[6];
         loader = Launch.classLoader;
         attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
         //ASMInit.init();
-    }
-
-    public static void versionCheck(String reqVersion, String mod) {
-
-        String mcVersion = currentMcVersion;
-        if (!VersionParser.parseRange(reqVersion).containsVersion(new DefaultArtifactVersion(mcVersion))) {
-            String err = "This version of " + mod + " does not support Minecraft version " + mcVersion;
-            System.err.println(err);
-
-            JEditorPane ep = new JEditorPane("text/html", "<html>" + err + "<br>Remove it from your mods folder and check <a href=\"http://teamcofh.com/\">here</a> for updates" + "</html>");
-
-            ep.setEditable(false);
-            ep.setOpaque(false);
-            ep.addHyperlinkListener(new HyperlinkListener() {
-
-                @Override
-                public void hyperlinkUpdate(HyperlinkEvent event) {
-
-                    try {
-                        if (event.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                            Desktop.getDesktop().browse(event.getURL().toURI());
-                        }
-                    } catch (Exception e) {
-                        // pokemon!
-                    }
-                }
-            });
-            JOptionPane.showMessageDialog(null, ep, "Fatal error", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
     }
 
     // public LoadingPlugin() {

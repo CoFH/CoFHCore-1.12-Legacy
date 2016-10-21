@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //TODO Re-write item registration
+@Deprecated
 public class ItemBase extends Item {
 
     public class ItemEntry {
@@ -160,7 +161,7 @@ public class ItemBase extends Item {
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
+    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 
         for (int i = 0; i < itemList.size(); i++) {
             list.add(new ItemStack(item, 1, itemList.get(i)));

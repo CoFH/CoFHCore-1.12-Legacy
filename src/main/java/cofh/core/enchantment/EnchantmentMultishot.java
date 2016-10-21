@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 public class EnchantmentMultishot extends Enchantment {
     public EnchantmentMultishot(String id) {
         super(Rarity.UNCOMMON, EnumEnchantmentType.BOW, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
-        setRegistryName("CoFH:" + id);
+        setRegistryName(id);
     }
 
     @Override

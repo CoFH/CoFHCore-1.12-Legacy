@@ -10,7 +10,7 @@ public class EnchantmentHolding extends Enchantment {
 
     public EnchantmentHolding(String id) {
         super(Rarity.RARE, EnumEnchantmentType.ALL, EntityEquipmentSlot.values());
-        setRegistryName("CoFH:" + id);
+        setRegistryName(id);
     }
 
     @Override

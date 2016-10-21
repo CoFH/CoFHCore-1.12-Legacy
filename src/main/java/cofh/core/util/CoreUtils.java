@@ -111,10 +111,10 @@ public class CoreUtils {
         return isRedstonePowered(tile.getWorld(), tile.getPos());
     }
 
-    public static void dismantleLog(String playerName, Block block, int metadata, double x, double y, double z) {
+    public static void dismantleLog(String playerName, Block block, int metadata, BlockPos pos) {
 
         if (CoFHProps.enableDismantleLogging) {
-            CoFHCore.log.info("Player " + playerName + " dismantled " + " (" + block + ":" + metadata + ") at (" + x + "," + y + "," + z + ")");
+            CoFHCore.log.info("Player " + playerName + " dismantled " + " (" + block + ":" + metadata + ") at (" + pos.getX() + "," + pos.getY() + "," + pos.getZ() + ")");
         }
     }
 

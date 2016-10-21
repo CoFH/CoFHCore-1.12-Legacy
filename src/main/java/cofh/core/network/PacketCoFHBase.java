@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.io.*;
@@ -315,9 +316,9 @@ public abstract class PacketCoFHBase extends PacketBase {
         }
     }
 
-    public int[] getCoords() {
+    public BlockPos getCoords() {
 
-        return new int[] { getInt(), getInt(), getInt() };
+        return new BlockPos(getInt(), getInt(), getInt() );
     }
 
     private void writeItemStack(ItemStack theStack) throws IOException {

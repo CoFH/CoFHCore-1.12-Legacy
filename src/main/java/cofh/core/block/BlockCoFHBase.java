@@ -274,6 +274,7 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
         return null;
     }
 
+    //TODO, Fix this simulate bullshit.
     public abstract ArrayList<ItemStack> dismantleBlock(EntityPlayer player, NBTTagCompound nbt, IBlockAccess world, BlockPos pos, boolean returnDrops, boolean simulate);
 
     /* IBlockDebug */
