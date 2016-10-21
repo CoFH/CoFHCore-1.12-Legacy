@@ -9,18 +9,12 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
-import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
-import net.minecraftforge.fml.common.versioning.VersionParser;
 import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import net.minecraftforge.fml.relauncher.IFMLCallHook;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.apache.logging.log4j.Level;
 import org.objectweb.asm.Type;
 
-import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,7 +29,7 @@ import java.util.zip.ZipEntry;
 @IFMLLoadingPlugin.SortingIndex(1001)
 public class LoadingPlugin implements IFMLLoadingPlugin {
 
-    public static final String MC_VERSION = "[1.7.10]";
+    public static final String MC_VERSION = "[1.10.2]";
     public static ArrayList<String> transformersList = new ArrayList<String>();
     public static boolean runtimeDeobfEnabled = false;
     public static ASMDataTable ASM_DATA = null;
@@ -61,42 +55,42 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
             }
         }
         currentMcVersion = (String) FMLInjectionData.data()[4];
-        versionCheck(MC_VERSION, "CoFHCore");
+//        versionCheck(MC_VERSION, "CoFHCore");
         minecraftDir = (File) FMLInjectionData.data()[6];
         loader = Launch.classLoader;
         attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
         //ASMInit.init();
     }
 
-    public static void versionCheck(String reqVersion, String mod) {
-
-        String mcVersion = currentMcVersion;
-        if (!VersionParser.parseRange(reqVersion).containsVersion(new DefaultArtifactVersion(mcVersion))) {
-            String err = "This version of " + mod + " does not support Minecraft version " + mcVersion;
-            System.err.println(err);
-
-            JEditorPane ep = new JEditorPane("text/html", "<html>" + err + "<br>Remove it from your mods folder and check <a href=\"http://teamcofh.com/\">here</a> for updates" + "</html>");
-
-            ep.setEditable(false);
-            ep.setOpaque(false);
-            ep.addHyperlinkListener(new HyperlinkListener() {
-
-                @Override
-                public void hyperlinkUpdate(HyperlinkEvent event) {
-
-                    try {
-                        if (event.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                            Desktop.getDesktop().browse(event.getURL().toURI());
-                        }
-                    } catch (Exception e) {
-                        // pokemon!
-                    }
-                }
-            });
-            JOptionPane.showMessageDialog(null, ep, "Fatal error", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
-    }
+//    public static void versionCheck(String reqVersion, String mod) {
+//
+//        String mcVersion = currentMcVersion;
+//        if (!VersionParser.parseRange(reqVersion).containsVersion(new DefaultArtifactVersion(mcVersion))) {
+//            String err = "This version of " + mod + " does not support Minecraft version " + mcVersion;
+//            System.err.println(err);
+//
+//            JEditorPane ep = new JEditorPane("text/html", "<html>" + err + "<br>Remove it from your mods folder and check <a href=\"http://teamcofh.com/\">here</a> for updates" + "</html>");
+//
+//            ep.setEditable(false);
+//            ep.setOpaque(false);
+//            ep.addHyperlinkListener(new HyperlinkListener() {
+//
+//                @Override
+//                public void hyperlinkUpdate(HyperlinkEvent event) {
+//
+//                    try {
+//                        if (event.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
+//                            Desktop.getDesktop().browse(event.getURL().toURI());
+//                        }
+//                    } catch (Exception e) {
+//                        // pokemon!
+//                    }
+//                }
+//            });
+//            JOptionPane.showMessageDialog(null, ep, "Fatal error", JOptionPane.ERROR_MESSAGE);
+//            System.exit(1);
+//        }
+//    }
 
     // public LoadingPlugin() {
     //
