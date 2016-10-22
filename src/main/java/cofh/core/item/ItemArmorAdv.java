@@ -4,6 +4,7 @@ import cofh.lib.util.helpers.ItemHelper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -21,24 +22,20 @@ public class ItemArmorAdv extends ItemArmor {
     protected boolean showInCreative = true;
 
     public ItemArmorAdv(ArmorMaterial material, EntityEquipmentSlot type) {
-
         super(material, 0, type);
     }
 
     public ItemArmorAdv setRepairIngot(String repairIngot) {
-
         this.repairIngot = repairIngot;
         return this;
     }
 
     public ItemArmorAdv setArmorTextures(String[] textures) {
-
         this.textures = textures;
         return this;
     }
 
     public ItemArmorAdv setShowInCreative(boolean showInCreative) {
-
         this.showInCreative = showInCreative;
         return this;
     }
@@ -57,15 +54,13 @@ public class ItemArmorAdv extends ItemArmor {
         return ItemHelper.isOreNameEqual(stack, repairIngot);
     }
 
-//    @Override
-//    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-//
-//        if (slot == 2) {
-//            return textures[1];
-//        }
-//        return textures[0];
-//    }
-
+    @Override
+    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+        if (slot == EntityEquipmentSlot.LEGS) {
+            return textures[1];
+        }
+        return textures[0];
+    }
 
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {

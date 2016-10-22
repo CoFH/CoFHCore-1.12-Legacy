@@ -3,17 +3,19 @@ package cofh.core.item.tool;
 import cofh.core.entity.EntityCoFHFishHook;
 import cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 //import net.minecraft.client.renderer.texture.IIconRegister;
@@ -30,9 +32,16 @@ public class ItemFishingRodAdv extends ItemFishingRod {
     protected int speedModifier = 0;
 
     public ItemFishingRodAdv(ToolMaterial toolMaterial) {
-
         this.toolMaterial = toolMaterial;
         this.setMaxDamage(toolMaterial.getMaxUses());
+        this.addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter()
+        {
+            @SideOnly(Side.CLIENT)
+            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn)
+            {
+                return entityIn == null ? 0.0F : (entityIn.getHeldItemMainhand() == stack && entityIn instanceof EntityPlayer && ((EntityPlayer)entityIn).fishEntity != null ? 1.0F : 0.0F);
+            }
+        });
     }
 
     public ItemFishingRodAdv setRepairIngot(String repairIngot) {

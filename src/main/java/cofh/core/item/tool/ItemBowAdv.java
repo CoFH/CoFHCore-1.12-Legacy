@@ -160,7 +160,7 @@ public class ItemBowAdv extends ItemBow {
                         boolean flame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;
                         stack.damageItem(1, entityplayer);
 
-                        for (int shot = 0; i <= enchantMultishot; i++) {
+                        for (int shot = 0; shot <= enchantMultishot; shot++) {
                             ItemArrow itemarrow = (ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW);
                             EntityArrow entityarrow = itemarrow.createArrow(world, itemstack, entityplayer);
                             entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
