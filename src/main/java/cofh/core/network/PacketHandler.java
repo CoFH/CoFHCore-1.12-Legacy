@@ -2,6 +2,7 @@ package cofh.core.network;
 
 import cofh.core.CoFHProps;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -9,14 +10,18 @@ import io.netty.handler.codec.MessageToMessageCodec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
 import net.minecraftforge.fml.common.network.FMLOutboundHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -131,6 +136,24 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
         }
     }
 
+    public void injectPacket(byte[] data) throws Exception {
+        if (FMLCommonHandler.instance().getEffectiveSide().isServer()){
+            throw new RuntimeException("Packet hack only works for the client end.");
+        }
+        ByteBuf buf = Unpooled.copiedBuffer(data);
+        byte discriminator = buf.readByte();
+
+        Class<? extends PacketBase> packetClass = this.packets.get(discriminator);
+
+        if (packetClass == null) {
+            throw new NullPointerException("No packet registered for discriminator: " + discriminator);
+        }
+        PacketBase pkt = packetClass.newInstance();
+        pkt.decodeInto(null, buf.slice());
+
+        handlePacketClient(pkt, Minecraft.getMinecraft().thePlayer);
+    }
+
     // Method to call from FMLInitializationEvent
     public void initialize() {
 
@@ -221,8 +244,29 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
     }
 
     public static Packet toMCPacket(PacketBase packet) {
-
         return instance.channels.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
+    }
+
+    public static NBTTagCompound toNBTTag(PacketBase packetBase, NBTTagCompound inputTag) {
+        ByteBuf buf = Unpooled.buffer();
+        byte discriminator = (byte) instance.packets.indexOf(packetBase.getClass());
+        buf.writeByte(discriminator);
+        packetBase.encodeInto(null, buf);
+        inputTag.setByteArray("CoFH:data", buf.array());
+        return inputTag;
+    }
+
+    public static SPacketUpdateTileEntity toTilePacket(PacketBase packet, BlockPos pos) {
+         return new SPacketUpdateTileEntity(pos, 0, toNBTTag(packet, new NBTTagCompound()));
+    }
+
+    public static void handleNBTPacket(NBTTagCompound tagCompound){
+        try {
+            instance.injectPacket(tagCompound.getByteArray("CoFH:data"));
+        } catch (Exception e){
+            FMLLog.severe("Unable to handle CoFH packet!");
+            e.printStackTrace();
+        }
     }
 
 }
