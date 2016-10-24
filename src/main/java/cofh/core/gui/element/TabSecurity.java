@@ -6,6 +6,7 @@ import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.TabBase;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -123,9 +124,9 @@ public class TabSecurity extends TabBase {
         float colorR = (backgroundColor >> 16 & 255) / 255.0F * 0.6F;
         float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
         float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
-        GL11.glColor4f(colorR, colorG, colorB, 1.0F);
+        GlStateManager.color(colorR, colorG, colorB, 1.0F);
         gui.drawTexturedModalRect(posX() + 24, posY + 16, 16, 20, 64, 24);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @Override
@@ -160,7 +161,7 @@ public class TabSecurity extends TabBase {
             gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1);
             getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPrivate"), posXOffset() + 14, posY + 54, textColor);
         }
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @Override

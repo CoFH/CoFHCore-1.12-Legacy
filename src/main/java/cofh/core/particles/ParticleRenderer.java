@@ -52,8 +52,8 @@ public class ParticleRenderer {
         }
         Minecraft mc = Minecraft.getMinecraft();
 
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_FOG);
+        GlStateManager.enableBlend();
+        GlStateManager.enableFog();
         float p_78471_1_ = event.getPartialTicks();
 
         mc.entityRenderer.enableLightmap();
@@ -109,16 +109,16 @@ public class ParticleRenderer {
                 }
 
                 tessellator.draw();
-                GL11.glDisable(GL11.GL_BLEND);
+                GlStateManager.disableBlend();
                 GlStateManager.depthMask(true);
-                GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+                GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
             }
         }
 
         mc.entityRenderer.disableLightmap();
 
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_FOG);
+        GlStateManager.disableBlend();
+        GlStateManager.disableFog();
     }
 
     private static final LinkedList<ParticleBase> particles_toAdd = new LinkedList<ParticleBase>();

@@ -113,9 +113,9 @@ public class TabConfiguration extends TabBase {
         float colorR = (backgroundColor >> 16 & 255) / 255.0F * 0.6F;
         float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
         float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
-        GL11.glColor4f(colorR, colorG, colorB, 1.0F);
+        GlStateManager.color(colorR, colorG, colorB, 1.0F);
         gui.drawTexturedModalRect(posX() + 16, posY + 20, 16, 20, 64, 64);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @Override
@@ -128,7 +128,7 @@ public class TabConfiguration extends TabBase {
         getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), posXOffset() + 18, posY + 6, headerColor);
         RenderHelper.setBlockTextureSheet();
 
-        GL11.glEnable(GL11.GL_BLEND);
+        GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         for (int i = 0; i < 2; i++) {
@@ -139,9 +139,9 @@ public class TabConfiguration extends TabBase {
             gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_BELOW[myTile.getFacing()], i), posX() + 40, posY + 64);
             gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_OPPOSITE[myTile.getFacing()], i), posX() + 60, posY + 64);
         }
-        GL11.glDisable(GL11.GL_BLEND);
+        GlStateManager.disableBlend();
         RenderHelper.setDefaultFontTextureSheet();
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     void handleSideChange(int side, int mouseButton) {

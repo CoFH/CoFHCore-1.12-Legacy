@@ -61,7 +61,7 @@ public class CoFHProps {
 
     static {
         for (int i = 0; i < STORAGE_SIZE.length; i++) {
-            TEXTURE_STORAGE[i] = new ResourceLocation(PATH_GUI_STORAGE + "Storage" + STORAGE_SIZE[i] + ".png");
+            TEXTURE_STORAGE[i] = new ResourceLocation(PATH_GUI_STORAGE + "storage_" + STORAGE_SIZE[i] + ".png");
         }
     }
 

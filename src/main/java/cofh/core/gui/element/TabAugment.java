@@ -8,6 +8,7 @@ import cofh.lib.gui.element.TabBase;
 import cofh.lib.render.RenderHelper;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
@@ -122,14 +123,14 @@ public class TabAugment extends TabBase {
         float colorR = (backgroundColor >> 16 & 255) / 255.0F * 0.6F;
         float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
         float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
-        GL11.glColor4f(colorR, colorG, colorB, 1.0F);
+        GlStateManager.color(colorR, colorG, colorB, 1.0F);
 
         if (numAugments > 3) {
             gui.drawTexturedModalRect(posXOffset() + slotsBorderX1, posY + slotsBorderY1, 16, 20, (numAugments > 4 ? 18 * 3 : 18 * 2) + 6, 24 + 18);
         } else {
             gui.drawTexturedModalRect(posXOffset() + slotsBorderX1, posY + slotsBorderY1, 16, 20, 18 * numAugments + 6, 24);
         }
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         RenderHelper.bindTexture(GRID_TEXTURE);
 
         switch (numAugments) {
@@ -148,7 +149,7 @@ public class TabAugment extends TabBase {
             default:
                 drawSlots(0, 0, numAugments);
         }
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @Override
@@ -160,7 +161,7 @@ public class TabAugment extends TabBase {
         }
         getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.augmentation"), posXOffset() + 18, posY + 6, headerColor);
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @Override

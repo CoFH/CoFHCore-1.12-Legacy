@@ -147,7 +147,7 @@ public class ProxyClient extends Proxy {
         }
         CoFHCore.configClient.save();
 
-        l:
+        /*l://Forge has removed their forcing of stencil bits.
         if (!Boolean.parseBoolean(System.getProperty("forge.forceDisplayStencil", "false"))) {
             if (Boolean.parseBoolean(System.getProperty("forge.forceNoStencil", "false"))) {
                 break l;
@@ -180,7 +180,7 @@ public class ProxyClient extends Proxy {
             } catch (Throwable e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     @Override
