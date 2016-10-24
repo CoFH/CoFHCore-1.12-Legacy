@@ -232,7 +232,7 @@ public class OreDictionaryArbiter {
 	 */
 	public static ArrayList<ItemStack> getOres(ItemStack stack) {
 
-		return oreStacks.get(getOreIDs(stack));
+		return oreStacks.get(getOreID(stack));
 	}
 
 	/**
