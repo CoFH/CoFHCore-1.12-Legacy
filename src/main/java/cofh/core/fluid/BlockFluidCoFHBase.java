@@ -1,9 +1,11 @@
 package cofh.core.fluid;
 
 import cofh.lib.render.particle.EntityDropParticleFX;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -53,6 +55,17 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
     public BlockFluidCoFHBase setParticleColor(int c) {
 
         return setParticleColor(((c >> 16) & 255) / 255f, ((c >> 8) & 255) / 255f, ((c >> 0) & 255) / 255f);
+    }
+
+    @Override
+    public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState iblockstate, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
+        if (iblockstate.getMaterial().isLiquid()) {
+            double fluidHeight = (double) ((float) (blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(iblockstate.getValue(BlockLiquid.LEVEL)));
+            if (yToTest >= fluidHeight) {
+                return true;
+            }
+        }
+        return super.isEntityInsideMaterial(world, blockpos, iblockstate, entity, yToTest, materialIn, testingHead);
     }
 
     public BlockFluidCoFHBase setParticleColor(float particleRed, float particleGreen, float particleBlue) {
