@@ -7,6 +7,9 @@ import net.minecraft.nbt.NBTTagList;
 
 public class CoFHEnchantment {
 
+    public static Enchantment holding;
+    public static Enchantment multishot;
+
     private CoFHEnchantment() {
 
     }
@@ -20,6 +23,20 @@ public class CoFHEnchantment {
     public static NBTTagList getEnchantmentTagList(NBTTagCompound nbt) {
 
         return nbt == null ? null : nbt.getTagList("ench", 10);
+    }
+
+    public static void addEnchantment(ItemStack stack, Enchantment ench, int level) {
+
+        addEnchantment(stack.getTagCompound(), Enchantment.getEnchantmentID(ench), level);
+    }
+
+    public static void addEnchantment(NBTTagCompound nbt, Enchantment ench, int level){
+        addEnchantment(nbt, Enchantment.getEnchantmentID(ench), level);
+    }
+
+    public static void addEnchantment(ItemStack stack, int id, int level) {
+
+        addEnchantment(stack.getTagCompound(), id, level);
     }
 
     public static void addEnchantment(NBTTagCompound nbt, int id, int level) {
@@ -49,13 +66,5 @@ public class CoFHEnchantment {
         }
         nbt.setTag("ench", list);
     }
-
-    public static void addEnchantment(ItemStack stack, int id, int level) {
-
-        addEnchantment(stack.getTagCompound(), id, level);
-    }
-
-    public static Enchantment holding;
-    public static Enchantment multishot;
 
 }

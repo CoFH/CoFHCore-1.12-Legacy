@@ -5,6 +5,7 @@ import cofh.lib.gui.element.TabBase;
 import cofh.lib.util.helpers.MathHelper;
 import org.lwjgl.opengl.GL11;
 
+import java.io.IOException;
 import java.util.List;
 
 public abstract class TabScrolledText extends TabBase {
@@ -62,7 +63,7 @@ public abstract class TabScrolledText extends TabBase {
     }
 
     @Override
-    public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
+    public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) throws IOException{
 
         int shiftedMouseX = mouseX - this.posX();
         int shiftedMouseY = mouseY - this.posY;

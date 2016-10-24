@@ -1,5 +1,6 @@
 package cofh.core.entity;
 
+import cofh.lib.util.helpers.ItemHelper;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
@@ -14,6 +15,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.UUID;
@@ -99,26 +101,26 @@ public class CoFHFakePlayer extends FakePlayer {
         //}
     }
 
-    //public void tickItemInUse(ItemStack updateItem) {
-    //
-    //	if (updateItem != null && ItemHelper.itemsEqualWithMetadata(previousItem, itemInUse)) {
-    //
-    //		itemInUseCount = ForgeEventFactory.onItemUseTick(this, itemInUse, itemInUseCount);
-    //		if (itemInUseCount <= 0) {
-    //			onItemUseFinish();
-    //		} else {
-    //			itemInUse.getItem().onUsingTick(itemInUse, this, itemInUseCount);
-    //			if (itemInUseCount <= 25 && itemInUseCount % 4 == 0) {
-    //				updateItemUse(updateItem, 5);
-    //			}
-    //			if (--itemInUseCount == 0 && !worldObj.isRemote) {
-    //				onItemUseFinish();
-    //			}
-    //		}
-    //	} else {
-    //		clearItemInUse();
-    //	}
-    //}
+    public void tickItemInUse(ItemStack updateItem) {
+
+    	if (updateItem != null && ItemHelper.itemsEqualWithMetadata(previousItem, activeItemStack)) {
+
+            activeItemStackUseCount = ForgeEventFactory.onItemUseTick(this, activeItemStack, activeItemStackUseCount);
+    		if (activeItemStackUseCount <= 0) {
+    			onItemUseFinish();
+    		} else {
+                activeItemStack.getItem().onUsingTick(activeItemStack, this, activeItemStackUseCount);
+    			if (activeItemStackUseCount <= 25 && activeItemStackUseCount % 4 == 0) {
+    				updateItemUse(updateItem, 5);
+    			}
+    			if (--activeItemStackUseCount == 0 && !worldObj.isRemote) {
+    				onItemUseFinish();
+    			}
+    		}
+    	} else {
+            resetActiveHand();
+    	}
+    }
 
     @Override
     protected void updateItemUse(ItemStack par1ItemStack, int par2) {
@@ -140,7 +142,11 @@ public class CoFHFakePlayer extends FakePlayer {
 
     @Override
     public float getEyeHeight() {
+        return getDefaultEyeHeight() + eyeHeight;
+    }
 
+    @Override
+    public float getDefaultEyeHeight() {
         return 1.1F;
     }
 
