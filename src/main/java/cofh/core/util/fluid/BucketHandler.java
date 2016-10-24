@@ -46,21 +46,18 @@ public class BucketHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onPreBucketFill(FillBucketEvent event) {
-
         // perform global permissions checks
         onBucketFill(event, true);
     }
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onPostBucketFill(FillBucketEvent event) {
-
         // handle thusfar unhandled buckets
         onBucketFill(event, false);
     }
 
     private void onBucketFill(FillBucketEvent event, boolean pre) {
-
-        if (ServerHelper.isClientWorld(event.getWorld()) | event.getResult() != null || event.getResult() != Result.DEFAULT) {
+        if (ServerHelper.isClientWorld(event.getWorld()) || event.getResult() != Result.DEFAULT) {
             return;
         }
         ItemStack current = event.getEmptyBucket();
@@ -69,7 +66,7 @@ public class BucketHandler {
             return;
         }
         boolean fill = true;
-        BlockPos offsetPos = target.getBlockPos().offset(target.sideHit);
+        BlockPos offsetPos = target.getBlockPos();
 
         if (!Items.BUCKET.equals(current.getItem())) {
             if (!FluidContainerRegistry.isBucket(current)) {

@@ -94,16 +94,16 @@ public class ItemBucket extends ItemBase implements IFluidOverlayItem {
             return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
         }
 
-        BlockPos pos = traceResult.blockPos;
-        pos.offset(traceResult.sideHit);
+        BlockPos offset = traceResult.blockPos.offset(traceResult.sideHit);
 
-        if (!player.canPlayerEdit(pos, traceResult.sideHit, stack) || !world.isAirBlock(pos) && world.getBlockState(pos).getMaterial().isSolid()) {
+        if (!player.canPlayerEdit(offset, traceResult.sideHit, stack) || !world.isAirBlock(offset) && world.getBlockState(offset).getMaterial().isSolid()) {
             return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
         }
-        if (BucketHandler.emptyBucket(world, pos, stack)) {
+        if (BucketHandler.emptyBucket(world, offset, stack)) {
             if (!player.capabilities.isCreativeMode) {
                 return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, new ItemStack(container));
             }
+            //return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, new ItemStack(container));
         }
         return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
     }
