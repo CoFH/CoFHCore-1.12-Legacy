@@ -12,6 +12,8 @@ import java.io.File;
 import java.util.ArrayList;
 
 import cofh.core.util.OreDictionaryArbiter;
+import cofh.core.util.crafting.RecipeUpgrade;
+import cofh.core.util.crafting.RecipeUpgradeOverride;
 import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
 import net.minecraft.server.MinecraftServer;
@@ -30,6 +32,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
+import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -88,6 +91,9 @@ public class CoFHCore {
 
 		FeatureParser.initialize();
 		WorldHandler.initialize();
+
+		RecipeSorter.register("cofh:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
+		RecipeSorter.register("cofh:upgradeoverride", RecipeUpgradeOverride.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 
 		proxy.preInit(event);
 	}
