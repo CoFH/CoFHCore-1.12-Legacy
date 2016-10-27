@@ -232,12 +232,6 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
         return tile != null ? tile.receiveClientEvent(id, param) : false;
     }
 
-    //@Override
-    public boolean renderAsNormalBlock() {
-
-        return false;
-    }
-
     @Override
     public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
         TileEntity tile = world.getTileEntity(pos);
