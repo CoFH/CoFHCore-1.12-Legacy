@@ -1,0 +1,44 @@
+package cofh.core.key;
+
+import cofh.CoFHCore;
+import cofh.core.network.PacketCoFHBase;
+import cofh.core.network.PacketHandler;
+import net.minecraft.entity.player.EntityPlayer;
+
+public class PacketKey extends PacketCoFHBase {
+	public static void sendToServer(String uuid) {
+
+		PacketHandler.sendToServer(new PacketKey(uuid));
+	}
+
+	public PacketKey() {
+
+	}
+
+	protected PacketKey(String uuid) {
+
+		addString(uuid);
+	}
+
+	public static void initialize() {
+
+		PacketHandler.instance.registerPacket(PacketKey.class);
+	}
+
+	@Override
+	public void handlePacket(EntityPlayer player, boolean isServer) {
+
+		String bindUUID = getString();
+		if (KeyHandler.serverBinds.containsKey(bindUUID)) {
+			KeyHandler.serverBinds.get(bindUUID).keyPressServer(player);
+		} else {
+			CoFHCore.LOG.error("Invalid Key Packet! Unregistered Server Key! UUID: " + bindUUID);
+		}
+	}
+
+	public void sendKeyPacket(String uuid) {
+
+		addString(uuid);
+		PacketHandler.sendToServer(this);
+	}
+}

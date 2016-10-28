@@ -1,6 +1,7 @@
 package cofh.core;
 
 import cofh.core.chat.PacketIndexedChat;
+import cofh.core.key.KeyBindingEmpower;
 import cofh.core.key.KeyBindingMultiMode;
 import cofh.core.key.KeyHandler;
 import cofh.core.key.PacketKey;
@@ -14,7 +15,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -36,6 +37,7 @@ public class Proxy {
 	public void postInit(FMLPostInitializationEvent event) {
 
 		registerPacketInformation();
+		registerKeyBinds();
 
 		PacketHandler.instance.postInit();
 	}
@@ -44,6 +46,7 @@ public class Proxy {
 	public void registerKeyBinds() {
 
 		KeyHandler.addServerKeyBind(KeyBindingMultiMode.instance);
+		KeyHandler.addServerKeyBind(KeyBindingEmpower.instance);
 		// KeyHandler.addServerKeyBind(KeyBindingAugments.instance);
 	}
 
@@ -57,7 +60,7 @@ public class Proxy {
 	}
 
 	/* HELPERS */
-	public void addIndexedChatMessage(IChatComponent chat, int index) {
+	public void addIndexedChatMessage(ITextComponent chat, int index) {
 
 	}
 
@@ -71,7 +74,7 @@ public class Proxy {
 
 		MinecraftServer theServer = FMLCommonHandler.instance().getMinecraftServerInstance();
 		playerName = playerName.trim();
-		for (String a : theServer.getConfigurationManager().getOppedPlayerNames()) {
+		for (String a : theServer.getPlayerList().getOppedPlayerNames()) {
 			if (playerName.equalsIgnoreCase(a)) {
 				return true; // TODO: This is awful but likely no way to improve. Thanks Mojang.
 			}

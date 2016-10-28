@@ -9,13 +9,12 @@ import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.item.Item;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -42,7 +41,7 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic implements II
 		this.name = name;
 		this.modName = modName;
 
-		setRenderLayer(EnumWorldBlockLayer.TRANSLUCENT);
+		setRenderLayer(BlockRenderLayer.TRANSLUCENT);
 		setUnlocalizedName(modName + ".fluid." + name);
 		displacements.put(this, false);
 	}
@@ -74,9 +73,9 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic implements II
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, BlockPos pos, IBlockState state, Random rand) {
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 
-		super.randomDisplayTick(world, pos, state, rand);
+		super.randomDisplayTick(state, world, pos, rand);
 
 		int x = pos.getX();
 		int y = pos.getY();
@@ -90,28 +89,26 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic implements II
 			py = y + 2.10D;
 		}
 		if (rand.nextInt(20) == 0 && world.isSideSolid(new BlockPos(x, y + densityDir, z), densityDir == -1 ? EnumFacing.UP : EnumFacing.DOWN)
-				&& !world.getBlockState(new BlockPos(x, y + 2 * densityDir, z)).getBlock().getMaterial().blocksMovement()) {
-			EntityFX fx = new EntityDropParticleFX(world, px, py, pz, particleRed, particleGreen, particleBlue, densityDir);
+				&& !world.getBlockState(new BlockPos(x, y + 2 * densityDir, z)).getMaterial().blocksMovement()) {
+			Particle fx = new EntityDropParticleFX(world, px, py, pz, particleRed, particleGreen, particleBlue, densityDir);
 			FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
 		}
 	}
 
 	@Override
-	public int getLightValue(IBlockAccess world, BlockPos pos) {
-
+	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return definedFluid.getLuminosity();
 	}
 
 	@Override
-	public boolean canCreatureSpawn(IBlockAccess world, BlockPos pos, SpawnPlacementType type) {
-
+	public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, SpawnPlacementType type) {
 		return false;
 	}
 
 	@Override
 	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
 
-		if (!shouldDisplaceFluids && world.getBlockState(pos).getBlock().getMaterial().isLiquid()) {
+		if (!shouldDisplaceFluids && world.getBlockState(pos).getMaterial().isLiquid()) {
 			return false;
 		}
 		return super.canDisplace(world, pos);
@@ -120,7 +117,7 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic implements II
 	@Override
 	public boolean displaceIfPossible(World world, BlockPos pos) {
 
-		if (!shouldDisplaceFluids && world.getBlockState(pos).getBlock().getMaterial().isLiquid()) {
+		if (!shouldDisplaceFluids && world.getBlockState(pos).getMaterial().isLiquid()) {
 			return false;
 		}
 		return super.displaceIfPossible(world, pos);
@@ -131,12 +128,9 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic implements II
 	@SideOnly(Side.CLIENT)
 	public void registerModels() {
 
-		Item item = Item.getItemFromBlock(this);
+		//TODO item model registration was here - is it needed in some cases?
 		StateMapper mapper = new StateMapper(modName, "fluid", name);
 
-		// Item Model
-		ModelBakery.registerItemVariants(item);
-		ModelLoader.setCustomMeshDefinition(item, mapper);
 		// Block Model
 		ModelLoader.setCustomStateMapper(this, mapper);
 	}

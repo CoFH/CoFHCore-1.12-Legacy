@@ -9,13 +9,19 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+import org.apache.logging.log4j.core.helpers.Loader;
+
+import java.io.*;
 
 public class CoreUtils {
 
@@ -72,11 +78,31 @@ public class CoreUtils {
 		return CoFHCore.proxy.isServer();
 	}
 
+	/* FILE UTILS */
+	public static void copyFileUsingStream(String source, String dest) throws IOException {
+
+		copyFileUsingStream(source, new File(dest));
+	}
+
+	public static void copyFileUsingStream(String source, File dest) throws IOException {
+
+		try (
+				InputStream is = Loader.getResource(source, null).openStream();
+				OutputStream os = new FileOutputStream(dest);) {
+
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = is.read(buffer)) > 0) {
+				os.write(buffer, 0, length);
+			}
+		}
+	}
+
 	/* SOUND UTILS */
-	public static final String getSoundName(String modId, String soundpath) {
+	public static final SoundEvent getSoundEvent(String modId, String soundpath) {
 
 		soundpath = soundpath.replaceAll("/", ".");
-		return String.format("%s:%s", modId, soundpath);
+		return new SoundEvent(new ResourceLocation(modId, soundpath));
 	}
 
 	/* ENTITY UTILS */
@@ -136,7 +162,7 @@ public class CoreUtils {
 			return teleportEntityTo((EntityLivingBase) entity, x, y, z);
 		} else {
 			entity.setLocationAndAngles(x, y, z, entity.rotationYaw, entity.rotationPitch);
-			entity.worldObj.playSoundAtEntity(entity, "mob.endermen.portal", 1.0F, 1.0F);
+			entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
 		}
 		return true;
 	}
@@ -148,8 +174,8 @@ public class CoreUtils {
 		if (MinecraftForge.EVENT_BUS.post(event)) {
 			return false;
 		}
-		entity.setPositionAndUpdate(event.targetX, event.targetY, event.targetZ);
-		entity.worldObj.playSoundAtEntity(entity, "mob.endermen.portal", 1.0F, 1.0F);
+		entity.setPositionAndUpdate(event.getTargetX(), event.getTargetY(), event.getTargetZ());
+		entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
 
 		return true;
 	}

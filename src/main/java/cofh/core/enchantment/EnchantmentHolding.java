@@ -4,14 +4,15 @@ import cofh.api.item.IInventoryContainerItem;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class EnchantmentHolding extends Enchantment {
 
-	public EnchantmentHolding(int id) {
+	public EnchantmentHolding() {
 
-		super(id, new ResourceLocation("cofh:holding"), 2, EnumEnchantmentType.ALL);
+		super(Rarity.RARE, EnumEnchantmentType.ALL, new EntityEquipmentSlot[]{}); //TODO figure out if there needs to be equipment slot defined here
 	}
 
 	@Override

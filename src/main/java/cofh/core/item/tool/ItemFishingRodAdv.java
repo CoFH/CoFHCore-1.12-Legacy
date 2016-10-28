@@ -7,9 +7,13 @@ import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -94,21 +98,20 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 
 		if (player.fishEntity != null) {
 			int i = player.fishEntity.handleHookRetraction();
 			stack.damageItem(i, player);
-			player.swingItem();
+			player.swingArm(hand);
 		} else {
-			world.playSoundAtEntity(player, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+			player.playSound(SoundEvents.ENTITY_BOBBER_THROW, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 			if (!world.isRemote) {
 				world.spawnEntityInWorld(new EntityFishHookCoFH(world, player, luckModifier, speedModifier));
 			}
-			player.swingItem();
+			player.swingArm(hand);
 		}
-		return stack;
+		return new ActionResult(EnumActionResult.SUCCESS, stack);
 	}
-
 }

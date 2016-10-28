@@ -10,9 +10,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatBase;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.FakePlayer;
 
 public class ChatHelper {
@@ -30,14 +30,14 @@ public class ChatHelper {
 		indexChat = CoFHCore.CONFIG_CLIENT.get(category, "RemoveOutdatedChat", true, comment);
 	}
 
-	public static IChatComponent getChatComponent(Object object) {
+	public static ITextComponent getChatComponent(Object object) {
 
-		if (object instanceof IChatComponent) {
-			return (IChatComponent) object;
+		if (object instanceof ITextComponent) {
+			return (ITextComponent) object;
 		} else if (object instanceof String) {
-			return new ChatComponentText((String) object);
+			return new TextComponentString((String) object);
 		} else if (object instanceof ItemStack) {
-			return ((ItemStack) object).getChatComponent();
+			return ((ItemStack) object).getTextComponent();
 		} else if (object instanceof StatBase) {
 			return ((StatBase) object).getStatName();
 		} else if (object instanceof Entity) {
@@ -45,13 +45,13 @@ public class ChatHelper {
 		} else if (object instanceof ICommandSender) {
 			return ((ICommandSender) object).getDisplayName();
 		} else {
-			return new ChatComponentText(String.valueOf(object));
+			return new TextComponentString(String.valueOf(object));
 		}
 	}
 
-	public static IChatComponent formChatComponent(Object... chats) {
+	public static ITextComponent formChatComponent(Object... chats) {
 
-		IChatComponent chat = getChatComponent(chats[0]);
+		ITextComponent chat = getChatComponent(chats[0]);
 
 		for (int i = 1, chatsLength = chats.length; i < chatsLength; i++) {
 			chat.appendSibling(getChatComponent(chats[i]));
@@ -60,22 +60,22 @@ public class ChatHelper {
 		return chat;
 	}
 
-	public static IChatComponent translate(String key) {
+	public static ITextComponent translate(String key) {
 
-		return new ChatComponentTranslation(key);
+		return new TextComponentTranslation(key);
 	}
 
-	public static String toJSON(IChatComponent chatComponent) {
+	public static String toJSON(ITextComponent chatComponent) {
 
-		return IChatComponent.Serializer.componentToJson(chatComponent);
+		return ITextComponent.Serializer.componentToJson(chatComponent);
 	}
 
-	public static IChatComponent fromJSON(String string) {
+	public static ITextComponent fromJSON(String string) {
 
-		return IChatComponent.Serializer.jsonToComponent(string);
+		return ITextComponent.Serializer.jsonToComponent(string);
 	}
 
-	public static void sendIndexedChatMessageToPlayer(EntityPlayer player, IChatComponent message) {
+	public static void sendIndexedChatMessageToPlayer(EntityPlayer player, ITextComponent message) {
 
 		if (player.worldObj == null || player instanceof FakePlayer) {
 			return;
@@ -92,7 +92,7 @@ public class ChatHelper {
 		}
 	}
 
-	public static void sendIndexedChatMessagesToPlayer(EntityPlayer player, List<IChatComponent> messages) {
+	public static void sendIndexedChatMessagesToPlayer(EntityPlayer player, List<ITextComponent> messages) {
 
 		if (player.worldObj == null || player instanceof FakePlayer) {
 			return;

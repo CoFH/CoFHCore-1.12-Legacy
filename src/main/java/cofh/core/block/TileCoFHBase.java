@@ -19,16 +19,19 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.network.Packet;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 
 public abstract class TileCoFHBase extends TileEntity {
 
+	private static final int METADATA_NOT_APPLICABLE = 0;
 	protected boolean inWorld = false;
 
 	public abstract String getName();
@@ -72,6 +75,12 @@ public abstract class TileCoFHBase extends TileEntity {
 	public int getComparatorInputOverride() {
 
 		return 0;
+	}
+
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+
+		return oldState.getBlock() != newState.getBlock();
 	}
 
 	public int getLightValue() {
@@ -156,9 +165,19 @@ public abstract class TileCoFHBase extends TileEntity {
 
 	/* NETWORK METHODS */
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
-		return PacketHandler.toMCPacket(getPacket());
+		return new SPacketUpdateTileEntity(this.pos, METADATA_NOT_APPLICABLE, new NBTTagCompound());
+	}
+
+	@Override
+	/**
+	 * Only used for initial load of tile entities and not the subsequent packet calls. Reason being it uses readFromNBT on client and thus needs
+	 * all data instead of just small packets
+	 */
+	public NBTTagCompound getUpdateTag() {
+
+		return writeToNBT(super.getUpdateTag());
 	}
 
 	public PacketCoFHBase getPacket() {
@@ -207,7 +226,7 @@ public abstract class TileCoFHBase extends TileEntity {
 
 	public void sendFluidPacket() {
 
-		PacketHandler.sendToDimension(getFluidPacket(), worldObj.provider.getDimensionId());
+		PacketHandler.sendToDimension(getFluidPacket(), worldObj.provider.getDimension());
 	}
 
 	public void sendModePacket() {
@@ -268,7 +287,7 @@ public abstract class TileCoFHBase extends TileEntity {
 
 	}
 
-	public void sendGuiNetworkData(Container container, ICrafting iCrafting) {
+	public void sendGuiNetworkData(Container container, IContainerListener containerListener) {
 
 	}
 

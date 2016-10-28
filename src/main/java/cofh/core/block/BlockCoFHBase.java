@@ -1,9 +1,10 @@
 package cofh.core.block;
 
+import cofh.api.core.IInitializer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 
-public class BlockCoFHBase extends Block {
+public abstract class BlockCoFHBase extends Block {
 
 	protected String modName;
 	protected String name;

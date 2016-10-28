@@ -14,7 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 
 public class CommandKillAll implements ISubCommand {
@@ -83,7 +83,7 @@ public class CommandKillAll implements ISubCommand {
 			finalNames = finalNames.substring(0, finalNames.length() - 2);
 			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.killall.success" + (target != null ? "" : "Hostile"), killCount, finalNames);
 		} else {
-			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.killall.no" + (target != null ? "Match" : "Hostile")));
+			sender.addChatMessage(new TextComponentTranslation("info.cofh.command.killall.no" + (target != null ? "Match" : "Hostile")));
 		}
 	}
 
