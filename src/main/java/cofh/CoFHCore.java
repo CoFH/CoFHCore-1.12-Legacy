@@ -7,15 +7,13 @@ import cofh.core.network.PacketCoFHBase;
 import cofh.core.network.PacketCore;
 import cofh.core.network.PacketCore.PacketTypes;
 import cofh.core.util.ConfigHandler;
-
-import java.io.File;
-import java.util.ArrayList;
-
 import cofh.core.util.OreDictionaryArbiter;
 import cofh.core.util.crafting.RecipeUpgrade;
 import cofh.core.util.crafting.RecipeUpgradeOverride;
 import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -24,17 +22,15 @@ import net.minecraftforge.fml.common.Mod.CustomProperty;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
-import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.File;
+import java.util.ArrayList;
 
 @Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, guiFactory = CoFHCore.modGuiFactory,
 		customProperties = @CustomProperty(k = "cofhversion", v = "true"))
@@ -89,13 +85,16 @@ public class CoFHCore {
 		CONFIG_LOOT.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/loot.cfg"), true));
 		CONFIG_CLIENT.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/client.cfg"), true));
 
+		proxy.preInit(event);
+
 		FeatureParser.initialize();
 		WorldHandler.initialize();
 
 		RecipeSorter.register("cofh:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
-		RecipeSorter.register("cofh:upgradeoverride", RecipeUpgradeOverride.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
+		RecipeSorter.register("cofh:upgradeoverride", RecipeUpgradeOverride.class, RecipeSorter.Category.SHAPED,
+				"before:forge:shapedore");
 
-		proxy.preInit(event);
+		registerOreDictionaryEntries();
 	}
 
 	@EventHandler
@@ -110,6 +109,20 @@ public class CoFHCore {
 	public void postInit(FMLPostInitializationEvent event) {
 
 		proxy.postInit(event);
+	}
+
+	public void registerOreDictionaryEntries() {
+
+		registerOreDictionaryEntry("blockCloth", new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
+	}
+
+	private boolean registerOreDictionaryEntry(String oreName, ItemStack ore) {
+
+		if (OreDictionary.getOres(oreName).isEmpty()) {
+			OreDictionary.registerOre(oreName, ore);
+			return true;
+		}
+		return false;
 	}
 
 	@EventHandler
