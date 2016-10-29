@@ -96,17 +96,17 @@ public class TabRedstone extends TabBase {
         if (28 <= mouseX && mouseX < 44 && 20 <= mouseY && mouseY < 36) {
             if (!myContainer.getControl().isDisabled()) {
                 myContainer.setControl(IRedstoneControl.ControlMode.DISABLED);
-                GuiBase.playSound("random.click", 1.0F, 0.4F);
+                GuiBase.playClickSound(1.0F, 0.4F);
             }
         } else if (48 <= mouseX && mouseX < 64 && 20 <= mouseY && mouseY < 36) {
             if (!myContainer.getControl().isLow()) {
                 myContainer.setControl(IRedstoneControl.ControlMode.LOW);
-                GuiBase.playSound("random.click", 1.0F, 0.6F);
+                GuiBase.playClickSound(1.0F, 0.6F);
             }
         } else if (68 <= mouseX && mouseX < 84 && 20 <= mouseY && mouseY < 36) {
             if (!myContainer.getControl().isHigh()) {
                 myContainer.setControl(IRedstoneControl.ControlMode.HIGH);
-                GuiBase.playSound("random.click", 1.0F, 0.8F);
+                GuiBase.playClickSound(1.0F, 0.8F);
             }
         }
         return true;
@@ -141,21 +141,21 @@ public class TabRedstone extends TabBase {
 
         if (myContainer.getControl().isDisabled()) {
             gui.drawButton("IconGunpowder", posX() + 28, posY + 20, 1);
-            gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1);
-            gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1);
+            gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 0);
+            gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 0);
             getFontRenderer().drawString(StringHelper.localize("info.cofh.disabled"), posXOffset() + 14, posY + 54, textColor);
             getFontRenderer().drawString(StringHelper.localize("info.cofh.ignored"), posXOffset() + 14, posY + 78, textColor);
         } else {
             getFontRenderer().drawString(StringHelper.localize("info.cofh.enabled"), posXOffset() + 14, posY + 54, textColor);
 
             if (myContainer.getControl().isLow()) {
-                gui.drawButton("IconRedstone", posX() + 28, posY + 20, 1);
+                gui.drawButton("IconRedstone", posX() + 28, posY + 20, 0);
                 gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1);
-                gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1);
+                gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 0);
                 getFontRenderer().drawString(StringHelper.localize("info.cofh.low"), posXOffset() + 14, posY + 78, textColor);
             } else {
-                gui.drawButton("IconRedstone", posX() + 28, posY + 20, 1);
-                gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 1);
+                gui.drawButton("IconRedstone", posX() + 28, posY + 20, 0);
+                gui.drawButton("IconRSTorchOff", posX() + 48, posY + 20, 0);
                 gui.drawButton("IconRSTorchOn", posX() + 68, posY + 20, 1);
                 getFontRenderer().drawString(StringHelper.localize("info.cofh.high"), posXOffset() + 14, posY + 78, textColor);
             }

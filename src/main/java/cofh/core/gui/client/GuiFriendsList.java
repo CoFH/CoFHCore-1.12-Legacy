@@ -177,7 +177,7 @@ public class GuiFriendsList extends GuiBaseAdv {
         if (this.tbName.isFocused()) {
 
             if (j == 28) { // enter
-                playSound("random.click", 1.0F, 0.7F);
+                playClickSound(1.0F, 0.7F);
             }
         }
         updateButtons();

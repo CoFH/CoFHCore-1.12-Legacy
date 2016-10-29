@@ -296,7 +296,7 @@ public class ProxyClient extends Proxy {
     @SubscribeEvent
     public void initializeIcons(TextureStitchEvent.Post event) {
         IconRegistry.addIcon("IconGunpowder", TextureUtils.getItemTexture("gunpowder"));
-        IconRegistry.addIcon("IconRedstone", TextureUtils.getItemTexture("redstone"));
+        IconRegistry.addIcon("IconRedstone", TextureUtils.getItemTexture("redstone_dust"));
     }
 
     /* SERVER UTILS */
