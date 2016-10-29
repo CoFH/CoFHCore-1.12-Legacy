@@ -3,6 +3,7 @@ package cofh.core.render;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.FMLLog;
 
 import java.util.HashMap;
 
@@ -19,13 +20,17 @@ public class IconRegistry {
 
     }
 
+    public static void addIcon(String iconName, ResourceLocation iconLocation, TextureMap ir) {
+
+        addIcon(iconName, ir.registerSprite(iconLocation));
+    }
+
     public static void addIcon(String iconName, String iconLocation, TextureMap ir) {
 
-        icons.put(iconName, ir.registerSprite(new ResourceLocation(iconLocation)));
+        addIcon(iconName, ir.registerSprite(new ResourceLocation(iconLocation)));
     }
 
     public static void addIcon(String iconName, TextureAtlasSprite icon) {
-
         icons.put(iconName, icon);
     }
 

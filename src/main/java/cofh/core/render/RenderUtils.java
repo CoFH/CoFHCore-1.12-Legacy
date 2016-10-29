@@ -81,6 +81,7 @@ public class RenderUtils {
     // return renderTransformations[scaleType];
     // }
 
+    @Deprecated//Just do new Vector3 / new Translation
     public static Vector3 getRenderVector(double x, double y, double z) {
 
         renderVector.x = x;
