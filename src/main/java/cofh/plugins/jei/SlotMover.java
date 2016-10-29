@@ -25,7 +25,7 @@ public class SlotMover implements IAdvancedGuiHandler<GuiBase> {
 
         for (TabBase tab : guiContainer.tabs) {
             Rectangle4i rect = tab.getBounds();
-            tabBoxes.add(new Rectangle(rect.x, rect.y, rect.h, rect.w));
+            tabBoxes.add(new Rectangle(rect.x, rect.y, rect.w, rect.h));
         }
 
         return tabBoxes;
