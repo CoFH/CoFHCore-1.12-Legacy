@@ -1,5 +1,6 @@
 package cofh.core.network;
 
+import cofh.CoFHCore;
 import cofh.core.CoFHProps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -95,7 +96,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
         EntityPlayer player;
         switch (FMLCommonHandler.instance().getEffectiveSide()) {
             case CLIENT:
-                player = this.getClientPlayer();
+                player = CoFHCore.proxy.getClientPlayer();
                 handlePacketClient(pkt, player);
                 break;
 
@@ -151,7 +152,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
         PacketBase pkt = packetClass.newInstance();
         pkt.decodeInto(null, buf.slice());
 
-        handlePacketClient(pkt, Minecraft.getMinecraft().thePlayer);
+        handlePacketClient(pkt, CoFHCore.proxy.getClientPlayer());
     }
 
     // Method to call from FMLInitializationEvent
@@ -181,12 +182,6 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
                 return com;
             }
         });
-    }
-
-    @SideOnly(Side.CLIENT)
-    private EntityPlayer getClientPlayer() {
-
-        return Minecraft.getMinecraft().thePlayer;
     }
 
     public static void sendToAll(PacketBase message) {
