@@ -68,7 +68,7 @@ public class DropHandler {
         }
         EntityLivingBase living = event.getEntityLiving();
         EntityItem theDrop = new EntityItem(living.worldObj, living.posX, living.posY, living.posZ, itemSkull);
-        theDrop.delayBeforeCanPickup = 10;
+        theDrop.setPickupDelay(10);
         event.getDrops().add(theDrop);
     }
 }

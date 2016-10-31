@@ -54,7 +54,7 @@ public class EntityCoFHFishHook extends EntityFishHook {
         onEntityUpdate();
 
         if (this.worldObj.isRemote) {
-            int i = ((Integer) this.getDataManager().get(DATA_HOOKED_ENTITY)).intValue();
+            int i = this.getDataManager().get(DATA_HOOKED_ENTITY);
 
             if (i > 0 && this.caughtEntity == null) {
                 this.caughtEntity = this.worldObj.getEntityByID(i - 1);

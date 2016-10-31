@@ -45,7 +45,7 @@ public class ItemHammerAdv extends ItemToolAdv {
         float refStrength = ForgeHooks.blockStrength(state, player, world, hitPos);
         if (refStrength != 0.0D && canHarvestBlock(state, stack)) {
             RayTraceResult traceResult = BlockHelper.getCurrentMovingObjectPosition(player, true);
-            BlockPos tracePos = traceResult.blockPos;
+            BlockPos tracePos = traceResult.getBlockPos();
             IBlockState adjBlock;
             float strength;
 
