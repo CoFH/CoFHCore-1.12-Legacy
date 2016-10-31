@@ -133,7 +133,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
                 }
             });
         } else {
-            packet.handleClientSide(player);
+            packet.handleServerSide(player);
         }
     }
 
