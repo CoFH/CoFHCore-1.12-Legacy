@@ -5,16 +5,20 @@ import codechicken.lib.texture.TextureUtils;
 import codechicken.lib.vec.Vector3;
 import codechicken.lib.vec.uv.IconTransformation;
 import codechicken.lib.vec.uv.UV;
+import cofh.lib.render.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
@@ -46,7 +50,6 @@ public class RenderUtils {
         }
     }
 
-    public static final ItemRenderer renderItem = new ItemRenderer(Minecraft.getMinecraft());
     //public static final RenderBlocks renderBlocks = new RenderBlocks();
 
     public static float[][] angleBaseYNeg = new float[6][3];
@@ -414,12 +417,12 @@ public class RenderUtils {
 		}
 	}*/
 
-	/*public static final void renderItemOnBlockSide(TileEntity tile, ItemStack stack, int side, double x, double y, double z) {
+	public static final void renderItemOnBlockSide(TileEntity tile, ItemStack stack, int side, double x, double y, double z) {
 
 		if (stack == null) {
 			return;
 		}
-		GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
 
 		switch (side) {
 		case 0:
@@ -431,34 +434,34 @@ public class RenderUtils {
 			break;
 		case 3:
 			GlStateManager.translate(x + 0.25, y + 0.875, z + 1 + RenderHelper.RENDER_OFFSET);
-			GL11.glRotated(180, 0, 1, 0);
+            GlStateManager.rotate(180, 0, 1, 0);
 			break;
 		case 4:
 			GlStateManager.translate(x - RenderHelper.RENDER_OFFSET, y + 0.875, z + 0.25);
-			GL11.glRotated(90, 0, 1, 0);
+            GlStateManager.rotate(90, 0, 1, 0);
 			break;
 		case 5:
 			GlStateManager.translate(x + 1 + RenderHelper.RENDER_OFFSET, y + 0.875, z + 0.75);
-			GL11.glRotated(-90, 0, 1, 0);
+            GlStateManager.rotate(-90, 0, 1, 0);
 			break;
 		default:
 		}
 		GlStateManager.scale(0.03125, 0.03125, -RenderHelper.RENDER_OFFSET);
-		GL11.glRotated(180, 0, 0, 1);
+		GlStateManager.rotate(180, 0, 0, 1);
 
-		setupLight(tile, side);
+		setupLight(tile, EnumFacing.VALUES[side]);
 		RenderHelper.enableGUIStandardItemLighting();
 
-		if (!ForgeHooksClient.renderInventoryItem(renderBlocks, RenderHelper.engine(), stack, true, 0.0F, 0.0F, 0.0F)) {
-			renderItem.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, RenderHelper.engine(), stack, 0, 0);
-		}
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-		GL11.glEnable(GL11.GL_BLEND);
-		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
+		//if (!ForgeHooksClient.renderInventoryItem(renderBlocks, RenderHelper.engine(), stack, true, 0.0F, 0.0F, 0.0F)) {
+			RenderHelper.renderItem().renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRendererObj, stack, 0, 0, null);
+		//}
+		GlStateManager.enableAlpha();
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+		GlStateManager.enableBlend();
+		GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 		GlStateManager.popMatrix();
 		net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
-	}*/
+	}
 
     public static void setupLight(TileEntity tile, EnumFacing side) {
 
