@@ -435,18 +435,18 @@ public class RenderUtils {
 		case 1:
 			break;
 		case 2:
-			GlStateManager.translate(x + 0.75, y + 0.875, z - RenderHelper.RENDER_OFFSET);
+			GlStateManager.translate(x + 0.75, y + 0.875, z + RenderHelper.RENDER_OFFSET * 145);
 			break;
 		case 3:
-			GlStateManager.translate(x + 0.25, y + 0.875, z + 1 + RenderHelper.RENDER_OFFSET);
+			GlStateManager.translate(x + 0.25, y + 0.875, z + 1 - RenderHelper.RENDER_OFFSET * 145);
             GlStateManager.rotate(180, 0, 1, 0);
 			break;
 		case 4:
-			GlStateManager.translate(x - RenderHelper.RENDER_OFFSET, y + 0.875, z + 0.25);
+			GlStateManager.translate(x + RenderHelper.RENDER_OFFSET * 145, y + 0.875, z + 0.25);
             GlStateManager.rotate(90, 0, 1, 0);
 			break;
 		case 5:
-			GlStateManager.translate(x + 1 + RenderHelper.RENDER_OFFSET, y + 0.875, z + 0.75);
+			GlStateManager.translate(x + 1 - RenderHelper.RENDER_OFFSET * 145, y + 0.875, z + 0.75);
             GlStateManager.rotate(-90, 0, 1, 0);
 			break;
 		default:
@@ -457,9 +457,8 @@ public class RenderUtils {
 		setupLight(tile, EnumFacing.VALUES[side]);
 		RenderHelper.enableGUIStandardItemLighting();
 
-		//if (!ForgeHooksClient.renderInventoryItem(renderBlocks, RenderHelper.engine(), stack, true, 0.0F, 0.0F, 0.0F)) {
-			RenderHelper.renderItem().renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRendererObj, stack, 0, 0, null);
-		//}
+		RenderHelper.renderItem().renderItemAndEffectIntoGUI(stack, 0,0);
+
 		GlStateManager.enableAlpha();
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		GlStateManager.enableBlend();
