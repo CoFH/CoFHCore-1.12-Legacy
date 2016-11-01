@@ -13,9 +13,9 @@ public class CoFHProps {
 
     }
 
-    private static final String BUILD = "1448";
-    public static final String FORGE_REQ = "10.13.4." + BUILD;
-    public static final String FORGE_REQ_MAX = "10.14";
+    private static final String BUILD = "2099";
+    public static final String FORGE_REQ = "12.18.2." + BUILD;
+    public static final String FORGE_REQ_MAX = "";
 
     public static final String FORGE_DEP = "required-after:Forge@[" + FORGE_REQ + "," + FORGE_REQ_MAX + ");";
 

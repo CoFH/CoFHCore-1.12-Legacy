@@ -70,6 +70,9 @@ public class RenderUtils {
 
     public static Vector3 renderVector = new Vector3();
 
+    @Deprecated
+    //Due to the static nature of these transforms, we cant use them.
+    //Parts of the model pipeline run on other threads causing thread leaks.
     public static ScaledIconTransformation getIconTransformation(TextureAtlasSprite icon) {
 
         if (icon != null) {
@@ -84,7 +87,9 @@ public class RenderUtils {
     // return renderTransformations[scaleType];
     // }
 
-    @Deprecated//Just do new Vector3 / new Translation
+    @Deprecated
+    //Due to the static nature of this, we cant use it.
+    //Parts of the model pipeline run on other threads causing thread leaks.
     public static Vector3 getRenderVector(double x, double y, double z) {
 
         renderVector.x = x;
