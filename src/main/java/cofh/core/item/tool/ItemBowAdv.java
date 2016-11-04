@@ -1,5 +1,6 @@
 package cofh.core.item.tool;
 
+import cofh.api.item.IEmpowerableItem;
 import cofh.core.enchantment.CoFHEnchantment;
 import cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.creativetab.CreativeTabs;
@@ -152,6 +153,7 @@ public class ItemBowAdv extends ItemBow {
 
                 if ((double) f >= 0.1D) {
                     boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer) : false);
+                    boolean empowered = this instanceof IEmpowerableItem && ((IEmpowerableItem)this).isEmpowered(stack);
 
                     if (!world.isRemote) {
                         int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoFHEnchantment.multishot, stack);
@@ -159,11 +161,15 @@ public class ItemBowAdv extends ItemBow {
                         int powerLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
                         boolean flame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;
                         stack.damageItem(1, entityplayer);
+                        onBowFired(entityplayer, stack);
 
                         for (int shot = 0; shot <= enchantMultishot; shot++) {
                             ItemArrow itemarrow = (ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW);
                             EntityArrow entityarrow = itemarrow.createArrow(world, itemstack, entityplayer);
                             entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+                            if (empowered) {
+                                entityarrow.setDamage(entityarrow.getDamage() + 1.5);
+                            }
 
                             if (f == 1.0F) {
                                 entityarrow.setIsCritical(true);
@@ -285,43 +291,5 @@ public class ItemBowAdv extends ItemBow {
 //        }
     }
 
-    //    @Override
-//    public IIcon getIconIndex(ItemStack stack) {
-//
-//        return getIcon(stack, 0);
-//    }
-//
-//    @Override
-//    public IIcon getIcon(ItemStack stack, int pass) {
-//
-//        return this.normalIcons[0];
-//    }
-//
-//    @Override
-//    public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-//
-//        if (useRemaining > 0) {
-//            int draw = stack.getMaxItemUseDuration() - useRemaining;
-//
-//            if (draw > 17) {
-//                return this.normalIcons[3];
-//            } else if (draw > 13) {
-//                return this.normalIcons[2];
-//            } else if (draw > 0) {
-//                return this.normalIcons[1];
-//            }
-//        }
-//        return this.normalIcons[0];
-//    }
-//
-//    @Override
-//    public void registerIcons(IIconRegister ir) {
-//
-//        this.normalIcons[0] = ir.registerIcon(this.getIconString());
-//
-//        for (int i = 1; i < 4; i++) {
-//            this.normalIcons[i] = ir.registerIcon(this.getIconString() + "_" + (i - 1));
-//        }
-//    }
-
+    public void onBowFired(EntityPlayer player, ItemStack stack) {}
 }
