@@ -57,7 +57,7 @@ public abstract class ItemToolAdv extends ItemTool {
     }
 
     @Override
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
+    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 
         if (showInCreative) {
             list.add(new ItemStack(item, 1, 0));
