@@ -5,6 +5,7 @@ import cofh.lib.gui.element.TabBase;
 import cofh.lib.util.Rectangle4i;
 import mezz.jei.api.gui.IAdvancedGuiHandler;
 
+import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,5 +30,11 @@ public class SlotMover implements IAdvancedGuiHandler<GuiBase> {
         }
 
         return tabBoxes;
+    }
+
+    @Nullable
+    @Override
+    public Object getIngredientUnderMouse(GuiBase guiContainer, int mouseX, int mouseY) {
+        return null;
     }
 }
