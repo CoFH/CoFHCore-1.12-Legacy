@@ -4,6 +4,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CoFHEnchantment {
 
@@ -16,8 +17,11 @@ public class CoFHEnchantment {
 
     public static void postInit() {
 
-        holding = new EnchantmentHolding("holding");
-        multishot = new EnchantmentMultishot("multishot");
+        holding = new EnchantmentHolding("cofh:holding");
+        multishot = new EnchantmentMultishot("cofh:multishot");
+
+        GameRegistry.register(holding);
+        GameRegistry.register(multishot);
     }
 
     public static NBTTagList getEnchantmentTagList(NBTTagCompound nbt) {
