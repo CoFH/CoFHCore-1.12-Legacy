@@ -36,6 +36,9 @@ public class DropHandler {
 
     @SubscribeEvent
     public void onLivingDrops(LivingDropsEvent event) {
+        if (!event.getEntityLiving().worldObj.getGameRules().getBoolean("doMobLoot")) {
+            return;
+        }
 
         int randPerc = MathHelper.RANDOM.nextInt(100);
         ItemStack itemSkull = null;
