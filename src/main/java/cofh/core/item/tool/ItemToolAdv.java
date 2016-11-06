@@ -33,9 +33,14 @@ public abstract class ItemToolAdv extends ItemTool {
     protected int harvestLevel = -1;
     protected boolean showInCreative = true;
 
+    public ItemToolAdv(float baseDamage, float attackSpeed, Item.ToolMaterial toolMaterial) {
+
+        super(baseDamage, attackSpeed, toolMaterial, null);
+    }
+
     public ItemToolAdv(float baseDamage, Item.ToolMaterial toolMaterial) {
 
-        super(baseDamage, 0, toolMaterial, null);
+        this(baseDamage, -3.0F, toolMaterial);
     }
 
     public ItemToolAdv(float baseDamage, Item.ToolMaterial toolMaterial, int harvestLevel) {

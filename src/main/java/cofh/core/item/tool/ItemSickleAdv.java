@@ -22,7 +22,7 @@ public class ItemSickleAdv extends ItemToolAdv {
 
     public ItemSickleAdv(Item.ToolMaterial toolMaterial) {
 
-        super(3.0F, toolMaterial);
+        super(3.0F, -2.4F, toolMaterial);
         addToolClass("sickle");
 
         effectiveMaterials.add(Material.LEAVES);

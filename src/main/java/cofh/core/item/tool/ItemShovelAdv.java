@@ -7,7 +7,7 @@ public class ItemShovelAdv extends ItemToolAdv {
 
     public ItemShovelAdv(ToolMaterial toolMaterial) {
 
-        super(1.0F, toolMaterial);
+        super(1.0F, -3.0F, toolMaterial);
         addToolClass("shovel");
 
         effectiveBlocks.addAll(ItemSpade.EFFECTIVE_ON);

@@ -7,7 +7,7 @@ public class ItemPickaxeAdv extends ItemToolAdv {
 
     public ItemPickaxeAdv(ToolMaterial toolMaterial) {
 
-        super(2.0F, toolMaterial);
+        super(2.0F, -2.8F, toolMaterial);
         addToolClass("pickaxe");
 
         effectiveBlocks.addAll(ItemPickaxe.EFFECTIVE_ON);
