@@ -107,7 +107,6 @@ public abstract class BlockCoFHBase extends Block implements ITileEntityProvider
     public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
         if (!player.capabilities.isCreativeMode) {
             dropBlockAsItem(world, pos, state, 0);
-            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 7);
         }
     }
 
