@@ -455,7 +455,6 @@ public class RenderUtils {
 		GlStateManager.rotate(180, 0, 0, 1);
 
 		setupLight(tile, EnumFacing.VALUES[side]);
-		RenderHelper.enableGUIStandardItemLighting();
 
 		RenderHelper.renderItem().renderItemAndEffectIntoGUI(stack, 0,0);
 
