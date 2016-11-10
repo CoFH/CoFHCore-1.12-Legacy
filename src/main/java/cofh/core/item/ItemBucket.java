@@ -90,7 +90,7 @@ public class ItemBucket extends ItemBase implements IFluidOverlayItem {
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         RayTraceResult traceResult = this.rayTrace(world, player, false);
 
-        if (traceResult.typeOfHit != RayTraceResult.Type.BLOCK) {
+        if (traceResult == null || traceResult.typeOfHit != RayTraceResult.Type.BLOCK) {
             return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
         }
 
