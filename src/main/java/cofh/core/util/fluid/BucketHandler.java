@@ -62,7 +62,7 @@ public class BucketHandler {
         }
         ItemStack current = event.getEmptyBucket();
         RayTraceResult target = event.getTarget();
-        if (target.typeOfHit != Type.BLOCK) {
+        if (target == null || target.typeOfHit != Type.BLOCK) {
             return;
         }
         boolean fill = true;
