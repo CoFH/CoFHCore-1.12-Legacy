@@ -34,7 +34,7 @@ class ASMCore {
 
     static Logger log = LogManager.getLogger("CoFH ASM");
 
-    static TObjectByteHashMap<String> hashes = new TObjectByteHashMap<String>(30, 1, (byte) 0);
+    //static TObjectByteHashMap<String> hashes = new TObjectByteHashMap<String>(30, 1, (byte) 0);
     static THashSet<String> parsables, implementables, strippables, substitutables;
     static final String implementableDesc, strippableDesc, substitutableDesc;
     static String side;
@@ -54,32 +54,32 @@ class ASMCore {
         strippables = new THashSet<String>(10);
         substitutables = new THashSet<String>(10);
 
-        hashes.put("net.minecraft.world.WorldServer", (byte) 1);
-        hashes.put("net.minecraft.world.World", (byte) 2);
-        hashes.put("skyboy.core.world.WorldProxy", (byte) 3);
-        hashes.put("skyboy.core.world.WorldServerProxy", (byte) 4);
-        hashes.put("net.minecraft.block.BlockPane", (byte) 5);
-        hashes.put("net.minecraft.block.Block", (byte) 6);
-        hashes.put("net.minecraft.client.multiplayer.PlayerControllerMP", (byte) 7);
-        hashes.put("net.minecraft.util.LongHashMap", (byte) 8);
-        if (Boolean.parseBoolean(System.getProperty("cofh.lightedit", "true"))) {
-            hashes.put("net.minecraft.world.chunk.Chunk", (byte) 9);
-        }
-        hashes.put("net.minecraft.client.Minecraft", (byte) 10);
-        hashes.put("net.minecraft.client.renderer.RenderBlocks", (byte) 11);
-        hashes.put("net.minecraft.tileentity.TileEntity", (byte) 12);
-        hashes.put("net.minecraft.inventory.Container", (byte) 13);
-        hashes.put("net.minecraft.entity.Entity", (byte) 14);
-        hashes.put("net.minecraft.entity.item.EntityItem", (byte) 15);
-        hashes.put("cofh.asmhooks.HooksCore", (byte) 16);
-        hashes.put("net.minecraft.enchantment.Enchantment", (byte) 17);
-        hashes.put("net.minecraft.item.Item", (byte) 18);
-        hashes.put("net.minecraft.client.gui.GuiKeyBindingList$KeyEntry", (byte) 19);
-        hashes.put("net.minecraft.client.settings.KeyBinding", (byte) 20);
-        hashes.put("net.minecraftforge.fml.common.registry.GameRegistry", (byte) 21);
-        if (Boolean.parseBoolean(System.getProperty("cofh.profiler.debug", "false"))) {
-            hashes.put("net.minecraft.profiler.Profiler", (byte) 22);
-        }
+        //hashes.put("net.minecraft.world.WorldServer", (byte) 1);
+        //hashes.put("net.minecraft.world.World", (byte) 2);
+        //hashes.put("skyboy.core.world.WorldProxy", (byte) 3);
+        //hashes.put("skyboy.core.world.WorldServerProxy", (byte) 4);
+        //hashes.put("net.minecraft.block.BlockPane", (byte) 5);
+        //hashes.put("net.minecraft.block.Block", (byte) 6);
+        //hashes.put("net.minecraft.client.multiplayer.PlayerControllerMP", (byte) 7);
+        //hashes.put("net.minecraft.util.LongHashMap", (byte) 8);
+        //if (Boolean.parseBoolean(System.getProperty("cofh.lightedit", "true"))) {
+        //    hashes.put("net.minecraft.world.chunk.Chunk", (byte) 9);
+        //}
+        //hashes.put("net.minecraft.client.Minecraft", (byte) 10);
+        //hashes.put("net.minecraft.client.renderer.RenderBlocks", (byte) 11);
+        //hashes.put("net.minecraft.tileentity.TileEntity", (byte) 12);
+        //hashes.put("net.minecraft.inventory.Container", (byte) 13);
+        //hashes.put("net.minecraft.entity.Entity", (byte) 14);
+        //hashes.put("net.minecraft.entity.item.EntityItem", (byte) 15);
+        //hashes.put("cofh.asmhooks.HooksCore", (byte) 16);
+        //hashes.put("net.minecraft.enchantment.Enchantment", (byte) 17);
+        //hashes.put("net.minecraft.item.Item", (byte) 18);
+        //hashes.put("net.minecraft.client.gui.GuiKeyBindingList$KeyEntry", (byte) 19);
+        //hashes.put("net.minecraft.client.settings.KeyBinding", (byte) 20);
+        //hashes.put("net.minecraftforge.fml.common.registry.GameRegistry", (byte) 21);
+        //if (Boolean.parseBoolean(System.getProperty("cofh.profiler.debug", "false"))) {
+        //    hashes.put("net.minecraft.profiler.Profiler", (byte) 22);
+        //}
     }
 
     static final ArrayList<String> workingPath = new ArrayList<String>();
@@ -142,6 +142,7 @@ class ASMCore {
         return bytes;
     }
 
+    @Deprecated //This is disabled for now.
     static byte[] transform(int index, String name, String transformedName, byte[] bytes) {
 
         ClassReader cr = new ClassReader(bytes);

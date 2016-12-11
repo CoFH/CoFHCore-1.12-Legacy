@@ -31,10 +31,10 @@ public class CoFHClassTransformer implements IClassTransformer {
             bytes = parse(name, transformedName, bytes);
         }
 
-        int index = hashes.get(transformedName);
-        if (index != 0) {
-            bytes = ASMCore.transform(index, name, transformedName, bytes);
-        }
+        //int index = hashes.get(transformedName);
+        //if (index != 0) {
+        //    bytes = ASMCore.transform(index, name, transformedName, bytes);
+        //}
 
         return bytes;
     }

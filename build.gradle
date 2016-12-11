@@ -71,6 +71,8 @@ processResources {
 version = "${project.minecraft.version}-${project.version}"
 def commonManifest = {
     attributes 'FMLAT': 'CoFH_at.cfg CoFHLib_at.cfg'
+    attributes 'FMLCorePlugin': 'cofh.asm.LoadingPlugin'
+    attributes 'FMLCorePluginContainsFMLMod': 'true'
 }
 
 jar {

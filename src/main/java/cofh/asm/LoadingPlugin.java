@@ -33,6 +33,7 @@ import java.util.zip.ZipEntry;
 
 @IFMLLoadingPlugin.TransformerExclusions({ "cofh.asm." })
 @IFMLLoadingPlugin.SortingIndex(1001)
+@IFMLLoadingPlugin.Name("CoFH Loading Plugin")
 public class LoadingPlugin implements IFMLLoadingPlugin {
 
     public static final String MC_VERSION = "[1.7.10]";
