@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandler;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -267,6 +268,40 @@ public class CrashHelper {
 		}
 
 	}
+
+    public static void addInventoryContents(CrashReport report, String categoryName, final IItemHandler inv) {
+
+        CrashReportCategory category = report.makeCategory(categoryName);
+
+        if (inv == null) {
+            category.addCrashSection("Null?", "Null");
+            return;
+        }
+
+        category.addCrashSection("InventoryContents", new Callable<String>() {
+
+            @Override
+            public String call() throws Exception {
+
+                StringBuilder builder = new StringBuilder("\n\n");
+                builder.append(inv.toString()).append(" - ").append(inv.getSlots());
+                for (int i = 0; i < inv.getSlots(); i++) {
+                    builder.append(i).append(" - ");
+                    ItemStack stackInSlot;
+                    try {
+                        stackInSlot = inv.getStackInSlot(i);
+                    } catch (Exception e) {
+                        builder.append("Errored - ").append(e.toString()).append("\n");
+                        continue;
+                    }
+
+                    builder.append(stackInSlot == null ? "Null" : stackInSlot.toString()).append("\n");
+                }
+                builder.append("\n\n");
+                return builder.toString();
+            }
+        });
+    }
 
 	public static void addInventoryContents(CrashReport report, String categoryName, final IInventory inv) {
 
