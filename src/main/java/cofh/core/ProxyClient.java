@@ -263,7 +263,7 @@ public class ProxyClient extends Proxy {
         IconRegistry.addIcon("IconAcceptInactive", "cofh:items/icons/icon_accept_inactive", event.getMap());
         IconRegistry.addIcon("IconAugment", "cofh:items/icons/icon_augment", event.getMap());
         IconRegistry.addIcon("IconButton", "cofh:items/icons/icon_button", event.getMap());
-        IconRegistry.addIcon("IconButtonHighlight", "cofh:items/icons/icon_Button_highlight", event.getMap());
+        IconRegistry.addIcon("IconButtonHighlight", "cofh:items/icons/icon_button_highlight", event.getMap());
         IconRegistry.addIcon("IconButtonInactive", "cofh:items/icons/icon_button_inactive", event.getMap());
         IconRegistry.addIcon("IconCancel", "cofh:items/icons/icon_cancel", event.getMap());
         IconRegistry.addIcon("IconCancelInactive", "cofh:items/icons/icon_cancel_inactive", event.getMap());
@@ -276,9 +276,9 @@ public class ProxyClient extends Proxy {
         IconRegistry.addIcon("IconRSTorchOff", "cofh:items/icons/icon_rs_torch_off", event.getMap());
         IconRegistry.addIcon("IconRSTorchOn", "cofh:items/icons/icon_rs_torch_on", event.getMap());
 
-        IconRegistry.addIcon("IconArrowDown0", "cofh:items/icons/icon_Arrow_down_inactive", event.getMap());
+        IconRegistry.addIcon("IconArrowDown0", "cofh:items/icons/icon_arrow_down_inactive", event.getMap());
         IconRegistry.addIcon("IconArrowDown1", "cofh:items/icons/icon_arrow_down", event.getMap());
-        IconRegistry.addIcon("IconArrowUp0", "cofh:items/icons/icon_arrow_up_Inactive", event.getMap());
+        IconRegistry.addIcon("IconArrowUp0", "cofh:items/icons/icon_arrow_up_inactive", event.getMap());
         IconRegistry.addIcon("IconArrowUp1", "cofh:items/icons/icon_arrow_up", event.getMap());
     }
 
