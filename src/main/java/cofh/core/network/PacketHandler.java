@@ -110,6 +110,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
         }
     }
 
+    @SideOnly(Side.CLIENT)
     private void handlePacketClient(final PacketBase packet, final EntityPlayer player) {
         if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
             Minecraft.getMinecraft().addScheduledTask(new Runnable() {

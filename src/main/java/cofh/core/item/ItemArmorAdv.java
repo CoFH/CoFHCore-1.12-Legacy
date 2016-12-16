@@ -64,7 +64,7 @@ public class ItemArmorAdv extends ItemArmor {
 
     @Override
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        if (slot == getEquipmentSlot()) {
+        if (slot == armorType) {
             Multimap<String, AttributeModifier> map = super.getAttributeModifiers(slot, stack);
             map.putAll(properties);
             return map;
