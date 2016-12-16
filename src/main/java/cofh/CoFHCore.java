@@ -127,7 +127,7 @@ public class CoFHCore extends BaseMod {
 		/* Register Handlers */
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
         CommandHandler.registerSubCommand(CommandFriend.instance);
-        //SecurityHelper.setup();
+        SecurityHelper.setup();
         PacketCore.initialize();
         PacketSocial.initialize();
         RegistrySocial.initialize();
