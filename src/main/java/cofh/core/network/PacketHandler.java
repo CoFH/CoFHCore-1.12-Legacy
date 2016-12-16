@@ -3,12 +3,10 @@ package cofh.core.network;
 import cofh.CoFHCore;
 import cofh.core.CoFHProps;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,8 +15,8 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IThreadListener;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -29,7 +27,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 
@@ -110,10 +107,10 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
         }
     }
 
-    @SideOnly(Side.CLIENT)
     private void handlePacketClient(final PacketBase packet, final EntityPlayer player) {
-        if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
-            Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+        IThreadListener threadListener = CoFHCore.proxy.getThreadListener();
+        if (!threadListener.isCallingFromMinecraftThread()) {
+            threadListener.addScheduledTask(new Runnable() {
                 @Override
                 public void run() {
                     handlePacketClient(packet, player);
@@ -125,9 +122,9 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
     }
 
     private void handlePacketServer(final PacketBase packet, final EntityPlayer player) {
-        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-        if (!server.isCallingFromMinecraftThread()) {
-            server.addScheduledTask(new Runnable() {
+        IThreadListener threadListener = CoFHCore.proxy.getThreadListener();
+        if (!threadListener.isCallingFromMinecraftThread()) {
+            threadListener.addScheduledTask(new Runnable() {
                 @Override
                 public void run() {
                     handlePacketServer(packet, player);

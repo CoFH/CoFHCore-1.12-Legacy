@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.IThreadListener;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -156,6 +157,10 @@ public class Proxy {
     public EntityPlayer getClientPlayer() {
 
         return null;
+    }
+
+    public IThreadListener getThreadListener() {
+        return FMLCommonHandler.instance().getMinecraftServerInstance();
     }
 
     public List<EntityPlayer> getPlayerList() {

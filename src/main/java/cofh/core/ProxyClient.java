@@ -24,6 +24,7 @@ import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.IThreadListener;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
@@ -322,6 +323,11 @@ public class ProxyClient extends Proxy {
     public World getClientWorld() {
 
         return Minecraft.getMinecraft().theWorld;
+    }
+
+    @Override
+    public IThreadListener getThreadListener() {
+        return Minecraft.getMinecraft();
     }
 
     /* PLAYER UTILS */
