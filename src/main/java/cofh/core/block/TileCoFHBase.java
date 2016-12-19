@@ -158,7 +158,6 @@ public abstract class TileCoFHBase extends TileEntity {
 
     @Override
     public void handleUpdateTag(NBTTagCompound tag) {
-        super.handleUpdateTag(tag);
         PacketHandler.handleNBTPacket(tag);
     }
 
