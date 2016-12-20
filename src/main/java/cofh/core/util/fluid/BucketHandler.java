@@ -2,6 +2,7 @@ package cofh.core.util.fluid;
 
 import cofh.lib.util.BlockWrapper;
 import cofh.lib.util.ItemWrapper;
+import cofh.lib.util.helpers.HolidayHelper;
 import cofh.lib.util.helpers.ServerHelper;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -74,7 +75,12 @@ public class BucketHandler {
             }
             IBlockState state = event.getWorld().getBlockState(offsetPos);
             if (!state.getBlock().isReplaceable(event.getWorld(), offsetPos) && state.getMaterial().isSolid()) {
-                offsetPos = offsetPos.offset(target.sideHit.getOpposite());
+                if (HolidayHelper.isAprilFools()) {
+                    offsetPos = offsetPos.offset(target.sideHit.getOpposite());
+                }
+                else {
+                    offsetPos = offsetPos.offset(target.sideHit);
+                }
             }
             fill = false;
         }
