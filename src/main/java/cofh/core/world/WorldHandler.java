@@ -310,7 +310,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
             return;
         }
         // TODO: pull out the ExtendedStorageArray and edit that directly. faster.
-        IBlockState filler = world.getBiomeGenForCoords(new BlockPos(offsetX, 0, offsetZ)).fillerBlock;
+        IBlockState filler = world.getBiome(new BlockPos(offsetX, 0, offsetZ)).fillerBlock;
         // NOTE: filler block is dirt by default, the actual filler block for the biome is part of a method body
         int meta = 0; // no meta field for filler
         switch (world.provider.getDimension()) {

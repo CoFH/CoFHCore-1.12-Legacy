@@ -16,7 +16,7 @@ public final class DispenserEmptyBucketHandler extends BehaviorDefaultDispenseIt
     @Override
     public ItemStack dispenseStack(IBlockSource blockSource, ItemStack stackBucket) {
 
-        EnumFacing facing = blockSource.func_189992_e().getValue(BlockDispenser.FACING);
+        EnumFacing facing = blockSource.getBlockState().getValue(BlockDispenser.FACING);
         World world = blockSource.getWorld();
 
         BlockPos pos = blockSource.getBlockPos().offset(facing);

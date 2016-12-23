@@ -55,9 +55,9 @@ public class DropHandler {
             if (event.getEntity() instanceof EntitySkeleton) {
                 EntitySkeleton theEntity = (EntitySkeleton) event.getEntity();
 
-                if (theEntity.func_189771_df() == SkeletonType.NORMAL && skeletonEnabled && randPerc < skeletonChance) {
+                if (theEntity.getSkeletonType() == SkeletonType.NORMAL && skeletonEnabled && randPerc < skeletonChance) {
                     itemSkull = new ItemStack(Items.SKULL, 1, 0);
-                } else if (theEntity.func_189771_df() == SkeletonType.WITHER && witherSkeletonEnabled && randPerc < witherSkeletonChance) {
+                } else if (theEntity.getSkeletonType() == SkeletonType.WITHER && witherSkeletonEnabled && randPerc < witherSkeletonChance) {
                     itemSkull = new ItemStack(Items.SKULL, 1, 1);
                 }
             } else if (event.getEntity() instanceof EntityZombie && zombieEnabled && randPerc < zombieChance) {

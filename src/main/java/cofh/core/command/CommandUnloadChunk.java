@@ -56,7 +56,7 @@ public class CommandUnloadChunk implements ISubCommand {
             throw Throwables.propagate(e);
         }
 
-        o.add(ChunkPos.chunkXZ2Int(chunk.xPosition, chunk.zPosition));
+        o.add(ChunkPos.asLong(chunk.xPosition, chunk.zPosition));
         CommandHandler.logAdminCommand(sender, this, "info.cofh.command.unloadchunk.success", chunk.xPosition, chunk.zPosition);
     }
 
