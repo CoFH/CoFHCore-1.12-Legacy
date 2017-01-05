@@ -91,7 +91,8 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
         pkt.decodeInto(ctx, payload.slice());
 
         EntityPlayer player;
-        switch (FMLCommonHandler.instance().getEffectiveSide()) {
+        FMLLog.info(ctx.channel().attr(NetworkRegistry.CHANNEL_SOURCE).get().toString());
+        switch (ctx.channel().attr(NetworkRegistry.CHANNEL_SOURCE).get()) {
             case CLIENT:
                 player = CoFHCore.proxy.getClientPlayer();
                 handlePacketClient(pkt, player);
