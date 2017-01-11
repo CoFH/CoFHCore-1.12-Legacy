@@ -122,7 +122,7 @@ public class RenderHitbox {
 
         if (hitbox.drawSide[side]) {
             // Draw Square - I assume this is faster then drawing/changing modes/drawing/changing modes to go from line -> square -> line mode
-            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
+            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
             buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
             buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
             buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
@@ -132,8 +132,8 @@ public class RenderHitbox {
             buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
 
             // Draw vertical lines
-            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
-            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd - sideLength, hitbox.minZ);
+            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
+            buffer.pos(hitbox.minX, hitbox.minY + heightToAdd - sideLength, hitbox.minZ).endVertex();
 
             buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
             buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd - sideLength, hitbox.minZ).endVertex();
@@ -219,7 +219,7 @@ public class RenderHitbox {
                 buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
                 // Draw North Side Line
                 buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
-                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
                 // Draw South Side Line
                 buffer.pos(hitbox.minX - hitbox.sideLength[4], hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
                 buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ + hitbox.middleWidth).endVertex();
@@ -242,7 +242,7 @@ public class RenderHitbox {
                 buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]).endVertex();
                 // Draw North Side Line
                 buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]).endVertex();
-                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ);
+                buffer.pos(hitbox.minX, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
                 // Draw South Side Line
                 buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ - hitbox.sideLength[2]).endVertex();
                 buffer.pos(hitbox.minX + hitbox.middleDepth, hitbox.minY + heightToAdd, hitbox.minZ).endVertex();
