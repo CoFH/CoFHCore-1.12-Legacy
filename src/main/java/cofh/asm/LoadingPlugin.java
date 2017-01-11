@@ -64,7 +64,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
         currentMcVersion = (String) FMLInjectionData.data()[4];
         minecraftDir = (File) FMLInjectionData.data()[6];
         loader = Launch.classLoader;
-        attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
+        //attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
         //ASMInit.init();
     }
 
@@ -92,7 +92,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
     @Override
     public String[] getASMTransformerClass() {
 
-        return transformersList.toArray(new String[1]);
+        return new String[0];//transformersList.toArray(new String[1]);
     }
 
     @Override
