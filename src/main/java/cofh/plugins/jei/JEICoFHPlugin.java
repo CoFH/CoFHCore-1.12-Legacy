@@ -7,7 +7,7 @@ import mezz.jei.api.ingredients.IModIngredientRegistration;
  * Created by covers1624 on 26/10/2016.
  */
 @JEIPlugin
-public class JEiCoFHPlugin implements IModPlugin {
+public class JEICoFHPlugin implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
 
@@ -27,4 +27,5 @@ public class JEiCoFHPlugin implements IModPlugin {
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
 
     }
+
 }

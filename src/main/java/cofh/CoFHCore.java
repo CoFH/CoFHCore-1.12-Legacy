@@ -53,7 +53,7 @@ import java.util.ArrayList;
 @Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, guiFactory = CoFHCore.modGuiFactory, customProperties = @CustomProperty(k = "cofhversion", v = "true"))
 public class CoFHCore extends BaseMod {
 
-    public static final String modId = "CoFHCore";
+    public static final String modId = "cofhcore";
     public static final String modName = "CoFH Core";
     public static final String version = "1.0.0";
     public static final String version_max = "1.1.0";
