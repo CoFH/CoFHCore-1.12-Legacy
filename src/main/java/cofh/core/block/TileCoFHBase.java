@@ -19,7 +19,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -158,26 +157,30 @@ public abstract class TileCoFHBase extends TileEntity {
 	}
 
 	/* NETWORK METHODS */
-    @Nullable
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        return PacketHandler.toTilePacket(getPacket(), getPos());
-    }
+	@Nullable
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-        PacketHandler.handleNBTPacket(pkt.getNbtCompound());
-    }
+		return PacketHandler.toTilePacket(getPacket(), getPos());
+	}
 
-    @Override
-    public NBTTagCompound getUpdateTag() {
-        return PacketHandler.toNBTTag(getPacket(), super.getUpdateTag());
-    }
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 
-    @Override
-    public void handleUpdateTag(NBTTagCompound tag) {
-        PacketHandler.handleNBTPacket(tag);
-    }
+		PacketHandler.handleNBTPacket(pkt.getNbtCompound());
+	}
+
+	@Override
+	public NBTTagCompound getUpdateTag() {
+
+		return PacketHandler.toNBTTag(getPacket(), super.getUpdateTag());
+	}
+
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag) {
+
+		PacketHandler.handleNBTPacket(tag);
+	}
 
 	public PacketCoFHBase getPacket() {
 

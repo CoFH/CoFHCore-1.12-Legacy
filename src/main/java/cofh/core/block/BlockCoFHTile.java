@@ -4,22 +4,10 @@ import cofh.api.block.IBlockInfo;
 import cofh.api.block.IDismantleable;
 import cofh.api.core.IInitializer;
 import cofh.api.energy.IEnergyReceiver;
-import cofh.api.tileentity.IInventoryRetainer;
-import cofh.api.tileentity.IReconfigurableFacing;
-import cofh.api.tileentity.IRedstoneControl;
-import cofh.api.tileentity.ISecurable;
-import cofh.api.tileentity.ITileInfo;
+import cofh.api.tileentity.*;
 import cofh.core.util.CoreUtils;
-import cofh.lib.util.helpers.MathHelper;
-import cofh.lib.util.helpers.RedstoneControlHelper;
-import cofh.lib.util.helpers.SecurityHelper;
-import cofh.lib.util.helpers.ServerHelper;
-import cofh.lib.util.helpers.StringHelper;
+import cofh.lib.util.helpers.*;
 import com.mojang.authlib.GameProfile;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -34,16 +22,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntityProvider, IBlockInfo, IDismantleable, IInitializer {
 
@@ -53,22 +43,22 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 
 		super(material);
 
-        setSoundType(SoundType.STONE);
+		setSoundType(SoundType.STONE);
 	}
 
 	public BlockCoFHTile(Material material, String modName) {
 
 		super(material, modName);
 
-        setSoundType(SoundType.STONE);
+		setSoundType(SoundType.STONE);
 	}
 
 	/* ITileEntityProvider */
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
+	@Override
+	public TileEntity createTileEntity(World world, IBlockState state) {
 
-        return createNewTileEntity(world, state.getBlock().getMetaFromState(state));
-    }
+		return createNewTileEntity(world, state.getBlock().getMetaFromState(state));
+	}
 
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
@@ -102,10 +92,10 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 		}
 	}
 
-    @Override
-    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+	@Override
+	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
 
-    }
+	}
 
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
@@ -146,25 +136,25 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 				quadrant = placer.rotationPitch > 60 ? 4 : placer.rotationPitch < -60 ? 5 : quadrant;
 			}
 			switch (quadrant) {
-			    // TODO: Change away from ordinals.
-			case 0:
-				reconfig.setFacing(EnumFacing.NORTH.ordinal());
-				break;
-			case 1:
-				reconfig.setFacing(EnumFacing.EAST.ordinal());
-				break;
-			case 2:
-				reconfig.setFacing(EnumFacing.SOUTH.ordinal());
-				break;
-			case 3:
-				reconfig.setFacing(EnumFacing.WEST.ordinal());
-				break;
-			case 4:
-				reconfig.setFacing(EnumFacing.UP.ordinal());
-				break;
-			case 5:
-				reconfig.setFacing(EnumFacing.DOWN.ordinal());
-				break;
+				// TODO: Change away from ordinals.
+				case 0:
+					reconfig.setFacing(EnumFacing.NORTH.ordinal());
+					break;
+				case 1:
+					reconfig.setFacing(EnumFacing.EAST.ordinal());
+					break;
+				case 2:
+					reconfig.setFacing(EnumFacing.SOUTH.ordinal());
+					break;
+				case 3:
+					reconfig.setFacing(EnumFacing.WEST.ordinal());
+					break;
+				case 4:
+					reconfig.setFacing(EnumFacing.UP.ordinal());
+					break;
+				case 5:
+					reconfig.setFacing(EnumFacing.DOWN.ordinal());
+					break;
 			}
 		}
 		if (tile instanceof TileCoFHBase) {
@@ -174,7 +164,7 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 	}
 
 	@Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
 
 		TileEntity tile = world.getTileEntity(pos);
 
@@ -194,7 +184,7 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 	}
 
 	@Override
-    public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World world, BlockPos pos) {
+	public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World world, BlockPos pos) {
 
 		TileEntity tile = world.getTileEntity(pos);
 
@@ -205,33 +195,33 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 	}
 
 	@Override
-    public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
+	public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
 
 		TileEntity tile = world.getTileEntity(pos);
 		return tile instanceof TileCoFHBase && tile.hasWorldObj() ? ((TileCoFHBase) tile).getComparatorInputOverride() : 0;
 	}
 
 	@Override
-    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
 
 		TileEntity tile = world.getTileEntity(pos);
 		return tile instanceof TileCoFHBase && tile.hasWorldObj() ? ((TileCoFHBase) tile).getLightValue() : 0;
 	}
 
 	@Override
-    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, SpawnPlacementType type) {
+	public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, SpawnPlacementType type) {
 
 		return false;
 	}
 
 	@Override
-    public boolean isOpaqueCube(IBlockState state) {
+	public boolean isOpaqueCube(IBlockState state) {
 
 		return false;
 	}
 
 	@Override
-    public boolean eventReceived(IBlockState state, World world, BlockPos pos, int id, int param) {
+	public boolean eventReceived(IBlockState state, World world, BlockPos pos, int id, int param) {
 
 		TileEntity tile = world.getTileEntity(pos);
 		return tile != null ? tile.receiveClientEvent(id, param) : false;
@@ -266,8 +256,7 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 
 	public abstract ArrayList<ItemStack> dropDelegate(NBTTagCompound nbt, IBlockAccess world, BlockPos pos, int fortune);
 
-	public abstract ArrayList<ItemStack> dismantleDelegate(NBTTagCompound nbt, World world, BlockPos pos, EntityPlayer player, boolean returnDrops,
-			boolean simulate);
+	public abstract ArrayList<ItemStack> dismantleDelegate(NBTTagCompound nbt, World world, BlockPos pos, EntityPlayer player, boolean returnDrops, boolean simulate);
 
 	/* IBlockInfo */
 	@Override
@@ -283,8 +272,7 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 				if (eReceiver.getMaxEnergyStored(side) <= 0) {
 					return;
 				}
-				info.add(new TextComponentString(StringHelper.localize("info.cofh.energy") + ": " + eReceiver.getEnergyStored(side) + "/"
-						+ eReceiver.getMaxEnergyStored(side) + " RF."));
+				info.add(new TextComponentString(StringHelper.localize("info.cofh.energy") + ": " + eReceiver.getEnergyStored(side) + "/" + eReceiver.getMaxEnergyStored(side) + " RF."));
 			}
 		}
 	}

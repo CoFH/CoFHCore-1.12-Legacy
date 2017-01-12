@@ -18,31 +18,31 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 public class FMLEventHandler {
 
-    public static FMLEventHandler instance = new FMLEventHandler();
+	public static FMLEventHandler instance = new FMLEventHandler();
 
-    public static void initialize() {
+	public static void initialize() {
 
-        MinecraftForge.EVENT_BUS.register(instance);
-    }
+		MinecraftForge.EVENT_BUS.register(instance);
+	}
 
-    @SubscribeEvent
-    public void onPlayerLogin(PlayerLoggedInEvent event) {
+	@SubscribeEvent
+	public void onPlayerLogin(PlayerLoggedInEvent event) {
 
-        EntityPlayer player = event.player;
-        if (ServerHelper.isMultiPlayerServer() && CoFHProps.enableOpSecureAccess && CoFHProps.enableOpSecureAccessWarning) {
-            player.addChatMessage(new TextComponentString(StringHelper.YELLOW + "[CoFH] ").appendSibling(new TextComponentTranslation("chat.cofh.secureNotice")));
-        }
-        PacketCore.sendConfigSyncPacketToClient(event.player);
-        handleIdMappingEvent(null);
-    }
+		EntityPlayer player = event.player;
+		if (ServerHelper.isMultiPlayerServer() && CoFHProps.enableOpSecureAccess && CoFHProps.enableOpSecureAccessWarning) {
+			player.addChatMessage(new TextComponentString(StringHelper.YELLOW + "[CoFH] ").appendSibling(new TextComponentTranslation("chat.cofh.secureNotice")));
+		}
+		PacketCore.sendConfigSyncPacketToClient(event.player);
+		handleIdMappingEvent(null);
+	}
 
-    @EventHandler
-    public void handleIdMappingEvent(FMLModIdMappingEvent event) {
+	@EventHandler
+	public void handleIdMappingEvent(FMLModIdMappingEvent event) {
 
-        BucketHandler.refreshMap();
-        FurnaceFuelHandler.refreshMap();
-        //ItemRenderRegistry.refreshMap();
-        OreDictionaryArbiter.initialize();
-    }
+		BucketHandler.refreshMap();
+		FurnaceFuelHandler.refreshMap();
+		//ItemRenderRegistry.refreshMap();
+		OreDictionaryArbiter.initialize();
+	}
 
 }

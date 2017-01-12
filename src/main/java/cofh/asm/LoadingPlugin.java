@@ -9,18 +9,12 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
-import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
-import net.minecraftforge.fml.common.versioning.VersionParser;
 import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import net.minecraftforge.fml.relauncher.IFMLCallHook;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.apache.logging.log4j.Level;
 import org.objectweb.asm.Type;
 
-import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -31,192 +25,192 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
-@IFMLLoadingPlugin.TransformerExclusions({ "cofh.asm." })
-@IFMLLoadingPlugin.SortingIndex(1001)
-@IFMLLoadingPlugin.Name("CoFH Loading Plugin")
+@IFMLLoadingPlugin.TransformerExclusions ({ "cofh.asm." })
+@IFMLLoadingPlugin.SortingIndex (1001)
+@IFMLLoadingPlugin.Name ("CoFH Loading Plugin")
 public class LoadingPlugin implements IFMLLoadingPlugin {
 
-    public static final String MC_VERSION = "[1.7.10]";
-    public static ArrayList<String> transformersList = new ArrayList<String>();
-    public static boolean runtimeDeobfEnabled = false;
-    public static ASMDataTable ASM_DATA = null;
-    public static LaunchClassLoader loader = null;
+	public static final String MC_VERSION = "[1.7.10]";
+	public static ArrayList<String> transformersList = new ArrayList<String>();
+	public static boolean runtimeDeobfEnabled = false;
+	public static ASMDataTable ASM_DATA = null;
+	public static LaunchClassLoader loader = null;
 
-    public static final String currentMcVersion;
-    public static final File minecraftDir;
-    public static final boolean obfuscated;
+	public static final String currentMcVersion;
+	public static final File minecraftDir;
+	public static final boolean obfuscated;
 
-    // Initialize SubMod transformers
-    static {
+	// Initialize SubMod transformers
+	static {
 
-        boolean obf = true;
-        try {
-            obf = Launch.classLoader.getClassBytes("net.minecraft.world.World") == null;
-        } catch (IOException e) {
-        }
-        obfuscated = obf;
-        if (!obfuscated) {
-            try {
-                CoFHAccessTransformer.initForDeobf();
-            } catch (IOException e) {
-            }
-        }
-        currentMcVersion = (String) FMLInjectionData.data()[4];
-        minecraftDir = (File) FMLInjectionData.data()[6];
-        loader = Launch.classLoader;
-        //attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
-        //ASMInit.init();
-    }
+		boolean obf = true;
+		try {
+			obf = Launch.classLoader.getClassBytes("net.minecraft.world.World") == null;
+		} catch (IOException e) {
+		}
+		obfuscated = obf;
+		if (!obfuscated) {
+			try {
+				CoFHAccessTransformer.initForDeobf();
+			} catch (IOException e) {
+			}
+		}
+		currentMcVersion = (String) FMLInjectionData.data()[4];
+		minecraftDir = (File) FMLInjectionData.data()[6];
+		loader = Launch.classLoader;
+		//attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
+		//ASMInit.init();
+	}
 
-    // public LoadingPlugin() {
-    //
-    // // DepLoader.load();
-    // }
+	// public LoadingPlugin() {
+	//
+	// // DepLoader.load();
+	// }
 
-    public static void attemptClassLoad(String className, String failMessage) {
+	public static void attemptClassLoad(String className, String failMessage) {
 
-        try {
-            Class.forName(className, false, LoadingPlugin.class.getClassLoader());
-            transformersList.add(className);
-        } catch (Throwable e) {
-            FMLLog.warning(failMessage);
-        }
-    }
+		try {
+			Class.forName(className, false, LoadingPlugin.class.getClassLoader());
+			transformersList.add(className);
+		} catch (Throwable e) {
+			FMLLog.warning(failMessage);
+		}
+	}
 
-    @Override
-    public String getAccessTransformerClass() {
+	@Override
+	public String getAccessTransformerClass() {
 
-        return CoFHAccessTransformer.class.getName();
-    }
+		return CoFHAccessTransformer.class.getName();
+	}
 
-    @Override
-    public String[] getASMTransformerClass() {
+	@Override
+	public String[] getASMTransformerClass() {
 
-        return new String[0];//transformersList.toArray(new String[1]);
-    }
+		return new String[0];//transformersList.toArray(new String[1]);
+	}
 
-    @Override
-    public String getModContainerClass() {
+	@Override
+	public String getModContainerClass() {
 
-        return CoFHDummyContainer.class.getName();
-    }
+		return CoFHDummyContainer.class.getName();
+	}
 
-    @Override
-    public String getSetupClass() {
+	@Override
+	public String getSetupClass() {
 
-        return CoFHDummyContainer.class.getName();
-    }
+		return CoFHDummyContainer.class.getName();
+	}
 
-    @Override
-    public void injectData(Map<String, Object> data) {
+	@Override
+	public void injectData(Map<String, Object> data) {
 
-        runtimeDeobfEnabled = (Boolean) data.get("runtimeDeobfuscationEnabled");
-        if (data.containsKey("coremodLocation")) {
-            myLocation = (File) data.get("coremodLocation");
-        }
-    }
+		runtimeDeobfEnabled = (Boolean) data.get("runtimeDeobfuscationEnabled");
+		if (data.containsKey("coremodLocation")) {
+			myLocation = (File) data.get("coremodLocation");
+		}
+	}
 
-    public File myLocation;
+	public File myLocation;
 
-    public static class CoFHDummyContainer extends DummyModContainer implements IFMLCallHook {
+	public static class CoFHDummyContainer extends DummyModContainer implements IFMLCallHook {
 
-        public CoFHDummyContainer() {
+		public CoFHDummyContainer() {
 
-            super(new ModMetadata());
-            ModMetadata md = getMetadata();
-            md.autogenerated = true;
-            md.modId = "<CoFH ASM>";
-            md.name = md.description = "CoFH ASM";
-            md.parent = "CoFHCore";
-            md.version = "000";
-        }
+			super(new ModMetadata());
+			ModMetadata md = getMetadata();
+			md.autogenerated = true;
+			md.modId = "<CoFH ASM>";
+			md.name = md.description = "CoFH ASM";
+			md.parent = "CoFHCore";
+			md.version = "000";
+		}
 
-        @Override
-        public boolean registerBus(EventBus bus, LoadController controller) {
+		@Override
+		public boolean registerBus(EventBus bus, LoadController controller) {
 
-            bus.register(this);
-            return true;
-        }
+			bus.register(this);
+			return true;
+		}
 
-        @Subscribe
-        public void construction(FMLConstructionEvent evt) {
+		@Subscribe
+		public void construction(FMLConstructionEvent evt) {
 
-            ASM_DATA = evt.getASMHarvestedData();
-            CoFHClassTransformer.scrapeData(ASM_DATA);
+			ASM_DATA = evt.getASMHarvestedData();
+			CoFHClassTransformer.scrapeData(ASM_DATA);
 
-            //for (ModCandidate t : ASM_DATA.getCandidatesFor("cofh.api.energy"));
+			//for (ModCandidate t : ASM_DATA.getCandidatesFor("cofh.api.energy"));
 
-        }
+		}
 
-        @Override
-        public void injectData(Map<String, Object> data) {
+		@Override
+		public void injectData(Map<String, Object> data) {
 
-            loader = (LaunchClassLoader) data.get("classLoader");
-        }
+			loader = (LaunchClassLoader) data.get("classLoader");
+		}
 
-        @Override
-        public Void call() throws Exception {
+		@Override
+		public Void call() throws Exception {
 
-            scanMods();
-            ModContainerFactory.instance().registerContainerType(Type.getType(ChildMod.class), ChildModContainer.class);
-            return null;
-        }
+			scanMods();
+			ModContainerFactory.instance().registerContainerType(Type.getType(ChildMod.class), ChildModContainer.class);
+			return null;
+		}
 
-        private void scanMods() {
+		private void scanMods() {
 
-            File modsDir = new File(minecraftDir, "mods");
-            for (File file : modsDir.listFiles()) {
-                scanMod(file);
-            }
-            File versionModsDir = new File(minecraftDir, "mods/" + currentMcVersion);
-            if (versionModsDir.exists()) {
-                for (File file : versionModsDir.listFiles()) {
-                    scanMod(file);
-                }
-            }
-        }
+			File modsDir = new File(minecraftDir, "mods");
+			for (File file : modsDir.listFiles()) {
+				scanMod(file);
+			}
+			File versionModsDir = new File(minecraftDir, "mods/" + currentMcVersion);
+			if (versionModsDir.exists()) {
+				for (File file : versionModsDir.listFiles()) {
+					scanMod(file);
+				}
+			}
+		}
 
-        private void scanMod(File file) {
+		private void scanMod(File file) {
 
-            {
-                String name = file.getName().toLowerCase();
-                if (file.isDirectory() || !name.endsWith(".jar") && !name.endsWith(".zip")) {
-                    return;
-                }
-            }
+			{
+				String name = file.getName().toLowerCase();
+				if (file.isDirectory() || !name.endsWith(".jar") && !name.endsWith(".zip")) {
+					return;
+				}
+			}
 
-            try {
-                JarFile jar = new JarFile(file);
-                try {
-                    l:
-                    {
-                        Manifest manifest = jar.getManifest();
-                        if (manifest == null) {
-                            break l;
-                        }
-                        Attributes attr = manifest.getMainAttributes();
-                        if (attr == null) {
-                            break l;
-                        }
+			try {
+				JarFile jar = new JarFile(file);
+				try {
+					l:
+					{
+						Manifest manifest = jar.getManifest();
+						if (manifest == null) {
+							break l;
+						}
+						Attributes attr = manifest.getMainAttributes();
+						if (attr == null) {
+							break l;
+						}
 
-                        String transformers = attr.getValue("CoFHAT");
-                        if (transformers != null) {
-                            for (String t : transformers.split(" ")) {
-                                ZipEntry at = jar.getEntry("META-INF/" + t);
-                                if (at != null) {
-                                    FMLLog.log("CoFHASM", Level.DEBUG, "Adding CoFHAT: " + t + " from: " + file.getName());
-                                    CoFHAccessTransformer.processATFile(new InputStreamReader(jar.getInputStream(at)));
-                                }
-                            }
-                        }
-                    }
-                } finally {
-                    jar.close();
-                }
-            } catch (Exception e) {
-                // todo log at debug?
-            }
-        }
-    }
+						String transformers = attr.getValue("CoFHAT");
+						if (transformers != null) {
+							for (String t : transformers.split(" ")) {
+								ZipEntry at = jar.getEntry("META-INF/" + t);
+								if (at != null) {
+									FMLLog.log("CoFHASM", Level.DEBUG, "Adding CoFHAT: " + t + " from: " + file.getName());
+									CoFHAccessTransformer.processATFile(new InputStreamReader(jar.getInputStream(at)));
+								}
+							}
+						}
+					}
+				} finally {
+					jar.close();
+				}
+			} catch (Exception e) {
+				// todo log at debug?
+			}
+		}
+	}
 
 }

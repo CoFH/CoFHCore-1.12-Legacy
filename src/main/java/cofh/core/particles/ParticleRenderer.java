@@ -32,181 +32,190 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 public class ParticleRenderer {
-    private static ParticleRenderer instance = new ParticleRenderer();
 
-    private ParticleRenderer() {
-        MinecraftForge.EVENT_BUS.register(this);
-        FMLCommonHandler.instance().bus().register(this);
-    }
+	private static ParticleRenderer instance = new ParticleRenderer();
 
-    private WeakReference<World> worldRef = new WeakReference<World>(null);
+	private ParticleRenderer() {
 
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void renderParticles(RenderWorldLastEvent event) {
-        if (worldRef.get() == null) {
-            return;
-        }
-        if (particles.isEmpty()) {
-            return;
-        }
-        Minecraft mc = Minecraft.getMinecraft();
+		MinecraftForge.EVENT_BUS.register(this);
+		FMLCommonHandler.instance().bus().register(this);
+	}
 
-        GlStateManager.enableBlend();
-        GlStateManager.enableFog();
-        float p_78471_1_ = event.getPartialTicks();
+	private WeakReference<World> worldRef = new WeakReference<World>(null);
 
-        mc.entityRenderer.enableLightmap();
+	@SideOnly (Side.CLIENT)
+	@SubscribeEvent
+	public void renderParticles(RenderWorldLastEvent event) {
 
-        Entity p_78874_1_ = mc.getRenderViewEntity();
+		if (worldRef.get() == null) {
+			return;
+		}
+		if (particles.isEmpty()) {
+			return;
+		}
+		Minecraft mc = Minecraft.getMinecraft();
 
-        ParticleBase.interpPosX = p_78874_1_.lastTickPosX + (p_78874_1_.posX - p_78874_1_.lastTickPosX) * (double) event.getPartialTicks();
-        ParticleBase.interpPosY = p_78874_1_.lastTickPosY + (p_78874_1_.posY - p_78874_1_.lastTickPosY) * (double) event.getPartialTicks();
-        ParticleBase.interpPosZ = p_78874_1_.lastTickPosZ + (p_78874_1_.posZ - p_78874_1_.lastTickPosZ) * (double) event.getPartialTicks();
-        ParticleBase.rX = ActiveRenderInfo.getRotationX();
-        ParticleBase.rZ = ActiveRenderInfo.getRotationZ();
-        ParticleBase.rYZ = ActiveRenderInfo.getRotationYZ();
-        ParticleBase.rXY = ActiveRenderInfo.getRotationXY();
-        ParticleBase.rXZ = ActiveRenderInfo.getRotationXZ();
+		GlStateManager.enableBlend();
+		GlStateManager.enableFog();
+		float p_78471_1_ = event.getPartialTicks();
 
-        synchronized (particles) {
-            for (Map.Entry<ResourceLocation, LinkedList<ParticleBase>> entry : particles.entrySet()) {
-                mc.getTextureManager().bindTexture(entry.getKey());
-                LinkedList<ParticleBase> list = entry.getValue();
-                if (list.isEmpty()) {
-                    continue; //should not happen but hey...
-                }
+		mc.entityRenderer.enableLightmap();
 
-                GlStateManager.color(1, 1, 1, 1);
-                GlStateManager.depthMask(false);
-                GlStateManager.enableBlend();
-                GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                GlStateManager.alphaFunc(GL11.GL_GREATER, 0.003921569F);
+		Entity p_78874_1_ = mc.getRenderViewEntity();
 
-                Tessellator tessellator = Tessellator.getInstance();
-                VertexBuffer buffer = tessellator.getBuffer();
-                buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
+		ParticleBase.interpPosX = p_78874_1_.lastTickPosX + (p_78874_1_.posX - p_78874_1_.lastTickPosX) * (double) event.getPartialTicks();
+		ParticleBase.interpPosY = p_78874_1_.lastTickPosY + (p_78874_1_.posY - p_78874_1_.lastTickPosY) * (double) event.getPartialTicks();
+		ParticleBase.interpPosZ = p_78874_1_.lastTickPosZ + (p_78874_1_.posZ - p_78874_1_.lastTickPosZ) * (double) event.getPartialTicks();
+		ParticleBase.rX = ActiveRenderInfo.getRotationX();
+		ParticleBase.rZ = ActiveRenderInfo.getRotationZ();
+		ParticleBase.rYZ = ActiveRenderInfo.getRotationYZ();
+		ParticleBase.rXY = ActiveRenderInfo.getRotationXY();
+		ParticleBase.rXZ = ActiveRenderInfo.getRotationXZ();
 
-                for (final ParticleBase particleBase : list) {
-                    //tessellator.setBrightness(particleBase.brightness(event.getPartialTicks()));
-                    try {
-                        particleBase.render(buffer, event.getPartialTicks());
-                    } catch (Throwable throwable) {
-                        CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Rendering Particle");
-                        CrashReportCategory crashreportcategory = crashreport.makeCategory("Particle being rendered");
-                        crashreportcategory.addCrashSection("Particle", new Callable() {
-                            public String call() {
-                                return particleBase.toString();
-                            }
-                        });
-                        crashreportcategory.addCrashSection("Particle Type", new Callable() {
-                            public String call() {
-                                return particleBase.location.toString();
-                            }
-                        });
-                        throw new ReportedException(crashreport);
-                    }
-                }
+		synchronized (particles) {
+			for (Map.Entry<ResourceLocation, LinkedList<ParticleBase>> entry : particles.entrySet()) {
+				mc.getTextureManager().bindTexture(entry.getKey());
+				LinkedList<ParticleBase> list = entry.getValue();
+				if (list.isEmpty()) {
+					continue; //should not happen but hey...
+				}
 
-                tessellator.draw();
-                GlStateManager.disableBlend();
-                GlStateManager.depthMask(true);
-                GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-            }
-        }
+				GlStateManager.color(1, 1, 1, 1);
+				GlStateManager.depthMask(false);
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.003921569F);
 
-        mc.entityRenderer.disableLightmap();
+				Tessellator tessellator = Tessellator.getInstance();
+				VertexBuffer buffer = tessellator.getBuffer();
+				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
 
-        GlStateManager.disableBlend();
-        GlStateManager.disableFog();
-    }
+				for (final ParticleBase particleBase : list) {
+					//tessellator.setBrightness(particleBase.brightness(event.getPartialTicks()));
+					try {
+						particleBase.render(buffer, event.getPartialTicks());
+					} catch (Throwable throwable) {
+						CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Rendering Particle");
+						CrashReportCategory crashreportcategory = crashreport.makeCategory("Particle being rendered");
+						crashreportcategory.addCrashSection("Particle", new Callable() {
+							public String call() {
 
-    private static final LinkedList<ParticleBase> particles_toAdd = new LinkedList<ParticleBase>();
-    private final LinkedHashMap<ResourceLocation, LinkedList<ParticleBase>> particles = new LinkedHashMap<ResourceLocation, LinkedList<ParticleBase>>();
+								return particleBase.toString();
+							}
+						});
+						crashreportcategory.addCrashSection("Particle Type", new Callable() {
+							public String call() {
 
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void updateParticles(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END || (particles.isEmpty() && particles_toAdd.isEmpty())) {
-            return;
-        }
+								return particleBase.location.toString();
+							}
+						});
+						throw new ReportedException(crashreport);
+					}
+				}
 
-        Minecraft mc = Minecraft.getMinecraft();
-        if (mc == null || mc.isGamePaused()) {
-            return;
-        }
+				tessellator.draw();
+				GlStateManager.disableBlend();
+				GlStateManager.depthMask(true);
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			}
+		}
 
-        WorldClient mcWorld = Minecraft.getMinecraft().theWorld;
-        if (mcWorld == null) {
-            return;
-        }
+		mc.entityRenderer.disableLightmap();
 
-        World world = worldRef.get();
-        if (world == null || mcWorld != world) {
-            clearParticles();
-            worldRef = new WeakReference<World>(mcWorld);
-        }
+		GlStateManager.disableBlend();
+		GlStateManager.disableFog();
+	}
 
-        ParticleBase newParticle;
-        while ((newParticle = particles_toAdd.poll()) != null) {
-            LinkedList<ParticleBase> list = particles.get(newParticle.location);
-            if (list == null) {
-                list = new LinkedList<ParticleBase>();
-                particles.put(newParticle.location, list);
-            }
+	private static final LinkedList<ParticleBase> particles_toAdd = new LinkedList<ParticleBase>();
+	private final LinkedHashMap<ResourceLocation, LinkedList<ParticleBase>> particles = new LinkedHashMap<ResourceLocation, LinkedList<ParticleBase>>();
 
-            while (list.size() > 4000) {
-                list.poll();
-            }
+	@SideOnly (Side.CLIENT)
+	@SubscribeEvent
+	public void updateParticles(TickEvent.ClientTickEvent event) {
 
-            list.add(newParticle);
-        }
+		if (event.phase == TickEvent.Phase.END || (particles.isEmpty() && particles_toAdd.isEmpty())) {
+			return;
+		}
 
-        for (Iterator<Map.Entry<ResourceLocation, LinkedList<ParticleBase>>> resourceSectionIterator = particles.entrySet().iterator(); resourceSectionIterator.hasNext(); ) {
-            LinkedList<ParticleBase> particleBases = resourceSectionIterator.next().getValue();
+		Minecraft mc = Minecraft.getMinecraft();
+		if (mc == null || mc.isGamePaused()) {
+			return;
+		}
 
-            for (Iterator<ParticleBase> particleListIterator = particleBases.iterator(); particleListIterator.hasNext(); ) {
-                ParticleBase particleBase = particleListIterator.next();
-                try {
-                    if (!particleBase.advance()) {
-                        particleListIterator.remove();
-                    }
-                } catch (Exception err) {
-                    throw Throwables.propagate(err);
-                }
-            }
+		WorldClient mcWorld = Minecraft.getMinecraft().theWorld;
+		if (mcWorld == null) {
+			return;
+		}
 
-            if (particleBases.isEmpty()) {
-                resourceSectionIterator.remove();
-            }
-        }
+		World world = worldRef.get();
+		if (world == null || mcWorld != world) {
+			clearParticles();
+			worldRef = new WeakReference<World>(mcWorld);
+		}
 
-    }
+		ParticleBase newParticle;
+		while ((newParticle = particles_toAdd.poll()) != null) {
+			LinkedList<ParticleBase> list = particles.get(newParticle.location);
+			if (list == null) {
+				list = new LinkedList<ParticleBase>();
+				particles.put(newParticle.location, list);
+			}
 
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public void unloadParticles(WorldEvent.Unload event) {
-        if (!event.getWorld().isRemote) {
-            return;
-        }
+			while (list.size() > 4000) {
+				list.poll();
+			}
 
-        if (event.getWorld() != Minecraft.getMinecraft().theWorld) {
-            World world = worldRef.get();
-            if (world != null && world != event.getWorld()) {
-                return;
-            }
-        }
+			list.add(newParticle);
+		}
 
-        clearParticles();
-        worldRef = new WeakReference<World>(null);
-    }
+		for (Iterator<Map.Entry<ResourceLocation, LinkedList<ParticleBase>>> resourceSectionIterator = particles.entrySet().iterator(); resourceSectionIterator.hasNext(); ) {
+			LinkedList<ParticleBase> particleBases = resourceSectionIterator.next().getValue();
 
-    public void clearParticles() {
-        particles.clear();
-        particles_toAdd.clear();
-    }
+			for (Iterator<ParticleBase> particleListIterator = particleBases.iterator(); particleListIterator.hasNext(); ) {
+				ParticleBase particleBase = particleListIterator.next();
+				try {
+					if (!particleBase.advance()) {
+						particleListIterator.remove();
+					}
+				} catch (Exception err) {
+					throw Throwables.propagate(err);
+				}
+			}
 
-    public static void spawnParticle(ParticleBase particleBase) {
-        particles_toAdd.add(particleBase);
-    }
+			if (particleBases.isEmpty()) {
+				resourceSectionIterator.remove();
+			}
+		}
+
+	}
+
+	@SubscribeEvent
+	@SideOnly (Side.CLIENT)
+	public void unloadParticles(WorldEvent.Unload event) {
+
+		if (!event.getWorld().isRemote) {
+			return;
+		}
+
+		if (event.getWorld() != Minecraft.getMinecraft().theWorld) {
+			World world = worldRef.get();
+			if (world != null && world != event.getWorld()) {
+				return;
+			}
+		}
+
+		clearParticles();
+		worldRef = new WeakReference<World>(null);
+	}
+
+	public void clearParticles() {
+
+		particles.clear();
+		particles_toAdd.clear();
+	}
+
+	public static void spawnParticle(ParticleBase particleBase) {
+
+		particles_toAdd.add(particleBase);
+	}
 }

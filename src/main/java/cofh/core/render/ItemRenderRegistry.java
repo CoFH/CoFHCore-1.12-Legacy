@@ -2,7 +2,7 @@ package cofh.core.render;
 
 public class ItemRenderRegistry {
 
-    //public static Map<ItemWrapper, IItemRenderer> itemRenders = new THashMap<ItemWrapper, IItemRenderer>();
+	//public static Map<ItemWrapper, IItemRenderer> itemRenders = new THashMap<ItemWrapper, IItemRenderer>();
 
 	/*public static boolean addItemRenderer(ItemStack stack, IItemRenderer renderer) {
 

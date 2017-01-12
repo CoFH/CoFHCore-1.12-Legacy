@@ -4,7 +4,7 @@ public class RenderItemModular //implements IItemRenderer
 {
 
 	/*@Override
-    public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
 
 		if (ItemRenderRegistry.validItem(item)) {
 			return ItemRenderRegistry.getItemRenderer(item).handleRenderType(item, type);

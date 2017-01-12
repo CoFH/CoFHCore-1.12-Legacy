@@ -23,136 +23,137 @@ import static net.minecraft.util.EnumFacing.UP;
 
 public abstract class BlockFluidCoFHBase extends BlockFluidClassic implements IInitializer {
 
-    protected String modName;
-    protected String name;
+	protected String modName;
+	protected String name;
 
-    protected float particleRed = 1.0F;
-    protected float particleGreen = 1.0F;
-    protected float particleBlue = 1.0F;
-    protected boolean shouldDisplaceFluids = false;
+	protected float particleRed = 1.0F;
+	protected float particleGreen = 1.0F;
+	protected float particleBlue = 1.0F;
+	protected boolean shouldDisplaceFluids = false;
 
-    public BlockFluidCoFHBase(Fluid fluid, Material material, String modName, String name) {
+	public BlockFluidCoFHBase(Fluid fluid, Material material, String modName, String name) {
 
-        super(fluid, material);
+		super(fluid, material);
 
-        this.name = name;
-        this.modName = modName;
+		this.name = name;
+		this.modName = modName;
 
-        setUnlocalizedName(modName + ".fluid." + name);
-        displacements.put(this, false);
-    }
+		setUnlocalizedName(modName + ".fluid." + name);
+		displacements.put(this, false);
+	}
 
-    public BlockFluidCoFHBase(Fluid fluid, Material material, String name) {
+	public BlockFluidCoFHBase(Fluid fluid, Material material, String name) {
 
-        this(fluid, material, "cofh", name);
-    }
+		this(fluid, material, "cofh", name);
+	}
 
-    public BlockFluidCoFHBase setParticleColor(int c) {
+	public BlockFluidCoFHBase setParticleColor(int c) {
 
-        return setParticleColor(((c >> 16) & 255) / 255f, ((c >> 8) & 255) / 255f, ((c >> 0) & 255) / 255f);
-    }
+		return setParticleColor(((c >> 16) & 255) / 255f, ((c >> 8) & 255) / 255f, ((c >> 0) & 255) / 255f);
+	}
 
-    public BlockFluidCoFHBase setParticleColor(float particleRed, float particleGreen, float particleBlue) {
+	public BlockFluidCoFHBase setParticleColor(float particleRed, float particleGreen, float particleBlue) {
 
-        this.particleRed = particleRed;
-        this.particleGreen = particleGreen;
-        this.particleBlue = particleBlue;
+		this.particleRed = particleRed;
+		this.particleGreen = particleGreen;
+		this.particleBlue = particleBlue;
 
-        return this;
-    }
+		return this;
+	}
 
-    public BlockFluidCoFHBase setDisplaceFluids(boolean a) {
+	public BlockFluidCoFHBase setDisplaceFluids(boolean a) {
 
-        this.shouldDisplaceFluids = a;
-        return this;
-    }
+		this.shouldDisplaceFluids = a;
+		return this;
+	}
 
-    @Override
-    public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState iblockstate, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
-        if (iblockstate.getMaterial().isLiquid()) {
-            double fluidHeight = (double) ((float) (blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(iblockstate.getValue(BlockLiquid.LEVEL)));
-            if (yToTest >= fluidHeight) {
-                return true;
-            }
-        }
-        return super.isEntityInsideMaterial(world, blockpos, iblockstate, entity, yToTest, materialIn, testingHead);
-    }
+	@Override
+	public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState iblockstate, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
 
-    //@Override
-    //@SideOnly(Side.CLIENT)
-    //public IIcon getIcon(int side, int meta) {
-    //
-    //	return side <= 1 ? IconRegistry.getIcon("Fluid" + name) : IconRegistry.getIcon("Fluid" + name, 1);
-    //}
+		if (iblockstate.getMaterial().isLiquid()) {
+			double fluidHeight = (double) ((float) (blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(iblockstate.getValue(BlockLiquid.LEVEL)));
+			if (yToTest >= fluidHeight) {
+				return true;
+			}
+		}
+		return super.isEntityInsideMaterial(world, blockpos, iblockstate, entity, yToTest, materialIn, testingHead);
+	}
 
-    //@Override
-    //@SideOnly(Side.CLIENT)
-    //public void registerBlockIcons(IIconRegister ir) {
-    //
-    //	IconRegistry.addIcon("Fluid" + name, modName + ":fluid/Fluid_" + name + "_Still", ir);
-    //	IconRegistry.addIcon("Fluid" + name + "1", modName + ":fluid/Fluid_" + name + "_Flow", ir);
-    //}
+	//@Override
+	//@SideOnly(Side.CLIENT)
+	//public IIcon getIcon(int side, int meta) {
+	//
+	//	return side <= 1 ? IconRegistry.getIcon("Fluid" + name) : IconRegistry.getIcon("Fluid" + name, 1);
+	//}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+	//@Override
+	//@SideOnly(Side.CLIENT)
+	//public void registerBlockIcons(IIconRegister ir) {
+	//
+	//	IconRegistry.addIcon("Fluid" + name, modName + ":fluid/Fluid_" + name + "_Still", ir);
+	//	IconRegistry.addIcon("Fluid" + name + "1", modName + ":fluid/Fluid_" + name + "_Flow", ir);
+	//}
 
-        super.randomDisplayTick(state, world, pos, rand);
+	@Override
+	@SideOnly (Side.CLIENT)
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 
-        double px = pos.getX() + rand.nextFloat();
-        double py = pos.getY() - 1.05D;
-        double pz = pos.getZ() + rand.nextFloat();
+		super.randomDisplayTick(state, world, pos, rand);
 
-        if (density < 0) {
-            py = pos.getY() + 2.10D;
-        }
-        if (rand.nextInt(20) == 0 && world.isSideSolid(pos.add(0, densityDir, 0), densityDir == -1 ? UP : EnumFacing.DOWN) && !world.getBlockState(pos.add(0, 2 * densityDir, 0)).getMaterial().blocksMovement()) {
-            Particle fx = new EntityDropParticleFX(world, px, py, pz, particleRed, particleGreen, particleBlue, densityDir);
-            FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
-        }
-    }
+		double px = pos.getX() + rand.nextFloat();
+		double py = pos.getY() - 1.05D;
+		double pz = pos.getZ() + rand.nextFloat();
 
-    @Override
-    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, net.minecraft.entity.EntityLiving.SpawnPlacementType type) {
+		if (density < 0) {
+			py = pos.getY() + 2.10D;
+		}
+		if (rand.nextInt(20) == 0 && world.isSideSolid(pos.add(0, densityDir, 0), densityDir == -1 ? UP : EnumFacing.DOWN) && !world.getBlockState(pos.add(0, 2 * densityDir, 0)).getMaterial().blocksMovement()) {
+			Particle fx = new EntityDropParticleFX(world, px, py, pz, particleRed, particleGreen, particleBlue, densityDir);
+			FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
+		}
+	}
 
-        return false;
-    }
+	@Override
+	public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, net.minecraft.entity.EntityLiving.SpawnPlacementType type) {
 
-    @Override
-    public boolean canDisplace(IBlockAccess world, BlockPos pos) {
+		return false;
+	}
 
-        if (!shouldDisplaceFluids && world.getBlockState(pos).getMaterial().isLiquid()) {
-            return false;
-        }
-        return super.canDisplace(world, pos);
-    }
+	@Override
+	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
 
-    @Override
-    public boolean displaceIfPossible(World world, BlockPos pos) {
+		if (!shouldDisplaceFluids && world.getBlockState(pos).getMaterial().isLiquid()) {
+			return false;
+		}
+		return super.canDisplace(world, pos);
+	}
 
-        if (!shouldDisplaceFluids && world.getBlockState(pos).getMaterial().isLiquid()) {
-            return false;
-        }
-        return super.displaceIfPossible(world, pos);
-    }
+	@Override
+	public boolean displaceIfPossible(World world, BlockPos pos) {
 
-    /* IInitializer */
-    @Override
-    public boolean preInit() {
+		if (!shouldDisplaceFluids && world.getBlockState(pos).getMaterial().isLiquid()) {
+			return false;
+		}
+		return super.displaceIfPossible(world, pos);
+	}
 
-        return false;
-    }
+	/* IInitializer */
+	@Override
+	public boolean preInit() {
 
-    @Override
-    public boolean initialize() {
+		return false;
+	}
 
-        return false;
-    }
+	@Override
+	public boolean initialize() {
 
-    @Override
-    public boolean postInit() {
+		return false;
+	}
 
-        return false;
-    }
+	@Override
+	public boolean postInit() {
+
+		return false;
+	}
 
 }

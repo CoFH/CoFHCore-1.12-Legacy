@@ -3,7 +3,6 @@ package cofh.core.render;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.FMLLog;
 
 import java.util.HashMap;
 
@@ -14,34 +13,35 @@ import java.util.HashMap;
  */
 public class IconRegistry {
 
-    private static HashMap<String, TextureAtlasSprite> icons = new HashMap<String, TextureAtlasSprite>();
+	private static HashMap<String, TextureAtlasSprite> icons = new HashMap<String, TextureAtlasSprite>();
 
-    private IconRegistry() {
+	private IconRegistry() {
 
-    }
+	}
 
-    public static void addIcon(String iconName, ResourceLocation iconLocation, TextureMap ir) {
+	public static void addIcon(String iconName, ResourceLocation iconLocation, TextureMap ir) {
 
-        addIcon(iconName, ir.registerSprite(iconLocation));
-    }
+		addIcon(iconName, ir.registerSprite(iconLocation));
+	}
 
-    public static void addIcon(String iconName, String iconLocation, TextureMap ir) {
+	public static void addIcon(String iconName, String iconLocation, TextureMap ir) {
 
-        addIcon(iconName, ir.registerSprite(new ResourceLocation(iconLocation)));
-    }
+		addIcon(iconName, ir.registerSprite(new ResourceLocation(iconLocation)));
+	}
 
-    public static void addIcon(String iconName, TextureAtlasSprite icon) {
-        icons.put(iconName, icon);
-    }
+	public static void addIcon(String iconName, TextureAtlasSprite icon) {
 
-    public static TextureAtlasSprite getIcon(String iconName) {
+		icons.put(iconName, icon);
+	}
 
-        return icons.get(iconName);
-    }
+	public static TextureAtlasSprite getIcon(String iconName) {
 
-    public static TextureAtlasSprite getIcon(String iconName, int iconOffset) {
+		return icons.get(iconName);
+	}
 
-        return icons.get(iconName + iconOffset);
-    }
+	public static TextureAtlasSprite getIcon(String iconName, int iconOffset) {
+
+		return icons.get(iconName + iconOffset);
+	}
 
 }

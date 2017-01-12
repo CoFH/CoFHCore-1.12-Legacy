@@ -15,25 +15,25 @@ import java.util.List;
 @Deprecated//TODO
 public class DungeonParser implements IGeneratorParser {
 
-    @Override
-    public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	@Override
+	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
 
-        ArrayList<WeightedRandomNBTTag> mobList = new ArrayList<WeightedRandomNBTTag>();
-        if (genObject.has("spawnEntity")) {
-            if (!FeatureParser.parseEntityList(genObject.get("spawnEntity"), mobList)) {
-                log.warn("Entry specifies invalid entity list for 'dungeon' generator! Using 'Pig'!");
-                mobList.clear();
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setString("EntityId", "Pig");
-                mobList.add(new WeightedRandomNBTTag(100, tag));
-            }
-        } else {
-            log.warn("Entry specifies invalid entity list for 'dungeon' generator! Using 'Pig'!");
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setString("EntityId", "Pig");
-            mobList.add(new WeightedRandomNBTTag(100, tag));
-        }
-        /*WorldGenDungeon r = new WorldGenDungeon(resList, matList, mobList);
+		ArrayList<WeightedRandomNBTTag> mobList = new ArrayList<WeightedRandomNBTTag>();
+		if (genObject.has("spawnEntity")) {
+			if (!FeatureParser.parseEntityList(genObject.get("spawnEntity"), mobList)) {
+				log.warn("Entry specifies invalid entity list for 'dungeon' generator! Using 'Pig'!");
+				mobList.clear();
+				NBTTagCompound tag = new NBTTagCompound();
+				tag.setString("EntityId", "Pig");
+				mobList.add(new WeightedRandomNBTTag(100, tag));
+			}
+		} else {
+			log.warn("Entry specifies invalid entity list for 'dungeon' generator! Using 'Pig'!");
+			NBTTagCompound tag = new NBTTagCompound();
+			tag.setString("EntityId", "Pig");
+			mobList.add(new WeightedRandomNBTTag(100, tag));
+		}
+		/*WorldGenDungeon r = new WorldGenDungeon(resList, matList, mobList);
 		if (genObject.has("spawnerFloor")) {
 			resList = new ArrayList<WeightedRandomBlock>();
 			if (FeatureParser.parseResList(genObject.get("spawnerFloor"), resList, true)) {
@@ -85,7 +85,7 @@ public class DungeonParser implements IGeneratorParser {
 				r.maxWidthZ = genObject.get("maxWidthZ").getAsInt();
 			}
 		}*/
-        return null;
-    }
+		return null;
+	}
 
 }

@@ -7,36 +7,36 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class KeyBindingAugments implements IKeyBinding {
 
-    public static KeyBindingAugments instance = new KeyBindingAugments();
+	public static KeyBindingAugments instance = new KeyBindingAugments();
 
-    @Override
-    public boolean keyPress() {
+	@Override
+	public boolean keyPress() {
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public void keyPressServer(EntityPlayer player) {
+	@Override
+	public void keyPressServer(EntityPlayer player) {
 
-        player.openGui(CoFHCore.instance, GuiHandler.AUGMENTS_ID, player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
-    }
+		player.openGui(CoFHCore.instance, GuiHandler.AUGMENTS_ID, player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
+	}
 
-    @Override
-    public String getUUID() {
+	@Override
+	public String getUUID() {
 
-        return "cofh.augment";
-    }
+		return "cofh.augment";
+	}
 
-    @Override
-    public int getKey() {
+	@Override
+	public int getKey() {
 
-        return CoFHCore.proxy.getKeyBind(getUUID());
-    }
+		return CoFHCore.proxy.getKeyBind(getUUID());
+	}
 
-    @Override
-    public boolean hasServerSide() {
+	@Override
+	public boolean hasServerSide() {
 
-        return true;
-    }
+		return true;
+	}
 
 }

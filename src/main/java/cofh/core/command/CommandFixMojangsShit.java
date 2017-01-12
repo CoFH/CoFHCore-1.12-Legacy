@@ -24,91 +24,91 @@ import java.util.List;
 @Deprecated
 public class CommandFixMojangsShit implements ISubCommand {
 
-    public static ISubCommand instance = new CommandFixMojangsShit();
+	public static ISubCommand instance = new CommandFixMojangsShit();
 
-    @Override
-    public String getCommandName() {
+	@Override
+	public String getCommandName() {
 
-        return "updatechests";
-    }
+		return "updatechests";
+	}
 
-    @Override
-    public int getPermissionLevel() {
+	@Override
+	public int getPermissionLevel() {
 
-        return 4;
-    }
+		return 4;
+	}
 
-    @Override
-    public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+	@Override
+	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
-        if (args.length < 3) {
-            sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-            throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
-        }
-        World world = sender.getEntityWorld();
-        if (world.isRemote) {
-            return;
-        }
+		if (args.length < 3) {
+			sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
+			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
+		}
+		World world = sender.getEntityWorld();
+		if (world.isRemote) {
+			return;
+		}
 
-        BlockPos center = null;
-        int i = 1;
-        int xS, xL;
-        if ("@".equals(args[i])) {
-            center = sender.getPosition();
-            ++i;
-            xS = CommandBase.parseInt(args[i++]);
-        } else {
-            try {
-                xS = CommandBase.parseInt(args[i++]);
-            } catch (Throwable t) {
-                center = CommandBase.getPlayer(server, sender, args[i - 1]).getPosition();
-                xS = CommandBase.parseInt(args[i++]);
-            }
-        }
-        int zS = CommandBase.parseInt(args[i++]), zL;
-        int t = i + 1;
+		BlockPos center = null;
+		int i = 1;
+		int xS, xL;
+		if ("@".equals(args[i])) {
+			center = sender.getPosition();
+			++i;
+			xS = CommandBase.parseInt(args[i++]);
+		} else {
+			try {
+				xS = CommandBase.parseInt(args[i++]);
+			} catch (Throwable t) {
+				center = CommandBase.getPlayer(server, sender, args[i - 1]).getPosition();
+				xS = CommandBase.parseInt(args[i++]);
+			}
+		}
+		int zS = CommandBase.parseInt(args[i++]), zL;
+		int t = i + 1;
 
-        try {
-            xL = CommandBase.parseInt(args[i++]);
-            zL = CommandBase.parseInt(args[i++]);
-        } catch (Throwable e) {
-            if (i > t || center == null) {
-                throw Throwables.propagate(e);
-            }
-            --i;
-            xL = xS;
-            zL = zS;
-        }
+		try {
+			xL = CommandBase.parseInt(args[i++]);
+			zL = CommandBase.parseInt(args[i++]);
+		} catch (Throwable e) {
+			if (i > t || center == null) {
+				throw Throwables.propagate(e);
+			}
+			--i;
+			xL = xS;
+			zL = zS;
+		}
 
-        if (center != null) {
-            xS = center.getX() - xS;
-            zS = center.getZ() - zS;
+		if (center != null) {
+			xS = center.getX() - xS;
+			zS = center.getZ() - zS;
 
-            xL = center.getX() + xL;
-            zL = center.getZ() + zL;
-        }
+			xL = center.getX() + xL;
+			zL = center.getZ() + zL;
+		}
 
-        if (xL < xS) {
-            t = xS;
-            xS = xL;
-            xL = t;
-        }
-        if (zL < zS) {
-            t = zS;
-            zS = zL;
-            zL = t;
-        }
+		if (xL < xS) {
+			t = xS;
+			xS = xL;
+			xL = t;
+		}
+		if (zL < zS) {
+			t = zS;
+			zS = zL;
+			zL = t;
+		}
 
-        int yS = 0, yL = 255;
+		int yS = 0, yL = 255;
 
-        long blockCounter = ((long) xL - xS) * ((long) yL - yS) * ((long) zL - zS);
-        CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.start", blockCounter, xS, yS, zS, xL, yL, zL, "chest");
+		long blockCounter = ((long) xL - xS) * ((long) yL - yS) * ((long) zL - zS);
+		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.start", blockCounter, xS, yS, zS, xL, yL, zL, "chest");
 
-        THashSet<Chunk> set = new THashSet<Chunk>();
+		THashSet<Chunk> set = new THashSet<Chunk>();
 
-        blockCounter = 0;
-        Block block = Blocks.CHEST, air = Blocks.AIR;
-        /*try {
+		blockCounter = 0;
+		Block block = Blocks.CHEST, air = Blocks.AIR;
+		/*try {
             for (int x = xS; x <= xL; ++x) {
 				for (int z = zS; z <= zL; ++z) {
 					Chunk chunk = world.getChunkFromBlockCoords(x, z);
@@ -131,35 +131,35 @@ public class CommandFixMojangsShit implements ISubCommand {
 		} catch (Throwable e) {
 			Throwables.propagate(e);
 		}*/
-        if (!set.isEmpty()) {
-            CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.success", blockCounter, xS, yS, zS, xL, yL, zL, "chest");
-        } else {
-            CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.failure");
-        }
+		if (!set.isEmpty()) {
+			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.success", blockCounter, xS, yS, zS, xL, yL, zL, "chest");
+		} else {
+			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.failure");
+		}
 
-        if (world instanceof WorldServer) {
-            TObjectHashIterator<Chunk> c = set.iterator();
-            for (int k = 0, e = set.size(); k < e; ++k) {
-                Chunk chunk = c.next();
-                PlayerChunkMap manager = ((WorldServer) world).getPlayerChunkMap();
-                if (manager == null) {
-                    return;
-                }
-                PlayerChunkMapEntry watcher = manager.getEntry(chunk.xPosition, chunk.zPosition);
-                if (watcher != null) {
-                    watcher.sendPacket(new SPacketChunkData(chunk, -1));
-                }
-            }
-        }
-    }
+		if (world instanceof WorldServer) {
+			TObjectHashIterator<Chunk> c = set.iterator();
+			for (int k = 0, e = set.size(); k < e; ++k) {
+				Chunk chunk = c.next();
+				PlayerChunkMap manager = ((WorldServer) world).getPlayerChunkMap();
+				if (manager == null) {
+					return;
+				}
+				PlayerChunkMapEntry watcher = manager.getEntry(chunk.xPosition, chunk.zPosition);
+				if (watcher != null) {
+					watcher.sendPacket(new SPacketChunkData(chunk, -1));
+				}
+			}
+		}
+	}
 
-    @Override
-    public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
+	@Override
+	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
-        if (args.length == 2) {
-            return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
-        }
-        return null;
-    }
+		if (args.length == 2) {
+			return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+		}
+		return null;
+	}
 
 }

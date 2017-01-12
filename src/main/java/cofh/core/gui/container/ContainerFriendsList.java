@@ -6,32 +6,32 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerFriendsList extends ContainerBase {
 
-    public ContainerFriendsList(InventoryPlayer inventory) {
+	public ContainerFriendsList(InventoryPlayer inventory) {
 
-    }
+	}
 
-    @Override
-    public boolean canInteractWith(EntityPlayer player) {
+	@Override
+	public boolean canInteractWith(EntityPlayer player) {
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public boolean supportsShiftClick(int slotIndex) {
+	@Override
+	public boolean supportsShiftClick(int slotIndex) {
 
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    protected int getPlayerInventoryVerticalOffset() {
+	@Override
+	protected int getPlayerInventoryVerticalOffset() {
 
-        return 0;
-    }
+		return 0;
+	}
 
-    @Override
-    protected int getSizeInventory() {
+	@Override
+	protected int getSizeInventory() {
 
-        return 0;
-    }
+		return 0;
+	}
 
 }

@@ -7,33 +7,33 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerAugments extends ContainerBase {
 
-    EntityPlayer thePlayer;
+	EntityPlayer thePlayer;
 
-    public ContainerAugments(InventoryPlayer inventory) {
+	public ContainerAugments(InventoryPlayer inventory) {
 
-        thePlayer = inventory.player;
-        for (int i = 0; i < 5; i++) {
-            addSlotToContainer(new SlotPlayerAugment(thePlayer, i, 40 + i * 18 + (i * 2), 26));
-        }
-        bindPlayerInventory(inventory);
-    }
+		thePlayer = inventory.player;
+		for (int i = 0; i < 5; i++) {
+			addSlotToContainer(new SlotPlayerAugment(thePlayer, i, 40 + i * 18 + (i * 2), 26));
+		}
+		bindPlayerInventory(inventory);
+	}
 
-    @Override
-    protected int getPlayerInventoryVerticalOffset() {
+	@Override
+	protected int getPlayerInventoryVerticalOffset() {
 
-        return 84;
-    }
+		return 84;
+	}
 
-    @Override
-    public boolean canInteractWith(EntityPlayer player) {
+	@Override
+	public boolean canInteractWith(EntityPlayer player) {
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    protected int getSizeInventory() {
+	@Override
+	protected int getSizeInventory() {
 
-        return 0;
-    }
+		return 0;
+	}
 
 }

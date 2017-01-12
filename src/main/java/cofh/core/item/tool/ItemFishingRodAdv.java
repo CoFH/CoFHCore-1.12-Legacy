@@ -23,125 +23,125 @@ import java.util.List;
 
 public class ItemFishingRodAdv extends ItemFishingRod {
 
-//    protected IIcon normalIcons[] = new IIcon[2];
+	//    protected IIcon normalIcons[] = new IIcon[2];
 
-    public String repairIngot = "";
-    protected ToolMaterial toolMaterial;
-    protected boolean showInCreative = true;
-    protected int luckModifier = 0;
-    protected int speedModifier = 0;
+	public String repairIngot = "";
+	protected ToolMaterial toolMaterial;
+	protected boolean showInCreative = true;
+	protected int luckModifier = 0;
+	protected int speedModifier = 0;
 
-    public ItemFishingRodAdv(ToolMaterial toolMaterial) {
-        this.toolMaterial = toolMaterial;
-        this.setMaxDamage(toolMaterial.getMaxUses());
-        this.addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter()
-        {
-            @SideOnly(Side.CLIENT)
-            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn)
-            {
-                return entityIn == null ? 0.0F : (entityIn.getHeldItemMainhand() == stack && entityIn instanceof EntityPlayer && ((EntityPlayer)entityIn).fishEntity != null ? 1.0F : 0.0F);
-            }
-        });
-    }
+	public ItemFishingRodAdv(ToolMaterial toolMaterial) {
 
-    public ItemFishingRodAdv setRepairIngot(String repairIngot) {
+		this.toolMaterial = toolMaterial;
+		this.setMaxDamage(toolMaterial.getMaxUses());
+		this.addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter() {
+			@SideOnly (Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 
-        this.repairIngot = repairIngot;
-        return this;
-    }
+				return entityIn == null ? 0.0F : (entityIn.getHeldItemMainhand() == stack && entityIn instanceof EntityPlayer && ((EntityPlayer) entityIn).fishEntity != null ? 1.0F : 0.0F);
+			}
+		});
+	}
 
-    public ItemFishingRodAdv setShowInCreative(boolean showInCreative) {
+	public ItemFishingRodAdv setRepairIngot(String repairIngot) {
 
-        this.showInCreative = showInCreative;
-        return this;
-    }
+		this.repairIngot = repairIngot;
+		return this;
+	}
 
-    public ItemFishingRodAdv setLuckModifier(int luckMod) {
+	public ItemFishingRodAdv setShowInCreative(boolean showInCreative) {
 
-        luckModifier = luckMod;
-        return this;
-    }
+		this.showInCreative = showInCreative;
+		return this;
+	}
 
-    public ItemFishingRodAdv setSpeedModifier(int speedMod) {
+	public ItemFishingRodAdv setLuckModifier(int luckMod) {
 
-        speedModifier = speedMod;
-        return this;
-    }
+		luckModifier = luckMod;
+		return this;
+	}
 
-    @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public ItemFishingRodAdv setSpeedModifier(int speedMod) {
 
-        if (showInCreative) {
-            list.add(new ItemStack(item, 1, 0));
-        }
-    }
+		speedModifier = speedMod;
+		return this;
+	}
 
-    @Override
-    public int getItemEnchantability() {
+	@Override
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 
-        return toolMaterial.getEnchantability();
-    }
+		if (showInCreative) {
+			list.add(new ItemStack(item, 1, 0));
+		}
+	}
 
-    @Override
-    public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
+	@Override
+	public int getItemEnchantability() {
 
-        return ItemHelper.isOreNameEqual(stack, repairIngot);
-    }
+		return toolMaterial.getEnchantability();
+	}
 
-    // TODO: This will need a custom render or something
-    @Override
-    public boolean isFull3D() {
+	@Override
+	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
 
-        return true;
-    }
+		return ItemHelper.isOreNameEqual(stack, repairIngot);
+	}
 
-    @Override
-    public boolean isItemTool(ItemStack stack) {
+	// TODO: This will need a custom render or something
+	@Override
+	public boolean isFull3D() {
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	@Override
+	public boolean isItemTool(ItemStack stack) {
 
-        if (player.fishEntity != null) {
-            int i = player.fishEntity.handleHookRetraction();
-            stack.damageItem(i, player);
-            player.swingArm(hand);
-        } else {
-            world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+		return true;
+	}
 
-            if (!world.isRemote) {
-                world.spawnEntityInWorld(new EntityCoFHFishHook(world, player, luckModifier, speedModifier));
-            }
-            player.swingArm(hand);
-        }
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
-    }
+		if (player.fishEntity != null) {
+			int i = player.fishEntity.handleHookRetraction();
+			stack.damageItem(i, player);
+			player.swingArm(hand);
+		} else {
+			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
-//    @Override
-//    public IIcon getIconIndex(ItemStack stack) {
-//
-//        return getIcon(stack, 0);
-//    }
-//
-//    @Override
-//    public IIcon getIcon(ItemStack stack, int pass) {
-//
-//        EntityPlayer player = CoreUtils.getClientPlayer();
-//
-//        if (player.inventory.getCurrentItem() == stack && player.fishEntity != null) {
-//            return this.normalIcons[1];
-//        }
-//        return this.normalIcons[0];
-//    }
-//
-//    @Override
-//    public void registerIcons(IIconRegister ir) {
-//
-//        this.normalIcons[0] = ir.registerIcon(this.getIconString() + "_Uncast");
-//        this.normalIcons[1] = ir.registerIcon(this.getIconString() + "_Cast");
-//    }
+			if (!world.isRemote) {
+				world.spawnEntityInWorld(new EntityCoFHFishHook(world, player, luckModifier, speedModifier));
+			}
+			player.swingArm(hand);
+		}
+
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+	}
+
+	//    @Override
+	//    public IIcon getIconIndex(ItemStack stack) {
+	//
+	//        return getIcon(stack, 0);
+	//    }
+	//
+	//    @Override
+	//    public IIcon getIcon(ItemStack stack, int pass) {
+	//
+	//        EntityPlayer player = CoreUtils.getClientPlayer();
+	//
+	//        if (player.inventory.getCurrentItem() == stack && player.fishEntity != null) {
+	//            return this.normalIcons[1];
+	//        }
+	//        return this.normalIcons[0];
+	//    }
+	//
+	//    @Override
+	//    public void registerIcons(IIconRegister ir) {
+	//
+	//        this.normalIcons[0] = ir.registerIcon(this.getIconString() + "_Uncast");
+	//        this.normalIcons[1] = ir.registerIcon(this.getIconString() + "_Cast");
+	//    }
 
 }

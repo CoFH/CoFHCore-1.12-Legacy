@@ -14,14 +14,14 @@ import java.lang.annotation.*;
  * Mod and API values can have a version range associated e.g., "mod:ThermalExpansion@[4.0.0, 4.1.0)"
  */
 @Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.TYPE })
+@Retention (RetentionPolicy.RUNTIME)
+@Target ({ ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.TYPE })
 public @interface Strippable {
 
-    public String[] value();
+	public String[] value();
 
-    /**
-     * The side from which these interfaces will *always* be stripped.
-     */
-    public CoFHSide side() default CoFHSide.NONE;
+	/**
+	 * The side from which these interfaces will *always* be stripped.
+	 */
+	public CoFHSide side() default CoFHSide.NONE;
 }

@@ -2,7 +2,7 @@ package cofh.asmhooks;
 
 public class HooksCore {
 
-    // { Forge hooks
+	// { Forge hooks
 
 	/*public static void preGenerateWorld(World world, int chunkX, int chunkZ) {
 

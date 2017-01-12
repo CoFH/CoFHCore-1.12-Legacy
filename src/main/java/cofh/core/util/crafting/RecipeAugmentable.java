@@ -7,21 +7,21 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class RecipeAugmentable extends ShapedOreRecipe {
 
-    ItemStack[] augments;
+	ItemStack[] augments;
 
-    public RecipeAugmentable(ItemStack result, ItemStack[] augments, Object[] recipe) {
+	public RecipeAugmentable(ItemStack result, ItemStack[] augments, Object[] recipe) {
 
-        super(result, recipe);
-        this.augments = augments;
-    }
+		super(result, recipe);
+		this.augments = augments;
+	}
 
-    @Override
-    public ItemStack getCraftingResult(InventoryCrafting craftMatrix) {
+	@Override
+	public ItemStack getCraftingResult(InventoryCrafting craftMatrix) {
 
-        ItemStack retStack = getRecipeOutput().copy();
-        AugmentHelper.writeAugments(retStack, augments);
+		ItemStack retStack = getRecipeOutput().copy();
+		AugmentHelper.writeAugments(retStack, augments);
 
-        return retStack;
-    }
+		return retStack;
+	}
 
 }

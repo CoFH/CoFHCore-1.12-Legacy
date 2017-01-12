@@ -19,8 +19,8 @@ import java.util.concurrent.Callable;
 
 public class CrashHelper {
 
-    static final int range = 3;
-    static final char[] validLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!£$%^&*()`¬_+\"\\@'{}[]~/|<>,.?:;".toCharArray();
+	static final int range = 3;
+	static final char[] validLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!£$%^&*()`¬_+\"\\@'{}[]~/|<>,.?:;".toCharArray();
 	static final char[] metaLetters = "0123456789ABCDEF".toCharArray();
 
 	public static CrashReport makeDetailedCrashReport(Throwable throwable, String message, Object caller, Object... curState) {
@@ -114,7 +114,7 @@ public class CrashHelper {
 							int x2 = x + dx, y2 = y + dy, z2 = z + dz;
 
 							if (world.isBlockLoaded(new BlockPos(x2, y2, z2))) {
-                                IBlockState state = world.getBlockState(new BlockPos(x2, y2, z2));
+								IBlockState state = world.getBlockState(new BlockPos(x2, y2, z2));
 								Block block = state.getBlock();
 								builder.append(getNameForObject(block, map));
 
@@ -269,39 +269,39 @@ public class CrashHelper {
 
 	}
 
-    public static void addInventoryContents(CrashReport report, String categoryName, final IItemHandler inv) {
+	public static void addInventoryContents(CrashReport report, String categoryName, final IItemHandler inv) {
 
-        CrashReportCategory category = report.makeCategory(categoryName);
+		CrashReportCategory category = report.makeCategory(categoryName);
 
-        if (inv == null) {
-            category.addCrashSection("Null?", "Null");
-            return;
-        }
+		if (inv == null) {
+			category.addCrashSection("Null?", "Null");
+			return;
+		}
 
-        category.addCrashSection("InventoryContents", new Callable<String>() {
+		category.addCrashSection("InventoryContents", new Callable<String>() {
 
-            @Override
-            public String call() throws Exception {
+			@Override
+			public String call() throws Exception {
 
-                StringBuilder builder = new StringBuilder("\n\n");
-                builder.append(inv.toString()).append(" - ").append(inv.getSlots());
-                for (int i = 0; i < inv.getSlots(); i++) {
-                    builder.append(i).append(" - ");
-                    ItemStack stackInSlot;
-                    try {
-                        stackInSlot = inv.getStackInSlot(i);
-                    } catch (Exception e) {
-                        builder.append("Errored - ").append(e.toString()).append("\n");
-                        continue;
-                    }
+				StringBuilder builder = new StringBuilder("\n\n");
+				builder.append(inv.toString()).append(" - ").append(inv.getSlots());
+				for (int i = 0; i < inv.getSlots(); i++) {
+					builder.append(i).append(" - ");
+					ItemStack stackInSlot;
+					try {
+						stackInSlot = inv.getStackInSlot(i);
+					} catch (Exception e) {
+						builder.append("Errored - ").append(e.toString()).append("\n");
+						continue;
+					}
 
-                    builder.append(stackInSlot == null ? "Null" : stackInSlot.toString()).append("\n");
-                }
-                builder.append("\n\n");
-                return builder.toString();
-            }
-        });
-    }
+					builder.append(stackInSlot == null ? "Null" : stackInSlot.toString()).append("\n");
+				}
+				builder.append("\n\n");
+				return builder.toString();
+			}
+		});
+	}
 
 	public static void addInventoryContents(CrashReport report, String categoryName, final IInventory inv) {
 

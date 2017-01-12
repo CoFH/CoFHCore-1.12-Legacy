@@ -9,62 +9,62 @@ import net.minecraft.tileentity.TileEntity;
 
 public class SlotAugment extends Slot {
 
-    IAugmentable myTile;
+	IAugmentable myTile;
 
-    public SlotAugment(IAugmentable tile, IInventory inventory, int slotIndex, int x, int y) {
+	public SlotAugment(IAugmentable tile, IInventory inventory, int slotIndex, int x, int y) {
 
-        super(inventory, slotIndex, x, y);
-        myTile = tile;
-    }
+		super(inventory, slotIndex, x, y);
+		myTile = tile;
+	}
 
-    @Override
-    public boolean isItemValid(ItemStack stack) {
+	@Override
+	public boolean isItemValid(ItemStack stack) {
 
-        return stack != null && stack.getItem() instanceof IAugmentItem;
-    }
+		return stack != null && stack.getItem() instanceof IAugmentItem;
+	}
 
-    @Override
-    public ItemStack getStack() {
+	@Override
+	public ItemStack getStack() {
 
-        return myTile.getAugmentSlots()[getSlotIndex()];
-    }
+		return myTile.getAugmentSlots()[getSlotIndex()];
+	}
 
-    @Override
-    public void putStack(ItemStack stack) {
+	@Override
+	public void putStack(ItemStack stack) {
 
-        myTile.getAugmentSlots()[getSlotIndex()] = stack;
-        onSlotChanged();
-    }
+		myTile.getAugmentSlots()[getSlotIndex()] = stack;
+		onSlotChanged();
+	}
 
-    @Override
-    public void onSlotChanged() {
+	@Override
+	public void onSlotChanged() {
 
-        myTile.installAugments();
-        ((TileEntity) myTile).markDirty();
-    }
+		myTile.installAugments();
+		((TileEntity) myTile).markDirty();
+	}
 
-    @Override
-    public int getSlotStackLimit() {
+	@Override
+	public int getSlotStackLimit() {
 
-        return 1;
-    }
+		return 1;
+	}
 
-    @Override
-    public ItemStack decrStackSize(int amount) {
+	@Override
+	public ItemStack decrStackSize(int amount) {
 
-        if (myTile.getAugmentSlots()[getSlotIndex()] == null) {
-            return null;
-        }
-        ItemStack stack = myTile.getAugmentSlots()[getSlotIndex()].splitStack(1);
-        myTile.getAugmentSlots()[getSlotIndex()] = null;
+		if (myTile.getAugmentSlots()[getSlotIndex()] == null) {
+			return null;
+		}
+		ItemStack stack = myTile.getAugmentSlots()[getSlotIndex()].splitStack(1);
+		myTile.getAugmentSlots()[getSlotIndex()] = null;
 
-        return stack;
-    }
+		return stack;
+	}
 
-    @Override
-    public boolean isHere(IInventory inventory, int slot) {
+	@Override
+	public boolean isHere(IInventory inventory, int slot) {
 
-        return false;
-    }
+		return false;
+	}
 
 }

@@ -10,40 +10,40 @@ import java.util.List;
 
 public class ItemShearsAdv extends ItemShears {
 
-    public String repairIngot = "";
-    protected Item.ToolMaterial toolMaterial;
-    protected boolean showInCreative = true;
+	public String repairIngot = "";
+	protected Item.ToolMaterial toolMaterial;
+	protected boolean showInCreative = true;
 
-    public ItemShearsAdv(Item.ToolMaterial toolMaterial) {
+	public ItemShearsAdv(Item.ToolMaterial toolMaterial) {
 
-        this.toolMaterial = toolMaterial;
-        this.setMaxDamage(toolMaterial.getMaxUses());
-    }
+		this.toolMaterial = toolMaterial;
+		this.setMaxDamage(toolMaterial.getMaxUses());
+	}
 
-    public ItemShearsAdv setRepairIngot(String repairIngot) {
+	public ItemShearsAdv setRepairIngot(String repairIngot) {
 
-        this.repairIngot = repairIngot;
-        return this;
-    }
+		this.repairIngot = repairIngot;
+		return this;
+	}
 
-    public ItemShearsAdv setShowInCreative(boolean showInCreative) {
+	public ItemShearsAdv setShowInCreative(boolean showInCreative) {
 
-        this.showInCreative = showInCreative;
-        return this;
-    }
+		this.showInCreative = showInCreative;
+		return this;
+	}
 
-    @Override
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
+	@Override
+	public void getSubItems(Item item, CreativeTabs tab, List list) {
 
-        if (showInCreative) {
-            list.add(new ItemStack(item, 1, 0));
-        }
-    }
+		if (showInCreative) {
+			list.add(new ItemStack(item, 1, 0));
+		}
+	}
 
-    @Override
-    public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
+	@Override
+	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
 
-        return ItemHelper.isOreNameEqual(stack, repairIngot);
-    }
+		return ItemHelper.isOreNameEqual(stack, repairIngot);
+	}
 
 }

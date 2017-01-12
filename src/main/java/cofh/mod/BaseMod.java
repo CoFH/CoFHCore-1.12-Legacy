@@ -28,119 +28,119 @@ import java.util.zip.ZipEntry;
 
 public abstract class BaseMod implements IUpdatableMod {
 
-    protected File _configFolder;
-    protected final String _modid;
-    protected final Logger _log;
+	protected File _configFolder;
+	protected final String _modid;
+	protected final Logger _log;
 
-    protected BaseMod(Logger log) {
+	protected BaseMod(Logger log) {
 
-        String name = getModId();
-        _modid = name.toLowerCase(Locale.US);
-        _log = log;
-        init();
-    }
+		String name = getModId();
+		_modid = name.toLowerCase(Locale.US);
+		_log = log;
+		init();
+	}
 
-    protected BaseMod() {
+	protected BaseMod() {
 
-        String name = getModId();
-        _modid = name.toLowerCase(Locale.US);
-        _log = LogManager.getLogger(name);
-        init();
-    }
+		String name = getModId();
+		_modid = name.toLowerCase(Locale.US);
+		_log = LogManager.getLogger(name);
+		init();
+	}
 
-    private void init() {
+	private void init() {
 
-        ModContainer container = net.minecraftforge.fml.common.Loader.instance().activeModContainer();
-        if (container.getSource().isDirectory()) {
-            FMLCommonHandler.instance().registerCrashCallable(new CrashCallable("Loaded from a directory"));
-        } else {
-            try {
-                JarFile jar = new JarFile(container.getSource());
-                ZipEntry file = jar.getEntry("vers.prop");
-                if (file != null) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(jar.getInputStream(file)));
-                    String data = reader.readLine();
-                    FMLCommonHandler.instance().registerCrashCallable(new CrashCallable(data));
-                } else {
-                    FMLCommonHandler.instance().registerCrashCallable(new CrashCallable("Lacking version information."));
-                }
-                jar.close();
-            } catch (IOException e) {
-                FMLCommonHandler.instance().registerCrashCallable(new CrashCallable("Error reading version information." + e.getMessage()));
-            }
-        }
-    }
+		ModContainer container = net.minecraftforge.fml.common.Loader.instance().activeModContainer();
+		if (container.getSource().isDirectory()) {
+			FMLCommonHandler.instance().registerCrashCallable(new CrashCallable("Loaded from a directory"));
+		} else {
+			try {
+				JarFile jar = new JarFile(container.getSource());
+				ZipEntry file = jar.getEntry("vers.prop");
+				if (file != null) {
+					BufferedReader reader = new BufferedReader(new InputStreamReader(jar.getInputStream(file)));
+					String data = reader.readLine();
+					FMLCommonHandler.instance().registerCrashCallable(new CrashCallable(data));
+				} else {
+					FMLCommonHandler.instance().registerCrashCallable(new CrashCallable("Lacking version information."));
+				}
+				jar.close();
+			} catch (IOException e) {
+				FMLCommonHandler.instance().registerCrashCallable(new CrashCallable("Error reading version information." + e.getMessage()));
+			}
+		}
+	}
 
-    @NetworkCheckHandler
-    public final boolean networkCheck(Map<String, String> remoteVersions, Side side) throws InvalidVersionSpecificationException {
+	@NetworkCheckHandler
+	public final boolean networkCheck(Map<String, String> remoteVersions, Side side) throws InvalidVersionSpecificationException {
 
-        if (!requiresRemoteFrom(side)) {
-            return true;
-        }
-        Mod mod = getClass().getAnnotation(Mod.class);
-        String _modid = mod.modid();
-        if (!remoteVersions.containsKey(_modid)) {
-            return false;
-        }
-        String remotes = mod.acceptableRemoteVersions();
-        if (!"*".equals(remotes)) {
+		if (!requiresRemoteFrom(side)) {
+			return true;
+		}
+		Mod mod = getClass().getAnnotation(Mod.class);
+		String _modid = mod.modid();
+		if (!remoteVersions.containsKey(_modid)) {
+			return false;
+		}
+		String remotes = mod.acceptableRemoteVersions();
+		if (!"*".equals(remotes)) {
 
-            String remote = remoteVersions.get(_modid);
-            if (Strings.isNullOrEmpty(remotes)) {
-                return getModVersion().equalsIgnoreCase(remote);
-            }
-            return ModRange.createFromVersionSpec(_modid, remotes).containsVersion(new ModVersion(_modid, remote));
-        }
-        return true;
-    }
+			String remote = remoteVersions.get(_modid);
+			if (Strings.isNullOrEmpty(remotes)) {
+				return getModVersion().equalsIgnoreCase(remote);
+			}
+			return ModRange.createFromVersionSpec(_modid, remotes).containsVersion(new ModVersion(_modid, remote));
+		}
+		return true;
+	}
 
-    protected boolean requiresRemoteFrom(Side side) {
+	protected boolean requiresRemoteFrom(Side side) {
 
-        return true;
-    }
+		return true;
+	}
 
-    protected String getConfigBaseFolder() {
+	protected String getConfigBaseFolder() {
 
-        String base = getClass().getPackage().getName();
-        int i = base.indexOf('.');
-        if (i >= 0) {
-            return base.substring(0, i);
-        }
-        return "";
-    }
+		String base = getClass().getPackage().getName();
+		int i = base.indexOf('.');
+		if (i >= 0) {
+			return base.substring(0, i);
+		}
+		return "";
+	}
 
-    protected void setConfigFolderBase(File folder) {
+	protected void setConfigFolderBase(File folder) {
 
-        _configFolder = new File(folder, getConfigBaseFolder() + "/" + _modid + "/");
-    }
+		_configFolder = new File(folder, getConfigBaseFolder() + "/" + _modid + "/");
+	}
 
-    protected File getConfig(String name) {
+	protected File getConfig(String name) {
 
-        return new File(_configFolder, name + ".cfg");
-    }
+		return new File(_configFolder, name + ".cfg");
+	}
 
-    protected File getClientConfig() {
+	protected File getClientConfig() {
 
-        return getConfig("client");
-    }
+		return getConfig("client");
+	}
 
-    protected File getCommonConfig() {
+	protected File getCommonConfig() {
 
-        return getConfig("common");
-    }
+		return getConfig("common");
+	}
 
-    protected String getAssetDir() {
+	protected String getAssetDir() {
 
-        return _modid;
-    }
+		return _modid;
+	}
 
-    @Override
-    public Logger getLogger() {
+	@Override
+	public Logger getLogger() {
 
-        return _log;
-    }
-    //TODO Why.........
-    /*private void loadLanguageFile(Properties lang, InputStream stream) throws Throwable {
+		return _log;
+	}
+	//TODO Why.........
+	/*private void loadLanguageFile(Properties lang, InputStream stream) throws Throwable {
 
 		InputStreamReader is = new InputStreamReader(stream, "UTF-8");
 
@@ -159,7 +159,7 @@ public abstract class BaseMod implements IUpdatableMod {
 		LanguageRegistry.instance().injectLanguage(lang.intern(), parsedLangFile);
 	}*/
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings ({ "unchecked", "rawtypes" })
 	/*protected void loadLang() {
 
 		if (FMLLaunchHandler.side() == Side.CLIENT) {
@@ -185,12 +185,12 @@ public abstract class BaseMod implements IUpdatableMod {
 		}
 	}*/
 
-    @SideOnly(Side.CLIENT)
-    private void loadClientLang() {
+	@SideOnly (Side.CLIENT)
+	private void loadClientLang() {
 
-        IReloadableResourceManager manager = (IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager();
-        //manager.registerReloadListener(new LangManager(manager));
-    }
+		IReloadableResourceManager manager = (IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager();
+		//manager.registerReloadListener(new LangManager(manager));
+	}
 
 	/*@SideOnly(Side.CLIENT)
 	private class LangManager implements IResourceManagerReloadListener {
@@ -240,27 +240,27 @@ public abstract class BaseMod implements IUpdatableMod {
 		}
 	}*/
 
-    private class CrashCallable implements ICrashCallable {
+	private class CrashCallable implements ICrashCallable {
 
-        private final String data;
+		private final String data;
 
-        private CrashCallable(String data) {
+		private CrashCallable(String data) {
 
-            this.data = data;
-        }
+			this.data = data;
+		}
 
-        @Override
-        public String call() throws Exception {
+		@Override
+		public String call() throws Exception {
 
-            return data;
-        }
+			return data;
+		}
 
-        @Override
-        public String getLabel() {
+		@Override
+		public String getLabel() {
 
-            return getModId();
-        }
+			return getModId();
+		}
 
-    }
+	}
 
 }

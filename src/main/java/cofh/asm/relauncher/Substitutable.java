@@ -14,17 +14,17 @@ import java.lang.annotation.*;
  * Mod and API values can have a version range associated e.g., "mod:ThermalExpansion@[4.0.0, 4.1.0)"
  */
 @Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.METHOD })
+@Retention (RetentionPolicy.RUNTIME)
+@Target ({ ElementType.METHOD })
 public @interface Substitutable {
 
-    public String[] value();
+	public String[] value();
 
-    public String method();
+	public String method();
 
-    /**
-     * The side from which this method will *always* be substituted.
-     */
-    public CoFHSide side() default CoFHSide.NONE;
+	/**
+	 * The side from which this method will *always* be substituted.
+	 */
+	public CoFHSide side() default CoFHSide.NONE;
 
 }

@@ -12,21 +12,21 @@ import java.util.List;
 
 public class ClusterParser implements IGeneratorParser {
 
-    private final boolean sparse;
+	private final boolean sparse;
 
-    public ClusterParser(boolean sparse) {
+	public ClusterParser(boolean sparse) {
 
-        this.sparse = sparse;
-    }
+		this.sparse = sparse;
+	}
 
-    @Override
-    public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	@Override
+	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
 
-        if (sparse) {
-            return new WorldGenSparseMinableCluster(resList, clusterSize, matList);
-        }
+		if (sparse) {
+			return new WorldGenSparseMinableCluster(resList, clusterSize, matList);
+		}
 
-        return new WorldGenMinableCluster(resList, clusterSize, matList);
-    }
+		return new WorldGenMinableCluster(resList, clusterSize, matList);
+	}
 
 }

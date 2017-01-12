@@ -7,8 +7,7 @@ public class FluidCoFHBase extends Fluid {
 
 	public FluidCoFHBase(String fluidName, String modName) {
 
-		super(fluidName, new ResourceLocation(modName, "blocks/fluid/" + fluidName + "_still"), new ResourceLocation(modName, "blocks/fluid/" + fluidName
-				+ "_flow"));
+		super(fluidName, new ResourceLocation(modName, "blocks/fluid/" + fluidName + "_still"), new ResourceLocation(modName, "blocks/fluid/" + fluidName + "_flow"));
 	}
 
 }

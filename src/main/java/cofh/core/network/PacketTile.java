@@ -7,43 +7,43 @@ import net.minecraft.util.math.BlockPos;
 
 public class PacketTile extends PacketCoFHBase {
 
-    public static void initialize() {
+	public static void initialize() {
 
-        PacketHandler.instance.registerPacket(PacketTile.class);
-    }
+		PacketHandler.instance.registerPacket(PacketTile.class);
+	}
 
-    public PacketTile() {
+	public PacketTile() {
 
-    }
+	}
 
-    public PacketTile(TileEntity theTile) {
+	public PacketTile(TileEntity theTile) {
 
-        addInt(theTile.getPos().getX());
-        addInt(theTile.getPos().getY());
-        addInt(theTile.getPos().getZ());
+		addInt(theTile.getPos().getX());
+		addInt(theTile.getPos().getY());
+		addInt(theTile.getPos().getZ());
 
-    }
+	}
 
-    @Override
-    public void handlePacket(EntityPlayer player, boolean isServer) {
+	@Override
+	public void handlePacket(EntityPlayer player, boolean isServer) {
 
-        TileEntity tile = player.worldObj.getTileEntity(new BlockPos(getInt(), getInt(), getInt()));
+		TileEntity tile = player.worldObj.getTileEntity(new BlockPos(getInt(), getInt(), getInt()));
 
-        if (tile instanceof ITilePacketHandler) {
-            ((ITilePacketHandler) tile).handleTilePacket(this, isServer);
-            IBlockState state = tile.getWorld().getBlockState(tile.getPos());
-            tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 3);
-            if (isServer) {
-                tile.getWorld().updateComparatorOutputLevel(tile.getPos(), tile.getBlockType());
-            }
-        } else {
-            // TODO: Throw error, bad packet
-        }
-    }
+		if (tile instanceof ITilePacketHandler) {
+			((ITilePacketHandler) tile).handleTilePacket(this, isServer);
+			IBlockState state = tile.getWorld().getBlockState(tile.getPos());
+			tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 3);
+			if (isServer) {
+				tile.getWorld().updateComparatorOutputLevel(tile.getPos(), tile.getBlockType());
+			}
+		} else {
+			// TODO: Throw error, bad packet
+		}
+	}
 
-    public static PacketTile newPacket(TileEntity theTile) {
+	public static PacketTile newPacket(TileEntity theTile) {
 
-        return new PacketTile(theTile);
-    }
+		return new PacketTile(theTile);
+	}
 
 }

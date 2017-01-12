@@ -8,24 +8,26 @@ import mezz.jei.api.ingredients.IModIngredientRegistration;
  */
 @JEIPlugin
 public class JEICoFHPlugin implements IModPlugin {
-    @Override
-    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
 
-    }
+	@Override
+	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
 
-    @Override
-    public void registerIngredients(IModIngredientRegistration registry) {
+	}
 
-    }
+	@Override
+	public void registerIngredients(IModIngredientRegistration registry) {
 
-    @Override
-    public void register(IModRegistry registry) {
-        registry.addAdvancedGuiHandlers(new SlotMover());
-    }
+	}
 
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+	@Override
+	public void register(IModRegistry registry) {
 
-    }
+		registry.addAdvancedGuiHandlers(new SlotMover());
+	}
+
+	@Override
+	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+
+	}
 
 }

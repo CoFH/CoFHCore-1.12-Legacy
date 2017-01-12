@@ -11,14 +11,14 @@ import java.util.List;
 
 public class LargeVeinParser implements IGeneratorParser {
 
-    @Override
-    public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	@Override
+	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
 
-        boolean sparse = true;
-        {
-            sparse = genObject.has("sparse") ? genObject.get("sparse").getAsBoolean() : sparse;
-        }
-        return new WorldGenMinableLargeVein(resList, clusterSize, matList, sparse);
-    }
+		boolean sparse = true;
+		{
+			sparse = genObject.has("sparse") ? genObject.get("sparse").getAsBoolean() : sparse;
+		}
+		return new WorldGenMinableLargeVein(resList, clusterSize, matList, sparse);
+	}
 
 }

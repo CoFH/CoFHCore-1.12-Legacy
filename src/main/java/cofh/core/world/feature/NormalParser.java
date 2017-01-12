@@ -12,17 +12,17 @@ import java.util.List;
 
 public class NormalParser extends UniformParser {
 
-    @Override
-    protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
+	@Override
+	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
-        if (!(genObject.has("meanHeight") && genObject.has("maxVariance"))) {
-            log.error("Height parameters for 'normal' template not specified in \"" + featureName + "\"");
-            return null;
-        }
-        int meanHeight = genObject.get("meanHeight").getAsInt();
-        int maxVariance = genObject.get("maxVariance").getAsInt();
+		if (!(genObject.has("meanHeight") && genObject.has("maxVariance"))) {
+			log.error("Height parameters for 'normal' template not specified in \"" + featureName + "\"");
+			return null;
+		}
+		int meanHeight = genObject.get("meanHeight").getAsInt();
+		int maxVariance = genObject.get("maxVariance").getAsInt();
 
-        return new FeatureGenNormal(featureName, gen, numClusters, meanHeight, maxVariance, biomeRes, retrogen, dimRes);
-    }
+		return new FeatureGenNormal(featureName, gen, numClusters, meanHeight, maxVariance, biomeRes, retrogen, dimRes);
+	}
 
 }

@@ -16,71 +16,77 @@ import java.util.List;
 
 public class ItemArmorAdv extends ItemArmor {
 
-    public String repairIngot = "";
-    public String[] textures = new String[2];
-    protected Multimap<String, AttributeModifier> properties = HashMultimap.create();
-    protected boolean showInCreative = true;
+	public String repairIngot = "";
+	public String[] textures = new String[2];
+	protected Multimap<String, AttributeModifier> properties = HashMultimap.create();
+	protected boolean showInCreative = true;
 
-    public ItemArmorAdv(ArmorMaterial material, EntityEquipmentSlot type) {
-        super(material, 0, type);
-    }
+	public ItemArmorAdv(ArmorMaterial material, EntityEquipmentSlot type) {
 
-    public ItemArmorAdv setRepairIngot(String repairIngot) {
-        this.repairIngot = repairIngot;
-        return this;
-    }
+		super(material, 0, type);
+	}
 
-    public ItemArmorAdv setArmorTextures(String[] textures) {
-        this.textures = textures;
-        return this;
-    }
+	public ItemArmorAdv setRepairIngot(String repairIngot) {
 
-    public ItemArmorAdv setShowInCreative(boolean showInCreative) {
-        this.showInCreative = showInCreative;
-        return this;
-    }
+		this.repairIngot = repairIngot;
+		return this;
+	}
 
-    @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public ItemArmorAdv setArmorTextures(String[] textures) {
 
-        if (showInCreative) {
-            list.add(new ItemStack(item, 1, 0));
-        }
-    }
+		this.textures = textures;
+		return this;
+	}
 
-    @Override
-    public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
+	public ItemArmorAdv setShowInCreative(boolean showInCreative) {
 
-        return ItemHelper.isOreNameEqual(stack, repairIngot);
-    }
+		this.showInCreative = showInCreative;
+		return this;
+	}
 
-    @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        if (slot == EntityEquipmentSlot.LEGS) {
-            return textures[1];
-        }
-        return textures[0];
-    }
+	@Override
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 
-    @Override
-    public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        if (slot == armorType) {
-            Multimap<String, AttributeModifier> map = super.getAttributeModifiers(slot, stack);
-            map.putAll(properties);
-            return map;
-        }
-        return super.getAttributeModifiers(slot, stack);
-    }
+		if (showInCreative) {
+			list.add(new ItemStack(item, 1, 0));
+		}
+	}
 
-    public ItemArmorAdv putAttribute(String attribute, AttributeModifier modifier) {
+	@Override
+	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
 
-        properties.put(attribute, modifier);
-        return this;
-    }
+		return ItemHelper.isOreNameEqual(stack, repairIngot);
+	}
 
-    public Collection<AttributeModifier> removeAttribute(String attribute) {
+	@Override
+	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 
-        return properties.removeAll(attribute);
-    }
+		if (slot == EntityEquipmentSlot.LEGS) {
+			return textures[1];
+		}
+		return textures[0];
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+
+		if (slot == armorType) {
+			Multimap<String, AttributeModifier> map = super.getAttributeModifiers(slot, stack);
+			map.putAll(properties);
+			return map;
+		}
+		return super.getAttributeModifiers(slot, stack);
+	}
+
+	public ItemArmorAdv putAttribute(String attribute, AttributeModifier modifier) {
+
+		properties.put(attribute, modifier);
+		return this;
+	}
+
+	public Collection<AttributeModifier> removeAttribute(String attribute) {
+
+		return properties.removeAll(attribute);
+	}
 
 }

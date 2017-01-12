@@ -10,30 +10,31 @@ import net.minecraft.world.World;
 
 public class BlockTickingWater extends BlockDynamicLiquid {
 
-    public BlockTickingWater(Material mat) {
+	public BlockTickingWater(Material mat) {
 
-        super(mat);
-    }
+		super(mat);
+	}
 
-    @Override
-    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-        super.onBlockAdded(world, pos, state);
+	@Override
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
 
-        if (this.blockMaterial != Material.WATER) {
-            return;
-        }
+		super.onBlockAdded(world, pos, state);
 
-        if (world.provider.doesWaterVaporize()) {
-            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
-            world.playEvent(1004, pos, 0);
-            world.playEvent(2000, pos, 4);
-        }
-    }
+		if (this.blockMaterial != Material.WATER) {
+			return;
+		}
 
-    @Override
-    public boolean isAssociatedBlock(Block block) {
+		if (world.provider.doesWaterVaporize()) {
+			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+			world.playEvent(1004, pos, 0);
+			world.playEvent(2000, pos, 4);
+		}
+	}
 
-        return super.isAssociatedBlock(block) || block == Blocks.WATER;
-    }
+	@Override
+	public boolean isAssociatedBlock(Block block) {
+
+		return super.isAssociatedBlock(block) || block == Blocks.WATER;
+	}
 
 }

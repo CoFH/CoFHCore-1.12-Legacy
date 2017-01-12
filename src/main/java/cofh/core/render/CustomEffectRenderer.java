@@ -6,16 +6,16 @@ import net.minecraft.client.particle.ParticleManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@SideOnly (Side.CLIENT)
 public class CustomEffectRenderer extends ParticleManager {
 
-    public CustomEffectRenderer() {
+	public CustomEffectRenderer() {
 
-        super(Minecraft.getMinecraft().theWorld, Minecraft.getMinecraft().renderEngine);
-    }
+		super(Minecraft.getMinecraft().theWorld, Minecraft.getMinecraft().renderEngine);
+	}
 
-    @Override
-    public void addEffect(Particle p) {
+	@Override
+	public void addEffect(Particle p) {
 
-    }
+	}
 }

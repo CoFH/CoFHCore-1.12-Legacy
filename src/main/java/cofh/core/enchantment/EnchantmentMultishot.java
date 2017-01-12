@@ -7,45 +7,47 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
 public class EnchantmentMultishot extends Enchantment {
-    public EnchantmentMultishot(String id) {
-        super(Rarity.UNCOMMON, EnumEnchantmentType.BOW, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
-        setRegistryName(id);
-    }
 
-    @Override
-    public int getMinEnchantability(int level) {
+	public EnchantmentMultishot(String id) {
 
-        return 5 + (level - 1) * 10;
-    }
+		super(Rarity.UNCOMMON, EnumEnchantmentType.BOW, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
+		setRegistryName(id);
+	}
 
-    @Override
-    public int getMaxEnchantability(int level) {
+	@Override
+	public int getMinEnchantability(int level) {
 
-        return getMinEnchantability(level) + 15;
-    }
+		return 5 + (level - 1) * 10;
+	}
 
-    @Override
-    public int getMaxLevel() {
+	@Override
+	public int getMaxEnchantability(int level) {
 
-        return 4;
-    }
+		return getMinEnchantability(level) + 15;
+	}
 
-    @Override
-    public String getName() {
+	@Override
+	public int getMaxLevel() {
 
-        return "enchant.cofh.multishot";
-    }
+		return 4;
+	}
 
-    @Override
-    public boolean canApply(ItemStack stack) {
+	@Override
+	public String getName() {
 
-        return (stack.getItem() instanceof ItemBowAdv);
-    }
+		return "enchant.cofh.multishot";
+	}
 
-    @Override
-    public boolean isAllowedOnBooks() {
+	@Override
+	public boolean canApply(ItemStack stack) {
 
-        return false;
-    }
+		return (stack.getItem() instanceof ItemBowAdv);
+	}
+
+	@Override
+	public boolean isAllowedOnBooks() {
+
+		return false;
+	}
 
 }

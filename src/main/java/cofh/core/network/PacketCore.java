@@ -5,43 +5,43 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class PacketCore extends PacketCoFHBase {
 
-    public static void initialize() {
+	public static void initialize() {
 
-        PacketHandler.instance.registerPacket(PacketCore.class);
-    }
+		PacketHandler.instance.registerPacket(PacketCore.class);
+	}
 
-    public enum PacketTypes {
-        CONFIG_SYNC
-    }
+	public enum PacketTypes {
+		CONFIG_SYNC
+	}
 
-    @Override
-    public void handlePacket(EntityPlayer player, boolean isServer) {
+	@Override
+	public void handlePacket(EntityPlayer player, boolean isServer) {
 
-        try {
-            int type = getByte();
+		try {
+			int type = getByte();
 
-            switch (PacketTypes.values()[type]) {
-                case CONFIG_SYNC:
-                    CoFHCore.instance.handleConfigSync(this);
-                    return;
-                default:
-                    CoFHCore.log.error("Unknown Packet! Internal: COFH, ID: " + type);
-            }
-        } catch (Exception e) {
-            CoFHCore.log.error("Packet payload failure! Please check your config files!");
-            e.printStackTrace();
-        }
+			switch (PacketTypes.values()[type]) {
+				case CONFIG_SYNC:
+					CoFHCore.instance.handleConfigSync(this);
+					return;
+				default:
+					CoFHCore.log.error("Unknown Packet! Internal: COFH, ID: " + type);
+			}
+		} catch (Exception e) {
+			CoFHCore.log.error("Packet payload failure! Please check your config files!");
+			e.printStackTrace();
+		}
 
-    }
+	}
 
-    public static void sendConfigSyncPacketToClient(EntityPlayer player) {
+	public static void sendConfigSyncPacketToClient(EntityPlayer player) {
 
-        PacketHandler.sendTo(CoFHCore.instance.getConfigSync(), player);
-    }
+		PacketHandler.sendTo(CoFHCore.instance.getConfigSync(), player);
+	}
 
-    public static PacketCoFHBase getPacket(PacketTypes theType) {
+	public static PacketCoFHBase getPacket(PacketTypes theType) {
 
-        return new PacketCore().addByte(theType.ordinal());
-    }
+		return new PacketCore().addByte(theType.ordinal());
+	}
 
 }

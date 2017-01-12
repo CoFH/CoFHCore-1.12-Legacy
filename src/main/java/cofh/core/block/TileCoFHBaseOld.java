@@ -19,7 +19,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -31,193 +30,200 @@ import java.util.UUID;
 
 public abstract class TileCoFHBaseOld extends TileEntity {
 
-    @Override
-    public void onChunkUnload() {
+	@Override
+	public void onChunkUnload() {
 
-        if (!tileEntityInvalid) {
-            invalidate(); // this isn't called when a tile unloads. guard incase it is in the future
-        }
-    }
+		if (!tileEntityInvalid) {
+			invalidate(); // this isn't called when a tile unloads. guard incase it is in the future
+		}
+	}
 
-    public abstract String getName();
+	public abstract String getName();
 
-    public abstract int getType();
+	public abstract int getType();
 
-    public void blockBroken() {
+	public void blockBroken() {
 
-    }
+	}
 
-    public void blockDismantled() {
+	public void blockDismantled() {
 
-        blockBroken();
-    }
+		blockBroken();
+	}
 
-    public void blockPlaced() {
+	public void blockPlaced() {
 
-    }
+	}
 
-    public void markChunkDirty() {
+	public void markChunkDirty() {
 
-        worldObj.markChunkDirty(this.getPos(), this);
-    }
+		worldObj.markChunkDirty(this.getPos(), this);
+	}
 
-    public void callNeighborBlockChange() {
-        worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
-    }
+	public void callNeighborBlockChange() {
 
-    public void callNeighborTileChange() {
-        worldObj.updateComparatorOutputLevel(this.getPos(), this.getBlockType());
-    }
+		worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
+	}
 
-    public void onNeighborBlockChange() {
+	public void callNeighborTileChange() {
 
-    }
+		worldObj.updateComparatorOutputLevel(this.getPos(), this.getBlockType());
+	}
 
-    public void onNeighborTileChange(BlockPos pos) {
+	public void onNeighborBlockChange() {
 
-    }
+	}
 
-    //TODO Side
-    public int getComparatorInput(/*int side*/) {
+	public void onNeighborTileChange(BlockPos pos) {
 
-        return 0;
-    }
+	}
 
-    public int getLightValue() {
+	//TODO Side
+	public int getComparatorInput(/*int side*/) {
 
-        return 0;
-    }
+		return 0;
+	}
 
-    public boolean canPlayerAccess(EntityPlayer player) {
+	public int getLightValue() {
 
-        if (!(this instanceof ISecurable)) {
-            return true;
-        }
-        AccessMode access = ((ISecurable) this).getAccess();
-        String name = player.getName();
-        if (access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name))) {
-            return true;
-        }
+		return 0;
+	}
 
-        GameProfile profile = ((ISecurable) this).getOwner();
-        UUID ownerID = profile.getId();
-        if (SecurityHelper.isDefaultUUID(ownerID)) {
-            return true;
-        }
+	public boolean canPlayerAccess(EntityPlayer player) {
 
-        UUID otherID = SecurityHelper.getID(player);
-        if (ownerID.equals(otherID)) {
-            return true;
-        }
-        return access.isRestricted() && RegistrySocial.playerHasAccess(name, profile);
-    }
+		if (!(this instanceof ISecurable)) {
+			return true;
+		}
+		AccessMode access = ((ISecurable) this).getAccess();
+		String name = player.getName();
+		if (access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name))) {
+			return true;
+		}
 
-    public boolean canPlayerDismantle(EntityPlayer player) {
+		GameProfile profile = ((ISecurable) this).getOwner();
+		UUID ownerID = profile.getId();
+		if (SecurityHelper.isDefaultUUID(ownerID)) {
+			return true;
+		}
 
-        return true;
-    }
+		UUID otherID = SecurityHelper.getID(player);
+		if (ownerID.equals(otherID)) {
+			return true;
+		}
+		return access.isRestricted() && RegistrySocial.playerHasAccess(name, profile);
+	}
 
-    public boolean isUseable(EntityPlayer player) {
+	public boolean canPlayerDismantle(EntityPlayer player) {
 
-        return BlockUtils.isEntityInRange(getPos(), player, 64) && worldObj.getTileEntity(pos) == this;
-    }
+		return true;
+	}
 
-    public boolean onWrench(EntityPlayer player, int hitSide) {
+	public boolean isUseable(EntityPlayer player) {
 
-        return false;
-    }
+		return BlockUtils.isEntityInRange(getPos(), player, 64) && worldObj.getTileEntity(pos) == this;
+	}
 
-    protected final boolean timeCheck() {
+	public boolean onWrench(EntityPlayer player, int hitSide) {
 
-        return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT == 0;
-    }
+		return false;
+	}
 
-    protected final boolean timeCheckEighth() {
+	protected final boolean timeCheck() {
 
-        return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT_EIGHTH == 0;
-    }
+		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT == 0;
+	}
+
+	protected final boolean timeCheckEighth() {
+
+		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT_EIGHTH == 0;
+	}
 
     /* NETWORK METHODS */
-    //@Override//TODO
+	//@Override//TODO
 
-    @Nullable
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        return PacketHandler.toTilePacket(getPacket(), getPos());
-    }
+	@Nullable
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-        PacketHandler.handleNBTPacket(pkt.getNbtCompound());
-    }
+		return PacketHandler.toTilePacket(getPacket(), getPos());
+	}
 
-    @Override
-    public NBTTagCompound getUpdateTag() {
-        return PacketHandler.toNBTTag(getPacket(), super.getUpdateTag());
-    }
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 
-    @Override
-    public void handleUpdateTag(NBTTagCompound tag) {
-        PacketHandler.handleNBTPacket(tag);
-    }
+		PacketHandler.handleNBTPacket(pkt.getNbtCompound());
+	}
 
-    public PacketCoFHBase getPacket() {
+	@Override
+	public NBTTagCompound getUpdateTag() {
 
-        return new PacketTile(this);
-    }
+		return PacketHandler.toNBTTag(getPacket(), super.getUpdateTag());
+	}
 
-    public void sendDescPacket() {
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag) {
 
-        PacketHandler.sendToAllAround(getPacket(), this);
-    }
+		PacketHandler.handleNBTPacket(tag);
+	}
 
-    protected void updateLighting() {
-        int light2 = worldObj.getLightFor(EnumSkyBlock.BLOCK, getPos()), light1 = getLightValue();
-        if (light1 != light2 && worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos())) {
-            IBlockState state = worldObj.getBlockState(getPos());
-            worldObj.notifyBlockUpdate(pos, state, state, 3);//TODO might me markBlocksForUpdate.
-        }
-    }
+	public PacketCoFHBase getPacket() {
 
-    public void sendUpdatePacket(Side side) {
+		return new PacketTile(this);
+	}
 
-        if (worldObj == null) {
-            return;
-        }
-        if (side == Side.CLIENT && ServerHelper.isServerWorld(worldObj)) {
-            PacketHandler.sendToAllAround(getPacket(), this);
-        } else if (side == Side.SERVER && ServerHelper.isClientWorld(worldObj)) {
-            PacketHandler.sendToServer(getPacket());
-        }
-    }
+	public void sendDescPacket() {
 
-    /* GUI METHODS */
-    public Object getGuiClient(InventoryPlayer inventory) {
+		PacketHandler.sendToAllAround(getPacket(), this);
+	}
 
-        return null;
-    }
+	protected void updateLighting() {
 
-    public Object getGuiServer(InventoryPlayer inventory) {
+		int light2 = worldObj.getLightFor(EnumSkyBlock.BLOCK, getPos()), light1 = getLightValue();
+		if (light1 != light2 && worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos())) {
+			IBlockState state = worldObj.getBlockState(getPos());
+			worldObj.notifyBlockUpdate(pos, state, state, 3);//TODO might me markBlocksForUpdate.
+		}
+	}
 
-        return null;
-    }
+	public void sendUpdatePacket(Side side) {
 
-    public int getInvSlotCount() {
+		if (worldObj == null) {
+			return;
+		}
+		if (side == Side.CLIENT && ServerHelper.isServerWorld(worldObj)) {
+			PacketHandler.sendToAllAround(getPacket(), this);
+		} else if (side == Side.SERVER && ServerHelper.isClientWorld(worldObj)) {
+			PacketHandler.sendToServer(getPacket());
+		}
+	}
 
-        return 0;
-    }
+	/* GUI METHODS */
+	public Object getGuiClient(InventoryPlayer inventory) {
 
-    public boolean openGui(EntityPlayer player) {
+		return null;
+	}
 
-        return false;
-    }
+	public Object getGuiServer(InventoryPlayer inventory) {
 
-    public void receiveGuiNetworkData(int i, int j) {
+		return null;
+	}
 
-    }
+	public int getInvSlotCount() {
 
-    public void sendGuiNetworkData(Container container, IContainerListener player) {
+		return 0;
+	}
 
-    }
+	public boolean openGui(EntityPlayer player) {
+
+		return false;
+	}
+
+	public void receiveGuiNetworkData(int i, int j) {
+
+	}
+
+	public void sendGuiNetworkData(Container container, IContainerListener player) {
+
+	}
 
 }

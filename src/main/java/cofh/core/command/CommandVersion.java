@@ -11,31 +11,31 @@ import java.util.List;
 
 public class CommandVersion implements ISubCommand {
 
-    public static CommandVersion instance = new CommandVersion();
+	public static CommandVersion instance = new CommandVersion();
 
-    /* ISubCommand */
-    @Override
-    public String getCommandName() {
+	/* ISubCommand */
+	@Override
+	public String getCommandName() {
 
-        return "version";
-    }
+		return "version";
+	}
 
-    @Override
-    public int getPermissionLevel() {
+	@Override
+	public int getPermissionLevel() {
 
-        return -1;
-    }
+		return -1;
+	}
 
-    @Override
-    public void handleCommand(MinecraftServer server, ICommandSender sender, String[] arguments) throws CommandException {
+	@Override
+	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] arguments) throws CommandException {
 
-        sender.addChatMessage(new TextComponentString(StringHelper.localize("info.cofh.command.version.0") + " " + CoFHCore.version + "."));
-    }
+		sender.addChatMessage(new TextComponentString(StringHelper.localize("info.cofh.command.version.0") + " " + CoFHCore.version + "."));
+	}
 
-    @Override
-    public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
+	@Override
+	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
-        return null;
-    }
+		return null;
+	}
 
 }

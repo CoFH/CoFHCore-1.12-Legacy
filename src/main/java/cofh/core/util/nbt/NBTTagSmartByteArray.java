@@ -22,249 +22,251 @@ import java.util.UUID;
  */
 public final class NBTTagSmartByteArray extends NBTTagByteArray {
 
-    private class _ByteArrayOutputStream extends ByteArrayOutputStream {
+	private class _ByteArrayOutputStream extends ByteArrayOutputStream {
 
-        _ByteArrayOutputStream(int initialSize) {
-            super(initialSize);
-        }
+		_ByteArrayOutputStream(int initialSize) {
 
-        byte[] getByteArray() {
-            return this.buf;
-        }
-    }
+			super(initialSize);
+		}
 
-    private _ByteArrayOutputStream arrayout;
-    private DataOutputStream dataout;
+		byte[] getByteArray() {
 
-    public NBTTagSmartByteArray() {
+			return this.buf;
+		}
+	}
 
-        this(64);
-    }
+	private _ByteArrayOutputStream arrayout;
+	private DataOutputStream dataout;
 
-    public NBTTagSmartByteArray(int initialSize) {
+	public NBTTagSmartByteArray() {
 
-        super(null);
+		this(64);
+	}
 
-        arrayout = new _ByteArrayOutputStream(initialSize);
-        dataout = new DataOutputStream(arrayout);
-    }
+	public NBTTagSmartByteArray(int initialSize) {
 
-    public NBTTagSmartByteArray addString(String theString) {
+		super(null);
 
-        try {
-            dataout.writeUTF(theString);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
+		arrayout = new _ByteArrayOutputStream(initialSize);
+		dataout = new DataOutputStream(arrayout);
+	}
 
-    public NBTTagSmartByteArray addUUID(UUID theUUID) {
+	public NBTTagSmartByteArray addString(String theString) {
 
-        try {
-            dataout.writeLong(theUUID.getMostSignificantBits());
-            dataout.writeLong(theUUID.getLeastSignificantBits());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
+		try {
+			dataout.writeUTF(theString);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 
-    public NBTTagSmartByteArray addLong(long theLong) {
+	public NBTTagSmartByteArray addUUID(UUID theUUID) {
 
-        try {
-            dataout.writeLong(theLong);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
+		try {
+			dataout.writeLong(theUUID.getMostSignificantBits());
+			dataout.writeLong(theUUID.getLeastSignificantBits());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 
-    public NBTTagSmartByteArray addInt(int theInteger) {
+	public NBTTagSmartByteArray addLong(long theLong) {
 
-        try {
-            dataout.writeInt(theInteger);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
+		try {
+			dataout.writeLong(theLong);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 
-    public NBTTagSmartByteArray addVarInt(int theInteger) {
+	public NBTTagSmartByteArray addInt(int theInteger) {
 
-        try {
-            int v = 0x00;
-            if (theInteger < 0) {
-                v |= 0x40;
-                theInteger = ~theInteger;
-            }
-            if ((theInteger & ~0x3F) != 0) {
-                v |= 0x80;
-            }
-            dataout.writeByte(v | (theInteger & 0x3F));
-            theInteger >>>= 6;
-            while (theInteger != 0) {
-                dataout.writeByte((theInteger & 0x7F) | ((theInteger & ~0x7F) != 0 ? 0x80 : 0));
-                theInteger >>>= 7;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
+		try {
+			dataout.writeInt(theInteger);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 
-    public NBTTagSmartByteArray addBool(boolean theBoolean) {
+	public NBTTagSmartByteArray addVarInt(int theInteger) {
 
-        try {
-            dataout.writeBoolean(theBoolean);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
+		try {
+			int v = 0x00;
+			if (theInteger < 0) {
+				v |= 0x40;
+				theInteger = ~theInteger;
+			}
+			if ((theInteger & ~0x3F) != 0) {
+				v |= 0x80;
+			}
+			dataout.writeByte(v | (theInteger & 0x3F));
+			theInteger >>>= 6;
+			while (theInteger != 0) {
+				dataout.writeByte((theInteger & 0x7F) | ((theInteger & ~0x7F) != 0 ? 0x80 : 0));
+				theInteger >>>= 7;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 
-    public NBTTagSmartByteArray addByte(byte theByte) {
+	public NBTTagSmartByteArray addBool(boolean theBoolean) {
 
-        try {
-            dataout.writeByte(theByte);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
+		try {
+			dataout.writeBoolean(theBoolean);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 
-    public NBTTagSmartByteArray addByte(int theByte) {
+	public NBTTagSmartByteArray addByte(byte theByte) {
 
-        return addByte((byte) theByte);
-    }
+		try {
+			dataout.writeByte(theByte);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 
-    public NBTTagSmartByteArray addShort(short theShort) {
+	public NBTTagSmartByteArray addByte(int theByte) {
 
-        try {
-            dataout.writeShort(theShort);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
+		return addByte((byte) theByte);
+	}
 
-    public NBTTagSmartByteArray addShort(int theShort) {
+	public NBTTagSmartByteArray addShort(short theShort) {
 
-        return addShort((short) theShort);
-    }
+		try {
+			dataout.writeShort(theShort);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 
-    public NBTTagSmartByteArray addByteArray(byte theByteArray[]) {
+	public NBTTagSmartByteArray addShort(int theShort) {
 
-        try {
-            dataout.write(theByteArray);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
+		return addShort((short) theShort);
+	}
 
-    public NBTTagSmartByteArray addFloat(float theFloat) {
+	public NBTTagSmartByteArray addByteArray(byte theByteArray[]) {
 
-        try {
-            dataout.writeFloat(theFloat);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
+		try {
+			dataout.write(theByteArray);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 
-    public NBTTagSmartByteArray addItemStack(ItemStack theStack) {
+	public NBTTagSmartByteArray addFloat(float theFloat) {
 
-        try {
-            if (theStack == null) {
-                addShort(-1);
-            } else {
-                addShort(Item.getIdFromItem(theStack.getItem()));
-                addByte(theStack.stackSize);
-                addShort(ItemHelper.getItemDamage(theStack));
-                addNBT(theStack.getTagCompound());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
+		try {
+			dataout.writeFloat(theFloat);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 
-    public void addNBT(NBTTagCompound nbt) throws IOException {
+	public NBTTagSmartByteArray addItemStack(ItemStack theStack) {
 
-        if (nbt == null) {
-            addShort(-1);
-        } else {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            CompressedStreamTools.writeCompressed(nbt, baos);
-            byte[] abyte = baos.toByteArray();
-            addShort((short) abyte.length);
-            addByteArray(abyte);
-        }
-    }
+		try {
+			if (theStack == null) {
+				addShort(-1);
+			} else {
+				addShort(Item.getIdFromItem(theStack.getItem()));
+				addByte(theStack.stackSize);
+				addShort(ItemHelper.getItemDamage(theStack));
+				addNBT(theStack.getTagCompound());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 
-    public NBTTagSmartByteArray addFluidStack(FluidStack theStack) {
+	public void addNBT(NBTTagCompound nbt) throws IOException {
 
-        try {
-            FluidHelper.writeFluidStackToPacket(theStack, dataout);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return this;
-    }
+		if (nbt == null) {
+			addShort(-1);
+		} else {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			CompressedStreamTools.writeCompressed(nbt, baos);
+			byte[] abyte = baos.toByteArray();
+			addShort((short) abyte.length);
+			addByteArray(abyte);
+		}
+	}
 
-    public NBTTagSmartByteArray addCoords(TileEntity theTile) {
+	public NBTTagSmartByteArray addFluidStack(FluidStack theStack) {
 
-        addInt(theTile.getPos().getX());
-        addInt(theTile.getPos().getY());
-        return addInt(theTile.getPos().getZ());
-    }
+		try {
+			FluidHelper.writeFluidStackToPacket(theStack, dataout);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 
-    public NBTTagSmartByteArray addCoords(int x, int y, int z) {
+	public NBTTagSmartByteArray addCoords(TileEntity theTile) {
 
-        addInt(x);
-        addInt(y);
-        return addInt(z);
-    }
+		addInt(theTile.getPos().getX());
+		addInt(theTile.getPos().getY());
+		return addInt(theTile.getPos().getZ());
+	}
 
-    public void write(DataOutput output) throws IOException {
+	public NBTTagSmartByteArray addCoords(int x, int y, int z) {
 
-        output.writeInt(arrayout.size());
-        output.write(arrayout.getByteArray(), 0, arrayout.size());
-    }
+		addInt(x);
+		addInt(y);
+		return addInt(z);
+	}
 
-    @Override
-    public String toString() {
+	public void write(DataOutput output) throws IOException {
 
-        return "[" + arrayout.size() + " bytes]";
-    }
+		output.writeInt(arrayout.size());
+		output.write(arrayout.getByteArray(), 0, arrayout.size());
+	}
 
-    @Override
-    public NBTBase copy() {
+	@Override
+	public String toString() {
 
-        return new NBTTagByteArray(getByteArray());
-    }
+		return "[" + arrayout.size() + " bytes]";
+	}
 
-    @Override
-    public boolean equals(Object o) {
+	@Override
+	public NBTBase copy() {
 
-        if (super.equals(o) && o.getClass() == NBTTagSmartByteArray.class) {
-            NBTTagSmartByteArray other = (NBTTagSmartByteArray) o;
-            return other.dataout.equals(dataout);
-        }
-        return false;
-    }
+		return new NBTTagByteArray(getByteArray());
+	}
 
-    @Override
-    public int hashCode() {
+	@Override
+	public boolean equals(Object o) {
 
-        return super.hashCode() ^ dataout.hashCode();
-    }
+		if (super.equals(o) && o.getClass() == NBTTagSmartByteArray.class) {
+			NBTTagSmartByteArray other = (NBTTagSmartByteArray) o;
+			return other.dataout.equals(dataout);
+		}
+		return false;
+	}
 
-    @Override
-    public byte[] getByteArray() {
+	@Override
+	public int hashCode() {
 
-        return arrayout.toByteArray();
-    }
+		return super.hashCode() ^ dataout.hashCode();
+	}
+
+	@Override
+	public byte[] getByteArray() {
+
+		return arrayout.toByteArray();
+	}
 
 }

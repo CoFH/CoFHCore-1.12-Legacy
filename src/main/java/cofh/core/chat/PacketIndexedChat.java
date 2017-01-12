@@ -10,37 +10,37 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketIndexedChat extends PacketCoFHBase {
 
-    public static void initialize() {
+	public static void initialize() {
 
-        PacketHandler.instance.registerPacket(PacketIndexedChat.class);
-    }
+		PacketHandler.instance.registerPacket(PacketIndexedChat.class);
+	}
 
-    public PacketIndexedChat() {
+	public PacketIndexedChat() {
 
-    }
+	}
 
-    public PacketIndexedChat(ITextComponent chat) {
+	public PacketIndexedChat(ITextComponent chat) {
 
-    }
+	}
 
-    public PacketIndexedChat(ITextComponent chat, int index) {
+	public PacketIndexedChat(ITextComponent chat, int index) {
 
-        addString(ChatHelper.toJSON(chat));
-        addInt(index);
-    }
+		addString(ChatHelper.toJSON(chat));
+		addInt(index);
+	}
 
-    @Override
-    public void handlePacket(EntityPlayer player, boolean isServer) {
+	@Override
+	public void handlePacket(EntityPlayer player, boolean isServer) {
 
-    }
+	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void handleClientSide(EntityPlayer player) {
+	@Override
+	@SideOnly (Side.CLIENT)
+	public void handleClientSide(EntityPlayer player) {
 
-        String string = getString();
-        int offset = getInt();
-        CoFHCore.proxy.addIndexedChatMessage(ChatHelper.fromJSON(string), offset);
-    }
+		String string = getString();
+		int offset = getInt();
+		CoFHCore.proxy.addIndexedChatMessage(ChatHelper.fromJSON(string), offset);
+	}
 
 }

@@ -12,11 +12,11 @@ import java.util.List;
 
 public class CaveParser extends UniformParser {
 
-    @Override
-    protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
+	@Override
+	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
-        boolean ceiling = genObject.has("ceiling") && genObject.get("ceiling").getAsBoolean();
-        return new FeatureGenCave(featureName, gen, ceiling, numClusters, biomeRes, retrogen, dimRes);
-    }
+		boolean ceiling = genObject.has("ceiling") && genObject.get("ceiling").getAsBoolean();
+		return new FeatureGenCave(featureName, gen, ceiling, numClusters, biomeRes, retrogen, dimRes);
+	}
 
 }

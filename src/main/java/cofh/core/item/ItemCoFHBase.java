@@ -5,14 +5,8 @@ import cofh.core.render.CoFHFontRenderer;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.StringHelper;
-
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,6 +22,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ItemCoFHBase extends Item implements IModelRegister {
 
@@ -183,16 +181,16 @@ public class ItemCoFHBase extends Item implements IModelRegister {
 		return null;
 	}
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public FontRenderer getFontRenderer(ItemStack stack) {
+	@Override
+	@SideOnly (Side.CLIENT)
+	public FontRenderer getFontRenderer(ItemStack stack) {
 
-        return CoFHFontRenderer.loadFontRendererStack(stack);
-    }
+		return CoFHFontRenderer.loadFontRendererStack(stack);
+	}
 
 	/* IModelRegister */
 	@Override
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	public void registerModels() {
 
 		for (Map.Entry<Integer, ItemEntry> entry : itemMap.entrySet()) {

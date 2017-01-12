@@ -15,27 +15,30 @@ import java.util.List;
  */
 public class SlotMover implements IAdvancedGuiHandler<GuiBase> {
 
-    @Override
-    public Class<GuiBase> getGuiContainerClass() {
-        return GuiBase.class;
-    }
+	@Override
+	public Class<GuiBase> getGuiContainerClass() {
 
-    @Override
-    public List<Rectangle> getGuiExtraAreas(GuiBase guiContainer) {
-        List<Rectangle> tabBoxes = new ArrayList<Rectangle>();
+		return GuiBase.class;
+	}
 
-        for (TabBase tab : guiContainer.tabs) {
-            Rectangle4i rect = tab.getBounds();
-            tabBoxes.add(new Rectangle(rect.x, rect.y, rect.w, rect.h));
-        }
+	@Override
+	public List<Rectangle> getGuiExtraAreas(GuiBase guiContainer) {
 
-        return tabBoxes;
-    }
+		List<Rectangle> tabBoxes = new ArrayList<Rectangle>();
 
-    @Nullable
-    @Override
-    public Object getIngredientUnderMouse(GuiBase guiContainer, int mouseX, int mouseY) {
-        return null;
-    }
+		for (TabBase tab : guiContainer.tabs) {
+			Rectangle4i rect = tab.getBounds();
+			tabBoxes.add(new Rectangle(rect.x, rect.y, rect.w, rect.h));
+		}
+
+		return tabBoxes;
+	}
+
+	@Nullable
+	@Override
+	public Object getIngredientUnderMouse(GuiBase guiContainer, int mouseX, int mouseY) {
+
+		return null;
+	}
 
 }

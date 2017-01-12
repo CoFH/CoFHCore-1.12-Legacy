@@ -31,265 +31,270 @@ import java.util.List;
 
 public class ItemBowAdv extends ItemBow {
 
-    //    protected IIcon normalIcons[] = new IIcon[4];
-    protected ToolMaterial toolMaterial;
+	//    protected IIcon normalIcons[] = new IIcon[4];
+	protected ToolMaterial toolMaterial;
 
-    public String repairIngot = "";
-    public float arrowSpeedMultiplier = 2.0F;
-    public float arrowDamageMultiplier = 1.25F;
-    protected boolean showInCreative = true;
+	public String repairIngot = "";
+	public float arrowSpeedMultiplier = 2.0F;
+	public float arrowDamageMultiplier = 1.25F;
+	protected boolean showInCreative = true;
 
-    public ItemBowAdv(Item.ToolMaterial toolMaterial) {
+	public ItemBowAdv(Item.ToolMaterial toolMaterial) {
 
-        super();
-        this.toolMaterial = toolMaterial;
-        setMaxDamage(toolMaterial.getMaxUses());
-    }
+		super();
+		this.toolMaterial = toolMaterial;
+		setMaxDamage(toolMaterial.getMaxUses());
+	}
 
-    public int cofh_canEnchantApply(ItemStack stack, Enchantment ench) {
+	public int cofh_canEnchantApply(ItemStack stack, Enchantment ench) {
 
-        if (ench == Enchantments.LOOTING) {
-            return 1;
-        }
-        if (ench.type == EnumEnchantmentType.BOW) {
-            return 1;
-        }
-        return -1;
-    }
+		if (ench == Enchantments.LOOTING) {
+			return 1;
+		}
+		if (ench.type == EnumEnchantmentType.BOW) {
+			return 1;
+		}
+		return -1;
+	}
 
-    public ItemBowAdv setRepairIngot(String repairIngot) {
+	public ItemBowAdv setRepairIngot(String repairIngot) {
 
-        this.repairIngot = repairIngot;
-        return this;
-    }
+		this.repairIngot = repairIngot;
+		return this;
+	}
 
-    public ItemBowAdv setArrowSpeed(float multiplier) {
+	public ItemBowAdv setArrowSpeed(float multiplier) {
 
-        this.arrowSpeedMultiplier = multiplier;
-        return this;
-    }
+		this.arrowSpeedMultiplier = multiplier;
+		return this;
+	}
 
-    public ItemBowAdv setArrowDamage(float multiplier) {
+	public ItemBowAdv setArrowDamage(float multiplier) {
 
-        arrowDamageMultiplier = multiplier;
-        return this;
-    }
+		arrowDamageMultiplier = multiplier;
+		return this;
+	}
 
-    public ItemBowAdv setShowInCreative(boolean showInCreative) {
+	public ItemBowAdv setShowInCreative(boolean showInCreative) {
 
-        this.showInCreative = showInCreative;
-        return this;
-    }
+		this.showInCreative = showInCreative;
+		return this;
+	}
 
-    @Override
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+	@Override
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 
-        if (showInCreative) {
-            list.add(new ItemStack(item, 1, 0));
-        }
-    }
+		if (showInCreative) {
+			list.add(new ItemStack(item, 1, 0));
+		}
+	}
 
-    @Override
-    public int getItemEnchantability() {
+	@Override
+	public int getItemEnchantability() {
 
-        return toolMaterial.getEnchantability();
-    }
+		return toolMaterial.getEnchantability();
+	}
 
-    @Override
-    public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
+	@Override
+	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
 
-        return ItemHelper.isOreNameEqual(stack, repairIngot);
-    }
+		return ItemHelper.isOreNameEqual(stack, repairIngot);
+	}
 
-    // TODO: This will need a custom render or something
-    @Override
-    public boolean isFull3D() {
+	// TODO: This will need a custom render or something
+	@Override
+	public boolean isFull3D() {
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public boolean isItemTool(ItemStack stack) {
+	@Override
+	public boolean isItemTool(ItemStack stack) {
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
-        boolean flag = this.findAmmo(player) != null;
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
 
-        ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemStack, world, player, hand, flag);
-        if (ret != null) {
-            return ret;
-        }
+		boolean flag = this.findAmmo(player) != null;
 
-        if (!player.capabilities.isCreativeMode && !flag) {
-            return !flag ? new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStack) : new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
-        }
-        else {
-            player.setActiveHand(hand);
-            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
-        }
-    }
+		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemStack, world, player, hand, flag);
+		if (ret != null) {
+			return ret;
+		}
 
-    //TODO Multishot enchant can use Arrow Loose Efent for better mod compatibility.
-    @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase livingBase, int timeLeft) {
-        if (livingBase instanceof EntityPlayer) {
-            EntityPlayer entityplayer = (EntityPlayer) livingBase;
-            boolean flag = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-            ItemStack itemstack = this.findAmmo(entityplayer);
+		if (!player.capabilities.isCreativeMode && !flag) {
+			return !flag ? new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStack) : new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
+		} else {
+			player.setActiveHand(hand);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+		}
+	}
 
-            int i = this.getMaxItemUseDuration(stack) - timeLeft;
-            i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) livingBase, i, itemstack != null || flag);
-            if (i < 0) return;
+	//TODO Multishot enchant can use Arrow Loose Efent for better mod compatibility.
+	@Override
+	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase livingBase, int timeLeft) {
 
-            if (itemstack != null || flag) {
-                if (itemstack == null) {
-                    itemstack = new ItemStack(Items.ARROW);
-                }
+		if (livingBase instanceof EntityPlayer) {
+			EntityPlayer entityplayer = (EntityPlayer) livingBase;
+			boolean flag = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
+			ItemStack itemstack = this.findAmmo(entityplayer);
 
-                float f = getArrowVelocity(i);
+			int i = this.getMaxItemUseDuration(stack) - timeLeft;
+			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) livingBase, i, itemstack != null || flag);
+			if (i < 0) {
+				return;
+			}
 
-                if ((double) f >= 0.1D) {
-                    boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer) : false);
-                    boolean empowered = this instanceof IEmpowerableItem && ((IEmpowerableItem)this).isEmpowered(stack);
+			if (itemstack != null || flag) {
+				if (itemstack == null) {
+					itemstack = new ItemStack(Items.ARROW);
+				}
 
-                    if (!world.isRemote) {
-                        int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoFHEnchantment.multishot, stack);
-                        int punchLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
-                        int powerLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
-                        boolean flame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;
-                        stack.damageItem(1, entityplayer);
-                        onBowFired(entityplayer, stack);
+				float f = getArrowVelocity(i);
 
-                        for (int shot = 0; shot <= enchantMultishot; shot++) {
-                            ItemArrow itemarrow = (ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW);
-                            EntityArrow entityarrow = itemarrow.createArrow(world, itemstack, entityplayer);
-                            entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
-                            if (empowered) {
-                                entityarrow.setDamage(entityarrow.getDamage() + 1.5);
-                            }
+				if ((double) f >= 0.1D) {
+					boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer) : false);
+					boolean empowered = this instanceof IEmpowerableItem && ((IEmpowerableItem) this).isEmpowered(stack);
 
-                            if (f == 1.0F) {
-                                entityarrow.setIsCritical(true);
-                            }
+					if (!world.isRemote) {
+						int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoFHEnchantment.multishot, stack);
+						int punchLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
+						int powerLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
+						boolean flame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;
+						stack.damageItem(1, entityplayer);
+						onBowFired(entityplayer, stack);
 
-                            if (powerLvl > 0) {
-                                entityarrow.setDamage(entityarrow.getDamage() + (double) powerLvl * 0.5D + 0.5D);
-                            }
+						for (int shot = 0; shot <= enchantMultishot; shot++) {
+							ItemArrow itemarrow = (ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW);
+							EntityArrow entityarrow = itemarrow.createArrow(world, itemstack, entityplayer);
+							entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+							if (empowered) {
+								entityarrow.setDamage(entityarrow.getDamage() + 1.5);
+							}
 
-                            if (punchLvl > 0) {
-                                entityarrow.setKnockbackStrength(punchLvl);
-                            }
+							if (f == 1.0F) {
+								entityarrow.setIsCritical(true);
+							}
 
-                            if (flame) {
-                                entityarrow.setFire(100);
-                            }
+							if (powerLvl > 0) {
+								entityarrow.setDamage(entityarrow.getDamage() + (double) powerLvl * 0.5D + 0.5D);
+							}
 
-                            if (flag1) {
-                                entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
-                            }
+							if (punchLvl > 0) {
+								entityarrow.setKnockbackStrength(punchLvl);
+							}
 
-                            world.spawnEntityInWorld(entityarrow);
-                        }
-                    }
+							if (flame) {
+								entityarrow.setFire(100);
+							}
 
-                    world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+							if (flag1) {
+								entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
+							}
 
-                    if (!flag1) {
-                        --itemstack.stackSize;
+							world.spawnEntityInWorld(entityarrow);
+						}
+					}
 
-                        if (itemstack.stackSize == 0) {
-                            entityplayer.inventory.deleteStack(itemstack);
-                        }
-                    }
+					world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
-                    entityplayer.addStat(StatList.getObjectUseStats(this));
-                }
-            }
-        }
+					if (!flag1) {
+						--itemstack.stackSize;
 
-//        int draw = this.getMaxItemUseDuration(stack) - timeLeft;
-//
-//        ArrowLooseEvent event = new ArrowLooseEvent(livingBase, stack, draw);
-//        MinecraftForge.EVENT_BUS.post(event);
-//        if (event.isCanceled()) {
-//            return;
-//        }
-//        draw = event.charge;
-//
-//        boolean flag = livingBase.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
-//
-//        if (flag || livingBase.inventory.hasItem(Items.arrow)) {
-//            float drawStrength = draw / 20.0F;
-//            drawStrength = (drawStrength * drawStrength + drawStrength * 2.0F) / 3.0F;
-//
-//            if (drawStrength > 1.0F) {
-//                drawStrength = 1.0F;
-//            } else if (drawStrength < 0.1F) {
-//                return;
-//            }
-//            int enchantPower = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
-//            int enchantKnockback = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
-//            int enchantFire = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack);
-//            int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoFHEnchantment.multishot.effectId, stack);
-//
-//            EntityArrow arrow = new EntityArrow(world, livingBase, drawStrength * arrowSpeedMultiplier);
-//            double damage = arrow.getDamage() * arrowDamageMultiplier;
-//            arrow.setDamage(damage);
-//
-//            if (drawStrength == 1.0F) {
-//                arrow.setIsCritical(true);
-//            }
-//            if (enchantPower > 0) {
-//                arrow.setDamage(damage + enchantPower * 0.5D + 0.5D);
-//            }
-//            if (enchantKnockback > 0) {
-//                arrow.setKnockbackStrength(enchantKnockback);
-//            }
-//            if (enchantFire > 0) {
-//                arrow.setFire(100);
-//            }
-//            if (flag) {
-//                arrow.canBePickedUp = 2;
-//            } else {
-//                livingBase.inventory.consumeInventoryItem(Items.arrow);
-//            }
-//            world.playSoundAtEntity(livingBase, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + drawStrength * 0.5F);
-//
-//            if (ServerHelper.isServerWorld(world)) {
-//                world.spawnEntityInWorld(arrow);
-//            }
-//            for (int i = 0; i < enchantMultishot; i++) {
-//                arrow = new EntityArrow(world, livingBase, drawStrength * arrowSpeedMultiplier);
-//                arrow.setThrowableHeading(arrow.motionX, arrow.motionY, arrow.motionZ, 1.5f * drawStrength * arrowSpeedMultiplier, 3.0F);
-//
-//                arrow.setDamage(damage);
-//
-//                if (drawStrength == 1.0F) {
-//                    arrow.setIsCritical(true);
-//                }
-//                if (enchantPower > 0) {
-//                    arrow.setDamage(damage + enchantPower * 0.5D + 0.5D);
-//                }
-//                if (enchantKnockback > 0) {
-//                    arrow.setKnockbackStrength(enchantKnockback);
-//                }
-//                if (enchantFire > 0) {
-//                    arrow.setFire(100);
-//                }
-//                arrow.canBePickedUp = 2;
-//
-//                if (ServerHelper.isServerWorld(world)) {
-//                    world.spawnEntityInWorld(arrow);
-//                }
-//            }
-//            if (!livingBase.capabilities.isCreativeMode) {
-//                stack.damageItem(1, livingBase);
-//            }
-//        }
-    }
+						if (itemstack.stackSize == 0) {
+							entityplayer.inventory.deleteStack(itemstack);
+						}
+					}
 
-    public void onBowFired(EntityPlayer player, ItemStack stack) {}
+					entityplayer.addStat(StatList.getObjectUseStats(this));
+				}
+			}
+		}
+
+		//        int draw = this.getMaxItemUseDuration(stack) - timeLeft;
+		//
+		//        ArrowLooseEvent event = new ArrowLooseEvent(livingBase, stack, draw);
+		//        MinecraftForge.EVENT_BUS.post(event);
+		//        if (event.isCanceled()) {
+		//            return;
+		//        }
+		//        draw = event.charge;
+		//
+		//        boolean flag = livingBase.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0;
+		//
+		//        if (flag || livingBase.inventory.hasItem(Items.arrow)) {
+		//            float drawStrength = draw / 20.0F;
+		//            drawStrength = (drawStrength * drawStrength + drawStrength * 2.0F) / 3.0F;
+		//
+		//            if (drawStrength > 1.0F) {
+		//                drawStrength = 1.0F;
+		//            } else if (drawStrength < 0.1F) {
+		//                return;
+		//            }
+		//            int enchantPower = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
+		//            int enchantKnockback = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
+		//            int enchantFire = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack);
+		//            int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoFHEnchantment.multishot.effectId, stack);
+		//
+		//            EntityArrow arrow = new EntityArrow(world, livingBase, drawStrength * arrowSpeedMultiplier);
+		//            double damage = arrow.getDamage() * arrowDamageMultiplier;
+		//            arrow.setDamage(damage);
+		//
+		//            if (drawStrength == 1.0F) {
+		//                arrow.setIsCritical(true);
+		//            }
+		//            if (enchantPower > 0) {
+		//                arrow.setDamage(damage + enchantPower * 0.5D + 0.5D);
+		//            }
+		//            if (enchantKnockback > 0) {
+		//                arrow.setKnockbackStrength(enchantKnockback);
+		//            }
+		//            if (enchantFire > 0) {
+		//                arrow.setFire(100);
+		//            }
+		//            if (flag) {
+		//                arrow.canBePickedUp = 2;
+		//            } else {
+		//                livingBase.inventory.consumeInventoryItem(Items.arrow);
+		//            }
+		//            world.playSoundAtEntity(livingBase, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + drawStrength * 0.5F);
+		//
+		//            if (ServerHelper.isServerWorld(world)) {
+		//                world.spawnEntityInWorld(arrow);
+		//            }
+		//            for (int i = 0; i < enchantMultishot; i++) {
+		//                arrow = new EntityArrow(world, livingBase, drawStrength * arrowSpeedMultiplier);
+		//                arrow.setThrowableHeading(arrow.motionX, arrow.motionY, arrow.motionZ, 1.5f * drawStrength * arrowSpeedMultiplier, 3.0F);
+		//
+		//                arrow.setDamage(damage);
+		//
+		//                if (drawStrength == 1.0F) {
+		//                    arrow.setIsCritical(true);
+		//                }
+		//                if (enchantPower > 0) {
+		//                    arrow.setDamage(damage + enchantPower * 0.5D + 0.5D);
+		//                }
+		//                if (enchantKnockback > 0) {
+		//                    arrow.setKnockbackStrength(enchantKnockback);
+		//                }
+		//                if (enchantFire > 0) {
+		//                    arrow.setFire(100);
+		//                }
+		//                arrow.canBePickedUp = 2;
+		//
+		//                if (ServerHelper.isServerWorld(world)) {
+		//                    world.spawnEntityInWorld(arrow);
+		//                }
+		//            }
+		//            if (!livingBase.capabilities.isCreativeMode) {
+		//                stack.damageItem(1, livingBase);
+		//            }
+		//        }
+	}
+
+	public void onBowFired(EntityPlayer player, ItemStack stack) {
+
+	}
 }

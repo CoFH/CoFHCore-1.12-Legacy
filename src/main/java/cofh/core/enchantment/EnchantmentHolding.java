@@ -8,45 +8,46 @@ import net.minecraft.item.ItemStack;
 
 public class EnchantmentHolding extends Enchantment {
 
-    public EnchantmentHolding(String id) {
-        super(Rarity.RARE, EnumEnchantmentType.ALL, EntityEquipmentSlot.values());
-        setRegistryName(id);
-    }
+	public EnchantmentHolding(String id) {
 
-    @Override
-    public int getMinEnchantability(int level) {
+		super(Rarity.RARE, EnumEnchantmentType.ALL, EntityEquipmentSlot.values());
+		setRegistryName(id);
+	}
 
-        return 1 + (level - 1) * 10;
-    }
+	@Override
+	public int getMinEnchantability(int level) {
 
-    @Override
-    public int getMaxEnchantability(int level) {
+		return 1 + (level - 1) * 10;
+	}
 
-        return getMinEnchantability(level) + 15;
-    }
+	@Override
+	public int getMaxEnchantability(int level) {
 
-    @Override
-    public int getMaxLevel() {
+		return getMinEnchantability(level) + 15;
+	}
 
-        return 4;
-    }
+	@Override
+	public int getMaxLevel() {
 
-    @Override
-    public String getName() {
+		return 4;
+	}
 
-        return "enchant.cofh.holding";
-    }
+	@Override
+	public String getName() {
 
-    @Override
-    public boolean canApply(ItemStack stack) {
+		return "enchant.cofh.holding";
+	}
 
-        return (stack.getItem() instanceof IInventoryContainerItem);
-    }
+	@Override
+	public boolean canApply(ItemStack stack) {
 
-    @Override
-    public boolean isAllowedOnBooks() {
+		return (stack.getItem() instanceof IInventoryContainerItem);
+	}
 
-        return false;
-    }
+	@Override
+	public boolean isAllowedOnBooks() {
+
+		return false;
+	}
 
 }

@@ -8,60 +8,62 @@ import net.minecraftforge.fluids.Fluid;
 import java.util.HashMap;
 
 public class BlockFluidInteractive extends BlockFluidCoFHBase {
-    private final HashMap<IBlockState, IBlockState> collisionMap = new HashMap<IBlockState, IBlockState>();
-    private final HashMap<Block, IBlockState> anyState = new HashMap<Block, IBlockState>();
 
-    public BlockFluidInteractive(Fluid fluid, Material material, String name) {
+	private final HashMap<IBlockState, IBlockState> collisionMap = new HashMap<IBlockState, IBlockState>();
+	private final HashMap<Block, IBlockState> anyState = new HashMap<Block, IBlockState>();
 
-        super(fluid, material, name);
-    }
+	public BlockFluidInteractive(Fluid fluid, Material material, String name) {
 
-    public BlockFluidInteractive(Fluid fluid, Material material, String modName, String name) {
+		super(fluid, material, name);
+	}
 
-        super(fluid, material, modName, name);
-    }
+	public BlockFluidInteractive(Fluid fluid, Material material, String modName, String name) {
 
-    public boolean addInteraction(Block preBlock, Block postBlock) {
+		super(fluid, material, modName, name);
+	}
 
-        if (preBlock == null || postBlock == null) {
-            return false;
-        }
-        return addInteraction(preBlock.getDefaultState(), postBlock.getDefaultState(), true);
-    }
+	public boolean addInteraction(Block preBlock, Block postBlock) {
 
-    public boolean addInteraction(IBlockState pre, IBlockState post){
-        return addInteraction(pre, post, false);
-    }
+		if (preBlock == null || postBlock == null) {
+			return false;
+		}
+		return addInteraction(preBlock.getDefaultState(), postBlock.getDefaultState(), true);
+	}
 
-    public boolean addInteraction(IBlockState pre, IBlockState post, boolean anyState) {
+	public boolean addInteraction(IBlockState pre, IBlockState post) {
 
-        if (pre == null || post == null) {
-            return false;
-        }
-        if (anyState) {
-            this.anyState.put(pre.getBlock(), post);
-        } else {
-            collisionMap.put(pre, post);
-        }
-        return true;
-    }
+		return addInteraction(pre, post, false);
+	}
 
-    public boolean addInteraction(IBlockState pre, Block postBlock) {
+	public boolean addInteraction(IBlockState pre, IBlockState post, boolean anyState) {
 
-        return addInteraction(pre, postBlock.getDefaultState(), false);
-    }
+		if (pre == null || post == null) {
+			return false;
+		}
+		if (anyState) {
+			this.anyState.put(pre.getBlock(), post);
+		} else {
+			collisionMap.put(pre, post);
+		}
+		return true;
+	}
 
-    public boolean hasInteraction(IBlockState state) {
+	public boolean addInteraction(IBlockState pre, Block postBlock) {
 
-        return collisionMap.containsKey(state) || anyState.containsKey(state.getBlock());
-    }
+		return addInteraction(pre, postBlock.getDefaultState(), false);
+	}
 
-    public IBlockState getInteraction(IBlockState state) {
+	public boolean hasInteraction(IBlockState state) {
 
-        if (collisionMap.containsKey(state)) {
-            return collisionMap.get(state);
-        }
-        return anyState.get(state.getBlock());
-    }
+		return collisionMap.containsKey(state) || anyState.containsKey(state.getBlock());
+	}
+
+	public IBlockState getInteraction(IBlockState state) {
+
+		if (collisionMap.containsKey(state)) {
+			return collisionMap.get(state);
+		}
+		return anyState.get(state.getBlock());
+	}
 
 }
