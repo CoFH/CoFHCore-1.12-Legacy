@@ -70,9 +70,9 @@ public class Proxy {
     @SubscribeEvent
     public void save(Save evt) {
 
-        if (evt.getWorld().provider.getDimension() == 0) {
-            RegistryEnderAttuned.save();
-        }
+//        if (evt.getWorld().provider.getDimension() == 0) {
+//            RegistryEnderAttuned.save();
+//        }
     }
 
     public int getKeyBind(String key) {

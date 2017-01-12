@@ -12,12 +12,13 @@ public class BlockFluidInteractive extends BlockFluidCoFHBase {
     private final HashMap<Block, IBlockState> anyState = new HashMap<Block, IBlockState>();
 
     public BlockFluidInteractive(Fluid fluid, Material material, String name) {
+
         super(fluid, material, name);
     }
 
-    public BlockFluidInteractive(String modName, Fluid fluid, Material material, String name) {
+    public BlockFluidInteractive(Fluid fluid, Material material, String modName, String name) {
 
-        super(modName, fluid, material, name);
+        super(fluid, material, modName, name);
     }
 
     public boolean addInteraction(Block preBlock, Block postBlock) {

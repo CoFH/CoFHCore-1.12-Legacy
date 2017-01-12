@@ -1,6 +1,6 @@
 package cofh.core.gui;
 
-import cofh.core.block.TileCoFHBase;
+import cofh.core.block.TileCoFHBaseOld;
 import cofh.core.gui.client.GuiAugments;
 import cofh.core.gui.client.GuiFriendsList;
 import cofh.core.gui.container.ContainerAugments;
@@ -24,8 +24,8 @@ public class GuiHandler implements IGuiHandler {
         switch (id) {
             case TILE_ID:
                 TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-                if (tile instanceof TileCoFHBase) {
-                    return ((TileCoFHBase) tile).getGuiClient(player.inventory);
+                if (tile instanceof TileCoFHBaseOld) {
+                    return ((TileCoFHBaseOld) tile).getGuiClient(player.inventory);
                 }
                 return null;
             case FRIENDS_ID:
@@ -43,8 +43,8 @@ public class GuiHandler implements IGuiHandler {
         switch (id) {
             case TILE_ID:
                 TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-                if (tile instanceof TileCoFHBase) {
-                    return ((TileCoFHBase) tile).getGuiServer(player.inventory);
+                if (tile instanceof TileCoFHBaseOld) {
+                    return ((TileCoFHBaseOld) tile).getGuiServer(player.inventory);
                 }
                 return null;
             case FRIENDS_ID:

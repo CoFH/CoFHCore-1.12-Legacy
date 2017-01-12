@@ -1,5 +1,6 @@
 package cofh.core.fluid;
 
+import cofh.api.core.IInitializer;
 import cofh.lib.render.particle.EntityDropParticleFX;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -20,52 +21,35 @@ import java.util.Random;
 
 import static net.minecraft.util.EnumFacing.UP;
 
-public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
+public abstract class BlockFluidCoFHBase extends BlockFluidClassic implements IInitializer {
 
-    //String name = "";
-    String modName = "cofh";
+    protected String modName;
+    protected String name;
+
     protected float particleRed = 1.0F;
     protected float particleGreen = 1.0F;
     protected float particleBlue = 1.0F;
     protected boolean shouldDisplaceFluids = false;
 
-    public BlockFluidCoFHBase(Fluid fluid, Material material, String name) {
+    public BlockFluidCoFHBase(Fluid fluid, Material material, String modName, String name) {
 
         super(fluid, material);
 
-        //this.name = name.substring(0, 1).toUpperCase(Locale.US) + name.substring(1);
+        this.name = name;
+        this.modName = modName;
 
-        //setRenderPass(1);
         setUnlocalizedName(modName + ".fluid." + name);
         displacements.put(this, false);
     }
 
-    public BlockFluidCoFHBase(String modName, Fluid fluid, Material material, String name) {
+    public BlockFluidCoFHBase(Fluid fluid, Material material, String name) {
 
-        super(fluid, material);
-
-        //this.name = StringHelper.titleCase(name);
-        this.modName = modName;
-
-        //setRenderPass(1);
-        setUnlocalizedName(modName + ".fluid." + name);
-        displacements.put(this, false);
+        this(fluid, material, "cofh", name);
     }
 
     public BlockFluidCoFHBase setParticleColor(int c) {
 
         return setParticleColor(((c >> 16) & 255) / 255f, ((c >> 8) & 255) / 255f, ((c >> 0) & 255) / 255f);
-    }
-
-    @Override
-    public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState iblockstate, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
-        if (iblockstate.getMaterial().isLiquid()) {
-            double fluidHeight = (double) ((float) (blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(iblockstate.getValue(BlockLiquid.LEVEL)));
-            if (yToTest >= fluidHeight) {
-                return true;
-            }
-        }
-        return super.isEntityInsideMaterial(world, blockpos, iblockstate, entity, yToTest, materialIn, testingHead);
     }
 
     public BlockFluidCoFHBase setParticleColor(float particleRed, float particleGreen, float particleBlue) {
@@ -84,14 +68,14 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
     }
 
     @Override
-    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, net.minecraft.entity.EntityLiving.SpawnPlacementType type) {
-
-        return false;
-    }
-
-    public boolean preInit() {
-
-        return true;
+    public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState iblockstate, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
+        if (iblockstate.getMaterial().isLiquid()) {
+            double fluidHeight = (double) ((float) (blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(iblockstate.getValue(BlockLiquid.LEVEL)));
+            if (yToTest >= fluidHeight) {
+                return true;
+            }
+        }
+        return super.isEntityInsideMaterial(world, blockpos, iblockstate, entity, yToTest, materialIn, testingHead);
     }
 
     //@Override
@@ -129,6 +113,12 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
     }
 
     @Override
+    public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, net.minecraft.entity.EntityLiving.SpawnPlacementType type) {
+
+        return false;
+    }
+
+    @Override
     public boolean canDisplace(IBlockAccess world, BlockPos pos) {
 
         if (!shouldDisplaceFluids && world.getBlockState(pos).getMaterial().isLiquid()) {
@@ -144,6 +134,25 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic {
             return false;
         }
         return super.displaceIfPossible(world, pos);
+    }
+
+    /* IInitializer */
+    @Override
+    public boolean preInit() {
+
+        return false;
+    }
+
+    @Override
+    public boolean initialize() {
+
+        return false;
+    }
+
+    @Override
+    public boolean postInit() {
+
+        return false;
     }
 
 }

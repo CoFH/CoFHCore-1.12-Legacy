@@ -2,7 +2,6 @@ package cofh;
 
 import cofh.core.CoFHProps;
 import cofh.core.Proxy;
-import cofh.core.RegistryEnderAttuned;
 import cofh.core.RegistrySocial;
 import cofh.core.command.CommandFriend;
 import cofh.core.command.CommandHandler;
@@ -16,7 +15,6 @@ import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketSocial;
 import cofh.core.util.ConfigHandler;
 import cofh.core.util.FMLEventHandler;
-import cofh.core.util.IBakeable;
 import cofh.core.util.crafting.RecipeAugmentable;
 import cofh.core.util.crafting.RecipeSecure;
 import cofh.core.util.crafting.RecipeUpgrade;
@@ -28,7 +26,6 @@ import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.mod.BaseMod;
-import cofh.mod.updater.UpdateManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -77,13 +74,6 @@ public class CoFHCore extends BaseMod {
 
     public static MinecraftServer server;
 
-    private final ArrayList<IBakeable> oven = new ArrayList<IBakeable>();
-
-    public static void registerBakeable(IBakeable a) {
-
-        instance.oven.add(a);
-    }
-
     /* INIT SEQUENCE */
     public CoFHCore() {
 
@@ -131,7 +121,6 @@ public class CoFHCore extends BaseMod {
         PacketCore.initialize();
         PacketSocial.initialize();
         RegistrySocial.initialize();
-        RegistryEnderAttuned.initialize();
     }
 
     @EventHandler
@@ -163,8 +152,6 @@ public class CoFHCore extends BaseMod {
     @EventHandler
     public void serverAboutToStart(FMLServerAboutToStartEvent event) {
 
-        RegistryEnderAttuned.createClientRegistry();
-        RegistryEnderAttuned.createServerRegistry();
     }
 
     @EventHandler
@@ -173,16 +160,11 @@ public class CoFHCore extends BaseMod {
         OreDictionaryArbiter.initialize();
         CommandHandler.initCommands(event);
         server = event.getServer();
-        for (IBakeable i : oven) {
-            i.bake();
-        }
     }
 
     public void handleConfigSync(PacketCoFHBase payload) {
 
         FMLEventHandler.instance.handleIdMappingEvent(null);
-
-        RegistryEnderAttuned.createClientRegistry();
     }
 
     public PacketCoFHBase getConfigSync() {
