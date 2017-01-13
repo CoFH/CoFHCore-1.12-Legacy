@@ -17,8 +17,8 @@ public class CoFHEnchantment {
 
 	public static void postInit() {
 
-		holding = new EnchantmentHolding("cofh:holding");
-		multishot = new EnchantmentMultishot("cofh:multishot");
+		holding = new EnchantmentHolding("cofhcore:holding");
+		multishot = new EnchantmentMultishot("cofhcore:multishot");
 
 		GameRegistry.register(holding);
 		GameRegistry.register(multishot);

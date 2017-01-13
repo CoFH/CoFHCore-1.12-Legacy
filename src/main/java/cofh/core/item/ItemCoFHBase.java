@@ -1,22 +1,16 @@
 package cofh.core.item;
 
 import cofh.api.core.IModelRegister;
-import cofh.core.render.CoFHFontRenderer;
 import cofh.lib.util.helpers.ItemHelper;
-import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.StringHelper;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -27,10 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ItemCoFHBase extends Item implements IModelRegister {
-
-	protected String name;
-	protected String modName;
+public class ItemCoFHBase extends ItemCore implements IModelRegister {
 
 	protected TMap<Integer, ItemEntry> itemMap = new THashMap<Integer, ItemEntry>();
 	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
@@ -42,8 +33,7 @@ public class ItemCoFHBase extends Item implements IModelRegister {
 
 	public ItemCoFHBase(String modName) {
 
-		this.modName = modName;
-		setHasSubtypes(true);
+		super(modName);
 	}
 
 	protected void addInformationDelegate(ItemStack stack, EntityPlayer player, List<String> list, boolean check) {
@@ -116,18 +106,6 @@ public class ItemCoFHBase extends Item implements IModelRegister {
 	}
 
 	@Override
-	public boolean hasCustomEntity(ItemStack stack) {
-
-		return SecurityHelper.isSecure(stack);
-	}
-
-	@Override
-	public boolean isItemTool(ItemStack stack) {
-
-		return false;
-	}
-
-	@Override
 	public EnumRarity getRarity(ItemStack stack) {
 
 		int i = stack.getItemDamage();
@@ -163,29 +141,6 @@ public class ItemCoFHBase extends Item implements IModelRegister {
 		this.name = name;
 		name = modName + "." + name;
 		return super.setUnlocalizedName(name);
-	}
-
-	public Item setUnlocalizedNamePass(String name) {
-
-		return super.setUnlocalizedName(name);
-	}
-
-	@Override
-	public Entity createEntity(World world, Entity location, ItemStack stack) {
-
-		if (SecurityHelper.isSecure(stack)) {
-			location.invulnerable = true;
-			location.isImmuneToFire = true;
-			((EntityItem) location).lifespan = Integer.MAX_VALUE;
-		}
-		return null;
-	}
-
-	@Override
-	@SideOnly (Side.CLIENT)
-	public FontRenderer getFontRenderer(ItemStack stack) {
-
-		return CoFHFontRenderer.loadFontRendererStack(stack);
 	}
 
 	/* IModelRegister */

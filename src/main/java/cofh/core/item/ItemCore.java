@@ -2,38 +2,32 @@ package cofh.core.item;
 
 import cofh.core.render.CoFHFontRenderer;
 import cofh.lib.util.helpers.SecurityHelper;
-import cofh.lib.util.helpers.StringHelper;
-import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemBlockCoFHBase extends ItemBlock {
+public class ItemCore extends Item {
 
-	public ItemBlockCoFHBase(Block block) {
+	protected String name;
+	protected String modName;
 
-		super(block);
+	public ItemCore() {
+
+		this("cofh");
+	}
+
+	public ItemCore(String modName) {
+
+		this.modName = modName;
 		setHasSubtypes(true);
-		setMaxDamage(0);
 	}
 
-	@Override
-	public String getItemStackDisplayName(ItemStack stack) {
-
-		return StringHelper.localize(getUnlocalizedName(stack));
-	}
-
-	@Override
-	public int getMetadata(int i) {
-
-		return i;
-	}
-
+	/* STANDARD METHODS */
 	@Override
 	public boolean hasCustomEntity(ItemStack stack) {
 
