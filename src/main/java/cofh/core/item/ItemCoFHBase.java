@@ -151,7 +151,7 @@ public class ItemCoFHBase extends Item implements IModelRegister {
 	@Override
 	public Item setUnlocalizedName(String name) {
 
-		GameRegistry.registerItem(this, name);
+		GameRegistry.register(setRegistryName(name));
 		this.name = name;
 		name = modName + "." + name;
 		return super.setUnlocalizedName(name);
@@ -159,7 +159,7 @@ public class ItemCoFHBase extends Item implements IModelRegister {
 
 	public Item setUnlocalizedName(String name, String registrationName) {
 
-		GameRegistry.registerItem(this, registrationName);
+		GameRegistry.register(setRegistryName(registrationName));
 		this.name = name;
 		name = modName + "." + name;
 		return super.setUnlocalizedName(name);
@@ -194,7 +194,7 @@ public class ItemCoFHBase extends Item implements IModelRegister {
 	public void registerModels() {
 
 		for (Map.Entry<Integer, ItemEntry> entry : itemMap.entrySet()) {
-			ModelLoader.setCustomModelResourceLocation(this, entry.getKey(), new ModelResourceLocation(getRegistryName(), entry.getValue().name));
+			ModelLoader.setCustomModelResourceLocation(this, entry.getKey(), new ModelResourceLocation(getRegistryName(), "type=" + entry.getValue().name));
 		}
 	}
 
