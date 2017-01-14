@@ -18,24 +18,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-//import net.minecraft.client.renderer.texture.IIconRegister;
-//import net.minecraft.util.IIcon;
-
 public class ItemFishingRodAdv extends ItemFishingRod {
 
-	//    protected IIcon normalIcons[] = new IIcon[2];
-
-	public String repairIngot = "";
+	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
+
 	protected boolean showInCreative = true;
+
 	protected int luckModifier = 0;
 	protected int speedModifier = 0;
 
 	public ItemFishingRodAdv(ToolMaterial toolMaterial) {
 
 		this.toolMaterial = toolMaterial;
-		this.setMaxDamage(toolMaterial.getMaxUses());
-		this.addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter() {
+		setMaxDamage(toolMaterial.getMaxUses());
+
+		addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter() {
 			@SideOnly (Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 
@@ -56,15 +54,15 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 		return this;
 	}
 
-	public ItemFishingRodAdv setLuckModifier(int luckMod) {
+	public ItemFishingRodAdv setLuckModifier(int luckModifier) {
 
-		luckModifier = luckMod;
+		this.luckModifier = luckModifier;
 		return this;
 	}
 
-	public ItemFishingRodAdv setSpeedModifier(int speedMod) {
+	public ItemFishingRodAdv setSpeedModifier(int speedModifier) {
 
-		speedModifier = speedMod;
+		this.speedModifier = speedModifier;
 		return this;
 	}
 
@@ -77,28 +75,21 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 	}
 
 	@Override
-	public int getItemEnchantability() {
-
-		return toolMaterial.getEnchantability();
-	}
-
-	@Override
 	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
 
 		return ItemHelper.isOreNameEqual(stack, repairIngot);
-	}
-
-	// TODO: This will need a custom render or something
-	@Override
-	public boolean isFull3D() {
-
-		return true;
 	}
 
 	@Override
 	public boolean isItemTool(ItemStack stack) {
 
 		return true;
+	}
+
+	@Override
+	public int getItemEnchantability() {
+
+		return toolMaterial.getEnchantability();
 	}
 
 	@Override
@@ -109,39 +100,14 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 			stack.damageItem(i, player);
 			player.swingArm(hand);
 		} else {
-			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 			if (!world.isRemote) {
 				world.spawnEntityInWorld(new EntityCoFHFishHook(world, player, luckModifier, speedModifier));
 			}
 			player.swingArm(hand);
 		}
-
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
-
-	//    @Override
-	//    public IIcon getIconIndex(ItemStack stack) {
-	//
-	//        return getIcon(stack, 0);
-	//    }
-	//
-	//    @Override
-	//    public IIcon getIcon(ItemStack stack, int pass) {
-	//
-	//        EntityPlayer player = CoreUtils.getClientPlayer();
-	//
-	//        if (player.inventory.getCurrentItem() == stack && player.fishEntity != null) {
-	//            return this.normalIcons[1];
-	//        }
-	//        return this.normalIcons[0];
-	//    }
-	//
-	//    @Override
-	//    public void registerIcons(IIconRegister ir) {
-	//
-	//        this.normalIcons[0] = ir.registerIcon(this.getIconString() + "_Uncast");
-	//        this.normalIcons[1] = ir.registerIcon(this.getIconString() + "_Cast");
-	//    }
 
 }

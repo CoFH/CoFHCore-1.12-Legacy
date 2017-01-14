@@ -13,7 +13,7 @@ public class ItemSwordAdv extends ItemSword {
 	public String repairIngot = "";
 	protected boolean showInCreative = true;
 
-	public ItemSwordAdv(Item.ToolMaterial toolMaterial) {
+	public ItemSwordAdv(ToolMaterial toolMaterial) {
 
 		super(toolMaterial);
 	}

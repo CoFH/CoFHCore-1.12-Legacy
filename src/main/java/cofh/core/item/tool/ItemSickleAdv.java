@@ -8,7 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.server.SPacketBlockChange;
@@ -20,17 +19,20 @@ public class ItemSickleAdv extends ItemToolAdv {
 
 	public int radius = 3;
 
-	public ItemSickleAdv(Item.ToolMaterial toolMaterial) {
+	public ItemSickleAdv(ToolMaterial toolMaterial) {
 
 		super(3.0F, -2.4F, toolMaterial);
 		addToolClass("sickle");
+
+		effectiveBlocks.add(Blocks.WEB);
+		effectiveBlocks.add(Blocks.VINE);
+		effectiveBlocks.add(Blocks.LEAVES);
+		effectiveBlocks.add(Blocks.LEAVES2);
 
 		effectiveMaterials.add(Material.LEAVES);
 		effectiveMaterials.add(Material.PLANTS);
 		effectiveMaterials.add(Material.VINE);
 		effectiveMaterials.add(Material.WEB);
-		effectiveBlocks.add(Blocks.WEB);
-		effectiveBlocks.add(Blocks.VINE);
 	}
 
 	public ItemSickleAdv setRadius(int radius) {
@@ -49,11 +51,8 @@ public class ItemSickleAdv extends ItemToolAdv {
 		if (player instanceof EntityPlayerMP) {
 			playerMP = (EntityPlayerMP) player;
 		}
-		// check if the block can be broken, since extra block breaks shouldn't instantly break stuff like obsidian
-		// or precious ores you can't harvest while mining stone
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		//        int meta = world.getBlockMetadata(x, y, z);
 		// only effective materials
 		if (!(getToolClasses(player.getHeldItemMainhand()).contains(block.getHarvestTool(state)) || canHarvestBlock(state, player.getHeldItemMainhand()))) {
 			return false;
@@ -73,7 +72,6 @@ public class ItemSickleAdv extends ItemToolAdv {
 			if (!world.isRemote) {
 				block.onBlockHarvested(world, pos, state, player);
 			}
-
 			if (block.removedByPlayer(state, world, pos, player, false)) {
 				block.onBlockDestroyedByPlayer(world, pos, state);
 			}
@@ -86,14 +84,16 @@ public class ItemSickleAdv extends ItemToolAdv {
 			return true;
 		}
 		if (!world.isRemote) {
-			// serverside we reproduce ItemInWorldManager.tryHarvestBlock
-			// ItemInWorldManager.removeBlock
 			block.onBlockHarvested(world, pos, state, player);
 			if (block.removedByPlayer(state, world, pos, player, true)) {
 				block.onBlockDestroyedByPlayer(world, pos, state);
 				block.harvestBlock(world, player, pos, state, world.getTileEntity(pos), player.getHeldItemMainhand());
 				if (block.equals(Blocks.VINE)) {
 					CoreUtils.dropItemStackIntoWorldWithVelocity(new ItemStack(Blocks.VINE), world, pos);
+				} else if (block.equals(Blocks.LEAVES)) {
+					CoreUtils.dropItemStackIntoWorldWithVelocity(new ItemStack(Blocks.LEAVES), world, pos);
+				} else if (block.equals(Blocks.LEAVES2)) {
+					CoreUtils.dropItemStackIntoWorldWithVelocity(new ItemStack(Blocks.LEAVES2), world, pos);
 				}
 				if (xpToDrop > 0) {
 					block.dropXpOnBlockBreak(world, pos, xpToDrop);
@@ -102,10 +102,6 @@ public class ItemSickleAdv extends ItemToolAdv {
 			// always send block update to client
 			playerMP.connection.sendPacket(new SPacketBlockChange(world, pos));
 		} else {
-			// PlayerControllerMP pcmp = Minecraft.getMinecraft().playerController;
-			// clientside we do a "this block has been clicked on long enough to be broken" call. This should not send any new packets
-			// the code above, executed on the server, sends a block-updates that give us the correct state of the block we destroy.
-			// following code can be found in PlayerControllerMP.onPlayerDestroyBlock
 			if (block.removedByPlayer(state, world, pos, player, true)) {
 				block.onBlockDestroyedByPlayer(world, pos, state);
 			}
@@ -126,12 +122,16 @@ public class ItemSickleAdv extends ItemToolAdv {
 			}
 			return false;
 		}
+		int x = pos.getX();
+		// int y = pos.getY();
+		int z = pos.getZ();
+
 		boolean used = false;
 
 		world.playEvent(2001, pos, Block.getStateId(state));
 
-		for (int i = pos.getX() - radius; i <= pos.getX() + radius; i++) {
-			for (int k = pos.getZ() - radius; k <= pos.getZ() + radius; k++) {
+		for (int i = x - radius; i <= x + radius; i++) {
+			for (int k = z - radius; k <= z + radius; k++) {
 				used |= harvestBlock(world, new BlockPos(i, pos.getY(), k), player);
 			}
 		}

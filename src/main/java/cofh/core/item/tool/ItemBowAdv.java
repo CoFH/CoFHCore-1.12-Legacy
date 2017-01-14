@@ -26,20 +26,17 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-//import net.minecraft.client.renderer.texture.IIconRegister;
-//import net.minecraft.util.IIcon;
-
 public class ItemBowAdv extends ItemBow {
 
-	//    protected IIcon normalIcons[] = new IIcon[4];
+	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
 
-	public String repairIngot = "";
-	public float arrowSpeedMultiplier = 2.0F;
-	public float arrowDamageMultiplier = 1.25F;
 	protected boolean showInCreative = true;
 
-	public ItemBowAdv(Item.ToolMaterial toolMaterial) {
+	protected float arrowDamageMultiplier = 1.25F;
+	protected float arrowSpeedMultiplier = 2.0F;
+
+	public ItemBowAdv(ToolMaterial toolMaterial) {
 
 		super();
 		this.toolMaterial = toolMaterial;
@@ -63,15 +60,15 @@ public class ItemBowAdv extends ItemBow {
 		return this;
 	}
 
-	public ItemBowAdv setArrowSpeed(float multiplier) {
-
-		this.arrowSpeedMultiplier = multiplier;
-		return this;
-	}
-
 	public ItemBowAdv setArrowDamage(float multiplier) {
 
 		arrowDamageMultiplier = multiplier;
+		return this;
+	}
+
+	public ItemBowAdv setArrowSpeed(float multiplier) {
+
+		this.arrowSpeedMultiplier = multiplier;
 		return this;
 	}
 

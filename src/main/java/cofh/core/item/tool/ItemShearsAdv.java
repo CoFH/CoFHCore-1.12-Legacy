@@ -10,11 +10,12 @@ import java.util.List;
 
 public class ItemShearsAdv extends ItemShears {
 
-	public String repairIngot = "";
-	protected Item.ToolMaterial toolMaterial;
+	protected String repairIngot = "";
+	protected ToolMaterial toolMaterial;
+
 	protected boolean showInCreative = true;
 
-	public ItemShearsAdv(Item.ToolMaterial toolMaterial) {
+	public ItemShearsAdv(ToolMaterial toolMaterial) {
 
 		this.toolMaterial = toolMaterial;
 		this.setMaxDamage(toolMaterial.getMaxUses());

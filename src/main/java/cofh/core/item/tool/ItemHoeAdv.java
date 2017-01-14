@@ -13,7 +13,7 @@ public class ItemHoeAdv extends ItemHoe {
 	public String repairIngot = "";
 	protected boolean showInCreative = true;
 
-	public ItemHoeAdv(Item.ToolMaterial toolMaterial) {
+	public ItemHoeAdv(ToolMaterial toolMaterial) {
 
 		super(toolMaterial);
 	}

@@ -11,30 +11,37 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
-import java.util.Collection;
 import java.util.List;
 
 public class ItemArmorAdv extends ItemArmor {
 
-	public String repairIngot = "";
-	public String[] textures = new String[2];
-	protected Multimap<String, AttributeModifier> properties = HashMultimap.create();
+	protected String repairIngot = "";
+	protected String[] textures = new String[2];
+
 	protected boolean showInCreative = true;
+
+	protected Multimap<String, AttributeModifier> properties = HashMultimap.create();
 
 	public ItemArmorAdv(ArmorMaterial material, EntityEquipmentSlot type) {
 
 		super(material, 0, type);
 	}
 
-	public ItemArmorAdv setRepairIngot(String repairIngot) {
+	public ItemArmorAdv putAttribute(String attribute, AttributeModifier modifier) {
 
-		this.repairIngot = repairIngot;
+		properties.put(attribute, modifier);
 		return this;
 	}
 
 	public ItemArmorAdv setArmorTextures(String[] textures) {
 
 		this.textures = textures;
+		return this;
+	}
+
+	public ItemArmorAdv setRepairIngot(String repairIngot) {
+
+		this.repairIngot = repairIngot;
 		return this;
 	}
 
@@ -76,17 +83,6 @@ public class ItemArmorAdv extends ItemArmor {
 			return map;
 		}
 		return super.getAttributeModifiers(slot, stack);
-	}
-
-	public ItemArmorAdv putAttribute(String attribute, AttributeModifier modifier) {
-
-		properties.put(attribute, modifier);
-		return this;
-	}
-
-	public Collection<AttributeModifier> removeAttribute(String attribute) {
-
-		return properties.removeAll(attribute);
 	}
 
 }

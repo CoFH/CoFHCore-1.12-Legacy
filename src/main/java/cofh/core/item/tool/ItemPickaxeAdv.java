@@ -11,6 +11,7 @@ public class ItemPickaxeAdv extends ItemToolAdv {
 		addToolClass("pickaxe");
 
 		effectiveBlocks.addAll(ItemPickaxe.EFFECTIVE_ON);
+
 		effectiveMaterials.add(Material.IRON);
 		effectiveMaterials.add(Material.ANVIL);
 		effectiveMaterials.add(Material.ROCK);
