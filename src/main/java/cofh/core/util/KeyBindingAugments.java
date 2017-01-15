@@ -1,4 +1,4 @@
-package cofh.core.augments;
+package cofh.core.util;
 
 import cofh.CoFHCore;
 import cofh.core.gui.GuiHandler;

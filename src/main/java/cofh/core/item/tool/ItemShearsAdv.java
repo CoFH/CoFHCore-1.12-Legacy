@@ -17,8 +17,9 @@ public class ItemShearsAdv extends ItemShears {
 
 	public ItemShearsAdv(ToolMaterial toolMaterial) {
 
+		super();
 		this.toolMaterial = toolMaterial;
-		this.setMaxDamage(toolMaterial.getMaxUses());
+		this.setMaxDamage(toolMaterial.getMaxUses() - 12);
 	}
 
 	public ItemShearsAdv setRepairIngot(String repairIngot) {

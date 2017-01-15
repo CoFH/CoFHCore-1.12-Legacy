@@ -2,6 +2,7 @@ package cofh.core.item.tool;
 
 import cofh.core.entity.EntityCoFHFishHook;
 import cofh.lib.util.helpers.ItemHelper;
+import cofh.lib.util.helpers.ServerHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,15 +24,16 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
 
-	protected boolean showInCreative = true;
-
 	protected int luckModifier = 0;
 	protected int speedModifier = 0;
+
+	protected boolean showInCreative = true;
 
 	public ItemFishingRodAdv(ToolMaterial toolMaterial) {
 
 		this.toolMaterial = toolMaterial;
-		setMaxDamage(toolMaterial.getMaxUses());
+		setMaxStackSize(1);
+		setMaxDamage(toolMaterial.getMaxUses() + 5);
 
 		addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter() {
 			@SideOnly (Side.CLIENT)
@@ -102,7 +104,7 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 		} else {
 			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
-			if (!world.isRemote) {
+			if (ServerHelper.isServerWorld(world)) {
 				world.spawnEntityInWorld(new EntityCoFHFishHook(world, player, luckModifier, speedModifier));
 			}
 			player.swingArm(hand);

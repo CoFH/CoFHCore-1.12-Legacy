@@ -9,7 +9,6 @@ import cofh.core.network.PacketTileInfo;
 import cofh.core.sided.IFunctionSided;
 import cofh.core.sided.IRunnableClient;
 import cofh.core.sided.IRunnableServer;
-import cofh.core.util.KeyBindingEmpower;
 import cofh.core.util.KeyBindingMultiMode;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import net.minecraft.entity.Entity;
@@ -43,7 +42,6 @@ public class Proxy {
 
 	public void registerKeyBinds() {
 
-		CoFHKeyHandler.addServerKeyBind(KeyBindingEmpower.instance);
 		CoFHKeyHandler.addServerKeyBind(KeyBindingMultiMode.instance);
 		// CoFHKeyHandler.addServerKeyBind(KeyBindingAugments.instance);
 	}

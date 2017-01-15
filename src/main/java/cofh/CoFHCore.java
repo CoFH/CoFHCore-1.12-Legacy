@@ -25,7 +25,6 @@ import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
 import cofh.lib.util.helpers.SecurityHelper;
-import cofh.mod.BaseMod;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -33,7 +32,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.CustomProperty;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -46,8 +44,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-@Mod (modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, guiFactory = CoFHCore.modGuiFactory, customProperties = @CustomProperty (k = "cofhversion", v = "true"))
-public class CoFHCore extends BaseMod {
+@Mod (modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, guiFactory = CoFHCore.modGuiFactory)
+public class CoFHCore {
 
 	public static final String modId = "cofhcore";
 	public static final String modName = "CoFH Core";
@@ -73,10 +71,10 @@ public class CoFHCore extends BaseMod {
 
 	public static MinecraftServer server;
 
-	/* INIT SEQUENCE */
+	/* INIT */
 	public CoFHCore() {
 
-		super(log);
+		super();
 	}
 
 	@EventHandler
@@ -84,7 +82,6 @@ public class CoFHCore extends BaseMod {
 
 		CoFHProps.configDir = event.getModConfigurationDirectory();
 
-		//UpdateManager.registerUpdater(new UpdateManager(this, releaseURL, CoFHProps.DOWNLOAD_URL));
 		configCore.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/common.cfg"), true));
 		configClient.setConfiguration(new Configuration(new File(CoFHProps.configDir, "/cofh/core/client.cfg"), true));
 
@@ -282,31 +279,6 @@ public class CoFHCore extends BaseMod {
 		MinecraftForge.EVENT_BUS.register(DropHandler.instance);
 
 		return true;
-	}
-
-	/* BaseMod */
-	@Override
-	public String getModId() {
-
-		return modId;
-	}
-
-	@Override
-	protected String getAssetDir() {
-
-		return "cofh";
-	}
-
-	@Override
-	public String getModName() {
-
-		return modName;
-	}
-
-	@Override
-	public String getModVersion() {
-
-		return version;
 	}
 
 }

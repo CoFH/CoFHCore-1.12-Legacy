@@ -13,17 +13,14 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemArrow;
-import net.minecraft.item.ItemBow;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemBowAdv extends ItemBow {
@@ -31,16 +28,36 @@ public class ItemBowAdv extends ItemBow {
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
 
-	protected boolean showInCreative = true;
-
 	protected float arrowDamageMultiplier = 1.25F;
 	protected float arrowSpeedMultiplier = 2.0F;
 
+	protected boolean showInCreative = true;
+
 	public ItemBowAdv(ToolMaterial toolMaterial) {
 
-		super();
 		this.toolMaterial = toolMaterial;
-		setMaxDamage(toolMaterial.getMaxUses());
+		setMaxStackSize(1);
+		setMaxDamage(toolMaterial.getMaxUses() + 325);
+
+		addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
+			@SideOnly (Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+
+				if (entityIn == null) {
+					return 0.0F;
+				} else {
+					ItemStack itemstack = entityIn.getActiveItemStack();
+					return itemstack != null && itemstack.getItem() instanceof ItemBow ? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+				}
+			}
+		});
+		addPropertyOverride(new ResourceLocation("pulling"), new IItemPropertyGetter() {
+			@SideOnly (Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+
+				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
+			}
+		});
 	}
 
 	public int cofh_canEnchantApply(ItemStack stack, Enchantment ench) {
@@ -87,28 +104,21 @@ public class ItemBowAdv extends ItemBow {
 	}
 
 	@Override
-	public int getItemEnchantability() {
-
-		return toolMaterial.getEnchantability();
-	}
-
-	@Override
 	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
 
 		return ItemHelper.isOreNameEqual(stack, repairIngot);
-	}
-
-	// TODO: This will need a custom render or something
-	@Override
-	public boolean isFull3D() {
-
-		return true;
 	}
 
 	@Override
 	public boolean isItemTool(ItemStack stack) {
 
 		return true;
+	}
+
+	@Override
+	public int getItemEnchantability() {
+
+		return toolMaterial.getEnchantability();
 	}
 
 	@Override

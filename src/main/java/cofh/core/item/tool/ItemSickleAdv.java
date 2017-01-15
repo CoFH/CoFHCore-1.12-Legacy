@@ -17,7 +17,7 @@ import net.minecraftforge.common.ForgeHooks;
 
 public class ItemSickleAdv extends ItemToolAdv {
 
-	public int radius = 3;
+	protected int radius = 3;
 
 	public ItemSickleAdv(ToolMaterial toolMaterial) {
 

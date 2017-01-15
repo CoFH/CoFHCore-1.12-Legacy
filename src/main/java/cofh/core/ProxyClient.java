@@ -12,7 +12,6 @@ import cofh.core.render.ShaderHelper;
 import cofh.core.sided.IFunctionSided;
 import cofh.core.sided.IRunnableClient;
 import cofh.core.sided.IRunnableServer;
-import cofh.core.util.KeyBindingEmpower;
 import cofh.core.util.KeyBindingMultiMode;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.client.Minecraft;
@@ -46,9 +45,8 @@ public class ProxyClient extends Proxy {
 
 	public static CoFHFontRenderer fontRenderer;
 
-	public static final KeyBind KEYBINDING_EMPOWER = new KeyBind("key.cofh.empower", Keyboard.KEY_V, "key.cofh.category");
-	public static final KeyBind KEYBINDING_MULTIMODE = new KeyBind("key.cofh.multimode", Keyboard.KEY_C, "key.cofh.category");
-	public static final KeyBind KEYBINDING_AUGMENTS = null; //new KeyBind("key.cofh.augments", Keyboard.KEY_G, "key.cofh.category");
+	public static final KeyBind KEYBINDING_MULTIMODE = new KeyBind("key.cofh.multimode", Keyboard.KEY_V, "key.cofh.category");
+	public static final KeyBind KEYBINDING_AUGMENTS = null; //new KeyBind("key.cofh.augments", Keyboard.KEY_C, "key.cofh.category");
 
 	public static class KeyBind extends KeyBinding {
 
@@ -182,11 +180,9 @@ public class ProxyClient extends Proxy {
 	public void registerKeyBinds() {
 
 		super.registerKeyBinds();
-		CoFHKeyHandler.addKeyBind(KeyBindingEmpower.instance);
 		CoFHKeyHandler.addKeyBind(KeyBindingMultiMode.instance);
 		// CoFHKeyHandler.addKeyBind(KeyBindingAugments.instance);
 
-		ClientRegistry.registerKeyBinding(KEYBINDING_EMPOWER);
 		ClientRegistry.registerKeyBinding(KEYBINDING_MULTIMODE);
 		// ClientRegistry.registerKeyBinding(KEYBINDING_AUGMENTS);
 	}
@@ -224,9 +220,7 @@ public class ProxyClient extends Proxy {
 	@Override
 	public int getKeyBind(String key) {
 
-		if (key.equalsIgnoreCase("cofh.empower")) {
-			return KEYBINDING_EMPOWER.getKeyCode();
-		} else if (key.equalsIgnoreCase("cofh.multimode")) {
+		if (key.equalsIgnoreCase("cofh.multimode")) {
 			return KEYBINDING_MULTIMODE.getKeyCode();
 		} else if (key.equalsIgnoreCase("cofh.augment")) {
 			//return KEYBINDING_AUGMENTS.getKeyCode();
@@ -278,7 +272,7 @@ public class ProxyClient extends Proxy {
 	}
 
 	/*@SubscribeEvent
-    public void blockRenderBlockOverlay(RenderBlockOverlayEvent evt) {
+	public void blockRenderBlockOverlay(RenderBlockOverlayEvent evt) {
 
 		if (evt.overlayType == OverlayType.BLOCK && !evt.blockForOverlay.isNormalCube()) {
 			// occasionally the overlay code screws up and tries to overlay a block that didn't pass the checks, this fixes that

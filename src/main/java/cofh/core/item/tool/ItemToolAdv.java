@@ -30,6 +30,7 @@ public abstract class ItemToolAdv extends ItemTool {
 	protected String repairIngot = "";
 	protected THashSet<Block> effectiveBlocks = new THashSet<Block>();
 	protected THashSet<Material> effectiveMaterials = new THashSet<Material>();
+
 	protected int harvestLevel = -1;
 
 	protected boolean showInCreative = true;

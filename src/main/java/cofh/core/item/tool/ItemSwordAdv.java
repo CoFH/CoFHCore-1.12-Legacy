@@ -10,7 +10,8 @@ import java.util.List;
 
 public class ItemSwordAdv extends ItemSword {
 
-	public String repairIngot = "";
+	protected String repairIngot = "";
+
 	protected boolean showInCreative = true;
 
 	public ItemSwordAdv(ToolMaterial toolMaterial) {

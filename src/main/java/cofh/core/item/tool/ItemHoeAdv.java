@@ -11,6 +11,7 @@ import java.util.List;
 public class ItemHoeAdv extends ItemHoe {
 
 	public String repairIngot = "";
+
 	protected boolean showInCreative = true;
 
 	public ItemHoeAdv(ToolMaterial toolMaterial) {
