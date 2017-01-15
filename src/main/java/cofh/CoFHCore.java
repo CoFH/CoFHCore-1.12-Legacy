@@ -1,7 +1,6 @@
 package cofh;
 
 import cofh.core.CoFHProps;
-import cofh.core.Proxy;
 import cofh.core.RegistrySocial;
 import cofh.core.command.CommandFriend;
 import cofh.core.command.CommandHandler;
@@ -13,6 +12,7 @@ import cofh.core.network.PacketCore;
 import cofh.core.network.PacketCore.PacketTypes;
 import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketSocial;
+import cofh.core.proxy.Proxy;
 import cofh.core.util.ConfigHandler;
 import cofh.core.util.FMLEventHandler;
 import cofh.core.util.crafting.RecipeAugmentable;
@@ -44,29 +44,29 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-@Mod (modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, guiFactory = CoFHCore.modGuiFactory)
+@Mod (modid = CoFHCore.MOD_ID, name = CoFHCore.MOD_NAME, version = CoFHCore.VERSION, dependencies = CoFHCore.DEPENDENCIES, guiFactory = CoFHCore.MOD_GUI_FACTORY)
 public class CoFHCore {
 
-	public static final String modId = "cofhcore";
-	public static final String modName = "CoFH Core";
-	public static final String version = "1.0.0";
-	public static final String version_max = "1.1.0";
-	public static final String dependencies = CoFHProps.FORGE_DEP;
-	public static final String modGuiFactory = "cofh.core.gui.GuiConfigCoreFactory";
+	public static final String MOD_ID = "cofhcore";
+	public static final String MOD_NAME = "CoFH Core";
 
-	public static final String VERSION_GROUP = "required-after:" + modId + "@[" + version + "," + version_max + ");";
-	public static final String releaseURL = "https://raw.github.com/CoFH/VERSION/master/" + modId;
+	public static final String VERSION = "3.2.0";
+	public static final String VERSION_MAX = "3.3.0";
+	public static final String VERSION_GROUP = "required-after:" + MOD_ID + "@[" + VERSION + "," + VERSION_MAX + ");";
 
-	@Instance (modId)
+	public static final String DEPENDENCIES = CoFHProps.FORGE_DEP;
+	public static final String MOD_GUI_FACTORY = "cofh.core.gui.GuiConfigCoreFactory";
+
+	@Instance (MOD_ID)
 	public static CoFHCore instance;
 
-	@SidedProxy (clientSide = "cofh.core.ProxyClient", serverSide = "cofh.core.Proxy")
+	@SidedProxy (clientSide = "cofh.core.proxy.ProxyClient", serverSide = "cofh.core.proxy.Proxy")
 	public static Proxy proxy;
 
-	public static final Logger log = LogManager.getLogger(modId);
-	public static final ConfigHandler configCore = new ConfigHandler(version);
-	public static final ConfigHandler configLoot = new ConfigHandler(version);
-	public static final ConfigHandler configClient = new ConfigHandler(version);
+	public static final Logger log = LogManager.getLogger(MOD_ID);
+	public static final ConfigHandler configCore = new ConfigHandler(VERSION);
+	public static final ConfigHandler configLoot = new ConfigHandler(VERSION);
+	public static final ConfigHandler configClient = new ConfigHandler(VERSION);
 	public static final GuiHandler guiHandler = new GuiHandler();
 
 	public static MinecraftServer server;

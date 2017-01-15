@@ -1,6 +1,6 @@
 package cofh.core.render.customcharrendering;
 
-import cofh.core.ProxyClient;
+import cofh.core.proxy.ProxyClient;
 import cofh.core.render.CoFHFontRenderer;
 import cofh.lib.util.helpers.SecurityHelper;
 import com.google.common.collect.Iterables;

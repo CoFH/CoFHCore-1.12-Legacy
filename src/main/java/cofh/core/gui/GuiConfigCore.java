@@ -15,7 +15,7 @@ public class GuiConfigCore extends GuiConfig {
 
 	public GuiConfigCore(GuiScreen parentScreen) {
 
-		super(parentScreen, getConfigElements(parentScreen), CoFHCore.modId, false, false, CoFHCore.modName);
+		super(parentScreen, getConfigElements(parentScreen), CoFHCore.MOD_ID, false, false, CoFHCore.MOD_NAME);
 	}
 
 	public static final String[] CATEGORIES_CLIENT = { "General", "Global", "Interface", "Security", "Tab" };

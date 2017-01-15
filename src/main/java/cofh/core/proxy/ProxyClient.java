@@ -1,7 +1,9 @@
-package cofh.core;
+package cofh.core.proxy;
 
 import codechicken.lib.texture.TextureUtils;
 import cofh.CoFHCore;
+import cofh.core.CoFHProps;
+import cofh.core.RegistrySocial;
 import cofh.core.entity.EntityCoFHArrow;
 import cofh.core.gui.client.GuiFriendsList;
 import cofh.core.gui.element.*;

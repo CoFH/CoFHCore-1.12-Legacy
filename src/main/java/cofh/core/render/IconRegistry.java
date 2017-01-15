@@ -37,9 +37,10 @@ public class IconRegistry {
 	}
 
 	public static TextureAtlasSprite getIcon(String iconName) {
-        if (!icons.containsKey(iconName)) {
-            return RenderHelper.textureMap().getMissingSprite();
-        }
+
+		if (!icons.containsKey(iconName)) {
+			return RenderHelper.textureMap().getMissingSprite();
+		}
 		return icons.get(iconName);
 	}
 

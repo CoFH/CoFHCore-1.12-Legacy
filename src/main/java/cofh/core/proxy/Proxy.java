@@ -1,5 +1,6 @@
-package cofh.core;
+package cofh.core.proxy;
 
+import cofh.core.CoFHProps;
 import cofh.core.chat.PacketIndexedChat;
 import cofh.core.key.CoFHKeyHandler;
 import cofh.core.key.KeyPacket;

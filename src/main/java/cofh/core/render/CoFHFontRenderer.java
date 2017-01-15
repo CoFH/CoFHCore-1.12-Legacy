@@ -1,6 +1,6 @@
 package cofh.core.render;
 
-import cofh.core.ProxyClient;
+import cofh.core.proxy.ProxyClient;
 import cofh.core.render.customcharrendering.ICustomCharRenderer;
 import cofh.core.render.customcharrendering.RenderPlayerFace;
 import cofh.core.render.customcharrendering.RenderSprite;

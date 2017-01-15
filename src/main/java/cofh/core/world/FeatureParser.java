@@ -47,7 +47,7 @@ public class FeatureParser {
 
 	private static File worldGenFolder;
 	private static File vanillaGen;
-	private static final String vanillaGenInternal = "assets/cofh/world/Vanilla.json";
+	private static final String worldGenVanilla = "assets/cofh/world/vanilla.json";
 	private static HashMap<String, IFeatureParser> templateHandlers = new HashMap<String, IFeatureParser>();
 	private static HashMap<String, IGeneratorParser> generatorHandlers = new HashMap<String, IGeneratorParser>();
 	private static Logger log = LogManager.getLogger("CoFHWorld");
@@ -90,11 +90,11 @@ public class FeatureParser {
 				// pokemon!
 			}
 		}
-		vanillaGen = new File(CoFHProps.configDir, "/cofh/world/Vanilla.json");
+		vanillaGen = new File(CoFHProps.configDir, "/cofh/world/vanilla.json");
 
 		try {
 			if (vanillaGen.createNewFile()) {
-				CoreUtils.copyFileUsingStream(vanillaGenInternal, vanillaGen);
+				CoreUtils.copyFileUsingStream(worldGenVanilla, vanillaGen);
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();

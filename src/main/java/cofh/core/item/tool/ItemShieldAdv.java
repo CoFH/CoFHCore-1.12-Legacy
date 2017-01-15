@@ -86,8 +86,8 @@ public class ItemShieldAdv extends Item {
 		return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
 	}
 
-	public EnumAction getItemUseAction(ItemStack stack)
-	{
+	public EnumAction getItemUseAction(ItemStack stack) {
+
 		return EnumAction.BLOCK;
 	}
 

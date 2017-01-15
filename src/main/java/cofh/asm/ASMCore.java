@@ -3,8 +3,6 @@ package cofh.asm;
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
 import cofh.asm.relauncher.Substitutable;
-import cofh.mod.updater.ModRange;
-import cofh.mod.updater.ModVersion;
 import com.google.common.base.Throwables;
 import gnu.trove.set.hash.THashSet;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -1866,7 +1864,7 @@ class ASMCore {
 				ModContainer modc = getLoadedMods().get(mod);
 				try {
 					if (Boolean.parseBoolean(modc.getCustomModProperties().get("cofhversion"))) {
-						ret = !ModRange.createFromVersionSpec(mod, clazz).containsVersion(new ModVersion(mod, modc.getVersion()));
+						//ret = !ModRange.createFromVersionSpec(mod, clazz).containsVersion(new ModVersion(mod, modc.getVersion()));
 					} else {
 						ret = !VersionRange.createFromVersionSpec(clazz).containsVersion(modc.getProcessedVersion());
 					}

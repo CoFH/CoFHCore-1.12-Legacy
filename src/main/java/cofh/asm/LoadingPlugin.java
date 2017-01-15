@@ -1,19 +1,19 @@
 package cofh.asm;
 
-import cofh.mod.ChildMod;
-import cofh.mod.ChildModContainer;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.launchwrapper.LaunchClassLoader;
-import net.minecraftforge.fml.common.*;
+import net.minecraftforge.fml.common.DummyModContainer;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.LoadController;
+import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.relauncher.FMLInjectionData;
 import net.minecraftforge.fml.relauncher.IFMLCallHook;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.apache.logging.log4j.Level;
-import org.objectweb.asm.Type;
 
 import java.io.File;
 import java.io.IOException;
@@ -152,7 +152,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 		public Void call() throws Exception {
 
 			scanMods();
-			ModContainerFactory.instance().registerContainerType(Type.getType(ChildMod.class), ChildModContainer.class);
+			//ModContainerFactory.instance().registerContainerType(Type.getType(ChildMod.class), ChildModContainer.class);
 			return null;
 		}
 

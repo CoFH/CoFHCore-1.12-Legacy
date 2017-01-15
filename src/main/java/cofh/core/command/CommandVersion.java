@@ -29,7 +29,7 @@ public class CommandVersion implements ISubCommand {
 	@Override
 	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] arguments) throws CommandException {
 
-		sender.addChatMessage(new TextComponentString(StringHelper.localize("info.cofh.command.version.0") + " " + CoFHCore.version + "."));
+		sender.addChatMessage(new TextComponentString(StringHelper.localize("info.cofh.command.version.0") + " " + CoFHCore.VERSION + "."));
 	}
 
 	@Override
