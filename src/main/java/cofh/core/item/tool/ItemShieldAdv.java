@@ -41,6 +41,18 @@ public class ItemShieldAdv extends Item {
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
 	}
 
+	public ItemShieldAdv setRepairIngot(String repairIngot) {
+
+		this.repairIngot = repairIngot;
+		return this;
+	}
+
+	public ItemShieldAdv setShowInCreative(boolean showInCreative) {
+
+		this.showInCreative = showInCreative;
+		return this;
+	}
+
 	@Override
 	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 
