@@ -7,7 +7,7 @@ import net.minecraftforge.fluids.Fluid;
 
 import java.util.HashMap;
 
-public class BlockFluidInteractive extends BlockFluidCoFHBase {
+public class BlockFluidInteractive extends BlockFluidCore {
 
 	private final HashMap<IBlockState, IBlockState> collisionMap = new HashMap<IBlockState, IBlockState>();
 	private final HashMap<Block, IBlockState> anyState = new HashMap<Block, IBlockState>();

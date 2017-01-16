@@ -1,4 +1,4 @@
-package cofh.plugins.jei;
+package cofh.core.plugins.jei;
 
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.TabBase;

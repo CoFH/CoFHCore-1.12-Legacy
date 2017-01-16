@@ -1,4 +1,4 @@
-package cofh.plugins.jei;
+package cofh.core.plugins.jei;
 
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IModIngredientRegistration;

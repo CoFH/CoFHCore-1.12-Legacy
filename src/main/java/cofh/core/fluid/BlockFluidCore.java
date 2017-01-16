@@ -1,16 +1,21 @@
 package cofh.core.fluid;
 
 import cofh.api.core.IInitializer;
+import cofh.api.core.IModelRegister;
+import cofh.core.util.StateMapper;
 import cofh.lib.render.particle.EntityDropParticleFX;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -21,7 +26,7 @@ import java.util.Random;
 
 import static net.minecraft.util.EnumFacing.UP;
 
-public abstract class BlockFluidCoFHBase extends BlockFluidClassic implements IInitializer {
+public abstract class BlockFluidCore extends BlockFluidClassic implements IInitializer, IModelRegister {
 
 	protected String modName;
 	protected String name;
@@ -31,7 +36,7 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic implements II
 	protected float particleBlue = 1.0F;
 	protected boolean shouldDisplaceFluids = false;
 
-	public BlockFluidCoFHBase(Fluid fluid, Material material, String modName, String name) {
+	public BlockFluidCore(Fluid fluid, Material material, String modName, String name) {
 
 		super(fluid, material);
 
@@ -42,17 +47,17 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic implements II
 		displacements.put(this, false);
 	}
 
-	public BlockFluidCoFHBase(Fluid fluid, Material material, String name) {
+	public BlockFluidCore(Fluid fluid, Material material, String name) {
 
 		this(fluid, material, "cofh", name);
 	}
 
-	public BlockFluidCoFHBase setParticleColor(int c) {
+	public BlockFluidCore setParticleColor(int c) {
 
 		return setParticleColor(((c >> 16) & 255) / 255f, ((c >> 8) & 255) / 255f, ((c >> 0) & 255) / 255f);
 	}
 
-	public BlockFluidCoFHBase setParticleColor(float particleRed, float particleGreen, float particleBlue) {
+	public BlockFluidCore setParticleColor(float particleRed, float particleGreen, float particleBlue) {
 
 		this.particleRed = particleRed;
 		this.particleGreen = particleGreen;
@@ -61,7 +66,7 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic implements II
 		return this;
 	}
 
-	public BlockFluidCoFHBase setDisplaceFluids(boolean a) {
+	public BlockFluidCore setDisplaceFluids(boolean a) {
 
 		this.shouldDisplaceFluids = a;
 		return this;
@@ -135,6 +140,21 @@ public abstract class BlockFluidCoFHBase extends BlockFluidClassic implements II
 			return false;
 		}
 		return super.displaceIfPossible(world, pos);
+	}
+
+	/* IModelRegister */
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerModels() {
+
+		Item item = Item.getItemFromBlock(this);
+		StateMapper mapper = new StateMapper(modName, "fluid", name);
+
+		// Item Model
+		ModelBakery.registerItemVariants(item);
+		ModelLoader.setCustomMeshDefinition(item, mapper);
+		// Block Model
+		ModelLoader.setCustomStateMapper(this, mapper);
 	}
 
 	/* IInitializer */

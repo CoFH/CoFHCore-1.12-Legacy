@@ -23,7 +23,7 @@ public class ItemAxeAdv extends ItemToolAdv {
 		effectiveMaterials.add(Material.CACTUS);
 		effectiveMaterials.add(Material.GOURD);
 
-		damageVsEntity = damageVsEntity * 1.25F;
+		damageVsEntity = damageVsEntity + 1;
 	}
 
 }

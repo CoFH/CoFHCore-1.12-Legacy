@@ -15,7 +15,7 @@ public class ItemHammerAdv extends ItemToolAdv {
 
 	public ItemHammerAdv(ToolMaterial toolMaterial) {
 
-		this(-4.0F, toolMaterial);
+		this(-3.5F, toolMaterial);
 	}
 
 	public ItemHammerAdv(float attackSpeed, ToolMaterial toolMaterial) {
@@ -33,7 +33,7 @@ public class ItemHammerAdv extends ItemToolAdv {
 		effectiveMaterials.add(Material.GLASS);
 		effectiveMaterials.add(Material.REDSTONE_LIGHT);
 
-		damageVsEntity = damageVsEntity * 1.5F;
+		damageVsEntity = damageVsEntity + 2;
 	}
 
 	@Override
