@@ -7,7 +7,7 @@ import cofh.asmhooks.event.ModPopulateChunkEvent;
 import cofh.core.world.TickHandlerWorld.RetroChunkCoord;
 import cofh.lib.util.LinkedHashList;
 import cofh.lib.util.helpers.MathHelper;
-import cofh.lib.util.position.ChunkCoord;
+import cofh.lib.util.ChunkCoord;
 import gnu.trove.set.hash.THashSet;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;

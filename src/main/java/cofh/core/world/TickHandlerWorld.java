@@ -1,7 +1,7 @@
 package cofh.core.world;
 
 import cofh.CoFHCore;
-import cofh.lib.util.position.ChunkCoord;
+import cofh.lib.util.ChunkCoord;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.hash.THashSet;
 import net.minecraft.nbt.NBTTagList;

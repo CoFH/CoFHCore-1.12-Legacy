@@ -229,7 +229,7 @@ public class CoreUtils {
 			return teleportEntityTo((EntityLivingBase) entity, x, y, z);
 		} else {
 			entity.setLocationAndAngles(x, y, z, entity.rotationYaw, entity.rotationPitch);
-			SoundUtils.playSoundAt(entity, SoundCategory.BLOCKS, SoundEvents.ENTITY_ENDERMEN_TELEPORT);
+			entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
 		}
 		return true;
 	}
@@ -242,7 +242,7 @@ public class CoreUtils {
 		}
 
 		entity.setPositionAndUpdate(event.getTargetX(), event.getTargetY(), event.getTargetZ());
-		SoundUtils.playSoundAt(entity, SoundCategory.BLOCKS, SoundEvents.ENTITY_ENDERMEN_TELEPORT);
+		entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
 
 		return true;
 	}
