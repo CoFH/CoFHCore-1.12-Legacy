@@ -3,9 +3,9 @@ package cofh.core.item.tool;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemSpade;
 
-public class ItemShovelAdv extends ItemToolAdv {
+public class ItemShovelCore extends ItemToolCore {
 
-	public ItemShovelAdv(ToolMaterial toolMaterial) {
+	public ItemShovelCore(ToolMaterial toolMaterial) {
 
 		super(1.0F, -3.0F, toolMaterial);
 		addToolClass("shovel");

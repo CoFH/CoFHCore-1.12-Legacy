@@ -5,37 +5,41 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-public class ItemShearsAdv extends ItemShears {
+public class ItemShearsCore extends ItemShears {
 
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
 
 	protected boolean showInCreative = true;
 
-	public ItemShearsAdv(ToolMaterial toolMaterial) {
+	public ItemShearsCore(ToolMaterial toolMaterial) {
 
 		super();
 		this.toolMaterial = toolMaterial;
 		this.setMaxDamage(toolMaterial.getMaxUses() - 12);
 	}
 
-	public ItemShearsAdv setRepairIngot(String repairIngot) {
+	public ItemShearsCore setRepairIngot(String repairIngot) {
 
 		this.repairIngot = repairIngot;
 		return this;
 	}
 
-	public ItemShearsAdv setShowInCreative(boolean showInCreative) {
+	public ItemShearsCore setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
 		return this;
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
+	@SideOnly (Side.CLIENT)
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
 
 		if (showInCreative) {
 			list.add(new ItemStack(item, 1, 0));

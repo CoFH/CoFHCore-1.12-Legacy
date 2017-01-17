@@ -20,10 +20,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemBowAdv extends ItemBow {
+public class ItemBowCore extends ItemBow {
 
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
@@ -33,7 +34,7 @@ public class ItemBowAdv extends ItemBow {
 
 	protected boolean showInCreative = true;
 
-	public ItemBowAdv(ToolMaterial toolMaterial) {
+	public ItemBowCore(ToolMaterial toolMaterial) {
 
 		this.toolMaterial = toolMaterial;
 		setMaxStackSize(1);
@@ -71,32 +72,33 @@ public class ItemBowAdv extends ItemBow {
 		return -1;
 	}
 
-	public ItemBowAdv setRepairIngot(String repairIngot) {
+	public ItemBowCore setRepairIngot(String repairIngot) {
 
 		this.repairIngot = repairIngot;
 		return this;
 	}
 
-	public ItemBowAdv setArrowDamage(float multiplier) {
+	public ItemBowCore setArrowDamage(float multiplier) {
 
 		arrowDamageMultiplier = multiplier;
 		return this;
 	}
 
-	public ItemBowAdv setArrowSpeed(float multiplier) {
+	public ItemBowCore setArrowSpeed(float multiplier) {
 
 		this.arrowSpeedMultiplier = multiplier;
 		return this;
 	}
 
-	public ItemBowAdv setShowInCreative(boolean showInCreative) {
+	public ItemBowCore setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
 		return this;
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+	@SideOnly (Side.CLIENT)
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
 
 		if (showInCreative) {
 			list.add(new ItemStack(item, 1, 0));

@@ -18,11 +18,14 @@ import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
 
-public abstract class ItemToolAdv extends ItemTool {
+public abstract class ItemToolCore extends ItemTool {
 
 	private final TLinkedHashSet<String> toolClasses = new TLinkedHashSet<String>();
 	private final Set<String> immutableClasses = java.util.Collections.unmodifiableSet(toolClasses);
@@ -35,24 +38,24 @@ public abstract class ItemToolAdv extends ItemTool {
 
 	protected boolean showInCreative = true;
 
-	public ItemToolAdv(float baseDamage, float attackSpeed, ToolMaterial toolMaterial) {
+	public ItemToolCore(float baseDamage, float attackSpeed, ToolMaterial toolMaterial) {
 
 		super(baseDamage, attackSpeed, toolMaterial, null);
 	}
 
-	public ItemToolAdv setHarvestLevel(int harvestLevel) {
+	public ItemToolCore setHarvestLevel(int harvestLevel) {
 
 		this.harvestLevel = harvestLevel;
 		return this;
 	}
 
-	public ItemToolAdv setRepairIngot(String repairIngot) {
+	public ItemToolCore setRepairIngot(String repairIngot) {
 
 		this.repairIngot = repairIngot;
 		return this;
 	}
 
-	public ItemToolAdv setShowInCreative(boolean showInCreative) {
+	public ItemToolCore setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
 		return this;
@@ -158,7 +161,8 @@ public abstract class ItemToolAdv extends ItemTool {
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+	@SideOnly (Side.CLIENT)
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
 
 		if (showInCreative) {
 			list.add(new ItemStack(item, 1, 0));

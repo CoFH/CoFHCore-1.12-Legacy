@@ -14,17 +14,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemShieldAdv extends Item {
+public class ItemShieldCore extends Item {
 
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
 
 	protected boolean showInCreative = true;
 
-	public ItemShieldAdv(ToolMaterial toolMaterial) {
+	public ItemShieldCore(ToolMaterial toolMaterial) {
 
 		super();
 		this.toolMaterial = toolMaterial;
@@ -41,20 +42,21 @@ public class ItemShieldAdv extends Item {
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
 	}
 
-	public ItemShieldAdv setRepairIngot(String repairIngot) {
+	public ItemShieldCore setRepairIngot(String repairIngot) {
 
 		this.repairIngot = repairIngot;
 		return this;
 	}
 
-	public ItemShieldAdv setShowInCreative(boolean showInCreative) {
+	public ItemShieldCore setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
 		return this;
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+	@SideOnly (Side.CLIENT)
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
 
 		if (showInCreative) {
 			list.add(new ItemStack(item, 1, 0));

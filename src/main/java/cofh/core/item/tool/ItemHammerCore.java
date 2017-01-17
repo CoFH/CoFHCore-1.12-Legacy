@@ -11,14 +11,14 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-public class ItemHammerAdv extends ItemToolAdv {
+public class ItemHammerCore extends ItemToolCore {
 
-	public ItemHammerAdv(ToolMaterial toolMaterial) {
+	public ItemHammerCore(ToolMaterial toolMaterial) {
 
 		this(-3.5F, toolMaterial);
 	}
 
-	public ItemHammerAdv(float attackSpeed, ToolMaterial toolMaterial) {
+	public ItemHammerCore(float attackSpeed, ToolMaterial toolMaterial) {
 
 		super(4.0F, attackSpeed, toolMaterial);
 		addToolClass("pickaxe");

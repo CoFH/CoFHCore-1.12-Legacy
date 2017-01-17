@@ -5,34 +5,38 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-public class ItemSwordAdv extends ItemSword {
+public class ItemSwordCore extends ItemSword {
 
 	protected String repairIngot = "";
 
 	protected boolean showInCreative = true;
 
-	public ItemSwordAdv(ToolMaterial toolMaterial) {
+	public ItemSwordCore(ToolMaterial toolMaterial) {
 
 		super(toolMaterial);
 	}
 
-	public ItemSwordAdv setRepairIngot(String repairIngot) {
+	public ItemSwordCore setRepairIngot(String repairIngot) {
 
 		this.repairIngot = repairIngot;
 		return this;
 	}
 
-	public ItemSwordAdv setShowInCreative(boolean showInCreative) {
+	public ItemSwordCore setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
 		return this;
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
+	@SideOnly (Side.CLIENT)
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
 
 		if (showInCreative) {
 			list.add(new ItemStack(item, 1, 0));

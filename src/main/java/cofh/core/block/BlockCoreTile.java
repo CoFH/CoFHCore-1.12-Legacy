@@ -35,18 +35,16 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntityProvider, IBlockInfo, IDismantleable, IInitializer {
+public abstract class BlockCoreTile extends BlockCore implements ITileEntityProvider, IBlockInfo, IDismantleable, IInitializer {
 
-	public static final ArrayList<ItemStack> NO_DROP = new ArrayList<ItemStack>();
-
-	public BlockCoFHTile(Material material) {
+	public BlockCoreTile(Material material) {
 
 		super(material);
 
 		setSoundType(SoundType.STONE);
 	}
 
-	public BlockCoFHTile(Material material, String modName) {
+	public BlockCoreTile(Material material, String modName) {
 
 		super(material, modName);
 
@@ -65,8 +63,8 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 
 		TileEntity tile = world.getTileEntity(pos);
 
-		if (tile instanceof TileCoFHBase) {
-			return ((TileCoFHBase) tile).getExtendedState(state, world, pos);
+		if (tile instanceof TileCore) {
+			return ((TileCore) tile).getExtendedState(state, world, pos);
 		}
 		return state;
 	}
@@ -76,8 +74,8 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 
 		TileEntity tile = world.getTileEntity(pos);
 
-		if (tile instanceof TileCoFHBase) {
-			((TileCoFHBase) tile).blockBroken();
+		if (tile instanceof TileCore) {
+			((TileCore) tile).blockBroken();
 		}
 		if (tile instanceof IInventoryRetainer && ((IInventoryRetainer) tile).retainInventory()) {
 			// do nothing
@@ -157,9 +155,9 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 					break;
 			}
 		}
-		if (tile instanceof TileCoFHBase) {
-			((TileCoFHBase) tile).onNeighborBlockChange();
-			((TileCoFHBase) tile).blockPlaced();
+		if (tile instanceof TileCore) {
+			((TileCore) tile).onNeighborBlockChange();
+			((TileCore) tile).blockPlaced();
 		}
 	}
 
@@ -168,8 +166,8 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 
 		TileEntity tile = world.getTileEntity(pos);
 
-		if (tile instanceof TileCoFHBase) {
-			((TileCoFHBase) tile).onNeighborBlockChange();
+		if (tile instanceof TileCore) {
+			((TileCore) tile).onNeighborBlockChange();
 		}
 	}
 
@@ -178,8 +176,8 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 
 		TileEntity tile = world.getTileEntity(pos);
 
-		if (tile instanceof TileCoFHBase) {
-			((TileCoFHBase) tile).onNeighborTileChange(neighbor);
+		if (tile instanceof TileCore) {
+			((TileCore) tile).onNeighborTileChange(neighbor);
 		}
 	}
 
@@ -198,14 +196,14 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 	public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
 
 		TileEntity tile = world.getTileEntity(pos);
-		return tile instanceof TileCoFHBase && tile.hasWorldObj() ? ((TileCoFHBase) tile).getComparatorInputOverride() : 0;
+		return tile instanceof TileCore && tile.hasWorldObj() ? ((TileCore) tile).getComparatorInputOverride() : 0;
 	}
 
 	@Override
 	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
 
 		TileEntity tile = world.getTileEntity(pos);
-		return tile instanceof TileCoFHBase && tile.hasWorldObj() ? ((TileCoFHBase) tile).getLightValue() : 0;
+		return tile instanceof TileCore && tile.hasWorldObj() ? ((TileCore) tile).getLightValue() : 0;
 	}
 
 	@Override
@@ -291,8 +289,8 @@ public abstract class BlockCoFHTile extends BlockCoFHBase implements ITileEntity
 
 		if (tile instanceof ISecurable) {
 			return ((ISecurable) tile).canPlayerAccess(player);
-		} else if (tile instanceof TileCoFHBase) {
-			return ((TileCoFHBase) tile).canPlayerDismantle(player);
+		} else if (tile instanceof TileCore) {
+			return ((TileCore) tile).canPlayerDismantle(player);
 		}
 		return true;
 	}

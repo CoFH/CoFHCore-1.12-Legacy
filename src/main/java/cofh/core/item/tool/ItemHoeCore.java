@@ -5,34 +5,38 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-public class ItemHoeAdv extends ItemHoe {
+public class ItemHoeCore extends ItemHoe {
 
 	public String repairIngot = "";
 
 	protected boolean showInCreative = true;
 
-	public ItemHoeAdv(ToolMaterial toolMaterial) {
+	public ItemHoeCore(ToolMaterial toolMaterial) {
 
 		super(toolMaterial);
 	}
 
-	public ItemHoeAdv setRepairIngot(String repairIngot) {
+	public ItemHoeCore setRepairIngot(String repairIngot) {
 
 		this.repairIngot = repairIngot;
 		return this;
 	}
 
-	public ItemHoeAdv setShowInCreative(boolean showInCreative) {
+	public ItemHoeCore setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
 		return this;
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
+	@SideOnly (Side.CLIENT)
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
 
 		if (showInCreative) {
 			list.add(new ItemStack(item, 1, 0));

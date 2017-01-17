@@ -16,10 +16,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemFishingRodAdv extends ItemFishingRod {
+public class ItemFishingRodCore extends ItemFishingRod {
 
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
@@ -29,7 +30,7 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 
 	protected boolean showInCreative = true;
 
-	public ItemFishingRodAdv(ToolMaterial toolMaterial) {
+	public ItemFishingRodCore(ToolMaterial toolMaterial) {
 
 		this.toolMaterial = toolMaterial;
 		setMaxStackSize(1);
@@ -44,32 +45,33 @@ public class ItemFishingRodAdv extends ItemFishingRod {
 		});
 	}
 
-	public ItemFishingRodAdv setRepairIngot(String repairIngot) {
+	public ItemFishingRodCore setRepairIngot(String repairIngot) {
 
 		this.repairIngot = repairIngot;
 		return this;
 	}
 
-	public ItemFishingRodAdv setShowInCreative(boolean showInCreative) {
+	public ItemFishingRodCore setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
 		return this;
 	}
 
-	public ItemFishingRodAdv setLuckModifier(int luckModifier) {
+	public ItemFishingRodCore setLuckModifier(int luckModifier) {
 
 		this.luckModifier = luckModifier;
 		return this;
 	}
 
-	public ItemFishingRodAdv setSpeedModifier(int speedModifier) {
+	public ItemFishingRodCore setSpeedModifier(int speedModifier) {
 
 		this.speedModifier = speedModifier;
 		return this;
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+	@SideOnly (Side.CLIENT)
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
 
 		if (showInCreative) {
 			list.add(new ItemStack(item, 1, 0));

@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +99,8 @@ public class ItemCoFHBase extends ItemCore implements IModelRegister {
 
 	/* STANDARD METHODS */
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
+	@SideOnly (Side.CLIENT)
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
 
 		for (int i = 0; i < itemList.size(); i++) {
 			list.add(new ItemStack(item, 1, itemList.get(i)));

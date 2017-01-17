@@ -15,11 +15,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-public class ItemSickleAdv extends ItemToolAdv {
+public class ItemSickleCore extends ItemToolCore {
 
 	protected int radius = 3;
 
-	public ItemSickleAdv(ToolMaterial toolMaterial) {
+	public ItemSickleCore(ToolMaterial toolMaterial) {
 
 		super(3.0F, -2.4F, toolMaterial);
 		addToolClass("sickle");
@@ -35,7 +35,7 @@ public class ItemSickleAdv extends ItemToolAdv {
 		effectiveMaterials.add(Material.WEB);
 	}
 
-	public ItemSickleAdv setRadius(int radius) {
+	public ItemSickleCore setRadius(int radius) {
 
 		this.radius = radius;
 		return this;

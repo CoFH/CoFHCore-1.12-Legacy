@@ -1,10 +1,12 @@
 package cofh.core;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class CoFHProps {
@@ -50,6 +52,8 @@ public class CoFHProps {
 	/* Dummy Inventories */
 	public static int[] EMPTY_INVENTORY = new int[] {};
 	public static FluidTankInfo[] EMPTY_TANK_INFO = new FluidTankInfo[] {};
+
+	public static final ArrayList<ItemStack> NO_DROP = new ArrayList<ItemStack>();
 
 	/* Graphics */
 	public static final String PATH_GFX = "cofh:textures/";

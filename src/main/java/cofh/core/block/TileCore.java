@@ -1,13 +1,12 @@
 package cofh.core.block;
 
-import codechicken.lib.util.BlockUtils;
 import cofh.api.tileentity.ISecurable;
-import cofh.api.tileentity.ISecurable.AccessMode;
 import cofh.core.CoFHProps;
 import cofh.core.RegistrySocial;
 import cofh.core.network.PacketCoFHBase;
 import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketTile;
+import cofh.core.network.PacketTileInfo;
 import cofh.core.util.CoreUtils;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.ServerHelper;
@@ -21,22 +20,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public abstract class TileCoFHBaseOld extends TileEntity {
+public abstract class TileCore extends TileEntity {
 
-	@Override
-	public void onChunkUnload() {
-
-		if (!tileEntityInvalid) {
-			invalidate(); // this isn't called when a tile unloads. guard incase it is in the future
-		}
-	}
+	protected boolean inWorld = false;
 
 	public abstract String getName();
 
@@ -55,19 +50,27 @@ public abstract class TileCoFHBaseOld extends TileEntity {
 
 	}
 
-	public void markChunkDirty() {
+	public void callNeighborStateChange() {
 
-		worldObj.markChunkDirty(this.getPos(), this);
-	}
-
-	public void callNeighborBlockChange() {
-
-		worldObj.notifyNeighborsOfStateChange(getPos(), getBlockType());
+		worldObj.notifyNeighborsOfStateChange(pos, getBlockType());
 	}
 
 	public void callNeighborTileChange() {
 
-		worldObj.updateComparatorOutputLevel(this.getPos(), this.getBlockType());
+		worldObj.updateComparatorOutputLevel(pos, getBlockType());
+	}
+
+	public void markChunkDirty() {
+
+		worldObj.markChunkDirty(this.pos, this);
+	}
+
+	@Override
+	public void onChunkUnload() {
+
+		if (!tileEntityInvalid) {
+			invalidate();
+		}
 	}
 
 	public void onNeighborBlockChange() {
@@ -78,34 +81,21 @@ public abstract class TileCoFHBaseOld extends TileEntity {
 
 	}
 
-	//TODO Side
-	public int getComparatorInput(/*int side*/) {
-
-		return 0;
-	}
-
-	public int getLightValue() {
-
-		return 0;
-	}
-
 	public boolean canPlayerAccess(EntityPlayer player) {
 
 		if (!(this instanceof ISecurable)) {
 			return true;
 		}
-		AccessMode access = ((ISecurable) this).getAccess();
+		ISecurable.AccessMode access = ((ISecurable) this).getAccess();
 		String name = player.getName();
 		if (access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name))) {
 			return true;
 		}
-
 		GameProfile profile = ((ISecurable) this).getOwner();
 		UUID ownerID = profile.getId();
 		if (SecurityHelper.isDefaultUUID(ownerID)) {
 			return true;
 		}
-
 		UUID otherID = SecurityHelper.getID(player);
 		if (ownerID.equals(otherID)) {
 			return true;
@@ -118,19 +108,57 @@ public abstract class TileCoFHBaseOld extends TileEntity {
 		return true;
 	}
 
-	public boolean isUseable(EntityPlayer player) {
+	public boolean isUsable(EntityPlayer player) {
 
-		return BlockUtils.isEntityInRange(getPos(), player, 64) && worldObj.getTileEntity(pos) == this;
+		return player.getDistanceSq(pos) <= 64D && worldObj.getTileEntity(pos) == this;
 	}
 
-	public boolean onWrench(EntityPlayer player, int hitSide) {
+	public boolean onWrench(EntityPlayer player, EnumFacing side) {
 
 		return false;
 	}
 
+	public int getComparatorInputOverride() {
+
+		return 0;
+	}
+
+	public int getLightValue() {
+
+		return 0;
+	}
+
+	/* BLOCK STATE */
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+
+		return state;
+	}
+
+	/* COFH ASM */
+	public void cofh_validate() {
+
+		inWorld = true;
+	}
+
+	public void cofh_invalidate() {
+
+		inWorld = false;
+	}
+
+	/* TIME CHECKS */
 	protected final boolean timeCheck() {
 
 		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT == 0;
+	}
+
+	protected final boolean timeCheckHalf() {
+
+		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT_HALF == 0;
+	}
+
+	protected final boolean timeCheckQuarter() {
+
+		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT_QUARTER == 0;
 	}
 
 	protected final boolean timeCheckEighth() {
@@ -138,9 +166,7 @@ public abstract class TileCoFHBaseOld extends TileEntity {
 		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT_EIGHTH == 0;
 	}
 
-    /* NETWORK METHODS */
-	//@Override//TODO
-
+	/* NETWORK METHODS */
 	@Nullable
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
@@ -171,17 +197,54 @@ public abstract class TileCoFHBaseOld extends TileEntity {
 		return new PacketTile(this);
 	}
 
+	public PacketCoFHBase getGuiPacket() {
+
+		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		payload.addByte(TilePacketID.GUI.ordinal());
+		return payload;
+	}
+
+	public PacketCoFHBase getFluidPacket() {
+
+		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		payload.addByte(TilePacketID.FLUID.ordinal());
+		return payload;
+	}
+
+	public PacketCoFHBase getModePacket() {
+
+		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		payload.addByte(TilePacketID.MODE.ordinal());
+		return payload;
+	}
+
+	protected void handleGuiPacket(PacketCoFHBase payload) {
+
+	}
+
+	protected void handleFluidPacket(PacketCoFHBase payload) {
+
+	}
+
+	protected void handleModePacket(PacketCoFHBase payload) {
+
+		markChunkDirty();
+	}
+
 	public void sendDescPacket() {
 
 		PacketHandler.sendToAllAround(getPacket(), this);
 	}
 
-	protected void updateLighting() {
+	public void sendFluidPacket() {
 
-		int light2 = worldObj.getLightFor(EnumSkyBlock.BLOCK, getPos()), light1 = getLightValue();
-		if (light1 != light2 && worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos())) {
-			IBlockState state = worldObj.getBlockState(getPos());
-			worldObj.notifyBlockUpdate(pos, state, state, 3);//TODO might me markBlocksForUpdate.
+		PacketHandler.sendToDimension(getFluidPacket(), worldObj.provider.getDimension());
+	}
+
+	public void sendModePacket() {
+
+		if (ServerHelper.isClientWorld(worldObj)) {
+			PacketHandler.sendToServer(getModePacket());
 		}
 	}
 
@@ -194,6 +257,16 @@ public abstract class TileCoFHBaseOld extends TileEntity {
 			PacketHandler.sendToAllAround(getPacket(), this);
 		} else if (side == Side.SERVER && ServerHelper.isClientWorld(worldObj)) {
 			PacketHandler.sendToServer(getPacket());
+		}
+	}
+
+	protected void updateLighting() {
+
+		// TODO: Still necessary?
+		int light2 = worldObj.getLightFor(EnumSkyBlock.BLOCK, getPos()), light1 = getLightValue();
+		if (light1 != light2 && worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos())) {
+			IBlockState state = worldObj.getBlockState(getPos());
+			worldObj.notifyBlockUpdate(pos, state, state, 3);
 		}
 	}
 
@@ -213,17 +286,27 @@ public abstract class TileCoFHBaseOld extends TileEntity {
 		return 0;
 	}
 
+	public boolean hasGui() {
+
+		return false;
+	}
+
 	public boolean openGui(EntityPlayer player) {
 
 		return false;
 	}
 
-	public void receiveGuiNetworkData(int i, int j) {
+	public void receiveGuiNetworkData(int id, int data) {
 
 	}
 
 	public void sendGuiNetworkData(Container container, IContainerListener player) {
 
+	}
+
+	/* PACKET ENUM */
+	public enum TilePacketID {
+		GUI, FLUID, MODE
 	}
 
 }

@@ -3,14 +3,14 @@ package cofh.core.item.tool;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemAxe;
 
-public class ItemAxeAdv extends ItemToolAdv {
+public class ItemAxeCore extends ItemToolCore {
 
-	public ItemAxeAdv(ToolMaterial toolMaterial) {
+	public ItemAxeCore(ToolMaterial toolMaterial) {
 
 		this(-3.2F, toolMaterial);
 	}
 
-	public ItemAxeAdv(float attackSpeed, ToolMaterial toolMaterial) {
+	public ItemAxeCore(float attackSpeed, ToolMaterial toolMaterial) {
 
 		super(3.0F, attackSpeed, toolMaterial);
 		addToolClass("axe");

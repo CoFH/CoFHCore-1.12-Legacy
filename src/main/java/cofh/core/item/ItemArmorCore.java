@@ -10,10 +10,13 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-public class ItemArmorAdv extends ItemArmor {
+public class ItemArmorCore extends ItemArmor {
 
 	protected String repairIngot = "";
 	protected String[] textures = new String[2];
@@ -22,37 +25,38 @@ public class ItemArmorAdv extends ItemArmor {
 
 	protected Multimap<String, AttributeModifier> properties = HashMultimap.create();
 
-	public ItemArmorAdv(ArmorMaterial material, EntityEquipmentSlot type) {
+	public ItemArmorCore(ArmorMaterial material, EntityEquipmentSlot type) {
 
 		super(material, 0, type);
 	}
 
-	public ItemArmorAdv putAttribute(String attribute, AttributeModifier modifier) {
+	public ItemArmorCore putAttribute(String attribute, AttributeModifier modifier) {
 
 		properties.put(attribute, modifier);
 		return this;
 	}
 
-	public ItemArmorAdv setArmorTextures(String[] textures) {
+	public ItemArmorCore setArmorTextures(String[] textures) {
 
 		this.textures = textures;
 		return this;
 	}
 
-	public ItemArmorAdv setRepairIngot(String repairIngot) {
+	public ItemArmorCore setRepairIngot(String repairIngot) {
 
 		this.repairIngot = repairIngot;
 		return this;
 	}
 
-	public ItemArmorAdv setShowInCreative(boolean showInCreative) {
+	public ItemArmorCore setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
 		return this;
 	}
 
 	@Override
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+	@SideOnly (Side.CLIENT)
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
 
 		if (showInCreative) {
 			list.add(new ItemStack(item, 1, 0));

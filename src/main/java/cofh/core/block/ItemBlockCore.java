@@ -1,4 +1,4 @@
-package cofh.core.item;
+package cofh.core.block;
 
 import cofh.core.render.CoFHFontRenderer;
 import cofh.lib.util.helpers.SecurityHelper;
