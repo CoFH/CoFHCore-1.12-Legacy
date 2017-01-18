@@ -134,7 +134,6 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 				quadrant = placer.rotationPitch > 60 ? 4 : placer.rotationPitch < -60 ? 5 : quadrant;
 			}
 			switch (quadrant) {
-				// TODO: Change away from ordinals.
 				case 0:
 					reconfig.setFacing(EnumFacing.NORTH.ordinal());
 					break;

@@ -34,14 +34,6 @@ import java.nio.channels.FileChannel;
 
 public class CoreUtils {
 
-	public static int entityId = 0;
-
-	public static int getEntityId() {
-
-		entityId++;
-		return entityId;
-	}
-
 	/* MOD UTILS */
 	@Deprecated
 	public static String getModName(Item item) {
