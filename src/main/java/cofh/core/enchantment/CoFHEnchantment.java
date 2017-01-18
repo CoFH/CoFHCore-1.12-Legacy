@@ -8,9 +8,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CoFHEnchantment {
 
-	public static Enchantment holding;
-	public static Enchantment multishot;
-
 	private CoFHEnchantment() {
 
 	}
@@ -22,11 +19,6 @@ public class CoFHEnchantment {
 
 		GameRegistry.register(holding);
 		GameRegistry.register(multishot);
-	}
-
-	public static NBTTagList getEnchantmentTagList(NBTTagCompound nbt) {
-
-		return nbt == null ? null : nbt.getTagList("ench", 10);
 	}
 
 	public static void addEnchantment(ItemStack stack, Enchantment ench, int level) {
@@ -71,5 +63,15 @@ public class CoFHEnchantment {
 		}
 		nbt.setTag("ench", list);
 	}
+
+	/* HELPERS */
+	private static NBTTagList getEnchantmentTagList(NBTTagCompound nbt) {
+
+		return nbt == null ? null : nbt.getTagList("ench", 10);
+	}
+
+	/* REFERENCES */
+	public static Enchantment holding;
+	public static Enchantment multishot;
 
 }

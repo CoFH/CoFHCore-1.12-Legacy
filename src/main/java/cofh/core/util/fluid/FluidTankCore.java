@@ -11,29 +11,29 @@ import net.minecraftforge.fluids.IFluidTank;
  *
  * @author King Lemming, cpw (LiquidTank)
  */
-public class FluidTankAdv implements IFluidTank {
+public class FluidTankCore implements IFluidTank {
 
 	protected FluidStack fluid;
 	protected int capacity;
 	protected boolean locked;
 
-	public FluidTankAdv(int capacity) {
+	public FluidTankCore(int capacity) {
 
 		this(null, capacity);
 	}
 
-	public FluidTankAdv(FluidStack stack, int capacity) {
+	public FluidTankCore(FluidStack stack, int capacity) {
 
 		this.fluid = stack;
 		this.capacity = capacity;
 	}
 
-	public FluidTankAdv(Fluid fluid, int amount, int capacity) {
+	public FluidTankCore(Fluid fluid, int amount, int capacity) {
 
 		this(new FluidStack(fluid, amount), capacity);
 	}
 
-	public FluidTankAdv readFromNBT(NBTTagCompound nbt) {
+	public FluidTankCore readFromNBT(NBTTagCompound nbt) {
 
 		FluidStack fluid = null;
 		locked = false;
@@ -45,7 +45,7 @@ public class FluidTankAdv implements IFluidTank {
 		return this;
 	}
 
-	public FluidTankAdv setLock(Fluid fluid) {
+	public FluidTankCore setLock(Fluid fluid) {
 
 		locked = fluid != null;
 		if (locked) {

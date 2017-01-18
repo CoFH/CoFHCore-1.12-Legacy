@@ -50,6 +50,11 @@ public abstract class TileCore extends TileEntity {
 
 	}
 
+	public void callBlockUpdate(){
+		IBlockState state = worldObj.getBlockState(pos);
+		worldObj.notifyBlockUpdate(pos, state, state, 3);
+	}
+
 	public void callNeighborStateChange() {
 
 		worldObj.notifyNeighborsOfStateChange(pos, getBlockType());
