@@ -13,7 +13,7 @@ import java.util.List;
 public class NormalParser extends UniformParser {
 
 	@Override
-	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
+	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
 		if (!(genObject.has("meanHeight") && genObject.has("maxVariance"))) {
 			log.error("Height parameters for 'normal' template not specified in \"" + featureName + "\"");

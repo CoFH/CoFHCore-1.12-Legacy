@@ -1,10 +1,12 @@
 {
 	"dirt": {
 		"template": "uniform",
-		"block": "dirt",
-		"material": "minecraft:stone",
-		"clusterSize": 33,
-		"numClusters": 10,
+		"generator": {
+			"block": "dirt",
+			"material": "stone",
+			"clusterSize": 33
+		},
+		"clusterCount": 10,
 		"minHeight": 0,
 		"maxHeight": 256,
 		"retrogen": "false",
@@ -15,10 +17,12 @@
 	},
 	"gravel": {
 		"template": "uniform",
-		"block": "gravel",
-		"material": "stone",
-		"clusterSize": 33,
-		"numClusters": 8,
+		"generator": {
+			"block": "gravel",
+			"material": "stone",
+			"clusterSize": 33
+		},
+		"clusterCount": 8,
 		"minHeight": 0,
 		"maxHeight": 256,
 		"retrogen": "false",
@@ -29,10 +33,12 @@
 	},
 	"granite": {
 		"template": "uniform",
-		"block": "granite",
-		"material": "stone",
-		"clusterSize": 33,
-		"numClusters": 10,
+		"generator": {
+			"block": "granite",
+			"material": "stone",
+			"clusterSize": 33
+		},
+		"clusterCount": 10,
 		"minHeight": 0,
 		"maxHeight": 80,
 		"retrogen": "false",
@@ -43,10 +49,12 @@
 	},
 	"diorite": {
 		"template": "uniform",
-		"block": "diorite",
-		"material": "stone",
-		"clusterSize": 33,
-		"numClusters": 10,
+		"generator": {
+			"block": "diorite",
+			"material": "stone",
+			"clusterSize": 33
+		},
+		"clusterCount": 10,
 		"minHeight": 0,
 		"maxHeight": 80,
 		"retrogen": "false",
@@ -57,10 +65,12 @@
 	},
 	"andesite": {
 		"template": "uniform",
-		"block": "andesite",
-		"material": "stone",
-		"clusterSize": 33,
-		"numClusters": 10,
+		"generator": {
+			"block": "andesite",
+			"material": "stone",
+			"clusterSize": 33
+		},
+		"clusterCount": 10,
 		"minHeight": 0,
 		"maxHeight": 80,
 		"retrogen": "false",
@@ -71,10 +81,12 @@
 	},
 	"coal": {
 		"template": "uniform",
-		"block": "coal_ore",
-		"material": "stone",
-		"clusterSize": 17,
-		"numClusters": 20,
+		"generator": {
+			"block": "coal_ore",
+			"material": "stone",
+			"clusterSize": 17
+		},
+		"clusterCount": 20,
 		"minHeight": 0,
 		"maxHeight": 128,
 		"retrogen": "true",
@@ -85,10 +97,12 @@
 	},
 	"iron": {
 		"template": "uniform",
-		"block": "iron_ore",
-		"material": "minecraft:stone",
-		"clusterSize": 9,
-		"numClusters": 20,
+		"generator": {
+			"block": "iron_ore",
+			"material": "stone",
+			"clusterSize": 9
+		},
+		"clusterCount": 20,
 		"minHeight": 0,
 		"maxHeight": 64,
 		"retrogen": "true",
@@ -99,10 +113,12 @@
 	},
 	"gold": {
 		"template": "uniform",
-		"block": "gold_ore",
-		"material": "minecraft:stone",
-		"clusterSize": 9,
-		"numClusters": 2,
+		"generator": {
+			"block": "gold_ore",
+			"material": "stone",
+			"clusterSize": 9
+		},
+		"clusterCount": 2,
 		"minHeight": 0,
 		"maxHeight": 32,
 		"retrogen": "true",
@@ -113,10 +129,12 @@
 	},
 	"redstone": {
 		"template": "uniform",
-		"block": "redstone_ore",
-		"material": "minecraft:stone",
-		"clusterSize": 8,
-		"numClusters": 8,
+		"generator": {
+			"block": "redstone_ore",
+			"material": "stone",
+			"clusterSize": 8
+		},
+		"clusterCount": 8,
 		"minHeight": 0,
 		"maxHeight": 16,
 		"retrogen": "true",
@@ -127,10 +145,12 @@
 	},
 	"diamond": {
 		"template": "uniform",
-		"block": "diamond_ore",
-		"material": "minecraft:stone",
-		"clusterSize": 8,
-		"numClusters": 1,
+		"generator": {
+			"block": "diamond_ore",
+			"material": "stone",
+			"clusterSize": 8
+		},
+		"clusterCount": 1,
 		"minHeight": 0,
 		"maxHeight": 16,
 		"retrogen": "true",
@@ -141,10 +161,12 @@
 	},
 	"lapis": {
 		"template": "normal",
-		"block": "lapis_ore",
-		"material": "minecraft:stone",
-		"clusterSize": 7,
-		"numClusters": 1,
+		"generator": {
+			"block": "lapis_ore",
+			"material": "stone",
+			"clusterSize": 7
+		},
+		"clusterCount": 1,
 		"meanHeight": 16,
 		"maxVariance": 16,
 		"retrogen": "true",
@@ -155,10 +177,12 @@
 	},
 	"quartz": {
 		"template": "uniform",
-		"block": "quartz_ore",
-		"material": "minecraft:netherrack",
-		"clusterSize": 14,
-		"numClusters": 16,
+		"generator": {
+			"block": "quartz_ore",
+			"material": "netherrack",
+			"clusterSize": 14
+		},
+		"clusterCount": 16,
 		"minHeight": 10,
 		"maxHeight": 118,
 		"retrogen": "true",

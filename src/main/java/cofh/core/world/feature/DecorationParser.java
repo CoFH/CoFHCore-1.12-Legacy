@@ -59,7 +59,7 @@ public class DecorationParser extends SurfaceParser implements IGeneratorParser 
 	}
 
 	@Override
-	protected String getDefaultTemplate() {
+	protected String getDefaultGenerator() {
 
 		return "decoration";
 	}

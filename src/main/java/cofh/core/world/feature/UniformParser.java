@@ -14,13 +14,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class UniformParser implements IFeatureParser {
 
-	private final List<WeightedRandomBlock> defaultMaterial;
+	protected final List<WeightedRandomBlock> defaultMaterial;
 
 	public UniformParser() {
 
@@ -34,21 +33,12 @@ public class UniformParser implements IFeatureParser {
 
 	@Override
 	public IFeatureGenerator parseFeature(String featureName, JsonObject genObject, Logger log) {
-
-		List<WeightedRandomBlock> resList = new ArrayList<WeightedRandomBlock>();
-		if (!FeatureParser.parseResList(genObject.get("block"), resList, true)) {
-			return null;
-		}
-		int clusterSize = 0;
-		if (genObject.has("clusterSize")) {
-			clusterSize = genObject.get("clusterSize").getAsInt();
-		}
 		int numClusters = 0;
-		if (genObject.has("numClusters")) {
-			numClusters = genObject.get("numClusters").getAsInt();
+		if (genObject.has("clusterCount")) {
+			numClusters = genObject.get("clusterCount").getAsInt();
 		}
-		if (clusterSize < 0 || numClusters <= 0) {
-			log.error("Invalid cluster size or count specified in \"" + featureName + "\"");
+		if (numClusters <= 0) {
+			log.error("Invalid cluster count specified in '%s'", featureName);
 			return null;
 		}
 		boolean retrogen = false;
@@ -63,10 +53,13 @@ public class UniformParser implements IFeatureParser {
 		if (genObject.has("dimensionRestriction")) {
 			dimRes = GenRestriction.get(genObject.get("dimensionRestriction").getAsString());
 		}
-		List<WeightedRandomBlock> matList = parseMaterial(genObject, log);
 
-		WorldGenerator generator = FeatureParser.parseGenerator(getDefaultTemplate(), genObject, resList, clusterSize, matList);
-		FeatureBase feature = getFeature(featureName, genObject, generator, matList, numClusters, biomeRes, retrogen, dimRes, log);
+		WorldGenerator generator = FeatureParser.parseGenerator(getDefaultGenerator(), genObject, defaultMaterial);
+		if (generator == null) {
+			log.warn("Invalid generator for '%s'!", featureName);
+			return null;
+		}
+		FeatureBase feature = getFeature(featureName, genObject, generator, numClusters, biomeRes, retrogen, dimRes, log);
 
 		if (feature != null) {
 			if (genObject.has("chunkChance")) {
@@ -78,7 +71,7 @@ public class UniformParser implements IFeatureParser {
 		return feature;
 	}
 
-	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
+	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
 		if (!(genObject.has("minHeight") && genObject.has("maxHeight"))) {
 			log.error("Height parameters for 'uniform' template not specified in \"" + featureName + "\"");
@@ -95,22 +88,9 @@ public class UniformParser implements IFeatureParser {
 		return new FeatureGenUniform(featureName, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
 	}
 
-	protected String getDefaultTemplate() {
+	protected String getDefaultGenerator() {
 
 		return "cluster";
-	}
-
-	protected List<WeightedRandomBlock> parseMaterial(JsonObject genObject, Logger log) {
-
-		List<WeightedRandomBlock> matList = defaultMaterial;
-		if (genObject.has("material")) {
-			matList = new ArrayList<WeightedRandomBlock>();
-			if (!FeatureParser.parseResList(genObject.get("material"), matList, false)) {
-				log.warn("Invalid material list! Using default list.");
-				matList = defaultMaterial;
-			}
-		}
-		return matList;
 	}
 
 	protected static boolean addFeatureRestrictions(FeatureBase feature, JsonObject genObject) {

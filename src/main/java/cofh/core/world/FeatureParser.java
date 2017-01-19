@@ -19,10 +19,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigParseOptions;
+import com.typesafe.config.ConfigSyntax;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -40,17 +42,21 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FeatureParser {
 
 	private static File worldGenFolder;
+	private static Path worldGenPathBase;
 	private static File vanillaGen;
 	private static final String worldGenVanilla = "assets/cofh/world/vanilla.json";
 	private static HashMap<String, IFeatureParser> templateHandlers = new HashMap<String, IFeatureParser>();
 	private static HashMap<String, IGeneratorParser> generatorHandlers = new HashMap<String, IGeneratorParser>();
-	private static Logger log = LogManager.getLogger("CoFHWorld");
+	private static Logger log = LogManager.getFormatterLogger("CoFHWorld");
 	public static ArrayList<IFeatureGenerator> parsedFeatures = new ArrayList<IFeatureGenerator>();
 
 	private FeatureParser() {
@@ -64,43 +70,24 @@ public class FeatureParser {
 			templateHandlers.put(template, handler);
 			return true;
 		}
-		log.error("Attempted to register duplicate template '" + template + "'!");
+		log.error("Attempted to register duplicate template '%s'!", template);
 		return false;
 	}
 
-	public static boolean registerGenerator(String template, IGeneratorParser handler) {
+	public static boolean registerGenerator(String generator, IGeneratorParser handler) {
 
 		// TODO: provide this function through IFeatureHandler?
-		if (!generatorHandlers.containsKey(template)) {
-			generatorHandlers.put(template, handler);
+		if (!generatorHandlers.containsKey(generator)) {
+			generatorHandlers.put(generator, handler);
 			return true;
 		}
-		log.error("Attempted to register duplicate generator '" + template + "'!");
+		log.error("Attempted to register duplicate generator '%s'!", generator);
 		return false;
 	}
 
 	public static void initialize() {
 
-		worldGenFolder = new File(CoFHProps.configDir, "/cofh/world/");
-
-		if (!worldGenFolder.exists()) {
-			try {
-				worldGenFolder.mkdir();
-			} catch (Throwable t) {
-				// pokemon!
-			}
-		}
-		vanillaGen = new File(CoFHProps.configDir, "/cofh/world/vanilla.json");
-
-		try {
-			if (vanillaGen.createNewFile()) {
-				CoreUtils.copyFileUsingStream(worldGenVanilla, vanillaGen);
-			}
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
-
-		log.info("Registering Default Templates.");
+		log.info("Registering Default Templates...");
 		registerTemplate("normal", new NormalParser());
 		registerTemplate("uniform", new UniformParser());
 		registerTemplate("surface", new SurfaceParser());
@@ -110,7 +97,7 @@ public class FeatureParser {
 		registerTemplate("underfluid", new UnderfluidParser(false));
 		registerTemplate("cave", new CaveParser());
 
-		log.info("Registering default generators");
+		log.info("Registering default generators...");
 		registerGenerator(null, new ClusterParser(false));
 		registerGenerator("", new ClusterParser(false));
 		registerGenerator("cluster", new ClusterParser(false));
@@ -127,11 +114,42 @@ public class FeatureParser {
 		registerGenerator("stalactite", new StalagmiteParser(true));
 		registerGenerator("small-tree", new SmallTreeParser());
 
-		log.info("Complete");
+		log.info("Verifying or creating base world generation directory...");
+
+		worldGenFolder = new File(CoFHProps.configDir, "/cofh/world/");
+		worldGenPathBase = Paths.get(CoFHProps.configDir.getPath());
+
+		if (!worldGenFolder.exists()) {
+			try {
+				if (!worldGenFolder.mkdir())
+					throw new Error("Could not make directory (unspecified error).");
+				else
+					log.info("Created world generation directory.");
+			} catch (Throwable t) {
+				log.fatal("Could not create world generation directory.", t);
+				return;
+			}
+		}
+		vanillaGen = new File(worldGenFolder, "vanilla.json");
+
+		try {
+			if (vanillaGen.createNewFile()) {
+				CoreUtils.copyFileUsingStream(worldGenVanilla, vanillaGen);
+				log.info("Created vanilla generation json");
+			} else if (!vanillaGen.exists()) {
+				throw new Error("Unable to create vanilla generation json (unspecified error).");
+			}
+		} catch (Throwable t) {
+			WorldHandler.genReplaceVanilla = false;
+			log.error("Could not create vanilla generation json.", t);
+		}
+
+		log.info("Complete.");
 	}
 
 	private static void addFiles(ArrayList<File> list, File folder) {
 
+		final AtomicInteger dirs = new AtomicInteger(0);
 		File[] fList = folder.listFiles(new FilenameFilter() {
 
 			@Override
@@ -139,21 +157,27 @@ public class FeatureParser {
 
 				if (name == null) {
 					return false;
+				} else if (new File(file, name).isDirectory()) {
+					dirs.incrementAndGet();
+					return true;
 				}
-				return name.toLowerCase(Locale.US).endsWith(".json") || new File(file, name).isDirectory();
+				return name.toLowerCase(Locale.US).endsWith(".json");
 			}
 		});
 
+		Object o = folder == worldGenFolder ? folder : worldGenPathBase.relativize(Paths.get(folder.getPath()));
 		if (fList == null || fList.length <= 0) {
-			log.error("There are no World Generation files present in " + folder + ".");
+			log.debug("There are no World Generation files present in %s.", o);
 			return;
 		}
-		log.info("CoFH Core found " + fList.length + " World Generation files present in " + folder + "/.");
+		int d = dirs.get();
+		log.info("Found %d World Generation files and %d folders present in %s.", (fList.length - d), d, o);
 		list.addAll(Arrays.asList(fList));
 	}
 
 	public static void parseGenerationFile() {
 
+		//ConfigFactory.parseFile(null, ConfigParseOptions.defaults().setSyntax(ConfigSyntax.CONF));
 		JsonParser parser = new JsonParser();
 
 		ArrayList<File> worldGenList = new ArrayList<File>(5);
@@ -169,33 +193,39 @@ public class FeatureParser {
 		}
 
 		for (int i = 0; i < worldGenList.size(); ++i) {
+			File genFile = worldGenList.get(i);
+
+			if (genFile.isDirectory()) {
+				worldGenList.remove(i--);
+				addFiles(worldGenList, genFile);
+			}
+		}
+
+		for (int i = 0, e = worldGenList.size(); i < e; ++i) {
 
 			File genFile = worldGenList.get(i);
-			if (genFile.isDirectory()) {
-				addFiles(worldGenList, genFile);
-				continue;
-			}
 
 			JsonObject genList;
 			try {
 				genList = (JsonObject) parser.parse(new InputStreamReader(new FileInputStream(genFile), "utf8"));
 			} catch (Throwable t) {
-				log.error("Critical error reading from a world generation file: " + genFile + " > Please be sure the file is correct!", t);
+				log.error(String.format("Critical error reading from a world generation file: \"%s\" > Please be sure the file is correct!", genFile), t);
 				continue;
 			}
 
-			log.info("Reading world generation info from: " + genFile + ":");
+			log.info("Reading world generation info from: %s:", worldGenPathBase.relativize(Paths.get(genFile.getPath())));
 			for (Entry<String, JsonElement> genEntry : genList.entrySet()) {
 				try {
 					if (parseGenerationEntry(genEntry.getKey(), genEntry.getValue())) {
-						log.debug("Generation entry successfully parsed: \"" + genEntry.getKey() + "\"");
+						log.debug("Generation entry successfully parsed: '%s'", genEntry.getKey());
 					} else {
-						log.error("Error parsing generation entry: \"" + genEntry.getKey() + "\" > Please check the parameters. It *may* be a duplicate.");
+						log.error("Error parsing generation entry: '%s' > Please check the parameters. It *may* be a duplicate.", genEntry.getKey());
 					}
 				} catch (Throwable t) {
-					log.fatal("There was a severe error parsing '" + genEntry.getKey() + "'!", t);
+					log.fatal(String.format("There was a severe error parsing '%s'!", genEntry.getKey()), t);
 				}
 			}
+			log.info("Finished reading %s", worldGenPathBase.relativize(Paths.get(genFile.getPath())));
 		}
 	}
 
@@ -228,42 +258,56 @@ public class FeatureParser {
 
 	private static String parseTemplate(JsonObject genObject) {
 
-		JsonElement genElement = genObject.get("template");
-		if (genElement.isJsonObject()) {
-			genObject = genElement.getAsJsonObject();
-
-			return genObject.get("type").getAsString();
-		} else {
-			return genElement.getAsString();
-		}
+		return genObject.get("template").getAsString();
 	}
 
 	// TODO: move these helper functions outside core?
 
-	public static WorldGenerator parseGenerator(String def, JsonObject genObject, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public static WorldGenerator parseGenerator(String def, JsonObject genObject, List<WeightedRandomBlock> defaultMaterial) {
 
-		JsonElement genElement = genObject.get("template");
+		JsonElement genElement;
 		String name = def;
-		if (genElement.isJsonObject()) {
-			genObject = genElement.getAsJsonObject();
+		if (!genObject.has("generator")) {
+			return null;
 		}
-		if (genObject.has("generator")) {
-			genElement = genObject.get("generator");
-			if (genElement.isJsonObject()) {
-				genObject = genElement.getAsJsonObject();
-				name = genObject.get("type").getAsString();
-			} else {
-				name = genElement.getAsString();
-			}
+		genElement = genObject.get("generator");
+		if (!genElement.isJsonObject()) {
+			return null;
+		}
+
+		genObject = genElement.getAsJsonObject();
+		if (genObject.has("type")) {
+			name = genObject.get("type").getAsString();
 			if (!generatorHandlers.containsKey(name)) {
 				log.warn("Unknown generator '%s'! using '%s'", name, def);
 				name = def;
 			}
 		}
 
+		List<WeightedRandomBlock> resList = new ArrayList<WeightedRandomBlock>();
+		if (!FeatureParser.parseResList(genObject.get("block"), resList, true)) {
+			return null;
+		}
+		int clusterSize = 0;
+		if (genObject.has("clusterSize")) {
+			clusterSize = genObject.get("clusterSize").getAsInt();
+		}
+		if (clusterSize <= 0) {
+			log.warn("Invalid cluster size for generator '%s'", name);
+			return null;
+		}
+
+		List<WeightedRandomBlock> matList = defaultMaterial;
+		if (genObject.has("material")) {
+			matList = new ArrayList<WeightedRandomBlock>();
+			if (!FeatureParser.parseResList(genObject.get("material"), matList, false)) {
+				log.warn("Invalid material list! Using default list.");
+				matList = defaultMaterial;
+			}
+		}
 		IGeneratorParser parser = generatorHandlers.get(name);
 		if (parser == null) {
-			throw new IllegalStateException("Generator " + name + " is not registered!");
+			throw new IllegalStateException("Generator '" + name + "' is not registered!");
 		}
 		return parser.parseGenerator(name, genObject, log, resList, clusterSize, matList);
 	}
@@ -282,7 +326,7 @@ public class FeatureParser {
 				} else if (element.isJsonObject()) {
 					JsonObject obj = element.getAsJsonObject();
 					String type = obj.get("type").getAsString();
-					boolean wl = obj.has("whitelist") ? obj.get("whitelist").getAsBoolean() : true;
+					boolean wl = !obj.has("whitelist") || obj.get("whitelist").getAsBoolean();
 					JsonElement value = obj.get("entry");
 					JsonArray array = value.isJsonArray() ? value.getAsJsonArray() : null;
 					String entry = array != null ? null : value.getAsString();
@@ -308,8 +352,8 @@ public class FeatureParser {
 							}
 						}
 					} else {
-						Object data = null;
-						int t = -1;
+						Object data;
+						int t;
 						if (type.equalsIgnoreCase("temperature")) {
 							if (array != null) {
 								ArrayList<TempCategory> temps = new ArrayList<TempCategory>();
@@ -326,10 +370,7 @@ public class FeatureParser {
 							if (array != null) {
 								ArrayList<Type> tags = new ArrayList<Type>();
 								for (int k = 0, j = array.size(); k < j; k++) {
-									Type a = Type.valueOf(array.get(k).getAsString());
-									if (a != null) {
-										tags.add(a);
-									}
+									tags.add(Type.valueOf(array.get(k).getAsString()));
 								}
 								data = tags.toArray(new Type[tags.size()]);
 								t = 6;
@@ -433,7 +474,7 @@ public class FeatureParser {
 			NBTTagCompound data;
 			if (genObject.has("spawnerTag")) {
 				try {
-					data = (NBTTagCompound) JsonToNBT.getTagFromJson(genObject.get("spawnerTag").toString());
+					data = JsonToNBT.getTagFromJson(genObject.get("spawnerTag").toString());
 				} catch (NBTException e) {
 					log.error("Invalid entity entry!", e);
 					return null;
@@ -491,7 +532,8 @@ public class FeatureParser {
 			return null;
 		} else if (genElement.isJsonObject()) {
 			JsonObject genObject = genElement.getAsJsonObject();
-			type = genObject.get("name").getAsString();
+			if (genObject.has("type"))
+				type = genObject.get("name").getAsString();
 			if (type == null) {
 				log.warn("Invalid string entry!");
 				return null;
@@ -575,12 +617,9 @@ public class FeatureParser {
 			}
 			if (item.has("nbt")) {
 				try {
-					NBTBase nbtbase = JsonToNBT.getTagFromJson(item.get("nbt").getAsString());
+					NBTTagCompound nbtbase = JsonToNBT.getTagFromJson(item.get("nbt").getAsString());
 
-					if (!(nbtbase instanceof NBTTagCompound)) {
-						log.error("Item has invalid NBT data.");
-					}
-					stack.setTagCompound((NBTTagCompound) nbtbase);
+					stack.setTagCompound(nbtbase);
 				} catch (NBTException t) {
 					log.error("Item has invalid NBT data.", t);
 				}

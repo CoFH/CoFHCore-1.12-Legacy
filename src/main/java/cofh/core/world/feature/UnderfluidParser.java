@@ -34,7 +34,7 @@ public class UnderfluidParser extends UniformParser {
 	}
 
 	@Override
-	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
+	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
 		boolean water = true;
 		int[] fluidList = null;
@@ -56,6 +56,16 @@ public class UnderfluidParser extends UniformParser {
 			}
 			fluidList = ints.toArray();
 		}
+
+		// TODO: WorldGeneratorAdv that allows access to its material list
+		List<WeightedRandomBlock> matList = defaultMaterial;
+		if (genObject.has("material")) {
+			matList = new ArrayList<WeightedRandomBlock>();
+			if (!FeatureParser.parseResList(genObject.get("material"), matList, false)) {
+				log.warn("Invalid material list! Using default list.");
+				matList = defaultMaterial;
+			}
+		}
 		if (water) {
 			return new FeatureGenUnderfluid(featureName, gen, matList, numClusters, biomeRes, retrogen, dimRes);
 		} else {
@@ -64,9 +74,9 @@ public class UnderfluidParser extends UniformParser {
 	}
 
 	@Override
-	protected String getDefaultTemplate() {
+	protected String getDefaultGenerator() {
 
-		return isUnderwater ? "plate" : super.getDefaultTemplate();
+		return isUnderwater ? "plate" : super.getDefaultGenerator();
 	}
 
 }
