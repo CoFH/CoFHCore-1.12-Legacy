@@ -92,7 +92,6 @@ public class UniformParser implements IFeatureParser {
 			log.error("Invalid height parameters specified in \"" + featureName + "\"");
 			return null;
 		}
-
 		return new FeatureGenUniform(featureName, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
 	}
 

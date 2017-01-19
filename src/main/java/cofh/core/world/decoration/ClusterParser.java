@@ -25,7 +25,6 @@ public class ClusterParser implements IGeneratorParser {
 		if (sparse) {
 			return new WorldGenSparseMinableCluster(resList, clusterSize, matList);
 		}
-
 		return new WorldGenMinableCluster(resList, clusterSize, matList);
 	}
 
