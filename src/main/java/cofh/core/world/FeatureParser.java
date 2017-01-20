@@ -201,6 +201,7 @@ public class FeatureParser {
 		for (int i = 0, e = worldGenList.size(); i < e; ++i) {
 
 			File genFile = worldGenList.get(i);
+			String file = worldGenPathBase.relativize(Paths.get(genFile.getPath())).toString();
 
 			JsonObject genList;
 			try {
@@ -210,19 +211,24 @@ public class FeatureParser {
 				continue;
 			}
 
-			log.info("Reading world generation info from: %s:", worldGenPathBase.relativize(Paths.get(genFile.getPath())));
-			for (Entry<String, JsonElement> genEntry : genList.entrySet()) {
-				try {
-					if (parseGenerationEntry(genEntry.getKey(), genEntry.getValue())) {
-						log.debug("Generation entry successfully parsed: '%s'", genEntry.getKey());
-					} else {
-						log.error("Error parsing generation entry: '%s' > Please check the parameters. It *may* be a duplicate.", genEntry.getKey());
+			JsonObject genData = genList.getAsJsonObject("populate");
+			if (genData != null) {
+				log.info("Reading world generation info from: %s:", file);
+				for (Entry<String, JsonElement> genEntry : genData.entrySet()) {
+					try {
+						if (parseGenerationEntry(genEntry.getKey(), genEntry.getValue())) {
+							log.debug("Generation entry successfully parsed: '%s'", genEntry.getKey());
+						} else {
+							log.error("Error parsing generation entry: '%s' > Please check the parameters. It *may* be a duplicate.", genEntry.getKey());
+						}
+					} catch (Throwable t) {
+						log.fatal(String.format("There was a severe error parsing '%s'!", genEntry.getKey()), t);
 					}
-				} catch (Throwable t) {
-					log.fatal(String.format("There was a severe error parsing '%s'!", genEntry.getKey()), t);
 				}
+				log.info("Finished reading %s", file);
+			} else {
+				log.fatal("No populate field in %s.", genFile);
 			}
-			log.info("Finished reading %s", worldGenPathBase.relativize(Paths.get(genFile.getPath())));
 		}
 	}
 
@@ -400,9 +406,7 @@ public class FeatureParser {
 
 	public static Block parseBlockName(String blockRaw) {
 
-		String[] blockTokens = blockRaw.split(":", 2);
-		int i = 0;
-		return GameRegistry.findBlock(blockTokens.length > 1 ? blockTokens[i++] : "minecraft", blockTokens[i]);
+		return Block.REGISTRY.getObjectBypass(new ResourceLocation(blockRaw));
 	}
 
 	public static WeightedRandomBlock parseBlockEntry(JsonElement genElement, boolean clamp) {
