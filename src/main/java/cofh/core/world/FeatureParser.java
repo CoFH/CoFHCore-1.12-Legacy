@@ -19,9 +19,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.typesafe.config.ConfigFactory;
-import com.typesafe.config.ConfigParseOptions;
-import com.typesafe.config.ConfigSyntax;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
@@ -88,7 +85,7 @@ public class FeatureParser {
 	public static void initialize() {
 
 		log.info("Registering Default Templates...");
-		registerTemplate("normal", new NormalParser());
+		registerTemplate("gaussian", new GaussianParser());
 		registerTemplate("uniform", new UniformParser());
 		registerTemplate("surface", new SurfaceParser());
 		registerTemplate("fractal", new FractalParser());
@@ -258,7 +255,7 @@ public class FeatureParser {
 
 	private static String parseTemplate(JsonObject genObject) {
 
-		return genObject.get("template").getAsString();
+		return genObject.get("distribution").getAsString();
 	}
 
 	// TODO: move these helper functions outside core?
@@ -586,25 +583,21 @@ public class FeatureParser {
 		} else {
 			JsonObject item = genElement.getAsJsonObject();
 
-			if (item.has("meta")) {
-				metadata = item.get("meta").getAsInt();
-			} else if (item.has("metadata")) {
+			if (item.has("metadata")) {
 				metadata = item.get("metadata").getAsInt();
 			}
 			if (item.has("stackSize")) {
 				stackSize = item.get("stackSize").getAsInt();
-			} else if (item.has("quantity")) {
-				stackSize = item.get("quantity").getAsInt();
 			} else if (item.has("amount")) {
 				stackSize = item.get("amount").getAsInt();
+			} else if (item.has("count")) {
+				stackSize = item.get("count").getAsInt();
 			}
 			if (stackSize <= 0) {
 				stackSize = 1;
 			}
 			if (item.has("weight")) {
 				chance = item.get("weight").getAsInt();
-			} else if (item.has("chance")) {
-				chance = item.get("chance").getAsInt();
 			}
 			if (item.has("oreName") && ItemHelper.oreNameExists(item.get("oreName").getAsString())) {
 				ItemStack oreStack = OreDictionary.getOres(item.get("oreName").getAsString()).get(0);
