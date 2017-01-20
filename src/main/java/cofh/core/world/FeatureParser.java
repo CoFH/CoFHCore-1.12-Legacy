@@ -20,6 +20,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
@@ -30,7 +33,6 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DungeonHooks.DungeonMob;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -426,9 +428,22 @@ public class FeatureParser {
 				log.error("Invalid block entry!");
 				return null;
 			}
-			int metadata = blockElement.has("metadata") ? MathHelper.clamp(blockElement.get("metadata").getAsInt(), min, 15) : min;
 			int weight = blockElement.has("weight") ? MathHelper.clamp(blockElement.get("weight").getAsInt(), 1, 1000000) : 100;
-			return new WeightedRandomBlock(block, metadata, weight);
+			if (blockElement.has("properties")) {
+				BlockStateContainer blockstatecontainer = block.getBlockState();
+				IBlockState state = block.getDefaultState();
+				for (Entry<String, JsonElement> propEntry : blockElement.getAsJsonObject("properties").entrySet()) {
+
+					IProperty<?> prop = blockstatecontainer.getProperty(propEntry.getKey());
+					if (prop != null) {
+						state = setValue(state, prop, propEntry.getValue().getAsString());
+					}
+				}
+				return new WeightedRandomBlock(state, weight);
+			} else {
+				int metadata = blockElement.has("metadata") ? MathHelper.clamp(blockElement.get("metadata").getAsInt(), min, 15) : min;
+				return new WeightedRandomBlock(block, metadata, weight);
+			}
 		} else {
 			Block block = parseBlockName(genElement.getAsString());
 			if (block == null) {
@@ -437,6 +452,10 @@ public class FeatureParser {
 			}
 			return new WeightedRandomBlock(block, min);
 		}
+	}
+
+	private static <T extends Comparable<T>> IBlockState setValue(IBlockState state, IProperty<T> prop, String val) {
+		return state.withProperty(prop, prop.parseValue(val).get());
 	}
 
 	public static boolean parseResList(JsonElement genElement, List<WeightedRandomBlock> resList, boolean clamp) {
