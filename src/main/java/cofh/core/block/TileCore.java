@@ -105,7 +105,7 @@ public abstract class TileCore extends TileEntity {
 		if (ownerID.equals(otherID)) {
 			return true;
 		}
-		return access.isRestricted() && RegistrySocial.playerHasAccess(name, profile);
+		return access.isFriendsOnly() && RegistrySocial.playerHasAccess(name, profile);
 	}
 
 	public boolean canPlayerDismantle(EntityPlayer player) {

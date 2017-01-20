@@ -99,8 +99,8 @@ public class TabSecurity extends TabBase {
 				GuiBase.playClickSound(1.0F, 0.4F);
 			}
 		} else if (48 <= mouseX && mouseX < 64 && 20 <= mouseY && mouseY < 36) {
-			if (!myContainer.getAccess().isRestricted()) {
-				myContainer.setAccess(ISecurable.AccessMode.RESTRICTED);
+			if (!myContainer.getAccess().isFriendsOnly()) {
+				myContainer.setAccess(ISecurable.AccessMode.FRIENDS);
 				GuiBase.playClickSound(1.0F, 0.6F);
 			}
 		} else if (68 <= mouseX && mouseX < 84 && 20 <= mouseY && mouseY < 36) {
@@ -133,7 +133,7 @@ public class TabSecurity extends TabBase {
 
 		if (myContainer.getAccess().isPublic()) {
 			drawTabIcon("IconAccessPublic");
-		} else if (myContainer.getAccess().isRestricted()) {
+		} else if (myContainer.getAccess().isFriendsOnly()) {
 			drawTabIcon("IconAccessFriends");
 		} else if (myContainer.getAccess().isPrivate()) {
 			drawTabIcon("IconAccessPrivate");
@@ -149,7 +149,7 @@ public class TabSecurity extends TabBase {
 			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 0);
 			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 0);
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPublic"), posXOffset() + 14, posY + 54, textColor);
-		} else if (myContainer.getAccess().isRestricted()) {
+		} else if (myContainer.getAccess().isFriendsOnly()) {
 			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 0);
 			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1);
 			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 0);

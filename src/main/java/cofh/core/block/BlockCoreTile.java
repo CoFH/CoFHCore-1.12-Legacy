@@ -262,7 +262,7 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 		TileEntity tile = world.getTileEntity(pos);
 
 		if (tile instanceof ITileInfo) {
-			((ITileInfo) tile).getTileInfo(info, world, pos, side, player, debug);
+			((ITileInfo) tile).getTileInfo(info, side, player, debug);
 		} else {
 			if (tile instanceof IEnergyReceiver) {
 				IEnergyReceiver eReceiver = (IEnergyReceiver) tile;
