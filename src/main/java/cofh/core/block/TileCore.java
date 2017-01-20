@@ -33,7 +33,7 @@ public abstract class TileCore extends TileEntity {
 
 	protected boolean inWorld = false;
 
-	public abstract String getName();
+	public abstract String getTileName();
 
 	public abstract int getType();
 
@@ -50,7 +50,8 @@ public abstract class TileCore extends TileEntity {
 
 	}
 
-	public void callBlockUpdate(){
+	public void callBlockUpdate() {
+
 		IBlockState state = worldObj.getBlockState(pos);
 		worldObj.notifyBlockUpdate(pos, state, state, 3);
 	}

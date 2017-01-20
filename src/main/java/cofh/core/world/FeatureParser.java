@@ -120,10 +120,11 @@ public class FeatureParser {
 
 		if (!worldGenFolder.exists()) {
 			try {
-				if (!worldGenFolder.mkdir())
+				if (!worldGenFolder.mkdir()) {
 					throw new Error("Could not make directory (unspecified error).");
-				else
+				} else {
 					log.info("Created world generation directory.");
+				}
 			} catch (Throwable t) {
 				log.fatal("Could not create world generation directory.", t);
 				return;
@@ -455,6 +456,7 @@ public class FeatureParser {
 	}
 
 	private static <T extends Comparable<T>> IBlockState setValue(IBlockState state, IProperty<T> prop, String val) {
+
 		return state.withProperty(prop, prop.parseValue(val).get());
 	}
 
@@ -552,8 +554,9 @@ public class FeatureParser {
 			return null;
 		} else if (genElement.isJsonObject()) {
 			JsonObject genObject = genElement.getAsJsonObject();
-			if (genObject.has("type"))
+			if (genObject.has("type")) {
 				type = genObject.get("name").getAsString();
+			}
 			if (type == null) {
 				log.warn("Invalid string entry!");
 				return null;

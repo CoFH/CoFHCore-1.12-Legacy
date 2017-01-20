@@ -324,6 +324,7 @@ public class ProxyClient extends Proxy {
 
 	@Override
 	public IThreadListener getServerListener() {
+
 		return Minecraft.getMinecraft().getIntegratedServer();
 	}
 

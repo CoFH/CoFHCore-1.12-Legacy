@@ -144,7 +144,7 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 
 	/* IModelRegister */
 	@Override
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	public void registerModels() {
 
 		Item item = Item.getItemFromBlock(this);

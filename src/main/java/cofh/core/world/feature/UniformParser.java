@@ -33,6 +33,7 @@ public class UniformParser implements IFeatureParser {
 
 	@Override
 	public IFeatureGenerator parseFeature(String featureName, JsonObject genObject, Logger log) {
+
 		int numClusters = 0;
 		if (genObject.has("clusterCount")) {
 			numClusters = genObject.get("clusterCount").getAsInt();

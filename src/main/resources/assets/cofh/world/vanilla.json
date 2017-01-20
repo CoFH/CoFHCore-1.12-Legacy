@@ -14,7 +14,10 @@
 			"biomeRestriction": "none",
 			"biomes": [],
 			"dimensionRestriction": "blacklist",
-			"dimensions": [-1, 1]
+			"dimensions": [
+				-1,
+				1
+			]
 		},
 		"gravel": {
 			"distribution": "uniform",
@@ -30,12 +33,18 @@
 			"biomeRestriction": "none",
 			"biomes": [],
 			"dimensionRestriction": "blacklist",
-			"dimensions": [-1, 1]
+			"dimensions": [
+				-1,
+				1
+			]
 		},
 		"granite": {
 			"distribution": "uniform",
 			"generator": {
-				"block": "granite",
+				"block": {
+					"name": "stone",
+					"metadata": 1
+				},
 				"material": "stone",
 				"clusterSize": 33
 			},
@@ -46,12 +55,18 @@
 			"biomeRestriction": "none",
 			"biomes": [],
 			"dimensionRestriction": "blacklist",
-			"dimensions": [-1, 1]
+			"dimensions": [
+				-1,
+				1
+			]
 		},
 		"diorite": {
 			"distribution": "uniform",
 			"generator": {
-				"block": "diorite",
+				"block": {
+					"name": "stone",
+					"metadata": 3
+				},
 				"material": "stone",
 				"clusterSize": 33
 			},
@@ -62,12 +77,18 @@
 			"biomeRestriction": "none",
 			"biomes": [],
 			"dimensionRestriction": "blacklist",
-			"dimensions": [-1, 1]
+			"dimensions": [
+				-1,
+				1
+			]
 		},
 		"andesite": {
 			"distribution": "uniform",
 			"generator": {
-				"block": "andesite",
+				"block": {
+					"name": "stone",
+					"metadata": 5
+				},
 				"material": "stone",
 				"clusterSize": 33
 			},
@@ -78,7 +99,10 @@
 			"biomeRestriction": "none",
 			"biomes": [],
 			"dimensionRestriction": "blacklist",
-			"dimensions": [-1, 1]
+			"dimensions": [
+				-1,
+				1
+			]
 		},
 		"coal": {
 			"distribution": "uniform",
@@ -94,7 +118,10 @@
 			"biomeRestriction": "none",
 			"biomes": [],
 			"dimensionRestriction": "blacklist",
-			"dimensions": [-1, 1]
+			"dimensions": [
+				-1,
+				1
+			]
 		},
 		"iron": {
 			"distribution": "uniform",
@@ -110,7 +137,10 @@
 			"biomeRestriction": "none",
 			"biomes": [],
 			"dimensionRestriction": "blacklist",
-			"dimensions": [-1, 1]
+			"dimensions": [
+				-1,
+				1
+			]
 		},
 		"gold": {
 			"distribution": "uniform",
@@ -126,7 +156,10 @@
 			"biomeRestriction": "none",
 			"biomes": [],
 			"dimensionRestriction": "blacklist",
-			"dimensions": [-1, 1]
+			"dimensions": [
+				-1,
+				1
+			]
 		},
 		"redstone": {
 			"distribution": "uniform",
@@ -142,7 +175,10 @@
 			"biomeRestriction": "none",
 			"biomes": [],
 			"dimensionRestriction": "blacklist",
-			"dimensions": [-1, 1]
+			"dimensions": [
+				-1,
+				1
+			]
 		},
 		"diamond": {
 			"distribution": "uniform",
@@ -158,7 +194,10 @@
 			"biomeRestriction": "none",
 			"biomes": [],
 			"dimensionRestriction": "blacklist",
-			"dimensions": [-1, 1]
+			"dimensions": [
+				-1,
+				1
+			]
 		},
 		"lapis": {
 			"distribution": "gaussian",
@@ -168,13 +207,16 @@
 				"clusterSize": 7
 			},
 			"clusterCount": 1,
-			"meanHeight": 16,
-			"maxVariance": 16,
+			"centerHeight": 16,
+			"spread": 16,
 			"retrogen": "true",
 			"biomeRestriction": "none",
 			"biomes": [],
 			"dimensionRestriction": "blacklist",
-			"dimensions": [-1, 1]
+			"dimensions": [
+				-1,
+				1
+			]
 		},
 		"quartz": {
 			"distribution": "uniform",
@@ -188,10 +230,12 @@
 			"maxHeight": 118,
 			"retrogen": "true",
 			"biomeRestriction": "whitelist",
-			"biomes": [{
-				"type": "dictionary",
-				"entry": "NETHER"
-			}],
+			"biomes": [
+				{
+					"type": "dictionary",
+					"entry": "NETHER"
+				}
+			],
 			"dimensionRestriction": "none",
 			"dimensions": []
 		}

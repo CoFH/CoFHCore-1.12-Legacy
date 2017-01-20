@@ -1,14 +1,11 @@
 package cofh.core.world.feature;
 
-import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenCave;
 import com.google.gson.JsonObject;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;
-
-import java.util.List;
 
 public class CaveParser extends UniformParser {
 
