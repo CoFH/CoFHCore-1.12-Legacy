@@ -317,9 +317,14 @@ public class ProxyClient extends Proxy {
 	}
 
 	@Override
-	public IThreadListener getThreadListener() {
+	public IThreadListener getClientListener() {
 
 		return Minecraft.getMinecraft();
+	}
+
+	@Override
+	public IThreadListener getServerListener() {
+		return Minecraft.getMinecraft().getIntegratedServer();
 	}
 
 	/* PLAYER UTILS */

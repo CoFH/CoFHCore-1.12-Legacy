@@ -109,7 +109,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 
 	private void handlePacketClient(final PacketBase packet, final EntityPlayer player) {
 
-		IThreadListener threadListener = CoFHCore.proxy.getThreadListener();
+		IThreadListener threadListener = CoFHCore.proxy.getClientListener();
 		if (!threadListener.isCallingFromMinecraftThread()) {
 			threadListener.addScheduledTask(new Runnable() {
 				@Override
@@ -125,7 +125,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 
 	private void handlePacketServer(final PacketBase packet, final EntityPlayer player) {
 
-		IThreadListener threadListener = CoFHCore.proxy.getThreadListener();
+		IThreadListener threadListener = CoFHCore.proxy.getServerListener();
 		if (!threadListener.isCallingFromMinecraftThread()) {
 			threadListener.addScheduledTask(new Runnable() {
 				@Override

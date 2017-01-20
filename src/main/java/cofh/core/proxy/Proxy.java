@@ -159,7 +159,13 @@ public class Proxy {
 		return null;
 	}
 
-	public IThreadListener getThreadListener() {
+	public IThreadListener getClientListener() {
+
+		//If this is called on the server, expect a crash.
+		return null;
+	}
+
+	public IThreadListener getServerListener() {
 
 		return FMLCommonHandler.instance().getMinecraftServerInstance();
 	}
