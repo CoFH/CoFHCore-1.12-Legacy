@@ -35,6 +35,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Resource;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Path;
@@ -386,21 +387,9 @@ public class FeatureParser {
 					} else {
 						Object data;
 						int t;
-						if (type.equalsIgnoreCase("temperature")) {
+						if (type.equalsIgnoreCase("dictionary")) {
 							if (array != null) {
-								ArrayList<TempCategory> temps = new ArrayList<TempCategory>();
-								for (int k = 0, j = array.size(); k < j; k++) {
-									temps.add(TempCategory.valueOf(array.get(k)));
-								}
-								data = EnumSet.copyOf(temps);
-								t = 5;
-							} else {
-								data = TempCategory.valueOf(entry);
-								t = 1;
-							}
-						} else if (type.equalsIgnoreCase("dictionary")) {
-							if (array != null) {
-								ArrayList<Type> tags = new ArrayList<Type>();
+								ArrayList<Type> tags = new ArrayList<Type>(array.size());
 								for (int k = 0, j = array.size(); k < j; k++) {
 									tags.add(Type.valueOf(array.get(k)));
 								}
@@ -409,6 +398,30 @@ public class FeatureParser {
 							} else {
 								data = Type.valueOf(entry);
 								t = 2;
+							}
+						} else if (type.equalsIgnoreCase("id")) {
+							if (array != null) {
+								ArrayList<ResourceLocation> ids = new ArrayList<ResourceLocation>(array.size());
+								for (int k = 0, j = array.size(); k < j; ++k) {
+									ids.add(new ResourceLocation(array.get(k)));
+								}
+								data = ids;
+								t = 8;
+							} else {
+								data = new ResourceLocation(entry);
+								t = 7;
+							}
+						} else if (type.equalsIgnoreCase("temperature")) {
+							if (array != null) {
+								ArrayList<TempCategory> temps = new ArrayList<TempCategory>(array.size());
+								for (int k = 0, j = array.size(); k < j; k++) {
+									temps.add(TempCategory.valueOf(array.get(k)));
+								}
+								data = EnumSet.copyOf(temps);
+								t = 5;
+							} else {
+								data = TempCategory.valueOf(entry);
+								t = 1;
 							}
 						} else {
 							log.warn("Biome entry of unknown type");
