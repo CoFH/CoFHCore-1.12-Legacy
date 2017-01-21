@@ -104,6 +104,41 @@
 				1
 			]
 		},
+		"silverfish": {
+			"distribution": "uniform",
+			"generator": {
+				"block": {
+					"name": "monster_egg",
+					"properties": {
+						"variant": "stone"
+					}
+				},
+				"material": "stone",
+				"clusterSize": 9
+			},
+			"clusterCount": 7,
+			"minHeight": 0,
+			"maxHeight": 64,
+			"retrogen": "false",
+			"biomeRestriction": "whitelist",
+			"biomes": [
+				{
+					"type": "id",
+					"entry": [
+						"extreme_hills",
+						"smaller_extreme_hills",
+						"extreme_hills_with_trees",
+						"mutated_extreme_hills",
+						"mutated_extreme_hills_with_trees"
+					]
+				}
+			],
+			"dimensionRestriction": "blacklist",
+			"dimensions": [
+				-1,
+				1
+			]
+		},
 		"coal": {
 			"distribution": "uniform",
 			"generator": {

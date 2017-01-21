@@ -61,19 +61,21 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	public static WorldHandler instance = new WorldHandler();
 
 	static {
-		vanillaGenEvents.add(OreGenEvent.GenerateMinable.EventType.ANDESITE);
-		vanillaGenEvents.add(OreGenEvent.GenerateMinable.EventType.COAL);
-		vanillaGenEvents.add(OreGenEvent.GenerateMinable.EventType.DIAMOND);
-		vanillaGenEvents.add(OreGenEvent.GenerateMinable.EventType.DIORITE);
-		vanillaGenEvents.add(OreGenEvent.GenerateMinable.EventType.DIRT);
-		vanillaGenEvents.add(OreGenEvent.GenerateMinable.EventType.EMERALD);
-		vanillaGenEvents.add(OreGenEvent.GenerateMinable.EventType.GOLD);
-		vanillaGenEvents.add(OreGenEvent.GenerateMinable.EventType.GRANITE);
-		vanillaGenEvents.add(OreGenEvent.GenerateMinable.EventType.GRAVEL);
-		vanillaGenEvents.add(OreGenEvent.GenerateMinable.EventType.IRON);
-		vanillaGenEvents.add(OreGenEvent.GenerateMinable.EventType.LAPIS);
-		vanillaGenEvents.add(OreGenEvent.GenerateMinable.EventType.REDSTONE);
-		vanillaGenEvents.add(OreGenEvent.GenerateMinable.EventType.QUARTZ);
+		vanillaGenEvents.add(EventType.ANDESITE);
+		vanillaGenEvents.add(EventType.COAL);
+		vanillaGenEvents.add(EventType.DIAMOND);
+		vanillaGenEvents.add(EventType.DIORITE);
+		vanillaGenEvents.add(EventType.DIRT);
+		vanillaGenEvents.add(EventType.EMERALD);
+		vanillaGenEvents.add(EventType.GOLD);
+		vanillaGenEvents.add(EventType.GRANITE);
+		vanillaGenEvents.add(EventType.GRAVEL);
+		vanillaGenEvents.add(EventType.IRON);
+		vanillaGenEvents.add(EventType.LAPIS);
+		vanillaGenEvents.add(EventType.REDSTONE);
+		vanillaGenEvents.add(EventType.QUARTZ);
+
+		vanillaGenEvents.add(EventType.SILVERFISH);
 	}
 
 	public static void initialize() {
