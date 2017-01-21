@@ -5,6 +5,7 @@ import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.world.WorldGenGeode;
 import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;
@@ -15,14 +16,14 @@ import java.util.List;
 public class GeodeParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, Config genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
 
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
-		if (!genObject.has("crust")) {
+		if (!genObject.hasPath("crust")) {
 			log.info("Entry does not specify crust for 'geode' generator. Using stone.");
 			list.add(new WeightedRandomBlock(Blocks.STONE));
 		} else {
-			if (!FeatureParser.parseResList(genObject.get("crust"), list, true)) {
+			if (!FeatureParser.parseResList(genObject.root().get("crust"), list, true)) {
 				log.warn("Entry specifies invalid crust for 'geode' generator! Using obsidian!");
 				list.clear();
 				list.add(new WeightedRandomBlock(Blocks.OBSIDIAN));
@@ -30,12 +31,12 @@ public class GeodeParser implements IGeneratorParser {
 		}
 		WorldGenGeode r = new WorldGenGeode(resList, matList, list);
 		{
-			if (genObject.has("hollow")) {
-				r.hollow = genObject.get("hollow").getAsBoolean();
+			if (genObject.hasPath("hollow")) {
+				r.hollow = genObject.getBoolean("hollow");
 			}
-			if (genObject.has("filler")) {
+			if (genObject.hasPath("filler")) {
 				list = new ArrayList<WeightedRandomBlock>();
-				if (!FeatureParser.parseResList(genObject.get("filler"), list, true)) {
+				if (!FeatureParser.parseResList(genObject.root().get("filler"), list, true)) {
 					log.warn("Entry specifies invalid filler for 'geode' generator! Not filling!");
 				} else {
 					r.fillBlock = list;

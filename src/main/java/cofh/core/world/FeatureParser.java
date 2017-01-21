@@ -15,10 +15,7 @@ import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.biome.BiomeInfo;
 import cofh.lib.world.biome.BiomeInfoRarity;
 import cofh.lib.world.biome.BiomeInfoSet;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.typesafe.config.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
@@ -34,13 +31,12 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DungeonHooks.DungeonMob;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FilenameFilter;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -175,10 +171,51 @@ public class FeatureParser {
 		list.addAll(Arrays.asList(fList));
 	}
 
-	public static void parseGenerationFile() {
+	private static class Includer implements ConfigIncluder, ConfigIncluderClasspath, ConfigIncluderFile, ConfigIncluderURL {
 
-		//ConfigFactory.parseFile(null, ConfigParseOptions.defaults().setSyntax(ConfigSyntax.CONF));
-		JsonParser parser = new JsonParser();
+		public static Includer includer = new Includer();
+		public static ConfigParseOptions options = ConfigParseOptions.defaults().setSyntax(ConfigSyntax.CONF).setIncluder(includer);
+		public static ConfigResolveOptions resolveOptions = ConfigResolveOptions.noSystem();
+
+		@Override
+		public ConfigIncluder withFallback(ConfigIncluder fallback) {
+
+			return this;
+		}
+
+		@Override
+		public ConfigObject include(ConfigIncludeContext context, String what) {
+
+			return includeFile(context, new File(what));
+		}
+
+		@Override
+		public ConfigObject includeFile(ConfigIncludeContext context, File file) {
+
+			try {
+				if (!FilenameUtils.directoryContains(worldGenFolder.getCanonicalPath(), file.getCanonicalPath())) {
+					return null;
+				}
+			} catch(IOException e) {
+				return null;
+			}
+			return ConfigFactory.parseFileAnySyntax(file, context.parseOptions()).root();
+		}
+
+		@Override
+		public ConfigObject includeResources(ConfigIncludeContext context, String what) {
+
+			throw new IllegalArgumentException("Cannot include resources");
+		}
+
+		@Override
+		public ConfigObject includeURL(ConfigIncludeContext context, URL what) {
+
+			throw new IllegalArgumentException("Cannot include URLs");
+		}
+	}
+
+	public static void parseGenerationFile() {
 
 		ArrayList<File> worldGenList = new ArrayList<File>(5);
 		addFiles(worldGenList, worldGenFolder);
@@ -206,20 +243,22 @@ public class FeatureParser {
 			File genFile = worldGenList.get(i);
 			String file = worldGenPathBase.relativize(Paths.get(genFile.getPath())).toString();
 
-			JsonObject genList;
+			Config genList;
 			try {
-				genList = (JsonObject) parser.parse(new InputStreamReader(new FileInputStream(genFile), "utf8"));
+				genList = ConfigFactory.parseFile(genFile, Includer.options).resolve(Includer.resolveOptions);
 			} catch (Throwable t) {
 				log.error(String.format("Critical error reading from a world generation file: \"%s\" > Please be sure the file is correct!", genFile), t);
 				continue;
 			}
 
-			JsonObject genData = genList.getAsJsonObject("populate");
-			if (genData != null) {
+			if (genList.hasPath("populate")) {
+				Config genData = genList.getConfig("populate");
 				log.info("Reading world generation info from: %s:", file);
-				for (Entry<String, JsonElement> genEntry : genData.entrySet()) {
+				for (Entry<String, ConfigValue> genEntry : genData.root().entrySet()) {
 					try {
-						if (parseGenerationEntry(genEntry.getKey(), genEntry.getValue())) {
+						if (genEntry.getValue().valueType() != ConfigValueType.OBJECT) {
+							log.error("Error parsing generation entry: '%s' > This must be an object and is not.", genEntry.getKey());
+						}  else if (parseGenerationEntry(genEntry.getKey(), genData.getConfig(genEntry.getKey()))) {
 							log.debug("Generation entry successfully parsed: '%s'", genEntry.getKey());
 						} else {
 							log.error("Error parsing generation entry: '%s' > Please check the parameters. It *may* be a duplicate.", genEntry.getKey());
@@ -230,17 +269,14 @@ public class FeatureParser {
 				}
 				log.info("Finished reading %s", file);
 			} else {
-				log.fatal("No populate field in %s.", genFile);
 			}
 		}
 	}
 
-	private static boolean parseGenerationEntry(String featureName, JsonElement genEntry) {
+	private static boolean parseGenerationEntry(String featureName, Config genObject) {
 
-		JsonObject genObject = genEntry.getAsJsonObject();
-
-		if (genObject.has("enabled")) {
-			if (!genObject.get("enabled").getAsBoolean()) {
+		if (genObject.hasPath("enabled")) {
+			if (!genObject.getBoolean("enabled")) {
 				log.info('"' + featureName + "\" is disabled.");
 				return true;
 			}
@@ -262,28 +298,22 @@ public class FeatureParser {
 		return false;
 	}
 
-	private static String parseTemplate(JsonObject genObject) {
+	private static String parseTemplate(Config genObject) {
 
-		return genObject.get("distribution").getAsString();
+		return genObject.getString("distribution");
 	}
 
 	// TODO: move these helper functions outside core?
 
-	public static WorldGenerator parseGenerator(String def, JsonObject genObject, List<WeightedRandomBlock> defaultMaterial) {
+	public static WorldGenerator parseGenerator(String def, Config genObject, List<WeightedRandomBlock> defaultMaterial) {
 
-		JsonElement genElement;
 		String name = def;
-		if (!genObject.has("generator")) {
+		if (!genObject.hasPath("generator")) {
 			return null;
 		}
-		genElement = genObject.get("generator");
-		if (!genElement.isJsonObject()) {
-			return null;
-		}
-
-		genObject = genElement.getAsJsonObject();
-		if (genObject.has("type")) {
-			name = genObject.get("type").getAsString();
+		genObject = genObject.getConfig("generator");
+		if (genObject.hasPath("type")) {
+			name = genObject.getString("type");
 			if (!generatorHandlers.containsKey(name)) {
 				log.warn("Unknown generator '%s'! using '%s'", name, def);
 				name = def;
@@ -291,22 +321,19 @@ public class FeatureParser {
 		}
 
 		List<WeightedRandomBlock> resList = new ArrayList<WeightedRandomBlock>();
-		if (!FeatureParser.parseResList(genObject.get("block"), resList, true)) {
+		if (!FeatureParser.parseResList(genObject.root().get("block"), resList, true)) {
 			return null;
 		}
-		int clusterSize = 0;
-		if (genObject.has("clusterSize")) {
-			clusterSize = genObject.get("clusterSize").getAsInt();
-		}
+		int clusterSize = genObject.getInt("clusterSize");
 		if (clusterSize <= 0) {
 			log.warn("Invalid cluster size for generator '%s'", name);
 			return null;
 		}
 
 		List<WeightedRandomBlock> matList = defaultMaterial;
-		if (genObject.has("material")) {
+		if (genObject.hasPath("material")) {
 			matList = new ArrayList<WeightedRandomBlock>();
-			if (!FeatureParser.parseResList(genObject.get("material"), matList, false)) {
+			if (!FeatureParser.parseResList(genObject.root().get("material"), matList, false)) {
 				log.warn("Invalid material list! Using default list.");
 				matList = defaultMaterial;
 			}
@@ -318,33 +345,32 @@ public class FeatureParser {
 		return parser.parseGenerator(name, genObject, log, resList, clusterSize, matList);
 	}
 
-	public static BiomeInfoSet parseBiomeRestrictions(JsonObject genObject) {
+	public static BiomeInfoSet parseBiomeRestrictions(Config genObject) {
 
 		BiomeInfoSet set = null;
-		if (genObject.has("biomes")) {
-			JsonArray restrictionList = genObject.getAsJsonArray("biomes");
+		if (genObject.hasPath("biomes")) {
+			ConfigList restrictionList = genObject.getList("biomes");
 			set = new BiomeInfoSet(restrictionList.size());
 			for (int i = 0, e = restrictionList.size(); i < e; i++) {
 				BiomeInfo info = null;
-				JsonElement element = restrictionList.get(i);
-				if (element.isJsonNull()) {
+				ConfigValue element = restrictionList.get(i);
+				switch(element.valueType()) {
+				case NULL:
 					log.info("Null biome entry. Ignoring.");
-				} else if (element.isJsonObject()) {
-					JsonObject obj = element.getAsJsonObject();
-					String type = obj.get("type").getAsString();
-					boolean wl = !obj.has("whitelist") || obj.get("whitelist").getAsBoolean();
-					JsonElement value = obj.get("entry");
-					JsonArray array = value.isJsonArray() ? value.getAsJsonArray() : null;
-					String entry = array != null ? null : value.getAsString();
-					int rarity = obj.has("rarity") ? obj.get("rarity").getAsInt() : -1;
+					break;
+				case OBJECT:
+					Config obj = ((ConfigObject) element).toConfig();
+					String type = obj.getString("type");
+					boolean wl = !obj.hasPath("whitelist") || obj.getBoolean("whitelist");
+					ConfigValue value = obj.root().get("entry");
+					List<String> array = value.valueType() == ConfigValueType.LIST ? obj.getStringList("entry") : null;
+					String entry = array != null ? null : (String)value.unwrapped();
+					int rarity = obj.hasPath("rarity") ? obj.getInt("rarity") : -1;
 
 					l:
 					if (type.equalsIgnoreCase("name")) {
 						if (array != null) {
-							ArrayList<String> names = new ArrayList<String>();
-							for (int k = 0, j = array.size(); k < j; k++) {
-								names.add(array.get(k).getAsString());
-							}
+							List<String> names = array;
 							if (rarity > 0) {
 								info = new BiomeInfoRarity(names, 4, true, rarity);
 							} else {
@@ -364,7 +390,7 @@ public class FeatureParser {
 							if (array != null) {
 								ArrayList<TempCategory> temps = new ArrayList<TempCategory>();
 								for (int k = 0, j = array.size(); k < j; k++) {
-									temps.add(TempCategory.valueOf(array.get(k).getAsString()));
+									temps.add(TempCategory.valueOf(array.get(k)));
 								}
 								data = EnumSet.copyOf(temps);
 								t = 5;
@@ -376,7 +402,7 @@ public class FeatureParser {
 							if (array != null) {
 								ArrayList<Type> tags = new ArrayList<Type>();
 								for (int k = 0, j = array.size(); k < j; k++) {
-									tags.add(Type.valueOf(array.get(k).getAsString()));
+									tags.add(Type.valueOf(array.get(k)));
 								}
 								data = tags.toArray(new Type[tags.size()]);
 								t = 6;
@@ -396,8 +422,12 @@ public class FeatureParser {
 							}
 						}
 					}
-				} else {
-					info = new BiomeInfo(element.getAsString());
+					break;
+				case STRING:
+					info = new BiomeInfo((String)element.unwrapped());
+					break;
+				default:
+					log.error("Unknown type in biome list at index %d", i);
 				}
 				if (info != null) {
 					set.add(info);
@@ -412,46 +442,59 @@ public class FeatureParser {
 		return Block.REGISTRY.getObjectBypass(new ResourceLocation(blockRaw));
 	}
 
-	public static WeightedRandomBlock parseBlockEntry(JsonElement genElement, boolean clamp) {
+	public static WeightedRandomBlock parseBlockEntry(ConfigValue genElement, boolean clamp) {
 
 		final int min = clamp ? 0 : -1;
-		if (genElement.isJsonNull()) {
+		Block block;
+		switch(genElement.valueType()) {
+		case NULL:
 			log.warn("Null Block entry!");
 			return null;
-		} else if (genElement.isJsonObject()) {
-			JsonObject blockElement = genElement.getAsJsonObject();
-			if (!blockElement.has("name")) {
+		case OBJECT:
+			Config blockElement = ((ConfigObject)genElement).toConfig();
+			if (!blockElement.hasPath("name")) {
 				log.error("Block entry needs a name!");
 				return null;
 			}
-			Block block = parseBlockName(blockElement.get("name").getAsString());
+			String blockName;
+			block = parseBlockName(blockName = blockElement.getString("name"));
 			if (block == null) {
 				log.error("Invalid block entry!");
 				return null;
 			}
-			int weight = blockElement.has("weight") ? MathHelper.clamp(blockElement.get("weight").getAsInt(), 1, 1000000) : 100;
-			if (blockElement.has("properties")) {
+			int weight = blockElement.hasPath("weight") ? MathHelper.clamp(blockElement.getInt("weight"), 1, 1000000) : 100;
+			if (blockElement.hasPath("properties")) {
 				BlockStateContainer blockstatecontainer = block.getBlockState();
 				IBlockState state = block.getDefaultState();
-				for (Entry<String, JsonElement> propEntry : blockElement.getAsJsonObject("properties").entrySet()) {
+				for (Entry<String, ConfigValue> propEntry : blockElement.getObject("properties").entrySet()) {
 
 					IProperty<?> prop = blockstatecontainer.getProperty(propEntry.getKey());
+					if (prop == null) {
+						log.warn("Block '%s' does not have property '%s'.", blockName, propEntry.getKey());
+					}
+					if (propEntry.getValue().valueType() != ConfigValueType.STRING) {
+						log.error("Property '%s' is not a string. All block properties must be strings.", propEntry.getKey());
+						prop = null;
+					}
+
 					if (prop != null) {
-						state = setValue(state, prop, propEntry.getValue().getAsString());
+						state = setValue(state, prop, (String) propEntry.getValue().unwrapped());
 					}
 				}
 				return new WeightedRandomBlock(state, weight);
 			} else {
-				int metadata = blockElement.has("metadata") ? MathHelper.clamp(blockElement.get("metadata").getAsInt(), min, 15) : min;
+				int metadata = blockElement.hasPath("metadata") ? MathHelper.clamp(blockElement.getInt("metadata"), min, 15) : min;
 				return new WeightedRandomBlock(block, metadata, weight);
 			}
-		} else {
-			Block block = parseBlockName(genElement.getAsString());
+		case STRING:
+			block = parseBlockName((String)genElement.unwrapped());
 			if (block == null) {
 				log.error("Invalid block entry!");
 				return null;
 			}
 			return new WeightedRandomBlock(block, min);
+		default:
+			return null;
 		}
 	}
 
@@ -460,14 +503,14 @@ public class FeatureParser {
 		return state.withProperty(prop, prop.parseValue(val).get());
 	}
 
-	public static boolean parseResList(JsonElement genElement, List<WeightedRandomBlock> resList, boolean clamp) {
+	public static boolean parseResList(ConfigValue genElement, List<WeightedRandomBlock> resList, boolean clamp) {
 
 		if (genElement == null) {
 			return false;
 		}
 
-		if (genElement.isJsonArray()) {
-			JsonArray blockList = genElement.getAsJsonArray();
+		if (genElement.valueType() == ConfigValueType.LIST) {
+			ConfigList blockList = (ConfigList) genElement;
 
 			for (int i = 0, e = blockList.size(); i < e; i++) {
 				WeightedRandomBlock entry = parseBlockEntry(blockList.get(i), clamp);
@@ -486,33 +529,34 @@ public class FeatureParser {
 		return true;
 	}
 
-	public static WeightedRandomNBTTag parseEntityEntry(JsonElement genElement) {
+	public static WeightedRandomNBTTag parseEntityEntry(ConfigValue genElement) {
 
-		if (genElement.isJsonNull()) {
+		switch (genElement.valueType()) {
+		case NULL:
 			log.warn("Null entity entry!");
 			return null;
-		} else if (genElement.isJsonObject()) {
-			JsonObject genObject = genElement.getAsJsonObject();
+		case OBJECT:
+			Config genObject = ((ConfigObject)genElement).toConfig();
 			NBTTagCompound data;
-			if (genObject.has("spawnerTag")) {
+			if (genObject.hasPath("spawnerTag")) {
 				try {
-					data = JsonToNBT.getTagFromJson(genObject.get("spawnerTag").toString());
+					data = JsonToNBT.getTagFromJson(genObject.getString("spawnerTag"));
 				} catch (NBTException e) {
-					log.error("Invalid entity entry!", e);
+					log.error(String.format("Invalid entity entry at line %d!", genElement.origin().lineNumber()), e);
 					return null;
 				}
+			} else if (!genObject.hasPath("entity")) {
+				log.error("Invalid entity entry at line %d!", genElement.origin().lineNumber());
+				return null;
 			} else {
 				data = new NBTTagCompound();
-				String type = genObject.get("entity").getAsString();
-				if (type == null) {
-					log.error("Invalid entity entry!");
-					return null;
-				}
+				String type = genObject.getString("entity");
 				data.setString("EntityId", type);
 			}
-			return new WeightedRandomNBTTag(genObject.get("weight").getAsInt(), data);
-		} else {
-			String type = genElement.getAsString();
+			int weight = genObject.hasPath("weight") ? genObject.getInt("weight") : 100;
+			return new WeightedRandomNBTTag(weight, data);
+		case STRING:
+			String type = (String)genElement.unwrapped();
 			if (type == null) {
 				log.error("Invalid entity entry!");
 				return null;
@@ -520,13 +564,16 @@ public class FeatureParser {
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setString("EntityId", type);
 			return new WeightedRandomNBTTag(100, tag);
+		default:
+			log.warn("Invalid entity entry type at line %d", genElement.origin().lineNumber());
+			return null;
 		}
 	}
 
-	public static boolean parseEntityList(JsonElement genElement, List<WeightedRandomNBTTag> list) {
+	public static boolean parseEntityList(ConfigValue genElement, List<WeightedRandomNBTTag> list) {
 
-		if (genElement.isJsonArray()) {
-			JsonArray blockList = genElement.getAsJsonArray();
+		if (genElement.valueType() == ConfigValueType.LIST) {
+			ConfigList blockList = (ConfigList) genElement;
 
 			for (int i = 0, e = blockList.size(); i < e; i++) {
 				WeightedRandomNBTTag entry = parseEntityEntry(blockList.get(i));
@@ -545,39 +592,41 @@ public class FeatureParser {
 		return true;
 	}
 
-	public static DungeonMob parseWeightedStringEntry(JsonElement genElement) {
+	public static DungeonMob parseWeightedStringEntry(ConfigValue genElement) {
 
 		int weight = 100;
 		String type = null;
-		if (genElement.isJsonNull()) {
-			log.warn("Null string entry!");
+		switch(genElement.valueType()) {
+		case LIST:
+			log.warn("Lists are not supported for string values at line %d.", genElement.origin().lineNumber());
 			return null;
-		} else if (genElement.isJsonObject()) {
-			JsonObject genObject = genElement.getAsJsonObject();
-			if (genObject.has("type")) {
-				type = genObject.get("name").getAsString();
+		case NULL:
+			log.warn("Null string entry at line %d", genElement.origin().lineNumber());
+			return null;
+		case OBJECT:
+			Config genObject = ((ConfigObject)genElement).toConfig();
+			if (genObject.hasPath("type")) {
+				type = genObject.getString("name");
+			} else {
+				log.warn("Value missing 'type' field at line %d", genElement.origin().lineNumber());
 			}
-			if (type == null) {
-				log.warn("Invalid string entry!");
-				return null;
+			if (genObject.hasPath("weight")) {
+				weight = genObject.getInt("weight");
 			}
-			if (genObject.has("weight")) {
-				weight = genObject.get("weight").getAsInt();
-			}
-		} else {
-			type = genElement.getAsString();
-			if (type == null) {
-				log.warn("Invalid string entry!");
-				return null;
-			}
+			break;
+		case BOOLEAN:
+		case NUMBER:
+		case STRING:
+			type = String.valueOf(genElement.unwrapped());
+			break;
 		}
 		return new DungeonMob(weight, type);
 	}
 
-	public static boolean parseWeightedStringList(JsonElement genElement, List<DungeonMob> list) {
+	public static boolean parseWeightedStringList(ConfigValue genElement, List<DungeonMob> list) {
 
-		if (genElement.isJsonArray()) {
-			JsonArray blockList = genElement.getAsJsonArray();
+		if (genElement.valueType() == ConfigValueType.LIST) {
+			ConfigList blockList = (ConfigList) genElement;
 
 			for (int i = 0, e = blockList.size(); i < e; i++) {
 				DungeonMob entry = parseWeightedStringEntry(blockList.get(i));
@@ -596,47 +645,47 @@ public class FeatureParser {
 		return true;
 	}
 
-	public static WeightedRandomItemStack parseWeightedRandomItem(JsonElement genElement) {
+	public static WeightedRandomItemStack parseWeightedRandomItem(ConfigValue genElement) {
 
-		if (genElement.isJsonNull()) {
+		if (genElement.valueType() == ConfigValueType.NULL) {
 			return null;
 		}
 		int metadata = 0, stackSize = 1, chance = 100;
 		ItemStack stack;
 
-		if (genElement.isJsonPrimitive()) {
-			stack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(genElement.getAsString())), 1, metadata);
+		if (genElement.valueType() != ConfigValueType.OBJECT) {
+			stack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(String.valueOf(genElement.unwrapped()))), 1, metadata);
 		} else {
-			JsonObject item = genElement.getAsJsonObject();
+			Config item = ((ConfigObject)genElement).toConfig();
 
-			if (item.has("metadata")) {
-				metadata = item.get("metadata").getAsInt();
+			if (item.hasPath("metadata")) {
+				metadata = item.getInt("metadata");
 			}
-			if (item.has("stackSize")) {
-				stackSize = item.get("stackSize").getAsInt();
-			} else if (item.has("amount")) {
-				stackSize = item.get("amount").getAsInt();
-			} else if (item.has("count")) {
-				stackSize = item.get("count").getAsInt();
+			if (item.hasPath("stackSize")) {
+				stackSize = item.getInt("stackSize");
+			} else if (item.hasPath("amount")) {
+				stackSize = item.getInt("amount");
+			} else if (item.hasPath("count")) {
+				stackSize = item.getInt("count");
 			}
 			if (stackSize <= 0) {
 				stackSize = 1;
 			}
-			if (item.has("weight")) {
-				chance = item.get("weight").getAsInt();
+			if (item.hasPath("weight")) {
+				chance = item.getInt("weight");
 			}
-			if (item.has("oreName") && ItemHelper.oreNameExists(item.get("oreName").getAsString())) {
-				ItemStack oreStack = OreDictionary.getOres(item.get("oreName").getAsString()).get(0);
+			if (item.hasPath("oreName") && ItemHelper.oreNameExists(item.getString("oreName"))) {
+				ItemStack oreStack = OreDictionary.getOres(item.getString("oreName")).get(0);
 				stack = ItemHelper.cloneStack(oreStack, stackSize);
 			} else {
-				if (!item.has("name")) {
+				if (!item.hasPath("name")) {
 					log.error("Item entry missing valid name or oreName!");
 				}
-				stack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(item.get("name").getAsString())), stackSize, metadata);
+				stack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(item.getString("name"))), stackSize, metadata);
 			}
-			if (item.has("nbt")) {
+			if (item.hasPath("nbt")) {
 				try {
-					NBTTagCompound nbtbase = JsonToNBT.getTagFromJson(item.get("nbt").getAsString());
+					NBTTagCompound nbtbase = JsonToNBT.getTagFromJson(item.getString("nbt"));
 
 					stack.setTagCompound(nbtbase);
 				} catch (NBTException t) {
@@ -650,16 +699,16 @@ public class FeatureParser {
 		return new WeightedRandomItemStack(stack, chance);
 	}
 
-	public static boolean parseWeightedItemList(JsonElement genElement, List<WeightedRandomItemStack> res) {
+	public static boolean parseWeightedItemList(ConfigValue genElement, List<WeightedRandomItemStack> res) {
 
-		if (!genElement.isJsonArray()) {
+		if (genElement.valueType() != ConfigValueType.LIST) {
 			WeightedRandomItemStack entry = parseWeightedRandomItem(genElement);
 			if (entry == null) {
 				return false;
 			}
 			res.add(entry);
 		} else {
-			JsonArray list = genElement.getAsJsonArray();
+			ConfigList list = (ConfigList) genElement;
 
 			for (int i = 0, e = list.size(); i < e; ++i) {
 				WeightedRandomItemStack entry = parseWeightedRandomItem(list.get(i));

@@ -6,6 +6,7 @@ import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenUnderfluid;
 import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
 import gnu.trove.set.hash.TIntHashSet;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -34,14 +35,14 @@ public class UnderfluidParser extends UniformParser {
 	}
 
 	@Override
-	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
+	protected FeatureBase getFeature(String featureName, Config genObject, WorldGenerator gen, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
 		boolean water = true;
 		int[] fluidList = null;
 		l:
-		if (genObject.has("genFluid")) {
+		if (genObject.hasPath("genFluid")) {
 			ArrayList<DungeonMob> list = new ArrayList<DungeonMob>();
-			if (!FeatureParser.parseWeightedStringList(genObject.get("genFluid"), list)) {
+			if (!FeatureParser.parseWeightedStringList(genObject.root().get("genFluid"), list)) {
 				break l;
 			}
 			water = false;
@@ -59,9 +60,9 @@ public class UnderfluidParser extends UniformParser {
 
 		// TODO: WorldGeneratorAdv that allows access to its material list
 		List<WeightedRandomBlock> matList = defaultMaterial;
-		if (genObject.has("material")) {
+		if (genObject.hasPath("material")) {
 			matList = new ArrayList<WeightedRandomBlock>();
-			if (!FeatureParser.parseResList(genObject.get("material"), matList, false)) {
+			if (!FeatureParser.parseResList(genObject.root().get("material"), matList, false)) {
 				log.warn("Invalid material list! Using default list.");
 				matList = defaultMaterial;
 			}

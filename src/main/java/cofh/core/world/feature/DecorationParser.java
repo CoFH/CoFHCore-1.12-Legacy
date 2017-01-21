@@ -6,6 +6,7 @@ import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.WorldGenDecoration;
 import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;
@@ -17,37 +18,37 @@ import java.util.List;
 public class DecorationParser extends SurfaceParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, Config genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
 
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
-		if (!genObject.has("genSurface")) {
+		if (!genObject.hasPath("genSurface")) {
 			log.info("Entry does not specify genSurface for 'decoration' generator. Using grass.");
 			list.add(new WeightedRandomBlock(Blocks.GRASS));
 		} else {
-			if (!FeatureParser.parseResList(genObject.get("genSurface"), list, false)) {
+			if (!FeatureParser.parseResList(genObject.root().get("genSurface"), list, false)) {
 				log.warn("Entry specifies invalid genSurface for 'decoration' generator! Using grass!");
 				list.clear();
 				list.add(new WeightedRandomBlock(Blocks.GRASS));
 			}
 		}
 		WorldGenDecoration r = new WorldGenDecoration(resList, clusterSize, matList, list);
-		if (genObject.has("genSky")) {
-			r.seeSky = genObject.get("genSky").getAsBoolean();
+		if (genObject.hasPath("genSky")) {
+			r.seeSky = genObject.getBoolean("genSky");
 		}
-		if (genObject.has("checkStay")) {
-			r.checkStay = genObject.get("checkStay").getAsBoolean();
+		if (genObject.hasPath("checkStay")) {
+			r.checkStay = genObject.getBoolean("checkStay");
 		}
-		if (genObject.has("stackHeight")) {
-			r.stackHeight = genObject.get("stackHeight").getAsInt();
+		if (genObject.hasPath("stackHeight")) {
+			r.stackHeight = genObject.getInt("stackHeight");
 		}
-		if (genObject.has("xVariance")) {
-			r.xVar = MathHelper.clamp(genObject.get("xVariance").getAsInt(), 1, 15);
+		if (genObject.hasPath("xVariance")) {
+			r.xVar = MathHelper.clamp(genObject.getInt("xVariance"), 1, 15);
 		}
-		if (genObject.has("yVariance")) {
-			r.yVar = MathHelper.clamp(genObject.get("yVariance").getAsInt(), 0, 15);
+		if (genObject.hasPath("yVariance")) {
+			r.yVar = MathHelper.clamp(genObject.getInt("yVariance"), 0, 15);
 		}
-		if (genObject.has("zVariance")) {
-			r.zVar = MathHelper.clamp(genObject.get("zVariance").getAsInt(), 1, 15);
+		if (genObject.hasPath("zVariance")) {
+			r.zVar = MathHelper.clamp(genObject.getInt("zVariance"), 1, 15);
 		}
 		return r;
 	}

@@ -5,6 +5,7 @@ import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.world.WorldGenMinableCluster;
 import cofh.lib.world.WorldGenSparseMinableCluster;
 import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +21,7 @@ public class ClusterParser implements IGeneratorParser {
 	}
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, Config genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
 
 		if (sparse) {
 			return new WorldGenSparseMinableCluster(resList, clusterSize, matList);

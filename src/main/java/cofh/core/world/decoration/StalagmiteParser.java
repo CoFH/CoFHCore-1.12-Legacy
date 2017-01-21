@@ -6,6 +6,7 @@ import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.world.WorldGenStalactite;
 import cofh.lib.world.WorldGenStalagmite;
 import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;
@@ -23,14 +24,14 @@ public class StalagmiteParser implements IGeneratorParser {
 	}
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, Config genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
 
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
-		if (!genObject.has("genBody")) {
+		if (!genObject.hasPath("genBody")) {
 			log.info("Entry does not specify genBody for 'stalagmite' generator. Using air.");
 			list.add(new WeightedRandomBlock(Blocks.AIR));
 		} else {
-			if (!FeatureParser.parseResList(genObject.get("genBody"), list, false)) {
+			if (!FeatureParser.parseResList(genObject.root().get("genBody"), list, false)) {
 				log.warn("Entry specifies invalid genBody for 'stalagmite' generator! Using air!");
 				list.clear();
 				list.add(new WeightedRandomBlock(Blocks.AIR));
@@ -38,29 +39,29 @@ public class StalagmiteParser implements IGeneratorParser {
 		}
 		WorldGenStalagmite r = stalactite ? new WorldGenStalactite(resList, matList, list) : new WorldGenStalagmite(resList, matList, list);
 		{
-			if (genObject.has("minHeight")) {
-				r.minHeight = genObject.get("minHeight").getAsInt();
+			if (genObject.hasPath("minHeight")) {
+				r.minHeight = genObject.getInt("minHeight");
 			}
-			if (genObject.has("heightVariance")) {
-				r.heightVariance = genObject.get("heightVariance").getAsInt();
+			if (genObject.hasPath("heightVariance")) {
+				r.heightVariance = genObject.getInt("heightVariance");
 			}
-			if (genObject.has("sizeVariance")) {
-				r.sizeVariance = genObject.get("sizeVariance").getAsInt();
+			if (genObject.hasPath("sizeVariance")) {
+				r.sizeVariance = genObject.getInt("sizeVariance");
 			}
-			if (genObject.has("heightMod")) {
-				r.heightMod = genObject.get("heightMod").getAsInt();
+			if (genObject.hasPath("heightMod")) {
+				r.heightMod = genObject.getInt("heightMod");
 			}
-			if (genObject.has("genSize")) {
-				r.genSize = genObject.get("genSize").getAsInt();
+			if (genObject.hasPath("genSize")) {
+				r.genSize = genObject.getInt("genSize");
 			}
-			if (genObject.has("smooth")) {
-				r.smooth = genObject.get("smooth").getAsBoolean();
+			if (genObject.hasPath("smooth")) {
+				r.smooth = genObject.getBoolean("smooth");
 			}
-			if (genObject.has("fat")) {
-				r.fat = genObject.get("fat").getAsBoolean();
+			if (genObject.hasPath("fat")) {
+				r.fat = genObject.getBoolean("fat");
 			}
-			if (genObject.has("altSinc")) {
-				r.altSinc = genObject.get("altSinc").getAsBoolean();
+			if (genObject.hasPath("altSinc")) {
+				r.altSinc = genObject.getBoolean("altSinc");
 			}
 		}
 		return r;

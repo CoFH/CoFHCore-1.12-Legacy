@@ -5,6 +5,7 @@ import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.WeightedRandomNBTTag;
 import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;
@@ -16,11 +17,11 @@ import java.util.List;
 public class DungeonParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, Config genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
 
 		ArrayList<WeightedRandomNBTTag> mobList = new ArrayList<WeightedRandomNBTTag>();
-		if (genObject.has("spawnEntity")) {
-			if (!FeatureParser.parseEntityList(genObject.get("spawnEntity"), mobList)) {
+		if (genObject.hasPath("spawnEntity")) {
+			if (!FeatureParser.parseEntityList(genObject.root().get("spawnEntity"), mobList)) {
 				log.warn("Entry specifies invalid entity list for 'dungeon' generator! Using 'Pig'!");
 				mobList.clear();
 				NBTTagCompound tag = new NBTTagCompound();
