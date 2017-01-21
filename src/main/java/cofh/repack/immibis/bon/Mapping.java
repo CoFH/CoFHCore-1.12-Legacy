@@ -111,6 +111,7 @@ public class Mapping {
 		if (type == null) {
 			return null;
 		}
+		type = type.replaceAll("(^\\s+)|(\\s+$)","");
 		int pos = 0, len = type.length(), l = type.indexOf('<');
 		char c;
 		StringBuilder out = new StringBuilder(len);
