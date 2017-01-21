@@ -110,11 +110,11 @@ public class ItemCoFHBase extends ItemCore implements IModelRegister {
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
 
-		int i = stack.getItemDamage();
+		int i = ItemHelper.getItemDamage(stack);
 		if (!itemMap.containsKey(Integer.valueOf(i))) {
 			return EnumRarity.COMMON;
 		}
-		return itemMap.get(stack.getItemDamage()).rarity;
+		return itemMap.get(ItemHelper.getItemDamage(stack)).rarity;
 	}
 
 	@Override
@@ -161,13 +161,13 @@ public class ItemCoFHBase extends ItemCore implements IModelRegister {
 		public String name;
 		public EnumRarity rarity;
 
-		public ItemEntry(String name, EnumRarity rarity) {
+		ItemEntry(String name, EnumRarity rarity) {
 
 			this.name = name;
 			this.rarity = rarity;
 		}
 
-		public ItemEntry(String name) {
+		ItemEntry(String name) {
 
 			this(name, EnumRarity.COMMON);
 		}

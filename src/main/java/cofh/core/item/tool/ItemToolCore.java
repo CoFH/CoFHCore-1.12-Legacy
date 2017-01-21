@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
@@ -61,9 +62,10 @@ public abstract class ItemToolCore extends ItemTool {
 		return this;
 	}
 
-	protected void addToolClass(String string) {
+	protected ItemToolCore addToolClass(String string) {
 
 		toolClasses.add(string);
+		return this;
 	}
 
 	protected boolean harvestBlock(World world, BlockPos pos, EntityPlayer player) {
@@ -130,21 +132,6 @@ public abstract class ItemToolCore extends ItemTool {
 		return true;
 	}
 
-	protected boolean isClassValid(String toolClass, ItemStack stack) {
-
-		return true;
-	}
-
-	protected boolean isValidHarvestMaterial(ItemStack stack, World world, BlockPos pos) {
-
-		return getEffectiveMaterials(stack).contains(world.getBlockState(pos).getMaterial());
-	}
-
-	protected int getHarvestLevel(ItemStack stack, int level) {
-
-		return level;
-	}
-
 	protected float getEfficiency(ItemStack stack) {
 
 		return efficiencyOnProperMaterial;
@@ -188,16 +175,15 @@ public abstract class ItemToolCore extends ItemTool {
 	}
 
 	@Override
-	public int getHarvestLevel(ItemStack stack, String toolClass) {
+	public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
 
 		if (harvestLevel != -1) {
 			return harvestLevel;
 		}
-		int level = super.getHarvestLevel(stack, toolClass);
-		if (level == -1 && isClassValid(toolClass, stack) && toolClasses.contains(toolClass)) {
-			level = toolMaterial.getHarvestLevel();
+		if (!getToolClasses(stack).contains(toolClass)) {
+			return -1;
 		}
-		return getHarvestLevel(stack, level);
+		return toolMaterial.getHarvestLevel();
 	}
 
 	@Override
