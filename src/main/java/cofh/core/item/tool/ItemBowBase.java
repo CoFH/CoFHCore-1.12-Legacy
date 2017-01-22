@@ -24,7 +24,10 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -32,7 +35,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,25 +59,25 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 		setMaxStackSize(1);
 		setHasSubtypes(true);
 
-		addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
-			@SideOnly (Side.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-
-				if (entityIn == null) {
-					return 0.0F;
-				} else {
-					ItemStack itemstack = entityIn.getActiveItemStack();
-					return itemstack != null && itemstack.getItem() instanceof ItemBow ? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
-				}
-			}
-		});
-		addPropertyOverride(new ResourceLocation("pulling"), new IItemPropertyGetter() {
-			@SideOnly (Side.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-
-				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
-			}
-		});
+		//		addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
+		//			@SideOnly (Side.CLIENT)
+		//			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+		//
+		//				if (entityIn == null) {
+		//					return 0.0F;
+		//				} else {
+		//					ItemStack itemstack = entityIn.getActiveItemStack();
+		//					return itemstack != null && itemstack.getItem() instanceof ItemBow ? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+		//				}
+		//			}
+		//		});
+		//		addPropertyOverride(new ResourceLocation("pulling"), new IItemPropertyGetter() {
+		//			@SideOnly (Side.CLIENT)
+		//			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+		//
+		//				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
+		//			}
+		//		});
 	}
 
 	public ItemBowBase setShowInCreative(boolean showInCreative) {
@@ -170,7 +172,11 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 			return;
 		}
 		for (int i = 0; i < itemList.size(); i++) {
-			list.add(new ItemStack(item, 1, itemList.get(i)));
+			ItemStack stack = new ItemStack(item, 1, itemList.get(i));
+			stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setInteger("Damage", 0);
+
+			list.add(stack);
 		}
 	}
 
@@ -179,6 +185,7 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 
 		if (stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setInteger("Damage", 0);
 		}
 		if (damage < 0) {
 			damage = 0;
@@ -213,7 +220,7 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
 
-		return false;
+		return !ItemHelper.itemsEqualWithMetadata(oldStack, newStack);
 	}
 
 	@Override
@@ -221,6 +228,7 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 
 		if (stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setInteger("Damage", 0);
 		}
 		return stack.getTagCompound().getInteger("Damage");
 	}
@@ -239,6 +247,16 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 	public int getMaxDamage(ItemStack stack) {
 
 		return getToolMaterial(stack).getMaxUses() + 325;
+	}
+
+	@Override
+	public int getMetadata(ItemStack stack) {
+
+		if (stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setInteger("Damage", 0);
+		}
+		return stack.getTagCompound().getInteger("Damage");
 	}
 
 	@Override
