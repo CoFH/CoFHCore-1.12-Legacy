@@ -2,6 +2,7 @@ package cofh.core.world.feature;
 
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.util.numbers.INumberProvider;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenSurface;
@@ -25,7 +26,7 @@ public class SurfaceParser extends UniformParser {
 	}
 
 	@Override
-	protected FeatureBase getFeature(String featureName, Config genObject, WorldGenerator gen, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
+	protected FeatureBase getFeature(String featureName, Config genObject, WorldGenerator gen, INumberProvider numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
 		// TODO: WorldGeneratorAdv that allows access to its material list
 		List<WeightedRandomBlock> matList = defaultMaterial;

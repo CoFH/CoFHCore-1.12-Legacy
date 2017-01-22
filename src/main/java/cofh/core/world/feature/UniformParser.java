@@ -5,6 +5,7 @@ import cofh.api.world.IFeatureParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;
+import cofh.lib.util.numbers.INumberProvider;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenUniform;
@@ -38,11 +39,7 @@ public class UniformParser implements IFeatureParser {
 	@Override
 	public IFeatureGenerator parseFeature(String featureName, Config genObject, Logger log) {
 
-		int numClusters = genObject.getInt("clusterCount");
-		if (numClusters <= 0) {
-			log.error("Invalid cluster count specified in '%s'", featureName);
-			return null;
-		}
+		INumberProvider numClusters = FeatureParser.parseNumberValue(genObject.root().get("clusterCount"), 0, Long.MAX_VALUE);
 		boolean retrogen = false;
 		if (genObject.hasPath("retrogen")) {
 			retrogen = genObject.getBoolean("retrogen");
@@ -73,19 +70,21 @@ public class UniformParser implements IFeatureParser {
 		return feature;
 	}
 
-	protected FeatureBase getFeature(String featureName, Config genObject, WorldGenerator gen, int numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
+	protected FeatureBase getFeature(String featureName, Config genObject, WorldGenerator gen, INumberProvider numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
 		if (!(genObject.hasPath("minHeight") && genObject.hasPath("maxHeight"))) {
 			log.error("Height parameters for 'uniform' template not specified in \"" + featureName + "\"");
 			return null;
 		}
 
-		int minHeight = genObject.getInt("minHeight");
-		int maxHeight = genObject.getInt("maxHeight");
+		INumberProvider minHeight = FeatureParser.parseNumberValue(genObject.root().get("minHeight"));
+		INumberProvider maxHeight = FeatureParser.parseNumberValue(genObject.root().get("maxHeight"));
 
-		if (minHeight >= maxHeight || minHeight < 0) {
-			log.error("Invalid height parameters specified in \"" + featureName + "\"");
-			return null;
+		// TODO: er... well, we need this
+		//if (minHeight >= maxHeight || minHeight < 0)
+		{
+		//	log.error("Invalid height parameters specified in \"" + featureName + "\"");
+		//	return null;
 		}
 		return new FeatureGenUniform(featureName, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
 	}
