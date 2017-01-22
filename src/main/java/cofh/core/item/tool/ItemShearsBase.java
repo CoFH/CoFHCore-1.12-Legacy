@@ -12,14 +12,13 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -32,44 +31,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ItemSwordBase extends ItemSword implements IModelRegister {
+public class ItemShearsBase extends ItemShears implements IModelRegister {
 
 	protected TMap<Integer, ToolEntry> itemMap = new THashMap<Integer, ToolEntry>();
 	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
 
 	protected String name;
 	protected String modName;
-	protected float baseAttackDamage = 3.0F;
-	protected float baseAttackSpeed = -2.4F;
 	protected boolean showInCreative = true;
 
-	public ItemSwordBase() {
+	public ItemShearsBase() {
 
 		this("cofh");
 	}
 
-	public ItemSwordBase(String modName) {
+	public ItemShearsBase(String modName) {
 
-		super(ToolMaterial.STONE);
 		this.modName = modName;
 		setMaxStackSize(1);
 		setHasSubtypes(true);
-	}
-
-	public ItemSwordBase setShowInCreative(boolean showInCreative) {
-
-		this.showInCreative = showInCreative;
-		return this;
-	}
-
-	protected float getAttackDamage(ItemStack stack) {
-
-		return baseAttackDamage + getToolMaterial(stack).getDamageVsEntity();
-	}
-
-	protected float getAttackSpeed(ItemStack stack) {
-
-		return baseAttackSpeed;
 	}
 
 	protected String getRepairIngot(ItemStack stack) {
@@ -192,7 +172,7 @@ public class ItemSwordBase extends ItemSword implements IModelRegister {
 	@Override
 	public int getMaxDamage(ItemStack stack) {
 
-		return getToolMaterial(stack).getMaxUses();
+		return getToolMaterial(stack).getMaxUses() - 12;
 	}
 
 	@Override
@@ -210,11 +190,6 @@ public class ItemSwordBase extends ItemSword implements IModelRegister {
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
 
 		Multimap<String, AttributeModifier> multimap = HashMultimap.<String, AttributeModifier>create();
-
-		if (slot == EntityEquipmentSlot.MAINHAND) {
-			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", getAttackDamage(stack), 0));
-			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", getAttackSpeed(stack), 0));
-		}
 
 		return multimap;
 	}
@@ -245,12 +220,6 @@ public class ItemSwordBase extends ItemSword implements IModelRegister {
 		}
 		ToolEntry item = itemMap.get(i);
 		return getUnlocalizedName() + "." + item.name;
-	}
-
-	@Override
-	public String getToolMaterialName() {
-
-		return "";
 	}
 
 	@Override

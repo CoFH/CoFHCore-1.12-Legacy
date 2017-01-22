@@ -21,7 +21,7 @@ public class ItemSickleCore extends ItemToolCore {
 
 	public ItemSickleCore(ToolMaterial toolMaterial) {
 
-		super(3.0F, -2.4F, toolMaterial);
+		super(3.0F, -2.6F, toolMaterial);
 		addToolClass("sickle");
 
 		effectiveBlocks.add(Blocks.WEB);

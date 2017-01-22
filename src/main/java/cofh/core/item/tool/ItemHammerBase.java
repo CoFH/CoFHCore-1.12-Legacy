@@ -16,7 +16,7 @@ public class ItemHammerBase extends ItemToolBase {
 
 	public ItemHammerBase(String modName) {
 
-		super(modName);
+		super(modName, 4.0F, -3.6F);
 		addToolClass("pickaxe");
 		addToolClass("hammer");
 

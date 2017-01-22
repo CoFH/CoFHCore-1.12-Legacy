@@ -64,15 +64,17 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 	protected float baseAttackSpeed = -2.4F;
 	protected boolean showInCreative = true;
 
-	public ItemToolBase() {
+	public ItemToolBase(float baseAttackDamage, float baseAttackSpeed) {
 
-		this("cofh");
+		this("cofh", baseAttackDamage, baseAttackSpeed);
 	}
 
-	public ItemToolBase(String modName) {
+	public ItemToolBase(String modName, float baseAttackDamage, float baseAttackSpeed) {
 
 		super(ToolMaterial.STONE, null);
 		this.modName = modName;
+		this.baseAttackDamage = baseAttackDamage;
+		this.baseAttackSpeed = baseAttackSpeed;
 		setMaxStackSize(1);
 		setHasSubtypes(true);
 	}
@@ -217,8 +219,6 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 		itemList.add(Integer.valueOf(number));
 
 		ItemStack stack = new ItemStack(this, 1, number);
-		stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setInteger("Damage", 0);
 		return stack;
 	}
 
@@ -248,6 +248,9 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 	@Override
 	public void setDamage(ItemStack stack, int damage) {
 
+		if (stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
+		}
 		if (damage < 0) {
 			damage = 0;
 		}
@@ -273,6 +276,12 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 	}
 
 	@Override
+	public boolean isDamaged(ItemStack stack) {
+
+		return getDamage(stack) > 0;
+	}
+
+	@Override
 	public boolean isItemTool(ItemStack stack) {
 
 		return true;
@@ -287,6 +296,9 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 	@Override
 	public int getDamage(ItemStack stack) {
 
+		if (stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
+		}
 		return stack.getTagCompound().getInteger("Damage");
 	}
 

@@ -15,7 +15,7 @@ public class ItemHammerCore extends ItemToolCore {
 
 	public ItemHammerCore(ToolMaterial toolMaterial) {
 
-		this(-3.5F, toolMaterial);
+		this(-3.6F, toolMaterial);
 	}
 
 	public ItemHammerCore(float attackSpeed, ToolMaterial toolMaterial) {

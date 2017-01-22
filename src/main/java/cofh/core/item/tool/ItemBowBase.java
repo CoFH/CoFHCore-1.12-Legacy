@@ -1,24 +1,29 @@
 package cofh.core.item.tool;
 
 import cofh.api.core.IModelRegister;
-import cofh.core.entity.EntityCoFHFishHook;
+import cofh.api.item.IEmpowerableItem;
+import cofh.core.enchantment.CoFHEnchantment;
 import cofh.core.render.CoFHFontRenderer;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
-import cofh.lib.util.helpers.ServerHelper;
 import cofh.lib.util.helpers.StringHelper;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -32,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister {
+public class ItemBowBase extends ItemBow implements IModelRegister {
 
 	protected TMap<Integer, ToolEntry> itemMap = new THashMap<Integer, ToolEntry>();
 	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
@@ -41,27 +46,39 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 	protected String modName;
 	protected boolean showInCreative = true;
 
-	public ItemFishingRodBase() {
+	public ItemBowBase() {
 
 		this("cofh");
 	}
 
-	public ItemFishingRodBase(String modName) {
+	public ItemBowBase(String modName) {
 
 		this.modName = modName;
 		setMaxStackSize(1);
 		setHasSubtypes(true);
 
-		addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter() {
+		addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
 			@SideOnly (Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 
-				return entityIn == null ? 0.0F : (entityIn.getHeldItemMainhand() == stack && entityIn instanceof EntityPlayer && ((EntityPlayer) entityIn).fishEntity != null ? 1.0F : 0.0F);
+				if (entityIn == null) {
+					return 0.0F;
+				} else {
+					ItemStack itemstack = entityIn.getActiveItemStack();
+					return itemstack != null && itemstack.getItem() instanceof ItemBow ? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+				}
+			}
+		});
+		addPropertyOverride(new ResourceLocation("pulling"), new IItemPropertyGetter() {
+			@SideOnly (Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+
+				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
 			}
 		});
 	}
 
-	public ItemFishingRodBase setShowInCreative(boolean showInCreative) {
+	public ItemBowBase setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
 		return this;
@@ -78,16 +95,16 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 		list.add(StringHelper.getInfoText("info." + modName + "." + name + "." + item.name));
 	}
 
-	protected int getLuckModifier(ItemStack stack) {
+	protected float getDamageModifier(ItemStack stack) {
 
 		int i = ItemHelper.getItemDamage(stack);
 		if (!itemMap.containsKey(Integer.valueOf(i))) {
 			return 0;
 		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).luckModifier;
+		return itemMap.get(ItemHelper.getItemDamage(stack)).damageModifier;
 	}
 
-	protected int getSpeedModifier(ItemStack stack) {
+	protected float getSpeedModifier(ItemStack stack) {
 
 		int i = ItemHelper.getItemDamage(stack);
 		if (!itemMap.containsKey(Integer.valueOf(i))) {
@@ -221,7 +238,7 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 	@Override
 	public int getMaxDamage(ItemStack stack) {
 
-		return getToolMaterial(stack).getMaxUses() + 5;
+		return getToolMaterial(stack).getMaxUses() + 325;
 	}
 
 	@Override
@@ -264,24 +281,6 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-
-		if (player.fishEntity != null) {
-			int i = player.fishEntity.handleHookRetraction();
-			stack.damageItem(i, player);
-			player.swingArm(hand);
-		} else {
-			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-
-			if (ServerHelper.isServerWorld(world)) {
-				world.spawnEntityInWorld(new EntityCoFHFishHook(world, player, getLuckModifier(stack), getSpeedModifier(stack)));
-			}
-			player.swingArm(hand);
-		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
-	}
-
-	@Override
 	public Item setUnlocalizedName(String name) {
 
 		GameRegistry.register(setRegistryName(name));
@@ -296,6 +295,109 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 		this.name = name;
 		name = modName + "." + name;
 		return super.setUnlocalizedName(name);
+	}
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+
+		boolean flag = this.findAmmo(player) != null;
+
+		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemStack, world, player, hand, flag);
+		if (ret != null) {
+			return ret;
+		}
+
+		if (!player.capabilities.isCreativeMode && !flag) {
+			return !flag ? new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStack) : new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
+		} else {
+			player.setActiveHand(hand);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+		}
+	}
+
+	//TODO Multishot enchant can use Arrow Loose Efent for better mod compatibility.
+	@Override
+	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase livingBase, int timeLeft) {
+
+		if (livingBase instanceof EntityPlayer) {
+			EntityPlayer entityplayer = (EntityPlayer) livingBase;
+			boolean flag = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
+			ItemStack itemstack = this.findAmmo(entityplayer);
+
+			int i = this.getMaxItemUseDuration(stack) - timeLeft;
+			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) livingBase, i, itemstack != null || flag);
+			if (i < 0) {
+				return;
+			}
+
+			if (itemstack != null || flag) {
+				if (itemstack == null) {
+					itemstack = new ItemStack(Items.ARROW);
+				}
+
+				float f = getArrowVelocity(i);
+
+				if ((double) f >= 0.1D) {
+					boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer) : false);
+					boolean empowered = this instanceof IEmpowerableItem && ((IEmpowerableItem) this).isEmpowered(stack);
+
+					if (!world.isRemote) {
+						int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoFHEnchantment.multishot, stack);
+						int punchLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
+						int powerLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
+						boolean flame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;
+						stack.damageItem(1, entityplayer);
+						onBowFired(entityplayer, stack);
+
+						for (int shot = 0; shot <= enchantMultishot; shot++) {
+							ItemArrow itemarrow = (ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW);
+							EntityArrow entityarrow = itemarrow.createArrow(world, itemstack, entityplayer);
+							entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+							if (empowered) {
+								entityarrow.setDamage(entityarrow.getDamage() + 1.5);
+							}
+
+							if (f == 1.0F) {
+								entityarrow.setIsCritical(true);
+							}
+
+							if (powerLvl > 0) {
+								entityarrow.setDamage(entityarrow.getDamage() + (double) powerLvl * 0.5D + 0.5D);
+							}
+
+							if (punchLvl > 0) {
+								entityarrow.setKnockbackStrength(punchLvl);
+							}
+
+							if (flame) {
+								entityarrow.setFire(100);
+							}
+
+							if (flag1) {
+								entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
+							}
+
+							world.spawnEntityInWorld(entityarrow);
+						}
+					}
+					world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+
+					if (!flag1) {
+						--itemstack.stackSize;
+
+						if (itemstack.stackSize == 0) {
+							entityplayer.inventory.deleteStack(itemstack);
+						}
+					}
+
+					entityplayer.addStat(StatList.getObjectUseStats(this));
+				}
+			}
+		}
+	}
+
+	public void onBowFired(EntityPlayer player, ItemStack stack) {
+
 	}
 
 	/* IModelRegister */
@@ -314,23 +416,23 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 		public String name;
 		public Item.ToolMaterial material;
 		public String ingot;
-		public int luckModifier;
-		public int speedModifier;
+		public float damageModifier;
+		public float speedModifier;
 		public EnumRarity rarity;
 
-		ToolEntry(String name, Item.ToolMaterial material, String ingot, int luckModifier, int speedModifier, EnumRarity rarity) {
+		ToolEntry(String name, Item.ToolMaterial material, String ingot, float damageModifier, float speedModifier, EnumRarity rarity) {
 
 			this.name = name;
 			this.material = material;
 			this.ingot = ingot;
-			this.luckModifier = luckModifier;
+			this.damageModifier = damageModifier;
 			this.speedModifier = speedModifier;
 			this.rarity = rarity;
 		}
 
-		ToolEntry(String name, Item.ToolMaterial material, String ingot, int luckModifier, int speedModifier) {
+		ToolEntry(String name, Item.ToolMaterial material, String ingot, float damageModifier, float speedModifier) {
 
-			this(name, material, ingot, luckModifier, speedModifier, EnumRarity.COMMON);
+			this(name, material, ingot, damageModifier, speedModifier, EnumRarity.COMMON);
 		}
 
 		ToolEntry(String name, Item.ToolMaterial material, String ingot) {

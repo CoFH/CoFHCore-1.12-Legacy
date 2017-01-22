@@ -7,7 +7,7 @@ public class ItemPickaxeBase extends ItemToolBase {
 
 	public ItemPickaxeBase(String modName) {
 
-		super(modName);
+		super(modName, 2.0F, -2.8F);
 		addToolClass("pickaxe");
 
 		effectiveBlocks.addAll(ItemPickaxe.EFFECTIVE_ON);

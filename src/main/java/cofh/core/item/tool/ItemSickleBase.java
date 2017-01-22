@@ -21,7 +21,7 @@ public class ItemSickleBase extends ItemToolBase {
 
 	public ItemSickleBase(String modName) {
 
-		super(modName);
+		super(modName, 3.0F, -2.6F);
 		addToolClass("sickle");
 
 		effectiveBlocks.add(Blocks.WEB);

@@ -7,7 +7,7 @@ public class ItemShovelBase extends ItemToolBase {
 
 	public ItemShovelBase(String modName) {
 
-		super(modName);
+		super(modName, 1.0F, -3.0F);
 		addToolClass("shovel");
 
 		effectiveBlocks.addAll(ItemSpade.EFFECTIVE_ON);

@@ -7,7 +7,7 @@ public class ItemAxeBase extends ItemToolBase {
 
 	public ItemAxeBase(String modName) {
 
-		super(modName);
+		super(modName, 3.0F, -3.2F);
 		addToolClass("axe");
 
 		effectiveBlocks.addAll(ItemAxe.EFFECTIVE_ON);

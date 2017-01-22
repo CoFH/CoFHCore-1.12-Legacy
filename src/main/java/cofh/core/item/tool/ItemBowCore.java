@@ -225,4 +225,5 @@ public class ItemBowCore extends ItemBow {
 	public void onBowFired(EntityPlayer player, ItemStack stack) {
 
 	}
+
 }
