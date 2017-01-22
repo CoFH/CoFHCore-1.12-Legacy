@@ -1,6 +1,7 @@
 package cofh.core.world.decoration;
 
 import cofh.api.world.IGeneratorParser;
+import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.WorldGenMinablePlate;
@@ -18,14 +19,11 @@ public class PlateParser implements IGeneratorParser {
 
 		WorldGenMinablePlate r = new WorldGenMinablePlate(resList, MathHelper.clamp(clusterSize, 0, 32), matList);
 		{
-			if (genObject.hasPath("sizeVariance")) {
-				r.variation = (byte) MathHelper.clamp(genObject.getInt("sizeVariance"), 0, 16);
-			}
 			if (genObject.hasPath("height")) {
-				r.height = (byte) MathHelper.clamp(genObject.getInt("height"), 0, 64);
+				r.setHeight(FeatureParser.parseNumberValue(genObject.root().get("height"), 0, 64));
 			}
 			if (genObject.hasPath("slim")) {
-				r.slim = genObject.getBoolean("slim");
+				r.setSlim(genObject.getBoolean("slim"));
 			}
 		}
 		return r;

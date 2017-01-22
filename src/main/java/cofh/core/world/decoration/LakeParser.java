@@ -25,15 +25,12 @@ public class LakeParser implements IGeneratorParser {
 		}
 		WorldGenAdvLakes r = new WorldGenAdvLakes(resList, useMaterial ? matList : null);
 		{
-			if (genObject.hasPath("outlineWithStone")) {
-				r.outlineBlock = genObject.getBoolean("outlineWithStone") ? Arrays.asList(new WeightedRandomBlock(Blocks.STONE, 0)) : null;
-			}
 			ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
 			if (genObject.hasPath("outlineBlock")) {
 				if (!FeatureParser.parseResList(genObject.root().get("outlineBlock"), list, true)) {
 					log.warn("Entry specifies invalid outlineBlock for 'lake' generator! Not filling!");
 				} else {
-					r.outlineBlock = list;
+					r.setOutlineBlock(list);
 				}
 				list = new ArrayList<WeightedRandomBlock>();
 			}
@@ -41,14 +38,14 @@ public class LakeParser implements IGeneratorParser {
 				if (!FeatureParser.parseResList(genObject.root().get("gapBlock"), list, true)) {
 					log.warn("Entry specifies invalid gapBlock for 'lake' generator! Not filling!");
 				} else {
-					r.gapBlock = list;
+					r.setGapBlock(list);
 				}
 			}
 			if (genObject.hasPath("solidOutline")) {
-				r.solidOutline = genObject.getBoolean("solidOutline");
+				r.setSolidOutline(genObject.getBoolean("solidOutline"));
 			}
 			if (genObject.hasPath("totalOutline")) {
-				r.totalOutline = genObject.getBoolean("totalOutline");
+				r.setTotalOutline(genObject.getBoolean("totalOutline"));
 			}
 		}
 		return r;

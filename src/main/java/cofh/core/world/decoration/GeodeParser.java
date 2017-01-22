@@ -32,14 +32,14 @@ public class GeodeParser implements IGeneratorParser {
 		WorldGenGeode r = new WorldGenGeode(resList, matList, list);
 		{
 			if (genObject.hasPath("hollow")) {
-				r.hollow = genObject.getBoolean("hollow");
+				r.setHollow(genObject.getBoolean("hollow"));
 			}
 			if (genObject.hasPath("filler")) {
 				list = new ArrayList<WeightedRandomBlock>();
 				if (!FeatureParser.parseResList(genObject.root().get("filler"), list, true)) {
 					log.warn("Entry specifies invalid filler for 'geode' generator! Not filling!");
 				} else {
-					r.fillBlock = list;
+					r.setFillBlock(list);
 				}
 			}
 		}

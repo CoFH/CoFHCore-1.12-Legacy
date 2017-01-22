@@ -12,6 +12,10 @@ import cofh.lib.util.WeightedRandomItemStack;
 import cofh.lib.util.WeightedRandomNBTTag;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.MathHelper;
+import cofh.lib.util.numbers.ConstantProvider;
+import cofh.lib.util.numbers.INumberProvider;
+import cofh.lib.util.numbers.SkellamRandomProvider;
+import cofh.lib.util.numbers.UniformRandomProvider;
 import cofh.lib.world.biome.BiomeInfo;
 import cofh.lib.world.biome.BiomeInfoRarity;
 import cofh.lib.world.biome.BiomeInfoSet;
@@ -35,6 +39,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.activation.UnsupportedDataTypeException;
 import javax.annotation.Resource;
 import java.io.*;
 import java.net.URL;
@@ -732,6 +737,44 @@ public class FeatureParser {
 			}
 		}
 		return true;
+	}
+
+	public static INumberProvider parseNumberValue(ConfigValue genElement) {
+
+		return parseNumberValue(genElement, Long.MIN_VALUE, Long.MAX_VALUE);
+	}
+
+	public static INumberProvider parseNumberValue(ConfigValue genElement, long min, long max) {
+		// TODO: verify min/max for values
+
+		switch(genElement.valueType()) {
+		case NUMBER:
+			return new ConstantProvider((Number)genElement.unwrapped());
+		case OBJECT:
+			ConfigObject genData = (ConfigObject) genElement;
+			Config genProp = genData.toConfig();
+			switch (genData.size()) {
+			case 1:
+				if (genData.containsKey("value")) {
+					return new ConstantProvider(genProp.getNumber("value"));
+				} else if (genData.containsKey("variance")) {
+					return new SkellamRandomProvider(genProp.getNumber("variance"));
+				}
+				break;
+			case 2:
+				if (genData.containsKey("min") && genData.containsKey("max")) {
+					return new UniformRandomProvider(genProp.getNumber("min"), genProp.getNumber("max"));
+				}
+				break;
+			default:
+				throw new Error(String.format("Too many properties on object at line %s", genElement.origin().lineNumber()));
+			case 0:
+				break;
+			}
+			throw new Error(String.format("Unknown properties on object at line %s", genElement.origin().lineNumber()));
+		default :
+			throw new Error(String.format("Unsupported data type at line %s", genElement.origin().lineNumber()));
+		}
 	}
 
 }
