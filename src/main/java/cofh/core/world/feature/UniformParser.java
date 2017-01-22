@@ -80,12 +80,6 @@ public class UniformParser implements IFeatureParser {
 		INumberProvider minHeight = FeatureParser.parseNumberValue(genObject.root().get("minHeight"));
 		INumberProvider maxHeight = FeatureParser.parseNumberValue(genObject.root().get("maxHeight"));
 
-		// TODO: er... well, we need this
-		//if (minHeight >= maxHeight || minHeight < 0)
-		{
-		//	log.error("Invalid height parameters specified in \"" + featureName + "\"");
-		//	return null;
-		}
 		return new FeatureGenUniform(featureName, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
 	}
 
