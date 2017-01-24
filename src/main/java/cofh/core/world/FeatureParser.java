@@ -10,12 +10,14 @@ import cofh.core.world.feature.*;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.WeightedRandomItemStack;
 import cofh.lib.util.WeightedRandomNBTTag;
+import cofh.lib.util.WeightedRandomWorldGenerator;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.numbers.ConstantProvider;
 import cofh.lib.util.numbers.INumberProvider;
 import cofh.lib.util.numbers.SkellamRandomProvider;
 import cofh.lib.util.numbers.UniformRandomProvider;
+import cofh.lib.world.WorldGenMulti;
 import cofh.lib.world.biome.BiomeInfo;
 import cofh.lib.world.biome.BiomeInfoRarity;
 import cofh.lib.world.biome.BiomeInfoSet;
@@ -28,6 +30,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -258,19 +261,27 @@ public class FeatureParser {
 			}
 
 			if (genList.hasPath("populate")) {
-				Config genData = genList.getConfig("populate");
 				log.info("Reading world generation info from: %s:", file);
+				Config genData = genList.getConfig("populate");
 				for (Entry<String, ConfigValue> genEntry : genData.root().entrySet()) {
+					String key = genEntry.getKey();
 					try {
 						if (genEntry.getValue().valueType() != ConfigValueType.OBJECT) {
-							log.error("Error parsing generation entry: '%s' > This must be an object and is not.", genEntry.getKey());
-						}  else if (parseGenerationEntry(genEntry.getKey(), genData.getConfig(genEntry.getKey()))) {
-							log.debug("Generation entry successfully parsed: '%s'", genEntry.getKey());
+							log.error("Error parsing generation entry: '%s' > This must be an object and is not.", key);
 						} else {
-							log.error("Error parsing generation entry: '%s' > Please check the parameters. It *may* be a duplicate.", genEntry.getKey());
+							switch (parseGenerationEntry(key, genData.getConfig(key))) {
+							case SUCCESS:
+								log.debug("Generation entry successfully parsed: '%s'", key);
+								break;
+							case FAIL:
+								log.error("Error parsing generation entry: '%s' > Please check the parameters.", key);
+								break;
+							case PASS:
+								log.error("Error parsing generation entry: '%s' > It is a duplicate.", key);
+							}
 						}
 					} catch (Throwable t) {
-						log.fatal(String.format("There was a severe error parsing '%s'!", genEntry.getKey()), t);
+						log.fatal(String.format("There was a severe error parsing '%s'!", key), t);
 					}
 				}
 				log.info("Finished reading %s", file);
@@ -279,12 +290,12 @@ public class FeatureParser {
 		}
 	}
 
-	private static boolean parseGenerationEntry(String featureName, Config genObject) {
+	private static EnumActionResult parseGenerationEntry(String featureName, Config genObject) {
 
 		if (genObject.hasPath("enabled")) {
 			if (!genObject.getBoolean("enabled")) {
 				log.info('"' + featureName + "\" is disabled.");
-				return true;
+				return EnumActionResult.SUCCESS;
 			}
 		}
 
@@ -294,14 +305,14 @@ public class FeatureParser {
 			IFeatureGenerator feature = template.parseFeature(featureName, genObject, log);
 			if (feature != null) {
 				parsedFeatures.add(feature);
-				return WorldHandler.addFeature(feature);
+				return WorldHandler.addFeature(feature) ? EnumActionResult.SUCCESS : EnumActionResult.PASS;
 			}
 			log.warn("Template '" + templateName + "' failed to parse its entry!");
 		} else {
 			log.warn("Unknown template + '" + templateName + "'.");
 		}
 
-		return false;
+		return EnumActionResult.FAIL;
 	}
 
 	private static String parseTemplate(Config genObject) {
@@ -309,15 +320,32 @@ public class FeatureParser {
 		return genObject.getString("distribution");
 	}
 
-	// TODO: move these helper functions outside core?
-
 	public static WorldGenerator parseGenerator(String def, Config genObject, List<WeightedRandomBlock> defaultMaterial) {
 
-		String name = def;
 		if (!genObject.hasPath("generator")) {
 			return null;
 		}
-		genObject = genObject.getConfig("generator");
+		ConfigValue genData = genObject.root().get("generator");
+		if (genData.valueType() == ConfigValueType.LIST) {
+			List<? extends Config> list = genObject.getConfigList("generator");
+			ArrayList<WeightedRandomWorldGenerator> gens = new ArrayList<WeightedRandomWorldGenerator>(list.size());
+			for (Config genElement : list) {
+				WorldGenerator gen = parseGeneratorData(def, genElement, defaultMaterial);
+				int weight = genElement.hasPath("weight") ? genElement.getInt("weight") : 100;
+				gens.add(new WeightedRandomWorldGenerator(gen, weight));
+			}
+			return new WorldGenMulti(gens);
+		} else if (genData.valueType() == ConfigValueType.OBJECT) {
+			return parseGeneratorData(def, genObject.getConfig("generator"), defaultMaterial);
+		} else {
+			log.error("Invalid data type for field 'generator'. > It must be an object or list.");
+			return null;
+		}
+	}
+
+	private static WorldGenerator parseGeneratorData(String def, Config genObject, List<WeightedRandomBlock> defaultMaterial) {
+
+		String name = def;
 		if (genObject.hasPath("type")) {
 			name = genObject.getString("type");
 			if (!generatorHandlers.containsKey(name)) {
