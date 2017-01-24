@@ -3,9 +3,9 @@ package cofh.core.item.tool;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemAxe;
 
-public class ItemAxeBase extends ItemToolBase {
+public class ItemAxeMulti extends ItemToolMulti {
 
-	public ItemAxeBase(String modName) {
+	public ItemAxeMulti(String modName) {
 
 		super(modName, 3.0F, -3.2F);
 		addToolClass("axe");

@@ -1,25 +1,30 @@
 package cofh.core.item.tool;
 
 import cofh.api.core.IModelRegister;
-import cofh.core.entity.EntityCoFHFishHook;
 import cofh.core.render.CoFHFontRenderer;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
-import cofh.lib.util.helpers.ServerHelper;
 import cofh.lib.util.helpers.StringHelper;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.*;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -27,41 +32,36 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister {
+public class ItemSwordMulti extends ItemSword implements IModelRegister {
 
 	protected TMap<Integer, ToolEntry> itemMap = new THashMap<Integer, ToolEntry>();
 	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
+	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<Integer, ModelResourceLocation>();
 
 	protected String name;
 	protected String modName;
+	protected float baseAttackDamage = 3.0F;
+	protected float baseAttackSpeed = -2.4F;
 	protected boolean showInCreative = true;
 
-	public ItemFishingRodBase() {
+	public ItemSwordMulti() {
 
 		this("cofh");
 	}
 
-	public ItemFishingRodBase(String modName) {
+	public ItemSwordMulti(String modName) {
 
+		super(ToolMaterial.IRON);
 		this.modName = modName;
 		setMaxStackSize(1);
 		setHasSubtypes(true);
-
-		addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter() {
-			@SideOnly (Side.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-
-				return entityIn == null ? 0.0F : (entityIn.getHeldItemMainhand() == stack && entityIn instanceof EntityPlayer && ((EntityPlayer) entityIn).fishEntity != null ? 1.0F : 0.0F);
-			}
-		});
 	}
 
-	public ItemFishingRodBase setShowInCreative(boolean showInCreative) {
+	public ItemSwordMulti setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
 		return this;
@@ -78,29 +78,30 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 		list.add(StringHelper.getInfoText("info." + modName + "." + name + "." + item.name));
 	}
 
-	protected int getLuckModifier(ItemStack stack) {
+	protected int getStackDamage(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return 0;
+		if (stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setInteger("Damage", 0);
 		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).luckModifier;
+		return stack.getTagCompound().getInteger("Damage");
 	}
 
-	protected int getSpeedModifier(ItemStack stack) {
+	protected float getAttackDamage(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return 0;
-		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).speedModifier;
+		return baseAttackDamage + getToolMaterial(stack).getDamageVsEntity();
+	}
+
+	protected float getAttackSpeed(ItemStack stack) {
+
+		return baseAttackSpeed;
 	}
 
 	protected String getRepairIngot(ItemStack stack) {
 
 		int i = ItemHelper.getItemDamage(stack);
 		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return "cobblestone";
+			return "ingotIron";
 		}
 		return itemMap.get(ItemHelper.getItemDamage(stack)).ingot;
 	}
@@ -109,7 +110,7 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 
 		int i = ItemHelper.getItemDamage(stack);
 		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return ToolMaterial.WOOD;
+			return ToolMaterial.IRON;
 		}
 		return itemMap.get(ItemHelper.getItemDamage(stack)).material;
 	}
@@ -129,14 +130,9 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 		return stack;
 	}
 
-	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot, int luckModifier, int speedModifier, EnumRarity rarity) {
+	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot, EnumRarity rarity) {
 
-		return addItem(number, new ToolEntry(name, material, ingot, luckModifier, speedModifier, rarity));
-	}
-
-	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot, int luckModifier, int speedModifier) {
-
-		return addItem(number, new ToolEntry(name, material, ingot, luckModifier, speedModifier));
+		return addItem(number, new ToolEntry(name, material, ingot, rarity));
 	}
 
 	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot) {
@@ -189,7 +185,7 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 	@Override
 	public boolean isDamaged(ItemStack stack) {
 
-		return getDamage(stack) > 0;
+		return getStackDamage(stack) > 0;
 	}
 
 	@Override
@@ -205,13 +201,21 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 	}
 
 	@Override
+	public boolean showDurabilityBar(ItemStack stack) {
+
+		return getStackDamage(stack) > 0;
+	}
+
+	@Override
 	public int getDamage(ItemStack stack) {
 
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
-		}
-		return stack.getTagCompound().getInteger("Damage");
+		return getStackDamage(stack);
+	}
+
+	@Override
+	public int getMetadata(ItemStack stack) {
+
+		return getStackDamage(stack);
 	}
 
 	@Override
@@ -227,17 +231,7 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 	@Override
 	public int getMaxDamage(ItemStack stack) {
 
-		return getToolMaterial(stack).getMaxUses() + 5;
-	}
-
-	@Override
-	public int getMetadata(ItemStack stack) {
-
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
-		}
-		return stack.getTagCompound().getInteger("Damage");
+		return getToolMaterial(stack).getMaxUses();
 	}
 
 	@Override
@@ -249,6 +243,19 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 			((EntityItem) location).lifespan = Integer.MAX_VALUE;
 		}
 		return null;
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+
+		Multimap<String, AttributeModifier> multimap = HashMultimap.<String, AttributeModifier>create();
+
+		if (slot == EntityEquipmentSlot.MAINHAND) {
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", getAttackDamage(stack), 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", getAttackSpeed(stack), 0));
+		}
+
+		return multimap;
 	}
 
 	@Override
@@ -280,21 +287,9 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public String getToolMaterialName() {
 
-		if (player.fishEntity != null) {
-			int i = player.fishEntity.handleHookRetraction();
-			stack.damageItem(i, player);
-			player.swingArm(hand);
-		} else {
-			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-
-			if (ServerHelper.isServerWorld(world)) {
-				world.spawnEntityInWorld(new EntityCoFHFishHook(world, player, getLuckModifier(stack), getSpeedModifier(stack)));
-			}
-			player.swingArm(hand);
-		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		return "";
 	}
 
 	@Override
@@ -302,7 +297,7 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 
 		GameRegistry.register(setRegistryName(name));
 		this.name = name;
-		name = modName + "." + name;
+		name = modName + ".tool." + name;
 		return super.setUnlocalizedName(name);
 	}
 
@@ -310,7 +305,7 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 
 		GameRegistry.register(setRegistryName(registrationName));
 		this.name = name;
-		name = modName + "." + name;
+		name = modName + ".tool." + name;
 		return super.setUnlocalizedName(name);
 	}
 
@@ -319,8 +314,24 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 	@SideOnly (Side.CLIENT)
 	public void registerModels() {
 
+		ModelLoader.setCustomMeshDefinition(this, new ToolMeshDefinition());
+
 		for (Map.Entry<Integer, ToolEntry> entry : itemMap.entrySet()) {
-			ModelLoader.setCustomModelResourceLocation(this, entry.getKey(), new ModelResourceLocation(getRegistryName(), "type=" + entry.getValue().name));
+
+			ModelResourceLocation texture = new ModelResourceLocation(modName + ":tool/" + name + "_" + entry.getValue().name, "inventory");
+
+			textureMap.put(entry.getKey(), texture);
+			ModelBakery.registerItemVariants(this, texture);
+		}
+	}
+
+	/* ITEM MESH DEFINITION */
+	@SideOnly (Side.CLIENT)
+	public class ToolMeshDefinition implements ItemMeshDefinition {
+
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+
+			return textureMap.get(ItemHelper.getItemDamage(stack));
 		}
 	}
 
@@ -330,28 +341,19 @@ public class ItemFishingRodBase extends ItemFishingRod implements IModelRegister
 		public String name;
 		public Item.ToolMaterial material;
 		public String ingot;
-		public int luckModifier;
-		public int speedModifier;
 		public EnumRarity rarity;
 
-		ToolEntry(String name, Item.ToolMaterial material, String ingot, int luckModifier, int speedModifier, EnumRarity rarity) {
+		ToolEntry(String name, Item.ToolMaterial material, String ingot, EnumRarity rarity) {
 
 			this.name = name;
 			this.material = material;
 			this.ingot = ingot;
-			this.luckModifier = luckModifier;
-			this.speedModifier = speedModifier;
 			this.rarity = rarity;
-		}
-
-		ToolEntry(String name, Item.ToolMaterial material, String ingot, int luckModifier, int speedModifier) {
-
-			this(name, material, ingot, luckModifier, speedModifier, EnumRarity.COMMON);
 		}
 
 		ToolEntry(String name, Item.ToolMaterial material, String ingot) {
 
-			this(name, material, ingot, 0, 0, EnumRarity.COMMON);
+			this(name, material, ingot, EnumRarity.COMMON);
 		}
 	}
 

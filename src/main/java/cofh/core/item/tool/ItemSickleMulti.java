@@ -15,11 +15,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-public class ItemSickleBase extends ItemToolBase {
+public class ItemSickleMulti extends ItemToolMulti {
 
 	protected int radius = 3;
 
-	public ItemSickleBase(String modName) {
+	public ItemSickleMulti(String modName) {
 
 		super(modName, 3.0F, -2.6F);
 		addToolClass("sickle");
@@ -35,7 +35,7 @@ public class ItemSickleBase extends ItemToolBase {
 		effectiveMaterials.add(Material.WEB);
 	}
 
-	public ItemSickleBase setRadius(int radius) {
+	public ItemSickleMulti setRadius(int radius) {
 
 		this.radius = radius;
 		return this;
@@ -126,19 +126,26 @@ public class ItemSickleBase extends ItemToolBase {
 		// int y = pos.getY();
 		int z = pos.getZ();
 
-		boolean used = false;
-
+		int used = 0;
 		world.playEvent(2001, pos, Block.getStateId(state));
 
 		for (int i = x - radius; i <= x + radius; i++) {
 			for (int k = z - radius; k <= z + radius; k++) {
-				used |= harvestBlock(world, new BlockPos(i, pos.getY(), k), player);
+				if (harvestBlock(world, new BlockPos(i, pos.getY(), k), player)) {
+					used++;
+				}
 			}
 		}
-		if (used && !player.capabilities.isCreativeMode) {
-			stack.damageItem(1, player);
+		if (used > 0 && !player.capabilities.isCreativeMode) {
+			stack.damageItem(used, player);
 		}
-		return true;
+		return false;
+	}
+
+	@Override
+	public int getMaxDamage(ItemStack stack) {
+
+		return getToolMaterial(stack).getMaxUses() * 4;
 	}
 
 }

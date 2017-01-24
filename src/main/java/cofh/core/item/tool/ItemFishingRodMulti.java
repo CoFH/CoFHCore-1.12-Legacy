@@ -1,0 +1,384 @@
+package cofh.core.item.tool;
+
+import cofh.api.core.IModelRegister;
+import cofh.core.entity.EntityCoFHFishHook;
+import cofh.core.render.CoFHFontRenderer;
+import cofh.lib.util.helpers.ItemHelper;
+import cofh.lib.util.helpers.SecurityHelper;
+import cofh.lib.util.helpers.ServerHelper;
+import cofh.lib.util.helpers.StringHelper;
+import gnu.trove.map.TMap;
+import gnu.trove.map.hash.THashMap;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.*;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.*;
+import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class ItemFishingRodMulti extends ItemFishingRod implements IModelRegister {
+
+	protected TMap<Integer, ToolEntry> itemMap = new THashMap<Integer, ToolEntry>();
+	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
+	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<Integer, ModelResourceLocation>();
+
+	protected String name;
+	protected String modName;
+	protected boolean showInCreative = true;
+
+	public ItemFishingRodMulti() {
+
+		this("cofh");
+	}
+
+	public ItemFishingRodMulti(String modName) {
+
+		this.modName = modName;
+		setMaxStackSize(1);
+		setHasSubtypes(true);
+
+		addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter() {
+			@SideOnly (Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+
+				return entityIn == null ? 0.0F : (entityIn.getHeldItemMainhand() == stack && entityIn instanceof EntityPlayer && ((EntityPlayer) entityIn).fishEntity != null ? 1.0F : 0.0F);
+			}
+		});
+	}
+
+	public ItemFishingRodMulti setShowInCreative(boolean showInCreative) {
+
+		this.showInCreative = showInCreative;
+		return this;
+	}
+
+	protected void addInformationDelegate(ItemStack stack, EntityPlayer player, List<String> list, boolean check) {
+
+		int i = ItemHelper.getItemDamage(stack);
+		if (!itemMap.containsKey(Integer.valueOf(i))) {
+			return;
+		}
+		ToolEntry item = itemMap.get(i);
+
+		list.add(StringHelper.getInfoText("info." + modName + "." + name + "." + item.name));
+	}
+
+	protected int getLuckModifier(ItemStack stack) {
+
+		int i = ItemHelper.getItemDamage(stack);
+		if (!itemMap.containsKey(Integer.valueOf(i))) {
+			return 0;
+		}
+		return itemMap.get(ItemHelper.getItemDamage(stack)).luckModifier;
+	}
+
+	protected int getSpeedModifier(ItemStack stack) {
+
+		int i = ItemHelper.getItemDamage(stack);
+		if (!itemMap.containsKey(Integer.valueOf(i))) {
+			return 0;
+		}
+		return itemMap.get(ItemHelper.getItemDamage(stack)).speedModifier;
+	}
+
+	protected int getStackDamage(ItemStack stack) {
+
+		if (stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setInteger("Damage", 0);
+		}
+		return stack.getTagCompound().getInteger("Damage");
+	}
+
+	protected String getRepairIngot(ItemStack stack) {
+
+		int i = ItemHelper.getItemDamage(stack);
+		if (!itemMap.containsKey(Integer.valueOf(i))) {
+			return "ingotIron";
+		}
+		return itemMap.get(ItemHelper.getItemDamage(stack)).ingot;
+	}
+
+	protected Item.ToolMaterial getToolMaterial(ItemStack stack) {
+
+		int i = ItemHelper.getItemDamage(stack);
+		if (!itemMap.containsKey(Integer.valueOf(i))) {
+			return ToolMaterial.IRON;
+		}
+		return itemMap.get(ItemHelper.getItemDamage(stack)).material;
+	}
+
+	/* ADD ITEMS */
+	public ItemStack addItem(int number, ToolEntry entry) {
+
+		if (itemMap.containsKey(Integer.valueOf(number))) {
+			return null;
+		}
+		itemMap.put(Integer.valueOf(number), entry);
+		itemList.add(Integer.valueOf(number));
+
+		ItemStack stack = new ItemStack(this, 1, number);
+		stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setInteger("Damage", 0);
+		return stack;
+	}
+
+	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot, int luckModifier, int speedModifier, EnumRarity rarity) {
+
+		return addItem(number, new ToolEntry(name, material, ingot, luckModifier, speedModifier, rarity));
+	}
+
+	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot, int luckModifier, int speedModifier) {
+
+		return addItem(number, new ToolEntry(name, material, ingot, luckModifier, speedModifier));
+	}
+
+	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot) {
+
+		return addItem(number, new ToolEntry(name, material, ingot));
+	}
+
+	/* STANDARD METHODS */
+	@Override
+	@SideOnly (Side.CLIENT)
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
+
+		if (!showInCreative) {
+			return;
+		}
+		for (int i = 0; i < itemList.size(); i++) {
+			ItemStack stack = new ItemStack(item, 1, itemList.get(i));
+			stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setInteger("Damage", 0);
+
+			list.add(stack);
+		}
+	}
+
+	@Override
+	public void setDamage(ItemStack stack, int damage) {
+
+		if (stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setInteger("Damage", 0);
+		}
+		if (damage < 0) {
+			damage = 0;
+		}
+		stack.getTagCompound().setInteger("Damage", damage);
+	}
+
+	@Override
+	public boolean getIsRepairable(ItemStack itemToRepair, ItemStack stack) {
+
+		return ItemHelper.isOreNameEqual(stack, getRepairIngot(stack));
+	}
+
+	@Override
+	public boolean hasCustomEntity(ItemStack stack) {
+
+		return SecurityHelper.isSecure(stack);
+	}
+
+	@Override
+	public boolean isDamaged(ItemStack stack) {
+
+		return getStackDamage(stack) > 0;
+	}
+
+	@Override
+	public boolean isItemTool(ItemStack stack) {
+
+		return true;
+	}
+
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+
+		return !ItemHelper.itemsEqualWithMetadata(oldStack, newStack);
+	}
+
+	@Override
+	public boolean showDurabilityBar(ItemStack stack) {
+
+		return getStackDamage(stack) > 0;
+	}
+
+	@Override
+	public int getDamage(ItemStack stack) {
+
+		return getStackDamage(stack);
+	}
+
+	@Override
+	public int getMetadata(ItemStack stack) {
+
+		return getStackDamage(stack);
+	}
+
+	@Override
+	public int getItemEnchantability(ItemStack stack) {
+
+		int i = ItemHelper.getItemDamage(stack);
+		if (!itemMap.containsKey(Integer.valueOf(i))) {
+			return 0;
+		}
+		return itemMap.get(ItemHelper.getItemDamage(stack)).material.getEnchantability();
+	}
+
+	@Override
+	public int getMaxDamage(ItemStack stack) {
+
+		return getToolMaterial(stack).getMaxUses() + 5;
+	}
+
+	@Override
+	public Entity createEntity(World world, Entity location, ItemStack stack) {
+
+		if (SecurityHelper.isSecure(stack)) {
+			location.invulnerable = true;
+			location.isImmuneToFire = true;
+			((EntityItem) location).lifespan = Integer.MAX_VALUE;
+		}
+		return null;
+	}
+
+	@Override
+	@SideOnly (Side.CLIENT)
+	public FontRenderer getFontRenderer(ItemStack stack) {
+
+		return CoFHFontRenderer.loadFontRendererStack(stack);
+	}
+
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+
+		int i = ItemHelper.getItemDamage(stack);
+		if (!itemMap.containsKey(Integer.valueOf(i))) {
+			return EnumRarity.COMMON;
+		}
+		return itemMap.get(ItemHelper.getItemDamage(stack)).rarity;
+	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+
+		int i = ItemHelper.getItemDamage(stack);
+		if (!itemMap.containsKey(Integer.valueOf(i))) {
+			return "item.invalid";
+		}
+		ToolEntry item = itemMap.get(i);
+		return getUnlocalizedName() + "." + item.name;
+	}
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+
+		if (player.fishEntity != null) {
+			int i = player.fishEntity.handleHookRetraction();
+			stack.damageItem(i, player);
+			player.swingArm(hand);
+		} else {
+			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+
+			if (ServerHelper.isServerWorld(world)) {
+				world.spawnEntityInWorld(new EntityCoFHFishHook(world, player, getLuckModifier(stack), getSpeedModifier(stack)));
+			}
+			player.swingArm(hand);
+		}
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+	}
+
+	@Override
+	public Item setUnlocalizedName(String name) {
+
+		GameRegistry.register(setRegistryName(name));
+		this.name = name;
+		name = modName + ".tool." + name;
+		return super.setUnlocalizedName(name);
+	}
+
+	public Item setUnlocalizedName(String name, String registrationName) {
+
+		GameRegistry.register(setRegistryName(registrationName));
+		this.name = name;
+		name = modName + ".tool." + name;
+		return super.setUnlocalizedName(name);
+	}
+
+	/* IModelRegister */
+	@Override
+	@SideOnly (Side.CLIENT)
+	public void registerModels() {
+
+		ModelLoader.setCustomMeshDefinition(this, new ToolMeshDefinition());
+
+		for (Map.Entry<Integer, ToolEntry> entry : itemMap.entrySet()) {
+
+			ModelResourceLocation texture = new ModelResourceLocation(modName + ":tool/" + name + "_" + entry.getValue().name, "inventory");
+
+			textureMap.put(entry.getKey(), texture);
+			ModelBakery.registerItemVariants(this, texture);
+		}
+	}
+
+	/* ITEM MESH DEFINITION */
+	@SideOnly (Side.CLIENT)
+	public class ToolMeshDefinition implements ItemMeshDefinition {
+
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+
+			return textureMap.get(ItemHelper.getItemDamage(stack));
+		}
+	}
+
+	/* ITEM ENTRY */
+	public class ToolEntry {
+
+		public String name;
+		public Item.ToolMaterial material;
+		public String ingot;
+		public int luckModifier;
+		public int speedModifier;
+		public EnumRarity rarity;
+
+		ToolEntry(String name, Item.ToolMaterial material, String ingot, int luckModifier, int speedModifier, EnumRarity rarity) {
+
+			this.name = name;
+			this.material = material;
+			this.ingot = ingot;
+			this.luckModifier = luckModifier;
+			this.speedModifier = speedModifier;
+			this.rarity = rarity;
+		}
+
+		ToolEntry(String name, Item.ToolMaterial material, String ingot, int luckModifier, int speedModifier) {
+
+			this(name, material, ingot, luckModifier, speedModifier, EnumRarity.COMMON);
+		}
+
+		ToolEntry(String name, Item.ToolMaterial material, String ingot) {
+
+			this(name, material, ingot, 0, 0, EnumRarity.COMMON);
+		}
+	}
+
+}

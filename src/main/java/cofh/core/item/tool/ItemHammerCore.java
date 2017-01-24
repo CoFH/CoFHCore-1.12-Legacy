@@ -24,6 +24,8 @@ public class ItemHammerCore extends ItemToolCore {
 		addToolClass("pickaxe");
 		addToolClass("hammer");
 
+		setMaxDamage(toolMaterial.getMaxUses() * 2);
+
 		effectiveBlocks.addAll(ItemPickaxe.EFFECTIVE_ON);
 		effectiveMaterials.add(Material.IRON);
 		effectiveMaterials.add(Material.ANVIL);
@@ -48,7 +50,7 @@ public class ItemHammerCore extends ItemToolCore {
 			}
 			return false;
 		}
-		boolean used = false;
+		int used = 0;
 
 		float refStrength = ForgeHooks.blockStrength(state, player, world, pos);
 		if (refStrength != 0.0F) {
@@ -70,7 +72,9 @@ public class ItemHammerCore extends ItemToolCore {
 							adjBlock = world.getBlockState(adjPos);
 							strength = ForgeHooks.blockStrength(adjBlock, player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
-								used |= harvestBlock(world, adjPos, player);
+								if (harvestBlock(world, adjPos, player)) {
+									used++;
+								}
 							}
 						}
 					}
@@ -83,7 +87,9 @@ public class ItemHammerCore extends ItemToolCore {
 							adjBlock = world.getBlockState(adjPos);
 							strength = ForgeHooks.blockStrength(adjBlock, player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
-								used |= harvestBlock(world, adjPos, player);
+								if (harvestBlock(world, adjPos, player)) {
+									used++;
+								}
 							}
 						}
 					}
@@ -96,17 +102,19 @@ public class ItemHammerCore extends ItemToolCore {
 							adjBlock = world.getBlockState(adjPos);
 							strength = ForgeHooks.blockStrength(adjBlock, player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
-								used |= harvestBlock(world, adjPos, player);
+								if (harvestBlock(world, adjPos, player)) {
+									used++;
+								}
 							}
 						}
 					}
 					break;
 			}
-			if (used && !player.capabilities.isCreativeMode) {
-				stack.damageItem(1, player);
+			if (used > 0 && !player.capabilities.isCreativeMode) {
+				stack.damageItem(used, player);
 			}
 		}
-		return true;
+		return false;
 	}
 
 }

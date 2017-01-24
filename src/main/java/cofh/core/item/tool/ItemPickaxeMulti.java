@@ -3,9 +3,9 @@ package cofh.core.item.tool;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemPickaxe;
 
-public class ItemPickaxeBase extends ItemToolBase {
+public class ItemPickaxeMulti extends ItemToolMulti {
 
-	public ItemPickaxeBase(String modName) {
+	public ItemPickaxeMulti(String modName) {
 
 		super(modName, 2.0F, -2.8F);
 		addToolClass("pickaxe");

@@ -1,7 +1,6 @@
 package cofh.core.item.tool;
 
 import cofh.api.core.IModelRegister;
-import cofh.api.item.IEmpowerableItem;
 import cofh.core.enchantment.CoFHEnchantment;
 import cofh.core.render.CoFHFontRenderer;
 import cofh.lib.util.helpers.ItemHelper;
@@ -10,6 +9,8 @@ import cofh.lib.util.helpers.StringHelper;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -24,63 +25,63 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ItemBowBase extends ItemBow implements IModelRegister {
+public class ItemBowMulti extends ItemBow implements IModelRegister {
 
 	protected TMap<Integer, ToolEntry> itemMap = new THashMap<Integer, ToolEntry>();
 	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
+	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<Integer, ModelResourceLocation>();
 
 	protected String name;
 	protected String modName;
 	protected boolean showInCreative = true;
 
-	public ItemBowBase() {
+	public ItemBowMulti() {
 
 		this("cofh");
 	}
 
-	public ItemBowBase(String modName) {
+	public ItemBowMulti(String modName) {
 
 		this.modName = modName;
 		setMaxStackSize(1);
 		setHasSubtypes(true);
 
-		//		addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
-		//			@SideOnly (Side.CLIENT)
-		//			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-		//
-		//				if (entityIn == null) {
-		//					return 0.0F;
-		//				} else {
-		//					ItemStack itemstack = entityIn.getActiveItemStack();
-		//					return itemstack != null && itemstack.getItem() instanceof ItemBow ? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
-		//				}
-		//			}
-		//		});
-		//		addPropertyOverride(new ResourceLocation("pulling"), new IItemPropertyGetter() {
-		//			@SideOnly (Side.CLIENT)
-		//			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-		//
-		//				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
-		//			}
-		//		});
+		addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
+			@SideOnly (Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+
+				if (entityIn == null) {
+					return 0.0F;
+				} else {
+					ItemStack itemstack = entityIn.getActiveItemStack();
+					return itemstack != null && itemstack.getItem() instanceof ItemBow ? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+				}
+			}
+		});
+		addPropertyOverride(new ResourceLocation("pulling"), new IItemPropertyGetter() {
+			@SideOnly (Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+
+				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
+			}
+		});
 	}
 
-	public ItemBowBase setShowInCreative(boolean showInCreative) {
+	public ItemBowMulti setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
 		return this;
@@ -95,6 +96,15 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 		ToolEntry item = itemMap.get(i);
 
 		list.add(StringHelper.getInfoText("info." + modName + "." + name + "." + item.name));
+	}
+
+	protected int getStackDamage(ItemStack stack) {
+
+		if (stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setInteger("Damage", 0);
+		}
+		return stack.getTagCompound().getInteger("Damage");
 	}
 
 	protected float getDamageModifier(ItemStack stack) {
@@ -119,7 +129,7 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 
 		int i = ItemHelper.getItemDamage(stack);
 		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return "cobblestone";
+			return "ingotIron";
 		}
 		return itemMap.get(ItemHelper.getItemDamage(stack)).ingot;
 	}
@@ -128,7 +138,7 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 
 		int i = ItemHelper.getItemDamage(stack);
 		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return ToolMaterial.WOOD;
+			return ToolMaterial.IRON;
 		}
 		return itemMap.get(ItemHelper.getItemDamage(stack)).material;
 	}
@@ -148,14 +158,14 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 		return stack;
 	}
 
-	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot, int luckModifier, int speedModifier, EnumRarity rarity) {
+	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot, float damageModifier, float speedModifier, EnumRarity rarity) {
 
-		return addItem(number, new ToolEntry(name, material, ingot, luckModifier, speedModifier, rarity));
+		return addItem(number, new ToolEntry(name, material, ingot, damageModifier, speedModifier, rarity));
 	}
 
-	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot, int luckModifier, int speedModifier) {
+	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot, float damageModifier, float speedModifier) {
 
-		return addItem(number, new ToolEntry(name, material, ingot, luckModifier, speedModifier));
+		return addItem(number, new ToolEntry(name, material, ingot, damageModifier, speedModifier));
 	}
 
 	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot) {
@@ -208,7 +218,7 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 	@Override
 	public boolean isDamaged(ItemStack stack) {
 
-		return getDamage(stack) > 0;
+		return getStackDamage(stack) > 0;
 	}
 
 	@Override
@@ -224,13 +234,21 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 	}
 
 	@Override
+	public boolean showDurabilityBar(ItemStack stack) {
+
+		return getStackDamage(stack) > 0;
+	}
+
+	@Override
 	public int getDamage(ItemStack stack) {
 
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
-		}
-		return stack.getTagCompound().getInteger("Damage");
+		return getStackDamage(stack);
+	}
+
+	@Override
+	public int getMetadata(ItemStack stack) {
+
+		return getStackDamage(stack);
 	}
 
 	@Override
@@ -247,16 +265,6 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 	public int getMaxDamage(ItemStack stack) {
 
 		return getToolMaterial(stack).getMaxUses() + 325;
-	}
-
-	@Override
-	public int getMetadata(ItemStack stack) {
-
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
-		}
-		return stack.getTagCompound().getInteger("Damage");
 	}
 
 	@Override
@@ -303,7 +311,7 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 
 		GameRegistry.register(setRegistryName(name));
 		this.name = name;
-		name = modName + "." + name;
+		name = modName + ".tool." + name;
 		return super.setUnlocalizedName(name);
 	}
 
@@ -311,7 +319,7 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 
 		GameRegistry.register(setRegistryName(registrationName));
 		this.name = name;
-		name = modName + "." + name;
+		name = modName + ".tool." + name;
 		return super.setUnlocalizedName(name);
 	}
 
@@ -319,12 +327,11 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
 
 		boolean flag = this.findAmmo(player) != null;
+		ActionResult<ItemStack> ret = ForgeEventFactory.onArrowNock(itemStack, world, player, hand, flag);
 
-		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemStack, world, player, hand, flag);
 		if (ret != null) {
 			return ret;
 		}
-
 		if (!player.capabilities.isCreativeMode && !flag) {
 			return !flag ? new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStack) : new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
 		} else {
@@ -333,7 +340,7 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 		}
 	}
 
-	//TODO Multishot enchant can use Arrow Loose Efent for better mod compatibility.
+	//TODO Multishot enchant can use Arrow Loose Event for better mod compatibility.
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase livingBase, int timeLeft) {
 
@@ -347,17 +354,14 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 			if (i < 0) {
 				return;
 			}
-
 			if (itemstack != null || flag) {
 				if (itemstack == null) {
 					itemstack = new ItemStack(Items.ARROW);
 				}
-
-				float f = getArrowVelocity(i);
+				float f = getArrowVelocity(i) * (1 + getSpeedModifier(stack));
 
 				if ((double) f >= 0.1D) {
 					boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer) : false);
-					boolean empowered = this instanceof IEmpowerableItem && ((IEmpowerableItem) this).isEmpowered(stack);
 
 					if (!world.isRemote) {
 						int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoFHEnchantment.multishot, stack);
@@ -369,33 +373,27 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 
 						for (int shot = 0; shot <= enchantMultishot; shot++) {
 							ItemArrow itemarrow = (ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW);
-							EntityArrow entityarrow = itemarrow.createArrow(world, itemstack, entityplayer);
-							entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
-							if (empowered) {
-								entityarrow.setDamage(entityarrow.getDamage() + 1.5);
-							}
+							EntityArrow arrow = itemarrow.createArrow(world, itemstack, entityplayer);
+							arrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
 
-							if (f == 1.0F) {
-								entityarrow.setIsCritical(true);
-							}
+							arrow.setDamage(arrow.getDamage() + getDamageModifier(stack));
 
+							if (f >= 1.0F) {
+								arrow.setIsCritical(true);
+							}
 							if (powerLvl > 0) {
-								entityarrow.setDamage(entityarrow.getDamage() + (double) powerLvl * 0.5D + 0.5D);
+								arrow.setDamage(arrow.getDamage() + (double) powerLvl * 0.5D + 0.5D);
 							}
-
 							if (punchLvl > 0) {
-								entityarrow.setKnockbackStrength(punchLvl);
+								arrow.setKnockbackStrength(punchLvl);
 							}
-
 							if (flame) {
-								entityarrow.setFire(100);
+								arrow.setFire(100);
 							}
-
 							if (flag1) {
-								entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
+								arrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
 							}
-
-							world.spawnEntityInWorld(entityarrow);
+							world.spawnEntityInWorld(arrow);
 						}
 					}
 					world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
@@ -407,7 +405,6 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 							entityplayer.inventory.deleteStack(itemstack);
 						}
 					}
-
 					entityplayer.addStat(StatList.getObjectUseStats(this));
 				}
 			}
@@ -423,8 +420,24 @@ public class ItemBowBase extends ItemBow implements IModelRegister {
 	@SideOnly (Side.CLIENT)
 	public void registerModels() {
 
+		ModelLoader.setCustomMeshDefinition(this, new ToolMeshDefinition());
+
 		for (Map.Entry<Integer, ToolEntry> entry : itemMap.entrySet()) {
-			ModelLoader.setCustomModelResourceLocation(this, entry.getKey(), new ModelResourceLocation(getRegistryName(), "type=" + entry.getValue().name));
+
+			ModelResourceLocation texture = new ModelResourceLocation(modName + ":tool/" + name + "_" + entry.getValue().name, "inventory");
+
+			textureMap.put(entry.getKey(), texture);
+			ModelBakery.registerItemVariants(this, texture);
+		}
+	}
+
+	/* ITEM MESH DEFINITION */
+	@SideOnly (Side.CLIENT)
+	public class ToolMeshDefinition implements ItemMeshDefinition {
+
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+
+			return textureMap.get(ItemHelper.getItemDamage(stack));
 		}
 	}
 

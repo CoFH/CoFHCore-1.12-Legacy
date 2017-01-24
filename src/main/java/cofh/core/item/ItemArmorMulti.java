@@ -1,23 +1,28 @@
-package cofh.core.item.tool;
+package cofh.core.item;
 
 import cofh.api.core.IModelRegister;
 import cofh.core.render.CoFHFontRenderer;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
+import cofh.lib.util.helpers.StringHelper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -30,33 +35,57 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
-public class ItemHoeBase extends ItemHoe implements IModelRegister {
+public class ItemArmorMulti extends ItemArmor implements IModelRegister {
 
-	protected TMap<Integer, ToolEntry> itemMap = new THashMap<Integer, ToolEntry>();
+	private static final UUID[] ARMOR_MODIFIERS = new UUID[] { UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150") };
+
+	protected TMap<Integer, ArmorEntry> itemMap = new THashMap<Integer, ArmorEntry>();
 	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
+	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<Integer, ModelResourceLocation>();
 
 	protected String name;
 	protected String modName;
 	protected boolean showInCreative = true;
 
-	public ItemHoeBase() {
+	public ItemArmorMulti(EntityEquipmentSlot type) {
 
-		this("cofh");
+		this("cofh", type);
 	}
 
-	public ItemHoeBase(String modName) {
+	public ItemArmorMulti(String modName, EntityEquipmentSlot type) {
 
-		super(ToolMaterial.STONE);
+		super(ArmorMaterial.IRON, 0, type);
 		this.modName = modName;
 		setMaxStackSize(1);
 		setHasSubtypes(true);
 	}
 
-	public ItemHoeBase setShowInCreative(boolean showInCreative) {
+	public ItemArmorMulti setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
 		return this;
+	}
+
+	protected void addInformationDelegate(ItemStack stack, EntityPlayer player, List<String> list, boolean check) {
+
+		int i = ItemHelper.getItemDamage(stack);
+		if (!itemMap.containsKey(Integer.valueOf(i))) {
+			return;
+		}
+		ArmorEntry item = itemMap.get(i);
+
+		list.add(StringHelper.getInfoText("info." + modName + "." + name + "." + item.name));
+	}
+
+	protected int getStackDamage(ItemStack stack) {
+
+		if (stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setInteger("Damage", 0);
+		}
+		return stack.getTagCompound().getInteger("Damage");
 	}
 
 	protected String getRepairIngot(ItemStack stack) {
@@ -68,17 +97,17 @@ public class ItemHoeBase extends ItemHoe implements IModelRegister {
 		return itemMap.get(ItemHelper.getItemDamage(stack)).ingot;
 	}
 
-	protected Item.ToolMaterial getToolMaterial(ItemStack stack) {
+	protected ItemArmor.ArmorMaterial getArmorMaterial(ItemStack stack) {
 
 		int i = ItemHelper.getItemDamage(stack);
 		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return ToolMaterial.WOOD;
+			return ArmorMaterial.IRON;
 		}
 		return itemMap.get(ItemHelper.getItemDamage(stack)).material;
 	}
 
 	/* ADD ITEMS */
-	public ItemStack addItem(int number, ToolEntry entry) {
+	public ItemStack addItem(int number, ArmorEntry entry) {
 
 		if (itemMap.containsKey(Integer.valueOf(number))) {
 			return null;
@@ -90,6 +119,16 @@ public class ItemHoeBase extends ItemHoe implements IModelRegister {
 		stack.setTagCompound(new NBTTagCompound());
 		stack.getTagCompound().setInteger("Damage", 0);
 		return stack;
+	}
+
+	public ItemStack addItem(int number, String name, ItemArmor.ArmorMaterial material, String[] textures, String ingot, EnumRarity rarity) {
+
+		return addItem(number, new ArmorEntry(name, material, textures, ingot, rarity));
+	}
+
+	public ItemStack addItem(int number, String name, ItemArmor.ArmorMaterial material, String[] textures, String ingot) {
+
+		return addItem(number, new ArmorEntry(name, material, textures, ingot));
 	}
 
 	/* STANDARD METHODS */
@@ -137,13 +176,13 @@ public class ItemHoeBase extends ItemHoe implements IModelRegister {
 	@Override
 	public boolean isDamaged(ItemStack stack) {
 
-		return getDamage(stack) > 0;
+		return getStackDamage(stack) > 0;
 	}
 
 	@Override
 	public boolean isItemTool(ItemStack stack) {
 
-		return true;
+		return false;
 	}
 
 	@Override
@@ -153,13 +192,21 @@ public class ItemHoeBase extends ItemHoe implements IModelRegister {
 	}
 
 	@Override
+	public boolean showDurabilityBar(ItemStack stack) {
+
+		return getStackDamage(stack) > 0;
+	}
+
+	@Override
 	public int getDamage(ItemStack stack) {
 
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
-		}
-		return stack.getTagCompound().getInteger("Damage");
+		return getStackDamage(stack);
+	}
+
+	@Override
+	public int getMetadata(ItemStack stack) {
+
+		return getStackDamage(stack);
 	}
 
 	@Override
@@ -175,17 +222,7 @@ public class ItemHoeBase extends ItemHoe implements IModelRegister {
 	@Override
 	public int getMaxDamage(ItemStack stack) {
 
-		return getToolMaterial(stack).getMaxUses();
-	}
-
-	@Override
-	public int getMetadata(ItemStack stack) {
-
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
-		}
-		return stack.getTagCompound().getInteger("Damage");
+		return getArmorMaterial(stack).getDurability(armorType);
 	}
 
 	@Override
@@ -199,11 +236,14 @@ public class ItemHoeBase extends ItemHoe implements IModelRegister {
 		return null;
 	}
 
-	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
 
 		Multimap<String, AttributeModifier> multimap = HashMultimap.<String, AttributeModifier>create();
 
+		if (slot == this.armorType) {
+			multimap.put(SharedMonsterAttributes.ARMOR.getAttributeUnlocalizedName(), new AttributeModifier(ARMOR_MODIFIERS[slot.getIndex()], "Armor modifier", (double) getArmorMaterial(stack).getDamageReductionAmount(slot), 0));
+			multimap.put(SharedMonsterAttributes.ARMOR_TOUGHNESS.getAttributeUnlocalizedName(), new AttributeModifier(ARMOR_MODIFIERS[slot.getIndex()], "Armor toughness", (double) getArmorMaterial(stack).getToughness(), 0));
+		}
 		return multimap;
 	}
 
@@ -225,20 +265,29 @@ public class ItemHoeBase extends ItemHoe implements IModelRegister {
 	}
 
 	@Override
+	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
+
+		int i = ItemHelper.getItemDamage(stack);
+		if (!itemMap.containsKey(Integer.valueOf(i))) {
+			return "item.invalid";
+		}
+		ArmorEntry item = itemMap.get(i);
+
+		if (slot == EntityEquipmentSlot.LEGS) {
+			return item.textures[1];
+		}
+		return item.textures[0];
+	}
+
+	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 
 		int i = ItemHelper.getItemDamage(stack);
 		if (!itemMap.containsKey(Integer.valueOf(i))) {
 			return "item.invalid";
 		}
-		ToolEntry item = itemMap.get(i);
+		ArmorEntry item = itemMap.get(i);
 		return getUnlocalizedName() + "." + item.name;
-	}
-
-	@Override
-	public String getMaterialName()
-	{
-		return "";
 	}
 
 	@Override
@@ -246,7 +295,7 @@ public class ItemHoeBase extends ItemHoe implements IModelRegister {
 
 		GameRegistry.register(setRegistryName(name));
 		this.name = name;
-		name = modName + "." + name;
+		name = modName + ".armor." + name;
 		return super.setUnlocalizedName(name);
 	}
 
@@ -254,7 +303,7 @@ public class ItemHoeBase extends ItemHoe implements IModelRegister {
 
 		GameRegistry.register(setRegistryName(registrationName));
 		this.name = name;
-		name = modName + "." + name;
+		name = modName + ".armor." + name;
 		return super.setUnlocalizedName(name);
 	}
 
@@ -263,30 +312,48 @@ public class ItemHoeBase extends ItemHoe implements IModelRegister {
 	@SideOnly (Side.CLIENT)
 	public void registerModels() {
 
-		for (Map.Entry<Integer, ToolEntry> entry : itemMap.entrySet()) {
-			ModelLoader.setCustomModelResourceLocation(this, entry.getKey(), new ModelResourceLocation(getRegistryName(), "type=" + entry.getValue().name));
+		ModelLoader.setCustomMeshDefinition(this, new ArmorMeshDefinition());
+
+		for (Map.Entry<Integer, ArmorEntry> entry : itemMap.entrySet()) {
+
+			ModelResourceLocation texture = new ModelResourceLocation(modName + ":armor/" + name + "_" + entry.getValue().name, "inventory");
+
+			textureMap.put(entry.getKey(), texture);
+			ModelBakery.registerItemVariants(this, texture);
+		}
+	}
+
+	/* ITEM MESH DEFINITION */
+	@SideOnly (Side.CLIENT)
+	public class ArmorMeshDefinition implements ItemMeshDefinition {
+
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+
+			return textureMap.get(ItemHelper.getItemDamage(stack));
 		}
 	}
 
 	/* ITEM ENTRY */
-	public class ToolEntry {
+	public class ArmorEntry {
 
 		public String name;
-		public Item.ToolMaterial material;
+		public ItemArmor.ArmorMaterial material;
+		public String[] textures;
 		public String ingot;
 		public EnumRarity rarity;
 
-		ToolEntry(String name, Item.ToolMaterial material, String ingot, EnumRarity rarity) {
+		ArmorEntry(String name, ItemArmor.ArmorMaterial material, String[] textures, String ingot, EnumRarity rarity) {
 
 			this.name = name;
 			this.material = material;
+			this.textures = textures;
 			this.ingot = ingot;
 			this.rarity = rarity;
 		}
 
-		ToolEntry(String name, Item.ToolMaterial material, String ingot) {
+		ArmorEntry(String name, ItemArmor.ArmorMaterial material, String[] textures, String ingot) {
 
-			this(name, material, ingot, EnumRarity.COMMON);
+			this(name, material, textures, ingot, EnumRarity.COMMON);
 		}
 	}
 

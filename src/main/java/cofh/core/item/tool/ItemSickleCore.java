@@ -24,6 +24,8 @@ public class ItemSickleCore extends ItemToolCore {
 		super(3.0F, -2.6F, toolMaterial);
 		addToolClass("sickle");
 
+		setMaxDamage(toolMaterial.getMaxUses() * 4);
+
 		effectiveBlocks.add(Blocks.WEB);
 		effectiveBlocks.add(Blocks.VINE);
 		effectiveBlocks.add(Blocks.LEAVES);
@@ -126,19 +128,20 @@ public class ItemSickleCore extends ItemToolCore {
 		// int y = pos.getY();
 		int z = pos.getZ();
 
-		boolean used = false;
-
+		int used = 0;
 		world.playEvent(2001, pos, Block.getStateId(state));
 
 		for (int i = x - radius; i <= x + radius; i++) {
 			for (int k = z - radius; k <= z + radius; k++) {
-				used |= harvestBlock(world, new BlockPos(i, pos.getY(), k), player);
+				if (harvestBlock(world, new BlockPos(i, pos.getY(), k), player)) {
+					used++;
+				}
 			}
 		}
-		if (used && !player.capabilities.isCreativeMode) {
-			stack.damageItem(1, player);
+		if (used > 0 && !player.capabilities.isCreativeMode) {
+			stack.damageItem(used, player);
 		}
-		return true;
+		return false;
 	}
 
 }

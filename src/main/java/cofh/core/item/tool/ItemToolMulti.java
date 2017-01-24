@@ -16,6 +16,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -47,7 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ItemToolBase extends ItemTool implements IModelRegister {
+public class ItemToolMulti extends ItemTool implements IModelRegister {
 
 	private final TLinkedHashSet<String> toolClasses = new TLinkedHashSet<String>();
 	private final Set<String> immutableClasses = java.util.Collections.unmodifiableSet(toolClasses);
@@ -57,6 +59,7 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 
 	protected TMap<Integer, ToolEntry> itemMap = new THashMap<Integer, ToolEntry>();
 	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
+	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<Integer, ModelResourceLocation>();
 
 	protected String name;
 	protected String modName;
@@ -64,14 +67,14 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 	protected float baseAttackSpeed = -2.4F;
 	protected boolean showInCreative = true;
 
-	public ItemToolBase(float baseAttackDamage, float baseAttackSpeed) {
+	public ItemToolMulti(float baseAttackDamage, float baseAttackSpeed) {
 
 		this("cofh", baseAttackDamage, baseAttackSpeed);
 	}
 
-	public ItemToolBase(String modName, float baseAttackDamage, float baseAttackSpeed) {
+	public ItemToolMulti(String modName, float baseAttackDamage, float baseAttackSpeed) {
 
-		super(ToolMaterial.STONE, null);
+		super(ToolMaterial.IRON, null);
 		this.modName = modName;
 		this.baseAttackDamage = baseAttackDamage;
 		this.baseAttackSpeed = baseAttackSpeed;
@@ -79,13 +82,13 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 		setHasSubtypes(true);
 	}
 
-	public ItemToolBase setShowInCreative(boolean showInCreative) {
+	public ItemToolMulti setShowInCreative(boolean showInCreative) {
 
 		this.showInCreative = showInCreative;
 		return this;
 	}
 
-	protected ItemToolBase addToolClass(String string) {
+	protected ItemToolMulti addToolClass(String string) {
 
 		toolClasses.add(string);
 		return this;
@@ -166,6 +169,15 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 		return true;
 	}
 
+	protected int getStackDamage(ItemStack stack) {
+
+		if (stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
+			stack.getTagCompound().setInteger("Damage", 0);
+		}
+		return stack.getTagCompound().getInteger("Damage");
+	}
+
 	protected float getAttackDamage(ItemStack stack) {
 
 		return baseAttackDamage + getToolMaterial(stack).getDamageVsEntity();
@@ -185,7 +197,7 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 
 		int i = ItemHelper.getItemDamage(stack);
 		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return "cobblestone";
+			return "ingotIron";
 		}
 		return itemMap.get(ItemHelper.getItemDamage(stack)).ingot;
 	}
@@ -194,7 +206,7 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 
 		int i = ItemHelper.getItemDamage(stack);
 		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return ToolMaterial.WOOD;
+			return ToolMaterial.IRON;
 		}
 		return itemMap.get(ItemHelper.getItemDamage(stack)).material;
 	}
@@ -219,6 +231,8 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 		itemList.add(Integer.valueOf(number));
 
 		ItemStack stack = new ItemStack(this, 1, number);
+		stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setInteger("Damage", 0);
 		return stack;
 	}
 
@@ -283,7 +297,7 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 	@Override
 	public boolean isDamaged(ItemStack stack) {
 
-		return getDamage(stack) > 0;
+		return getStackDamage(stack) > 0;
 	}
 
 	@Override
@@ -299,13 +313,21 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 	}
 
 	@Override
+	public boolean showDurabilityBar(ItemStack stack) {
+
+		return getStackDamage(stack) > 0;
+	}
+
+	@Override
 	public int getDamage(ItemStack stack) {
 
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
-		}
-		return stack.getTagCompound().getInteger("Damage");
+		return getStackDamage(stack);
+	}
+
+	@Override
+	public int getMetadata(ItemStack stack) {
+
+		return getStackDamage(stack);
 	}
 
 	@Override
@@ -334,16 +356,6 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 	}
 
 	@Override
-	public int getMetadata(ItemStack stack) {
-
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
-		}
-		return stack.getTagCompound().getInteger("Damage");
-	}
-
-	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state) {
 
 		return (getEffectiveMaterials(stack).contains(state.getMaterial()) || getEffectiveBlocks(stack).contains(state)) ? getEfficiency(stack) : 1.0F;
@@ -369,7 +381,6 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", getAttackDamage(stack), 0));
 			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", getAttackSpeed(stack), 0));
 		}
-
 		return multimap;
 	}
 
@@ -418,7 +429,7 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 
 		GameRegistry.register(setRegistryName(name));
 		this.name = name;
-		name = modName + "." + name;
+		name = modName + ".tool." + name;
 		return super.setUnlocalizedName(name);
 	}
 
@@ -426,7 +437,7 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 
 		GameRegistry.register(setRegistryName(registrationName));
 		this.name = name;
-		name = modName + "." + name;
+		name = modName + ".tool." + name;
 		return super.setUnlocalizedName(name);
 	}
 
@@ -435,8 +446,24 @@ public class ItemToolBase extends ItemTool implements IModelRegister {
 	@SideOnly (Side.CLIENT)
 	public void registerModels() {
 
+		ModelLoader.setCustomMeshDefinition(this, new ToolMeshDefinition());
+
 		for (Map.Entry<Integer, ToolEntry> entry : itemMap.entrySet()) {
-			ModelLoader.setCustomModelResourceLocation(this, entry.getKey(), new ModelResourceLocation(getRegistryName(), "type=" + entry.getValue().name));
+
+			ModelResourceLocation texture = new ModelResourceLocation(modName + ":tool/" + name + "_" + entry.getValue().name, "inventory");
+
+			textureMap.put(entry.getKey(), texture);
+			ModelBakery.registerItemVariants(this, texture);
+		}
+	}
+
+	/* ITEM MESH DEFINITION */
+	@SideOnly (Side.CLIENT)
+	public class ToolMeshDefinition implements ItemMeshDefinition {
+
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+
+			return textureMap.get(ItemHelper.getItemDamage(stack));
 		}
 	}
 

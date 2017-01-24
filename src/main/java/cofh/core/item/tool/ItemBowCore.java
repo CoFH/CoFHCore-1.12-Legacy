@@ -1,6 +1,5 @@
 package cofh.core.item.tool;
 
-import cofh.api.item.IEmpowerableItem;
 import cofh.core.enchantment.CoFHEnchantment;
 import cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,8 +28,8 @@ public class ItemBowCore extends ItemBow {
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
 
-	protected float arrowDamageMultiplier = 1.25F;
-	protected float arrowSpeedMultiplier = 2.0F;
+	protected float arrowDamageMultiplier = 1.0F;
+	protected float arrowSpeedMultiplier = 0.5F;
 
 	protected boolean showInCreative = true;
 
@@ -141,7 +140,7 @@ public class ItemBowCore extends ItemBow {
 		}
 	}
 
-	//TODO Multishot enchant can use Arrow Loose Efent for better mod compatibility.
+	//TODO Multishot enchant can use Arrow Loose Event for better mod compatibility.
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase livingBase, int timeLeft) {
 
@@ -155,17 +154,14 @@ public class ItemBowCore extends ItemBow {
 			if (i < 0) {
 				return;
 			}
-
 			if (itemstack != null || flag) {
 				if (itemstack == null) {
 					itemstack = new ItemStack(Items.ARROW);
 				}
-
-				float f = getArrowVelocity(i);
+				float f = getArrowVelocity(i) * (1 + arrowSpeedMultiplier);
 
 				if ((double) f >= 0.1D) {
 					boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer) : false);
-					boolean empowered = this instanceof IEmpowerableItem && ((IEmpowerableItem) this).isEmpowered(stack);
 
 					if (!world.isRemote) {
 						int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoFHEnchantment.multishot, stack);
@@ -177,33 +173,27 @@ public class ItemBowCore extends ItemBow {
 
 						for (int shot = 0; shot <= enchantMultishot; shot++) {
 							ItemArrow itemarrow = (ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW);
-							EntityArrow entityarrow = itemarrow.createArrow(world, itemstack, entityplayer);
-							entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
-							if (empowered) {
-								entityarrow.setDamage(entityarrow.getDamage() + 1.5);
-							}
+							EntityArrow arrow = itemarrow.createArrow(world, itemstack, entityplayer);
+							arrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
 
-							if (f == 1.0F) {
-								entityarrow.setIsCritical(true);
-							}
+							arrow.setDamage(arrow.getDamage() + arrowDamageMultiplier);
 
+							if (f >= 1.0F) {
+								arrow.setIsCritical(true);
+							}
 							if (powerLvl > 0) {
-								entityarrow.setDamage(entityarrow.getDamage() + (double) powerLvl * 0.5D + 0.5D);
+								arrow.setDamage(arrow.getDamage() + (double) powerLvl * 0.5D + 0.5D);
 							}
-
 							if (punchLvl > 0) {
-								entityarrow.setKnockbackStrength(punchLvl);
+								arrow.setKnockbackStrength(punchLvl);
 							}
-
 							if (flame) {
-								entityarrow.setFire(100);
+								arrow.setFire(100);
 							}
-
 							if (flag1) {
-								entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
+								arrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
 							}
-
-							world.spawnEntityInWorld(entityarrow);
+							world.spawnEntityInWorld(arrow);
 						}
 					}
 					world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
@@ -215,7 +205,6 @@ public class ItemBowCore extends ItemBow {
 							entityplayer.inventory.deleteStack(itemstack);
 						}
 					}
-
 					entityplayer.addStat(StatList.getObjectUseStats(this));
 				}
 			}

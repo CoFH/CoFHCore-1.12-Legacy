@@ -11,10 +11,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
-public class ItemHammerBase extends ItemToolBase {
+public class ItemHammerMulti extends ItemToolMulti {
 
 
-	public ItemHammerBase(String modName) {
+	public ItemHammerMulti(String modName) {
 
 		super(modName, 4.0F, -3.6F);
 		addToolClass("pickaxe");
@@ -42,7 +42,7 @@ public class ItemHammerBase extends ItemToolBase {
 			}
 			return false;
 		}
-		boolean used = false;
+		int used = 0;
 
 		float refStrength = ForgeHooks.blockStrength(state, player, world, pos);
 		if (refStrength != 0.0F) {
@@ -64,7 +64,9 @@ public class ItemHammerBase extends ItemToolBase {
 							adjBlock = world.getBlockState(adjPos);
 							strength = ForgeHooks.blockStrength(adjBlock, player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
-								used |= harvestBlock(world, adjPos, player);
+								if (harvestBlock(world, adjPos, player)) {
+									used++;
+								}
 							}
 						}
 					}
@@ -77,7 +79,9 @@ public class ItemHammerBase extends ItemToolBase {
 							adjBlock = world.getBlockState(adjPos);
 							strength = ForgeHooks.blockStrength(adjBlock, player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
-								used |= harvestBlock(world, adjPos, player);
+								if (harvestBlock(world, adjPos, player)) {
+									used++;
+								}
 							}
 						}
 					}
@@ -90,17 +94,25 @@ public class ItemHammerBase extends ItemToolBase {
 							adjBlock = world.getBlockState(adjPos);
 							strength = ForgeHooks.blockStrength(adjBlock, player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
-								used |= harvestBlock(world, adjPos, player);
+								if (harvestBlock(world, adjPos, player)) {
+									used++;
+								}
 							}
 						}
 					}
 					break;
 			}
-			if (used && !player.capabilities.isCreativeMode) {
-				stack.damageItem(1, player);
+			if (used > 0 && !player.capabilities.isCreativeMode) {
+				stack.damageItem(used, player);
 			}
 		}
-		return true;
+		return false;
+	}
+
+	@Override
+	public int getMaxDamage(ItemStack stack) {
+
+		return getToolMaterial(stack).getMaxUses() * 2;
 	}
 
 }

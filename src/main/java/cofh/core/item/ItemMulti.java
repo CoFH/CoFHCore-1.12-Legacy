@@ -22,17 +22,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ItemCoFHBase extends ItemCore implements IModelRegister {
+public class ItemMulti extends ItemCore implements IModelRegister {
 
 	protected TMap<Integer, ItemEntry> itemMap = new THashMap<Integer, ItemEntry>();
 	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
 
-	public ItemCoFHBase() {
+	public ItemMulti() {
 
 		this("cofh");
 	}
 
-	public ItemCoFHBase(String modName) {
+	public ItemMulti(String modName) {
 
 		super(modName);
 	}
