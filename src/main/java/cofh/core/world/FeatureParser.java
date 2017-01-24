@@ -745,7 +745,6 @@ public class FeatureParser {
 	}
 
 	public static INumberProvider parseNumberValue(ConfigValue genElement, long min, long max) {
-		// TODO: verify min/max for values
 
 		switch(genElement.valueType()) {
 		case NUMBER:
