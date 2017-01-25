@@ -41,8 +41,7 @@ public class CommandHandler extends CommandBase {
 		registerSubCommand(CommandHand.instance);
 
 		if (!LoadingPlugin.obfuscated) { // in-dev commands
-			//This is probably not needed anymore
-			//registerSubCommand(CommandFixMojangsShit.instance);
+			;
 		}
 	}
 
