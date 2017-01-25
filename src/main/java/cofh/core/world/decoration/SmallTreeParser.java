@@ -21,14 +21,13 @@ public class SmallTreeParser implements IGeneratorParser {
 
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
 		ArrayList<WeightedRandomBlock> blocks = new ArrayList<WeightedRandomBlock>();
-		if (genObject.hasPath("genMaterial")) {
-			if (!FeatureParser.parseResList(genObject.root().get("genMaterial"), blocks, false)) {
-				log.warn("Entry specifies invalid genMaterial for 'smalltree' generator! Using air!");
+		if (genObject.hasPath("surface")) {
+			if (!FeatureParser.parseResList(genObject.root().get("surface"), blocks, false)) {
+				log.warn("Entry specifies invalid surface for 'smalltree' generator! Using dirt!");
 				blocks.clear();
-				blocks.add(new WeightedRandomBlock(Blocks.AIR));
+				blocks.add(new WeightedRandomBlock(Blocks.GRASS));
+				blocks.add(new WeightedRandomBlock(Blocks.DIRT));
 			}
-		} else {
-			log.info("Entry does not specify genMaterial for 'smalltree' generator! There are no restrictions!");
 		}
 
 		if (genObject.hasPath("leaves")) {
@@ -41,28 +40,29 @@ public class SmallTreeParser implements IGeneratorParser {
 			log.info("Entry does not specify leaves for 'smalltree' generator! There are none!");
 		}
 
-		WorldGenSmallTree r = new WorldGenSmallTree(resList, list, blocks);
+		WorldGenSmallTree r = new WorldGenSmallTree(resList, list, matList);
 		{
-			r.genSurface = matList.toArray(new WeightedRandomBlock[matList.size()]);
+			if (blocks.size() > 0)
+				r.genSurface = blocks.toArray(new WeightedRandomBlock[blocks.size()]);
 
-			if (genObject.hasPath("minHeight")) {
-				r.minHeight = genObject.getInt("minHeight");
+			if (genObject.hasPath("min-height")) {
+				r.minHeight = genObject.getInt("min-height");
 			}
-			if (genObject.hasPath("heightVariance")) {
-				r.heightVariance = genObject.getInt("heightVariance");
+			if (genObject.hasPath("height-variance")) {
+				r.heightVariance = genObject.getInt("height-variance");
 			}
 
-			if (genObject.hasPath("treeChecks")) {
-				r.treeChecks = genObject.getBoolean("treeChecks");
+			if (genObject.hasPath("tree-checks")) {
+				r.treeChecks = genObject.getBoolean("tree-checks");
 			}
-			if (genObject.hasPath("relaxedGrowth")) {
-				r.relaxedGrowth = genObject.getBoolean("relaxedGrowth");
+			if (genObject.hasPath("relaxed-growth")) {
+				r.relaxedGrowth = genObject.getBoolean("relaxed-growth");
 			}
-			if (genObject.hasPath("waterLoving")) {
-				r.waterLoving = genObject.getBoolean("waterLoving");
+			if (genObject.hasPath("water-loving")) {
+				r.waterLoving = genObject.getBoolean("water-loving");
 			}
-			if (genObject.hasPath("leafVariance")) {
-				r.leafVariance = genObject.getBoolean("leafVariance");
+			if (genObject.hasPath("leaf-variance")) {
+				r.leafVariance = genObject.getBoolean("leaf-variance");
 			}
 		}
 		return r;

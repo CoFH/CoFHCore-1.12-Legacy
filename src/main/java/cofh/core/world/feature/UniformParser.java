@@ -46,7 +46,7 @@ public class UniformParser implements IFeatureParser {
 		}
 		GenRestriction biomeRes = GenRestriction.NONE;
 		if (genObject.hasPath("biomeRestriction")) {
-			biomeRes = GenRestriction.get(genObject.getString("biomeRestriction"));
+			biomeRes = GenRestriction.get(genObject.getString("biomeRestriction")); // TODO: consolidate these restriction fields with the value fields
 		}
 		GenRestriction dimRes = GenRestriction.NONE;
 		if (genObject.hasPath("dimensionRestriction")) {
@@ -61,8 +61,8 @@ public class UniformParser implements IFeatureParser {
 		FeatureBase feature = getFeature(featureName, genObject, generator, numClusters, biomeRes, retrogen, dimRes, log);
 
 		if (feature != null) {
-			if (genObject.hasPath("chunkChance")) {
-				int rarity = MathHelper.clamp(genObject.getInt("chunkChance"), 1, 1000000);
+			if (genObject.hasPath("chunk-chance")) {
+				int rarity = MathHelper.clamp(genObject.getInt("chunk-chance"), 1, 1000000);
 				feature.setRarity(rarity);
 			}
 			addFeatureRestrictions(feature, genObject);
@@ -72,13 +72,13 @@ public class UniformParser implements IFeatureParser {
 
 	protected FeatureBase getFeature(String featureName, Config genObject, WorldGenerator gen, INumberProvider numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
-		if (!(genObject.hasPath("minHeight") && genObject.hasPath("maxHeight"))) {
+		if (!(genObject.hasPath("min-height") && genObject.hasPath("max-height"))) {
 			log.error("Height parameters for 'uniform' template not specified in \"" + featureName + "\"");
 			return null;
 		}
 
-		INumberProvider minHeight = FeatureParser.parseNumberValue(genObject.root().get("minHeight"));
-		INumberProvider maxHeight = FeatureParser.parseNumberValue(genObject.root().get("maxHeight"));
+		INumberProvider minHeight = FeatureParser.parseNumberValue(genObject.root().get("min-height"));
+		INumberProvider maxHeight = FeatureParser.parseNumberValue(genObject.root().get("max-height"));
 
 		return new FeatureGenUniform(featureName, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
 	}

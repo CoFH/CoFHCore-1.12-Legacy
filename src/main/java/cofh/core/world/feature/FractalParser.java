@@ -16,24 +16,24 @@ public class FractalParser extends UniformParser {
 	@Override
 	protected FeatureBase getFeature(String featureName, Config genObject, WorldGenerator gen, INumberProvider numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
-		if (!(genObject.hasPath("minHeight") && genObject.hasPath("veinHeight"))) {
+		if (!(genObject.hasPath("min-height") && genObject.hasPath("vein-height"))) {
 			log.error("Height parameters for 'fractal' template not specified in \"" + featureName + "\"");
 			return null;
 		}
-		if (!(genObject.hasPath("veinDiameter"))) {
+		if (!(genObject.hasPath("vein-diameter"))) {
 			log.error("veinDiameter parameter for 'fractal' template not specified in \"" + featureName + "\"");
 			return null;
 		}
-		if (!(genObject.hasPath("verticalDensity") && genObject.hasPath("horizontalDensity"))) {
+		if (!(genObject.hasPath("vertical-density") && genObject.hasPath("horizontal-density"))) {
 			log.error("Density parameters for 'fractal' template not specified in \"" + featureName + "\"");
 			return null;
 		}
 		ConfigObject genData = genObject.root();
-		INumberProvider minY = FeatureParser.parseNumberValue(genData.get("minHeight"));
-		INumberProvider h = FeatureParser.parseNumberValue(genData.get("veinHeight"));
-		INumberProvider d = FeatureParser.parseNumberValue(genData.get("veinDiameter"));
-		INumberProvider vD = FeatureParser.parseNumberValue(genData.get("verticalDensity"));
-		INumberProvider hD = FeatureParser.parseNumberValue(genData.get("horizontalDensity"));
+		INumberProvider minY = FeatureParser.parseNumberValue(genData.get("min-height"));
+		INumberProvider h = FeatureParser.parseNumberValue(genData.get("vein-height"));
+		INumberProvider d = FeatureParser.parseNumberValue(genData.get("vein-diameter"));
+		INumberProvider vD = FeatureParser.parseNumberValue(genData.get("vertical-density"));
+		INumberProvider hD = FeatureParser.parseNumberValue(genData.get("horizontal-density"));
 
 		return new FeatureGenLargeVein(featureName, gen, numClusters, minY, biomeRes, retrogen, dimRes, h, d, vD, hD);
 	}

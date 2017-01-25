@@ -36,7 +36,7 @@ public class GeodeParser implements IGeneratorParser {
 			}
 			if (genObject.hasPath("filler")) {
 				list = new ArrayList<WeightedRandomBlock>();
-				if (!FeatureParser.parseResList(genObject.root().get("filler"), list, true)) {
+				if (!FeatureParser.parseResList(genObject.getValue("filler"), list, true)) {
 					log.warn("Entry specifies invalid filler for 'geode' generator! Not filling!");
 				} else {
 					r.setFillBlock(list);

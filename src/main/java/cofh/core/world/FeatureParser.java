@@ -355,10 +355,10 @@ public class FeatureParser {
 		}
 
 		List<WeightedRandomBlock> resList = new ArrayList<WeightedRandomBlock>();
-		if (!FeatureParser.parseResList(genObject.root().get("block"), resList, true)) {
+		if (!FeatureParser.parseResList(genObject.getValue("block"), resList, true)) {
 			return null;
 		}
-		int clusterSize = genObject.getInt("clusterSize");
+		int clusterSize = genObject.getInt("cluster-size");
 		if (clusterSize <= 0) {
 			log.warn("Invalid cluster size for generator '%s'", name);
 			return null;
@@ -565,6 +565,8 @@ public class FeatureParser {
 				}
 				resList.add(entry);
 			}
+		} else if (genElement.valueType() == null) {
+			return true;
 		} else {
 			WeightedRandomBlock entry = parseBlockEntry(genElement, clamp);
 			if (entry == null) {
@@ -584,9 +586,9 @@ public class FeatureParser {
 		case OBJECT:
 			Config genObject = ((ConfigObject)genElement).toConfig();
 			NBTTagCompound data;
-			if (genObject.hasPath("spawnerTag")) {
+			if (genObject.hasPath("spawner-tag")) {
 				try {
-					data = JsonToNBT.getTagFromJson(genObject.getString("spawnerTag"));
+					data = JsonToNBT.getTagFromJson(genObject.getString("spawner-tag"));
 				} catch (NBTException e) {
 					log.error(String.format("Invalid entity entry at line %d!", genElement.origin().lineNumber()), e);
 					return null;
@@ -707,12 +709,12 @@ public class FeatureParser {
 			if (item.hasPath("metadata")) {
 				metadata = item.getInt("metadata");
 			}
-			if (item.hasPath("stackSize")) {
-				stackSize = item.getInt("stackSize");
+			if (item.hasPath("count")) {
+				stackSize = item.getInt("count");
+			} else if (item.hasPath("stack-size")) {
+				stackSize = item.getInt("stack-size");
 			} else if (item.hasPath("amount")) {
 				stackSize = item.getInt("amount");
-			} else if (item.hasPath("count")) {
-				stackSize = item.getInt("count");
 			}
 			if (stackSize <= 0) {
 				stackSize = 1;
@@ -720,12 +722,18 @@ public class FeatureParser {
 			if (item.hasPath("weight")) {
 				chance = item.getInt("weight");
 			}
-			if (item.hasPath("oreName") && ItemHelper.oreNameExists(item.getString("oreName"))) {
-				ItemStack oreStack = OreDictionary.getOres(item.getString("oreName")).get(0);
+			if (item.hasPath("ore-name")) {
+				String oreName = item.getString("ore-name");
+				if (!ItemHelper.oreNameExists(oreName)) {
+					log.error("Invalid ore name for item at line %d!", genElement.origin().lineNumber());
+					return null;
+				}
+				ItemStack oreStack = OreDictionary.getOres(oreName).get(0);
 				stack = ItemHelper.cloneStack(oreStack, stackSize);
 			} else {
 				if (!item.hasPath("name")) {
-					log.error("Item entry missing valid name or oreName!");
+					log.error("Item entry missing valid name or ore name at line %d!", genElement.origin().lineNumber());
+					return null;
 				}
 				stack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(item.getString("name"))), stackSize, metadata);
 			}
@@ -740,6 +748,7 @@ public class FeatureParser {
 			}
 		}
 		if (stack.getItem() == null) {
+			log.error("Invalid item name at line %d!", genElement.origin().lineNumber());
 			return null;
 		}
 		return new WeightedRandomItemStack(stack, chance);

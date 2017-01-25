@@ -23,34 +23,34 @@ public class DecorationParser extends SurfaceParser implements IGeneratorParser 
 
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
 		ConfigObject genData = genObject.root();
-		if (!genObject.hasPath("genSurface")) {
-			log.info("Entry does not specify genSurface for 'decoration' generator. Using grass.");
+		if (!genObject.hasPath("surface")) {
+			log.info("Entry does not specify surface for 'decoration' generator. Using grass.");
 			list.add(new WeightedRandomBlock(Blocks.GRASS));
 		} else {
-			if (!FeatureParser.parseResList(genData.get("genSurface"), list, false)) {
-				log.warn("Entry specifies invalid genSurface for 'decoration' generator! Using grass!");
+			if (!FeatureParser.parseResList(genData.get("surface"), list, false)) {
+				log.warn("Entry specifies invalid surface for 'decoration' generator! Using grass!");
 				list.clear();
 				list.add(new WeightedRandomBlock(Blocks.GRASS));
 			}
 		}
 		WorldGenDecoration r = new WorldGenDecoration(resList, clusterSize, matList, list);
-		if (genObject.hasPath("genSky")) {
-			r.setSeeSky(genObject.getBoolean("genSky"));
+		if (genObject.hasPath("see-sky")) {
+			r.setSeeSky(genObject.getBoolean("see-sky"));
 		}
-		if (genObject.hasPath("checkStay")) {
-			r.setCheckStay(genObject.getBoolean("checkStay"));
+		if (genObject.hasPath("check-stay")) {
+			r.setCheckStay(genObject.getBoolean("check-stay"));
 		}
-		if (genObject.hasPath("stackHeight")) {
-			r.setStackHeight(FeatureParser.parseNumberValue(genData.get("stackHeight")));
+		if (genObject.hasPath("stack-height")) {
+			r.setStackHeight(FeatureParser.parseNumberValue(genData.get("stack-height")));
 		}
-		if (genObject.hasPath("xVariance")) {
-			r.setXVar(FeatureParser.parseNumberValue(genData.get("xVariance"), 1, 15));
+		if (genObject.hasPath("x-variance")) {
+			r.setXVar(FeatureParser.parseNumberValue(genData.get("x-variance"), 1, 15));
 		}
-		if (genObject.hasPath("yVariance")) {
-			r.setYVar(FeatureParser.parseNumberValue(genData.get("yVariance"), 0, 15));
+		if (genObject.hasPath("y-variance")) {
+			r.setYVar(FeatureParser.parseNumberValue(genData.get("y-variance"), 0, 15));
 		}
-		if (genObject.hasPath("zVariance")) {
-			r.setZVar(FeatureParser.parseNumberValue(genData.get("zVariance"), 1, 15));
+		if (genObject.hasPath("z-variance")) {
+			r.setZVar(FeatureParser.parseNumberValue(genData.get("z-variance"), 1, 15));
 		}
 		return r;
 	}

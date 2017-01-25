@@ -26,33 +26,34 @@ public class StalagmiteParser implements IGeneratorParser {
 	@Override
 	public WorldGenerator parseGenerator(String generatorName, Config genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
 
+		// TODO: these names need revised
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
-		if (!genObject.hasPath("genBody")) {
-			log.info("Entry does not specify genBody for 'stalagmite' generator. Using air.");
+		if (!genObject.hasPath("gen-body")) {
+			log.info("Entry does not specify gen body for 'stalagmite' generator. Using air.");
 			list.add(new WeightedRandomBlock(Blocks.AIR));
 		} else {
-			if (!FeatureParser.parseResList(genObject.root().get("genBody"), list, false)) {
-				log.warn("Entry specifies invalid genBody for 'stalagmite' generator! Using air!");
+			if (!FeatureParser.parseResList(genObject.root().get("gen-body"), list, false)) {
+				log.warn("Entry specifies invalid gen body for 'stalagmite' generator! Using air!");
 				list.clear();
 				list.add(new WeightedRandomBlock(Blocks.AIR));
 			}
 		}
 		WorldGenStalagmite r = stalactite ? new WorldGenStalactite(resList, matList, list) : new WorldGenStalagmite(resList, matList, list);
 		{
-			if (genObject.hasPath("minHeight")) {
-				r.minHeight = genObject.getInt("minHeight");
+			if (genObject.hasPath("min-height")) {
+				r.minHeight = genObject.getInt("min-height");
 			}
-			if (genObject.hasPath("heightVariance")) {
-				r.heightVariance = genObject.getInt("heightVariance");
+			if (genObject.hasPath("height-variance")) {
+				r.heightVariance = genObject.getInt("height-variance");
 			}
-			if (genObject.hasPath("sizeVariance")) {
-				r.sizeVariance = genObject.getInt("sizeVariance");
+			if (genObject.hasPath("size-variance")) {
+				r.sizeVariance = genObject.getInt("size-variance");
 			}
-			if (genObject.hasPath("heightMod")) {
-				r.heightMod = genObject.getInt("heightMod");
+			if (genObject.hasPath("height-mod")) {
+				r.heightMod = genObject.getInt("height-mod");
 			}
-			if (genObject.hasPath("genSize")) {
-				r.genSize = genObject.getInt("genSize");
+			if (genObject.hasPath("gen-size")) {
+				r.genSize = genObject.getInt("gen-size");
 			}
 			if (genObject.hasPath("smooth")) {
 				r.smooth = genObject.getBoolean("smooth");
@@ -60,8 +61,8 @@ public class StalagmiteParser implements IGeneratorParser {
 			if (genObject.hasPath("fat")) {
 				r.fat = genObject.getBoolean("fat");
 			}
-			if (genObject.hasPath("altSinc")) {
-				r.altSinc = genObject.getBoolean("altSinc");
+			if (genObject.hasPath("alt-sinc")) {
+				r.altSinc = genObject.getBoolean("alt-sinc");
 			}
 		}
 		return r;

@@ -17,32 +17,33 @@ public class SpikeParser implements IGeneratorParser {
 
 		WorldGenSpike r = new WorldGenSpike(resList, matList);
 		{
-			if (genObject.hasPath("largeSpikes")) {
-				r.largeSpikes = genObject.getBoolean("largeSpikes");
+			if (genObject.hasPath("min-height")) {
+				r.minHeight = genObject.getInt("min-height");
 			}
-			if (genObject.hasPath("largeSpikeChance")) {
-				r.largeSpikeChance = genObject.getInt("largeSpikeChance");
+			if (genObject.hasPath("height-variance")) {
+				r.heightVariance = genObject.getInt("height-variance");
 			}
-			if (genObject.hasPath("minHeight")) {
-				r.minHeight = genObject.getInt("minHeight");
+			if (genObject.hasPath("size-variance")) {
+				r.sizeVariance = genObject.getInt("size-variance");
 			}
-			if (genObject.hasPath("heightVariance")) {
-				r.heightVariance = genObject.getInt("heightVariance");
+			if (genObject.hasPath("position-variance")) {
+				r.positionVariance = genObject.getInt("position-variance");
 			}
-			if (genObject.hasPath("sizeVariance")) {
-				r.sizeVariance = genObject.getInt("sizeVariance");
+			// TODO: these fields need addressed. combined into a sub-object?
+			if (genObject.hasPath("large-spikes")) {
+				r.largeSpikes = genObject.getBoolean("large-spikes");
 			}
-			if (genObject.hasPath("positionVariance")) {
-				r.positionVariance = genObject.getInt("positionVariance");
+			if (genObject.hasPath("large-spike-chance")) {
+				r.largeSpikeChance = genObject.getInt("large-spike-chance");
 			}
-			if (genObject.hasPath("minLargeSpikeHeightGain")) {
-				r.minLargeSpikeHeightGain = genObject.getInt("minLargeSpikeHeightGain");
+			if (genObject.hasPath("min-large-spike-height-gain")) {
+				r.minLargeSpikeHeightGain = genObject.getInt("min-large-spike-height-gain");
 			}
-			if (genObject.hasPath("largeSpikeHeightVariance")) {
-				r.largeSpikeHeightVariance = genObject.getInt("largeSpikeHeightVariance");
+			if (genObject.hasPath("large-spike-height-variance")) {
+				r.largeSpikeHeightVariance = genObject.getInt("large-spike-height-variance");
 			}
-			if (genObject.hasPath("largeSpikeFillerSize")) {
-				r.largeSpikeFillerSize = genObject.getInt("largeSpikeFillerSize");
+			if (genObject.hasPath("large-spike-filler-size")) {
+				r.largeSpikeFillerSize = genObject.getInt("large-spike-filler-size");
 			}
 		}
 		return r;

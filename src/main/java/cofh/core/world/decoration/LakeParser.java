@@ -21,31 +21,31 @@ public class LakeParser implements IGeneratorParser {
 
 		boolean useMaterial = false;
 		{
-			useMaterial = genObject.hasPath("useMaterial") ? genObject.getBoolean("useMaterial") : useMaterial;
+			useMaterial = genObject.hasPath("use-material") ? genObject.getBoolean("use-material") : useMaterial;
 		}
 		WorldGenAdvLakes r = new WorldGenAdvLakes(resList, useMaterial ? matList : null);
 		{
 			ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
-			if (genObject.hasPath("outlineBlock")) {
-				if (!FeatureParser.parseResList(genObject.root().get("outlineBlock"), list, true)) {
-					log.warn("Entry specifies invalid outlineBlock for 'lake' generator! Not filling!");
+			if (genObject.hasPath("outline-block")) {
+				if (!FeatureParser.parseResList(genObject.root().get("outline-block"), list, true)) {
+					log.warn("Entry specifies invalid outline-block for 'lake' generator! Not outlining!");
 				} else {
 					r.setOutlineBlock(list);
 				}
 				list = new ArrayList<WeightedRandomBlock>();
 			}
-			if (genObject.hasPath("gapBlock")) {
-				if (!FeatureParser.parseResList(genObject.root().get("gapBlock"), list, true)) {
-					log.warn("Entry specifies invalid gapBlock for 'lake' generator! Not filling!");
+			if (genObject.hasPath("gap-block")) {
+				if (!FeatureParser.parseResList(genObject.getValue("gap-block"), list, true)) {
+					log.warn("Entry specifies invalid gap block for 'lake' generator! Not filling!");
 				} else {
 					r.setGapBlock(list);
 				}
 			}
-			if (genObject.hasPath("solidOutline")) {
-				r.setSolidOutline(genObject.getBoolean("solidOutline"));
+			if (genObject.hasPath("solid-outline")) {
+				r.setSolidOutline(genObject.getBoolean("solid-outline"));
 			}
-			if (genObject.hasPath("totalOutline")) {
-				r.setTotalOutline(genObject.getBoolean("totalOutline"));
+			if (genObject.hasPath("total-outline")) {
+				r.setTotalOutline(genObject.getBoolean("total-outline"));
 			}
 		}
 		return r;

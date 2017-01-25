@@ -37,7 +37,8 @@ public class SurfaceParser extends UniformParser {
 				matList = defaultMaterial;
 			}
 		}
-		if (genObject.hasPath("followTerrain") && genObject.getBoolean("followTerrain")) {
+		// TODO: clarity on follow-terrain field
+		if (genObject.hasPath("follow-terrain") && genObject.getBoolean("follow-terrain")) {
 			return new FeatureGenTopBlock(featureName, gen, matList, numClusters, biomeRes, retrogen, dimRes);
 		} else {
 			return new FeatureGenSurface(featureName, gen, matList, numClusters, biomeRes, retrogen, dimRes);

@@ -17,23 +17,23 @@ public class BoulderParser implements IGeneratorParser {
 
 		WorldGenBoulder r = new WorldGenBoulder(resList, clusterSize, matList);
 		{
-			if (genObject.hasPath("sizeVariance")) {
-				r.sizeVariance = genObject.getInt("sizeVariance");
+			if (genObject.hasPath("size-variance")) {
+				r.sizeVariance = genObject.getInt("size-variance");
 			}
 			if (genObject.hasPath("count")) {
 				r.clusters = genObject.getInt("count");
 			}
-			if (genObject.hasPath("countVariance")) {
-				r.clusterVariance = genObject.getInt("countVariance");
+			if (genObject.hasPath("count-variance")) {
+				r.clusterVariance = genObject.getInt("count-variance");
 			}
 			if (genObject.hasPath("hollow")) {
 				r.hollow = genObject.getBoolean("hollow");
 			}
-			if (genObject.hasPath("hollowSize")) {
-				r.hollowAmt = (float) genObject.getDouble("hollowSize");
+			if (genObject.hasPath("hollow-size")) {
+				r.hollowAmt = (float) genObject.getDouble("hollow-size");
 			}
-			if (genObject.hasPath("hollowVariance")) {
-				r.hollowVar = (float)genObject.getDouble("hollowVariance");
+			if (genObject.hasPath("hollow-variance")) {
+				r.hollowVar = (float)genObject.getDouble("hollow-vVariance");
 			}
 		}
 		return r;
