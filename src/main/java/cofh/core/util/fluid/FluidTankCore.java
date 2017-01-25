@@ -76,7 +76,7 @@ public class FluidTankCore implements IFluidTank {
 	}
 
 	/**
-	 * Only ever call this on a locked tank. Be really sure you know WTF you are doing.
+	 * Only ever call this on a LOCKED tank. Be really sure you know WTF you are doing.
 	 *
 	 * @param amount
 	 */
@@ -89,42 +89,6 @@ public class FluidTankCore implements IFluidTank {
 		} else if (this.fluid.amount < 0) {
 			this.fluid.amount = 0;
 		}
-	}
-
-	/* IFluidTank */
-	@Override
-	public FluidStack getFluid() {
-
-		return fluid;
-	}
-
-	@Override
-	public int getFluidAmount() {
-
-		if (fluid == null) {
-			return 0;
-		}
-		return fluid.amount;
-	}
-
-	public int getSpace() {
-
-		if (fluid == null) {
-			return capacity;
-		}
-		return fluid.amount >= capacity ? 0 : capacity - fluid.amount;
-	}
-
-	@Override
-	public int getCapacity() {
-
-		return capacity;
-	}
-
-	@Override
-	public FluidTankInfo getInfo() {
-
-		return new FluidTankInfo(this);
 	}
 
 	/**
@@ -151,6 +115,50 @@ public class FluidTankCore implements IFluidTank {
 			fluid.amount = capacity;
 		}
 		return filled;
+	}
+
+	public int getSpace() {
+
+		if (fluid == null) {
+			return capacity;
+		}
+		return fluid.amount >= capacity ? 0 : capacity - fluid.amount;
+	}
+
+	public FluidStack drain(FluidStack resource, boolean doDrain) {
+
+		if (resource == null || !resource.isFluidEqual(fluid)) {
+			return null;
+		}
+		return drain(resource.amount, doDrain);
+	}
+
+	/* IFluidTank */
+	@Override
+	public FluidStack getFluid() {
+
+		return fluid;
+	}
+
+	@Override
+	public int getFluidAmount() {
+
+		if (fluid == null) {
+			return 0;
+		}
+		return fluid.amount;
+	}
+
+	@Override
+	public int getCapacity() {
+
+		return capacity;
+	}
+
+	@Override
+	public FluidTankInfo getInfo() {
+
+		return new FluidTankInfo(this);
 	}
 
 	@Override
@@ -208,14 +216,6 @@ public class FluidTankCore implements IFluidTank {
 			}
 		}
 		return stack;
-	}
-
-	public FluidStack drain(FluidStack resource, boolean doDrain) {
-
-		if (resource == null || !resource.isFluidEqual(fluid)) {
-			return null;
-		}
-		return drain(resource.amount, doDrain);
 	}
 
 }
