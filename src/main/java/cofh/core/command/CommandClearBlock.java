@@ -140,7 +140,7 @@ public class CommandClearBlock implements ISubCommand {
 								BlockPos pos = new BlockPos(cX, y, cZ);
 								IBlockState state = chunk.getBlockState(pos);
 								if (state.getMaterial().isLiquid()) {
-									if (chunk.setBlockState(new BlockPos(x, y, z), Blocks.AIR.getDefaultState()) != state) {
+									if (chunk.setBlockState(new BlockPos(x, y, z), Blocks.AIR.getDefaultState()) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -159,7 +159,7 @@ public class CommandClearBlock implements ISubCommand {
 								IBlockState state = chunk.getBlockState(cPos);
 								if (state.getBlock().isWood(world, bPos) || state.getBlock().isLeaves(state, world, bPos)) {
 									++blockCounter;
-									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != state) {
+									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != null) {
 										set.add(chunk);
 									}
 								}
@@ -176,7 +176,7 @@ public class CommandClearBlock implements ISubCommand {
 								BlockPos bPos = new BlockPos(x, y, z);
 								IBlockState state = chunk.getBlockState(pos);
 								if (state.getBlock().isReplaceable(world, bPos)) {
-									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != state) {
+									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -196,7 +196,7 @@ public class CommandClearBlock implements ISubCommand {
 								Block block = state.getBlock();
 								if (block.isReplaceableOreGen(state, world, bPos, BlockMatcher.forBlock(Blocks.STONE)) || block.isReplaceableOreGen(state, world, bPos, BlockMatcher.forBlock(Blocks.NETHERRACK)) || block.isReplaceableOreGen(state, world, bPos, BlockMatcher.forBlock(Blocks.END_STONE))) {
 									++blockCounter;
-									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != state) {
+									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != null) {
 										set.add(chunk);
 									}
 								}
@@ -213,7 +213,7 @@ public class CommandClearBlock implements ISubCommand {
 								BlockPos bPos = new BlockPos(x, y, z);
 								IBlockState state = chunk.getBlockState(pos);
 								if (state.getMaterial() == Material.ROCK) {
-									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != state) {
+									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -231,7 +231,7 @@ public class CommandClearBlock implements ISubCommand {
 								BlockPos bPos = new BlockPos(x, y, z);
 								IBlockState state = chunk.getBlockState(pos);
 								if (state.getMaterial() == Material.SAND) {
-									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != state) {
+									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -250,7 +250,7 @@ public class CommandClearBlock implements ISubCommand {
 								IBlockState state = chunk.getBlockState(pos);
 								Material m = state.getMaterial();
 								if (m == Material.GRASS || m == Material.GROUND || m == Material.CLAY || m == Material.SNOW || m == Material.CRAFTED_SNOW || m == Material.ICE || m == Material.PACKED_ICE) {
-									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != state) {
+									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -269,7 +269,7 @@ public class CommandClearBlock implements ISubCommand {
 								IBlockState state = chunk.getBlockState(pos);
 								Material m = state.getMaterial();
 								if (m == Material.PLANTS || m == Material.VINE || m == Material.CACTUS || m == Material.LEAVES) {
-									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != state) {
+									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -288,7 +288,7 @@ public class CommandClearBlock implements ISubCommand {
 								IBlockState state = chunk.getBlockState(pos);
 								Material m = state.getMaterial();
 								if (m == Material.FIRE || m == Material.LAVA || state.getBlock().isBurning(world, bPos)) {
-									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != state) {
+									if (chunk.setBlockState(bPos, Blocks.AIR.getDefaultState()) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -318,7 +318,7 @@ public class CommandClearBlock implements ISubCommand {
 						IBlockState state = chunk.getBlockState(new BlockPos(cX, y, cZ));
 						boolean v = meta == -1 || state.getBlock().getMetaFromState(state) == meta;
 						if (v && state.getBlock() == block) {
-							if (chunk.setBlockState(new BlockPos(x, y, z), Blocks.AIR.getDefaultState()) != state) {
+							if (chunk.setBlockState(new BlockPos(x, y, z), Blocks.AIR.getDefaultState()) != null) {
 								++blockCounter;
 								set.add(chunk);
 							}

@@ -161,7 +161,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								BlockPos pos = new BlockPos(x, y, z);
 								IBlockState state = chunk.getBlockState(pos);
 								if (state.getMaterial().isLiquid()) {
-									if (chunk.setBlockState(pos, replState) != state) {
+									if (chunk.setBlockState(pos, replState) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -178,7 +178,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								BlockPos pos = new BlockPos(x, y, z);
 								IBlockState state = chunk.getBlockState(pos);
 								if (state.getBlock().isWood(world, pos) || state.getBlock().isLeaves(state, world, pos)) {
-									if (chunk.setBlockState(pos, replState) != state) {
+									if (chunk.setBlockState(pos, replState) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -195,7 +195,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								BlockPos pos = new BlockPos(x, y, z);
 								IBlockState state = chunk.getBlockState(pos);
 								if (state.getBlock().isReplaceable(world, pos)) {
-									if (chunk.setBlockState(pos, replState) != state) {
+									if (chunk.setBlockState(pos, replState) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -213,7 +213,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								IBlockState state = chunk.getBlockState(pos);
 								Block block = state.getBlock();
 								if (block.isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(Blocks.STONE)) || block.isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(Blocks.NETHERRACK)) || block.isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(Blocks.END_STONE))) {
-									if (chunk.setBlockState(pos, replState) != state) {
+									if (chunk.setBlockState(pos, replState) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -230,7 +230,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								BlockPos pos = new BlockPos(x, y, z);
 								IBlockState state = chunk.getBlockState(pos);
 								if (state.getMaterial() == Material.ROCK) {
-									if (chunk.setBlockState(pos, replState) != state) {
+									if (chunk.setBlockState(pos, replState) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -247,7 +247,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								BlockPos pos = new BlockPos(x, y, z);
 								IBlockState state = chunk.getBlockState(pos);
 								if (state.getMaterial() == Material.SAND) {
-									if (chunk.setBlockState(pos, replState) != state) {
+									if (chunk.setBlockState(pos, replState) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -265,7 +265,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								IBlockState state = chunk.getBlockState(pos);
 								Material m = state.getMaterial();
 								if (m == Material.GRASS || m == Material.GROUND || m == Material.CLAY || m == Material.SNOW || m == Material.CRAFTED_SNOW || m == Material.ICE || m == Material.PACKED_ICE) {
-									if (chunk.setBlockState(pos, replState) != state) {
+									if (chunk.setBlockState(pos, replState) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -283,7 +283,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								IBlockState state = chunk.getBlockState(pos);
 								Material m = state.getMaterial();
 								if (m == Material.PLANTS || m == Material.VINE || m == Material.CACTUS || m == Material.LEAVES) {
-									if (chunk.setBlockState(pos, replState) != state) {
+									if (chunk.setBlockState(pos, replState) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -301,7 +301,7 @@ public class CommandReplaceBlock implements ISubCommand {
 								IBlockState state = chunk.getBlockState(pos);
 								Material m = state.getMaterial();
 								if (m == Material.FIRE || m == Material.LAVA || state.getBlock().isBurning(world, pos)) {
-									if (chunk.setBlockState(pos, replState) != state) {
+									if (chunk.setBlockState(pos, replState) != null) {
 										++blockCounter;
 										set.add(chunk);
 									}
@@ -332,7 +332,7 @@ public class CommandReplaceBlock implements ISubCommand {
 						IBlockState state = chunk.getBlockState(pos);
 						boolean v = meta == -1 || state.getBlock().getMetaFromState(state) == meta;
 						if (v && state.getBlock() == block) {
-							if (chunk.setBlockState(pos, replState) != state) {
+							if (chunk.setBlockState(pos, replState) != null) {
 								++blockCounter;
 								set.add(chunk);
 							}
