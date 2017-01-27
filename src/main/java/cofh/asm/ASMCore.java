@@ -27,7 +27,7 @@ import java.util.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
-class ASMCore {
+public class ASMCore {
 
 	static Logger log = LogManager.getLogger("CoFH ASM");
 
@@ -1916,7 +1916,7 @@ class ASMCore {
 
 	private static Map<String, ModContainer> apis;
 
-	static Map<String, ModContainer> getLoadedAPIs() {
+	public static Map<String, ModContainer> getLoadedAPIs() {
 
 		if (apis == null) {
 			apis = new HashMap<String, ModContainer>();

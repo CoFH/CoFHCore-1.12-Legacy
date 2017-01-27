@@ -3,6 +3,7 @@ package cofh.core.world;
 import cofh.api.world.IFeatureGenerator;
 import cofh.api.world.IFeatureParser;
 import cofh.api.world.IGeneratorParser;
+import cofh.asm.ASMCore;
 import cofh.core.CoFHProps;
 import cofh.core.util.CoreUtils;
 import cofh.core.world.decoration.*;
@@ -36,7 +37,14 @@ import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DungeonHooks.DungeonMob;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.LoaderState;
+import net.minecraftforge.fml.common.ModAPIManager;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.versioning.ArtifactVersion;
+import net.minecraftforge.fml.common.versioning.DefaultArtifactVersion;
+import net.minecraftforge.fml.common.versioning.VersionParser;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
@@ -91,7 +99,7 @@ public class FeatureParser {
 
 	public static void initialize() {
 
-		log.info("Registering Default Templates...");
+		log.info("Registering default Templates...");
 		registerTemplate("gaussian", new GaussianParser());
 		registerTemplate("uniform", new UniformParser());
 		registerTemplate("surface", new SurfaceParser());
@@ -227,14 +235,19 @@ public class FeatureParser {
 	public static void parseGenerationFile() {
 
 		ArrayList<File> worldGenList = new ArrayList<File>(5);
-		addFiles(worldGenList, worldGenFolder);
-		for (int i = 0, e = worldGenList.size(); i < e; ++i) {
-			File genFile = worldGenList.get(i);
-			if (genFile.equals(vanillaGen)) {
-				if (!WorldHandler.genReplaceVanilla) {
+		{
+			int i = 0;
+			if (WorldHandler.genReplaceVanilla) {
+				worldGenList.add(vanillaGen); // prioritize this over all other files
+				++i;
+			}
+			addFiles(worldGenList, worldGenFolder);
+			for (int e = worldGenList.size(); i < e; ++i) {
+				File genFile = worldGenList.get(i);
+				if (genFile.equals(vanillaGen)) {
 					worldGenList.remove(i);
+					break;
 				}
-				break;
 			}
 		}
 
@@ -257,6 +270,11 @@ public class FeatureParser {
 				genList = ConfigFactory.parseFile(genFile, Includer.options).resolve(Includer.resolveOptions);
 			} catch (Throwable t) {
 				log.error(String.format("Critical error reading from a world generation file: \"%s\" > Please be sure the file is correct!", genFile), t);
+				continue;
+			}
+
+			if (genList.hasPath("dependencies") && !processDependencies(genList.getValue("dependencies"))) {
+				log.info("Unmet dependencies to load %s", file);
 				continue;
 			}
 
@@ -295,6 +313,73 @@ public class FeatureParser {
 			} else {
 			}
 		}
+	}
+
+	private static boolean processDependencies(ConfigValue value) {
+
+		if (value.valueType() == ConfigValueType.LIST) {
+			ConfigList list = (ConfigList) value;
+			boolean r = true;
+			for (int i = 0, e = list.size(); i < e; ++i) {
+				r &= processDependency(list.get(i));
+			}
+			return r;
+		} else {
+			return processDependency(value);
+		}
+	}
+
+	private static boolean processDependency(ConfigValue value) {
+
+		String id;
+		ModContainer con;
+		ArtifactVersion vers = null;
+		boolean retComp = true;
+		switch(value.valueType()) {
+		case STRING:
+			id = (String)value.unwrapped();
+			if (id.contains("@")) {
+				vers = VersionParser.parseVersionReference(id);
+				id = vers.getLabel();
+			}
+			con = Loader.instance().getIndexedModList().get(id);
+			break;
+		case OBJECT:
+			Config data = ((ConfigObject)value).toConfig();
+			id = data.getString("id");
+			con = Loader.instance().getIndexedModList().get(id);
+			if (data.hasPath("version")) {
+				vers = new DefaultArtifactVersion(id, data.getString("version"));
+			}
+			if (data.hasPath("exclude")) {
+				retComp = !data.getBoolean("exclude");
+			}
+			break;
+		default:
+			log.fatal("Invalid dependency at line %d!", value.origin().lineNumber());
+			return false;
+		}
+		if (con == null) {
+			con = ASMCore.getLoadedAPIs().get(id);
+			if (con == null) {
+				log.debug("Dependency '%s' is not loaded.", id);
+				return false == retComp;
+			}
+		}
+		LoaderState.ModState state = Loader.instance().getModState(con);
+		if (state == LoaderState.ModState.DISABLED || state == LoaderState.ModState.ERRORED) {
+			log.debug("Dependency '%s' is disabled or crashed.", id);
+			return false == retComp;
+		}
+		if (vers != null) {
+			if (retComp != vers.containsVersion(con.getProcessedVersion())) {
+				log.debug("Dependency '%s' has an incompatible version.", id);
+				return false;
+			} else {
+				return true;
+			}
+		}
+		return true == retComp;
 	}
 
 	private static EnumActionResult parseGenerationEntry(String featureName, Config genObject) {
