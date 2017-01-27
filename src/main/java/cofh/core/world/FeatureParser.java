@@ -280,6 +280,13 @@ public class FeatureParser {
 								log.error("Error parsing generation entry: '%s' > It is a duplicate.", key);
 							}
 						}
+					} catch (ConfigException ex) {
+						String line = "";
+						if (ex.origin() != null) {
+							line = String.format(" on line %d", ex.origin().lineNumber());
+						}
+						log.error(String.format("Error parsing entry '%s'%s: %s", key, line, ex.getMessage()));
+						continue;
 					} catch (Throwable t) {
 						log.fatal(String.format("There was a severe error parsing '%s'!", key), t);
 					}
@@ -381,106 +388,118 @@ public class FeatureParser {
 
 	public static BiomeInfoSet parseBiomeRestrictions(Config genObject) {
 
-		BiomeInfoSet set = null;
-		if (genObject.hasPath("biomes")) {
-			ConfigList restrictionList = genObject.getList("biomes");
+		BiomeInfoSet set;
+		ConfigValue data = genObject.getValue("value");
+		if (data.valueType() == ConfigValueType.LIST) {
+			ConfigList restrictionList = (ConfigList) data;
 			set = new BiomeInfoSet(restrictionList.size());
 			for (int i = 0, e = restrictionList.size(); i < e; i++) {
-				BiomeInfo info = null;
-				ConfigValue element = restrictionList.get(i);
-				switch(element.valueType()) {
-				case NULL:
-					log.info("Null biome entry. Ignoring.");
-					break;
-				case OBJECT:
-					Config obj = ((ConfigObject) element).toConfig();
-					String type = obj.getString("type");
-					boolean wl = !obj.hasPath("whitelist") || obj.getBoolean("whitelist");
-					ConfigValue value = obj.root().get("entry");
-					List<String> array = value.valueType() == ConfigValueType.LIST ? obj.getStringList("entry") : null;
-					String entry = array != null ? null : (String)value.unwrapped();
-					int rarity = obj.hasPath("rarity") ? obj.getInt("rarity") : -1;
-
-					l:
-					if (type.equalsIgnoreCase("name")) {
-						if (array != null) {
-							List<String> names = array;
-							if (rarity > 0) {
-								info = new BiomeInfoRarity(names, 4, true, rarity);
-							} else {
-								info = new BiomeInfo(names, 4, true);
-							}
-						} else {
-							if (rarity > 0) {
-								info = new BiomeInfoRarity(entry, rarity);
-							} else {
-								info = new BiomeInfo(entry);
-							}
-						}
-					} else {
-						Object data;
-						int t;
-						if (type.equalsIgnoreCase("dictionary")) {
-							if (array != null) {
-								ArrayList<Type> tags = new ArrayList<Type>(array.size());
-								for (int k = 0, j = array.size(); k < j; k++) {
-									tags.add(Type.valueOf(array.get(k)));
-								}
-								data = tags.toArray(new Type[tags.size()]);
-								t = 6;
-							} else {
-								data = Type.valueOf(entry);
-								t = 2;
-							}
-						} else if (type.equalsIgnoreCase("id")) {
-							if (array != null) {
-								ArrayList<ResourceLocation> ids = new ArrayList<ResourceLocation>(array.size());
-								for (int k = 0, j = array.size(); k < j; ++k) {
-									ids.add(new ResourceLocation(array.get(k)));
-								}
-								data = ids;
-								t = 8;
-							} else {
-								data = new ResourceLocation(entry);
-								t = 7;
-							}
-						} else if (type.equalsIgnoreCase("temperature")) {
-							if (array != null) {
-								ArrayList<TempCategory> temps = new ArrayList<TempCategory>(array.size());
-								for (int k = 0, j = array.size(); k < j; k++) {
-									temps.add(TempCategory.valueOf(array.get(k)));
-								}
-								data = EnumSet.copyOf(temps);
-								t = 5;
-							} else {
-								data = TempCategory.valueOf(entry);
-								t = 1;
-							}
-						} else {
-							log.warn("Biome entry of unknown type");
-							break l;
-						}
-						if (data != null) {
-							if (rarity > 0) {
-								info = new BiomeInfoRarity(data, t, wl, rarity);
-							} else {
-								info = new BiomeInfo(data, t, wl);
-							}
-						}
-					}
-					break;
-				case STRING:
-					info = new BiomeInfo((String)element.unwrapped());
-					break;
-				default:
-					log.error("Unknown type in biome list at index %d", i);
-				}
+				BiomeInfo info = parseBiomeData(restrictionList.get(i));
 				if (info != null) {
 					set.add(info);
 				}
 			}
+		} else {
+			set = new BiomeInfoSet(1);
+			BiomeInfo info = parseBiomeData(data);
+			if (info != null) {
+				set.add(info);
+			}
 		}
 		return set;
+	}
+
+	private static BiomeInfo parseBiomeData(ConfigValue element) {
+
+		BiomeInfo info = null;
+		switch(element.valueType()) {
+		case NULL:
+			log.info("Null biome entry. Ignoring.");
+			break;
+		case OBJECT:
+			Config obj = ((ConfigObject) element).toConfig();
+			String type = obj.getString("type");
+			boolean wl = !obj.hasPath("whitelist") || obj.getBoolean("whitelist");
+			ConfigValue value = obj.root().get("entry");
+			List<String> array = value.valueType() == ConfigValueType.LIST ? obj.getStringList("entry") : null;
+			String entry = array != null ? null : (String)value.unwrapped();
+			int rarity = obj.hasPath("rarity") ? obj.getInt("rarity") : -1;
+
+			l:
+			if (type.equalsIgnoreCase("name")) {
+				if (array != null) {
+					List<String> names = array;
+					if (rarity > 0) {
+						info = new BiomeInfoRarity(names, 4, true, rarity);
+					} else {
+						info = new BiomeInfo(names, 4, true);
+					}
+				} else {
+					if (rarity > 0) {
+						info = new BiomeInfoRarity(entry, rarity);
+					} else {
+						info = new BiomeInfo(entry);
+					}
+				}
+			} else {
+				Object data;
+				int t;
+				if (type.equalsIgnoreCase("dictionary")) {
+					if (array != null) {
+						ArrayList<Type> tags = new ArrayList<Type>(array.size());
+						for (int k = 0, j = array.size(); k < j; k++) {
+							tags.add(Type.valueOf(array.get(k)));
+						}
+						data = tags.toArray(new Type[tags.size()]);
+						t = 6;
+					} else {
+						data = Type.valueOf(entry);
+						t = 2;
+					}
+				} else if (type.equalsIgnoreCase("id")) {
+					if (array != null) {
+						ArrayList<ResourceLocation> ids = new ArrayList<ResourceLocation>(array.size());
+						for (int k = 0, j = array.size(); k < j; ++k) {
+							ids.add(new ResourceLocation(array.get(k)));
+						}
+						data = ids;
+						t = 8;
+					} else {
+						data = new ResourceLocation(entry);
+						t = 7;
+					}
+				} else if (type.equalsIgnoreCase("temperature")) {
+					if (array != null) {
+						ArrayList<TempCategory> temps = new ArrayList<TempCategory>(array.size());
+						for (int k = 0, j = array.size(); k < j; k++) {
+							temps.add(TempCategory.valueOf(array.get(k)));
+						}
+						data = EnumSet.copyOf(temps);
+						t = 5;
+					} else {
+						data = TempCategory.valueOf(entry);
+						t = 1;
+					}
+				} else {
+					log.warn("Biome entry of unknown type");
+					break l;
+				}
+				if (data != null) {
+					if (rarity > 0) {
+						info = new BiomeInfoRarity(data, t, wl, rarity);
+					} else {
+						info = new BiomeInfo(data, t, wl);
+					}
+				}
+			}
+			break;
+		case STRING:
+			info = new BiomeInfo((String)element.unwrapped());
+			break;
+		default:
+			log.error("Unknown biome type in at line %d", element.origin().lineNumber());
+		}
+		return info;
 	}
 
 	public static Block parseBlockName(String blockRaw) {

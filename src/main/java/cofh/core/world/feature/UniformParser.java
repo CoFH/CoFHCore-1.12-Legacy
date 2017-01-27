@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class UniformParser implements IFeatureParser {
 
@@ -39,18 +40,42 @@ public class UniformParser implements IFeatureParser {
 	@Override
 	public IFeatureGenerator parseFeature(String featureName, Config genObject, Logger log) {
 
-		INumberProvider numClusters = FeatureParser.parseNumberValue(genObject.root().get("clusterCount"), 0, Long.MAX_VALUE);
+		INumberProvider numClusters = FeatureParser.parseNumberValue(genObject.getValue("cluster-count"), 0, Long.MAX_VALUE);
 		boolean retrogen = false;
 		if (genObject.hasPath("retrogen")) {
 			retrogen = genObject.getBoolean("retrogen");
 		}
 		GenRestriction biomeRes = GenRestriction.NONE;
-		if (genObject.hasPath("biomeRestriction")) {
-			biomeRes = GenRestriction.get(genObject.getString("biomeRestriction")); // TODO: consolidate these restriction fields with the value fields
+		if (genObject.hasPath("biome")) {
+			ConfigValue data = genObject.getValue("biome");
+			if (data.valueType() == ConfigValueType.STRING) {
+				biomeRes = GenRestriction.get(genObject.getString("biome"));
+				if (biomeRes != GenRestriction.NONE) {
+					log.error("Invalid biome restriction %2$s on '%1$s'. Must be an object to meaningfully function", featureName, biomeRes.name().toLowerCase(Locale.US));
+					return null;
+				}
+			} else if (data.valueType() == ConfigValueType.OBJECT) {
+				biomeRes = GenRestriction.get(genObject.getString("biome.restriction"));
+			}
 		}
 		GenRestriction dimRes = GenRestriction.NONE;
-		if (genObject.hasPath("dimensionRestriction")) {
-			dimRes = GenRestriction.get(genObject.getString("dimensionRestriction"));
+		if (genObject.hasPath("dimension")) {
+			ConfigValue data = genObject.getValue("dimension");
+			switch (data.valueType()) {
+			case STRING:
+				dimRes = GenRestriction.get(genObject.getString("dimension"));
+				if (dimRes != GenRestriction.NONE) {
+					log.error("Invalid dimension restriction %2$s on '%1$s'. Must be an object to meaningfully function", featureName, dimRes.name().toLowerCase(Locale.US));
+					return null;
+				}
+				break;
+			case OBJECT:
+				dimRes = GenRestriction.get(genObject.getString("dimension.restriction"));
+				break;
+			case LIST:
+			case NUMBER:
+				dimRes = GenRestriction.WHITELIST;
+			}
 		}
 
 		WorldGenerator generator = FeatureParser.parseGenerator(getDefaultGenerator(), genObject, defaultMaterial);
@@ -62,7 +87,7 @@ public class UniformParser implements IFeatureParser {
 
 		if (feature != null) {
 			if (genObject.hasPath("chunk-chance")) {
-				int rarity = MathHelper.clamp(genObject.getInt("chunk-chance"), 1, 1000000);
+				int rarity = MathHelper.clamp(genObject.getInt("chunk-chance"), 1, 1000000000);
 				feature.setRarity(rarity);
 			}
 			addFeatureRestrictions(feature, genObject);
@@ -88,21 +113,36 @@ public class UniformParser implements IFeatureParser {
 		return "cluster";
 	}
 
-	protected static boolean addFeatureRestrictions(FeatureBase feature, Config genObject) {
+	protected static void addFeatureRestrictions(FeatureBase feature, Config genObject) {
 
 		if (feature.biomeRestriction != GenRestriction.NONE) {
-			feature.addBiomes(FeatureParser.parseBiomeRestrictions(genObject));
+			feature.addBiomes(FeatureParser.parseBiomeRestrictions(genObject.getConfig("biome")));
 		}
-		if (feature.dimensionRestriction != GenRestriction.NONE && genObject.hasPath("dimensions")) {
-			ConfigList restrictionList = genObject.getList("dimensions");
-			for (int i = 0; i < restrictionList.size(); i++) {
-				ConfigValue val = restrictionList.get(i);
-				if (val.valueType() == ConfigValueType.NUMBER) {
-					feature.addDimension(((Number)val.unwrapped()).intValue());
-				}
+		if (feature.dimensionRestriction != GenRestriction.NONE) {
+			String field = "dimension";
+			ConfigValue data = genObject.getValue(field);
+			ConfigList restrictionList = null;
+			switch (data.valueType()) {
+			case OBJECT:
+				field += ".value";
+			case LIST:
+				restrictionList = genObject.getList(field);
+				break;
+			case NUMBER:
+				feature.addDimension(genObject.getNumber(field).intValue());
+				break;
+			default:
+				// unreachable
+				break;
 			}
+			if (restrictionList != null)
+				for (int i = 0; i < restrictionList.size(); i++) {
+					ConfigValue val = restrictionList.get(i);
+					if (val.valueType() == ConfigValueType.NUMBER) {
+						feature.addDimension(((Number) val.unwrapped()).intValue());
+					}
+				}
 		}
-		return true;
 	}
 
 }
