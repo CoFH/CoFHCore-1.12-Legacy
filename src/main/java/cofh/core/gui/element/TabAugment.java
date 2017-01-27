@@ -1,6 +1,7 @@
 package cofh.core.gui.element;
 
 import cofh.CoFHCore;
+import cofh.core.init.CoreTextures;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.gui.container.IAugmentableContainer;
@@ -154,7 +155,7 @@ public class TabAugment extends TabBase {
 	@Override
 	protected void drawForeground() {
 
-		drawTabIcon("IconAugment");
+		drawTabIcon(CoreTextures.ICON_AUGMENT);
 		if (!isFullyOpened()) {
 			return;
 		}

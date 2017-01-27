@@ -2,6 +2,7 @@ package cofh.core.render.customcharrendering;
 
 import cofh.core.render.CoFHFontRenderer;
 import cofh.core.render.IconRegistry;
+import cofh.lib.render.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -9,31 +10,28 @@ import org.lwjgl.opengl.GL11;
 public class RenderIcon implements ICustomCharRenderer {
 
 	public final char underlyingCharacter;
-	private final ResourceLocation textureSheet;
-	private final String icon;
+	private final TextureAtlasSprite icon;
 
-	public RenderIcon(char underlyingCharacter, ResourceLocation textureSheet, String icon) {
+	public RenderIcon(char underlyingCharacter, TextureAtlasSprite icon) {
 
 		this.underlyingCharacter = underlyingCharacter;
-		this.textureSheet = textureSheet;
 		this.icon = icon;
 	}
 
 	@Override
 	public float renderChar(char letter, boolean italicFlag, float x, float y, CoFHFontRenderer fontRenderer) {
 
-		TextureAtlasSprite icon = IconRegistry.getIcon(this.icon);
 		if (icon == null) {
 			return 0;
 		}
 
 		GL11.glColor4f(1, 1, 1, 1);
-		fontRenderer.bindTexture(textureSheet);
+		RenderHelper.setBlockTextureSheet();
 
-		float u = icon.getMinU();
-		float v = icon.getMinV();
-		float w = icon.getMaxU() - u;
-		float h = icon.getMaxV() - v;
+		float u = this.icon.getMinU();
+		float v = this.icon.getMinV();
+		float w = this.icon.getMaxU() - u;
+		float h = this.icon.getMaxV() - v;
 
 		float rw = w / h * 8.02F;
 
@@ -57,20 +55,19 @@ public class RenderIcon implements ICustomCharRenderer {
 	@Override
 	public int getCharWidth(char letter, CoFHFontRenderer coFHFontRender) {
 
-		TextureAtlasSprite icon = IconRegistry.getIcon(this.icon);
-		if (icon == null) {
+		if (this.icon == null) {
 			return 0;
 		}
 
-		float w = icon.getMaxU() - icon.getMinU();
-		float h = icon.getMaxV() - icon.getMinV();
+		float w = this.icon.getMaxU() - this.icon.getMinU();
+		float h = this.icon.getMaxV() - this.icon.getMinV();
 
 		return (int) Math.ceil(w / h * 8 - 0.0002f);
 	}
 
-	public static void addRenderer(char c, ResourceLocation texture, String icon, CoFHFontRenderer fontRenderer) {
+	public static void addRenderer(char c, TextureAtlasSprite icon, CoFHFontRenderer fontRenderer) {
 
-		fontRenderer.renderOverrides.put(c, new RenderIcon(c, texture, icon));
+		fontRenderer.renderOverrides.put(c, new RenderIcon(c, icon));
 	}
 
 }

@@ -1,15 +1,14 @@
 package cofh.core.proxy;
 
-import codechicken.lib.texture.TextureUtils;
 import cofh.CoFHCore;
 import cofh.core.CoFHProps;
 import cofh.core.RegistrySocial;
 import cofh.core.entity.EntityCoFHArrow;
 import cofh.core.gui.client.GuiFriendsList;
 import cofh.core.gui.element.*;
+import cofh.core.init.CoreTextures;
 import cofh.core.key.CoFHKeyHandler;
 import cofh.core.render.CoFHFontRenderer;
-import cofh.core.render.IconRegistry;
 import cofh.core.render.ShaderHelper;
 import cofh.core.sided.IFunctionSided;
 import cofh.core.sided.IRunnableClient;
@@ -28,12 +27,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -66,6 +64,7 @@ public class ProxyClient extends Proxy {
 
 	@Override
 	public void preInit() {
+		MinecraftForge.EVENT_BUS.register(new CoreTextures());
 
 		Minecraft.memoryReserve = null;
 
@@ -240,39 +239,6 @@ public class ProxyClient extends Proxy {
 		}
 	}
 
-	/* EVENT HANDLERS */
-	@Override
-	@SideOnly (Side.CLIENT)
-	@SubscribeEvent
-	public void registerIcons(TextureStitchEvent.Pre event) {
-
-		IconRegistry.addIcon("IconAccessFriends", "cofh:items/icons/icon_access_friends", event.getMap());
-		IconRegistry.addIcon("IconAccessGuild", "cofh:items/icons/icon_access_guild", event.getMap());
-		IconRegistry.addIcon("IconAccessPrivate", "cofh:items/icons/icon_access_private", event.getMap());
-		IconRegistry.addIcon("IconAccessPublic", "cofh:items/icons/icon_access_public", event.getMap());
-		IconRegistry.addIcon("IconAccept", "cofh:items/icons/icon_accept", event.getMap());
-		IconRegistry.addIcon("IconAcceptInactive", "cofh:items/icons/icon_accept_inactive", event.getMap());
-		IconRegistry.addIcon("IconAugment", "cofh:items/icons/icon_augment", event.getMap());
-		IconRegistry.addIcon("IconButton", "cofh:items/icons/icon_button", event.getMap());
-		IconRegistry.addIcon("IconButtonHighlight", "cofh:items/icons/icon_button_highlight", event.getMap());
-		IconRegistry.addIcon("IconButtonInactive", "cofh:items/icons/icon_button_inactive", event.getMap());
-		IconRegistry.addIcon("IconCancel", "cofh:items/icons/icon_cancel", event.getMap());
-		IconRegistry.addIcon("IconCancelInactive", "cofh:items/icons/icon_cancel_inactive", event.getMap());
-		IconRegistry.addIcon("IconConfig", "cofh:items/icons/icon_config", event.getMap());
-		IconRegistry.addIcon("IconEnergy", "cofh:items/icons/icon_energy", event.getMap());
-		IconRegistry.addIcon("IconNope", "cofh:items/icons/icon_nope", event.getMap());
-		IconRegistry.addIcon("IconInformation", "cofh:items/icons/icon_information", event.getMap());
-		IconRegistry.addIcon("IconTutorial", "cofh:items/icons/icon_tutorial", event.getMap());
-
-		IconRegistry.addIcon("IconRSTorchOff", "cofh:items/icons/icon_rs_torch_off", event.getMap());
-		IconRegistry.addIcon("IconRSTorchOn", "cofh:items/icons/icon_rs_torch_on", event.getMap());
-
-		IconRegistry.addIcon("IconArrowDown0", "cofh:items/icons/icon_arrow_down_inactive", event.getMap());
-		IconRegistry.addIcon("IconArrowDown1", "cofh:items/icons/icon_arrow_down", event.getMap());
-		IconRegistry.addIcon("IconArrowUp0", "cofh:items/icons/icon_arrow_up_inactive", event.getMap());
-		IconRegistry.addIcon("IconArrowUp1", "cofh:items/icons/icon_arrow_up", event.getMap());
-	}
-
 	/*@SubscribeEvent
 	public void blockRenderBlockOverlay(RenderBlockOverlayEvent evt) {
 
@@ -281,15 +247,6 @@ public class ProxyClient extends Proxy {
 			evt.setCanceled(true);
 		}
 	}*/
-
-	@Override
-	@SideOnly (Side.CLIENT)
-	@SubscribeEvent
-	public void initializeIcons(TextureStitchEvent.Post event) {
-
-		IconRegistry.addIcon("IconGunpowder", TextureUtils.getItemTexture("gunpowder"));
-		IconRegistry.addIcon("IconRedstone", TextureUtils.getItemTexture("redstone_dust"));
-	}
 
 	/* SERVER UTILS */
 	@Override

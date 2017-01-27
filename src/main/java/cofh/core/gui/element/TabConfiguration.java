@@ -4,6 +4,7 @@ import cofh.CoFHCore;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IReconfigurableSides;
 import cofh.api.tileentity.ISidedTexture;
+import cofh.core.init.CoreTextures;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.TabBase;
 import cofh.lib.render.RenderHelper;
@@ -121,7 +122,7 @@ public class TabConfiguration extends TabBase {
 	@Override
 	protected void drawForeground() {
 
-		drawTabIcon("IconConfig");
+		drawTabIcon(CoreTextures.ICON_CONFIG);
 		if (!isFullyOpened()) {
 			return;
 		}

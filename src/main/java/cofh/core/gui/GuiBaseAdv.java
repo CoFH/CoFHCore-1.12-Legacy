@@ -1,6 +1,6 @@
 package cofh.core.gui;
 
-import cofh.core.render.IconRegistry;
+import cofh.core.init.CoreTextures;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.util.helpers.StringHelper;
@@ -62,22 +62,16 @@ public abstract class GuiBaseAdv extends GuiBase {
 
 		switch (mode) {
 			case 0:
-				drawIcon(IconRegistry.getIcon("IconButton"), x, y);
+				drawIcon(CoreTextures.ICON_BUTTON, x, y);
 				break;
 			case 1:
-				drawIcon(IconRegistry.getIcon("IconButtonHighlight"), x, y);
+				drawIcon(CoreTextures.ICON_BUTTON_HIGHLIGHT, x, y);
 				break;
 			default:
-				drawIcon(IconRegistry.getIcon("IconButtonInactive"), x, y);
+				drawIcon(CoreTextures.ICON_BUTTON_INACTIVE, x, y);
 				break;
 		}
 		drawIcon(icon, x, y);
-	}
-
-	@Override
-	public TextureAtlasSprite getIcon(String name) {
-
-		return IconRegistry.getIcon(name);
 	}
 
 }

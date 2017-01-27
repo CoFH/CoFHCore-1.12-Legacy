@@ -2,6 +2,7 @@ package cofh.core.gui.element;
 
 import cofh.CoFHCore;
 import cofh.api.tileentity.IEnergyInfo;
+import cofh.core.init.CoreTextures;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.TabBase;
 import cofh.lib.util.helpers.MathHelper;
@@ -59,7 +60,7 @@ public class TabEnergy extends TabBase {
 	@Override
 	protected void drawForeground() {
 
-		drawTabIcon("IconEnergy");
+		drawTabIcon(CoreTextures.ICON_ENERGY);
 		if (!isFullyOpened()) {
 			return;
 		}

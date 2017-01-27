@@ -1,9 +1,11 @@
 package cofh.core.gui.element;
 
 import cofh.CoFHCore;
+import cofh.core.init.CoreTextures;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
 public class TabTutorial extends TabScrolledText {
 
@@ -43,9 +45,9 @@ public class TabTutorial extends TabScrolledText {
 	}
 
 	@Override
-	public String getIcon() {
+	public TextureAtlasSprite getIcon() {
 
-		return "IconTutorial";
+		return CoreTextures.ICON_TUTORIAL;
 	}
 
 	@Override
