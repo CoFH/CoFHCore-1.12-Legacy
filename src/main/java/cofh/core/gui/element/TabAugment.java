@@ -25,7 +25,7 @@ public class TabAugment extends TabBase {
 	public static void initialize() {
 
 		String category = "Tab.Augment";
-		// enable = CoFHCore.configClient.get(category, "Enable", true);
+
 		defaultSide = MathHelper.clamp(CoFHCore.configClient.get(category, "Side", defaultSide), 0, 1);
 		defaultHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorHeader", defaultHeaderColor), 0, 0xffffff);
 		defaultSubHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorSubHeader", defaultSubHeaderColor), 0, 0xffffff);
