@@ -1,6 +1,6 @@
 package cofh.core.gui.client;
 
-import cofh.core.gui.GuiBaseAdv;
+import cofh.core.gui.GuiCore;
 import cofh.core.gui.container.ContainerFriendsList;
 import cofh.core.gui.element.TabInfo;
 import cofh.lib.gui.GuiProps;
@@ -12,7 +12,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
-public class GuiFriendList extends GuiBaseAdv {
+public class GuiFriendList extends GuiCore {
 
 	static final String TEXTURE_PATH = GuiProps.PATH_GUI + "friends_list.png";
 	static final ResourceLocation TEXTURE = new ResourceLocation(TEXTURE_PATH);

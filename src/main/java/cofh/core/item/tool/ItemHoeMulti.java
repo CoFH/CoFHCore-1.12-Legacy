@@ -66,9 +66,9 @@ public class ItemHoeMulti extends ItemHoe implements IModelRegister {
 
 		if (stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
+			stack.getTagCompound().setInteger("Durability", 0);
 		}
-		return stack.getTagCompound().getInteger("Damage");
+		return stack.getTagCompound().getInteger("Durability");
 	}
 
 	protected String getRepairIngot(ItemStack stack) {
@@ -100,7 +100,7 @@ public class ItemHoeMulti extends ItemHoe implements IModelRegister {
 
 		ItemStack stack = new ItemStack(this, 1, number);
 		stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setInteger("Damage", 0);
+		stack.getTagCompound().setInteger("Durability", 0);
 		return stack;
 	}
 
@@ -125,7 +125,7 @@ public class ItemHoeMulti extends ItemHoe implements IModelRegister {
 		for (int i = 0; i < itemList.size(); i++) {
 			ItemStack stack = new ItemStack(item, 1, itemList.get(i));
 			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
+			stack.getTagCompound().setInteger("Durability", 0);
 
 			list.add(stack);
 		}
@@ -136,12 +136,12 @@ public class ItemHoeMulti extends ItemHoe implements IModelRegister {
 
 		if (stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
+			stack.getTagCompound().setInteger("Durability", 0);
 		}
 		if (damage < 0) {
 			damage = 0;
 		}
-		stack.getTagCompound().setInteger("Damage", damage);
+		stack.getTagCompound().setInteger("Durability", damage);
 	}
 
 	@Override

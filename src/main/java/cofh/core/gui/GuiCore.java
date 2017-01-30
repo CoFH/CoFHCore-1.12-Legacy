@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
 
-public abstract class GuiBaseAdv extends GuiBase {
+public abstract class GuiCore extends GuiBase {
 
 	public static final String TEX_ARROW_LEFT = GuiProps.PATH_ELEMENTS + "progress_arrow_left.png";
 	public static final String TEX_ARROW_RIGHT = GuiProps.PATH_ELEMENTS + "progress_arrow_right.png";
@@ -22,28 +22,19 @@ public abstract class GuiBaseAdv extends GuiBase {
 	public static final String TEX_FLUX = GuiProps.PATH_ELEMENTS + "scale_flux.png";
 	public static final String TEX_SAW = GuiProps.PATH_ELEMENTS + "scale_saw.png";
 	public static final String TEX_SUN = GuiProps.PATH_ELEMENTS + "scale_sun.png";
-	public static final String TEX_SNOWFLAKE = GuiProps.PATH_ELEMENTS + "scale_snow_flake.png";
-
-	public static final String TEX_INFO_ANGLE = GuiProps.PATH_ELEMENTS + "info_angle.png";
-	public static final String TEX_INFO_DISTANCE = GuiProps.PATH_ELEMENTS + "info_distance.png";
-	public static final String TEX_INFO_DURATION = GuiProps.PATH_ELEMENTS + "info_duration.png";
-	public static final String TEX_INFO_FORCE = GuiProps.PATH_ELEMENTS + "info_force.png";
-	public static final String TEX_INFO_SIGNAL = GuiProps.PATH_ELEMENTS + "info_signal.png";
-
-	public static final String TEX_TANK = GuiProps.PATH_ELEMENTS + "fluid_tank.png";
-	public static final String TEX_TANK_GREY = GuiProps.PATH_ELEMENTS + "fluid_tank_grey.png";
+	public static final String TEX_SNOWFLAKE = GuiProps.PATH_ELEMENTS + "scale_snowflake.png";
 
 	public static final int PROGRESS = 24;
 	public static final int SPEED = 16;
 
 	protected String myInfo = "";
 
-	public GuiBaseAdv(Container container) {
+	public GuiCore(Container container) {
 
 		super(container);
 	}
 
-	public GuiBaseAdv(Container container, ResourceLocation texture) {
+	public GuiCore(Container container, ResourceLocation texture) {
 
 		super(container, texture);
 	}

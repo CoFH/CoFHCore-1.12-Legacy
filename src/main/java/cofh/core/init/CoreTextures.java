@@ -25,7 +25,7 @@ public class CoreTextures {
 		ICON_AUGMENT  = register(map, ICONS_ + "icon_augment");
 		ICON_BUTTON  = register(map, ICONS_ + "icon_button");
 		ICON_BUTTON_HIGHLIGHT  = register(map, ICONS_ + "icon_button_highlight");
-		ICON_BUTTON_INACTIVE = register(map, ICONS_ + "icon_button_inavtive");
+		ICON_BUTTON_INACTIVE = register(map, ICONS_ + "icon_button_inactive");
 		ICON_CANCEL  = register(map, ICONS_ + "icon_cancel");
 		ICON_CANCEL_INACTIVE  = register(map, ICONS_ + "icon_cancel_inactive");
 		ICON_CONFIG = register(map, ICONS_ + "icon_config");

@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * This class exists to optimize OreDictionary functionality, as it is embarrassingly slow otherwise.
- * <p>
+ *
  * The vast majority of this functionality is safely exposed through {@link ItemHelper} via a proxy. If you use the fancy functions here, READ how they work.
  * They are typically unsafe if you are stupid. Don't be stupid.
  *
@@ -96,7 +96,7 @@ public class OreDictionaryArbiter {
 
 	/**
 	 * Retrieves the oreID, given an oreName.
-	 * <p>
+	 *
 	 * Returns -1 if there is no corresponding oreID.
 	 */
 	public static int getOreID(String name) {
@@ -108,9 +108,9 @@ public class OreDictionaryArbiter {
 
 	/**
 	 * Retrieves the oreID, given an ItemStack.
-	 * <p>
+	 *
 	 * If an ItemStack has more than one oreID, this returns the first one - just like Forge's Ore Dictionary.
-	 * <p>
+	 *
 	 * Returns -1 if there is no corresponding oreID.
 	 */
 	public static int getOreID(ItemStack stack) {
@@ -128,7 +128,7 @@ public class OreDictionaryArbiter {
 
 	/**
 	 * Returns a list containing ALL oreIDs for a given ItemStack. Returns NULL if there are none.
-	 * <p>
+	 *
 	 * Input is not validated - don't be dumb!
 	 */
 	public static ArrayList<Integer> getAllOreIDs(ItemStack stack) {
@@ -140,7 +140,7 @@ public class OreDictionaryArbiter {
 
 	/**
 	 * Retrieves the oreName, given an oreID.
-	 * <p>
+	 *
 	 * Returns "Unknown" if there is no corresponding oreName.
 	 */
 	public static String getOreName(int id) {
@@ -152,9 +152,9 @@ public class OreDictionaryArbiter {
 
 	/**
 	 * Retrieves the oreName, given an ItemStack.
-	 * <p>
+	 *
 	 * If an ItemStack has more than one oreName, this returns the first one = just like Forge's Ore Dictionary.
-	 * <p>
+	 *
 	 * Returns "Unknown" if there is no corresponding oreName.
 	 */
 	public static String getOreName(ItemStack stack) {
@@ -166,7 +166,7 @@ public class OreDictionaryArbiter {
 
 	/**
 	 * Returns a list containing ALL oreNames for a given ItemStack. Returns NULL if there are none.
-	 * <p>
+	 *
 	 * Input is not validated - don't be dumb!
 	 */
 	public static ArrayList<String> getAllOreNames(ItemStack stack) {
@@ -178,9 +178,9 @@ public class OreDictionaryArbiter {
 
 	/**
 	 * Do not under ANY circumstances EVER modify these stacks. This is a direct return for time saving reasons.
-	 * <p>
+	 *
 	 * Forge's Ore Dictionary has an O(N) copy here because it assumes all modders are stupid. But you're not stupid, right?
-	 * <p>
+	 *
 	 * DO NOT MODIFY THESE.
 	 */
 	public static ArrayList<ItemStack> getOres(ItemStack stack) {
@@ -190,9 +190,9 @@ public class OreDictionaryArbiter {
 
 	/**
 	 * Do not under ANY circumstances EVER modify these stacks. This is a direct return for time saving reasons.
-	 * <p>
+	 *
 	 * Forge's Ore Dictionary has an O(N) copy here because it assumes all modders are stupid. But you're not stupid, right?
-	 * <p>
+	 *
 	 * DO NOT MODIFY THESE.
 	 */
 	public static ArrayList<ItemStack> getOres(String name) {
@@ -202,9 +202,9 @@ public class OreDictionaryArbiter {
 
 	/**
 	 * Do not under ANY circumstances EVER modify this array. This is a direct return for time saving reasons.
-	 * <p>
+	 *
 	 * Forge's Ore Dictionary has an O(N) copy here because it assumes all modders are stupid. But you're not stupid, right?
-	 * <p>
+	 *
 	 * DO NOT MODIFY THIS.
 	 */
 	public static String[] getOreNames() {

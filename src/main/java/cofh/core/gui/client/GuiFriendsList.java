@@ -1,7 +1,7 @@
 package cofh.core.gui.client;
 
 import cofh.core.RegistrySocial;
-import cofh.core.gui.GuiBaseAdv;
+import cofh.core.gui.GuiCore;
 import cofh.core.gui.GuiTextList;
 import cofh.core.gui.container.ContainerFriendsList;
 import cofh.core.gui.element.TabInfo;
@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-public class GuiFriendsList extends GuiBaseAdv {
+public class GuiFriendsList extends GuiCore {
 
 	static final String TEXTURE_PATH = GuiProps.PATH_GUI + "friends_list.png";
 	static final ResourceLocation TEXTURE = new ResourceLocation(TEXTURE_PATH);

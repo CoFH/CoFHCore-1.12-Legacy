@@ -29,25 +29,26 @@ public class TabConfiguration extends TabBase {
 	public static void initialize() {
 
 		String category = "Tab.Configuration";
-		// enable = CoFHCore.configClient.get(category, "Enable", true);
+
 		defaultSide = MathHelper.clamp(CoFHCore.configClient.get(category, "Side", defaultSide), 0, 1);
 		defaultHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorHeader", defaultHeaderColor), 0, 0xffffff);
 		defaultSubHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorSubHeader", defaultSubHeaderColor), 0, 0xffffff);
 		defaultTextColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorText", defaultTextColor), 0, 0xffffff);
 		defaultBackgroundColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorBackground", defaultBackgroundColor), 0, 0xffffff);
+
 		CoFHCore.configClient.save();
 	}
 
-	IReconfigurableFacing myTile;
+	IReconfigurableFacing myTileFacing;
 	IReconfigurableSides myTileSides;
 	ISidedTexture myTileTexture;
 
-	public TabConfiguration(GuiBase gui, IReconfigurableFacing theTile) {
+	public TabConfiguration(GuiBase gui, IReconfigurableSides theTile) {
 
 		this(gui, defaultSide, theTile);
 	}
 
-	public TabConfiguration(GuiBase gui, int side, IReconfigurableFacing theTile) {
+	public TabConfiguration(GuiBase gui, int side, IReconfigurableSides theTile) {
 
 		super(gui, side);
 
@@ -58,8 +59,8 @@ public class TabConfiguration extends TabBase {
 
 		maxHeight = 92;
 		maxWidth = 100;
-		myTile = theTile;
-		myTileSides = (IReconfigurableSides) theTile;
+		myTileSides = theTile;
+		myTileFacing = (IReconfigurableFacing) theTile;
 		myTileTexture = (ISidedTexture) theTile;
 	}
 
@@ -88,17 +89,17 @@ public class TabConfiguration extends TabBase {
 			return false;
 		}
 		if (40 <= mouseX && mouseX < 56 && 24 <= mouseY && mouseY < 40) {
-			handleSideChange(BlockHelper.SIDE_ABOVE[myTile.getFacing()], mouseButton);
+			handleSideChange(BlockHelper.SIDE_ABOVE[myTileFacing.getFacing()], mouseButton);
 		} else if (20 <= mouseX && mouseX < 36 && 44 <= mouseY && mouseY < 60) {
-			handleSideChange(BlockHelper.SIDE_LEFT[myTile.getFacing()], mouseButton);
+			handleSideChange(BlockHelper.SIDE_LEFT[myTileFacing.getFacing()], mouseButton);
 		} else if (40 <= mouseX && mouseX < 56 && 44 <= mouseY && mouseY < 60) {
-			handleSideChange(myTile.getFacing(), mouseButton);
+			handleSideChange(myTileFacing.getFacing(), mouseButton);
 		} else if (60 <= mouseX && mouseX < 76 && 44 <= mouseY && mouseY < 60) {
-			handleSideChange(BlockHelper.SIDE_RIGHT[myTile.getFacing()], mouseButton);
+			handleSideChange(BlockHelper.SIDE_RIGHT[myTileFacing.getFacing()], mouseButton);
 		} else if (40 <= mouseX && mouseX < 56 && 64 <= mouseY && mouseY < 80) {
-			handleSideChange(BlockHelper.SIDE_BELOW[myTile.getFacing()], mouseButton);
+			handleSideChange(BlockHelper.SIDE_BELOW[myTileFacing.getFacing()], mouseButton);
 		} else if (60 <= mouseX && mouseX < 76 && 64 <= mouseY && mouseY < 80) {
-			handleSideChange(BlockHelper.SIDE_OPPOSITE[myTile.getFacing()], mouseButton);
+			handleSideChange(BlockHelper.SIDE_OPPOSITE[myTileFacing.getFacing()], mouseButton);
 		}
 		return true;
 	}
@@ -133,12 +134,12 @@ public class TabConfiguration extends TabBase {
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		for (int i = 0; i < 2; i++) {
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_ABOVE[myTile.getFacing()], i), posX() + 40, posY + 24);
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_LEFT[myTile.getFacing()], i), posX() + 20, posY + 44);
-			gui.drawIcon(myTileTexture.getTexture(myTile.getFacing(), i), posX() + 40, posY + 44);
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_RIGHT[myTile.getFacing()], i), posX() + 60, posY + 44);
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_BELOW[myTile.getFacing()], i), posX() + 40, posY + 64);
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_OPPOSITE[myTile.getFacing()], i), posX() + 60, posY + 64);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_ABOVE[myTileFacing.getFacing()], i, 0), posX() + 40, posY + 24);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_LEFT[myTileFacing.getFacing()], i, 0), posX() + 20, posY + 44);
+			gui.drawIcon(myTileTexture.getTexture(myTileFacing.getFacing(), i, 0), posX() + 40, posY + 44);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_RIGHT[myTileFacing.getFacing()], i, 0), posX() + 60, posY + 44);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_BELOW[myTileFacing.getFacing()], i, 0), posX() + 40, posY + 64);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_OPPOSITE[myTileFacing.getFacing()], i, 0), posX() + 60, posY + 64);
 		}
 		GlStateManager.disableBlend();
 		RenderHelper.setDefaultFontTextureSheet();
@@ -148,7 +149,7 @@ public class TabConfiguration extends TabBase {
 	void handleSideChange(int side, int mouseButton) {
 
 		if (GuiScreen.isShiftKeyDown()) {
-			if (side == myTile.getFacing()) {
+			if (side == myTileFacing.getFacing()) {
 				if (myTileSides.resetSides()) {
 					GuiBase.playClickSound(1.0F, 0.2F);
 				}
