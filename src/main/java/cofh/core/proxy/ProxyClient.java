@@ -40,6 +40,8 @@ public class ProxyClient extends Proxy {
 
 		super.preInit(event);
 		Minecraft.memoryReserve = null;
+
+		ShaderHelper.initShaders();
 	}
 
 	@Override
@@ -53,7 +55,16 @@ public class ProxyClient extends Proxy {
 
 		super.postInit(event);
 
-		registerRenderInformation();
+		fontRenderer = new FontRendererCore(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"), Minecraft.getMinecraft().renderEngine, false);
+
+		if (Minecraft.getMinecraft().gameSettings.language != null) {
+			fontRenderer.setUnicodeFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode());
+			fontRenderer.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
+		}
+		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(fontRenderer);
+
+		fontRenderer.initSpecialCharacters();
+
 	}
 
 	/* REGISTRATION */
@@ -73,21 +84,6 @@ public class ProxyClient extends Proxy {
 
 		ClientRegistry.registerKeyBinding(KEYBINDING_MULTIMODE);
 		// ClientRegistry.registerKeyBinding(KEYBINDING_AUGMENTS);
-	}
-
-	public void registerRenderInformation() {
-
-		ShaderHelper.initShaders();
-
-		fontRenderer = new FontRendererCore(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"), Minecraft.getMinecraft().renderEngine, false);
-
-		if (Minecraft.getMinecraft().gameSettings.language != null) {
-			fontRenderer.setUnicodeFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode());
-			fontRenderer.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
-		}
-		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(fontRenderer);
-
-		fontRenderer.initSpecialCharacters();
 	}
 
 	/* HELPERS */
