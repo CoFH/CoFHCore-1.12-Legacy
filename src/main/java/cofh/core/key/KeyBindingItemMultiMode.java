@@ -1,6 +1,5 @@
 package cofh.core.key;
 
-import codechicken.lib.util.ItemUtils;
 import cofh.CoFHCore;
 import cofh.api.item.IMultiModeItem;
 import cofh.core.util.CoreUtils;
@@ -41,7 +40,7 @@ public class KeyBindingItemMultiMode implements IKeyBinding {
 	public boolean keyPressServer(EntityPlayer player) {
 
 		if (ItemHelper.isPlayerHoldingMultiModeItem(player) && ItemHelper.incrHeldMultiModeItemState(player)) {
-			ItemStack heldItem = ItemUtils.getHeldStack(player);
+			ItemStack heldItem = ItemHelper.getHeldStack(player);
 			((IMultiModeItem) heldItem.getItem()).onModeChange(player, heldItem);
 			return true;
 		}

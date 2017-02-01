@@ -1,6 +1,6 @@
 package cofh.core.command;
 
-import codechicken.lib.raytracer.RayTracer;
+import cofh.lib.util.RayTracer;
 import com.google.common.base.Throwables;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

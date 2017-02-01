@@ -1,7 +1,7 @@
 package cofh.core.entity;
 
-import codechicken.lib.util.ItemNBTUtils;
 import cofh.lib.util.helpers.MathHelper;
+import cofh.lib.util.helpers.NBTHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -49,7 +49,7 @@ public class DropHandler {
 				if (playersEnabled && randPerc < playerChance) {
 					EntityPlayer thePlayer = (EntityPlayerMP) event.getEntity();
 					itemSkull = new ItemStack(Items.SKULL, 1, 3);
-					ItemNBTUtils.setString(itemSkull, "SkullOwner", thePlayer.getName());
+					NBTHelper.setString(itemSkull, "SkullOwner", thePlayer.getName());
 				}
 			}
 		} else if (event.isRecentlyHit() || !mobPvEOnly) {

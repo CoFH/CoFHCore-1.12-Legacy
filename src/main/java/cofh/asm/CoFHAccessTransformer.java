@@ -1,6 +1,5 @@
 package cofh.asm;
 
-import codechicken.lib.asm.ObfMapping;
 import cofh.repack.immibis.bon.JoinMapping;
 import cofh.repack.immibis.bon.Mapping;
 import cofh.repack.immibis.bon.mcp.CsvFile;
@@ -197,7 +196,22 @@ public class CoFHAccessTransformer implements IClassTransformer {
 
 	static void initForDeobf() throws IOException {
 
-		File[] data = ObfMapping.MCPRemapper.getConfFiles();
+		File[] data = null;
+		File notchSrg = new File(System.getProperty("net.minecraftforge.gradle.GradleStart.srg.notch-srg"));
+		File csvDir = new File(System.getProperty("net.minecraftforge.gradle.GradleStart.csvDir"));
+
+		if (notchSrg.exists() && csvDir.exists()) {
+			File fieldCsv = new File(csvDir, "fields.csv");
+			File methodCsv = new File(csvDir, "methods.csv");
+
+			if (notchSrg.exists() && fieldCsv.exists() && methodCsv.exists()) {
+				data = new File[] { notchSrg, fieldCsv, methodCsv };
+			}
+		}
+		if (data == null) {
+			throw new IllegalStateException("Unable to load MPC mappings from GradleStart arguments");
+		}
+
 		Mapping forwardSRG = new Mapping();
 		Mapping forwardCSV = new Mapping();
 

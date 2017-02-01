@@ -1,10 +1,8 @@
 package cofh.core.util;
 
-import codechicken.lib.util.SoundUtils;
-import codechicken.lib.vec.Vector3;
 import cofh.CoFHCore;
-import cofh.core.init.CoreProps;
 import cofh.core.entity.EntityLightningBoltFake;
+import cofh.core.init.CoreProps;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -23,6 +21,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
@@ -150,22 +149,22 @@ public class CoreUtils {
 	}
 
 	/* ENTITY UTILS */
-	public static boolean dropItemStackIntoWorld(ItemStack stack, World world, Vector3 pos) {
+	public static boolean dropItemStackIntoWorld(ItemStack stack, World world, Vec3d pos) {
 
 		return dropItemStackIntoWorld(stack, world, pos, false);
 	}
 
 	public static boolean dropItemStackIntoWorldWithVelocity(ItemStack stack, World world, BlockPos pos) {
 
-		return dropItemStackIntoWorld(stack, world, new Vector3(pos), true);
+		return dropItemStackIntoWorld(stack, world, new Vec3d(pos), true);
 	}
 
-	public static boolean dropItemStackIntoWorldWithVelocity(ItemStack stack, World world, Vector3 pos) {
+	public static boolean dropItemStackIntoWorldWithVelocity(ItemStack stack, World world, Vec3d pos) {
 
 		return dropItemStackIntoWorld(stack, world, pos, true);
 	}
 
-	public static boolean dropItemStackIntoWorld(ItemStack stack, World world, Vector3 pos, boolean velocity) {
+	public static boolean dropItemStackIntoWorld(ItemStack stack, World world, Vec3d pos, boolean velocity) {
 
 		if (stack == null) {
 			return false;
@@ -179,7 +178,7 @@ public class CoreUtils {
 			y2 = world.rand.nextFloat() * 0.8F + 0.1F;
 			z2 = world.rand.nextFloat() * 0.8F + 0.1F;
 		}
-		EntityItem entity = new EntityItem(world, pos.x + x2, pos.y + y2, pos.z + z2, stack.copy());
+		EntityItem entity = new EntityItem(world, pos.xCoord + x2, pos.yCoord + y2, pos.zCoord + z2, stack.copy());
 
 		if (velocity) {
 			entity.motionX = (float) world.rand.nextGaussian() * 0.05F;
@@ -200,7 +199,7 @@ public class CoreUtils {
 		world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, x, y + 1, z, 0.0D, 0.0D, 0.0D);
 
 		if (playSound) {
-			SoundUtils.playSoundAt(new Vector3(x, y, z), world, SoundCategory.BLOCKS, SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0F, 1.0F, true);
+			world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		}
 	}
 
