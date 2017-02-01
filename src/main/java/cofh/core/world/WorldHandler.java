@@ -3,7 +3,6 @@ package cofh.core.world;
 import cofh.CoFHCore;
 import cofh.api.world.IFeatureGenerator;
 import cofh.api.world.IFeatureHandler;
-import cofh.asmhooks.event.ModPopulateChunkEvent;
 import cofh.core.world.TickHandlerWorld.RetroChunkCoord;
 import cofh.lib.util.ChunkCoord;
 import cofh.lib.util.LinkedHashList;
@@ -131,12 +130,6 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	public void populateChunkEvent(PopulateChunkEvent.Pre event) {
 
 		populatingChunks.add(new ChunkReference(event.getWorld().provider.getDimension(), event.getChunkX(), event.getChunkZ()));
-	}
-
-	@SubscribeEvent
-	public void populateChunkEvent(ModPopulateChunkEvent.Post event) {
-
-		populatingChunks.remove(new ChunkReference(event.world.provider.getDimension(), event.chunkX, event.chunkZ));
 	}
 
 	@SubscribeEvent
