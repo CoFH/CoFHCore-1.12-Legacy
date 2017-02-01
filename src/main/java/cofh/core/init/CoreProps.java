@@ -45,9 +45,6 @@ public class CoreProps {
 		comment = "If TRUE, death messages are displayed for any named entity.";
 		enableLivingEntityDeathMessages = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableGenericDeathMessage", category, enableLivingEntityDeathMessages, comment);
 
-		comment = "If TRUE, items on the ground will attempt to stack. Disabling this can improve server performance in some cases.";
-		enableItemStacking = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableItemStacking", category, enableItemStacking, comment);
-
 		/* HOLIDAY */
 		category = "Holidays";
 

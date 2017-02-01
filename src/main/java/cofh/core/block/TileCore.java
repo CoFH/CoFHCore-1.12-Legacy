@@ -31,8 +31,6 @@ import java.util.UUID;
 
 public abstract class TileCore extends TileEntity {
 
-	protected boolean inWorld = false;
-
 	public abstract String getTileName();
 
 	public abstract int getType();
@@ -138,17 +136,6 @@ public abstract class TileCore extends TileEntity {
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 
 		return state;
-	}
-
-	/* COFH ASM */
-	public void cofh_validate() {
-
-		inWorld = true;
-	}
-
-	public void cofh_invalidate() {
-
-		inWorld = false;
 	}
 
 	/* TIME CHECKS */

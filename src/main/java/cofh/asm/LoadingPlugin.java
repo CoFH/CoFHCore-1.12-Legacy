@@ -30,7 +30,7 @@ import java.util.zip.ZipEntry;
 @IFMLLoadingPlugin.Name ("CoFH Loading Plugin")
 public class LoadingPlugin implements IFMLLoadingPlugin {
 
-	public static final String MC_VERSION = "[1.7.10]";
+	public static final String MC_VERSION = "[1.10.2]";
 	public static ArrayList<String> transformersList = new ArrayList<String>();
 	public static boolean runtimeDeobfEnabled = false;
 	public static ASMDataTable ASM_DATA = null;
@@ -58,14 +58,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 		currentMcVersion = (String) FMLInjectionData.data()[4];
 		minecraftDir = (File) FMLInjectionData.data()[6];
 		loader = Launch.classLoader;
-		//attemptClassLoad("cofh.asm.CoFHClassTransformer", "Failed to find Class Transformer! Critical Issue!");
-		//ASMInit.init();
 	}
-
-	// public LoadingPlugin() {
-	//
-	// // DepLoader.load();
-	// }
 
 	public static void attemptClassLoad(String className, String failMessage) {
 
@@ -137,9 +130,6 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 
 			ASM_DATA = evt.getASMHarvestedData();
 			CoFHClassTransformer.scrapeData(ASM_DATA);
-
-			//for (ModCandidate t : ASM_DATA.getCandidatesFor("cofh.api.energy"));
-
 		}
 
 		@Override
@@ -152,7 +142,6 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 		public Void call() throws Exception {
 
 			scanMods();
-			//ModContainerFactory.instance().registerContainerType(Type.getType(ChildMod.class), ChildModContainer.class);
 			return null;
 		}
 
