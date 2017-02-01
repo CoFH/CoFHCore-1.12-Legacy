@@ -1,17 +1,8 @@
 package cofh.core.proxy;
 
-import cofh.core.CoFHProps;
-import cofh.core.chat.PacketIndexedChat;
-import cofh.core.key.CoFHKeyHandler;
-import cofh.core.key.KeyPacket;
-import cofh.core.network.PacketSocial;
-import cofh.core.network.PacketTile;
-import cofh.core.network.PacketTileInfo;
-import cofh.core.sided.IFunctionSided;
-import cofh.core.sided.IRunnableClient;
-import cofh.core.sided.IRunnableServer;
-import cofh.core.util.KeyBindingMultiMode;
-import cofh.core.util.oredict.OreDictionaryArbiter;
+import cofh.core.init.CoreProps;
+import cofh.core.key.KeyBindingItemMultiMode;
+import cofh.core.key.KeyHandlerCore;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,61 +10,46 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
-import net.minecraftforge.event.world.WorldEvent.Save;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class Proxy {
 
-	public void preInit() {
+	/* INIT */
+	public void preInit(FMLPreInitializationEvent event) {
 
 	}
 
+	public void initialize(FMLInitializationEvent event) {
+
+		registerKeyBinds();
+	}
+
+	public void postInit(FMLPostInitializationEvent event) {
+
+	}
+
+	/* REGISTRATION */
 	public void registerKeyBinds() {
 
-		CoFHKeyHandler.addServerKeyBind(KeyBindingMultiMode.instance);
-		// CoFHKeyHandler.addServerKeyBind(KeyBindingAugments.instance);
+		KeyHandlerCore.addServerKeyBind(KeyBindingItemMultiMode.instance);
+		// KeyHandlerCore.addServerKeyBind(KeyBindingPlayerAugments.instance);
 	}
 
-	public void registerPacketInformation() {
-
-		PacketIndexedChat.initialize();
-		PacketSocial.initialize();
-		KeyPacket.initialize();
-		PacketTileInfo.initialize();
-		PacketTile.initialize();
-	}
-
-	public void registerRenderInformation() {
-
-	}
-
-	public void registerTickHandlers() {
-
-		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.TERRAIN_GEN_BUS.register(this);
-	}
-
-	@SubscribeEvent
-	public void save(Save evt) {
-
-		//        if (evt.getWorld().provider.getDimension() == 0) {
-		//            RegistryEnderAttuned.save();
-		//        }
-	}
-
+	/* HELPERS */
 	public int getKeyBind(String key) {
 
 		return 0;
@@ -85,25 +61,25 @@ public class Proxy {
 
 	/* EVENT HANDLERS */
 	@SubscribeEvent
-	public void onLivingDeathEvent(LivingDeathEvent event) {
+	public void handleLivingDeathEvent(LivingDeathEvent event) {
 
 		Entity entity = event.getEntity();
-		if (!CoFHProps.enableLivingEntityDeathMessages || entity.worldObj.isRemote || !(entity instanceof EntityLiving) || !event.getEntityLiving().hasCustomName()) {
+
+		if (!CoreProps.enableLivingEntityDeathMessages || entity.worldObj.isRemote || !(entity instanceof EntityLiving) || !event.getEntityLiving().hasCustomName()) {
 			return;
 		}
-		((WorldServer) entity.worldObj).getMinecraftServer().getPlayerList().sendChatMsg(event.getEntityLiving().getCombatTracker().getDeathMessage());
+		entity.worldObj.getMinecraftServer().getPlayerList().sendChatMsg(event.getEntityLiving().getCombatTracker().getDeathMessage());
 	}
 
 	@SubscribeEvent
-	public void onOreRegisterEvent(OreRegisterEvent event) {
+	public void handleLivingDropsEvent(LivingDropsEvent event) {
 
-		OreDictionaryArbiter.registerOreDictionaryEntry(event.getOre(), event.getName());
 	}
 
 	@SubscribeEvent
-	public void onSaplingGrowTreeEvent(SaplingGrowTreeEvent event) {
+	public void handleSaplingGrowTreeEvent(SaplingGrowTreeEvent event) {
 
-		if (CoFHProps.treeGrowthChance > 1 && event.getWorld().rand.nextInt(CoFHProps.treeGrowthChance) != 0) {
+		if (CoreProps.treeGrowthChance < 100 && event.getWorld().rand.nextInt(100) >= CoreProps.treeGrowthChance) {
 			event.setResult(Result.DENY);
 		}
 	}
@@ -114,18 +90,12 @@ public class Proxy {
 
 	}
 
-	@SideOnly (Side.CLIENT)
-	@SubscribeEvent
-	public void initializeIcons(TextureStitchEvent.Post event) {
-
-	}
-
 	/* SERVER UTILS */
 	public boolean isOp(String playerName) {
 
-		MinecraftServer theServer = FMLCommonHandler.instance().getMinecraftServerInstance();
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		playerName = playerName.trim();
-		for (String a : theServer.getPlayerList().getOppedPlayerNames()) {
+		for (String a : server.getPlayerList().getOppedPlayerNames()) {
 			if (playerName.equalsIgnoreCase(a)) {
 				return true; // TODO: this is completely horrible. needs improvement. will probably still be horrible.
 			}
@@ -148,6 +118,17 @@ public class Proxy {
 		return null;
 	}
 
+	public IThreadListener getClientListener() {
+
+		// If this is called on the server, expect a crash.
+		return null;
+	}
+
+	public IThreadListener getServerListener() {
+
+		return FMLCommonHandler.instance().getMinecraftServerInstance();
+	}
+
 	/* PLAYER UTILS */
 	public EntityPlayer findPlayer(String player) {
 
@@ -159,20 +140,10 @@ public class Proxy {
 		return null;
 	}
 
-	public IThreadListener getClientListener() {
-
-		//If this is called on the server, expect a crash.
-		return null;
-	}
-
-	public IThreadListener getServerListener() {
-
-		return FMLCommonHandler.instance().getMinecraftServerInstance();
-	}
-
 	public List<EntityPlayer> getPlayerList() {
 
 		List<EntityPlayer> result = new LinkedList<EntityPlayer>();
+
 		for (int i = 0; i < FMLCommonHandler.instance().getMinecraftServerInstance().worldServers.length; i++) {
 			if (FMLCommonHandler.instance().getMinecraftServerInstance().worldServers[i] != null) {
 				result.addAll(FMLCommonHandler.instance().getMinecraftServerInstance().worldServers[i].playerEntities);
@@ -191,17 +162,4 @@ public class Proxy {
 		return 0;
 	}
 
-	public void runServer(IRunnableServer runnable) {
-
-		runnable.runServer();
-	}
-
-	public void runClient(IRunnableClient runnable) {
-
-	}
-
-	public <F, T> T apply(IFunctionSided<F, T> function, F input) {
-
-		return function.applyServer(input);
-	}
 }

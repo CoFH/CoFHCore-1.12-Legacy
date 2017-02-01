@@ -3,7 +3,7 @@ package cofh.core.util;
 import codechicken.lib.util.SoundUtils;
 import codechicken.lib.vec.Vector3;
 import cofh.CoFHCore;
-import cofh.core.CoFHProps;
+import cofh.core.init.CoreProps;
 import cofh.core.entity.EntityLightningBoltFake;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
@@ -107,8 +107,8 @@ public class CoreUtils {
 
 	public static void dismantleLog(String playerName, Block block, int metadata, BlockPos pos) {
 
-		if (CoFHProps.enableDismantleLogging) {
-			CoFHCore.log.info("Player " + playerName + " dismantled " + " (" + block + ":" + metadata + ") at (" + pos.getX() + "," + pos.getY() + "," + pos.getZ() + ")");
+		if (CoreProps.enableDismantleLogging) {
+			CoFHCore.LOG.info("Player " + playerName + " dismantled " + " (" + block + ":" + metadata + ") at (" + pos.getX() + "," + pos.getY() + "," + pos.getZ() + ")");
 		}
 	}
 

@@ -16,11 +16,11 @@ public class PacketTile extends PacketCoFHBase {
 
 	}
 
-	public PacketTile(TileEntity theTile) {
+	public PacketTile(TileEntity tile) {
 
-		addInt(theTile.getPos().getX());
-		addInt(theTile.getPos().getY());
-		addInt(theTile.getPos().getZ());
+		addInt(tile.getPos().getX());
+		addInt(tile.getPos().getY());
+		addInt(tile.getPos().getZ());
 
 	}
 
@@ -41,9 +41,9 @@ public class PacketTile extends PacketCoFHBase {
 		}
 	}
 
-	public static PacketTile newPacket(TileEntity theTile) {
+	public static PacketTile newPacket(TileEntity tile) {
 
-		return new PacketTile(theTile);
+		return new PacketTile(tile);
 	}
 
 }

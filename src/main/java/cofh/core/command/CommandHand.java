@@ -1,6 +1,6 @@
 package cofh.core.command;
 
-import cofh.core.RegistrySocial;
+import cofh.core.util.RegistrySocial;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.StringHelper;

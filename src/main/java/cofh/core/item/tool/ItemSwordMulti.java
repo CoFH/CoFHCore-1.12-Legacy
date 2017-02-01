@@ -1,7 +1,7 @@
 package cofh.core.item.tool;
 
 import cofh.api.core.IModelRegister;
-import cofh.core.render.CoFHFontRenderer;
+import cofh.core.render.FontRendererCore;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.StringHelper;
@@ -262,7 +262,7 @@ public class ItemSwordMulti extends ItemSword implements IModelRegister {
 	@SideOnly (Side.CLIENT)
 	public FontRenderer getFontRenderer(ItemStack stack) {
 
-		return CoFHFontRenderer.loadFontRendererStack(stack);
+		return FontRendererCore.loadFontRendererStack(stack);
 	}
 
 	@Override

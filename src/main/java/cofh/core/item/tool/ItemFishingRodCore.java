@@ -1,6 +1,6 @@
 package cofh.core.item.tool;
 
-import cofh.core.entity.EntityCoFHFishHook;
+import cofh.core.entity.EntityFishHookCore;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.ServerHelper;
 import net.minecraft.creativetab.CreativeTabs;
@@ -107,7 +107,7 @@ public class ItemFishingRodCore extends ItemFishingRod {
 			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 			if (ServerHelper.isServerWorld(world)) {
-				world.spawnEntityInWorld(new EntityCoFHFishHook(world, player, luckModifier, speedModifier));
+				world.spawnEntityInWorld(new EntityFishHookCore(world, player, luckModifier, speedModifier));
 			}
 			player.swingArm(hand);
 		}

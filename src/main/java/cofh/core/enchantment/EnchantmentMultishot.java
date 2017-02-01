@@ -1,6 +1,6 @@
 package cofh.core.enchantment;
 
-import cofh.core.item.tool.ItemBowCore;
+import cofh.core.item.tool.ItemBowMulti;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -41,7 +41,7 @@ public class EnchantmentMultishot extends Enchantment {
 	@Override
 	public boolean canApply(ItemStack stack) {
 
-		return (stack.getItem() instanceof ItemBowCore);
+		return (stack.getItem() instanceof ItemBowMulti);
 	}
 
 	@Override

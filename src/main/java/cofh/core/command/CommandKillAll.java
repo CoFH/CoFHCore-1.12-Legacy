@@ -1,6 +1,6 @@
 package cofh.core.command;
 
-import cofh.CoFHCore;
+import cofh.core.init.CoreProps;
 import cofh.lib.util.helpers.StringHelper;
 import gnu.trove.iterator.TObjectIntIterator;
 import gnu.trove.map.hash.TObjectIntHashMap;
@@ -47,7 +47,7 @@ public class CommandKillAll implements ISubCommand {
 			target = arguments[1].toLowerCase(Locale.US);
 			all = "*".equals(target);
 		}
-		for (WorldServer theWorld : CoFHCore.server.worldServers) {
+		for (WorldServer theWorld : CoreProps.server.worldServers) {
 			synchronized (theWorld) {
 				List<Entity> list = theWorld.loadedEntityList;
 				for (int i = list.size(); i-- > 0; ) {

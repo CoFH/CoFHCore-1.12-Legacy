@@ -22,13 +22,12 @@ public class PacketCore extends PacketCoFHBase {
 
 			switch (PacketTypes.values()[type]) {
 				case CONFIG_SYNC:
-					CoFHCore.instance.handleConfigSync(this);
 					return;
 				default:
-					CoFHCore.log.error("Unknown Packet! Internal: COFH, ID: " + type);
+					CoFHCore.LOG.error("Unknown Packet! Internal: COFH, ID: " + type);
 			}
 		} catch (Exception e) {
-			CoFHCore.log.error("Packet payload failure! Please check your config files!");
+			CoFHCore.LOG.error("Packet payload failure! Please check your config files!");
 			e.printStackTrace();
 		}
 
@@ -36,7 +35,7 @@ public class PacketCore extends PacketCoFHBase {
 
 	public static void sendConfigSyncPacketToClient(EntityPlayer player) {
 
-		PacketHandler.sendTo(CoFHCore.instance.getConfigSync(), player);
+		// PacketHandler.sendTo(CoFHCore.instance.getConfigSync(), player);
 	}
 
 	public static PacketCoFHBase getPacket(PacketTypes theType) {

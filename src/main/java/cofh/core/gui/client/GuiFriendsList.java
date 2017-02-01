@@ -1,6 +1,6 @@
 package cofh.core.gui.client;
 
-import cofh.core.RegistrySocial;
+import cofh.core.util.RegistrySocial;
 import cofh.core.gui.GuiCore;
 import cofh.core.gui.GuiTextList;
 import cofh.core.gui.container.ContainerFriendsList;

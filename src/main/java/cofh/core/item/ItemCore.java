@@ -1,6 +1,6 @@
 package cofh.core.item;
 
-import cofh.core.render.CoFHFontRenderer;
+import cofh.core.render.FontRendererCore;
 import cofh.lib.util.helpers.SecurityHelper;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
@@ -55,7 +55,7 @@ public class ItemCore extends Item {
 	@SideOnly (Side.CLIENT)
 	public FontRenderer getFontRenderer(ItemStack stack) {
 
-		return CoFHFontRenderer.loadFontRendererStack(stack);
+		return FontRendererCore.loadFontRendererStack(stack);
 	}
 
 }

@@ -1,13 +1,11 @@
 package cofh.core.gui.element;
 
-import cofh.CoFHCore;
 import cofh.core.init.CoreTextures;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.gui.container.IAugmentableContainer;
 import cofh.lib.gui.element.TabBase;
 import cofh.lib.render.RenderHelper;
-import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
@@ -16,34 +14,21 @@ import java.util.List;
 
 public class TabAugment extends TabBase {
 
-	public static boolean enable;
 	public static int defaultSide = 1;
 	public static int defaultHeaderColor = 0xe1c92f;
 	public static int defaultSubHeaderColor = 0xaaafb8;
 	public static int defaultTextColor = 0x000000;
 	public static int defaultBackgroundColor = 0x089e4c;
 
-	public static void initialize() {
-
-		String category = "Tab.Augment";
-
-		defaultSide = MathHelper.clamp(CoFHCore.configClient.get(category, "Side", defaultSide), 0, 1);
-		defaultHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorHeader", defaultHeaderColor), 0, 0xffffff);
-		defaultSubHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorSubHeader", defaultSubHeaderColor), 0, 0xffffff);
-		defaultTextColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorText", defaultTextColor), 0, 0xffffff);
-		defaultBackgroundColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorBackground", defaultBackgroundColor), 0, 0xffffff);
-		CoFHCore.configClient.save();
-	}
-
 	public static ResourceLocation GRID_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "slot_grid_augment.png");
 
 	IAugmentableContainer myContainer;
 
-	int numAugments = 0;
-	int slotsBorderX1 = 18;
-	int slotsBorderX2 = slotsBorderX1 + 60;
-	int slotsBorderY1 = 20;
-	int slotsBorderY2 = slotsBorderY1 + 42;
+	private int numAugments = 0;
+	private int slotsBorderX1 = 18;
+	private int slotsBorderX2 = slotsBorderX1 + 60;
+	private int slotsBorderY1 = 20;
+	private int slotsBorderY2 = slotsBorderY1 + 42;
 
 	public TabAugment(GuiBase gui, IAugmentableContainer container) {
 

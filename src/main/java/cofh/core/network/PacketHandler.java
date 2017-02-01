@@ -1,7 +1,7 @@
 package cofh.core.network;
 
 import cofh.CoFHCore;
-import cofh.core.CoFHProps;
+import cofh.core.init.CoreProps;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -45,22 +45,33 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	private final LinkedList<Class<? extends PacketBase>> packets = new LinkedList<Class<? extends PacketBase>>();
 	private boolean isPostInitialised = false;
 
-	public boolean registerPacket(Class<? extends PacketBase> packet) {
+	/* INIT */
+	public static void preInit() {
 
-		if (this.packets.size() > 256) {
-			return false;
-		}
-		if (this.packets.contains(packet)) {
-			return false;
-		}
-		if (this.isPostInitialised) {
-			// TODO: Resort or throw error
-			return false;
-		}
-		this.packets.add(packet);
-		return true;
+		instance.channels = NetworkRegistry.INSTANCE.newChannel("CoFH", instance);
 	}
 
+	public static void postInit() {
+
+		if (instance.isPostInitialised) {
+			return;
+		}
+		instance.isPostInitialised = true;
+		Collections.sort(instance.packets, new Comparator<Class<? extends PacketBase>>() {
+
+			@Override
+			public int compare(Class<? extends PacketBase> packetClass1, Class<? extends PacketBase> packetClass2) {
+
+				int com = String.CASE_INSENSITIVE_ORDER.compare(packetClass1.getCanonicalName(), packetClass2.getCanonicalName());
+				if (com == 0) {
+					com = packetClass1.getCanonicalName().compareTo(packetClass2.getCanonicalName());
+				}
+				return com;
+			}
+		});
+	}
+
+	/* ENCODE / DECODE */
 	@Override
 	protected void encode(ChannelHandlerContext ctx, PacketBase msg, List<Object> out) throws Exception {
 
@@ -96,17 +107,16 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 				player = CoFHCore.proxy.getClientPlayer();
 				handlePacketClient(pkt, player);
 				break;
-
 			case SERVER:
 				INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
 				player = ((NetHandlerPlayServer) netHandler).playerEntity;
 				handlePacketServer(pkt, player);
 				break;
-
 			default:
 		}
 	}
 
+	/* HELPERS */
 	private void handlePacketClient(final PacketBase packet, final EntityPlayer player) {
 
 		IThreadListener threadListener = CoFHCore.proxy.getClientListener();
@@ -139,14 +149,13 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		}
 	}
 
-	public void injectPacket(byte[] data) throws Exception {
+	private void injectPacket(byte[] data) throws Exception {
 
 		if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
 			throw new RuntimeException("Packet hack only works for the client end.");
 		}
 		ByteBuf buf = Unpooled.copiedBuffer(data);
 		byte discriminator = buf.readByte();
-
 		Class<? extends PacketBase> packetClass = this.packets.get(discriminator);
 
 		if (packetClass == null) {
@@ -154,39 +163,36 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		}
 		PacketBase pkt = packetClass.newInstance();
 		pkt.decodeInto(null, buf.slice());
-
 		handlePacketClient(pkt, CoFHCore.proxy.getClientPlayer());
 	}
 
-	// Method to call from FMLInitializationEvent
-	public void initialize() {
+	public boolean registerPacket(Class<? extends PacketBase> packet) {
 
-		this.channels = NetworkRegistry.INSTANCE.newChannel("CoFH", this);
-	}
-
-	// Method to call from FMLPostInitializationEvent
-	// Ensures that packet discriminators are common between server and client
-	// by using logical sorting
-	public void postInit() {
-
-		if (this.isPostInitialised) {
-			return;
+		if (this.packets.size() > 256) {
+			return false;
 		}
-		this.isPostInitialised = true;
-		Collections.sort(this.packets, new Comparator<Class<? extends PacketBase>>() {
-
-			@Override
-			public int compare(Class<? extends PacketBase> packetClass1, Class<? extends PacketBase> packetClass2) {
-
-				int com = String.CASE_INSENSITIVE_ORDER.compare(packetClass1.getCanonicalName(), packetClass2.getCanonicalName());
-				if (com == 0) {
-					com = packetClass1.getCanonicalName().compareTo(packetClass2.getCanonicalName());
-				}
-				return com;
-			}
-		});
+		if (this.packets.contains(packet)) {
+			return false;
+		}
+		if (this.isPostInitialised) {
+			// TODO: Resort or throw error
+			return false;
+		}
+		this.packets.add(packet);
+		return true;
 	}
 
+	public static void handleNBTPacket(NBTTagCompound tagCompound) {
+
+		try {
+			instance.injectPacket(tagCompound.getByteArray("CoFH:data"));
+		} catch (Exception e) {
+			FMLLog.severe("Unable to handle CoFH packet!");
+			e.printStackTrace();
+		}
+	}
+
+	/* TRANSMISSION */
 	public static void sendToAll(PacketBase message) {
 
 		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
@@ -217,14 +223,14 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	public static void sendToAllAround(PacketBase message, TileEntity theTile) {
 
 		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(new TargetPoint(theTile.getWorld().provider.getDimension(), theTile.getPos().getX(), theTile.getPos().getY(), theTile.getPos().getZ(), CoFHProps.NETWORK_UPDATE_RANGE));
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(new TargetPoint(theTile.getWorld().provider.getDimension(), theTile.getPos().getX(), theTile.getPos().getY(), theTile.getPos().getZ(), CoreProps.NETWORK_UPDATE_RANGE));
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendToAllAround(PacketBase message, World world, int x, int y, int z) {
 
 		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(new TargetPoint(world.provider.getDimension(), x, y, z, CoFHProps.NETWORK_UPDATE_RANGE));
+		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(new TargetPoint(world.provider.getDimension(), x, y, z, CoreProps.NETWORK_UPDATE_RANGE));
 		instance.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
@@ -241,6 +247,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 		instance.channels.get(Side.CLIENT).writeAndFlush(message);
 	}
 
+	/* CONVERSION */
 	public static Packet toMCPacket(PacketBase packet) {
 
 		return instance.channels.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
@@ -259,16 +266,6 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	public static SPacketUpdateTileEntity toTilePacket(PacketBase packet, BlockPos pos) {
 
 		return new SPacketUpdateTileEntity(pos, 0, toNBTTag(packet, new NBTTagCompound()));
-	}
-
-	public static void handleNBTPacket(NBTTagCompound tagCompound) {
-
-		try {
-			instance.injectPacket(tagCompound.getByteArray("CoFH:data"));
-		} catch (Exception e) {
-			FMLLog.severe("Unable to handle CoFH packet!");
-			e.printStackTrace();
-		}
 	}
 
 }

@@ -1,8 +1,8 @@
 package cofh.core.item.tool;
 
 import cofh.api.core.IModelRegister;
-import cofh.core.enchantment.CoFHEnchantment;
-import cofh.core.render.CoFHFontRenderer;
+import cofh.core.init.CoreEnchantments;
+import cofh.core.render.FontRendererCore;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.StringHelper;
@@ -282,7 +282,7 @@ public class ItemBowMulti extends ItemBow implements IModelRegister {
 	@SideOnly (Side.CLIENT)
 	public FontRenderer getFontRenderer(ItemStack stack) {
 
-		return CoFHFontRenderer.loadFontRendererStack(stack);
+		return FontRendererCore.loadFontRendererStack(stack);
 	}
 
 	@Override
@@ -364,7 +364,7 @@ public class ItemBowMulti extends ItemBow implements IModelRegister {
 					boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer) : false);
 
 					if (!world.isRemote) {
-						int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoFHEnchantment.multishot, stack);
+						int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, stack);
 						int punchLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
 						int powerLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
 						boolean flame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;

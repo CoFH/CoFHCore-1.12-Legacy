@@ -46,7 +46,7 @@ public abstract class TabScrolledText extends TabBase {
 		if (firstLine < maxFirstLine) {
 			gui.drawIcon(CoreTextures.ICON_ARROW_DOWN, posXOffset() + maxWidth - 20, posY + 76);
 		} else {
-			gui.drawIcon(CoreTextures.ICON_ARROW_DOWN_INAVTIVE, posXOffset() + maxWidth - 20, posY + 76);
+			gui.drawIcon(CoreTextures.ICON_ARROW_DOWN_INACTIVE, posXOffset() + maxWidth - 20, posY + 76);
 		}
 		getFontRenderer().drawStringWithShadow(getTitle(), posXOffset() + 18, posY + 6, headerColor);
 		for (int i = firstLine; i < firstLine + numLines; i++) {

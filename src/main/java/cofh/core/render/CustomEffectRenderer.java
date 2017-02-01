@@ -18,4 +18,5 @@ public class CustomEffectRenderer extends ParticleManager {
 	public void addEffect(Particle p) {
 
 	}
+
 }

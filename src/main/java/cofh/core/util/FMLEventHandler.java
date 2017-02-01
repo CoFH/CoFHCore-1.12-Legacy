@@ -1,9 +1,8 @@
 package cofh.core.util;
 
-import cofh.core.CoFHProps;
+import cofh.core.init.CoreProps;
 import cofh.core.network.PacketCore;
-import cofh.core.util.energy.FurnaceFuelHandler;
-import cofh.core.util.fluid.BucketHandler;
+import cofh.core.energy.FurnaceFuelHandler;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.lib.util.helpers.ServerHelper;
 import cofh.lib.util.helpers.StringHelper;
@@ -29,7 +28,7 @@ public class FMLEventHandler {
 	public void onPlayerLogin(PlayerLoggedInEvent event) {
 
 		EntityPlayer player = event.player;
-		if (ServerHelper.isMultiPlayerServer() && CoFHProps.enableOpSecureAccess && CoFHProps.enableOpSecureAccessWarning) {
+		if (ServerHelper.isMultiPlayerServer() && CoreProps.enableOpSecureAccess && CoreProps.enableOpSecureAccessWarning) {
 			player.addChatMessage(new TextComponentString(StringHelper.YELLOW + "[CoFH] ").appendSibling(new TextComponentTranslation("chat.cofh.secureNotice")));
 		}
 		PacketCore.sendConfigSyncPacketToClient(event.player);
@@ -39,9 +38,7 @@ public class FMLEventHandler {
 	@EventHandler
 	public void handleIdMappingEvent(FMLModIdMappingEvent event) {
 
-		BucketHandler.refreshMap();
 		FurnaceFuelHandler.refreshMap();
-		//ItemRenderRegistry.refreshMap();
 		OreDictionaryArbiter.initialize();
 	}
 

@@ -19,7 +19,7 @@ public class RenderHitbox {
 	 *
 	 * @param customHitBox
 	 */
-	public static void drawSelectionBox(EntityPlayer thePlayer, RayTraceResult rayTraceResult, float pTickTime, CustomHitBox customHitBox) {
+	public static void drawSelectionBox(EntityPlayer player, RayTraceResult rayTraceResult, float pTickTime, CustomHitBox customHitBox) {
 
 		if (rayTraceResult.typeOfHit == Type.BLOCK) {
 			GlStateManager.enableBlend();
@@ -28,13 +28,13 @@ public class RenderHitbox {
 			GlStateManager.glLineWidth(2.0F);
 			GlStateManager.disableTexture2D();
 			GlStateManager.depthMask(false);
-			IBlockState state = thePlayer.worldObj.getBlockState(rayTraceResult.getBlockPos());
+			IBlockState state = player.worldObj.getBlockState(rayTraceResult.getBlockPos());
 
 			if (state.getMaterial() != Material.AIR) {
 				//block.setBlockBoundsBasedOnState(thePlayer.worldObj, rayTraceResult.blockX, rayTraceResult.blockY, rayTraceResult.blockZ);
-				double d0 = thePlayer.lastTickPosX + (thePlayer.posX - thePlayer.lastTickPosX) * pTickTime;
-				double d1 = thePlayer.lastTickPosY + (thePlayer.posY - thePlayer.lastTickPosY) * pTickTime;
-				double d2 = thePlayer.lastTickPosZ + (thePlayer.posZ - thePlayer.lastTickPosZ) * pTickTime;
+				double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * pTickTime;
+				double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * pTickTime;
+				double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * pTickTime;
 				drawOutlinedBoundingBox(customHitBox.addExtraSpace(extraSpace).offsetForDraw(-d0, -d1, -d2));
 			}
 

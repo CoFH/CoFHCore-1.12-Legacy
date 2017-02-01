@@ -1,6 +1,6 @@
 package cofh.core.item.tool;
 
-import cofh.core.enchantment.CoFHEnchantment;
+import cofh.core.init.CoreEnchantments;
 import cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -164,7 +164,7 @@ public class ItemBowCore extends ItemBow {
 					boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer) : false);
 
 					if (!world.isRemote) {
-						int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoFHEnchantment.multishot, stack);
+						int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, stack);
 						int punchLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
 						int powerLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
 						boolean flame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;

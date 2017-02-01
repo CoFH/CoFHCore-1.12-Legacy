@@ -48,11 +48,10 @@ public class OreDictionaryArbiter {
 
 		oreNames = OreDictionary.getOreNames();
 
-		for (int i = 0; i < oreNames.length; i++) {
-			List<ItemStack> ores = OreDictionary.getOres(oreNames[i]);
-
-			for (int j = 0; j < ores.size(); j++) {
-				registerOreDictionaryEntry(ores.get(j), oreNames[i]);
+		for (String name : oreNames) {
+			List<ItemStack> ores = OreDictionary.getOres(name);
+			for (ItemStack ore : ores) {
+				registerOreDictionaryEntry(ore, name);
 			}
 		}
 		for (ItemWrapper wrapper : stackIDs.keySet()) {

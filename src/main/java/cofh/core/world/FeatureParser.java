@@ -4,7 +4,7 @@ import cofh.api.world.IFeatureGenerator;
 import cofh.api.world.IFeatureParser;
 import cofh.api.world.IGeneratorParser;
 import cofh.asm.ASMCore;
-import cofh.core.CoFHProps;
+import cofh.core.init.CoreProps;
 import cofh.core.util.CoreUtils;
 import cofh.core.world.decoration.*;
 import cofh.core.world.feature.*;
@@ -39,7 +39,6 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DungeonHooks.DungeonMob;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
-import net.minecraftforge.fml.common.ModAPIManager;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.versioning.ArtifactVersion;
@@ -50,9 +49,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.activation.UnsupportedDataTypeException;
-import javax.annotation.Resource;
-import java.io.*;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -128,8 +127,8 @@ public class FeatureParser {
 
 		log.info("Verifying or creating base world generation directory...");
 
-		worldGenFolder = new File(CoFHProps.configDir, "/cofh/world/");
-		worldGenPathBase = Paths.get(CoFHProps.configDir.getPath());
+		worldGenFolder = new File(CoreProps.configDir, "/cofh/world/");
+		worldGenPathBase = Paths.get(CoreProps.configDir.getPath());
 
 		if (!worldGenFolder.exists()) {
 			try {
@@ -148,7 +147,7 @@ public class FeatureParser {
 		try {
 			if (vanillaGen.createNewFile()) {
 				CoreUtils.copyFileUsingStream(worldGenVanilla, vanillaGen);
-				log.info("Created vanilla generation json");
+				log.info("Created vanilla generation json.");
 			} else if (!vanillaGen.exists()) {
 				throw new Error("Unable to create vanilla generation json (unspecified error).");
 			}
@@ -213,7 +212,7 @@ public class FeatureParser {
 				if (!FilenameUtils.directoryContains(worldGenFolder.getCanonicalPath(), file.getCanonicalPath())) {
 					return null;
 				}
-			} catch(IOException e) {
+			} catch (IOException e) {
 				return null;
 			}
 			return ConfigFactory.parseFileAnySyntax(file, context.parseOptions()).root();
@@ -288,14 +287,14 @@ public class FeatureParser {
 							log.error("Error parsing generation entry: '%s' > This must be an object and is not.", key);
 						} else {
 							switch (parseGenerationEntry(key, genData.getConfig(key))) {
-							case SUCCESS:
-								log.debug("Generation entry successfully parsed: '%s'", key);
-								break;
-							case FAIL:
-								log.error("Error parsing generation entry: '%s' > Please check the parameters.", key);
-								break;
-							case PASS:
-								log.error("Error parsing generation entry: '%s' > It is a duplicate.", key);
+								case SUCCESS:
+									log.debug("Generation entry successfully parsed: '%s'", key);
+									break;
+								case FAIL:
+									log.error("Error parsing generation entry: '%s' > Please check the parameters.", key);
+									break;
+								case PASS:
+									log.error("Error parsing generation entry: '%s' > It is a duplicate.", key);
 							}
 						}
 					} catch (ConfigException ex) {
@@ -335,29 +334,29 @@ public class FeatureParser {
 		ModContainer con;
 		ArtifactVersion vers = null;
 		boolean retComp = true;
-		switch(value.valueType()) {
-		case STRING:
-			id = (String)value.unwrapped();
-			if (id.contains("@")) {
-				vers = VersionParser.parseVersionReference(id);
-				id = vers.getLabel();
-			}
-			con = Loader.instance().getIndexedModList().get(id);
-			break;
-		case OBJECT:
-			Config data = ((ConfigObject)value).toConfig();
-			id = data.getString("id");
-			con = Loader.instance().getIndexedModList().get(id);
-			if (data.hasPath("version")) {
-				vers = new DefaultArtifactVersion(id, data.getString("version"));
-			}
-			if (data.hasPath("exclude")) {
-				retComp = !data.getBoolean("exclude");
-			}
-			break;
-		default:
-			log.fatal("Invalid dependency at line %d!", value.origin().lineNumber());
-			return false;
+		switch (value.valueType()) {
+			case STRING:
+				id = (String) value.unwrapped();
+				if (id.contains("@")) {
+					vers = VersionParser.parseVersionReference(id);
+					id = vers.getLabel();
+				}
+				con = Loader.instance().getIndexedModList().get(id);
+				break;
+			case OBJECT:
+				Config data = ((ConfigObject) value).toConfig();
+				id = data.getString("id");
+				con = Loader.instance().getIndexedModList().get(id);
+				if (data.hasPath("version")) {
+					vers = new DefaultArtifactVersion(id, data.getString("version"));
+				}
+				if (data.hasPath("exclude")) {
+					retComp = !data.getBoolean("exclude");
+				}
+				break;
+			default:
+				log.fatal("Invalid dependency at line %d!", value.origin().lineNumber());
+				return false;
 		}
 		if (con == null) {
 			con = ASMCore.getLoadedAPIs().get(id);
@@ -497,92 +496,92 @@ public class FeatureParser {
 	private static BiomeInfo parseBiomeData(ConfigValue element) {
 
 		BiomeInfo info = null;
-		switch(element.valueType()) {
-		case NULL:
-			log.info("Null biome entry. Ignoring.");
-			break;
-		case OBJECT:
-			Config obj = ((ConfigObject) element).toConfig();
-			String type = obj.getString("type");
-			boolean wl = !obj.hasPath("whitelist") || obj.getBoolean("whitelist");
-			ConfigValue value = obj.root().get("entry");
-			List<String> array = value.valueType() == ConfigValueType.LIST ? obj.getStringList("entry") : null;
-			String entry = array != null ? null : (String)value.unwrapped();
-			int rarity = obj.hasPath("rarity") ? obj.getInt("rarity") : -1;
+		switch (element.valueType()) {
+			case NULL:
+				log.info("Null biome entry. Ignoring.");
+				break;
+			case OBJECT:
+				Config obj = ((ConfigObject) element).toConfig();
+				String type = obj.getString("type");
+				boolean wl = !obj.hasPath("whitelist") || obj.getBoolean("whitelist");
+				ConfigValue value = obj.root().get("entry");
+				List<String> array = value.valueType() == ConfigValueType.LIST ? obj.getStringList("entry") : null;
+				String entry = array != null ? null : (String) value.unwrapped();
+				int rarity = obj.hasPath("rarity") ? obj.getInt("rarity") : -1;
 
-			l:
-			if (type.equalsIgnoreCase("name")) {
-				if (array != null) {
-					List<String> names = array;
-					if (rarity > 0) {
-						info = new BiomeInfoRarity(names, 4, true, rarity);
+				l:
+				if (type.equalsIgnoreCase("name")) {
+					if (array != null) {
+						List<String> names = array;
+						if (rarity > 0) {
+							info = new BiomeInfoRarity(names, 4, true, rarity);
+						} else {
+							info = new BiomeInfo(names, 4, true);
+						}
 					} else {
-						info = new BiomeInfo(names, 4, true);
+						if (rarity > 0) {
+							info = new BiomeInfoRarity(entry, rarity);
+						} else {
+							info = new BiomeInfo(entry);
+						}
 					}
 				} else {
-					if (rarity > 0) {
-						info = new BiomeInfoRarity(entry, rarity);
+					Object data;
+					int t;
+					if (type.equalsIgnoreCase("dictionary")) {
+						if (array != null) {
+							ArrayList<Type> tags = new ArrayList<Type>(array.size());
+							for (int k = 0, j = array.size(); k < j; k++) {
+								tags.add(Type.valueOf(array.get(k)));
+							}
+							data = tags.toArray(new Type[tags.size()]);
+							t = 6;
+						} else {
+							data = Type.valueOf(entry);
+							t = 2;
+						}
+					} else if (type.equalsIgnoreCase("id")) {
+						if (array != null) {
+							ArrayList<ResourceLocation> ids = new ArrayList<ResourceLocation>(array.size());
+							for (int k = 0, j = array.size(); k < j; ++k) {
+								ids.add(new ResourceLocation(array.get(k)));
+							}
+							data = ids;
+							t = 8;
+						} else {
+							data = new ResourceLocation(entry);
+							t = 7;
+						}
+					} else if (type.equalsIgnoreCase("temperature")) {
+						if (array != null) {
+							ArrayList<TempCategory> temps = new ArrayList<TempCategory>(array.size());
+							for (int k = 0, j = array.size(); k < j; k++) {
+								temps.add(TempCategory.valueOf(array.get(k)));
+							}
+							data = EnumSet.copyOf(temps);
+							t = 5;
+						} else {
+							data = TempCategory.valueOf(entry);
+							t = 1;
+						}
 					} else {
-						info = new BiomeInfo(entry);
+						log.warn("Biome entry of unknown type");
+						break l;
+					}
+					if (data != null) {
+						if (rarity > 0) {
+							info = new BiomeInfoRarity(data, t, wl, rarity);
+						} else {
+							info = new BiomeInfo(data, t, wl);
+						}
 					}
 				}
-			} else {
-				Object data;
-				int t;
-				if (type.equalsIgnoreCase("dictionary")) {
-					if (array != null) {
-						ArrayList<Type> tags = new ArrayList<Type>(array.size());
-						for (int k = 0, j = array.size(); k < j; k++) {
-							tags.add(Type.valueOf(array.get(k)));
-						}
-						data = tags.toArray(new Type[tags.size()]);
-						t = 6;
-					} else {
-						data = Type.valueOf(entry);
-						t = 2;
-					}
-				} else if (type.equalsIgnoreCase("id")) {
-					if (array != null) {
-						ArrayList<ResourceLocation> ids = new ArrayList<ResourceLocation>(array.size());
-						for (int k = 0, j = array.size(); k < j; ++k) {
-							ids.add(new ResourceLocation(array.get(k)));
-						}
-						data = ids;
-						t = 8;
-					} else {
-						data = new ResourceLocation(entry);
-						t = 7;
-					}
-				} else if (type.equalsIgnoreCase("temperature")) {
-					if (array != null) {
-						ArrayList<TempCategory> temps = new ArrayList<TempCategory>(array.size());
-						for (int k = 0, j = array.size(); k < j; k++) {
-							temps.add(TempCategory.valueOf(array.get(k)));
-						}
-						data = EnumSet.copyOf(temps);
-						t = 5;
-					} else {
-						data = TempCategory.valueOf(entry);
-						t = 1;
-					}
-				} else {
-					log.warn("Biome entry of unknown type");
-					break l;
-				}
-				if (data != null) {
-					if (rarity > 0) {
-						info = new BiomeInfoRarity(data, t, wl, rarity);
-					} else {
-						info = new BiomeInfo(data, t, wl);
-					}
-				}
-			}
-			break;
-		case STRING:
-			info = new BiomeInfo((String)element.unwrapped());
-			break;
-		default:
-			log.error("Unknown biome type in at line %d", element.origin().lineNumber());
+				break;
+			case STRING:
+				info = new BiomeInfo((String) element.unwrapped());
+				break;
+			default:
+				log.error("Unknown biome type in at line %d", element.origin().lineNumber());
 		}
 		return info;
 	}
@@ -596,55 +595,55 @@ public class FeatureParser {
 
 		final int min = clamp ? 0 : -1;
 		Block block;
-		switch(genElement.valueType()) {
-		case NULL:
-			log.warn("Null Block entry!");
-			return null;
-		case OBJECT:
-			Config blockElement = ((ConfigObject)genElement).toConfig();
-			if (!blockElement.hasPath("name")) {
-				log.error("Block entry needs a name!");
+		switch (genElement.valueType()) {
+			case NULL:
+				log.warn("Null Block entry!");
 				return null;
-			}
-			String blockName;
-			block = parseBlockName(blockName = blockElement.getString("name"));
-			if (block == null) {
-				log.error("Invalid block entry!");
-				return null;
-			}
-			int weight = blockElement.hasPath("weight") ? MathHelper.clamp(blockElement.getInt("weight"), 1, 1000000) : 100;
-			if (blockElement.hasPath("properties")) {
-				BlockStateContainer blockstatecontainer = block.getBlockState();
-				IBlockState state = block.getDefaultState();
-				for (Entry<String, ConfigValue> propEntry : blockElement.getObject("properties").entrySet()) {
-
-					IProperty<?> prop = blockstatecontainer.getProperty(propEntry.getKey());
-					if (prop == null) {
-						log.warn("Block '%s' does not have property '%s'.", blockName, propEntry.getKey());
-					}
-					if (propEntry.getValue().valueType() != ConfigValueType.STRING) {
-						log.error("Property '%s' is not a string. All block properties must be strings.", propEntry.getKey());
-						prop = null;
-					}
-
-					if (prop != null) {
-						state = setValue(state, prop, (String) propEntry.getValue().unwrapped());
-					}
+			case OBJECT:
+				Config blockElement = ((ConfigObject) genElement).toConfig();
+				if (!blockElement.hasPath("name")) {
+					log.error("Block entry needs a name!");
+					return null;
 				}
-				return new WeightedRandomBlock(state, weight);
-			} else {
-				int metadata = blockElement.hasPath("metadata") ? MathHelper.clamp(blockElement.getInt("metadata"), min, 15) : min;
-				return new WeightedRandomBlock(block, metadata, weight);
-			}
-		case STRING:
-			block = parseBlockName((String)genElement.unwrapped());
-			if (block == null) {
-				log.error("Invalid block entry!");
+				String blockName;
+				block = parseBlockName(blockName = blockElement.getString("name"));
+				if (block == null) {
+					log.error("Invalid block entry!");
+					return null;
+				}
+				int weight = blockElement.hasPath("weight") ? MathHelper.clamp(blockElement.getInt("weight"), 1, 1000000) : 100;
+				if (blockElement.hasPath("properties")) {
+					BlockStateContainer blockstatecontainer = block.getBlockState();
+					IBlockState state = block.getDefaultState();
+					for (Entry<String, ConfigValue> propEntry : blockElement.getObject("properties").entrySet()) {
+
+						IProperty<?> prop = blockstatecontainer.getProperty(propEntry.getKey());
+						if (prop == null) {
+							log.warn("Block '%s' does not have property '%s'.", blockName, propEntry.getKey());
+						}
+						if (propEntry.getValue().valueType() != ConfigValueType.STRING) {
+							log.error("Property '%s' is not a string. All block properties must be strings.", propEntry.getKey());
+							prop = null;
+						}
+
+						if (prop != null) {
+							state = setValue(state, prop, (String) propEntry.getValue().unwrapped());
+						}
+					}
+					return new WeightedRandomBlock(state, weight);
+				} else {
+					int metadata = blockElement.hasPath("metadata") ? MathHelper.clamp(blockElement.getInt("metadata"), min, 15) : min;
+					return new WeightedRandomBlock(block, metadata, weight);
+				}
+			case STRING:
+				block = parseBlockName((String) genElement.unwrapped());
+				if (block == null) {
+					log.error("Invalid block entry!");
+					return null;
+				}
+				return new WeightedRandomBlock(block, min);
+			default:
 				return null;
-			}
-			return new WeightedRandomBlock(block, min);
-		default:
-			return null;
 		}
 	}
 
@@ -684,41 +683,41 @@ public class FeatureParser {
 	public static WeightedRandomNBTTag parseEntityEntry(ConfigValue genElement) {
 
 		switch (genElement.valueType()) {
-		case NULL:
-			log.warn("Null entity entry!");
-			return null;
-		case OBJECT:
-			Config genObject = ((ConfigObject)genElement).toConfig();
-			NBTTagCompound data;
-			if (genObject.hasPath("spawner-tag")) {
-				try {
-					data = JsonToNBT.getTagFromJson(genObject.getString("spawner-tag"));
-				} catch (NBTException e) {
-					log.error(String.format("Invalid entity entry at line %d!", genElement.origin().lineNumber()), e);
+			case NULL:
+				log.warn("Null entity entry!");
+				return null;
+			case OBJECT:
+				Config genObject = ((ConfigObject) genElement).toConfig();
+				NBTTagCompound data;
+				if (genObject.hasPath("spawner-tag")) {
+					try {
+						data = JsonToNBT.getTagFromJson(genObject.getString("spawner-tag"));
+					} catch (NBTException e) {
+						log.error(String.format("Invalid entity entry at line %d!", genElement.origin().lineNumber()), e);
+						return null;
+					}
+				} else if (!genObject.hasPath("entity")) {
+					log.error("Invalid entity entry at line %d!", genElement.origin().lineNumber());
+					return null;
+				} else {
+					data = new NBTTagCompound();
+					String type = genObject.getString("entity");
+					data.setString("EntityId", type);
+				}
+				int weight = genObject.hasPath("weight") ? genObject.getInt("weight") : 100;
+				return new WeightedRandomNBTTag(weight, data);
+			case STRING:
+				String type = (String) genElement.unwrapped();
+				if (type == null) {
+					log.error("Invalid entity entry!");
 					return null;
 				}
-			} else if (!genObject.hasPath("entity")) {
-				log.error("Invalid entity entry at line %d!", genElement.origin().lineNumber());
+				NBTTagCompound tag = new NBTTagCompound();
+				tag.setString("EntityId", type);
+				return new WeightedRandomNBTTag(100, tag);
+			default:
+				log.warn("Invalid entity entry type at line %d", genElement.origin().lineNumber());
 				return null;
-			} else {
-				data = new NBTTagCompound();
-				String type = genObject.getString("entity");
-				data.setString("EntityId", type);
-			}
-			int weight = genObject.hasPath("weight") ? genObject.getInt("weight") : 100;
-			return new WeightedRandomNBTTag(weight, data);
-		case STRING:
-			String type = (String)genElement.unwrapped();
-			if (type == null) {
-				log.error("Invalid entity entry!");
-				return null;
-			}
-			NBTTagCompound tag = new NBTTagCompound();
-			tag.setString("EntityId", type);
-			return new WeightedRandomNBTTag(100, tag);
-		default:
-			log.warn("Invalid entity entry type at line %d", genElement.origin().lineNumber());
-			return null;
 		}
 	}
 
@@ -748,29 +747,29 @@ public class FeatureParser {
 
 		int weight = 100;
 		String type = null;
-		switch(genElement.valueType()) {
-		case LIST:
-			log.warn("Lists are not supported for string values at line %d.", genElement.origin().lineNumber());
-			return null;
-		case NULL:
-			log.warn("Null string entry at line %d", genElement.origin().lineNumber());
-			return null;
-		case OBJECT:
-			Config genObject = ((ConfigObject)genElement).toConfig();
-			if (genObject.hasPath("type")) {
-				type = genObject.getString("name");
-			} else {
-				log.warn("Value missing 'type' field at line %d", genElement.origin().lineNumber());
-			}
-			if (genObject.hasPath("weight")) {
-				weight = genObject.getInt("weight");
-			}
-			break;
-		case BOOLEAN:
-		case NUMBER:
-		case STRING:
-			type = String.valueOf(genElement.unwrapped());
-			break;
+		switch (genElement.valueType()) {
+			case LIST:
+				log.warn("Lists are not supported for string values at line %d.", genElement.origin().lineNumber());
+				return null;
+			case NULL:
+				log.warn("Null string entry at line %d", genElement.origin().lineNumber());
+				return null;
+			case OBJECT:
+				Config genObject = ((ConfigObject) genElement).toConfig();
+				if (genObject.hasPath("type")) {
+					type = genObject.getString("name");
+				} else {
+					log.warn("Value missing 'type' field at line %d", genElement.origin().lineNumber());
+				}
+				if (genObject.hasPath("weight")) {
+					weight = genObject.getInt("weight");
+				}
+				break;
+			case BOOLEAN:
+			case NUMBER:
+			case STRING:
+				type = String.valueOf(genElement.unwrapped());
+				break;
 		}
 		return new DungeonMob(weight, type);
 	}
@@ -808,7 +807,7 @@ public class FeatureParser {
 		if (genElement.valueType() != ConfigValueType.OBJECT) {
 			stack = new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation(String.valueOf(genElement.unwrapped()))), 1, metadata);
 		} else {
-			Config item = ((ConfigObject)genElement).toConfig();
+			Config item = ((ConfigObject) genElement).toConfig();
 
 			if (item.hasPath("metadata")) {
 				metadata = item.getInt("metadata");
@@ -887,33 +886,33 @@ public class FeatureParser {
 
 	public static INumberProvider parseNumberValue(ConfigValue genElement, long min, long max) {
 
-		switch(genElement.valueType()) {
-		case NUMBER:
-			return new ConstantProvider((Number)genElement.unwrapped());
-		case OBJECT:
-			ConfigObject genData = (ConfigObject) genElement;
-			Config genProp = genData.toConfig();
-			switch (genData.size()) {
-			case 1:
-				if (genData.containsKey("value")) {
-					return new ConstantProvider(genProp.getNumber("value"));
-				} else if (genData.containsKey("variance")) {
-					return new SkellamRandomProvider(genProp.getNumber("variance"));
+		switch (genElement.valueType()) {
+			case NUMBER:
+				return new ConstantProvider((Number) genElement.unwrapped());
+			case OBJECT:
+				ConfigObject genData = (ConfigObject) genElement;
+				Config genProp = genData.toConfig();
+				switch (genData.size()) {
+					case 1:
+						if (genData.containsKey("value")) {
+							return new ConstantProvider(genProp.getNumber("value"));
+						} else if (genData.containsKey("variance")) {
+							return new SkellamRandomProvider(genProp.getNumber("variance"));
+						}
+						break;
+					case 2:
+						if (genData.containsKey("min") && genData.containsKey("max")) {
+							return new UniformRandomProvider(genProp.getNumber("min"), genProp.getNumber("max"));
+						}
+						break;
+					default:
+						throw new Error(String.format("Too many properties on object at line %s", genElement.origin().lineNumber()));
+					case 0:
+						break;
 				}
-				break;
-			case 2:
-				if (genData.containsKey("min") && genData.containsKey("max")) {
-					return new UniformRandomProvider(genProp.getNumber("min"), genProp.getNumber("max"));
-				}
-				break;
+				throw new Error(String.format("Unknown properties on object at line %s", genElement.origin().lineNumber()));
 			default:
-				throw new Error(String.format("Too many properties on object at line %s", genElement.origin().lineNumber()));
-			case 0:
-				break;
-			}
-			throw new Error(String.format("Unknown properties on object at line %s", genElement.origin().lineNumber()));
-		default :
-			throw new Error(String.format("Unsupported data type at line %s", genElement.origin().lineNumber()));
+				throw new Error(String.format("Unsupported data type at line %s", genElement.origin().lineNumber()));
 		}
 	}
 

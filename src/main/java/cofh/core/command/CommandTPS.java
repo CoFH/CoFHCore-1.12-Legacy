@@ -1,6 +1,6 @@
 package cofh.core.command;
 
-import cofh.CoFHCore;
+import cofh.core.init.CoreProps;
 import com.google.common.base.Throwables;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -40,7 +40,7 @@ public class CommandTPS implements ISubCommand {
 
 	private double getTickMs(World world) {
 
-		return getTickTimeSum(world == null ? CoFHCore.server.tickTimeArray : (long[]) CoFHCore.server.worldTickTimes.get(Integer.valueOf(world.provider.getDimension()))) * 1.0E-006D;
+		return getTickTimeSum(world == null ? CoreProps.server.tickTimeArray : (long[]) CoreProps.server.worldTickTimes.get(Integer.valueOf(world.provider.getDimension()))) * 1.0E-006D;
 	}
 
 	private double getTps(World world) {
@@ -71,7 +71,7 @@ public class CommandTPS implements ISubCommand {
 
 			sender.addChatMessage(new TextComponentString("Overall: " + floatfmt.format(tps) + " TPS/" + floatfmt.format(tickms) + "MS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
 
-			for (World world : CoFHCore.server.worldServers) {
+			for (World world : CoreProps.server.worldServers) {
 				tps = getTps(world);
 				tickms = getTickMs(world);
 				sender.addChatMessage(new TextComponentString(world.provider.getDimensionType().getName() + " [" + world.provider.getDimension() + "]: " + floatfmt.format(tps) + " TPS/" + floatfmt.format(tickms) + "MS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
@@ -95,7 +95,7 @@ public class CommandTPS implements ISubCommand {
 			int te = 0;
 			int worlds = 0;
 
-			for (WorldServer world : CoFHCore.server.worldServers) {
+			for (WorldServer world : CoreProps.server.worldServers) {
 				loadedChunks += world.getChunkProvider().getLoadedChunkCount();
 				entities += world.loadedEntityList.size();
 				te += world.loadedTileEntityList.size();
@@ -113,7 +113,7 @@ public class CommandTPS implements ISubCommand {
 				Throwables.propagate(e);
 			}
 
-			WorldServer world = CoFHCore.server.worldServerForDimension(dim);
+			WorldServer world = CoreProps.server.worldServerForDimension(dim);
 			if (world == null) {
 				throw new CommandException("info.cofh.command.world.notFound");
 			}
@@ -134,7 +134,7 @@ public class CommandTPS implements ISubCommand {
 			List<String> worldIDs = new ArrayList<String>();
 			worldIDs.add("o");
 			worldIDs.add("a");
-			for (World world : CoFHCore.server.worldServers) {
+			for (World world : CoreProps.server.worldServers) {
 				worldIDs.add(Integer.toString(world.provider.getDimension()));
 			}
 			return CommandBase.getListOfStringsMatchingLastWord(args, worldIDs.toArray(new String[] { "" }));

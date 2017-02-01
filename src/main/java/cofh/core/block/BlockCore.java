@@ -26,4 +26,5 @@ public class BlockCore extends Block {
 		name = modName + "." + name;
 		return super.setUnlocalizedName(name);
 	}
+
 }

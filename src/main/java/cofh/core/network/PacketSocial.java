@@ -1,7 +1,7 @@
 package cofh.core.network;
 
 import cofh.CoFHCore;
-import cofh.core.RegistrySocial;
+import cofh.core.util.RegistrySocial;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 

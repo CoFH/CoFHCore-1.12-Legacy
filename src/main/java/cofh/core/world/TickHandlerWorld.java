@@ -42,9 +42,9 @@ public class TickHandlerWorld {
 				RetroChunkCoord r = chunks.pollFirst();
 				ChunkCoord c = r.coord;
 				if (retroC++ == 0 || chunks.size() < 3) {
-					CoFHCore.log.info("RetroGening " + c.toString() + ".");
+					CoFHCore.LOG.info("RetroGening " + c.toString() + ".");
 				} else {
-					CoFHCore.log.debug("RetroGening " + c.toString() + ".");
+					CoFHCore.LOG.debug("RetroGening " + c.toString() + ".");
 				}
 				retroC &= 31;
 				long worldSeed = world.getSeed();
@@ -63,9 +63,9 @@ public class TickHandlerWorld {
 			if (chunks != null && chunks.size() > 0) {
 				ChunkCoord c = chunks.pollFirst();
 				if (pregenC++ == 0 || chunks.size() < 5) {
-					CoFHCore.log.info("PreGening " + c.toString() + ".");
+					CoFHCore.LOG.info("PreGening " + c.toString() + ".");
 				} else {
-					CoFHCore.log.debug("PreGening " + c.toString() + ".");
+					CoFHCore.LOG.debug("PreGening " + c.toString() + ".");
 				}
 				pregenC &= 31;
 				world.getChunkFromChunkCoords(c.chunkX, c.chunkZ);

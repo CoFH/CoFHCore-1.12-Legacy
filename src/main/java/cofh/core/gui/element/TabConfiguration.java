@@ -1,6 +1,5 @@
 package cofh.core.gui.element;
 
-import cofh.CoFHCore;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IReconfigurableSides;
 import cofh.api.tileentity.ISidedTexture;
@@ -9,7 +8,6 @@ import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.TabBase;
 import cofh.lib.render.RenderHelper;
 import cofh.lib.util.helpers.BlockHelper;
-import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,29 +17,15 @@ import java.util.List;
 
 public class TabConfiguration extends TabBase {
 
-	public static boolean enable;
 	public static int defaultSide = 1;
 	public static int defaultHeaderColor = 0xe1c92f;
 	public static int defaultSubHeaderColor = 0xaaafb8;
 	public static int defaultTextColor = 0x000000;
 	public static int defaultBackgroundColor = 0x226688;
 
-	public static void initialize() {
-
-		String category = "Tab.Configuration";
-
-		defaultSide = MathHelper.clamp(CoFHCore.configClient.get(category, "Side", defaultSide), 0, 1);
-		defaultHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorHeader", defaultHeaderColor), 0, 0xffffff);
-		defaultSubHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorSubHeader", defaultSubHeaderColor), 0, 0xffffff);
-		defaultTextColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorText", defaultTextColor), 0, 0xffffff);
-		defaultBackgroundColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorBackground", defaultBackgroundColor), 0, 0xffffff);
-
-		CoFHCore.configClient.save();
-	}
-
-	IReconfigurableFacing myTileFacing;
-	IReconfigurableSides myTileSides;
-	ISidedTexture myTileTexture;
+	private IReconfigurableFacing myTileFacing;
+	private IReconfigurableSides myTileSides;
+	private ISidedTexture myTileTexture;
 
 	public TabConfiguration(GuiBase gui, IReconfigurableSides theTile) {
 

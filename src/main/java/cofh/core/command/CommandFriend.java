@@ -1,7 +1,7 @@
 package cofh.core.command;
 
 import cofh.CoFHCore;
-import cofh.core.RegistrySocial;
+import cofh.core.util.RegistrySocial;
 import cofh.core.gui.GuiHandler;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.command.CommandBase;

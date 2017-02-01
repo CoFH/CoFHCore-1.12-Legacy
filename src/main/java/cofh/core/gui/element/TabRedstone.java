@@ -1,11 +1,9 @@
 package cofh.core.gui.element;
 
-import cofh.CoFHCore;
 import cofh.api.tileentity.IRedstoneControl;
 import cofh.core.init.CoreTextures;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.TabBase;
-import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.client.renderer.GlStateManager;
 
@@ -13,26 +11,13 @@ import java.util.List;
 
 public class TabRedstone extends TabBase {
 
-	public static boolean enable;
 	public static int defaultSide = 1;
 	public static int defaultHeaderColor = 0xe1c92f;
 	public static int defaultSubHeaderColor = 0xaaafb8;
 	public static int defaultTextColor = 0x000000;
 	public static int defaultBackgroundColor = 0xd0230a;
 
-	public static void initialize() {
-
-		String category = "Tab.Redstone";
-		// enable = CoFHCore.configClient.get(category, "Enable", true);
-		defaultSide = MathHelper.clamp(CoFHCore.configClient.get(category, "Side", defaultSide), 0, 1);
-		defaultHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorHeader", defaultHeaderColor), 0, 0xffffff);
-		defaultSubHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorSubHeader", defaultSubHeaderColor), 0, 0xffffff);
-		defaultTextColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorText", defaultTextColor), 0, 0xffffff);
-		defaultBackgroundColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorBackground", defaultBackgroundColor), 0, 0xffffff);
-		CoFHCore.configClient.save();
-	}
-
-	IRedstoneControl myContainer;
+	private IRedstoneControl myContainer;
 
 	public TabRedstone(GuiBase gui, IRedstoneControl container) {
 
@@ -131,7 +116,7 @@ public class TabRedstone extends TabBase {
 	@Override
 	protected void drawForeground() {
 
-		drawTabIcon(CoreTextures.ICON_REDSTONE);
+		drawTabIcon(CoreTextures.ICON_REDSTONE_ON);
 		if (!isFullyOpened()) {
 			return;
 		}
@@ -140,7 +125,7 @@ public class TabRedstone extends TabBase {
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", posXOffset() + 6, posY + 66, subheaderColor);
 
 		if (myContainer.getControl().isDisabled()) {
-			gui.drawButton(CoreTextures.ICON_GUNPOWDER, posX() + 28, posY + 20, 1);
+			gui.drawButton(CoreTextures.ICON_REDSTONE_OFF, posX() + 28, posY + 20, 1);
 			gui.drawButton(CoreTextures.ICON_RS_TORCH_OFF, posX() + 48, posY + 20, 0);
 			gui.drawButton(CoreTextures.ICON_RS_TORCH_ON, posX() + 68, posY + 20, 0);
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.disabled"), posXOffset() + 14, posY + 54, textColor);
@@ -149,12 +134,12 @@ public class TabRedstone extends TabBase {
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.enabled"), posXOffset() + 14, posY + 54, textColor);
 
 			if (myContainer.getControl().isLow()) {
-				gui.drawButton(CoreTextures.ICON_REDSTONE, posX() + 28, posY + 20, 0);
+				gui.drawButton(CoreTextures.ICON_REDSTONE_ON, posX() + 28, posY + 20, 0);
 				gui.drawButton(CoreTextures.ICON_RS_TORCH_OFF, posX() + 48, posY + 20, 1);
 				gui.drawButton(CoreTextures.ICON_RS_TORCH_ON, posX() + 68, posY + 20, 0);
 				getFontRenderer().drawString(StringHelper.localize("info.cofh.low"), posXOffset() + 14, posY + 78, textColor);
 			} else {
-				gui.drawButton(CoreTextures.ICON_REDSTONE, posX() + 28, posY + 20, 0);
+				gui.drawButton(CoreTextures.ICON_REDSTONE_ON, posX() + 28, posY + 20, 0);
 				gui.drawButton(CoreTextures.ICON_RS_TORCH_OFF, posX() + 48, posY + 20, 0);
 				gui.drawButton(CoreTextures.ICON_RS_TORCH_ON, posX() + 68, posY + 20, 1);
 				getFontRenderer().drawString(StringHelper.localize("info.cofh.high"), posXOffset() + 14, posY + 78, textColor);

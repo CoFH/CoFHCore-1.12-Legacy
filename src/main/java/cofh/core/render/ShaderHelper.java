@@ -1,12 +1,12 @@
 package cofh.core.render;
 
 import cofh.CoFHCore;
-import cofh.core.CoFHProps;
+import cofh.core.init.CoreProps;
 import gnu.trove.map.hash.TIntFloatHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.opengl.ARBFragmentShader;
@@ -28,8 +28,7 @@ public final class ShaderHelper {
 		if (!useShaders()) {
 			return;
 		}
-
-		FMLCommonHandler.instance().bus().register(new ShaderHelper());
+		MinecraftForge.EVENT_BUS.register(new ShaderHelper());
 	}
 
 	public static int gameTicks = 0;
@@ -56,14 +55,13 @@ public final class ShaderHelper {
 		midGameTick = event.renderTickTime;
 	}
 
-	static TIntFloatHashMap prevTime = new TIntFloatHashMap();
+	private static TIntFloatHashMap prevTime = new TIntFloatHashMap();
 
 	public static void useShader(int shader, ShaderCallback callback) {
 
 		if (!useShaders()) {
 			return;
 		}
-
 		ARBShaderObjects.glUseProgramObjectARB(shader);
 
 		if (shader != 0) {
@@ -75,7 +73,6 @@ public final class ShaderHelper {
 				ARBShaderObjects.glUniform1fARB(time, frameTime);
 				prevTime.put(shader, frameTime);
 			}
-
 			if (callback != null) {
 				callback.call(shader, newFrame);
 			}
@@ -94,7 +91,7 @@ public final class ShaderHelper {
 
 	public static boolean useShaders() {
 
-		return OpenGlHelper.shadersSupported && CoFHProps.enableShaderEffects;
+		return OpenGlHelper.shadersSupported && CoreProps.enableShaderEffects;
 	}
 
 	// Most of the code taken from the LWJGL wiki
@@ -108,35 +105,29 @@ public final class ShaderHelper {
 		if (frag != null) {
 			fragId = createShader(frag, FRAG);
 		}
-
 		program = ARBShaderObjects.glCreateProgramObjectARB();
 		if (program == 0) {
 			return 0;
 		}
-
 		if (vert != null) {
 			ARBShaderObjects.glAttachObjectARB(program, vertId);
 		}
 		if (frag != null) {
 			ARBShaderObjects.glAttachObjectARB(program, fragId);
 		}
-
 		ARBShaderObjects.glLinkProgramARB(program);
 		if (ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_LINK_STATUS_ARB) == GL11.GL_FALSE) {
-			CoFHCore.log.error(getLogInfo(program));
+			CoFHCore.LOG.error(getLogInfo(program));
 			ARBShaderObjects.glDeleteObjectARB(program);
 			return 0;
 		}
-
 		ARBShaderObjects.glValidateProgramARB(program);
 		if (ARBShaderObjects.glGetObjectParameteriARB(program, ARBShaderObjects.GL_OBJECT_VALIDATE_STATUS_ARB) == GL11.GL_FALSE) {
-			CoFHCore.log.error(getLogInfo(program));
+			CoFHCore.LOG.error(getLogInfo(program));
 			ARBShaderObjects.glDeleteObjectARB(program);
 			return 0;
 		}
-
 		prevTime.put(program, -1);
-
 		return program;
 	}
 
@@ -150,14 +141,12 @@ public final class ShaderHelper {
 			if (shader == 0) {
 				return 0;
 			}
-
 			ARBShaderObjects.glShaderSourceARB(shader, readFileAsString(filename));
 			ARBShaderObjects.glCompileShaderARB(shader);
 
 			if (ARBShaderObjects.glGetObjectParameteriARB(shader, ARBShaderObjects.GL_OBJECT_COMPILE_STATUS_ARB) == GL11.GL_FALSE) {
 				throw new RuntimeException("Error creating shader: " + getLogInfo(shader));
 			}
-
 			return shader;
 		} catch (Exception e) {
 			ARBShaderObjects.glDeleteObjectARB(shader);
@@ -181,7 +170,6 @@ public final class ShaderHelper {
 		if (in == null) {
 			return "";
 		}
-
 		try {
 			try {
 				reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
@@ -210,7 +198,6 @@ public final class ShaderHelper {
 				}
 			}
 		}
-
 		return source.toString();
 	}
 

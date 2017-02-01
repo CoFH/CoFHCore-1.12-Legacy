@@ -1,8 +1,8 @@
 package cofh.core.block;
 
 import cofh.api.tileentity.ISecurable;
-import cofh.core.CoFHProps;
-import cofh.core.RegistrySocial;
+import cofh.core.init.CoreProps;
+import cofh.core.util.RegistrySocial;
 import cofh.core.network.PacketCoFHBase;
 import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketTile;
@@ -94,7 +94,7 @@ public abstract class TileCore extends TileEntity {
 		}
 		ISecurable.AccessMode access = ((ISecurable) this).getAccess();
 		String name = player.getName();
-		if (access.isPublic() || (CoFHProps.enableOpSecureAccess && CoreUtils.isOp(name))) {
+		if (access.isPublic() || (CoreProps.enableOpSecureAccess && CoreUtils.isOp(name))) {
 			return true;
 		}
 		GameProfile profile = ((ISecurable) this).getOwner();
@@ -154,22 +154,22 @@ public abstract class TileCore extends TileEntity {
 	/* TIME CHECKS */
 	protected final boolean timeCheck() {
 
-		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT == 0;
+		return worldObj.getTotalWorldTime() % CoreProps.TIME_CONSTANT == 0;
 	}
 
 	protected final boolean timeCheckHalf() {
 
-		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT_HALF == 0;
+		return worldObj.getTotalWorldTime() % CoreProps.TIME_CONSTANT_HALF == 0;
 	}
 
 	protected final boolean timeCheckQuarter() {
 
-		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT_QUARTER == 0;
+		return worldObj.getTotalWorldTime() % CoreProps.TIME_CONSTANT_QUARTER == 0;
 	}
 
 	protected final boolean timeCheckEighth() {
 
-		return worldObj.getTotalWorldTime() % CoFHProps.TIME_CONSTANT_EIGHTH == 0;
+		return worldObj.getTotalWorldTime() % CoreProps.TIME_CONSTANT_EIGHTH == 0;
 	}
 
 	/* NETWORK METHODS */

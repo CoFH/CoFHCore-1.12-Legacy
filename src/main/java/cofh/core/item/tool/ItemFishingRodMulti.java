@@ -1,8 +1,8 @@
 package cofh.core.item.tool;
 
 import cofh.api.core.IModelRegister;
-import cofh.core.entity.EntityCoFHFishHook;
-import cofh.core.render.CoFHFontRenderer;
+import cofh.core.entity.EntityFishHookCore;
+import cofh.core.render.FontRendererCore;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.ServerHelper;
@@ -265,7 +265,7 @@ public class ItemFishingRodMulti extends ItemFishingRod implements IModelRegiste
 	@SideOnly (Side.CLIENT)
 	public FontRenderer getFontRenderer(ItemStack stack) {
 
-		return CoFHFontRenderer.loadFontRendererStack(stack);
+		return FontRendererCore.loadFontRendererStack(stack);
 	}
 
 	@Override
@@ -300,7 +300,7 @@ public class ItemFishingRodMulti extends ItemFishingRod implements IModelRegiste
 			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 			if (ServerHelper.isServerWorld(world)) {
-				world.spawnEntityInWorld(new EntityCoFHFishHook(world, player, getLuckModifier(stack), getSpeedModifier(stack)));
+				world.spawnEntityInWorld(new EntityFishHookCore(world, player, getLuckModifier(stack), getSpeedModifier(stack)));
 			}
 			player.swingArm(hand);
 		}

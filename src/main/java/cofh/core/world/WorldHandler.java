@@ -7,7 +7,6 @@ import cofh.asmhooks.event.ModPopulateChunkEvent;
 import cofh.core.world.TickHandlerWorld.RetroChunkCoord;
 import cofh.lib.util.ChunkCoord;
 import cofh.lib.util.LinkedHashList;
-import cofh.lib.util.helpers.MathHelper;
 import gnu.trove.set.hash.THashSet;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -25,7 +24,6 @@ import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -43,20 +41,19 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 
 	private static long genHash = 0;
 
-	public static final int MAX_BEDROCK_LAYERS = 8;
+	private static final String TAG_NAME = "CoFHWorld";
+	private static final int MAX_BEDROCK_LAYERS = 8;
 
-	public static boolean allowCustomGen = false;
-	public static boolean genFlatBedrock = false;
-	public static boolean genReplaceVanilla = false;
-	public static boolean retroFlatBedrock = false;
-	public static boolean retroGeneration = false;
-	public static boolean forceFullRegeneration = false;
+	private static int layersBedrock = 1;
+
+	private static boolean genFlatBedrock = false;
+	private static boolean retroFlatBedrock = false;
+	private static boolean retroGeneration = false;
+	private static boolean forceFullRegeneration = false;
+
+	static boolean genReplaceVanilla = false;
 
 	public static ArrayList<String> registeredFeatureNames = new ArrayList<String>();
-
-	private static final String TAG_NAME = "CoFHWorld";
-
-	public static int layersBedrock = 1;
 
 	public static WorldHandler instance = new WorldHandler();
 
@@ -80,24 +77,27 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 
 	public static void initialize() {
 
-		String category = "World";
-		String comment = null;
+		String category;
+		String comment;
 
-		comment = "This allows for vanilla Minecraft ore generation to be REPLACED. Configure in the vanilla.json file; vanilla defaults have been provided. If you rename the vanilla.json file, this option WILL NOT WORK.";
-		genReplaceVanilla = CoFHCore.configCore.get(category, "ReplaceVanillaGeneration", false, comment);
+		category = "World";
 
-		comment = "This will flatten the bedrock layer.";
-		genFlatBedrock = CoFHCore.configCore.get(category, "FlatBedrock", false, comment);
+		comment = "If TRUE, vanilla Minecraft ore generation will be REPLACED. Configure in the vanilla.json file; vanilla defaults have been provided. If you rename the vanilla.json file, this option WILL NOT WORK.";
+		genReplaceVanilla = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("ReplaceVanillaGeneration", category, genReplaceVanilla, comment);
 
-		comment = "The number of layers of bedrock to flatten to. (Max: " + MAX_BEDROCK_LAYERS + ")";
-		layersBedrock = CoFHCore.configCore.get(category, "FlatBedrockLayers", 1, comment);
-		layersBedrock = MathHelper.clamp(layersBedrock, 1, MAX_BEDROCK_LAYERS);
+		comment = "If TRUE, world generation handled by CoFH Core will be retroactively applied to existing chunks.";
+		retroGeneration = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("RetroactiveGeneration", category, retroGeneration, comment);
 
-		comment = "If FlatBedrock is enabled, this will enforce it in previously generated chunks.";
-		retroFlatBedrock = CoFHCore.configCore.get(category, "RetroactiveFlatBedrock", false, comment);
+		category = "World.Bedrock";
 
-		comment = "This will retroactively generate ores in previously generated chunks.";
-		retroGeneration = CoFHCore.configCore.get(category, "RetroactiveOreGeneration", false, comment);
+		comment = "If TRUE, the bedrock layer will be flattened.";
+		genFlatBedrock = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("FlatBedrockEnable", category, genFlatBedrock, comment);
+
+		comment = "This adjusts the number of layers of Flat Bedrock, if enabled.";
+		layersBedrock = CoFHCore.CONFIG_CORE.getConfiguration().getInt("FlatBedrockLayers", category, 2, 1, MAX_BEDROCK_LAYERS, comment);
+
+		comment = "If TRUE, Flat Bedrock will retroactively be applied to existing chunks, if enabled.";
+		retroFlatBedrock = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("FlatBedrockRetroactive", category, retroFlatBedrock, comment);
 
 		GameRegistry.registerWorldGenerator(instance, 0);
 		MinecraftForge.EVENT_BUS.register(instance);
@@ -105,7 +105,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 
 		if (genFlatBedrock & retroFlatBedrock | retroGeneration) {
 			// TODO: remove this condition when pregen works? (see handler for alternate)
-			FMLCommonHandler.instance().bus().register(TickHandlerWorld.instance);
+			MinecraftForge.EVENT_BUS.register(TickHandlerWorld.instance);
 		}
 	}
 
@@ -120,7 +120,6 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			features.remove(feature);
 			genHash -= featureName.hashCode();
 		}
-
 		return true;
 	}
 
@@ -149,7 +148,6 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			genTag.setBoolean("Populating", true);
 			return;
 		}
-
 		if (genFlatBedrock) {
 			genTag.setBoolean("Bedrock", true);
 		}
@@ -191,11 +189,11 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			}
 
 			if (bedrock) {
-				CoFHCore.log.debug("Queuing RetroGen for flattening bedrock for the chunk at " + cCoord.toString() + ".");
+				CoFHCore.LOG.debug("Queuing RetroGen for flattening bedrock for the chunk at " + cCoord.toString() + ".");
 				regen = true;
 			}
 			if (genFeatures) {
-				CoFHCore.log.debug("Queuing RetroGen for features for the chunk at " + cCoord.toString() + ".");
+				CoFHCore.LOG.debug("Queuing RetroGen for features for the chunk at " + cCoord.toString() + ".");
 				regen = true;
 			}
 		} else {
@@ -241,11 +239,11 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 
 		String featureName = feature.getFeatureName();
 		if (featureName == null) {
-			CoFHCore.log.error("Feature attempted to register without providing a valid name... ignoring.");
+			CoFHCore.LOG.error("Feature attempted to register without providing a valid name... ignoring.");
 			return false;
 		}
 		if (featureNames.contains(featureName)) {
-			CoFHCore.log.debug("Feature " + featureName + " was attempting to register a second time... ignoring.");
+			CoFHCore.LOG.debug("Feature " + featureName + " was attempting to register a second time... ignoring.");
 			return false;
 		}
 		featureNames.add(featureName);
