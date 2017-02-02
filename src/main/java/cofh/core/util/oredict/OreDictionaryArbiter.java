@@ -211,4 +211,9 @@ public class OreDictionaryArbiter {
 		return oreNames;
 	}
 
+	private OreDictionaryArbiter() {
+
+		throw new IllegalArgumentException();
+	}
+
 }
