@@ -92,7 +92,7 @@ public class ItemArmorMulti extends ItemArmor implements IModelRegister {
 
 		int i = ItemHelper.getItemDamage(stack);
 		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return "cobblestone";
+			return "ingotIron";
 		}
 		return itemMap.get(ItemHelper.getItemDamage(stack)).ingot;
 	}

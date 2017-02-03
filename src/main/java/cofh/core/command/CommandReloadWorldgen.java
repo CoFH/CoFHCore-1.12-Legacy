@@ -40,7 +40,7 @@ public class CommandReloadWorldgen implements ISubCommand {
 		} catch (Throwable t) {
 			Throwables.propagate(t);
 		}
-		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.reloadworldgen.success");
+		CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.reloadworldgen.success");
 	}
 
 	@Override

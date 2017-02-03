@@ -256,8 +256,8 @@ public class ItemHoeMulti extends ItemHoe implements IModelRegister {
 	}
 
 	@Override
-	public String getMaterialName()
-	{
+	public String getMaterialName() {
+
 		return "";
 	}
 

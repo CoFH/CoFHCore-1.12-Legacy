@@ -8,12 +8,12 @@ import java.util.List;
 
 public interface ISubCommand {
 
-	public int getPermissionLevel();
+	String getCommandName();
 
-	public String getCommandName();
+	int getPermissionLevel();
 
-	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] arguments) throws CommandException;
+	void handleCommand(MinecraftServer server, ICommandSender sender, String[] arguments) throws CommandException;
 
-	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args);
+	List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args);
 
 }

@@ -13,7 +13,6 @@ import net.minecraftforge.common.ForgeHooks;
 
 public class ItemHammerMulti extends ItemToolMulti {
 
-
 	public ItemHammerMulti(String modName) {
 
 		super(modName, 4.0F, -3.6F);

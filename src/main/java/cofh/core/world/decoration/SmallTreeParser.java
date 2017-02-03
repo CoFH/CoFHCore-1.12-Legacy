@@ -4,8 +4,6 @@ import cofh.api.world.IGeneratorParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.world.WorldGenSmallTree;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.typesafe.config.Config;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -42,8 +40,9 @@ public class SmallTreeParser implements IGeneratorParser {
 
 		WorldGenSmallTree r = new WorldGenSmallTree(resList, list, matList);
 		{
-			if (blocks.size() > 0)
+			if (blocks.size() > 0) {
 				r.genSurface = blocks.toArray(new WeightedRandomBlock[blocks.size()]);
+			}
 
 			if (genObject.hasPath("min-height")) {
 				r.minHeight = genObject.getInt("min-height");

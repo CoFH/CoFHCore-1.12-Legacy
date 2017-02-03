@@ -6,7 +6,6 @@ import cofh.lib.util.numbers.INumberProvider;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenUnderfluid;
-import com.google.gson.JsonObject;
 import com.typesafe.config.Config;
 import gnu.trove.set.hash.TIntHashSet;
 import net.minecraft.init.Blocks;

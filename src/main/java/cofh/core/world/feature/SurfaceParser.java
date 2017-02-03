@@ -7,7 +7,6 @@ import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenSurface;
 import cofh.lib.world.feature.FeatureGenTopBlock;
-import com.google.gson.JsonObject;
 import com.typesafe.config.Config;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenerator;

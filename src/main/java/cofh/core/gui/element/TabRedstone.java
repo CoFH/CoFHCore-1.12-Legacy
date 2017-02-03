@@ -132,14 +132,12 @@ public class TabRedstone extends TabBase {
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.ignored"), posXOffset() + 14, posY + 78, textColor);
 		} else {
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.enabled"), posXOffset() + 14, posY + 54, textColor);
-
+			gui.drawButton(CoreTextures.ICON_REDSTONE_OFF, posX() + 28, posY + 20, 0);
 			if (myContainer.getControl().isLow()) {
-				gui.drawButton(CoreTextures.ICON_REDSTONE_ON, posX() + 28, posY + 20, 0);
 				gui.drawButton(CoreTextures.ICON_RS_TORCH_OFF, posX() + 48, posY + 20, 1);
 				gui.drawButton(CoreTextures.ICON_RS_TORCH_ON, posX() + 68, posY + 20, 0);
 				getFontRenderer().drawString(StringHelper.localize("info.cofh.low"), posXOffset() + 14, posY + 78, textColor);
 			} else {
-				gui.drawButton(CoreTextures.ICON_REDSTONE_ON, posX() + 28, posY + 20, 0);
 				gui.drawButton(CoreTextures.ICON_RS_TORCH_OFF, posX() + 48, posY + 20, 0);
 				gui.drawButton(CoreTextures.ICON_RS_TORCH_ON, posX() + 68, posY + 20, 1);
 				getFontRenderer().drawString(StringHelper.localize("info.cofh.high"), posXOffset() + 14, posY + 78, textColor);

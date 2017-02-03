@@ -132,7 +132,7 @@
 			"max-height": 64,
 			"retrogen": false,
 			"biome": {
-				"restriction":"whitelist",
+				"restriction": "whitelist",
 				"value": [
 					{
 						"type": "id",
@@ -263,12 +263,15 @@
 				"material": "stone",
 				"cluster-size": 1
 			},
-			"cluster-count": {"min": 3, "max": 6},
+			"cluster-count": {
+				"min": 3,
+				"max": 6
+			},
 			"min-height": 4,
 			"max-height": 28,
 			"retrogen": false,
 			"biome": {
-				"restriction":"whitelist",
+				"restriction": "whitelist",
 				"value": [
 					{
 						"type": "id",

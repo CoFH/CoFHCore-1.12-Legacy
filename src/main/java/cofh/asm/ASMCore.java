@@ -3,7 +3,6 @@ package cofh.asm;
 import cofh.asm.relauncher.Implementable;
 import cofh.asm.relauncher.Strippable;
 import cofh.asm.relauncher.Substitutable;
-import com.google.common.base.Throwables;
 import gnu.trove.set.hash.THashSet;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -15,14 +14,11 @@ import net.minecraftforge.fml.common.versioning.InvalidVersionSpecificationExcep
 import net.minecraftforge.fml.common.versioning.VersionRange;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.objectweb.asm.*;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.*;
 
 import static org.objectweb.asm.Opcodes.*;
@@ -36,6 +32,7 @@ public class ASMCore {
 	static String side;
 
 	static void init() {
+
 	}
 
 	static {

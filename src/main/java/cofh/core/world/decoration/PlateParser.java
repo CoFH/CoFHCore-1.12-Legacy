@@ -5,7 +5,6 @@ import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.world.WorldGenMinablePlate;
-import com.google.gson.JsonObject;
 import com.typesafe.config.Config;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;

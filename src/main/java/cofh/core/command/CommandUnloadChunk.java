@@ -57,7 +57,7 @@ public class CommandUnloadChunk implements ISubCommand {
 		}
 
 		o.add(ChunkPos.asLong(chunk.xPosition, chunk.zPosition));
-		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.unloadchunk.success", chunk.xPosition, chunk.zPosition);
+		CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.unloadchunk.success", chunk.xPosition, chunk.zPosition);
 	}
 
 	@Override

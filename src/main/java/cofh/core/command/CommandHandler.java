@@ -147,7 +147,7 @@ public class CommandHandler extends CommandBase {
 			}
 			throw new CommandException("commands.generic.permission");
 		}
-		throw new CommandNotFoundException("info.cofh.command.notFound");
+		throw new CommandNotFoundException("chat.cofh.command.notFound");
 	}
 
 	@Override

@@ -44,8 +44,8 @@ public class CommandReplaceBlock implements ISubCommand {
 	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
 		if (args.length < 7) {
-			sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
+			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+			throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 		}
 		World world = sender.getEntityWorld();
 		if (world.isRemote) {
@@ -115,8 +115,8 @@ public class CommandReplaceBlock implements ISubCommand {
 		}
 
 		if (yS > 255) {
-			sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-			sender.addChatMessage(new TextComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
+			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
 			return;
 		} else if (yL > 255) {
 			yL = 255;
@@ -135,8 +135,8 @@ public class CommandReplaceBlock implements ISubCommand {
 			}
 			Block block = Block.getBlockFromName(blockRaw);
 			if (block == Blocks.AIR || meta > 15 || meta < 0) {
-				sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-				sender.addChatMessage(new TextComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
+				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
 				// TODO: more descriptive error
 				return;
 			}
@@ -144,7 +144,7 @@ public class CommandReplaceBlock implements ISubCommand {
 		}
 
 		long blockCounter = ((long) xL - xS) * ((long) yL - yS) * ((long) zL - zS);
-		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.start", blockCounter, xS, yS, zS, xL, yL, zL, blockReplRaw);
+		CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.replaceblocks.start", blockCounter, xS, yS, zS, xL, yL, zL, blockReplRaw);
 
 		THashSet<Chunk> set = new THashSet<Chunk>();
 
@@ -342,9 +342,9 @@ public class CommandReplaceBlock implements ISubCommand {
 			}
 		}
 		if (!set.isEmpty()) {
-			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.success", blockCounter, xS, yS, zS, xL, yL, zL, blockReplRaw);
+			CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.replaceblocks.success", blockCounter, xS, yS, zS, xL, yL, zL, blockReplRaw);
 		} else {
-			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.replaceblocks.failure");
+			CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.replaceblocks.failure");
 		}
 
 		if (world instanceof WorldServer) {

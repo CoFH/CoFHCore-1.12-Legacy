@@ -80,9 +80,9 @@ public class CommandKillAll implements ISubCommand {
 				finalNames = finalNames + StringHelper.LIGHT_RED + it.value() + StringHelper.WHITE + "x" + StringHelper.YELLOW + it.key() + StringHelper.WHITE + ", ";
 			}
 			finalNames = finalNames.substring(0, finalNames.length() - 2);
-			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.killall.success" + (target != null ? "" : "Hostile"), killCount, finalNames);
+			CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.killall.success" + (target != null ? "" : "Hostile"), killCount, finalNames);
 		} else {
-			sender.addChatMessage(new TextComponentTranslation("info.cofh.command.killall.no" + (target != null ? "Match" : "Hostile")));
+			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.killall.no" + (target != null ? "Match" : "Hostile")));
 		}
 	}
 

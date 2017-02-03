@@ -51,9 +51,9 @@ public class CommandSyntax implements ISubCommand {
 		} catch (NumberInvalidException numberinvalidexception) {
 			String commandName = args[1];
 			if (!CommandHandler.getCommandExists(commandName)) {
-				throw new CommandNotFoundException("info.cofh.command.notFound");
+				throw new CommandNotFoundException("chat.cofh.command.notFound");
 			}
-			sender.addChatMessage(new TextComponentTranslation("info.cofh.command." + commandName + ".syntax"));
+			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + commandName + ".syntax"));
 			return;
 		}
 

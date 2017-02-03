@@ -6,7 +6,6 @@ import cofh.lib.util.numbers.INumberProvider;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenGaussian;
-import com.google.gson.JsonObject;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigObject;
 import net.minecraft.world.gen.feature.WorldGenerator;

@@ -1,5 +1,6 @@
 package cofh.core.item.tool;
 
+import cofh.api.core.IModelRegister;
 import cofh.core.render.FontRendererCore;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
@@ -7,6 +8,8 @@ import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -29,7 +32,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemShieldMulti extends Item {
+public class ItemShieldMulti extends Item implements IModelRegister {
 
 	protected TMap<Integer, ToolEntry> itemMap = new THashMap<Integer, ToolEntry>();
 	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
@@ -58,6 +61,12 @@ public class ItemShieldMulti extends Item {
 			}
 		});
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemArmor.DISPENSER_BEHAVIOR);
+	}
+
+	public ItemShieldMulti setShowInCreative(boolean showInCreative) {
+
+		this.showInCreative = showInCreative;
+		return this;
 	}
 
 	protected int getStackDamage(ItemStack stack) {
@@ -275,9 +284,41 @@ public class ItemShieldMulti extends Item {
 		return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
 	}
 
+	@Override
 	public EnumAction getItemUseAction(ItemStack stack) {
 
 		return EnumAction.BLOCK;
+	}
+
+	/* IModelRegister */
+	@Override
+	@SideOnly (Side.CLIENT)
+	public void registerModels() {
+
+		// ModelLoader.setCustomMeshDefinition(this, new ToolMeshDefinition());
+
+		ModelResourceLocation texture = new ModelResourceLocation(modName + ":tool/" + name, "inventory");
+		ModelBakery.registerItemVariants(this, texture);
+
+
+		// TODO: Fix this once shield rendering is in.
+		//		for (Map.Entry<Integer, ToolEntry> entry : itemMap.entrySet()) {
+		//
+		//			ModelResourceLocation texture = new ModelResourceLocation(modName + ":tool/" + name + "_" + entry.getValue().name, "inventory");
+		//
+		//			textureMap.put(entry.getKey(), texture);
+		//			ModelBakery.registerItemVariants(this, texture);
+		//		}
+	}
+
+	/* ITEM MESH DEFINITION */
+	@SideOnly (Side.CLIENT)
+	public class ToolMeshDefinition implements ItemMeshDefinition {
+
+		public ModelResourceLocation getModelLocation(ItemStack stack) {
+
+			return textureMap.get(ItemHelper.getItemDamage(stack));
+		}
 	}
 
 	/* ITEM ENTRY */

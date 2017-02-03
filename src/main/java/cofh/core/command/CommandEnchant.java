@@ -37,8 +37,8 @@ public class CommandEnchant implements ISubCommand {
 
 			case 0:
 			case 1:
-				sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-				throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
+				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+				throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 			default:
 			case 4:
 			case 3:
@@ -46,8 +46,8 @@ public class CommandEnchant implements ISubCommand {
 					player = CommandBase.getPlayer(server, sender, args[i++]);
 				} catch (CommandException t) {
 					if (l != 3) {
-						sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-						sender.addChatMessage(new TextComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
+						sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+						sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
 						throw t;
 					}
 					--i;

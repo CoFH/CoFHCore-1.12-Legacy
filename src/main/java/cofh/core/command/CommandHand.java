@@ -63,8 +63,8 @@ public class CommandHand implements ISubCommand {
 
 		switch (l) {
 			case 0:
-				sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-				throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
+				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+				throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 			default:
 			case 2:
 			case 3:
@@ -102,8 +102,8 @@ public class CommandHand implements ISubCommand {
 			for (; i < l; ++i) {
 				InfoType type = infoMap.get(args[i].toLowerCase());
 				if (type == null) {
-					sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-					throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
+					sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+					throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 				}
 				list.add(type);
 			}

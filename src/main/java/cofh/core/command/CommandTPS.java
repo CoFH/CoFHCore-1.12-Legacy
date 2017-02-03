@@ -108,14 +108,14 @@ public class CommandTPS implements ISubCommand {
 			try {
 				dim = CommandBase.parseInt(arguments[1]);
 			} catch (Throwable e) {
-				sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-				sender.addChatMessage(new TextComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
+				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
 				Throwables.propagate(e);
 			}
 
 			WorldServer world = CoreProps.server.worldServerForDimension(dim);
 			if (world == null) {
-				throw new CommandException("info.cofh.command.world.notFound");
+				throw new CommandException("chat.cofh.command.world.notFound");
 			}
 
 			double tickms = getTickMs(world);

@@ -35,8 +35,8 @@ public class CommandPregen implements ISubCommand {
 	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
 		if (args.length < 4) {
-			sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
+			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+			throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 		}
 		World world = sender.getEntityWorld();
 		if (world.isRemote) {
@@ -104,7 +104,7 @@ public class CommandPregen implements ISubCommand {
 				}
 			}
 			TickHandlerWorld.chunksToPreGen.put(world.provider.getDimension(), chunks);
-			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.pregen.start", (xL - xS) * (zL - zS), xS, zS, xL, zL);
+			CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.pregen.start", (xL - xS) * (zL - zS), xS, zS, xL, zL);
 		}
 	}
 

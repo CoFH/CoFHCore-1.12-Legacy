@@ -44,14 +44,13 @@ public class CommandClearBlock implements ISubCommand {
 	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
 		if (args.length < 6) {
-			sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
+			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+			throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 		}
 		World world = sender.getEntityWorld();
 		if (world.isRemote) {
 			return;
 		}
-
 		BlockPos center = null;
 		int i = 1;
 		int xS, xL;
@@ -84,7 +83,6 @@ public class CommandClearBlock implements ISubCommand {
 			yL = yS;
 			zL = zS;
 		}
-
 		if (center != null) {
 			xS = center.getX() - xS;
 			yS = center.getY() - yS;
@@ -94,7 +92,6 @@ public class CommandClearBlock implements ISubCommand {
 			yL = center.getY() + yL;
 			zL = center.getZ() + zL;
 		}
-
 		yS &= ~yS >> 31; // max(yS, 0)
 		yL &= ~yL >> 31; // max(yL, 0)
 
@@ -113,17 +110,15 @@ public class CommandClearBlock implements ISubCommand {
 			zS = zL;
 			zL = t;
 		}
-
 		if (yS > 255) {
-			sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-			sender.addChatMessage(new TextComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
+			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
 			return;
 		} else if (yL > 255) {
 			yL = 255;
 		}
-
 		long blockCounter = ((long) xL - xS) * ((long) yL - yS) * ((long) zL - zS);
-		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.clearblocks.start", blockCounter, xS, yS, zS, xL, yL, zL);
+		CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.clearblocks.start", blockCounter, xS, yS, zS, xL, yL, zL);
 
 		THashSet<Chunk> set = new THashSet<Chunk>();
 
@@ -309,7 +304,6 @@ public class CommandClearBlock implements ISubCommand {
 			if (block == Blocks.AIR) {
 				continue;
 			}
-
 			for (int x = xS; x <= xL; ++x) {
 				for (int z = zS; z <= zL; ++z) {
 					Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
@@ -328,11 +322,10 @@ public class CommandClearBlock implements ISubCommand {
 			}
 		}
 		if (!set.isEmpty()) {
-			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.clearblocks.success", blockCounter, xS, yS, zS, xL, yL, zL);
+			CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.clearblocks.success", blockCounter, xS, yS, zS, xL, yL, zL);
 		} else {
-			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.clearblocks.failure");
+			CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.clearblocks.failure");
 		}
-
 		if (world instanceof WorldServer) {
 			TObjectHashIterator<Chunk> c = set.iterator();
 			for (int k = 0, e = set.size(); k < e; ++k) {

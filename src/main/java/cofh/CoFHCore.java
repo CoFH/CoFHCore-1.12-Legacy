@@ -97,6 +97,8 @@ public class CoFHCore {
 	@EventHandler
 	public void loadComplete(FMLLoadCompleteEvent event) {
 
+		OreDictionaryArbiter.initialize();
+
 		CoreProps.loadComplete();
 		CONFIG_CORE.cleanUp(false, true);
 		CONFIG_CLIENT.cleanUp(false, true);

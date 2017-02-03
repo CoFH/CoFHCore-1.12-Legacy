@@ -7,7 +7,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 
 public class CoreTextures {
 
-	private CoreTextures () {
+	private CoreTextures() {
 
 	}
 
@@ -34,8 +34,8 @@ public class CoreTextures {
 		ICON_INFORMATION = register(map, ICONS_ + "icon_information");
 		ICON_TUTORIAL = register(map, ICONS_ + "icon_tutorial");
 
-		ICON_REDSTONE_OFF = map.getAtlasSprite(ICONS_ + "icon_redstone_off");
-		ICON_REDSTONE_ON = map.getAtlasSprite(ICONS_ + "icon_redstone_on");
+		ICON_REDSTONE_OFF = register(map, ICONS_ + "icon_redstone_off");
+		ICON_REDSTONE_ON = register(map, ICONS_ + "icon_redstone_on");
 
 		ICON_RS_TORCH_OFF = register(map, ICONS_ + "icon_rs_torch_off");
 		ICON_RS_TORCH_ON = register(map, ICONS_ + "icon_rs_torch_on");

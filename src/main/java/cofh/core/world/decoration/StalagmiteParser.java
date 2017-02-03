@@ -5,7 +5,6 @@ import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.world.WorldGenStalactite;
 import cofh.lib.world.WorldGenStalagmite;
-import com.google.gson.JsonObject;
 import com.typesafe.config.Config;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenerator;

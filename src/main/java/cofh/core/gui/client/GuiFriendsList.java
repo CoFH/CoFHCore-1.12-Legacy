@@ -1,6 +1,5 @@
 package cofh.core.gui.client;
 
-import cofh.core.util.RegistrySocial;
 import cofh.core.gui.GuiCore;
 import cofh.core.gui.GuiTextList;
 import cofh.core.gui.container.ContainerFriendsList;
@@ -8,6 +7,7 @@ import cofh.core.gui.element.TabInfo;
 import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketSocial;
 import cofh.core.network.PacketSocial.PacketTypes;
+import cofh.core.util.RegistrySocial;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.gui.element.ElementButton;
 import net.minecraft.client.Minecraft;

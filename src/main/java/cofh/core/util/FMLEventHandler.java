@@ -1,8 +1,8 @@
 package cofh.core.util;
 
+import cofh.core.energy.FurnaceFuelHandler;
 import cofh.core.init.CoreProps;
 import cofh.core.network.PacketCore;
-import cofh.core.energy.FurnaceFuelHandler;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.lib.util.helpers.ServerHelper;
 import cofh.lib.util.helpers.StringHelper;

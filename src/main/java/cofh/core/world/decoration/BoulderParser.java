@@ -3,7 +3,6 @@ package cofh.core.world.decoration;
 import cofh.api.world.IGeneratorParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.world.WorldGenBoulder;
-import com.google.gson.JsonObject;
 import com.typesafe.config.Config;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +32,7 @@ public class BoulderParser implements IGeneratorParser {
 				r.hollowAmt = (float) genObject.getDouble("hollow-size");
 			}
 			if (genObject.hasPath("hollow-variance")) {
-				r.hollowVar = (float)genObject.getDouble("hollow-vVariance");
+				r.hollowVar = (float) genObject.getDouble("hollow-vVariance");
 			}
 		}
 		return r;
