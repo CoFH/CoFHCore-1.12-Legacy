@@ -449,25 +449,18 @@ public class FeatureParser {
 		if (!FeatureParser.parseResList(genObject.getValue("block"), resList, true)) {
 			return null;
 		}
-		int clusterSize = genObject.getInt("cluster-size");
-		if (clusterSize <= 0) {
-			log.warn("Invalid cluster size for generator '%s'", name);
-			return null;
-		}
 
 		List<WeightedRandomBlock> matList = defaultMaterial;
-		if (genObject.hasPath("material")) {
-			matList = new ArrayList<WeightedRandomBlock>();
-			if (!FeatureParser.parseResList(genObject.root().get("material"), matList, false)) {
-				log.warn("Invalid material list! Using default list.");
-				matList = defaultMaterial;
-			}
+		matList = new ArrayList<WeightedRandomBlock>();
+		if (!FeatureParser.parseResList(genObject.root().get("material"), matList, false)) {
+			log.warn("Invalid material list! Using default list.");
+			matList = defaultMaterial;
 		}
 		IGeneratorParser parser = generatorHandlers.get(name);
 		if (parser == null) {
 			throw new IllegalStateException("Generator '" + name + "' is not registered!");
 		}
-		return parser.parseGenerator(name, genObject, log, resList, clusterSize, matList);
+		return parser.parseGenerator(name, genObject, log, resList, matList);
 	}
 
 	public static BiomeInfoSet parseBiomeRestrictions(Config genObject) {
@@ -668,7 +661,7 @@ public class FeatureParser {
 				}
 				resList.add(entry);
 			}
-		} else if (genElement.valueType() == null) {
+		} else if (genElement.valueType() == ConfigValueType.NULL) {
 			return true;
 		} else {
 			WeightedRandomBlock entry = parseBlockEntry(genElement, clamp);

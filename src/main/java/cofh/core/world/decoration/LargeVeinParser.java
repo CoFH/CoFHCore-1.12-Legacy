@@ -12,7 +12,13 @@ import java.util.List;
 public class LargeVeinParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, Config genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String name, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
+
+		int clusterSize = genObject.getInt("cluster-size");
+		if (clusterSize <= 0) {
+			log.warn("Invalid cluster size for generator '%s'", name);
+			return null;
+		}
 
 		boolean sparse = true;
 		{

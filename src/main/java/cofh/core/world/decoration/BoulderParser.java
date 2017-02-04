@@ -12,7 +12,13 @@ import java.util.List;
 public class BoulderParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, Config genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String name, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
+
+		int clusterSize = genObject.getInt("diameter");
+		if (clusterSize <= 0) {
+			log.warn("Invalid diameter for generator '%s'", name);
+			return null;
+		}
 
 		WorldGenBoulder r = new WorldGenBoulder(resList, clusterSize, matList);
 		{

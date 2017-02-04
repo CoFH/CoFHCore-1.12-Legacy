@@ -23,7 +23,7 @@ public class StalagmiteParser implements IGeneratorParser {
 	}
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, Config genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize, List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
 
 		// TODO: these names need revised
 		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
