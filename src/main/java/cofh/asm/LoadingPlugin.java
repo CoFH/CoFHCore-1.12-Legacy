@@ -43,7 +43,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	@Override
 	public String getAccessTransformerClass() {
 
-		return "";
+		return null;
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	@Override
 	public String getSetupClass() {
 
-		return "";
+		return null;
 	}
 
 	@Override
