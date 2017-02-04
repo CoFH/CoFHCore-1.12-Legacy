@@ -30,18 +30,17 @@ configFile.withReader {
 
 repositories {
     maven {
-        name = "ChickenBones repo"
+        name = "ChickenBones Maven"
         url = "http://chickenbones.net/maven/"
     }
     maven {
-        name = "JEI Maven."
+        name = "JEI Maven"
         url = "http://dvs1.progwml6.com/files/maven"
     }
 }
 
 dependencies {
     compile "codechicken:CodeChickenLib:${config.mc_version}-${config.ccl_version}:deobf"
-    compile "codechicken:NotEnoughItems:${config.mc_version}-${config.nei_version}:deobf"
     compile "mezz.jei:jei_${config.mc_version}:${config.jei_version}"
 }
 

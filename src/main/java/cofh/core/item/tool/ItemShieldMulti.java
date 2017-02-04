@@ -300,7 +300,6 @@ public class ItemShieldMulti extends Item implements IModelRegister {
 		ModelResourceLocation texture = new ModelResourceLocation(modName + ":tool/" + name, "inventory");
 		ModelBakery.registerItemVariants(this, texture);
 
-
 		// TODO: Fix this once shield rendering is in.
 		//		for (Map.Entry<Integer, ToolEntry> entry : itemMap.entrySet()) {
 		//
