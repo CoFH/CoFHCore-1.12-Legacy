@@ -88,6 +88,8 @@ public class CoFHCore {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 
+		OreDictionaryArbiter.initialize();
+
 		CoreEnchantments.postInit();
 		PacketHandler.postInit();
 
@@ -96,8 +98,6 @@ public class CoFHCore {
 
 	@EventHandler
 	public void loadComplete(FMLLoadCompleteEvent event) {
-
-		OreDictionaryArbiter.initialize();
 
 		CoreProps.loadComplete();
 		CONFIG_CORE.cleanUp(false, true);

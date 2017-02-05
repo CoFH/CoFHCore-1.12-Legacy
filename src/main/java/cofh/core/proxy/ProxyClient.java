@@ -1,9 +1,12 @@
 package cofh.core.proxy;
 
+import cofh.CoFHCore;
 import cofh.core.gui.client.GuiFriendsList;
+import cofh.core.init.CoreProps;
 import cofh.core.init.CoreTextures;
 import cofh.core.key.KeyBindingItemMultiMode;
 import cofh.core.key.KeyHandlerCore;
+import cofh.core.render.CustomEffectRenderer;
 import cofh.core.render.FontRendererCore;
 import cofh.core.render.ShaderHelper;
 import cofh.core.util.RegistrySocial;
@@ -42,6 +45,11 @@ public class ProxyClient extends Proxy {
 		Minecraft.memoryReserve = null;
 
 		ShaderHelper.initShaders();
+
+		if (CoreProps.disableParticles) {
+			CoFHCore.LOG.info("Replacing EffectRenderer - Particles have been disabled.");
+			Minecraft.getMinecraft().effectRenderer = new CustomEffectRenderer();
+		}
 	}
 
 	@Override

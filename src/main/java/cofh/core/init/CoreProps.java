@@ -1,10 +1,8 @@
 package cofh.core.init;
 
 import cofh.CoFHCore;
-import cofh.core.render.CustomEffectRenderer;
 import cofh.lib.util.helpers.StringHelper;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
@@ -77,10 +75,7 @@ public class CoreProps {
 		CoFHCore.CONFIG_CLIENT.getCategory(category).setComment("The options in this section change core Minecraft behavior and are not limited to CoFH mods.");
 
 		comment = "If TRUE, particles will be disabled.";
-		if (CoFHCore.CONFIG_CLIENT.getConfiguration().getBoolean("DisableParticles", category, false, comment)) {
-			CoFHCore.LOG.info("Replacing EffectRenderer - Particles have been disabled.");
-			Minecraft.getMinecraft().effectRenderer = new CustomEffectRenderer();
-		}
+		disableParticles = CoFHCore.CONFIG_CLIENT.getConfiguration().getBoolean("DisableParticles", category, disableParticles, comment);
 
 		/* GRAPHICS */
 		category = "Render";
@@ -211,6 +206,9 @@ public class CoreProps {
 
 	/* NETWORK */
 	public static final int NETWORK_UPDATE_RANGE = 192;
+
+	/* GLOBAL */
+	public static boolean disableParticles = false;
 
 	/* GENERAL */
 	public static boolean enableDismantleLogging = false;
