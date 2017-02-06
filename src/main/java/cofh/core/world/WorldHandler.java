@@ -7,6 +7,7 @@ import cofh.core.world.TickHandlerWorld.RetroChunkCoord;
 import cofh.lib.util.ChunkCoord;
 import cofh.lib.util.LinkedHashList;
 import gnu.trove.set.hash.THashSet;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -133,12 +134,20 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	}
 
 	@SubscribeEvent
+	public void populateChunkEvent(PopulateChunkEvent.Post event) {
+
+		populatingChunks.get(new ChunkReference(event.getWorld().provider.getDimension(), event.getChunkX(), event.getChunkZ())).hasVillage = event.isHasVillageGenerated();
+	}
+
+	@SubscribeEvent
 	public void handleChunkSaveEvent(ChunkDataEvent.Save event) {
 
 		NBTTagCompound genTag = event.getData().getCompoundTag(TAG_NAME);
 
-		if (populatingChunks.contains(event.getChunk())) {
+		ChunkReference chunk = populatingChunks.get(event.getChunk());
+		if (chunk != null) {
 			genTag.setBoolean("Populating", true);
+			genTag.setBoolean("HasVillage", chunk.hasVillage);
 			return;
 		}
 		if (genFlatBedrock) {
@@ -163,7 +172,9 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		NBTTagCompound tag = (NBTTagCompound) event.getData().getTag(TAG_NAME);
 
 		if (tag != null && tag.getBoolean("Populating")) {
-			populatingChunks.add(new ChunkReference(dim, event.getChunk().xPosition, event.getChunk().zPosition));
+			ChunkReference chunk = new ChunkReference(dim, event.getChunk().xPosition, event.getChunk().zPosition);
+			chunk.hasVillage = tag.getBoolean("HasVillage");
+			populatingChunks.add(chunk);
 			return;
 		}
 
@@ -259,9 +270,14 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		if (!newGen & !retroGeneration) {
 			return;
 		}
+		ChunkReference pos = new ChunkReference(world.provider.getDimension(), chunkX, chunkZ);
+		pos = populatingChunks.get(pos);
+		boolean hasVillage = pos == null ? false : pos.hasVillage;
 		for (IFeatureGenerator feature : features) {
-			feature.generateFeature(random, chunkX, chunkZ, world, newGen | forceFullRegeneration);
+			BlockFalling.fallInstantly = true;
+			feature.generateFeature(random, chunkX, chunkZ, world, hasVillage, newGen | forceFullRegeneration);
 		}
+		BlockFalling.fallInstantly = false;
 		if (!newGen) {
 			world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
 		}
@@ -281,12 +297,17 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			return;
 		}
 		THashSet<String> genned = chunk.generatedFeatures;
+		ChunkReference pos = new ChunkReference(world.provider.getDimension(), chunkX, chunkZ);
+		pos = populatingChunks.get(pos);
+		boolean hasVillage = pos == null ? false : pos.hasVillage;
 		for (IFeatureGenerator feature : features) {
 			if (genned.contains(feature.getFeatureName())) {
 				continue;
 			}
-			feature.generateFeature(random, chunkX, chunkZ, world, newGen | forceFullRegeneration);
+			BlockFalling.fallInstantly = true;
+			feature.generateFeature(random, chunkX, chunkZ, world, hasVillage, newGen | forceFullRegeneration);
 		}
+		BlockFalling.fallInstantly = false;
 		if (!newGen) {
 			world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
 		}
@@ -374,6 +395,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		public final int dimension;
 		public final int xPos;
 		public final int zPos;
+		public boolean hasVillage;
 
 		public ChunkReference(int dim, int x, int z) {
 

@@ -89,6 +89,9 @@ public class UniformParser implements IFeatureParser {
 				feature.setRarity(rarity);
 			}
 			addFeatureRestrictions(feature, genObject);
+			if (genObject.hasPath("in-village")) {
+				feature.withVillage = genObject.getBoolean("in-village");
+			}
 		}
 		return feature;
 	}
