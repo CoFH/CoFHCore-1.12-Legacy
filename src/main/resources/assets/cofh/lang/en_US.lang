@@ -94,6 +94,16 @@ enchant.cofh.holding=Holding
 enchant.cofh.multishot=Multishot
 enchant.cofh.vorpal=Vorpal
 
+gui.cofh.configuration=Configuration
+
+gui.cofh.transferInDisabled=Auto-Input Disabled
+gui.cofh.transferInEnabled=Auto-Input Enabled
+gui.cofh.transferInUnavailable=Auto-Input Unavailable
+
+gui.cofh.transferOutDisabled=Auto-Output Disabled
+gui.cofh.transferOutEnabled=Auto-Output Enabled
+gui.cofh.transferOutUnavailable=Auto-Output Unavailable
+
 info.cofh.access=Access
 info.cofh.accessMode=Access Mode
 info.cofh.accessPrivate=Owner Only
@@ -111,7 +121,6 @@ info.cofh.buffer=Buffer
 info.cofh.capacity=Capacity
 info.cofh.charge=Charge
 info.cofh.cheater=Cheater!
-info.cofh.configuration=Configuration
 info.cofh.contents=Contents
 info.cofh.controlStatus=Control Status
 info.cofh.damageAttack=Attack Damage
@@ -180,10 +189,8 @@ info.cofh.success=Success!
 info.cofh.template=Template
 info.cofh.transfer=Transfer
 info.cofh.tutorial.fluxRequired=Requires Redstone Flux to operate.
-info.cofh.tutorial.tabAugment=The Augment tab allows for modular additions.
-info.cofh.tutorial.tabConfiguration.0=The Configuration tab determines how items enter and leave this device.
-info.cofh.tutorial.tabConfiguration.1=The Configuration tab determines how energy is transferred to and from this device.
-info.cofh.tutorial.tabConfiguration.2=The Configuration tab determines the operation modes for this device.
+info.cofh.tutorial.tabAugment=The Augmentation tab allows for modular additions.
+info.cofh.tutorial.tabConfiguration=The Configuration tab determines input and output parameters for this device.
 info.cofh.tutorial.tabRedstone=The Redstone Control tab configures how this device reacts to redstone signals.
 info.cofh.tutorial.tabSecurity=The Security tab allows the owner to control who can access this device.
 info.cofh.tutorial=Tutorial

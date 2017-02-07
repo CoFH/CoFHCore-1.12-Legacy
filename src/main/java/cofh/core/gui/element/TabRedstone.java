@@ -42,6 +42,7 @@ public class TabRedstone extends TabBase {
 	public void addTooltip(List<String> list) {
 
 		if (!isFullyOpened()) {
+			list.add(StringHelper.localize("info.cofh.redstoneControl"));
 			if (myContainer.getControl().isDisabled()) {
 				list.add(StringHelper.localize("info.cofh.disabled"));
 				return;

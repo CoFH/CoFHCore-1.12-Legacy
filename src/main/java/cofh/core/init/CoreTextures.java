@@ -34,6 +34,9 @@ public class CoreTextures {
 		ICON_INFORMATION = register(map, ICONS_ + "icon_information");
 		ICON_TUTORIAL = register(map, ICONS_ + "icon_tutorial");
 
+		ICON_INPUT = register(map, ICONS_ + "icon_input");
+		ICON_OUTPUT = register(map, ICONS_ + "icon_output");
+
 		ICON_REDSTONE_OFF = register(map, ICONS_ + "icon_redstone_off");
 		ICON_REDSTONE_ON = register(map, ICONS_ + "icon_redstone_on");
 
@@ -74,6 +77,9 @@ public class CoreTextures {
 	public static TextureAtlasSprite ICON_NOPE;
 	public static TextureAtlasSprite ICON_INFORMATION;
 	public static TextureAtlasSprite ICON_TUTORIAL;
+
+	public static TextureAtlasSprite ICON_INPUT;
+	public static TextureAtlasSprite ICON_OUTPUT;
 
 	public static TextureAtlasSprite ICON_REDSTONE_OFF;
 	public static TextureAtlasSprite ICON_REDSTONE_ON;

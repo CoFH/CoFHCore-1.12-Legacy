@@ -255,7 +255,6 @@ public abstract class TileCore extends TileEntity {
 
 	protected void updateLighting() {
 
-		// TODO: Still necessary?
 		int light2 = worldObj.getLightFor(EnumSkyBlock.BLOCK, getPos()), light1 = getLightValue();
 		if (light1 != light2 && worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos())) {
 			IBlockState state = worldObj.getBlockState(getPos());

@@ -24,6 +24,8 @@ public abstract class GuiCore extends GuiBase {
 	public static final String TEX_SUN = GuiProps.PATH_ELEMENTS + "scale_sun.png";
 	public static final String TEX_SNOWFLAKE = GuiProps.PATH_ELEMENTS + "scale_snowflake.png";
 
+	public static final String TEX_BUTTONS = GuiProps.PATH_ELEMENTS + "buttons.png";
+
 	public static final int PROGRESS = 24;
 	public static final int SPEED = 16;
 
