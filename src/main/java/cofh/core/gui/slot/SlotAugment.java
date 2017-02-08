@@ -1,6 +1,5 @@
 package cofh.core.gui.slot;
 
-import cofh.api.item.IAugmentItem;
 import cofh.api.tileentity.IAugmentable;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -20,7 +19,7 @@ public class SlotAugment extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack stack) {
 
-		return stack != null && stack.getItem() instanceof IAugmentItem;
+		return stack != null && myTile.isValidAugment(stack);
 	}
 
 	@Override
@@ -39,7 +38,7 @@ public class SlotAugment extends Slot {
 	@Override
 	public void onSlotChanged() {
 
-		myTile.installAugment(myTile.getAugmentSlots()[getSlotIndex()]);
+		myTile.updateAugmentStatus();
 		((TileEntity) myTile).markDirty();
 	}
 
