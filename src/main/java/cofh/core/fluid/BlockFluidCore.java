@@ -84,21 +84,6 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 		return super.isEntityInsideMaterial(world, blockpos, iblockstate, entity, yToTest, materialIn, testingHead);
 	}
 
-	//@Override
-	//@SideOnly(Side.CLIENT)
-	//public IIcon getIcon(int side, int meta) {
-	//
-	//	return side <= 1 ? IconRegistry.getIcon("Fluid" + name) : IconRegistry.getIcon("Fluid" + name, 1);
-	//}
-
-	//@Override
-	//@SideOnly(Side.CLIENT)
-	//public void registerBlockIcons(IIconRegister ir) {
-	//
-	//	IconRegistry.addIcon("Fluid" + name, modName + ":fluid/Fluid_" + name + "_Still", ir);
-	//	IconRegistry.addIcon("Fluid" + name + "1", modName + ":fluid/Fluid_" + name + "_Flow", ir);
-	//}
-
 	@Override
 	@SideOnly (Side.CLIENT)
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {

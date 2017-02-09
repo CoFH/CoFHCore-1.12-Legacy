@@ -49,7 +49,9 @@ public class FluidTankCore implements IFluidTank {
 
 		locked = fluid != null;
 		if (locked) {
-			this.fluid = new FluidStack(fluid, 0);
+			if (this.fluid == null || !this.fluid.getFluid().equals(fluid)) {
+				this.fluid = new FluidStack(fluid, 0);
+			}
 		}
 		return this;
 	}
@@ -63,6 +65,15 @@ public class FluidTankCore implements IFluidTank {
 			nbt.setString("Empty", "");
 		}
 		return nbt;
+	}
+
+	public void clearLock() {
+
+		locked = false;
+
+		if (this.getFluidAmount() <= 0) {
+			this.fluid = null;
+		}
 	}
 
 	public void setFluid(FluidStack fluid) {
