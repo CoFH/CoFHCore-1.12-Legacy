@@ -149,7 +149,7 @@ public class CoFHCore {
 
 	private void addOreDictionaryEntries() {
 
-		OreDictionary.registerOre("blockCloth", new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("blockWool", new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("coal", new ItemStack(Items.COAL, 1, 0));
 		OreDictionary.registerOre("charcoal", new ItemStack(Items.COAL, 1, 1));
 	}
