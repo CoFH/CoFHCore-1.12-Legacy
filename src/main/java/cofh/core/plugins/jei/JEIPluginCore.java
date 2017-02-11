@@ -3,11 +3,8 @@ package cofh.core.plugins.jei;
 import mezz.jei.api.*;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 
-/**
- * Created by covers1624 on 26/10/2016.
- */
 @JEIPlugin
-public class JEICoFHPlugin implements IModPlugin {
+public class JEIPluginCore implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {

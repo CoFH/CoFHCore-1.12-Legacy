@@ -10,9 +10,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by covers1624 on 26/10/2016.
- */
 public class SlotMover implements IAdvancedGuiHandler<GuiBase> {
 
 	@Override
@@ -30,7 +27,6 @@ public class SlotMover implements IAdvancedGuiHandler<GuiBase> {
 			Rectangle4i rect = tab.getBounds();
 			tabBoxes.add(new Rectangle(rect.x, rect.y, rect.w, rect.h));
 		}
-
 		return tabBoxes;
 	}
 
