@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.List;
 
-public class TabRedstone extends TabBase {
+public class TabRedstoneControl extends TabBase {
 
 	public static int defaultSide = 1;
 	public static int defaultHeaderColor = 0xe1c92f;
@@ -19,12 +19,12 @@ public class TabRedstone extends TabBase {
 
 	private IRedstoneControl myContainer;
 
-	public TabRedstone(GuiBase gui, IRedstoneControl container) {
+	public TabRedstoneControl(GuiBase gui, IRedstoneControl container) {
 
 		this(gui, defaultSide, container);
 	}
 
-	public TabRedstone(GuiBase gui, int side, IRedstoneControl container) {
+	public TabRedstoneControl(GuiBase gui, int side, IRedstoneControl container) {
 
 		super(gui, side);
 
@@ -44,13 +44,13 @@ public class TabRedstone extends TabBase {
 		if (!isFullyOpened()) {
 			list.add(StringHelper.localize("info.cofh.redstoneControl"));
 			if (myContainer.getControl().isDisabled()) {
-				list.add(StringHelper.localize("info.cofh.disabled"));
+				list.add(StringHelper.YELLOW + StringHelper.localize("info.cofh.disabled"));
 				return;
 			} else if (myContainer.getControl().isLow()) {
-				list.add(StringHelper.localize("info.cofh.enabled") + ", " + StringHelper.localize("info.cofh.low"));
+				list.add(StringHelper.YELLOW + StringHelper.localize("info.cofh.enabled") + ", " + StringHelper.localize("info.cofh.low"));
 				return;
 			}
-			list.add(StringHelper.localize("info.cofh.enabled") + ", " + StringHelper.localize("info.cofh.high"));
+			list.add(StringHelper.YELLOW + StringHelper.localize("info.cofh.enabled") + ", " + StringHelper.localize("info.cofh.high"));
 			return;
 		}
 		int x = gui.getMouseX() - currentShiftX;
