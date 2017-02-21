@@ -20,6 +20,7 @@ public class ItemBlockCore extends ItemBlock {
 		super(block);
 		setHasSubtypes(true);
 		setMaxDamage(0);
+		setNoRepair();
 	}
 
 	@Override
