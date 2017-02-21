@@ -94,6 +94,9 @@ enchant.cofh.holding=Holding
 enchant.cofh.multishot=Multishot
 enchant.cofh.vorpal=Vorpal
 
+fluid.tile.lava=Lava
+fluid.tile.water=Water
+
 gui.cofh.configuration=Configuration
 
 gui.cofh.transferInDisabled=Auto-Input Disabled
