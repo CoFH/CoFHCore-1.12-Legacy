@@ -190,10 +190,17 @@ public abstract class TileCore extends TileEntity {
 		return new PacketTile(this);
 	}
 
-	public PacketCoFHBase getGuiPacket() {
+	public PacketCoFHBase getAccessPacket() {
 
 		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
-		payload.addByte(TilePacketID.GUI.ordinal());
+		payload.addByte(TilePacketID.ACCESS.ordinal());
+		return payload;
+	}
+
+	public PacketCoFHBase getConfigPacket() {
+
+		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		payload.addByte(TilePacketID.CONFIG.ordinal());
 		return payload;
 	}
 
@@ -204,6 +211,13 @@ public abstract class TileCore extends TileEntity {
 		return payload;
 	}
 
+	public PacketCoFHBase getGuiPacket() {
+
+		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		payload.addByte(TilePacketID.GUI.ordinal());
+		return payload;
+	}
+
 	public PacketCoFHBase getModePacket() {
 
 		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
@@ -211,11 +225,21 @@ public abstract class TileCore extends TileEntity {
 		return payload;
 	}
 
-	protected void handleGuiPacket(PacketCoFHBase payload) {
+	protected void handleAccessPacket(PacketCoFHBase payload) {
 
+		markChunkDirty();
+	}
+
+	protected void handleConfigPacket(PacketCoFHBase payload) {
+
+		markChunkDirty();
 	}
 
 	protected void handleFluidPacket(PacketCoFHBase payload) {
+
+	}
+
+	protected void handleGuiPacket(PacketCoFHBase payload) {
 
 	}
 
@@ -227,6 +251,20 @@ public abstract class TileCore extends TileEntity {
 	public void sendDescPacket() {
 
 		PacketHandler.sendToAllAround(getPacket(), this);
+	}
+
+	public void sendAccessPacket() {
+
+		if (ServerHelper.isClientWorld(worldObj)) {
+			PacketHandler.sendToServer(getAccessPacket());
+		}
+	}
+
+	public void sendConfigPacket() {
+
+		if (ServerHelper.isClientWorld(worldObj)) {
+			PacketHandler.sendToServer(getConfigPacket());
+		}
 	}
 
 	public void sendFluidPacket() {
@@ -298,7 +336,7 @@ public abstract class TileCore extends TileEntity {
 
 	/* PACKET ENUM */
 	public enum TilePacketID {
-		GUI, FLUID, MODE
+		ACCESS, CONFIG, FLUID, GUI, MODE
 	}
 
 }
