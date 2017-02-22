@@ -59,7 +59,7 @@ public class GuiFriendsList extends GuiCore {
 		drawInventory = false;
 		ySize = 188;
 
-		generateInfo("tab.cofh.friend", 2);
+		generateInfo("tab.cofh.friend");
 	}
 
 	@Override

@@ -265,11 +265,11 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 			((ITileInfo) tile).getTileInfo(info, side, player, debug);
 		} else {
 			if (tile instanceof IEnergyReceiver) {
-				IEnergyReceiver eReceiver = (IEnergyReceiver) tile;
-				if (eReceiver.getMaxEnergyStored(side) <= 0) {
+				IEnergyReceiver rec = (IEnergyReceiver) tile;
+				if (rec.getMaxEnergyStored(side) <= 0) {
 					return;
 				}
-				info.add(new TextComponentString(StringHelper.localize("info.cofh.energy") + ": " + eReceiver.getEnergyStored(side) + "/" + eReceiver.getMaxEnergyStored(side) + " RF."));
+				info.add(new TextComponentString(StringHelper.localize("info.cofh.energy") + ": " + rec.getEnergyStored(side) + "/" + rec.getMaxEnergyStored(side) + " RF."));
 			}
 		}
 	}

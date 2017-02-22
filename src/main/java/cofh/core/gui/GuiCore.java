@@ -41,11 +41,17 @@ public abstract class GuiCore extends GuiBase {
 		super(container, texture);
 	}
 
-	protected void generateInfo(String tileString, int lines) {
+	protected void generateInfo(String tileString) {
 
-		myInfo = StringHelper.localize(tileString + "." + 0);
-		for (int i = 1; i < lines; i++) {
-			myInfo += "\n\n" + StringHelper.localize(tileString + "." + i);
+		int i = 0;
+		String line = tileString + "." + i;
+		while (StringHelper.canLocalize(line)) {
+			if (i > 0) {
+				myInfo += "\n\n";
+			}
+			myInfo += StringHelper.localize(line);
+			i++;
+			line = tileString + "." + i;
 		}
 	}
 
