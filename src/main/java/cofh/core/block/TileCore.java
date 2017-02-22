@@ -164,7 +164,7 @@ public abstract class TileCore extends TileEntity {
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 
-		return PacketHandler.toTilePacket(getPacket(), getPos());
+		return PacketHandler.toTilePacket(getTilePacket(), getPos());
 	}
 
 	@Override
@@ -176,7 +176,7 @@ public abstract class TileCore extends TileEntity {
 	@Override
 	public NBTTagCompound getUpdateTag() {
 
-		return PacketHandler.toNBTTag(getPacket(), super.getUpdateTag());
+		return PacketHandler.toNBTTag(getTilePacket(), super.getUpdateTag());
 	}
 
 	@Override
@@ -185,43 +185,25 @@ public abstract class TileCore extends TileEntity {
 		PacketHandler.handleNBTPacket(tag);
 	}
 
-	public PacketCoFHBase getPacket() {
-
-		return new PacketTile(this);
-	}
-
+	/* CLIENT -> SERVER */
 	public PacketCoFHBase getAccessPacket() {
 
 		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
-		payload.addByte(TilePacketID.ACCESS.ordinal());
+		payload.addByte(TilePacketID.C_ACCESS.ordinal());
 		return payload;
 	}
 
 	public PacketCoFHBase getConfigPacket() {
 
 		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
-		payload.addByte(TilePacketID.CONFIG.ordinal());
-		return payload;
-	}
-
-	public PacketCoFHBase getFluidPacket() {
-
-		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
-		payload.addByte(TilePacketID.FLUID.ordinal());
-		return payload;
-	}
-
-	public PacketCoFHBase getGuiPacket() {
-
-		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
-		payload.addByte(TilePacketID.GUI.ordinal());
+		payload.addByte(TilePacketID.C_CONFIG.ordinal());
 		return payload;
 	}
 
 	public PacketCoFHBase getModePacket() {
 
 		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
-		payload.addByte(TilePacketID.MODE.ordinal());
+		payload.addByte(TilePacketID.C_MODE.ordinal());
 		return payload;
 	}
 
@@ -235,22 +217,10 @@ public abstract class TileCore extends TileEntity {
 		markChunkDirty();
 	}
 
-	protected void handleFluidPacket(PacketCoFHBase payload) {
-
-	}
-
-	protected void handleGuiPacket(PacketCoFHBase payload) {
-
-	}
-
 	protected void handleModePacket(PacketCoFHBase payload) {
 
 		markChunkDirty();
-	}
-
-	public void sendDescPacket() {
-
-		PacketHandler.sendToAllAround(getPacket(), this);
+		callNeighborTileChange();
 	}
 
 	public void sendAccessPacket() {
@@ -267,11 +237,6 @@ public abstract class TileCore extends TileEntity {
 		}
 	}
 
-	public void sendFluidPacket() {
-
-		PacketHandler.sendToDimension(getFluidPacket(), worldObj.provider.getDimension());
-	}
-
 	public void sendModePacket() {
 
 		if (ServerHelper.isClientWorld(worldObj)) {
@@ -279,15 +244,48 @@ public abstract class TileCore extends TileEntity {
 		}
 	}
 
-	public void sendUpdatePacket(Side side) {
+	/* SERVER -> CLIENT */
+	public PacketCoFHBase getFluidPacket() {
+
+		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		payload.addByte(TilePacketID.S_FLUID.ordinal());
+		return payload;
+	}
+
+	public PacketCoFHBase getGuiPacket() {
+
+		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		payload.addByte(TilePacketID.S_GUI.ordinal());
+		return payload;
+	}
+
+	public PacketCoFHBase getTilePacket() {
+
+		return new PacketTile(this);
+	}
+
+	protected void handleFluidPacket(PacketCoFHBase payload) {
+
+	}
+
+	protected void handleGuiPacket(PacketCoFHBase payload) {
+
+	}
+
+	public void sendFluidPacket() {
+
+		PacketHandler.sendToDimension(getFluidPacket(), worldObj.provider.getDimension());
+	}
+
+	public void sendTilePacket(Side side) {
 
 		if (worldObj == null) {
 			return;
 		}
 		if (side == Side.CLIENT && ServerHelper.isServerWorld(worldObj)) {
-			PacketHandler.sendToAllAround(getPacket(), this);
+			PacketHandler.sendToAllAround(getTilePacket(), this);
 		} else if (side == Side.SERVER && ServerHelper.isClientWorld(worldObj)) {
-			PacketHandler.sendToServer(getPacket());
+			PacketHandler.sendToServer(getTilePacket());
 		}
 	}
 
@@ -336,7 +334,7 @@ public abstract class TileCore extends TileEntity {
 
 	/* PACKET ENUM */
 	public enum TilePacketID {
-		ACCESS, CONFIG, FLUID, GUI, MODE
+		C_ACCESS, C_CONFIG, C_MODE, S_FLUID, S_GUI
 	}
 
 }
