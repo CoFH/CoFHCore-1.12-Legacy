@@ -102,32 +102,6 @@ public class FluidTankCore implements IFluidTank {
 		}
 	}
 
-	/**
-	 * This is used internally ONLY, when the tank is LOCKED.
-	 *
-	 * @param maxFill Amount of fluid to fill the tank with.
-	 * @param doFill  If false, the fill will only be simulated.
-	 * @return Amount of fluid that was accepted by the tank.
-	 */
-	public int fillLocked(int maxFill, boolean doFill) {
-
-		if (maxFill <= 0 || fluid == null) {
-			return 0;
-		}
-		if (!doFill) {
-			return Math.min(capacity - maxFill, maxFill);
-		}
-		int filled = capacity - fluid.amount;
-
-		if (maxFill < filled) {
-			fluid.amount += maxFill;
-			filled = maxFill;
-		} else {
-			fluid.amount = capacity;
-		}
-		return filled;
-	}
-
 	public int getSpace() {
 
 		if (fluid == null) {

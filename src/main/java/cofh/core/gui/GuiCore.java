@@ -12,6 +12,8 @@ public abstract class GuiCore extends GuiBase {
 
 	public static final String TEX_ARROW_LEFT = GuiProps.PATH_ELEMENTS + "progress_arrow_left.png";
 	public static final String TEX_ARROW_RIGHT = GuiProps.PATH_ELEMENTS + "progress_arrow_right.png";
+	public static final String TEX_ARROW_FLUID_LEFT = GuiProps.PATH_ELEMENTS + "progress_arrow_fluid_left.png";
+	public static final String TEX_ARROW_FLUID_RIGHT = GuiProps.PATH_ELEMENTS + "progress_arrow_fluid_right.png";
 	public static final String TEX_DROP_LEFT = GuiProps.PATH_ELEMENTS + "progress_fluid_left.png";
 	public static final String TEX_DROP_RIGHT = GuiProps.PATH_ELEMENTS + "progress_fluid_right.png";
 
