@@ -140,7 +140,7 @@ public class TabConfigurationTransfer extends TabBase {
 		RenderHelper.setBlockTextureSheet();
 
 		if (myTileControl.hasTransferIn()) {
-			gui.drawButton(CoreTextures.ICON_INPUT, posX() + 8, posY + 34,  myTileControl.getTransferIn() ? 1 : 0);
+			gui.drawButton(CoreTextures.ICON_INPUT, posX() + 8, posY + 34, myTileControl.getTransferIn() ? 1 : 0);
 		} else {
 			gui.drawButton(CoreTextures.ICON_INPUT, posX() + 8, posY + 34, 2);
 		}
@@ -152,15 +152,13 @@ public class TabConfigurationTransfer extends TabBase {
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-		for (int layer = 0; layer < myTileTexture.getNumLayers(); layer++) {
-			for (int pass = 0; pass < myTileTexture.getNumPasses(layer); pass++) {
-				gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_ABOVE[myTileFacing.getFacing()], layer, pass), posX() + 52, posY + 24);
-				gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_LEFT[myTileFacing.getFacing()], layer, pass), posX() + 32, posY + 44);
-				gui.drawIcon(myTileTexture.getTexture(myTileFacing.getFacing(), layer, pass), posX() + 52, posY + 44);
-				gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_RIGHT[myTileFacing.getFacing()], layer, pass), posX() + 72, posY + 44);
-				gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_BELOW[myTileFacing.getFacing()], layer, pass), posX() + 52, posY + 64);
-				gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_OPPOSITE[myTileFacing.getFacing()], layer, pass), posX() + 72, posY + 64);
-			}
+		for (int pass = 0; pass < myTileTexture.getNumPasses(); pass++) {
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_ABOVE[myTileFacing.getFacing()], pass), posX() + 52, posY + 24);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_LEFT[myTileFacing.getFacing()], pass), posX() + 32, posY + 44);
+			gui.drawIcon(myTileTexture.getTexture(myTileFacing.getFacing(), pass), posX() + 52, posY + 44);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_RIGHT[myTileFacing.getFacing()], pass), posX() + 72, posY + 44);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_BELOW[myTileFacing.getFacing()], pass), posX() + 52, posY + 64);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_OPPOSITE[myTileFacing.getFacing()], pass), posX() + 72, posY + 64);
 		}
 		GlStateManager.disableBlend();
 		RenderHelper.setDefaultFontTextureSheet();
@@ -170,11 +168,11 @@ public class TabConfigurationTransfer extends TabBase {
 	void handleTransferChange(int direction, int mouseButton) {
 
 		if (direction == 0) {
-			if(myTileControl.setTransferIn(!myTileControl.getTransferIn())) {
+			if (myTileControl.setTransferIn(!myTileControl.getTransferIn())) {
 				GuiBase.playClickSound(1.0F, myTileControl.getTransferIn() ? 0.8F : 0.4F);
 			}
 		} else {
-			if(myTileControl.setTransferOut(!myTileControl.getTransferOut())) {
+			if (myTileControl.setTransferOut(!myTileControl.getTransferOut())) {
 				GuiBase.playClickSound(1.0F, myTileControl.getTransferOut() ? 0.8F : 0.4F);
 			}
 		}
