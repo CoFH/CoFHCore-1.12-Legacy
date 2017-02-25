@@ -122,6 +122,7 @@ info.cofh.augmentation=Augmentation
 info.cofh.blank=Blank
 info.cofh.buffer=Buffer
 info.cofh.capacity=Capacity
+info.cofh.chance=Chance
 info.cofh.charge=Charge
 info.cofh.cheater=Cheater!
 info.cofh.contents=Contents

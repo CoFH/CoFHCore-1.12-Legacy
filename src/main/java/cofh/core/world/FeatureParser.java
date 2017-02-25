@@ -162,19 +162,15 @@ public class FeatureParser {
 	private static void addFiles(ArrayList<File> list, File folder) {
 
 		final AtomicInteger dirs = new AtomicInteger(0);
-		File[] fList = folder.listFiles(new FilenameFilter() {
+		File[] fList = folder.listFiles((file, name) -> {
 
-			@Override
-			public boolean accept(File file, String name) {
-
-				if (name == null) {
-					return false;
-				} else if (new File(file, name).isDirectory()) {
-					dirs.incrementAndGet();
-					return true;
-				}
-				return name.toLowerCase(Locale.US).endsWith(".json");
+			if (name == null) {
+				return false;
+			} else if (new File(file, name).isDirectory()) {
+				dirs.incrementAndGet();
+				return true;
 			}
+			return name.toLowerCase(Locale.US).endsWith(".json");
 		});
 
 		Object o = folder == worldGenFolder ? folder : worldGenPathBase.relativize(Paths.get(folder.getPath()));

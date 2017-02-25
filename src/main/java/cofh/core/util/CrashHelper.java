@@ -27,14 +27,7 @@ public class CrashHelper {
 
 		CrashReport crashReport = CrashReport.makeCrashReport(throwable, message);
 
-		crashReport.makeCategory("Calling Thread").addCrashSection("Name", new Callable<String>() {
-
-			@Override
-			public String call() throws Exception {
-
-				return Thread.currentThread().getName();
-			}
-		});
+		crashReport.makeCategory("Calling Thread").addCrashSection("Name", (Callable<String>) () -> Thread.currentThread().getName());
 
 		if (caller != null) {
 			addCallSection(caller, crashReport, "Calling Object");
@@ -69,23 +62,9 @@ public class CrashHelper {
 			return report;
 		}
 
-		cat.addCrashSection("Dim", new Callable<String>() {
+		cat.addCrashSection("Dim", (Callable<String>) () -> String.valueOf(world.provider.getDimension()));
 
-			@Override
-			public String call() throws Exception {
-
-				return String.valueOf(world.provider.getDimension());
-			}
-		});
-
-		cat.addCrashSection("Dim_Name", new Callable<String>() {
-
-			@Override
-			public String call() throws Exception {
-
-				return "" + world.provider.getDimensionType().getName();
-			}
-		});
+		cat.addCrashSection("Dim_Name", (Callable<String>) () -> "" + world.provider.getDimensionType().getName());
 
 		cat.addCrashSection("Pos", x + "," + y + "," + z);
 
@@ -226,44 +205,19 @@ public class CrashHelper {
 			return;
 		}
 
-		category.addCrashSection("Class", new Callable<Object>() {
+		category.addCrashSection("Class", (Callable<Object>) () -> object.getClass().getName());
 
-			@Override
-			public Object call() throws Exception {
-
-				return object.getClass().getName();
-			}
-		});
-
-		category.addCrashSection("ToString", new Callable<Object>() {
-
-			@Override
-			public Object call() throws Exception {
-
-				return object.toString();
-			}
-		});
+		category.addCrashSection("ToString", (Callable<Object>) () -> object.toString());
 
 		if (object instanceof TileEntity) {
 			final TileEntity tile = (TileEntity) object;
 			tile.addInfoToCrashReport(category);
-			category.addCrashSection("Tile Pos", new Callable<Object>() {
+			category.addCrashSection("Tile Pos", (Callable<Object>) () -> String.format("%d,%d,%d", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ()));
+			category.addCrashSection("Tile NBT", (Callable<Object>) () -> {
 
-				@Override
-				public Object call() throws Exception {
-
-					return String.format("%d,%d,%d", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ());
-				}
-			});
-			category.addCrashSection("Tile NBT", new Callable<Object>() {
-
-				@Override
-				public Object call() throws Exception {
-
-					NBTTagCompound tag = new NBTTagCompound();
-					tile.writeToNBT(tag);
-					return tag.toString();
-				}
+				NBTTagCompound tag = new NBTTagCompound();
+				tile.writeToNBT(tag);
+				return tag.toString();
 			});
 		}
 
@@ -278,28 +232,24 @@ public class CrashHelper {
 			return;
 		}
 
-		category.addCrashSection("InventoryContents", new Callable<String>() {
+		category.addCrashSection("InventoryContents", (Callable<String>) () -> {
 
-			@Override
-			public String call() throws Exception {
-
-				StringBuilder builder = new StringBuilder("\n\n");
-				builder.append(inv.toString()).append(" - ").append(inv.getSlots());
-				for (int i = 0; i < inv.getSlots(); i++) {
-					builder.append(i).append(" - ");
-					ItemStack stackInSlot;
-					try {
-						stackInSlot = inv.getStackInSlot(i);
-					} catch (Exception e) {
-						builder.append("Errored - ").append(e.toString()).append("\n");
-						continue;
-					}
-
-					builder.append(stackInSlot == null ? "Null" : stackInSlot.toString()).append("\n");
+			StringBuilder builder = new StringBuilder("\n\n");
+			builder.append(inv.toString()).append(" - ").append(inv.getSlots());
+			for (int i = 0; i < inv.getSlots(); i++) {
+				builder.append(i).append(" - ");
+				ItemStack stackInSlot;
+				try {
+					stackInSlot = inv.getStackInSlot(i);
+				} catch (Exception e) {
+					builder.append("Errored - ").append(e.toString()).append("\n");
+					continue;
 				}
-				builder.append("\n\n");
-				return builder.toString();
+
+				builder.append(stackInSlot == null ? "Null" : stackInSlot.toString()).append("\n");
 			}
+			builder.append("\n\n");
+			return builder.toString();
 		});
 	}
 
@@ -312,28 +262,24 @@ public class CrashHelper {
 			return;
 		}
 
-		category.addCrashSection("InventoryContents", new Callable<String>() {
+		category.addCrashSection("InventoryContents", (Callable<String>) () -> {
 
-			@Override
-			public String call() throws Exception {
-
-				StringBuilder builder = new StringBuilder("\n\n");
-				builder.append(inv.toString()).append(" - ").append(inv.getSizeInventory());
-				for (int i = 0; i < inv.getSizeInventory(); i++) {
-					builder.append(i).append(" - ");
-					ItemStack stackInSlot;
-					try {
-						stackInSlot = inv.getStackInSlot(i);
-					} catch (Exception e) {
-						builder.append("Errored - ").append(e.toString()).append("\n");
-						continue;
-					}
-
-					builder.append(stackInSlot == null ? "Null" : stackInSlot.toString()).append("\n");
+			StringBuilder builder = new StringBuilder("\n\n");
+			builder.append(inv.toString()).append(" - ").append(inv.getSizeInventory());
+			for (int i = 0; i < inv.getSizeInventory(); i++) {
+				builder.append(i).append(" - ");
+				ItemStack stackInSlot;
+				try {
+					stackInSlot = inv.getStackInSlot(i);
+				} catch (Exception e) {
+					builder.append("Errored - ").append(e.toString()).append("\n");
+					continue;
 				}
-				builder.append("\n\n");
-				return builder.toString();
+
+				builder.append(stackInSlot == null ? "Null" : stackInSlot.toString()).append("\n");
 			}
+			builder.append("\n\n");
+			return builder.toString();
 		});
 	}
 

@@ -57,17 +57,13 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 			return;
 		}
 		instance.isPostInitialised = true;
-		Collections.sort(instance.packets, new Comparator<Class<? extends PacketBase>>() {
+		Collections.sort(instance.packets, (packetClass1, packetClass2) -> {
 
-			@Override
-			public int compare(Class<? extends PacketBase> packetClass1, Class<? extends PacketBase> packetClass2) {
-
-				int com = String.CASE_INSENSITIVE_ORDER.compare(packetClass1.getCanonicalName(), packetClass2.getCanonicalName());
-				if (com == 0) {
-					com = packetClass1.getCanonicalName().compareTo(packetClass2.getCanonicalName());
-				}
-				return com;
+			int com = String.CASE_INSENSITIVE_ORDER.compare(packetClass1.getCanonicalName(), packetClass2.getCanonicalName());
+			if (com == 0) {
+				com = packetClass1.getCanonicalName().compareTo(packetClass2.getCanonicalName());
 			}
+			return com;
 		});
 	}
 
@@ -121,13 +117,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 
 		IThreadListener threadListener = CoFHCore.proxy.getClientListener();
 		if (!threadListener.isCallingFromMinecraftThread()) {
-			threadListener.addScheduledTask(new Runnable() {
-				@Override
-				public void run() {
-
-					handlePacketClient(packet, player);
-				}
-			});
+			threadListener.addScheduledTask(() -> handlePacketClient(packet, player));
 		} else {
 			packet.handleClientSide(player);
 		}
@@ -137,13 +127,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 
 		IThreadListener threadListener = CoFHCore.proxy.getServerListener();
 		if (!threadListener.isCallingFromMinecraftThread()) {
-			threadListener.addScheduledTask(new Runnable() {
-				@Override
-				public void run() {
-
-					handlePacketServer(packet, player);
-				}
-			});
+			threadListener.addScheduledTask(() -> handlePacketServer(packet, player));
 		} else {
 			packet.handleServerSide(player);
 		}
