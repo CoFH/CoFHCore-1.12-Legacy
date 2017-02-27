@@ -25,7 +25,7 @@ public class DecorationParser extends SurfaceParser implements IGeneratorParser 
 			return null;
 		}
 
-		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
+		ArrayList<WeightedRandomBlock> list = new ArrayList<>();
 		ConfigObject genData = genObject.root();
 		if (!genObject.hasPath("surface")) {
 			log.info("Entry does not specify surface for 'decoration' generator. Using grass.");

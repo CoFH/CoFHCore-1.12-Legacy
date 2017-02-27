@@ -34,9 +34,9 @@ import java.util.List;
 
 public class ItemShieldMulti extends Item implements IModelRegister {
 
-	protected TMap<Integer, ToolEntry> itemMap = new THashMap<Integer, ToolEntry>();
-	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
-	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<Integer, ModelResourceLocation>();
+	protected TMap<Integer, ToolEntry> itemMap = new THashMap<>();
+	protected ArrayList<Integer> itemList = new ArrayList<>(); // This is actually more memory efficient than a LinkedHashMap
+	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<>();
 
 	protected String name;
 	protected String modName;

@@ -133,10 +133,10 @@ public class ItemBowCore extends ItemBow {
 		}
 
 		if (!player.capabilities.isCreativeMode && !flag) {
-			return !flag ? new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStack) : new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
+			return !flag ? new ActionResult<>(EnumActionResult.FAIL, itemStack) : new ActionResult<>(EnumActionResult.PASS, itemStack);
 		} else {
 			player.setActiveHand(hand);
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
 		}
 	}
 

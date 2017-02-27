@@ -18,8 +18,8 @@ public class TickHandlerWorld {
 
 	public static TickHandlerWorld instance = new TickHandlerWorld();
 
-	public static TIntObjectHashMap<ArrayDeque<RetroChunkCoord>> chunksToGen = new TIntObjectHashMap<ArrayDeque<RetroChunkCoord>>();
-	public static TIntObjectHashMap<ArrayDeque<ChunkCoord>> chunksToPreGen = new TIntObjectHashMap<ArrayDeque<ChunkCoord>>();
+	public static TIntObjectHashMap<ArrayDeque<RetroChunkCoord>> chunksToGen = new TIntObjectHashMap<>();
+	public static TIntObjectHashMap<ArrayDeque<ChunkCoord>> chunksToPreGen = new TIntObjectHashMap<>();
 
 	// FIXME: put adding to these behind a function so we can remove the tick handler when there's nothing to do
 	// size of the maps indicates how many dimensions are needing to gen/pregen, and will be 0 when no work is required
@@ -77,7 +77,7 @@ public class TickHandlerWorld {
 
 	public static class RetroChunkCoord {
 
-		private static final THashSet<String> emptySet = new THashSet<String>(0);
+		private static final THashSet<String> emptySet = new THashSet<>(0);
 		public final ChunkCoord coord;
 		public final THashSet<String> generatedFeatures;
 
@@ -88,7 +88,7 @@ public class TickHandlerWorld {
 				generatedFeatures = emptySet;
 			} else {
 				int i = 0, e = features.tagCount();
-				generatedFeatures = new THashSet<String>(e);
+				generatedFeatures = new THashSet<>(e);
 				for (; i < e; ++i) {
 					generatedFeatures.add(features.getStringTagAt(i));
 				}

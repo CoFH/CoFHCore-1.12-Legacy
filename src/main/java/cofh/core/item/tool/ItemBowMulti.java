@@ -41,9 +41,9 @@ import java.util.Map;
 
 public class ItemBowMulti extends ItemBow implements IModelRegister {
 
-	protected TMap<Integer, ToolEntry> itemMap = new THashMap<Integer, ToolEntry>();
-	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
-	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<Integer, ModelResourceLocation>();
+	protected TMap<Integer, ToolEntry> itemMap = new THashMap<>();
+	protected ArrayList<Integer> itemList = new ArrayList<>(); // This is actually more memory efficient than a LinkedHashMap
+	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<>();
 
 	protected String name;
 	protected String modName;
@@ -333,10 +333,10 @@ public class ItemBowMulti extends ItemBow implements IModelRegister {
 			return ret;
 		}
 		if (!player.capabilities.isCreativeMode && !flag) {
-			return !flag ? new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStack) : new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
+			return !flag ? new ActionResult<>(EnumActionResult.FAIL, itemStack) : new ActionResult<>(EnumActionResult.PASS, itemStack);
 		} else {
 			player.setActiveHand(hand);
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
 		}
 	}
 

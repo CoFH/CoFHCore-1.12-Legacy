@@ -40,7 +40,7 @@ public class CommandKillAll implements ISubCommand {
 
 		int killCount = 0;
 		String curName;
-		TObjectIntHashMap<String> names = new TObjectIntHashMap<String>();
+		TObjectIntHashMap<String> names = new TObjectIntHashMap<>();
 		String target = null;
 		boolean all = false;
 		if (arguments.length > 1) {

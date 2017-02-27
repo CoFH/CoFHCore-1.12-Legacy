@@ -41,13 +41,13 @@ public class ASMCore {
 		strippableDesc = Type.getDescriptor(Strippable.class);
 		substitutableDesc = Type.getDescriptor(Substitutable.class);
 
-		parsables = new THashSet<String>(30);
-		implementables = new THashSet<String>(10);
-		strippables = new THashSet<String>(10);
-		substitutables = new THashSet<String>(10);
+		parsables = new THashSet<>(30);
+		implementables = new THashSet<>(10);
+		strippables = new THashSet<>(10);
+		substitutables = new THashSet<>(10);
 	}
 
-	static final ArrayList<String> workingPath = new ArrayList<String>();
+	static final ArrayList<String> workingPath = new ArrayList<>();
 	private static final String[] emptyList = {};
 
 	static class AnnotationInfo {
@@ -365,7 +365,7 @@ public class ASMCore {
 	static Map<String, ModContainer> getLoadedMods() {
 
 		if (mods == null) {
-			mods = new HashMap<String, ModContainer>();
+			mods = new HashMap<>();
 			for (ModContainer m : Loader.instance().getModList()) {
 				mods.put(m.getModId(), m);
 			}
@@ -378,7 +378,7 @@ public class ASMCore {
 	public static Map<String, ModContainer> getLoadedAPIs() {
 
 		if (apis == null) {
-			apis = new HashMap<String, ModContainer>();
+			apis = new HashMap<>();
 			for (ModContainer m : ModAPIManager.INSTANCE.getAPIList()) {
 				apis.put(m.getModId(), m);
 			}

@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 public class FurnaceFuelHandler implements IFuelHandler {
 
 	public static FurnaceFuelHandler instance = new FurnaceFuelHandler();
-	private static THashMap<ItemWrapper, Integer> fuels = new THashMap<ItemWrapper, Integer>();
+	private static THashMap<ItemWrapper, Integer> fuels = new THashMap<>();
 
 	public static void initialize() {
 
@@ -42,7 +42,7 @@ public class FurnaceFuelHandler implements IFuelHandler {
 
 	public static void refreshMap() {
 
-		THashMap<ItemWrapper, Integer> tempMap = new THashMap<ItemWrapper, Integer>();
+		THashMap<ItemWrapper, Integer> tempMap = new THashMap<>();
 
 		for (Entry<ItemWrapper, Integer> entry : fuels.entrySet()) {
 			ItemWrapper tempItem = new ItemWrapper(entry.getKey().item, entry.getKey().metadata);

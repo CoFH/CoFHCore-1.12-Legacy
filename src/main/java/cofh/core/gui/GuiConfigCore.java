@@ -24,7 +24,7 @@ public class GuiConfigCore extends GuiConfig {
 
 	private static List<IConfigElement> getConfigElements(GuiScreen parent) {
 
-		List<IConfigElement> list = new ArrayList<IConfigElement>();
+		List<IConfigElement> list = new ArrayList<>();
 
 		list.add(new DummyCategoryElement("Client", "config.client", getClientConfigElements()));
 		list.add(new DummyCategoryElement("Core", "config.core", getCoreModuleConfigElements()));
@@ -35,7 +35,7 @@ public class GuiConfigCore extends GuiConfig {
 
 	private static List<IConfigElement> getClientConfigElements() {
 
-		List<IConfigElement> list = new ArrayList<IConfigElement>();
+		List<IConfigElement> list = new ArrayList<>();
 
 		for (int i = 0; i < CATEGORIES_CLIENT.length; i++) {
 			list.add(new ConfigElement(CoFHCore.CONFIG_CLIENT.getCategory(CATEGORIES_CLIENT[i])));
@@ -45,7 +45,7 @@ public class GuiConfigCore extends GuiConfig {
 
 	private static List<IConfigElement> getCoreModuleConfigElements() {
 
-		List<IConfigElement> list = new ArrayList<IConfigElement>();
+		List<IConfigElement> list = new ArrayList<>();
 
 		for (int i = 0; i < CATEGORIES_CORE.length; i++) {
 			list.add(new ConfigElement(CoFHCore.CONFIG_CORE.getCategory(CATEGORIES_CORE[i])));
@@ -55,7 +55,7 @@ public class GuiConfigCore extends GuiConfig {
 
 	private static List<IConfigElement> getLootModuleConfigElements() {
 
-		List<IConfigElement> list = new ArrayList<IConfigElement>();
+		List<IConfigElement> list = new ArrayList<>();
 
 		for (int i = 0; i < CATEGORIES_LOOT.length; i++) {
 			list.add(new ConfigElement(CoFHCore.CONFIG_LOOT.getCategory(CATEGORIES_LOOT[i])));

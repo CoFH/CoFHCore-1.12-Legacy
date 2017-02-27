@@ -24,7 +24,7 @@ public class PacketSocial extends PacketCoFHBase {
 		switch (PacketTypes.values()[getByte()]) {
 			case FRIEND_LIST:
 				int size = getInt();
-				RegistrySocial.clientPlayerFriends = new LinkedList<String>();
+				RegistrySocial.clientPlayerFriends = new LinkedList<>();
 				for (int i = 0; i < size; i++) {
 					RegistrySocial.clientPlayerFriends.add(getString());
 				}

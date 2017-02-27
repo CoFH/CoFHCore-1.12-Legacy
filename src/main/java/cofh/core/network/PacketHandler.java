@@ -42,7 +42,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	public static final PacketHandler instance = new PacketHandler();
 
 	private EnumMap<Side, FMLEmbeddedChannel> channels;
-	private final LinkedList<Class<? extends PacketBase>> packets = new LinkedList<Class<? extends PacketBase>>();
+	private final LinkedList<Class<? extends PacketBase>> packets = new LinkedList<>();
 	private boolean isPostInitialised = false;
 
 	/* INIT */

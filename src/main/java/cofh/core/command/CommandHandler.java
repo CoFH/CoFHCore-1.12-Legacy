@@ -23,7 +23,7 @@ public class CommandHandler extends CommandBase {
 
 	public static CommandHandler instance = new CommandHandler();
 
-	private static TMap<String, ISubCommand> commands = new THashMap<String, ISubCommand>();
+	private static TMap<String, ISubCommand> commands = new THashMap<>();
 
 	static {
 		registerSubCommand(CommandHelp.instance);
@@ -118,7 +118,7 @@ public class CommandHandler extends CommandBase {
 	@Override
 	public List<String> getCommandAliases() {
 
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 
 	@Override

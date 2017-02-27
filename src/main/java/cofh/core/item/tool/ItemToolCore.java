@@ -28,12 +28,12 @@ import java.util.Set;
 
 public abstract class ItemToolCore extends ItemTool {
 
-	private final TLinkedHashSet<String> toolClasses = new TLinkedHashSet<String>();
+	private final TLinkedHashSet<String> toolClasses = new TLinkedHashSet<>();
 	private final Set<String> immutableClasses = java.util.Collections.unmodifiableSet(toolClasses);
 
 	protected String repairIngot = "";
-	protected THashSet<Block> effectiveBlocks = new THashSet<Block>();
-	protected THashSet<Material> effectiveMaterials = new THashSet<Material>();
+	protected THashSet<Block> effectiveBlocks = new THashSet<>();
+	protected THashSet<Material> effectiveMaterials = new THashSet<>();
 
 	protected int harvestLevel = -1;
 

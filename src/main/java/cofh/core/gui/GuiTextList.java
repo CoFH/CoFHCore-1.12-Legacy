@@ -38,7 +38,7 @@ public class GuiTextList extends Gui {
 	public int displayLines = 0;
 	public int lineHeight = 10;
 
-	public List<String> textLines = new LinkedList<String>();
+	public List<String> textLines = new LinkedList<>();
 	public int startLine = 0;
 	public int selectedLine = -1;
 

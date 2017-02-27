@@ -199,7 +199,7 @@ public class FontRendererCore extends FontRenderer {
 		super.setColor(r, g, b, a);
 	}
 
-	public final TCharObjectHashMap<ICustomCharRenderer> renderOverrides = new TCharObjectHashMap<ICustomCharRenderer>();
+	public final TCharObjectHashMap<ICustomCharRenderer> renderOverrides = new TCharObjectHashMap<>();
 
 	@Override
 	public float renderUnicodeChar(char ch, boolean italic) {

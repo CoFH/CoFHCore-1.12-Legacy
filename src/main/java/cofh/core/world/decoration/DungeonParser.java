@@ -18,7 +18,7 @@ public class DungeonParser implements IGeneratorParser {
 	@Override
 	public WorldGenerator parseGenerator(String name, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
 
-		ArrayList<WeightedRandomNBTTag> mobList = new ArrayList<WeightedRandomNBTTag>();
+		ArrayList<WeightedRandomNBTTag> mobList = new ArrayList<>();
 		if (genObject.hasPath("spawnEntity")) {
 			if (!FeatureParser.parseEntityList(genObject.root().get("spawnEntity"), mobList)) {
 				log.warn("Entry specifies invalid entity list for 'dungeon' generator! Using 'Pig'!");

@@ -21,7 +21,7 @@ public class SlotMover implements IAdvancedGuiHandler<GuiBase> {
 	@Override
 	public List<Rectangle> getGuiExtraAreas(GuiBase guiContainer) {
 
-		List<Rectangle> tabBoxes = new ArrayList<Rectangle>();
+		List<Rectangle> tabBoxes = new ArrayList<>();
 
 		for (TabBase tab : guiContainer.tabs) {
 			Rectangle4i rect = tab.getBounds();

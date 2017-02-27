@@ -9,8 +9,8 @@ import java.util.HashMap;
 
 public class BlockFluidInteractive extends BlockFluidCore {
 
-	private final HashMap<IBlockState, IBlockState> collisionMap = new HashMap<IBlockState, IBlockState>();
-	private final HashMap<Block, IBlockState> anyState = new HashMap<Block, IBlockState>();
+	private final HashMap<IBlockState, IBlockState> collisionMap = new HashMap<>();
+	private final HashMap<Block, IBlockState> anyState = new HashMap<>();
 
 	public BlockFluidInteractive(Fluid fluid, Material material, String name) {
 

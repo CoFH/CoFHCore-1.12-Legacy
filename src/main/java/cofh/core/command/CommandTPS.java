@@ -131,7 +131,7 @@ public class CommandTPS implements ISubCommand {
 	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
 		if (args.length == 2) {
-			List<String> worldIDs = new ArrayList<String>();
+			List<String> worldIDs = new ArrayList<>();
 			worldIDs.add("o");
 			worldIDs.add("a");
 			for (World world : CoreProps.server.worldServers) {

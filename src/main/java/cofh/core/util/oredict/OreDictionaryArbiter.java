@@ -24,10 +24,10 @@ import java.util.List;
 public class OreDictionaryArbiter {
 
 	private static BiMap<String, Integer> oreIDs = HashBiMap.create();
-	private static TMap<Integer, ArrayList<ItemStack>> oreStacks = new THashMap<Integer, ArrayList<ItemStack>>();
+	private static TMap<Integer, ArrayList<ItemStack>> oreStacks = new THashMap<>();
 
-	private static TMap<ItemWrapper, ArrayList<Integer>> stackIDs = new THashMap<ItemWrapper, ArrayList<Integer>>();
-	private static TMap<ItemWrapper, ArrayList<String>> stackNames = new THashMap<ItemWrapper, ArrayList<String>>();
+	private static TMap<ItemWrapper, ArrayList<Integer>> stackIDs = new THashMap<>();
+	private static TMap<ItemWrapper, ArrayList<String>> stackNames = new THashMap<>();
 
 	private static String[] oreNames = new String[] {};
 
@@ -41,10 +41,10 @@ public class OreDictionaryArbiter {
 	public static void initialize() {
 
 		oreIDs = HashBiMap.create(oreIDs == null ? 32 : oreIDs.size());
-		oreStacks = new THashMap<Integer, ArrayList<ItemStack>>(oreStacks == null ? 32 : oreStacks.size());
+		oreStacks = new THashMap<>(oreStacks == null ? 32 : oreStacks.size());
 
-		stackIDs = new THashMap<ItemWrapper, ArrayList<Integer>>(stackIDs == null ? 32 : stackIDs.size());
-		stackNames = new THashMap<ItemWrapper, ArrayList<String>>(stackNames == null ? 32 : stackNames.size());
+		stackIDs = new THashMap<>(stackIDs == null ? 32 : stackIDs.size());
+		stackNames = new THashMap<>(stackNames == null ? 32 : stackNames.size());
 
 		oreNames = OreDictionary.getOreNames();
 
@@ -79,15 +79,15 @@ public class OreDictionaryArbiter {
 		oreIDs.put(name, id);
 
 		if (!oreStacks.containsKey(id)) {
-			oreStacks.put(id, new ArrayList<ItemStack>());
+			oreStacks.put(id, new ArrayList<>());
 		}
 		oreStacks.get(id).add(stack);
 
 		ItemWrapper item = ItemWrapper.fromItemStack(stack);
 
 		if (!stackIDs.containsKey(item)) {
-			stackIDs.put(item, new ArrayList<Integer>());
-			stackNames.put(item, new ArrayList<String>());
+			stackIDs.put(item, new ArrayList<>());
+			stackNames.put(item, new ArrayList<>());
 		}
 		stackIDs.get(item).add(id);
 		stackNames.get(item).add(name);

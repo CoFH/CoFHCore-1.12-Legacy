@@ -142,7 +142,7 @@ public class Proxy {
 
 	public List<EntityPlayer> getPlayerList() {
 
-		List<EntityPlayer> result = new LinkedList<EntityPlayer>();
+		List<EntityPlayer> result = new LinkedList<>();
 
 		for (int i = 0; i < FMLCommonHandler.instance().getMinecraftServerInstance().worldServers.length; i++) {
 			if (FMLCommonHandler.instance().getMinecraftServerInstance().worldServers[i] != null) {

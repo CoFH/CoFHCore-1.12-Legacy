@@ -174,7 +174,7 @@ public class ProxyClient extends Proxy {
 	@Override
 	public List<EntityPlayer> getPlayerList() {
 
-		return new LinkedList<EntityPlayer>();
+		return new LinkedList<>();
 	}
 
 	@Override

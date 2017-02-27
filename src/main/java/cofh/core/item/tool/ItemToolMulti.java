@@ -51,15 +51,15 @@ import java.util.Set;
 
 public class ItemToolMulti extends ItemTool implements IModelRegister {
 
-	private final TLinkedHashSet<String> toolClasses = new TLinkedHashSet<String>();
+	private final TLinkedHashSet<String> toolClasses = new TLinkedHashSet<>();
 	private final Set<String> immutableClasses = java.util.Collections.unmodifiableSet(toolClasses);
 
-	protected THashSet<Block> effectiveBlocks = new THashSet<Block>();
-	protected THashSet<Material> effectiveMaterials = new THashSet<Material>();
+	protected THashSet<Block> effectiveBlocks = new THashSet<>();
+	protected THashSet<Material> effectiveMaterials = new THashSet<>();
 
-	protected TMap<Integer, ToolEntry> itemMap = new THashMap<Integer, ToolEntry>();
-	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
-	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<Integer, ModelResourceLocation>();
+	protected TMap<Integer, ToolEntry> itemMap = new THashMap<>();
+	protected ArrayList<Integer> itemList = new ArrayList<>(); // This is actually more memory efficient than a LinkedHashMap
+	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<>();
 
 	protected String name;
 	protected String modName;

@@ -26,7 +26,7 @@ public class StalagmiteParser implements IGeneratorParser {
 	public WorldGenerator parseGenerator(String generatorName, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
 
 		// TODO: these names need revised
-		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
+		ArrayList<WeightedRandomBlock> list = new ArrayList<>();
 		if (!genObject.hasPath("gen-body")) {
 			log.info("Entry does not specify gen body for 'stalagmite' generator. Using air.");
 			list.add(new WeightedRandomBlock(Blocks.AIR));

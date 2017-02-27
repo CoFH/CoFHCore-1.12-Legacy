@@ -17,8 +17,8 @@ public class SmallTreeParser implements IGeneratorParser {
 	@Override
 	public WorldGenerator parseGenerator(String name, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
 
-		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
-		ArrayList<WeightedRandomBlock> blocks = new ArrayList<WeightedRandomBlock>();
+		ArrayList<WeightedRandomBlock> list = new ArrayList<>();
+		ArrayList<WeightedRandomBlock> blocks = new ArrayList<>();
 		if (genObject.hasPath("surface")) {
 			if (!FeatureParser.parseResList(genObject.root().get("surface"), blocks, false)) {
 				log.warn("Entry specifies invalid surface for 'smalltree' generator! Using dirt!");
@@ -29,7 +29,7 @@ public class SmallTreeParser implements IGeneratorParser {
 		}
 
 		if (genObject.hasPath("leaves")) {
-			list = new ArrayList<WeightedRandomBlock>();
+			list = new ArrayList<>();
 			if (!FeatureParser.parseResList(genObject.root().get("leaves"), list, true)) {
 				log.warn("Entry specifies invalid leaves for 'smalltree' generator!");
 				list.clear();

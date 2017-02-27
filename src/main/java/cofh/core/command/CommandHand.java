@@ -47,7 +47,7 @@ public class CommandHand implements ISubCommand {
 		return 0;
 	}
 
-	private static HashMap<String, InfoType> infoMap = new HashMap<String, InfoType>();
+	private static HashMap<String, InfoType> infoMap = new HashMap<>();
 
 	static {
 		InfoType.values();
@@ -94,7 +94,7 @@ public class CommandHand implements ISubCommand {
 			return;
 		}
 
-		ArrayList<InfoType> list = new ArrayList<InfoType>();
+		ArrayList<InfoType> list = new ArrayList<>();
 
 		if (++i == l) {
 			list.add(InfoType.Name);
@@ -189,7 +189,7 @@ public class CommandHand implements ISubCommand {
 			@Override
 			public ITextComponent[] getData(ItemStack stack) {
 
-				LinkedList<ITextComponent> ret = new LinkedList<ITextComponent>();
+				LinkedList<ITextComponent> ret = new LinkedList<>();
 				ret.add(null);
 
 				if (stack.hasTagCompound() && stack.getTagCompound().hasKey("display", 10)) {
@@ -215,7 +215,7 @@ public class CommandHand implements ISubCommand {
 
 				NBTTagList nbttaglist = stack.getEnchantmentTagList();
 
-				LinkedList<ITextComponent> ret = new LinkedList<ITextComponent>();
+				LinkedList<ITextComponent> ret = new LinkedList<>();
 				ret.add(null);
 				if (nbttaglist != null && nbttaglist.tagCount() > 0) {
 					int i = 0;
@@ -255,7 +255,7 @@ public class CommandHand implements ISubCommand {
 			@Override
 			public ITextComponent[] getData(ItemStack stack) {
 
-				LinkedList<ITextComponent> ret = new LinkedList<ITextComponent>();
+				LinkedList<ITextComponent> ret = new LinkedList<>();
 				ret.add(null);
 
 				Multimap<String, AttributeModifier> multimap = stack.getAttributeModifiers(EntityEquipmentSlot.HEAD);//TODO

@@ -146,7 +146,7 @@ public class CommandReplaceBlock implements ISubCommand {
 		long blockCounter = ((long) xL - xS) * ((long) yL - yS) * ((long) zL - zS);
 		CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.replaceblocks.start", blockCounter, xS, yS, zS, xL, yL, zL, blockReplRaw);
 
-		THashSet<Chunk> set = new THashSet<Chunk>();
+		THashSet<Chunk> set = new THashSet<>();
 
 		blockCounter = 0;
 		for (int e = args.length; i < e; ++i) {

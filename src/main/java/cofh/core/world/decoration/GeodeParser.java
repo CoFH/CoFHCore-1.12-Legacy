@@ -17,7 +17,7 @@ public class GeodeParser implements IGeneratorParser {
 	@Override
 	public WorldGenerator parseGenerator(String name, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
 
-		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
+		ArrayList<WeightedRandomBlock> list = new ArrayList<>();
 		if (!genObject.hasPath("crust")) {
 			log.info("Entry does not specify crust for 'geode' generator. Using stone.");
 			list.add(new WeightedRandomBlock(Blocks.STONE));
@@ -34,7 +34,7 @@ public class GeodeParser implements IGeneratorParser {
 				r.setHollow(genObject.getBoolean("hollow"));
 			}
 			if (genObject.hasPath("filler")) {
-				list = new ArrayList<WeightedRandomBlock>();
+				list = new ArrayList<>();
 				if (!FeatureParser.parseResList(genObject.getValue("filler"), list, true)) {
 					log.warn("Entry specifies invalid filler for 'geode' generator! Not filling!");
 				} else {

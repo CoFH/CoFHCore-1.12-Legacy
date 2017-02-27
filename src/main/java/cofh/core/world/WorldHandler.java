@@ -34,10 +34,10 @@ import java.util.*;
 
 public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 
-	private static List<IFeatureGenerator> features = new ArrayList<IFeatureGenerator>();
-	private static Set<String> featureNames = new THashSet<String>();
-	private static Set<EventType> vanillaGenEvents = new THashSet<EventType>();
-	private static LinkedHashList<ChunkReference> populatingChunks = new LinkedHashList<ChunkReference>();
+	private static List<IFeatureGenerator> features = new ArrayList<>();
+	private static Set<String> featureNames = new THashSet<>();
+	private static Set<EventType> vanillaGenEvents = new THashSet<>();
+	private static LinkedHashList<ChunkReference> populatingChunks = new LinkedHashList<>();
 
 	private static long genHash = 0;
 
@@ -53,7 +53,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 
 	static boolean genReplaceVanilla = false;
 
-	public static ArrayList<String> registeredFeatureNames = new ArrayList<String>();
+	public static ArrayList<String> registeredFeatureNames = new ArrayList<>();
 
 	public static WorldHandler instance = new WorldHandler();
 
@@ -209,7 +209,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			ArrayDeque<RetroChunkCoord> chunks = TickHandlerWorld.chunksToGen.get(dim);
 
 			if (chunks == null) {
-				TickHandlerWorld.chunksToGen.put(dim, new ArrayDeque<RetroChunkCoord>(128));
+				TickHandlerWorld.chunksToGen.put(dim, new ArrayDeque<>(128));
 				chunks = TickHandlerWorld.chunksToGen.get(dim);
 			}
 			if (chunks != null) {

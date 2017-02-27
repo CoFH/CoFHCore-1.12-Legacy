@@ -297,7 +297,7 @@ public class GuiFriendsList extends GuiCore {
 
 	public List<String> getOnlineNames() {
 
-		List<String> online = new LinkedList<String>();
+		List<String> online = new LinkedList<>();
 		for (NetworkPlayerInfo playerInfo : Minecraft.getMinecraft().thePlayer.connection.getPlayerInfoMap()) {
 			online.add(playerInfo.getGameProfile().getName());
 		}

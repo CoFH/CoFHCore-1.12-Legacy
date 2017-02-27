@@ -36,9 +36,9 @@ import java.util.Map;
 
 public class ItemFishingRodMulti extends ItemFishingRod implements IModelRegister {
 
-	protected TMap<Integer, ToolEntry> itemMap = new THashMap<Integer, ToolEntry>();
-	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
-	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<Integer, ModelResourceLocation>();
+	protected TMap<Integer, ToolEntry> itemMap = new THashMap<>();
+	protected ArrayList<Integer> itemList = new ArrayList<>(); // This is actually more memory efficient than a LinkedHashMap
+	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<>();
 
 	protected String name;
 	protected String modName;
@@ -304,7 +304,7 @@ public class ItemFishingRodMulti extends ItemFishingRod implements IModelRegiste
 			}
 			player.swingArm(hand);
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
 	@Override

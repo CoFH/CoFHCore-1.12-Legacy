@@ -65,10 +65,10 @@ public class FeatureParser {
 	private static Path worldGenPathBase;
 	private static File vanillaGen;
 	private static final String worldGenVanilla = "assets/cofh/world/vanilla.json";
-	private static HashMap<String, IFeatureParser> templateHandlers = new HashMap<String, IFeatureParser>();
-	private static HashMap<String, IGeneratorParser> generatorHandlers = new HashMap<String, IGeneratorParser>();
+	private static HashMap<String, IFeatureParser> templateHandlers = new HashMap<>();
+	private static HashMap<String, IGeneratorParser> generatorHandlers = new HashMap<>();
 	private static Logger log = LogManager.getFormatterLogger("CoFHWorld");
-	public static ArrayList<IFeatureGenerator> parsedFeatures = new ArrayList<IFeatureGenerator>();
+	public static ArrayList<IFeatureGenerator> parsedFeatures = new ArrayList<>();
 
 	private FeatureParser() {
 
@@ -229,7 +229,7 @@ public class FeatureParser {
 
 	public static void parseGenerationFile() {
 
-		ArrayList<File> worldGenList = new ArrayList<File>(5);
+		ArrayList<File> worldGenList = new ArrayList<>(5);
 		{
 			int i = 0;
 			if (WorldHandler.genReplaceVanilla) {
@@ -415,7 +415,7 @@ public class FeatureParser {
 		ConfigValue genData = genObject.root().get("generator");
 		if (genData.valueType() == ConfigValueType.LIST) {
 			List<? extends Config> list = genObject.getConfigList("generator");
-			ArrayList<WeightedRandomWorldGenerator> gens = new ArrayList<WeightedRandomWorldGenerator>(list.size());
+			ArrayList<WeightedRandomWorldGenerator> gens = new ArrayList<>(list.size());
 			for (Config genElement : list) {
 				WorldGenerator gen = parseGeneratorData(def, genElement, defaultMaterial);
 				int weight = genElement.hasPath("weight") ? genElement.getInt("weight") : 100;
@@ -441,13 +441,13 @@ public class FeatureParser {
 			}
 		}
 
-		List<WeightedRandomBlock> resList = new ArrayList<WeightedRandomBlock>();
+		List<WeightedRandomBlock> resList = new ArrayList<>();
 		if (!FeatureParser.parseResList(genObject.getValue("block"), resList, true)) {
 			return null;
 		}
 
 		List<WeightedRandomBlock> matList = defaultMaterial;
-		matList = new ArrayList<WeightedRandomBlock>();
+		matList = new ArrayList<>();
 		if (!FeatureParser.parseResList(genObject.root().get("material"), matList, false)) {
 			log.warn("Invalid material list! Using default list.");
 			matList = defaultMaterial;
@@ -519,7 +519,7 @@ public class FeatureParser {
 					int t;
 					if (type.equalsIgnoreCase("dictionary")) {
 						if (array != null) {
-							ArrayList<Type> tags = new ArrayList<Type>(array.size());
+							ArrayList<Type> tags = new ArrayList<>(array.size());
 							for (int k = 0, j = array.size(); k < j; k++) {
 								tags.add(Type.valueOf(array.get(k)));
 							}
@@ -531,7 +531,7 @@ public class FeatureParser {
 						}
 					} else if (type.equalsIgnoreCase("id")) {
 						if (array != null) {
-							ArrayList<ResourceLocation> ids = new ArrayList<ResourceLocation>(array.size());
+							ArrayList<ResourceLocation> ids = new ArrayList<>(array.size());
 							for (int k = 0, j = array.size(); k < j; ++k) {
 								ids.add(new ResourceLocation(array.get(k)));
 							}
@@ -543,7 +543,7 @@ public class FeatureParser {
 						}
 					} else if (type.equalsIgnoreCase("temperature")) {
 						if (array != null) {
-							ArrayList<TempCategory> temps = new ArrayList<TempCategory>(array.size());
+							ArrayList<TempCategory> temps = new ArrayList<>(array.size());
 							for (int k = 0, j = array.size(); k < j; k++) {
 								temps.add(TempCategory.valueOf(array.get(k)));
 							}

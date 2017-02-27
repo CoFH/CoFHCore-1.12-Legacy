@@ -22,7 +22,7 @@ public class RegistrySocial {
 	}
 
 	public static Configuration friendConf;
-	public static List<String> clientPlayerFriends = new LinkedList<String>();
+	public static List<String> clientPlayerFriends = new LinkedList<>();
 
 	public synchronized static boolean addFriend(GameProfile owner, String friendName) {
 

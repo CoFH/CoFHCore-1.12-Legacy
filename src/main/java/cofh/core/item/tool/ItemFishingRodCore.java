@@ -111,7 +111,7 @@ public class ItemFishingRodCore extends ItemFishingRod {
 			}
 			player.swingArm(hand);
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
 }

@@ -22,14 +22,14 @@ public class LakeParser implements IGeneratorParser {
 		}
 		WorldGenAdvLakes r = new WorldGenAdvLakes(resList, useMaterial ? matList : null);
 		{
-			ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
+			ArrayList<WeightedRandomBlock> list = new ArrayList<>();
 			if (genObject.hasPath("outline-block")) {
 				if (!FeatureParser.parseResList(genObject.root().get("outline-block"), list, true)) {
 					log.warn("Entry specifies invalid outline-block for 'lake' generator! Not outlining!");
 				} else {
 					r.setOutlineBlock(list);
 				}
-				list = new ArrayList<WeightedRandomBlock>();
+				list = new ArrayList<>();
 			}
 			if (genObject.hasPath("gap-block")) {
 				if (!FeatureParser.parseResList(genObject.getValue("gap-block"), list, true)) {

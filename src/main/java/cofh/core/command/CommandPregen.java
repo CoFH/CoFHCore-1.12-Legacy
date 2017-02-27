@@ -95,7 +95,7 @@ public class CommandPregen implements ISubCommand {
 		synchronized (TickHandlerWorld.chunksToPreGen) {
 			ArrayDeque<ChunkCoord> chunks = TickHandlerWorld.chunksToPreGen.get(world.provider.getDimension());
 			if (chunks == null) {
-				chunks = new ArrayDeque<ChunkCoord>();
+				chunks = new ArrayDeque<>();
 			}
 
 			for (int x = xS; x <= xL; ++x) {

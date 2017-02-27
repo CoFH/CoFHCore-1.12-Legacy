@@ -41,9 +41,9 @@ public class ItemArmorMulti extends ItemArmor implements IModelRegister {
 
 	private static final UUID[] ARMOR_MODIFIERS = new UUID[] { UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150") };
 
-	protected TMap<Integer, ArmorEntry> itemMap = new THashMap<Integer, ArmorEntry>();
-	protected ArrayList<Integer> itemList = new ArrayList<Integer>(); // This is actually more memory efficient than a LinkedHashMap
-	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<Integer, ModelResourceLocation>();
+	protected TMap<Integer, ArmorEntry> itemMap = new THashMap<>();
+	protected ArrayList<Integer> itemList = new ArrayList<>(); // This is actually more memory efficient than a LinkedHashMap
+	protected TMap<Integer, ModelResourceLocation> textureMap = new THashMap<>();
 
 	protected String name;
 	protected String modName;

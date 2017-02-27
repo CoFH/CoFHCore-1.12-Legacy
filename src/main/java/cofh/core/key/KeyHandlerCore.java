@@ -15,9 +15,9 @@ import java.util.ArrayList;
 
 public class KeyHandlerCore {
 
-	private static TMap<String, IKeyBinding> clientBinds = new THashMap<String, IKeyBinding>();
-	static TMap<String, IKeyBinding> serverBinds = new THashMap<String, IKeyBinding>();
-	private static ArrayList<IKeyBinding> keys = new ArrayList<IKeyBinding>();
+	private static TMap<String, IKeyBinding> clientBinds = new THashMap<>();
+	static TMap<String, IKeyBinding> serverBinds = new THashMap<>();
+	private static ArrayList<IKeyBinding> keys = new ArrayList<>();
 
 	static {
 		MinecraftForge.EVENT_BUS.register(new KeyHandlerCore());

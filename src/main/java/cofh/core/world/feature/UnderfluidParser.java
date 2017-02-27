@@ -41,7 +41,7 @@ public class UnderfluidParser extends UniformParser {
 		int[] fluidList = null;
 		l:
 		if (genObject.hasPath("fluid")) {
-			ArrayList<DungeonMob> list = new ArrayList<DungeonMob>();
+			ArrayList<DungeonMob> list = new ArrayList<>();
 			if (!FeatureParser.parseWeightedStringList(genObject.root().get("fluid"), list)) {
 				break l;
 			}
@@ -61,7 +61,7 @@ public class UnderfluidParser extends UniformParser {
 		// TODO: WorldGeneratorAdv that allows access to its material list
 		List<WeightedRandomBlock> matList = defaultMaterial;
 		if (genObject.hasPath("material")) {
-			matList = new ArrayList<WeightedRandomBlock>();
+			matList = new ArrayList<>();
 			if (!FeatureParser.parseResList(genObject.root().get("material"), matList, false)) {
 				log.warn("Invalid material list! Using default list.");
 				matList = defaultMaterial;

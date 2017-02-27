@@ -20,7 +20,7 @@ public class RenderPlayerFace implements ICustomCharRenderer {
 	static GameProfile profile;
 
 	// Cache the Texture data for the Game Profiles
-	private static final HashMap<GameProfile, GameProfile> textureCache = new HashMap<GameProfile, GameProfile>();
+	private static final HashMap<GameProfile, GameProfile> textureCache = new HashMap<>();
 
 	public final static char CHAR_FACE = '\u0378';
 
