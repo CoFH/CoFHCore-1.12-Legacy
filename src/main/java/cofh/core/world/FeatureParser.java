@@ -50,7 +50,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -64,7 +63,9 @@ public class FeatureParser {
 	private static File worldGenFolder;
 	private static Path worldGenPathBase;
 	private static File vanillaGen;
-	private static final String worldGenVanilla = "assets/cofh/world/vanilla.json";
+
+	private static final String WORLD_GEN_VANILLA = "assets/cofh/world/vanilla.json";
+
 	private static HashMap<String, IFeatureParser> templateHandlers = new HashMap<>();
 	private static HashMap<String, IGeneratorParser> generatorHandlers = new HashMap<>();
 	private static Logger log = LogManager.getFormatterLogger("CoFHWorld");
@@ -146,7 +147,7 @@ public class FeatureParser {
 
 		try {
 			if (vanillaGen.createNewFile()) {
-				CoreUtils.copyFileUsingStream(worldGenVanilla, vanillaGen);
+				CoreUtils.copyFileUsingStream(WORLD_GEN_VANILLA, vanillaGen);
 				log.info("Created vanilla generation json.");
 			} else if (!vanillaGen.exists()) {
 				throw new Error("Unable to create vanilla generation json (unspecified error).");

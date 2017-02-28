@@ -36,8 +36,8 @@ public class CoFHCore {
 	public static final String MOD_ID = "cofhcore";
 	public static final String MOD_NAME = "CoFH Core";
 
-	public static final String VERSION = "3.2.0";
-	public static final String VERSION_MAX = "3.3.0";
+	public static final String VERSION = "4.0.0";
+	public static final String VERSION_MAX = "4.1.0";
 	public static final String VERSION_GROUP = "required-after:" + MOD_ID + "@[" + VERSION + "," + VERSION_MAX + ");";
 
 	public static final String DEPENDENCIES = CoreProps.FORGE_DEP;
