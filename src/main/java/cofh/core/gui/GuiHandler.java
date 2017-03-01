@@ -2,7 +2,7 @@ package cofh.core.gui;
 
 import cofh.core.block.TileCore;
 import cofh.core.gui.client.GuiAugments;
-import cofh.core.gui.client.GuiFriendsList;
+import cofh.core.gui.client.GuiFriendList;
 import cofh.core.gui.container.ContainerAugments;
 import cofh.core.gui.container.ContainerFriendsList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +29,7 @@ public class GuiHandler implements IGuiHandler {
 				}
 				return null;
 			case FRIENDS_ID:
-				return new GuiFriendsList(player.inventory);
+				return new GuiFriendList(player.inventory);
 			case AUGMENTS_ID:
 				return new GuiAugments(player.inventory);
 			default:

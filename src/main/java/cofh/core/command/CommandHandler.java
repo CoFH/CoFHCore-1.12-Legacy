@@ -39,6 +39,7 @@ public class CommandHandler extends CommandBase {
 		registerSubCommand(CommandReloadWorldgen.instance);
 		registerSubCommand(CommandCountBlock.instance);
 		registerSubCommand(CommandHand.instance);
+		registerSubCommand(CommandFriend.instance);
 
 		if (!LoadingPlugin.obfuscated) { // in-dev commands
 			;

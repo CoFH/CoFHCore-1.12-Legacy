@@ -45,28 +45,28 @@ public class CommandFriend implements ISubCommand {
 			if (arguments[1].equalsIgnoreCase("add")) {
 				if (validUsername(arguments[2])) {
 					if (RegistrySocial.addFriend(player.getGameProfile(), arguments[2])) {
-						sender.addChatMessage(new TextComponentString(StringHelper.YELLOW + arguments[2] + StringHelper.GREEN + " " + StringHelper.localize("info.cofh.command.friend.0")));
+						sender.addChatMessage(new TextComponentString(StringHelper.YELLOW + arguments[2] + StringHelper.GREEN + " " + StringHelper.localize("chat.cofh.command.friend.0")));
 					} else {
-						sender.addChatMessage(new TextComponentString(StringHelper.RED + StringHelper.localize("info.cofh.command.friend.1") + " " + StringHelper.YELLOW + arguments[2] + StringHelper.RED + " " + StringHelper.localize("info.cofh.command.friend.2")));
+						sender.addChatMessage(new TextComponentString(StringHelper.RED + StringHelper.localize("chat.cofh.command.friend.1") + " " + StringHelper.YELLOW + arguments[2] + StringHelper.RED + " " + StringHelper.localize("chat.cofh.command.friend.2")));
 					}
 				} else {
-					sender.addChatMessage(new TextComponentString(StringHelper.RED + StringHelper.localize("info.cofh.command.friend.3")));
+					sender.addChatMessage(new TextComponentString(StringHelper.RED + StringHelper.localize("chat.cofh.command.friend.3")));
 				}
 			} else if (arguments[1].equalsIgnoreCase("remove")) {
 				if (validUsername(arguments[2])) {
 					if (RegistrySocial.removeFriend(player.getGameProfile(), arguments[2])) {
-						sender.addChatMessage(new TextComponentString(StringHelper.YELLOW + arguments[2] + StringHelper.GREEN + " " + StringHelper.localize("info.cofh.command.friend.4")));
+						sender.addChatMessage(new TextComponentString(StringHelper.YELLOW + arguments[2] + StringHelper.GREEN + " " + StringHelper.localize("chat.cofh.command.friend.4")));
 					} else {
-						sender.addChatMessage(new TextComponentString(StringHelper.YELLOW + arguments[2] + StringHelper.RED + " " + StringHelper.localize("info.cofh.command.friend.5")));
+						sender.addChatMessage(new TextComponentString(StringHelper.YELLOW + arguments[2] + StringHelper.RED + " " + StringHelper.localize("chat.cofh.command.friend.5")));
 					}
 				} else {
-					sender.addChatMessage(new TextComponentString(StringHelper.RED + StringHelper.localize("info.cofh.command.friend.3")));
+					sender.addChatMessage(new TextComponentString(StringHelper.RED + StringHelper.localize("chat.cofh.command.friend.3")));
 				}
 			} else {
-				sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-				throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
+				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+				throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 			}
-		} else if (arguments.length > 1 && arguments[1].equalsIgnoreCase("gui")) {
+		} else if (arguments.length > 1 && (arguments[1].equalsIgnoreCase("gui") ||arguments[1].equalsIgnoreCase("list"))) {
 			if (sender instanceof EntityPlayerMP) {
 				EntityPlayerMP thePlayer = (EntityPlayerMP) sender;
 				RegistrySocial.sendFriendsToPlayer(thePlayer);
@@ -74,7 +74,7 @@ public class CommandFriend implements ISubCommand {
 			}
 		} else {
 			sender.addChatMessage(new TextComponentTranslation("info.cofh.command.syntaxError"));
-			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
+			throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 		}
 	}
 

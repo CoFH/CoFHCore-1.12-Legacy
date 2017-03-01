@@ -1,7 +1,7 @@
 package cofh.core.proxy;
 
 import cofh.CoFHCore;
-import cofh.core.gui.client.GuiFriendsList;
+import cofh.core.gui.client.GuiFriendList;
 import cofh.core.init.CoreProps;
 import cofh.core.init.CoreTextures;
 import cofh.core.key.KeyBindingItemMultiMode;
@@ -181,7 +181,7 @@ public class ProxyClient extends Proxy {
 	public void updateFriendListGui() {
 
 		if (Minecraft.getMinecraft().currentScreen != null) {
-			((GuiFriendsList) Minecraft.getMinecraft().currentScreen).taFriendsList.textLines = RegistrySocial.clientPlayerFriends;
+			((GuiFriendList) Minecraft.getMinecraft().currentScreen).taFriendList.textLines = RegistrySocial.clientPlayerFriends;
 		}
 	}
 

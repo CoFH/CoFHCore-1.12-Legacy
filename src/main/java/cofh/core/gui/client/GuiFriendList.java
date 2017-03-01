@@ -23,16 +23,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-public class GuiFriendsList extends GuiCore {
+public class GuiFriendList extends GuiCore {
 
-	static final String TEXTURE_PATH = GuiProps.PATH_GUI + "friends_list.png";
+	static final String TEXTURE_PATH = GuiProps.PATH_GUI + "friend_list.png";
 	static final ResourceLocation TEXTURE = new ResourceLocation(TEXTURE_PATH);
 
 	static final int TB_HEIGHT = 12;
 
 	GuiTextField tbName;
 	GuiTextList taOnlineList;
-	public GuiTextList taFriendsList;
+	public GuiTextList taFriendList;
 
 	ElementButton flUp;
 	ElementButton flDown;
@@ -41,7 +41,7 @@ public class GuiFriendsList extends GuiCore {
 	ElementButton addName;
 	ElementButton removeName;
 
-	String tempName = "";
+	String tempName;
 
 	int tbNameX = 0;
 	int tbNameY = 0;
@@ -52,14 +52,14 @@ public class GuiFriendsList extends GuiCore {
 	int taflX = 0;
 	int taflY = 0;
 
-	public GuiFriendsList(InventoryPlayer inventory) {
+	public GuiFriendList(InventoryPlayer inventory) {
 
 		super(new ContainerFriendsList(inventory), TEXTURE);
-		name = "info.cofh.friendsList";
+		name = "info.cofh.friend_list";
 		drawInventory = false;
 		ySize = 188;
 
-		generateInfo("tab.cofh.friend");
+		generateInfo("tab.cofh.friend_list");
 	}
 
 	@Override
@@ -89,10 +89,10 @@ public class GuiFriendsList extends GuiCore {
 
 		// Setup Text Area
 
-		taFriendsList = new GuiTextList(this.fontRendererObj, taflX, taflY, 128, 10);
-		taFriendsList.textLines = RegistrySocial.clientPlayerFriends;
-		taFriendsList.drawBackground = false;
-		taFriendsList.drawBorder = false;
+		taFriendList = new GuiTextList(this.fontRendererObj, taflX, taflY, 128, 10);
+		taFriendList.textLines = RegistrySocial.clientPlayerFriends;
+		taFriendList.drawBackground = false;
+		taFriendList.drawBorder = false;
 
 		taOnlineList = new GuiTextList(this.fontRendererObj, taX, taY, 128, 4);
 		taOnlineList.textLines = getOnlineNames();
@@ -130,9 +130,9 @@ public class GuiFriendsList extends GuiCore {
 		} else if (buttonName.equals("OnlineDown")) {
 			taOnlineList.scrollUp();
 		} else if (buttonName.equals("FriendsUp")) {
-			taFriendsList.scrollDown();
+			taFriendList.scrollDown();
 		} else if (buttonName.equals("FriendsDown")) {
-			taFriendsList.scrollUp();
+			taFriendList.scrollUp();
 		}
 	}
 
@@ -144,7 +144,7 @@ public class GuiFriendsList extends GuiCore {
 
 		tbName.drawTextBox();
 		taOnlineList.drawText();
-		taFriendsList.drawText();
+		taFriendList.drawText();
 	}
 
 	@Override
@@ -186,8 +186,8 @@ public class GuiFriendsList extends GuiCore {
 	@Override
 	protected void mouseClicked(int mX, int mY, int mButton) throws IOException {
 
-		int textAreaX = taFriendsList.xPos - guiLeft;
-		int textAreaY = taFriendsList.yPos - guiTop;
+		int textAreaX = taFriendList.xPos - guiLeft;
+		int textAreaY = taFriendList.yPos - guiTop;
 		int onlineX = taOnlineList.xPos - guiLeft;
 		int onlineY = taOnlineList.yPos - guiTop;
 
@@ -195,9 +195,9 @@ public class GuiFriendsList extends GuiCore {
 			if (!taOnlineList.mouseClicked(mouseX, mouseY, mButton, onlineY).equalsIgnoreCase(tbName.getText())) {
 				tbName.setText(taOnlineList.mouseClicked(mouseX, mouseY, mButton, onlineY));
 			}
-		} else if (textAreaX <= mouseX && mouseX < textAreaX + taFriendsList.width && mouseY >= textAreaY && mouseY < textAreaY + taFriendsList.height) {
-			if (!taFriendsList.mouseClicked(mouseX, mouseY, mButton, textAreaY).equalsIgnoreCase(tbName.getText())) {
-				tbName.setText(taFriendsList.mouseClicked(mouseX, mouseY, mButton, textAreaY));
+		} else if (textAreaX <= mouseX && mouseX < textAreaX + taFriendList.width && mouseY >= textAreaY && mouseY < textAreaY + taFriendList.height) {
+			if (!taFriendList.mouseClicked(mouseX, mouseY, mButton, textAreaY).equalsIgnoreCase(tbName.getText())) {
+				tbName.setText(taFriendList.mouseClicked(mouseX, mouseY, mButton, textAreaY));
 			}
 		} else if (tbNameX - guiLeft <= mouseX && mouseX < tbNameX - guiLeft + tbName.getWidth() && mouseY >= tbNameY - guiTop && mouseY < tbNameY - guiTop + 12) {
 			tbName.setFocused(true);
@@ -246,20 +246,20 @@ public class GuiFriendsList extends GuiCore {
 
 		super.handleMouseInput();
 
-		int textAreaX = taFriendsList.xPos - guiLeft;
-		int textAreaY = taFriendsList.yPos - guiTop;
+		int textAreaX = taFriendList.xPos - guiLeft;
+		int textAreaY = taFriendList.yPos - guiTop;
 		int onlineX = taOnlineList.xPos - guiLeft;
 		int onlineY = taOnlineList.yPos - guiTop;
 
-		if (textAreaX <= mouseX && mouseX < textAreaX + taFriendsList.width && mouseY >= textAreaY && mouseY < textAreaY + taFriendsList.height) {
+		if (textAreaX <= mouseX && mouseX < textAreaX + taFriendList.width && mouseY >= textAreaY && mouseY < textAreaY + taFriendList.height) {
 			int wheelDir = Mouse.getEventDWheel();
 
 			if (wheelDir < 0) {
-				taFriendsList.scrollUp();
+				taFriendList.scrollUp();
 			}
 
 			if (wheelDir > 0) {
-				taFriendsList.scrollDown();
+				taFriendList.scrollDown();
 			}
 		} else if (onlineX <= mouseX && mouseX < onlineX + taOnlineList.width && mouseY >= onlineY && mouseY < onlineY + taOnlineList.height) {
 			int wheelDir = Mouse.getEventDWheel();
@@ -287,12 +287,12 @@ public class GuiFriendsList extends GuiCore {
 
 	private boolean canScrollUpFriend() {
 
-		return taFriendsList.startLine != 0;
+		return taFriendList.startLine != 0;
 	}
 
 	private boolean canScrollDownFriend() {
 
-		return taFriendsList.textLines.size() > taFriendsList.displayLines && taFriendsList.startLine < taFriendsList.textLines.size() - taFriendsList.displayLines;
+		return taFriendList.textLines.size() > taFriendList.displayLines && taFriendList.startLine < taFriendList.textLines.size() - taFriendList.displayLines;
 	}
 
 	public List<String> getOnlineNames() {

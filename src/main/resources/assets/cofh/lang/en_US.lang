@@ -81,9 +81,10 @@ chat.cofh.command.version=Gives you the version of this mod.
 
 chat.cofh.command.world.notFound=World does not exist.
 
-chat.cofh.secure=This is private and belongs to %s! You could have lost your hand!
-chat.cofh.secureItem=This item now belongs to you.
-chat.cofh.secureNotice=Notice: Server Ops are able to freely access 'secure' blocks on this server.
+chat.cofh.secure.block.success=This block now belongs to you.
+chat.cofh.secure.item.success=This item now belongs to you.
+chat.cofh.secure.notice=Notice: Server Ops are able to freely access 'secure' blocks on this server.
+chat.cofh.secure.warning=This is private and belongs to %s! You could have lost your hand!
 
 config.Client.tooltip=Configure client-side only options.
 config.Common.tooltip=Configure general options.
@@ -149,7 +150,7 @@ info.cofh.folded=Folded
 info.cofh.force=Force
 info.cofh.forDetails=for Details
 info.cofh.frequency=Frequency
-info.cofh.friendsList=Friends List
+info.cofh.friend_list=Friend List
 info.cofh.hasInfo=Has Information
 info.cofh.high=High
 info.cofh.hold=Hold
@@ -206,3 +207,7 @@ item.invalid.name=Invalid Item (Destroy)
 key.cofh.augments=Open Player Augment GUI
 key.cofh.category=CoFH Keys
 key.cofh.multimode=Cycle Item Mode
+
+tab.cofh.friend_list.0=Use this list to add and remove Friends!
+tab.cofh.friend_list.1=Friends are able to access your secure blocks and items, if you allow them to.
+tab.cofh.friend_list.2=Friends not provided.
