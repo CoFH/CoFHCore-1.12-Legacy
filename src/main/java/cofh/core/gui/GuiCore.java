@@ -19,6 +19,7 @@ public abstract class GuiCore extends GuiBase {
 
 	public static final String TEX_ALCHEMY = GuiProps.PATH_ELEMENTS + "scale_alchemy.png";
 	public static final String TEX_BUBBLE = GuiProps.PATH_ELEMENTS + "scale_bubble.png";
+	public static final String TEX_COMPACT = GuiProps.PATH_ELEMENTS + "scale_compress.png";
 	public static final String TEX_CRUSH = GuiProps.PATH_ELEMENTS + "scale_crush.png";
 	public static final String TEX_FLAME = GuiProps.PATH_ELEMENTS + "scale_flame.png";
 	public static final String TEX_FLUX = GuiProps.PATH_ELEMENTS + "scale_flux.png";
