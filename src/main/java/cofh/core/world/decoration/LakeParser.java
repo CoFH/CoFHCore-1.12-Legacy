@@ -53,6 +53,40 @@ public class LakeParser implements IGeneratorParser {
 				r.totalOutline = genObject.get("totalOutline").getAsBoolean();
 			}
 		}
+		if (genObject.has("boxWidth")) {
+			r.width = genObject.get("boxWidth").getAsInt();
+		}
+		if (genObject.has("boxHeight")) {
+			r.height = genObject.get("boxHeight").getAsInt();
+		}
+		if (genObject.has("blobMinWidth")) {
+			r.blobMinWidth = genObject.get("blobMinWidth").getAsDouble();
+		}
+		if (genObject.has("blobMinHeight")) {
+			r.blobMinHeight = genObject.get("blobMinHeight").getAsDouble();
+		}
+		if (genObject.has("blobWidthVariance")) {
+			r.blobWidthVariance = genObject.get("blobWidthVariance")
+					.getAsDouble();
+		}
+		if (genObject.has("blobHeightVariance")) {
+			r.blobHeightVariance = genObject.get("blobHeightVariance")
+					.getAsDouble();
+		}
+		if (genObject.has("minBlobs")) {
+			r.minBlobs = genObject.get("minBlobs").getAsInt();
+		}
+		if (genObject.has("blobVariance")) {
+			r.blobVariance = genObject.get("blobVariance").getAsInt();
+		}
+		if (genObject.has("boxOffsetHorizontal")) {
+			r.boxOffsetHorizontal = genObject.get("boxOffsetHorizontal")
+					.getAsDouble();
+		}
+		if (genObject.has("boxOffsetVertical")) {
+			r.boxOffsetVertical = genObject.get("boxOffsetVertical")
+					.getAsDouble();
+		}
 		return r;
 	}
 
