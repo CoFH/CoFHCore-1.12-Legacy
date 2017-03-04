@@ -30,7 +30,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-@Mod (modid = CoFHCore.MOD_ID, name = CoFHCore.MOD_NAME, version = CoFHCore.VERSION, dependencies = CoFHCore.DEPENDENCIES, guiFactory = CoFHCore.MOD_GUI_FACTORY)
+@Mod (modid = CoFHCore.MOD_ID, name = CoFHCore.MOD_NAME, version = CoFHCore.VERSION, dependencies = CoFHCore.DEPENDENCIES, updateJSON = CoFHCore.UPDATE_URL)
 public class CoFHCore {
 
 	public static final String MOD_ID = "cofhcore";
@@ -39,6 +39,7 @@ public class CoFHCore {
 	public static final String VERSION = "4.0.0";
 	public static final String VERSION_MAX = "4.1.0";
 	public static final String VERSION_GROUP = "required-after:" + MOD_ID + "@[" + VERSION + "," + VERSION_MAX + ");";
+	public static final String UPDATE_URL = "https://raw.github.com/cofh/version/master/" + MOD_ID + "_update.json";
 
 	public static final String DEPENDENCIES = CoreProps.FORGE_DEP;
 	public static final String MOD_GUI_FACTORY = "cofh.core.gui.GuiConfigCoreFactory";
