@@ -1,6 +1,6 @@
 [
     {
-        "modid": "CoFHCore",
+        "modid": "cofhcore",
         "name": "CoFH Core",
         "description": "Required for all CoFH Mods. Also provides some customization options for Minecraft.",
         "version": "${version}",
@@ -13,7 +13,7 @@
         "parent": "",
         "screenshots": [],
         "dependencies": [
-            "MinecraftForge"
+            "Forge"
         ]
     }
 ]
