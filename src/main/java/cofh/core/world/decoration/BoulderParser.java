@@ -38,7 +38,7 @@ public class BoulderParser implements IGeneratorParser {
 				r.hollowAmt = (float) genObject.getDouble("hollow-size");
 			}
 			if (genObject.hasPath("hollow-variance")) {
-				r.hollowVar = (float) genObject.getDouble("hollow-vVariance");
+				r.hollowVar = (float) genObject.getDouble("hollow-variance");
 			}
 		}
 		return r;
