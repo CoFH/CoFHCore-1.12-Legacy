@@ -361,7 +361,6 @@ public class ItemBowMulti extends ItemBow implements IModelRegister {
 				float f = getArrowVelocity(i) * (1 + getSpeedModifier(stack));
 
 				if ((double) f >= 0.1D) {
-					boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow ? ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer) : false);
 
 					if (!world.isRemote) {
 						int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, stack);
@@ -390,7 +389,7 @@ public class ItemBowMulti extends ItemBow implements IModelRegister {
 							if (flame) {
 								arrow.setFire(100);
 							}
-							if (flag1) {
+							if (flag) {
 								arrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
 							}
 							world.spawnEntityInWorld(arrow);
@@ -398,7 +397,7 @@ public class ItemBowMulti extends ItemBow implements IModelRegister {
 					}
 					world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
-					if (!flag1) {
+					if (!flag) {
 						--itemstack.stackSize;
 
 						if (itemstack.stackSize == 0) {

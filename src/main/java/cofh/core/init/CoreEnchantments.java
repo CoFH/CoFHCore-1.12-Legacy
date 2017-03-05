@@ -3,9 +3,11 @@ package cofh.core.init;
 import cofh.core.enchantment.EnchantmentHolding;
 import cofh.core.enchantment.EnchantmentMultishot;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CoreEnchantments {
@@ -75,5 +77,8 @@ public class CoreEnchantments {
 	public static Enchantment holding;
 	public static Enchantment multishot;
 	public static Enchantment vorpal;
+
+	/* TYPES */
+	public static final EnumEnchantmentType ENCHANTMENT_TYPE_STORAGE = EnumHelper.addEnchantmentType("COFH:STORAGE");
 
 }

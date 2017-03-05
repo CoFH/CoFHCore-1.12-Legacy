@@ -75,6 +75,9 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 	@Override
 	public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState iblockstate, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
 
+		if (this.density < 0) {
+			return null;
+		}
 		if (iblockstate.getMaterial().isLiquid()) {
 			double fluidHeight = (double) ((float) (blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(iblockstate.getValue(BlockLiquid.LEVEL)));
 			if (yToTest >= fluidHeight) {
