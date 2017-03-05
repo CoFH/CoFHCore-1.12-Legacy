@@ -24,8 +24,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-import static net.minecraft.util.EnumFacing.UP;
-
 public abstract class BlockFluidCore extends BlockFluidClassic implements IInitializer, IModelRegister {
 
 	protected String modName;
@@ -100,7 +98,7 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 		if (density < 0) {
 			py = pos.getY() + 2.10D;
 		}
-		if (rand.nextInt(20) == 0 && world.isSideSolid(pos.add(0, densityDir, 0), densityDir == -1 ? UP : EnumFacing.DOWN) && !world.getBlockState(pos.add(0, 2 * densityDir, 0)).getMaterial().blocksMovement()) {
+		if (rand.nextInt(20) == 0 && world.isSideSolid(pos.add(0, densityDir, 0), densityDir == -1 ? EnumFacing.UP : EnumFacing.DOWN) && !world.getBlockState(pos.add(0, 2 * densityDir, 0)).getMaterial().blocksMovement()) {
 			Particle fx = new EntityDropParticleFX(world, px, py, pz, particleRed, particleGreen, particleBlue, densityDir);
 			FMLClientHandler.instance().getClient().effectRenderer.addEffect(fx);
 		}

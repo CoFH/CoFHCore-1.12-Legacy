@@ -60,7 +60,6 @@ public abstract class TabScrolledText extends TabBase {
 
 		if (!isFullyOpened()) {
 			list.add(getTitle());
-			return;
 		}
 	}
 

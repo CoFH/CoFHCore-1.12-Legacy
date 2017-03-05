@@ -10,7 +10,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
@@ -20,8 +19,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -82,12 +79,6 @@ public class Proxy {
 		if (CoreProps.treeGrowthChance < 100 && event.getWorld().rand.nextInt(100) >= CoreProps.treeGrowthChance) {
 			event.setResult(Result.DENY);
 		}
-	}
-
-	@SideOnly (Side.CLIENT)
-	@SubscribeEvent
-	public void registerIcons(TextureStitchEvent.Pre event) {
-
 	}
 
 	/* SERVER UTILS */

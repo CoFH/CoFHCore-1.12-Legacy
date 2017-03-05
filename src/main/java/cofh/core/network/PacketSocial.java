@@ -38,7 +38,6 @@ public class PacketSocial extends PacketCoFHBase {
 			case REMOVE_FRIEND:
 				RegistrySocial.removeFriend(((EntityPlayerMP) player).getGameProfile(), getString());
 				RegistrySocial.sendFriendsToPlayer((EntityPlayerMP) player);
-				return;
 		}
 	}
 

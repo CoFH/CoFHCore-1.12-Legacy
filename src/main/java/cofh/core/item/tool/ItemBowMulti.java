@@ -228,12 +228,6 @@ public class ItemBowMulti extends ItemBow implements IModelRegister {
 	}
 
 	@Override
-	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-
-		return !ItemHelper.itemsEqualWithMetadata(oldStack, newStack);
-	}
-
-	@Override
 	public boolean showDurabilityBar(ItemStack stack) {
 
 		return getStackDamage(stack) > 0;
@@ -358,23 +352,22 @@ public class ItemBowMulti extends ItemBow implements IModelRegister {
 				if (itemstack == null) {
 					itemstack = new ItemStack(Items.ARROW);
 				}
-				float f = getArrowVelocity(i) * (1 + getSpeedModifier(stack));
+				float f = getArrowVelocity(i);
+				float speedMod = 1 + getSpeedModifier(stack);
 
 				if ((double) f >= 0.1D) {
-
 					if (!world.isRemote) {
 						int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, stack);
 						int punchLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
 						int powerLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
 						boolean flame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;
-						stack.damageItem(1, entityplayer);
 						onBowFired(entityplayer, stack);
 
 						for (int shot = 0; shot <= enchantMultishot; shot++) {
 							ItemArrow itemarrow = (ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW);
 							EntityArrow arrow = itemarrow.createArrow(world, itemstack, entityplayer);
 							arrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
-
+							arrow.setVelocity(arrow.motionX * speedMod, arrow.motionY * speedMod, arrow.motionZ * speedMod);
 							arrow.setDamage(arrow.getDamage() + getDamageModifier(stack));
 
 							if (f >= 1.0F) {
@@ -394,6 +387,7 @@ public class ItemBowMulti extends ItemBow implements IModelRegister {
 							}
 							world.spawnEntityInWorld(arrow);
 						}
+						stack.damageItem(1, entityplayer);
 					}
 					world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
