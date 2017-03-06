@@ -3,7 +3,7 @@ package cofh.core.world;
 import cofh.CoFHCore;
 import cofh.api.world.IFeatureGenerator;
 import cofh.api.world.IFeatureHandler;
-import cofh.asm.hooks.ModPopulateChunkEvent;
+import cofh.asm.hooks.ASMHooks;
 import cofh.core.world.TickHandlerWorld.RetroChunkCoord;
 import cofh.lib.util.ChunkCoord;
 import cofh.lib.util.LinkedHashList;
@@ -104,6 +104,8 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		MinecraftForge.EVENT_BUS.register(instance);
 		MinecraftForge.ORE_GEN_BUS.register(instance);
 
+		ASMHooks.registerPostGenHook((world, chunkX, chunkZ) -> populatingChunks.remove(new ChunkReference(world.provider.getDimension(), chunkX, chunkZ)));
+
 		if (genFlatBedrock & retroFlatBedrock | retroGeneration) {
 			// TODO: remove this condition when pregen works? (see handler for alternate)
 			MinecraftForge.EVENT_BUS.register(TickHandlerWorld.instance);
@@ -138,12 +140,6 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	public void populateChunkEvent(PopulateChunkEvent.Post event) {
 
 		populatingChunks.get(new ChunkReference(event.getWorld().provider.getDimension(), event.getChunkX(), event.getChunkZ())).hasVillage = event.isHasVillageGenerated();
-	}
-
-	@SubscribeEvent
-	public void populateChunkEvent(ModPopulateChunkEvent.Post event) {
-
-		populatingChunks.remove(new ChunkReference(event.world.provider.getDimension(), event.chunkX, event.chunkZ));
 	}
 
 	@SubscribeEvent

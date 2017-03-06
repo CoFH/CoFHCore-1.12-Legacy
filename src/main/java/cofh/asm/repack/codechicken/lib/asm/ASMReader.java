@@ -243,7 +243,7 @@ public class ASMReader {
 								insn = new VarInsnNode(opcode, Integer.parseInt(split[1]));
 								break;
 							case TYPE_INSN:
-								insn = new ObfMapping(split[1]).toClassloading().toInsn(opcode);
+								insn = new ObfMapping(split[1]).toRuntime().toInsn(opcode);
 								break;
 							case FIELD_INSN:
 							case METHOD_INSN:
@@ -251,7 +251,7 @@ public class ASMReader {
 								for (int i = 1; i < split.length; i++) {
 									sb.append(split[i]);
 								}
-								insn = ObfMapping.fromDesc(sb.toString()).toClassloading().toInsn(opcode);
+								insn = ObfMapping.fromDesc(sb.toString()).toRuntime().toInsn(opcode);
 								break;
 							case INVOKE_DYNAMIC_INSN:
 								throw new Exception("Found INVOKEDYNAMIC while reading");

@@ -103,7 +103,7 @@ public class ModularASMTransformer {
 
 		public MethodTransformer(ObfMapping method) {
 
-			this.method = method.toClassloading();
+			this.method = method.toRuntime();
 		}
 
 		@Override
@@ -198,7 +198,7 @@ public class ModularASMTransformer {
 		public MethodWriter(int access, @Nonnull ObfMapping method, @Nullable String[] exceptions, @Nullable InsnList list) {
 
 			this.access = access;
-			this.method = method.toClassloading();
+			this.method = method.toRuntime();
 			this.exceptions = exceptions;
 			this.list = list;
 		}
@@ -416,7 +416,7 @@ public class ModularASMTransformer {
 		 */
 		public FieldWriter(@Nonnull int access, @Nonnull ObfMapping field, @Nullable Object value) {
 
-			this.field = field.toClassloading();
+			this.field = field.toRuntime();
 			this.access = access;
 			this.value = value;
 		}
