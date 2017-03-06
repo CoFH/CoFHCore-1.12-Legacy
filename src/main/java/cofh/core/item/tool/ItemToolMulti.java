@@ -4,7 +4,6 @@ import cofh.api.core.IModelRegister;
 import cofh.core.render.FontRendererCore;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
-import cofh.lib.util.helpers.StringHelper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import gnu.trove.map.TMap;
@@ -88,21 +87,11 @@ public class ItemToolMulti extends ItemTool implements IModelRegister {
 		return this;
 	}
 
+	/* TOOL METHODS */
 	protected ItemToolMulti addToolClass(String string) {
 
 		toolClasses.add(string);
 		return this;
-	}
-
-	protected void addInformationDelegate(ItemStack stack, EntityPlayer player, List<String> list, boolean check) {
-
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return;
-		}
-		ToolEntry item = itemMap.get(i);
-
-		list.add(StringHelper.getInfoText("info." + modName + "." + name + "." + item.name));
 	}
 
 	protected boolean harvestBlock(World world, BlockPos pos, EntityPlayer player) {
@@ -169,15 +158,6 @@ public class ItemToolMulti extends ItemTool implements IModelRegister {
 		return true;
 	}
 
-	protected int getStackDamage(ItemStack stack) {
-
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Durability", 0);
-		}
-		return stack.getTagCompound().getInteger("Durability");
-	}
-
 	protected float getAttackDamage(ItemStack stack) {
 
 		return baseAttackDamage + getToolMaterial(stack).getDamageVsEntity();
@@ -193,24 +173,6 @@ public class ItemToolMulti extends ItemTool implements IModelRegister {
 		return getToolMaterial(stack).getEfficiencyOnProperMaterial();
 	}
 
-	protected String getRepairIngot(ItemStack stack) {
-
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return "ingotIron";
-		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).ingot;
-	}
-
-	protected Item.ToolMaterial getToolMaterial(ItemStack stack) {
-
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return ToolMaterial.IRON;
-		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).material;
-	}
-
 	protected THashSet<Block> getEffectiveBlocks(ItemStack stack) {
 
 		return effectiveBlocks;
@@ -221,29 +183,67 @@ public class ItemToolMulti extends ItemTool implements IModelRegister {
 		return effectiveMaterials;
 	}
 
-	/* ADD ITEMS */
-	public ItemStack addItem(int number, ToolEntry entry) {
+	/* COMMON METHODS */
+	public ItemStack setDefaultTag(ItemStack stack) {
 
-		if (itemMap.containsKey(Integer.valueOf(number))) {
-			return null;
-		}
-		itemMap.put(Integer.valueOf(number), entry);
-		itemList.add(Integer.valueOf(number));
+		return setDefaultTag(stack, 0);
+	}
 
-		ItemStack stack = new ItemStack(this, 1, number);
+	public ItemStack setDefaultTag(ItemStack stack, int type) {
+
 		stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setInteger("Durability", 0);
+		stack.getTagCompound().setInteger("Type", type);
+
 		return stack;
 	}
 
-	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot, EnumRarity rarity) {
+	protected int getType(ItemStack stack) {
 
-		return addItem(number, new ToolEntry(name, material, ingot, rarity));
+		if (stack.getTagCompound() == null) {
+			setDefaultTag(stack);
+		}
+		return stack.getTagCompound().getInteger("Type");
 	}
 
-	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot) {
+	protected ToolEntry getToolEntry(ItemStack stack) {
 
-		return addItem(number, new ToolEntry(name, material, ingot));
+		int type = getType(stack);
+		return itemMap.get(type);
+	}
+
+	protected Item.ToolMaterial getToolMaterial(ItemStack stack) {
+
+		ToolEntry entry = getToolEntry(stack);
+		return entry == null ? Item.ToolMaterial.IRON : entry.material;
+	}
+
+	protected String getRepairIngot(ItemStack stack) {
+
+		ToolEntry entry = getToolEntry(stack);
+		return entry == null ? "ingotIron" : entry.ingot;
+	}
+
+	/* ADD ITEMS */
+	public ItemStack addItem(int type, ToolEntry entry) {
+
+		if (itemMap.containsKey(type)) {
+			return null;
+		}
+		itemMap.put(type, entry);
+		itemList.add(type);
+
+		ItemStack stack = setDefaultTag(new ItemStack(this), type);
+		return stack;
+	}
+
+	public ItemStack addItem(int type, String name, Item.ToolMaterial material, String ingot, EnumRarity rarity) {
+
+		return addItem(type, new ToolEntry(name, material, ingot, rarity));
+	}
+
+	public ItemStack addItem(int type, String name, Item.ToolMaterial material, String ingot) {
+
+		return addItem(type, new ToolEntry(name, material, ingot));
 	}
 
 	/* STANDARD METHODS */
@@ -255,25 +255,8 @@ public class ItemToolMulti extends ItemTool implements IModelRegister {
 			return;
 		}
 		for (int i = 0; i < itemList.size(); i++) {
-			ItemStack stack = new ItemStack(item, 1, itemList.get(i));
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Durability", 0);
-
-			list.add(stack);
+			list.add(setDefaultTag(new ItemStack(this), itemList.get(i)));
 		}
-	}
-
-	@Override
-	public void setDamage(ItemStack stack, int damage) {
-
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Durability", 0);
-		}
-		if (damage < 0) {
-			damage = 0;
-		}
-		stack.getTagCompound().setInteger("Durability", damage);
 	}
 
 	@Override
@@ -295,39 +278,9 @@ public class ItemToolMulti extends ItemTool implements IModelRegister {
 	}
 
 	@Override
-	public boolean isDamaged(ItemStack stack) {
-
-		return getStackDamage(stack) > 0;
-	}
-
-	@Override
 	public boolean isItemTool(ItemStack stack) {
 
 		return true;
-	}
-
-	@Override
-	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-
-		return !ItemHelper.itemsEqualWithMetadata(oldStack, newStack);
-	}
-
-	@Override
-	public boolean showDurabilityBar(ItemStack stack) {
-
-		return getStackDamage(stack) > 0;
-	}
-
-	@Override
-	public int getDamage(ItemStack stack) {
-
-		return getStackDamage(stack);
-	}
-
-	@Override
-	public int getMetadata(ItemStack stack) {
-
-		return getStackDamage(stack);
 	}
 
 	@Override
@@ -342,11 +295,7 @@ public class ItemToolMulti extends ItemTool implements IModelRegister {
 	@Override
 	public int getItemEnchantability(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return 0;
-		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).material.getEnchantability();
+		return getToolMaterial(stack).getEnchantability();
 	}
 
 	@Override
@@ -375,7 +324,7 @@ public class ItemToolMulti extends ItemTool implements IModelRegister {
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
 
-		Multimap<String, AttributeModifier> multimap = HashMultimap.<String, AttributeModifier>create();
+		Multimap<String, AttributeModifier> multimap = HashMultimap.create();
 
 		if (slot == EntityEquipmentSlot.MAINHAND) {
 			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", getAttackDamage(stack), 0));
@@ -394,11 +343,8 @@ public class ItemToolMulti extends ItemTool implements IModelRegister {
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return EnumRarity.COMMON;
-		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).rarity;
+		ToolEntry entry = getToolEntry(stack);
+		return entry == null ? EnumRarity.COMMON : entry.rarity;
 	}
 
 	@Override
@@ -410,12 +356,8 @@ public class ItemToolMulti extends ItemTool implements IModelRegister {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return "item.invalid";
-		}
-		ToolEntry item = itemMap.get(i);
-		return getUnlocalizedName() + "." + item.name;
+		ToolEntry entry = getToolEntry(stack);
+		return entry == null ? "item.invalid" : getUnlocalizedName() + "." + entry.name;
 	}
 
 	@Override
@@ -463,17 +405,17 @@ public class ItemToolMulti extends ItemTool implements IModelRegister {
 
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
 
-			return textureMap.get(ItemHelper.getItemDamage(stack));
+			return textureMap.get(getType(stack));
 		}
 	}
 
 	/* ITEM ENTRY */
 	public class ToolEntry {
 
-		public String name;
-		public Item.ToolMaterial material;
-		public String ingot;
-		public EnumRarity rarity;
+		final String name;
+		final Item.ToolMaterial material;
+		final String ingot;
+		final EnumRarity rarity;
 
 		ToolEntry(String name, Item.ToolMaterial material, String ingot, EnumRarity rarity) {
 

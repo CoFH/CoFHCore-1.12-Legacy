@@ -40,7 +40,7 @@ public class CommandTPS implements ISubCommand {
 
 	private double getTickMs(World world) {
 
-		return getTickTimeSum(world == null ? CoreProps.server.tickTimeArray : (long[]) CoreProps.server.worldTickTimes.get(Integer.valueOf(world.provider.getDimension()))) * 1.0E-006D;
+		return getTickTimeSum(world == null ? CoreProps.server.tickTimeArray : (long[]) CoreProps.server.worldTickTimes.get(world.provider.getDimension())) * 1.0E-006D;
 	}
 
 	private double getTps(World world) {

@@ -66,7 +66,7 @@ public class CommandFriend implements ISubCommand {
 				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
 				throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 			}
-		} else if (arguments.length > 1 && (arguments[1].equalsIgnoreCase("gui") ||arguments[1].equalsIgnoreCase("list"))) {
+		} else if (arguments.length > 1 && (arguments[1].equalsIgnoreCase("gui") || arguments[1].equalsIgnoreCase("list"))) {
 			if (sender instanceof EntityPlayerMP) {
 				EntityPlayerMP thePlayer = (EntityPlayerMP) sender;
 				RegistrySocial.sendFriendsToPlayer(thePlayer);

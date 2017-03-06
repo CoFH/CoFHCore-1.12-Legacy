@@ -40,7 +40,7 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 	protected void addInformationDelegate(ItemStack stack, EntityPlayer player, List<String> list, boolean check) {
 
 		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
+		if (!itemMap.containsKey(i)) {
 			return;
 		}
 		ItemEntry item = itemMap.get(i);
@@ -51,11 +51,11 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 	/* ADD ITEMS */
 	public ItemStack addItem(int number, ItemEntry entry) {
 
-		if (itemMap.containsKey(Integer.valueOf(number))) {
+		if (itemMap.containsKey(number)) {
 			return null;
 		}
-		itemMap.put(Integer.valueOf(number), entry);
-		itemList.add(Integer.valueOf(number));
+		itemMap.put(number, entry);
+		itemList.add(number);
 
 		ItemStack stack = new ItemStack(this, 1, number);
 		return stack;
@@ -111,7 +111,7 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 	public EnumRarity getRarity(ItemStack stack) {
 
 		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
+		if (!itemMap.containsKey(i)) {
 			return EnumRarity.COMMON;
 		}
 		return itemMap.get(ItemHelper.getItemDamage(stack)).rarity;
@@ -121,7 +121,7 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 	public String getUnlocalizedName(ItemStack stack) {
 
 		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
+		if (!itemMap.containsKey(i)) {
 			return "item.invalid";
 		}
 		ItemEntry item = itemMap.get(i);

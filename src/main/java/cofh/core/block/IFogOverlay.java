@@ -20,9 +20,9 @@ public interface IFogOverlay {
 	 *
 	 * @param state            The State at the Entities head.
 	 * @param renderViewEntity The entity at the ViewPort.
-	 * @param fogColourRed     The current Red cog colour.
-	 * @param fogColourGreen   The current Green cog colour.
-	 * @param fogColourBlue    The current Blue cog colour.
+	 * @param fogColourRed     The current Red fog colour.
+	 * @param fogColourGreen   The current Green fog colour.
+	 * @param fogColourBlue    The current Blue fog colour.
 	 * @return The modified or new fog colour.(x=red, y=green, z=blue)
 	 */
 	Vec3d getFog(IBlockState state, Entity renderViewEntity, float fogColourRed, float fogColourGreen, float fogColourBlue);

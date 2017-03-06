@@ -11,15 +11,9 @@ public class JEIPluginCore implements IModPlugin {
 
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+
 		for (Item item : Item.REGISTRY) {
-			if (item instanceof ItemToolMulti ||
-					item instanceof ItemBowMulti ||
-					item instanceof ItemShearsMulti ||
-					item instanceof ItemShieldMulti ||
-					item instanceof ItemFishingRodMulti ||
-					item instanceof ItemHoeMulti ||
-					item instanceof ItemSwordMulti
-					) {
+			if (item instanceof ItemToolMulti || item instanceof ItemBowMulti || item instanceof ItemShearsMulti || item instanceof ItemShieldMulti || item instanceof ItemFishingRodMulti || item instanceof ItemHoeMulti || item instanceof ItemSwordMulti) {
 				subtypeRegistry.registerSubtypeInterpreter(item, itemStack -> String.valueOf(ItemHelper.getItemDamage(itemStack)));
 			}
 		}

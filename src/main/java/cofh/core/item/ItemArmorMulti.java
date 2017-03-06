@@ -4,7 +4,6 @@ import cofh.api.core.IModelRegister;
 import cofh.core.render.FontRendererCore;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
-import cofh.lib.util.helpers.StringHelper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import gnu.trove.map.TMap;
@@ -15,6 +14,7 @@ import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
@@ -25,8 +25,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,7 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class ItemArmorMulti extends ItemArmor implements IModelRegister {
+public class ItemArmorMulti extends ItemArmor implements ISpecialArmor, IModelRegister {
 
 	private static final UUID[] ARMOR_MODIFIERS = new UUID[] { UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150") };
 
@@ -68,67 +70,66 @@ public class ItemArmorMulti extends ItemArmor implements IModelRegister {
 		return this;
 	}
 
-	protected void addInformationDelegate(ItemStack stack, EntityPlayer player, List<String> list, boolean check) {
+	public ItemStack setDefaultTag(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return;
-		}
-		ArmorEntry item = itemMap.get(i);
-
-		list.add(StringHelper.getInfoText("info." + modName + "." + name + "." + item.name));
+		return setDefaultTag(stack, 0);
 	}
 
-	protected int getStackDamage(ItemStack stack) {
+	public ItemStack setDefaultTag(ItemStack stack, int type) {
+
+		stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setInteger("Type", type);
+
+		return stack;
+	}
+
+	protected int getArmorType(ItemStack stack) {
 
 		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
+			setDefaultTag(stack);
 		}
-		return stack.getTagCompound().getInteger("Damage");
+		return stack.getTagCompound().getInteger("Type");
 	}
 
-	protected String getRepairIngot(ItemStack stack) {
+	protected ArmorEntry getArmorEntry(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return "ingotIron";
-		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).ingot;
+		int type = getArmorType(stack);
+		return itemMap.get(type);
 	}
 
 	protected ItemArmor.ArmorMaterial getArmorMaterial(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return ArmorMaterial.IRON;
-		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).material;
+		ArmorEntry entry = getArmorEntry(stack);
+		return entry.material;
+	}
+
+	protected String getRepairIngot(ItemStack stack) {
+
+		ArmorEntry entry = getArmorEntry(stack);
+		return entry.ingot;
 	}
 
 	/* ADD ITEMS */
-	public ItemStack addItem(int number, ArmorEntry entry) {
+	public ItemStack addItem(int type, ArmorEntry entry) {
 
-		if (itemMap.containsKey(Integer.valueOf(number))) {
+		if (itemMap.containsKey(type)) {
 			return null;
 		}
-		itemMap.put(Integer.valueOf(number), entry);
-		itemList.add(Integer.valueOf(number));
+		itemMap.put(type, entry);
+		itemList.add(type);
 
-		ItemStack stack = new ItemStack(this, 1, number);
-		stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setInteger("Damage", 0);
+		ItemStack stack = setDefaultTag(new ItemStack(this), type);
 		return stack;
 	}
 
-	public ItemStack addItem(int number, String name, ItemArmor.ArmorMaterial material, String[] textures, String ingot, EnumRarity rarity) {
+	public ItemStack addItem(int type, String name, ItemArmor.ArmorMaterial material, String[] textures, String ingot, EnumRarity rarity) {
 
-		return addItem(number, new ArmorEntry(name, material, textures, ingot, rarity));
+		return addItem(type, new ArmorEntry(name, material, textures, ingot, rarity));
 	}
 
-	public ItemStack addItem(int number, String name, ItemArmor.ArmorMaterial material, String[] textures, String ingot) {
+	public ItemStack addItem(int type, String name, ItemArmor.ArmorMaterial material, String[] textures, String ingot) {
 
-		return addItem(number, new ArmorEntry(name, material, textures, ingot));
+		return addItem(type, new ArmorEntry(name, material, textures, ingot));
 	}
 
 	/* STANDARD METHODS */
@@ -140,25 +141,8 @@ public class ItemArmorMulti extends ItemArmor implements IModelRegister {
 			return;
 		}
 		for (int i = 0; i < itemList.size(); i++) {
-			ItemStack stack = new ItemStack(item, 1, itemList.get(i));
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
-
-			list.add(stack);
+			list.add(setDefaultTag(new ItemStack(this), itemList.get(i)));
 		}
-	}
-
-	@Override
-	public void setDamage(ItemStack stack, int damage) {
-
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Damage", 0);
-		}
-		if (damage < 0) {
-			damage = 0;
-		}
-		stack.getTagCompound().setInteger("Damage", damage);
 	}
 
 	@Override
@@ -174,49 +158,15 @@ public class ItemArmorMulti extends ItemArmor implements IModelRegister {
 	}
 
 	@Override
-	public boolean isDamaged(ItemStack stack) {
-
-		return getStackDamage(stack) > 0;
-	}
-
-	@Override
 	public boolean isItemTool(ItemStack stack) {
 
-		return false;
-	}
-
-	@Override
-	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-
-		return !ItemHelper.itemsEqualWithMetadata(oldStack, newStack);
-	}
-
-	@Override
-	public boolean showDurabilityBar(ItemStack stack) {
-
-		return getStackDamage(stack) > 0;
-	}
-
-	@Override
-	public int getDamage(ItemStack stack) {
-
-		return getStackDamage(stack);
-	}
-
-	@Override
-	public int getMetadata(ItemStack stack) {
-
-		return getStackDamage(stack);
+		return true;
 	}
 
 	@Override
 	public int getItemEnchantability(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return 0;
-		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).material.getEnchantability();
+		return getArmorMaterial(stack).getEnchantability();
 	}
 
 	@Override
@@ -236,9 +186,9 @@ public class ItemArmorMulti extends ItemArmor implements IModelRegister {
 		return null;
 	}
 
-	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
 
-		Multimap<String, AttributeModifier> multimap = HashMultimap.<String, AttributeModifier>create();
+		Multimap<String, AttributeModifier> multimap = HashMultimap.create();
 
 		if (slot == this.armorType) {
 			multimap.put(SharedMonsterAttributes.ARMOR.getAttributeUnlocalizedName(), new AttributeModifier(ARMOR_MODIFIERS[slot.getIndex()], "Armor modifier", (double) getArmorMaterial(stack).getDamageReductionAmount(slot), 0));
@@ -257,37 +207,26 @@ public class ItemArmorMulti extends ItemArmor implements IModelRegister {
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return EnumRarity.COMMON;
-		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).rarity;
+		ArmorEntry entry = getArmorEntry(stack);
+		return entry == null ? EnumRarity.COMMON : entry.rarity;
 	}
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return "item.invalid";
-		}
-		ArmorEntry item = itemMap.get(i);
+		ArmorEntry entry = getArmorEntry(stack);
 
 		if (slot == EntityEquipmentSlot.LEGS) {
-			return item.textures[1];
+			return entry.textures[1];
 		}
-		return item.textures[0];
+		return entry.textures[0];
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return "item.invalid";
-		}
-		ArmorEntry item = itemMap.get(i);
-		return getUnlocalizedName() + "." + item.name;
+		ArmorEntry entry = getArmorEntry(stack);
+		return entry == null ? "item.invalid" : getUnlocalizedName() + "." + entry.name;
 	}
 
 	@Override
@@ -305,6 +244,25 @@ public class ItemArmorMulti extends ItemArmor implements IModelRegister {
 		this.name = name;
 		name = modName + ".armor." + name;
 		return super.setUnlocalizedName(name);
+	}
+
+	/* ISpecialArmor */
+	@Override
+	public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage, int slot) {
+
+		return source.isUnblockable() ? null : new ArmorProperties(0, damageReduceAmount / 25D, Integer.MAX_VALUE);
+	}
+
+	@Override
+	public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot) {
+
+		return getArmorMaterial(armor).getDamageReductionAmount(armorType);
+	}
+
+	@Override
+	public void damageArmor(EntityLivingBase entity, ItemStack armor, DamageSource source, int damage, int slot) {
+
+		armor.damageItem(1, entity);
 	}
 
 	/* IModelRegister */
@@ -329,18 +287,18 @@ public class ItemArmorMulti extends ItemArmor implements IModelRegister {
 
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
 
-			return textureMap.get(ItemHelper.getItemDamage(stack));
+			return textureMap.get(getArmorType(stack));
 		}
 	}
 
 	/* ITEM ENTRY */
 	public class ArmorEntry {
 
-		public String name;
-		public ItemArmor.ArmorMaterial material;
-		public String[] textures;
-		public String ingot;
-		public EnumRarity rarity;
+		final String name;
+		final ItemArmor.ArmorMaterial material;
+		final String[] textures;
+		final String ingot;
+		final EnumRarity rarity;
 
 		ArmorEntry(String name, ItemArmor.ArmorMaterial material, String[] textures, String ingot, EnumRarity rarity) {
 

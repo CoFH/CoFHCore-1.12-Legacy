@@ -153,7 +153,7 @@ public class EntityFishHookCore extends EntityFishHook {
 				if (raytraceresult != null) {
 					if (raytraceresult.entityHit != null) {
 						this.caughtEntity = raytraceresult.entityHit;
-						this.getDataManager().set(DATA_HOOKED_ENTITY, Integer.valueOf(this.caughtEntity.getEntityId() + 1));
+						this.getDataManager().set(DATA_HOOKED_ENTITY, this.caughtEntity.getEntityId() + 1);
 					} else {
 						this.inGround = true;
 					}

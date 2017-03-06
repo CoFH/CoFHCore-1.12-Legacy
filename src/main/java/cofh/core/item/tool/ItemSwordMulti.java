@@ -4,7 +4,6 @@ import cofh.api.core.IModelRegister;
 import cofh.core.render.FontRendererCore;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.SecurityHelper;
-import cofh.lib.util.helpers.StringHelper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import gnu.trove.map.TMap;
@@ -18,7 +17,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
@@ -67,26 +65,7 @@ public class ItemSwordMulti extends ItemSword implements IModelRegister {
 		return this;
 	}
 
-	protected void addInformationDelegate(ItemStack stack, EntityPlayer player, List<String> list, boolean check) {
-
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return;
-		}
-		ToolEntry item = itemMap.get(i);
-
-		list.add(StringHelper.getInfoText("info." + modName + "." + name + "." + item.name));
-	}
-
-	protected int getStackDamage(ItemStack stack) {
-
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Durability", 0);
-		}
-		return stack.getTagCompound().getInteger("Durability");
-	}
-
+	/* TOOL METHODS */
 	protected float getAttackDamage(ItemStack stack) {
 
 		return baseAttackDamage + getToolMaterial(stack).getDamageVsEntity();
@@ -97,47 +76,67 @@ public class ItemSwordMulti extends ItemSword implements IModelRegister {
 		return baseAttackSpeed;
 	}
 
-	protected String getRepairIngot(ItemStack stack) {
+	/* COMMON METHODS */
+	public ItemStack setDefaultTag(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return "ingotIron";
+		return setDefaultTag(stack, 0);
+	}
+
+	public ItemStack setDefaultTag(ItemStack stack, int type) {
+
+		stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setInteger("Type", type);
+
+		return stack;
+	}
+
+	protected int getType(ItemStack stack) {
+
+		if (stack.getTagCompound() == null) {
+			setDefaultTag(stack);
 		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).ingot;
+		return stack.getTagCompound().getInteger("Type");
+	}
+
+	protected ToolEntry getToolEntry(ItemStack stack) {
+
+		int type = getType(stack);
+		return itemMap.get(type);
 	}
 
 	protected Item.ToolMaterial getToolMaterial(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return ToolMaterial.IRON;
-		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).material;
+		ToolEntry entry = getToolEntry(stack);
+		return entry.material;
+	}
+
+	protected String getRepairIngot(ItemStack stack) {
+
+		ToolEntry entry = getToolEntry(stack);
+		return entry.ingot;
 	}
 
 	/* ADD ITEMS */
-	public ItemStack addItem(int number, ToolEntry entry) {
+	public ItemStack addItem(int type, ToolEntry entry) {
 
-		if (itemMap.containsKey(Integer.valueOf(number))) {
+		if (itemMap.containsKey(type)) {
 			return null;
 		}
-		itemMap.put(Integer.valueOf(number), entry);
-		itemList.add(Integer.valueOf(number));
+		itemMap.put(type, entry);
+		itemList.add(type);
 
-		ItemStack stack = new ItemStack(this, 1, number);
-		stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setInteger("Durability", 0);
+		ItemStack stack = setDefaultTag(new ItemStack(this), type);
 		return stack;
 	}
 
-	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot, EnumRarity rarity) {
+	public ItemStack addItem(int type, String name, Item.ToolMaterial material, String ingot, EnumRarity rarity) {
 
-		return addItem(number, new ToolEntry(name, material, ingot, rarity));
+		return addItem(type, new ToolEntry(name, material, ingot, rarity));
 	}
 
-	public ItemStack addItem(int number, String name, Item.ToolMaterial material, String ingot) {
+	public ItemStack addItem(int type, String name, Item.ToolMaterial material, String ingot) {
 
-		return addItem(number, new ToolEntry(name, material, ingot));
+		return addItem(type, new ToolEntry(name, material, ingot));
 	}
 
 	/* STANDARD METHODS */
@@ -149,25 +148,8 @@ public class ItemSwordMulti extends ItemSword implements IModelRegister {
 			return;
 		}
 		for (int i = 0; i < itemList.size(); i++) {
-			ItemStack stack = new ItemStack(item, 1, itemList.get(i));
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Durability", 0);
-
-			list.add(stack);
+			list.add(setDefaultTag(new ItemStack(this), itemList.get(i)));
 		}
-	}
-
-	@Override
-	public void setDamage(ItemStack stack, int damage) {
-
-		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-			stack.getTagCompound().setInteger("Durability", 0);
-		}
-		if (damage < 0) {
-			damage = 0;
-		}
-		stack.getTagCompound().setInteger("Durability", damage);
 	}
 
 	@Override
@@ -183,49 +165,15 @@ public class ItemSwordMulti extends ItemSword implements IModelRegister {
 	}
 
 	@Override
-	public boolean isDamaged(ItemStack stack) {
-
-		return getStackDamage(stack) > 0;
-	}
-
-	@Override
 	public boolean isItemTool(ItemStack stack) {
 
 		return true;
 	}
 
 	@Override
-	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-
-		return !ItemHelper.itemsEqualWithMetadata(oldStack, newStack);
-	}
-
-	@Override
-	public boolean showDurabilityBar(ItemStack stack) {
-
-		return getStackDamage(stack) > 0;
-	}
-
-	@Override
-	public int getDamage(ItemStack stack) {
-
-		return getStackDamage(stack);
-	}
-
-	@Override
-	public int getMetadata(ItemStack stack) {
-
-		return getStackDamage(stack);
-	}
-
-	@Override
 	public int getItemEnchantability(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return 0;
-		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).material.getEnchantability();
+		return getToolMaterial(stack).getEnchantability();
 	}
 
 	@Override
@@ -268,22 +216,15 @@ public class ItemSwordMulti extends ItemSword implements IModelRegister {
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return EnumRarity.COMMON;
-		}
-		return itemMap.get(ItemHelper.getItemDamage(stack)).rarity;
+		ToolEntry entry = getToolEntry(stack);
+		return entry == null ? EnumRarity.COMMON : entry.rarity;
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(Integer.valueOf(i))) {
-			return "item.invalid";
-		}
-		ToolEntry item = itemMap.get(i);
-		return getUnlocalizedName() + "." + item.name;
+		ToolEntry entry = getToolEntry(stack);
+		return entry == null ? "item.invalid" : getUnlocalizedName() + "." + entry.name;
 	}
 
 	@Override
@@ -331,7 +272,7 @@ public class ItemSwordMulti extends ItemSword implements IModelRegister {
 
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
 
-			return textureMap.get(ItemHelper.getItemDamage(stack));
+			return textureMap.get(getType(stack));
 		}
 	}
 

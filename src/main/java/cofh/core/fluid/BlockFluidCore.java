@@ -2,6 +2,7 @@ package cofh.core.fluid;
 
 import cofh.api.core.IInitializer;
 import cofh.api.core.IModelRegister;
+import cofh.core.block.IFogOverlay;
 import cofh.core.util.StateMapper;
 import cofh.lib.render.particle.EntityDropParticleFX;
 import net.minecraft.block.BlockLiquid;
@@ -13,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -24,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public abstract class BlockFluidCore extends BlockFluidClassic implements IInitializer, IModelRegister {
+public abstract class BlockFluidCore extends BlockFluidClassic implements IInitializer, IFogOverlay, IModelRegister {
 
 	protected String modName;
 	protected String name;
@@ -126,6 +128,12 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 			return false;
 		}
 		return super.displaceIfPossible(world, pos);
+	}
+
+	/* IFogOverlay */
+	public Vec3d getFog(IBlockState state, Entity renderViewEntity, float fogColourRed, float fogColourGreen, float fogColourBlue) {
+
+		return new Vec3d(particleRed, particleGreen, particleBlue);
 	}
 
 	/* IModelRegister */
