@@ -22,14 +22,14 @@ public class CC_ClassWriter extends ClassWriter {
 
 		String c = type1.replace('/', '.');
 		String d = type2.replace('/', '.');
-		if (ClassHeirarchyManager.classExtends(d, c)) {
+		if (ClassHierarchyManager.classExtends(d, c)) {
 			return type1;
 		}
-		if (ClassHeirarchyManager.classExtends(c, d)) {
+		if (ClassHierarchyManager.classExtends(c, d)) {
 			return type2;
 		}
 		do
-			c = ClassHeirarchyManager.getSuperClass(c, runtime); while (!ClassHeirarchyManager.classExtends(d, c));
+			c = ClassHierarchyManager.getSuperClass(c, runtime); while (!ClassHierarchyManager.classExtends(d, c));
 
 		return c.replace('.', '/');
 	}
