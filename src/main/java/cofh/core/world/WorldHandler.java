@@ -329,7 +329,10 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		int offsetZ = chunkZ * 16;
 
 		/* Determine if this is a void age; halt if so. */
-		boolean isVoidAge = world.isAirBlock(new BlockPos(offsetX, 0, offsetZ));
+		boolean isVoidAge = !world.getBlockState(new BlockPos(offsetX, 0, offsetZ)).getBlock().isAssociatedBlock(Blocks.BEDROCK);
+		isVoidAge |= !world.getBlockState(new BlockPos(offsetX + 4, 0, offsetZ + 4)).getBlock().isAssociatedBlock(Blocks.BEDROCK);
+		isVoidAge |= !world.getBlockState(new BlockPos(offsetX + 8, 0, offsetZ + 8)).getBlock().isAssociatedBlock(Blocks.BEDROCK);
+		isVoidAge |= !world.getBlockState(new BlockPos(offsetX + 12, 0, offsetZ + 12)).getBlock().isAssociatedBlock(Blocks.BEDROCK);
 
 		if (isVoidAge) {
 			return;

@@ -49,7 +49,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	@Override
 	public String[] getASMTransformerClass() {
 
-		return new String[] { "cofh.asm.CoFHClassTransformer", "cofh.asm.repack.codechicken.lib.asm.ClassHeirachyManager" };
+		return new String[] { "cofh.asm.CoFHClassTransformer", "cofh.asm.repack.codechicken.lib.asm.ClassHeirarchyManager" };
 	}
 
 	@Override
