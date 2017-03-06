@@ -1,90 +1,4 @@
-#en_US
-
-chat.cofh.command.clearblocks.failure=No blocks to clear.
-chat.cofh.command.clearblocks.start=Clearing %s blocks from %s:%s:%s to %s:%s:%s.
-chat.cofh.command.clearblocks.success=Successfully cleared %s blocks from %s:%s:%s to %s:%s:%s.
-chat.cofh.command.clearblocks.syntax=/cofh clearblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} [block#meta] [block#meta] ...
-chat.cofh.command.clearblocks=Clears specified blocks from a specified area in the world.
-
-chat.cofh.command.countblocks.failure=No blocks exist in the area.
-chat.cofh.command.countblocks.start=Counting %s blocks from %s:%s:%s to %s:%s:%s.
-chat.cofh.command.countblocks.success=Found %s blocks from %s:%s:%s to %s:%s:%s.
-chat.cofh.command.countblocks.syntax=/cofh countblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} [block#meta] [block#meta] ...
-chat.cofh.command.countblocks=Counts specified blocks from a specified area in the world.
-
-chat.cofh.command.enchant.syntax=/cofh enchant [player] <enchantment ID> [level]
-chat.cofh.command.enchant=Improved /enchant. Has no limits on level or applicability.
-
-chat.cofh.command.friend.0=successfully added to your friends list.
-chat.cofh.command.friend.1=Sorry, there was a problem adding
-chat.cofh.command.friend.2=to your list.
-chat.cofh.command.friend.3=Sorry, that is not a valid username.
-chat.cofh.command.friend.4=successfully removed from your friends list.
-chat.cofh.command.friend.5=was not your friend.
-chat.cofh.command.friend.syntax=/cofh friend {gui | add <username> | remove <username>}
-chat.cofh.command.friend=The command to add and remove friends from your friend list.
-
-chat.cofh.command.help.0=Available commands are:
-chat.cofh.command.help.syntax=/cofh help [command]
-chat.cofh.command.help=The command to help you out with other commands!
-
-chat.cofh.command.killall.noHostile=No hostile mobs found!
-chat.cofh.command.killall.noMatch=No matching entities found!
-chat.cofh.command.killall.success=Removed %d entities. (%s)
-chat.cofh.command.killall.successHostile=Removed %d hostile mobs. (%s)
-chat.cofh.command.killall.syntax=/cofh killall [partial name]
-chat.cofh.command.killall=Kills all of the entities of the given name, and kills all hostile mobs by default.
-
-chat.cofh.command.notFound=Unknown command. Try /cofh help for a list of commands
-
-chat.cofh.command.pregen.start=Pre-generating %s chunks from %s:%s to %s:%s.
-chat.cofh.command.pregen.syntax=/cofh pregen {<user> <x chunk radius> <z chunk radius> | <x chunk start> <z chunk start> <x chunk end> <z chunk end>}
-chat.cofh.command.pregen=Pre-generates chunks in a specified area in the world.
-
-chat.cofh.command.reloadworldgen.success=Successfully reloaded World Generators.
-chat.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
-chat.cofh.command.reloadworldgen=Reloads world generation from disk.
-
-chat.cofh.command.replaceblocks.failure=No blocks to replace.
-chat.cofh.command.replaceblocks.start=Replacing %s blocks from %s:%s:%s to %s:%s:%s with %s.
-chat.cofh.command.replaceblocks.success=Successfully replaced %s blocks from %s:%s:%s to %s:%s:%s with %s.
-chat.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} <replaceBlock#meta> [block#meta] [block#meta] ...
-chat.cofh.command.replaceblocks=Replaces specified blocks from a specified area in the world.
-
-chat.cofh.command.syntax.syntax=/cofh syntax [command]
-chat.cofh.command.syntax=The command to help you out with the syntax other commands!
-chat.cofh.command.syntaxError=Invalid Syntax.
-
-chat.cofh.command.tps.syntax=/cofh tps [{o | a | <dim ID>}]
-chat.cofh.command.tps=Gets the Ticks Per Second on the server. On a perfect server this should be 20.
-
-chat.cofh.command.tpx.dimensionOther=Successfully teleported %s to The %2$s at %3$.2f %4$.2f %5$.2f
-chat.cofh.command.tpx.dimensionOtherTo=Successfully teleported %s to %s in %3$s at %4$.2f %5$.2f %6$.2f
-chat.cofh.command.tpx.dimensionOtherToSelf=Successfully teleported %s to themself in %2$s at %3$.2f %4$.2f %5$.2f
-chat.cofh.command.tpx.dimensionSelf=Successfully teleported to The %1$s at %2$.2f %3$.2f %4$.2f
-chat.cofh.command.tpx.other=Successfully teleported %s to %.2f %.2f %.2f
-chat.cofh.command.tpx.otherTo=Successfully teleported %s to %s at %.2f %.2f %.2f
-chat.cofh.command.tpx.otherToSelf=Successfully teleported %s to themself at %.2f %.2f %.2f
-chat.cofh.command.tpx.self=Successfully teleported to %.2f %.2f %.2f
-chat.cofh.command.tpx.snark.0=Successfully teleported you to yourself!
-chat.cofh.command.tpx.snark.1=Successfully teleported %s to themself!
-chat.cofh.command.tpx.syntax=/cofh tpx [player] {(<player> | <dimension>) | <x> <y> <z> [dimension]}
-chat.cofh.command.tpx=A improved version of the /tp command that works in between dimensions.
-
-chat.cofh.command.unloadchunk.success=Unloading Chunk at %s:%s
-chat.cofh.command.unloadchunk.syntax=/cofh unloadchunk
-chat.cofh.command.unloadchunk=Unloads the chunk the player is looking at.
-
-chat.cofh.command.version.0=This mod is on version
-chat.cofh.command.version.syntax=/cofh version
-chat.cofh.command.version=Gives you the version of this mod.
-
-chat.cofh.command.world.notFound=World does not exist.
-
-chat.cofh.secure.block.success=This block now belongs to you.
-chat.cofh.secure.item.success=This item now belongs to you.
-chat.cofh.secure.notice=Notice: Server Ops are able to freely access 'secure' blocks on this server.
-chat.cofh.secure.warning=This is private and belongs to %s! You could have lost your hand!
+#it_IT
 
 config.Client.tooltip=Configura solo le opzioni a livello di client.
 config.Common.tooltip=Configura le opzioni generali.
@@ -93,49 +7,32 @@ config.Loot.tooltip=Configura le opzioni del modulo Loot.
 
 enchant.cofh.holding=Spazio
 enchant.cofh.multishot=Multi-tiro
-enchant.cofh.vorpal=Vorpal
 
 fluid.tile.lava=Lava
 fluid.tile.water=Acqua
-
-gui.cofh.configuration=Configuration
-
-gui.cofh.transferInDisabled=Auto-Input Disabled
-gui.cofh.transferInEnabled=Auto-Input Enabled
-gui.cofh.transferInUnavailable=Auto-Input Unavailable
-
-gui.cofh.transferOutDisabled=Auto-Output Disabled
-gui.cofh.transferOutEnabled=Auto-Output Enabled
-gui.cofh.transferOutUnavailable=Auto-Output Unavailable
 
 info.cofh.access=Accesso
 info.cofh.accessMode=Modalità accesso
 info.cofh.accessPrivate=Solo proprietario
 info.cofh.accessPublic=Accesso pubblico
 info.cofh.accessRestricted=Ristretto
-info.cofh.addDestination=Add Destination
-info.cofh.addFrequency=Add Frequency
 info.cofh.all=Tutto
 info.cofh.amount=Quantità
 info.cofh.angle=Angolo
 info.cofh.anotherplayer=Altro giocatore
 info.cofh.augmentation=Potenziamento
 info.cofh.blank=Vuoto
-info.cofh.buffer=Buffer
 info.cofh.capacity=Capacità
-info.cofh.chance=Chance
 info.cofh.charge=Carica
 info.cofh.cheater=Imbroglione!
 info.cofh.contents=Contenuto
 info.cofh.controlStatus=Controllo stato
 info.cofh.damageAttack=Danni per colpo
 info.cofh.damageFlux=Danni per flux
-info.cofh.disable=Disable
 info.cofh.disabled=Disabilitato
 info.cofh.distance=Distanza
 info.cofh.dry=Asciutto
 info.cofh.duration=Durata
-info.cofh.efficiency=Efficiency
 info.cofh.empty=Vuoto
 info.cofh.enable=Enable
 info.cofh.enabled=Attiva
@@ -146,15 +43,12 @@ info.cofh.energyStored=Corrente immag.
 info.cofh.filter=Filter
 info.cofh.fluid=Fluido
 info.cofh.fluids=Fluidi
-info.cofh.folded=Folded
 info.cofh.force=Forza
 info.cofh.forDetails=per dettagli
 info.cofh.frequency=Frequenza
-info.cofh.friend_list=Friend List
 info.cofh.hasInfo=Ha informazioni
 info.cofh.high=Alto
 info.cofh.hold=Tieni premuto
-info.cofh.idle=Idle
 info.cofh.ignored=Ignorato
 info.cofh.infinite=Infinito
 info.cofh.information=Informazioni
@@ -163,26 +57,19 @@ info.cofh.items=Oggetti
 info.cofh.legacy=Legacy
 info.cofh.level=Livello
 info.cofh.locked=Bloccato
-info.cofh.loot=Loot
 info.cofh.low=Basso
 info.cofh.maxEnergyPerTick=Corrente massima
 info.cofh.modeChange=per cambiare modalità
 info.cofh.none=Niente
-info.cofh.output=Output
 info.cofh.owner=Proprietario
 info.cofh.perUse=per uso
-info.cofh.preferences=Preferences
 info.cofh.press=Premi
 info.cofh.receive=Riceve
 info.cofh.receiving=Ricevendo
 info.cofh.redstoneControl=Controllo pietrar.
-info.cofh.removeDestination=Remove Destination
-info.cofh.removeFrequency=Remove Frequency
 info.cofh.security=Sicurezza
 info.cofh.send=Manda
 info.cofh.sending=Mandando
-info.cofh.setDestination=Set Destination
-info.cofh.setFrequency=Set Frequency
 info.cofh.shift=Shift
 info.cofh.signal=Segnale
 info.cofh.signalRequired=Segnale richiesto
@@ -191,7 +78,6 @@ info.cofh.source=Fonte
 info.cofh.stored=Contenuto
 info.cofh.strength=Forza
 info.cofh.success=Successo!
-info.cofh.template=Template
 info.cofh.transfer=Trasferisci
 info.cofh.tutorial.fluxRequired=Richiede Redstone Flux per funzionare.
 info.cofh.tutorial.tabAugment=Il tab Potenziamento permette aggiunte modulari.
@@ -200,14 +86,5 @@ info.cofh.tutorial.tabRedstone=Il tab Controllo pietrarossa configura come quest
 info.cofh.tutorial.tabSecurity=Il tab Sicurezza permette al proprietario di controllare chi ha accesso a quest dispositivo.
 info.cofh.tutorial=Tutorial
 info.cofh.unlocked=Sblocca
-info.cofh.work=Work
 
 item.invalid.name=Oggetto invalido (elimina)
-
-key.cofh.augments=Open Player Augment GUI
-key.cofh.category=Comandi CoFH
-key.cofh.multimode=Cicla modalità dell'oggetto
-
-tab.cofh.friend_list.0=Use this list to add and remove Friends!
-tab.cofh.friend_list.1=Friends are able to access your secure blocks and items, if you allow them to.
-tab.cofh.friend_list.2=Friends not provided.
