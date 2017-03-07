@@ -3,27 +3,17 @@ package cofh.asm;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import net.minecraft.launchwrapper.Launch;
-import net.minecraft.launchwrapper.LaunchClassLoader;
 import net.minecraftforge.fml.common.DummyModContainer;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.LoadController;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.relauncher.FMLInjectionData;
-import net.minecraftforge.fml.relauncher.IFMLCallHook;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
-import org.apache.logging.log4j.Level;
-import org.objectweb.asm.Type;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Map;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
-import java.util.zip.ZipEntry;
 
 @IFMLLoadingPlugin.TransformerExclusions ({ "cofh.asm." })
 @IFMLLoadingPlugin.SortingIndex (1001)
@@ -33,7 +23,6 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	public static final String MC_VERSION = "[1.10.2]";
 	public static boolean runtimeDeobfEnabled = false;
 	public static ASMDataTable ASM_DATA = null;
-	public static LaunchClassLoader loader = null;
 
 	public static final String currentMcVersion;
 	public static final File minecraftDir;
@@ -49,13 +38,12 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 		obfuscated = obf;
 		currentMcVersion = (String) FMLInjectionData.data()[4];
 		minecraftDir = (File) FMLInjectionData.data()[6];
-		loader = Launch.classLoader;
 	}
 
 	@Override
 	public String getAccessTransformerClass() {
 
-		return CoFHAccessTransformer.class.getName();
+		return null;
 	}
 
 	@Override
@@ -73,7 +61,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	@Override
 	public String getSetupClass() {
 
-		return CoFHDummyContainer.class.getName();
+		return null;
 	}
 
 	@Override
@@ -87,7 +75,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 
 	public File myLocation;
 
-	public static class CoFHDummyContainer extends DummyModContainer implements IFMLCallHook {
+	public static class CoFHDummyContainer extends DummyModContainer {
 
 		public CoFHDummyContainer() {
 
@@ -112,74 +100,6 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 
 			ASM_DATA = evt.getASMHarvestedData();
 			CoFHClassTransformer.scrapeData(ASM_DATA);
-		}
-
-		@Override
-		public void injectData(Map<String, Object> data) {
-
-			loader = (LaunchClassLoader) data.get("classLoader");
-		}
-
-		@Override
-		public Void call() throws Exception {
-
-			scanMods();
-			return null;
-		}
-
-		private void scanMods() {
-
-			File modsDir = new File(minecraftDir, "mods");
-			for (File file : modsDir.listFiles()) {
-				scanMod(file);
-			}
-			File versionModsDir = new File(minecraftDir, "mods/"+currentMcVersion);
-			if (versionModsDir.exists()) {
-				for (File file : versionModsDir.listFiles()) {
-					scanMod(file);
-				}
-			}
-		}
-
-		private void scanMod(File file) {
-
-			{
-				String name = file.getName().toLowerCase();
-				if (file.isDirectory() || !name.endsWith(".jar") && !name.endsWith(".zip")) {
-					return;
-				}
-			}
-
-			try {
-				JarFile jar = new JarFile(file);
-				try {
-					l: {
-						Manifest manifest = jar.getManifest();
-						if (manifest == null) {
-							break l;
-						}
-						Attributes attr = manifest.getMainAttributes();
-						if (attr == null) {
-							break l;
-						}
-
-						String transformers = attr.getValue("CoFHAT");
-						if (transformers != null) {
-							for (String t : transformers.split(" ")) {
-								ZipEntry at = jar.getEntry("META-INF/" + t);
-								if (at != null) {
-									FMLLog.log("CoFHASM", Level.DEBUG, "Adding CoFHAT: " + t + " from: " + file.getName());
-									CoFHAccessTransformer.processATFile(new InputStreamReader(jar.getInputStream(at)));
-								}
-							}
-						}
-					}
-				} finally {
-					jar.close();
-				}
-			} catch(Exception e) {
-
-			}
 		}
 	}
 
