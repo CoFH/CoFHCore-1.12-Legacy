@@ -1,66 +1,101 @@
 #de_DE
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 enchant.cofh.holding=Hält
+enchant.cofh.multishot=Multischuss
+enchant.cofh.vorpal=Vorpal
 
 fluid.tile.lava=Lava
 fluid.tile.water=Wasser
 
+gui.cofh.friendList=Freundesliste
+
+gui.cofh.transferInDisabled=Auto-Input Deaktiviert
+gui.cofh.transferInEnabled=Auto-Input Aktiviert
+gui.cofh.transferInUnavailable=Auto-Input Nicht Verfügbar
+
+gui.cofh.transferOutDisabled=Auto-Output Deaktiviert
+gui.cofh.transferOutEnabled=Auto-Output Aktiviert
+gui.cofh.transferOutUnavailable=Auto-Output Nicht Verfügbar
+
 info.cofh.access=Zugriff
-info.cofh.accessMode=Zugriffsmodus
 info.cofh.accessPrivate=Nur Besitzer
 info.cofh.accessPublic=Öffentlich
 info.cofh.accessRestricted=Eingeschränkt
-info.cofh.addDestination=Add Destination
-info.cofh.addFrequency=Add Frequency
-info.cofh.all=Alles
 info.cofh.amount=Menge
+info.cofh.anotherplayer=Anderer Spieler
 info.cofh.augmentation=Erweiterung
 info.cofh.blank=Leer
 info.cofh.capacity=Kapazität
+info.cofh.chance=Chance
 info.cofh.charge=Ladung
+info.cofh.configuration=Konfiguration
 info.cofh.contents=Inhalt
 info.cofh.controlStatus=Kontrollstatus
 info.cofh.damageAttack=Angriffsschaden
 info.cofh.damageFlux=Flux-Schaden
 info.cofh.disabled=Deaktiviert
-info.cofh.dry=Trocken
 info.cofh.empty=Leer
-info.cofh.enable=Enable
 info.cofh.enabled=Aktiviert
 info.cofh.energy=Energie
 info.cofh.energyConsume=Energieverbrauch
 info.cofh.energyProduce=Energie-Output
 info.cofh.energyStored=Energiespeicher
+info.cofh.filter=Filter
 info.cofh.fluid=Flüssigkeit
-info.cofh.forDetails=für Details
-info.cofh.frequency=Frequenz
-info.cofh.hasInfo=Hat Informationen
-info.cofh.hold=Halte
+info.cofh.fluids=Fluide
+info.cofh.high=High
+info.cofh.holdShiftForDetails=Halte §e§oShift§r§7 für Details§r
 info.cofh.ignored=Ignorieren
 info.cofh.infinite=Unendlich
+info.cofh.infiniteSource=Unendliche Quelle
 info.cofh.information=Information
-info.cofh.item=Artikel
-info.cofh.items=Artikel
+info.cofh.item=Item
+info.cofh.items=Items
 info.cofh.level=Ebene
 info.cofh.locked=Verschlossen
+info.cofh.low=Low
 info.cofh.maxPower=Energiemaximum
+info.cofh.modeChange=zum Moduswechsel
 info.cofh.none=Niemand
 info.cofh.owner=Besitzer
 info.cofh.perUse=Je Nutzung
-info.cofh.press=Drücke
 info.cofh.receive=Empfangen
-info.cofh.receiving=Empfangend
 info.cofh.redstoneControl=Redstonekontrolle
 info.cofh.security=Sicherheit
 info.cofh.send=Senden
-info.cofh.sending=Sendend
+info.cofh.signalDisabled=Signal: §4Deaktiviert§r
+info.cofh.signalEnabledHigh=Signal: §aAktiviert§7, High§r
+info.cofh.signalEnabledLow=Signal: §aAktiviert§7, Low§r
 info.cofh.signalRequired=Signal benötigt
-info.cofh.soaked=Vollgesogen
-info.cofh.source=Quelle
+info.cofh.stored=Enthalten
 info.cofh.tutorial.fluxRequired=Benötigt Redstone-Flux zum Arbeiten.
 info.cofh.tutorial.tabAugment=Der Erweiteungs-Tab ermöglicht das Hinzufügen von Modulen.
+info.cofh.tutorial.tabConfiguration=Der Konfigurations-Tab bestimmt Input- und Output-Parameter dieses Blocks.
 info.cofh.tutorial.tabRedstone=Der Redstone-Kontroll-Tab konfiguriert, wie dieses Gerät auf Redstone-Signale reagiert.
 info.cofh.tutorial.tabSecurity=Der Sicherheits-Tab ermöglicht dem Besitzer Kontrolle darüber, wer auf dieses Gerät zugreifen darf.
+info.cofh.tutorial=Tutorial
 info.cofh.unlocked=Entriegelt
 
 item.invalid.name=Ungültiges Item (Zerstören)
+
+key.cofh.augments=Verbesserungs-GUI des Spielers öffnen
+key.cofh.category=CoFH-Steuerung
+key.cofh.multimode=Item-Modus wechseln
+
