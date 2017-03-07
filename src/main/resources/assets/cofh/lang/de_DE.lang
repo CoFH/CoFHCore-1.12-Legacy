@@ -17,6 +17,10 @@
 
 
 
+config.Client.tooltip=Konfiguriere Client-Optionen.
+config.Common.tooltip=Konfiguriere allgemeine Optionen.
+config.Core.tooltip=Konfiguriere Optionen des Core-Moduls.
+config.Loot.tooltip=Konfiguriere Optionen des Loot-Moduls.
 
 enchant.cofh.holding=Hält
 enchant.cofh.multishot=Multischuss
