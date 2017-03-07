@@ -56,7 +56,7 @@ public class TabConfigurationTransfer extends TabBase {
 	public void addTooltip(List<String> list) {
 
 		if (!isFullyOpened()) {
-			list.add(StringHelper.localize("gui.cofh.configuration"));
+			list.add(StringHelper.localize("info.cofh.configuration"));
 			return;
 		}
 		int x = gui.getMouseX() - currentShiftX;
@@ -136,7 +136,7 @@ public class TabConfigurationTransfer extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("gui.cofh.configuration"), posXOffset() + 18, posY + 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), posXOffset() + 18, posY + 6, headerColor);
 		RenderHelper.setBlockTextureSheet();
 
 		if (myTileControl.hasTransferIn()) {

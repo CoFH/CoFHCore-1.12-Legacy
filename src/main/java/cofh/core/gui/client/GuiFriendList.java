@@ -55,11 +55,11 @@ public class GuiFriendList extends GuiCore {
 	public GuiFriendList(InventoryPlayer inventory) {
 
 		super(new ContainerFriendsList(inventory), TEXTURE);
-		name = "info.cofh.friend_list";
+		name = "gui.cofh.friendList";
 		drawInventory = false;
 		ySize = 188;
 
-		generateInfo("tab.cofh.friend_list");
+		generateInfo("tab.cofh.friendList");
 	}
 
 	@Override
