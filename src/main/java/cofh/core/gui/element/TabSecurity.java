@@ -128,7 +128,7 @@ public class TabSecurity extends TabBase {
 			return;
 		}
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.security"), posXOffset() + 18, posY + 6, headerColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.accessMode") + ":", posXOffset() + 6, posY + 42, subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.access") + ":", posXOffset() + 6, posY + 42, subheaderColor);
 
 		if (myContainer.getAccess().isPublic()) {
 			gui.drawButton(CoreTextures.ICON_ACCESS_PUBLIC, posX() + 28, posY + 20, 1);

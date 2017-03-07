@@ -52,7 +52,7 @@ public class TabConfiguration extends TabBase {
 	public void addTooltip(List<String> list) {
 
 		if (!isFullyOpened()) {
-			list.add(StringHelper.localize("gui.cofh.configuration"));
+			list.add(StringHelper.localize("info.cofh.configuration"));
 			return;
 		}
 	}
@@ -111,7 +111,7 @@ public class TabConfiguration extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("gui.cofh.configuration"), posXOffset() + 18, posY + 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), posXOffset() + 18, posY + 6, headerColor);
 		RenderHelper.setBlockTextureSheet();
 
 		GlStateManager.enableBlend();

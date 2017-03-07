@@ -1,9 +1,9 @@
 #zh_TW
 
-config.Client.tooltip=設定客戶端的唯一選擇.
-config.Common.tooltip=設定一般選項.
-config.Core.tooltip=設定核心模組選項.
-config.Loot.tooltip=設定戰利品模組選項.
+config.client.tooltip=設定客戶端的唯一選擇.
+config.common.tooltip=設定一般選項.
+config.core.tooltip=設定核心模組選項.
+config.loot.tooltip=設定戰利品模組選項.
 
 enchant.cofh.holding=保持
 enchant.cofh.multishot=多重射擊
@@ -12,7 +12,6 @@ fluid.tile.lava=岩漿
 fluid.tile.water=水
 
 info.cofh.access=訪問
-info.cofh.accessMode=訪問模式
 info.cofh.accessPrivate=私有
 info.cofh.accessPublic=公開
 info.cofh.accessRestricted=受限
@@ -55,7 +54,7 @@ info.cofh.items=物品
 info.cofh.level=等級
 info.cofh.locked=鎖定
 info.cofh.low=低
-info.cofh.maxEnergyPerTick=最大功率
+info.cofh.maxPower=最大功率
 info.cofh.none=無
 info.cofh.owner=主人
 info.cofh.perUse=每次使用
