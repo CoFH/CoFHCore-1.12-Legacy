@@ -1,15 +1,23 @@
 package cofh.core.proxy;
 
 import cofh.core.init.CoreProps;
+import cofh.core.item.tool.ItemShieldCore;
 import cofh.core.key.KeyBindingItemMultiMode;
 import cofh.core.key.KeyHandlerCore;
+import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
@@ -57,6 +65,36 @@ public class Proxy {
 	}
 
 	/* EVENT HANDLERS */
+	@SubscribeEvent
+	public void handleLivingAttackEvent(LivingAttackEvent event) {
+
+		if ((event.getEntityLiving() instanceof EntityPlayer)) {
+			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+
+			if (player.getActiveItemStack() != null) {
+				ItemStack stack = player.getActiveItemStack();
+				float damage = event.getAmount();
+
+				if (damage >= 3.0F && stack != null && ((stack.getItem() instanceof ItemShieldCore))) {
+					((ItemShieldCore) stack.getItem()).damageShield(stack, 1 + MathHelper.floor(damage), player, event.getSource().getEntity());
+
+					if (stack.stackSize <= 0) {
+						EnumHand enumhand = player.getActiveHand();
+						ForgeEventFactory.onPlayerDestroyItem(player, player.activeItemStack, enumhand);
+
+						if (enumhand == EnumHand.MAIN_HAND) {
+							player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
+						} else {
+							player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, null);
+						}
+						player.activeItemStack = null;
+						player.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + player.worldObj.rand.nextFloat() * 0.4F);
+					}
+				}
+			}
+		}
+	}
+
 	@SubscribeEvent
 	public void handleLivingDeathEvent(LivingDeathEvent event) {
 

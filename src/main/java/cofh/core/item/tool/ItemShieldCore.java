@@ -3,6 +3,7 @@ package cofh.core.item.tool;
 import cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.*;
@@ -54,6 +55,11 @@ public class ItemShieldCore extends Item {
 		return this;
 	}
 
+	public void damageShield(ItemStack stack, int damage, EntityPlayer player, Entity source) {
+
+		stack.damageItem(damage, player);
+	}
+
 	@Override
 	@SideOnly (Side.CLIENT)
 	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
@@ -88,6 +94,7 @@ public class ItemShieldCore extends Item {
 		return new ActionResult(EnumActionResult.SUCCESS, itemStackIn);
 	}
 
+	@Override
 	public EnumAction getItemUseAction(ItemStack stack) {
 
 		return EnumAction.BLOCK;

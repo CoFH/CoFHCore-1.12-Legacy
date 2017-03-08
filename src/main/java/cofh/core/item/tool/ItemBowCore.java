@@ -28,8 +28,8 @@ public class ItemBowCore extends ItemBow {
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
 
-	protected float arrowDamageMultiplier = 1.0F;
-	protected float arrowSpeedMultiplier = 0.5F;
+	protected float arrowDamageMultiplier = 0.0F;
+	protected float arrowSpeedMultiplier = 0.0F;
 
 	protected boolean showInCreative = true;
 
@@ -174,7 +174,7 @@ public class ItemBowCore extends ItemBow {
 							EntityArrow arrow = itemarrow.createArrow(world, itemstack, entityplayer);
 							arrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
 							arrow.setVelocity(arrow.motionX * speedMod, arrow.motionY * speedMod, arrow.motionZ * speedMod);
-							arrow.setDamage(arrow.getDamage() + arrowDamageMultiplier);
+							arrow.setDamage(arrow.getDamage() * (1 + arrowDamageMultiplier));
 
 							if (f >= 1.0F) {
 								arrow.setIsCritical(true);
