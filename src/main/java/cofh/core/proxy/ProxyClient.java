@@ -1,6 +1,7 @@
 package cofh.core.proxy;
 
 import cofh.CoFHCore;
+import cofh.core.block.IFogOverlay;
 import cofh.core.gui.client.GuiFriendList;
 import cofh.core.init.CoreProps;
 import cofh.core.init.CoreTextures;
@@ -10,15 +11,29 @@ import cofh.core.render.CustomEffectRenderer;
 import cofh.core.render.FontRendererCore;
 import cofh.core.render.ShaderHelper;
 import cofh.core.util.RegistrySocial;
+import cofh.lib.render.RenderHelper;
+import cofh.lib.util.RayTracer;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderBlockOverlayEvent;
+import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -36,6 +51,8 @@ import java.util.Locale;
 
 @SideOnly (Side.CLIENT)
 public class ProxyClient extends Proxy {
+
+	private static final ResourceLocation UNDERWATER_GRAYSCALE = new ResourceLocation("cofh:textures/misc/underwater_grayscale.png");
 
 	/* INIT */
 	@Override
@@ -114,6 +131,50 @@ public class ProxyClient extends Proxy {
 		} else {
 			Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(chat, index);
 		}
+	}
+
+	/* EVENT HANDLERS */
+	@SubscribeEvent
+	public void handleFluidBlockOverlayEvent(RenderBlockOverlayEvent event) {
+
+		if (event.getOverlayType() == OverlayType.WATER) {
+			EntityPlayer player = event.getPlayer();
+			Vec3d playerEyePos = RayTracer.getCorrectedHeadVec(player);
+			IBlockState state = player.worldObj.getBlockState(new BlockPos(playerEyePos));
+			Block block = state.getBlock();
+
+			if (block instanceof IFogOverlay) {
+
+				RenderHelper.bindTexture(UNDERWATER_GRAYSCALE);
+				float brightness = player.getBrightness(event.getRenderPartialTicks());
+				Vec3d colour = ((IFogOverlay) block).getFog(state, player, 0.0F, 0.0F, 0.0F).scale(brightness);
+
+				GlStateManager.color((float) colour.xCoord, (float) colour.yCoord, (float) colour.zCoord, 0.5F);
+				GlStateManager.enableBlend();
+				GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
+				GlStateManager.pushMatrix();
+
+				float yaw = -player.rotationYaw / 64.0F;
+				float pitch = player.rotationPitch / 64.0F;
+
+				Tessellator t = Tessellator.getInstance();
+				VertexBuffer buffer = t.getBuffer();
+
+				buffer.begin(0x07, DefaultVertexFormats.POSITION_TEX);
+				buffer.pos(-1.0D, -1.0D, -0.5D).tex(4.0F + yaw, 4.0F + pitch).endVertex();
+				buffer.pos(1.0D, -1.0D, -0.5D).tex(0.0F + yaw, 4.0F + pitch).endVertex();
+				buffer.pos(1.0D, 1.0D, -0.5D).tex(0.0F + yaw, 0.0F + pitch).endVertex();
+				buffer.pos(-1.0D, 1.0D, -0.5D).tex(4.0F + yaw, 0.0F + pitch).endVertex();
+				t.draw();
+
+				GlStateManager.popMatrix();
+				GlStateManager.disableBlend();
+				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				event.setCanceled(true);
+			}
+
+		}
+
 	}
 
 	/* SERVER UTILS */
