@@ -1,6 +1,9 @@
 buildscript {
 	repositories {
-        jcenter()
+        maven {//MavenMirror is an experimental project.
+            name = "covers1624"//Maven central and jcenter.
+            url = "http://mavenmirror.covers1624.net/general/"
+        }
         maven {
             name = "covers1624"
             url = "http://maven.covers1624.net/"
@@ -37,17 +40,12 @@ configFile.withReader {
 
 repositories {
 	maven {
-		name = "ChickenBones Maven"
-		url = "http://chickenbones.net/maven/"
-	}
-	maven {
 		name = "JEI Maven"
 		url = "http://dvs1.progwml6.com/files/maven"
 	}
 }
 
 dependencies {
-	compile "codechicken:CodeChickenLib:${config.mc_version}-${config.ccl_version}:deobf"
 	compile "mezz.jei:jei_${config.mc_version}:${config.jei_version}"
 }
 
