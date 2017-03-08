@@ -20,7 +20,7 @@ import java.util.concurrent.Callable;
 public class CrashHelper {
 
 	static final int range = 3;
-	static final char[] validLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!£$%^&*()`¬_+\"\\@'{}[]~/|<>,.?:;".toCharArray();
+	static final char[] validLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!$%^&*()`_+\"\\@'{}[]~/|<>,.?:;".toCharArray();
 	static final char[] metaLetters = "0123456789ABCDEF".toCharArray();
 
 	public static CrashReport makeDetailedCrashReport(Throwable throwable, String message, Object caller, Object... curState) {
