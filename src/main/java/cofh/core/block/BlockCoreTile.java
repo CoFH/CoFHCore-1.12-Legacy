@@ -2,10 +2,15 @@ package cofh.core.block;
 
 import cofh.api.block.IBlockInfo;
 import cofh.api.block.IDismantleable;
-import cofh.api.core.IInitializer;
+import cofh.api.core.ISecurable;
+import cofh.core.util.core.IInitializer;
 import cofh.api.energy.IEnergyReceiver;
 import cofh.api.tileentity.*;
 import cofh.core.util.CoreUtils;
+import cofh.core.util.helpers.RedstoneControlHelper;
+import cofh.core.util.helpers.SecurityHelper;
+import cofh.core.util.tileentity.IInventoryRetainer;
+import cofh.core.util.tileentity.IRedstoneControl;
 import cofh.lib.util.helpers.*;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;

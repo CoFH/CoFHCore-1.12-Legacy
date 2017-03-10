@@ -1,8 +1,8 @@
 package cofh.core.world;
 
-import cofh.api.world.IFeatureGenerator;
-import cofh.api.world.IFeatureParser;
-import cofh.api.world.IGeneratorParser;
+import cofh.lib.world.IFeatureGenerator;
+import cofh.lib.world.IFeatureParser;
+import cofh.lib.world.IGeneratorParser;
 import cofh.asm.ASMCore;
 import cofh.core.init.CoreProps;
 import cofh.core.util.CoreUtils;

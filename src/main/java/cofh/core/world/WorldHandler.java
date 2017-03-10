@@ -1,8 +1,8 @@
 package cofh.core.world;
 
 import cofh.CoFHCore;
-import cofh.api.world.IFeatureGenerator;
-import cofh.api.world.IFeatureHandler;
+import cofh.lib.world.IFeatureGenerator;
+import cofh.lib.world.IFeatureHandler;
 import cofh.asm.hooks.ASMHooks;
 import cofh.core.world.TickHandlerWorld.RetroChunkCoord;
 import cofh.lib.util.ChunkCoord;

@@ -4,7 +4,7 @@ import cofh.core.proxy.ProxyClient;
 import cofh.core.render.font.ICustomCharRenderer;
 import cofh.core.render.font.RenderPlayerFace;
 import cofh.core.render.font.RenderSprite;
-import cofh.lib.util.helpers.SecurityHelper;
+import cofh.core.util.helpers.SecurityHelper;
 import gnu.trove.map.hash.TCharObjectHashMap;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;

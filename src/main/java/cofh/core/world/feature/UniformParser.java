@@ -1,7 +1,7 @@
 package cofh.core.world.feature;
 
-import cofh.api.world.IFeatureGenerator;
-import cofh.api.world.IFeatureParser;
+import cofh.lib.world.IFeatureGenerator;
+import cofh.lib.world.IFeatureParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;

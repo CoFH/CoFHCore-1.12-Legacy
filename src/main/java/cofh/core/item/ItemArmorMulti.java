@@ -1,9 +1,9 @@
 package cofh.core.item;
 
-import cofh.api.core.IModelRegister;
+import cofh.core.render.IModelRegister;
 import cofh.core.render.FontRendererCore;
 import cofh.lib.util.helpers.ItemHelper;
-import cofh.lib.util.helpers.SecurityHelper;
+import cofh.core.util.helpers.SecurityHelper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import gnu.trove.map.TMap;

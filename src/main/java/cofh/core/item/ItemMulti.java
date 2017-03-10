@@ -1,6 +1,6 @@
 package cofh.core.item;
 
-import cofh.api.core.IModelRegister;
+import cofh.core.render.IModelRegister;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.StringHelper;
 import gnu.trove.map.TMap;

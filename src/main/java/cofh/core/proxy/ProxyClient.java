@@ -11,7 +11,7 @@ import cofh.core.render.CustomEffectRenderer;
 import cofh.core.render.FontRendererCore;
 import cofh.core.render.ShaderHelper;
 import cofh.core.util.RegistrySocial;
-import cofh.lib.render.RenderHelper;
+import cofh.lib.util.helpers.RenderHelper;
 import cofh.lib.util.RayTracer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

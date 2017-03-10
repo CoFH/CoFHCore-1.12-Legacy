@@ -2,7 +2,7 @@ package cofh.core.render.font;
 
 import cofh.core.proxy.ProxyClient;
 import cofh.core.render.FontRendererCore;
-import cofh.lib.util.helpers.SecurityHelper;
+import cofh.core.util.helpers.SecurityHelper;
 import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;

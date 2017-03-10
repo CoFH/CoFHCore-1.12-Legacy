@@ -1,6 +1,6 @@
 package cofh.core.gui.element;
 
-import cofh.api.tileentity.ISecurable;
+import cofh.api.core.ISecurable;
 import cofh.core.init.CoreTextures;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.TabBase;

@@ -1,6 +1,6 @@
 package cofh.core.command;
 
-import cofh.api.world.IFeatureGenerator;
+import cofh.lib.world.IFeatureGenerator;
 import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
 import com.google.common.base.Throwables;

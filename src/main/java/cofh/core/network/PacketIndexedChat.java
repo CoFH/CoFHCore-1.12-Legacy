@@ -1,7 +1,7 @@
 package cofh.core.network;
 
 import cofh.CoFHCore;
-import cofh.core.util.ChatHelper;
+import cofh.core.util.helpers.ChatHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;

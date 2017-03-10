@@ -1,7 +1,7 @@
 package cofh.core.item;
 
 import cofh.core.render.FontRendererCore;
-import cofh.lib.util.helpers.SecurityHelper;
+import cofh.core.util.helpers.SecurityHelper;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;

@@ -1,4 +1,4 @@
-package cofh.core.util;
+package cofh.core.util.helpers;
 
 import cofh.CoFHCore;
 import cofh.core.network.PacketHandler;

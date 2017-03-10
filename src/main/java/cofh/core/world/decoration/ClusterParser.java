@@ -1,6 +1,6 @@
 package cofh.core.world.decoration;
 
-import cofh.api.world.IGeneratorParser;
+import cofh.lib.world.IGeneratorParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.world.WorldGenMinableCluster;
 import cofh.lib.world.WorldGenSparseMinableCluster;

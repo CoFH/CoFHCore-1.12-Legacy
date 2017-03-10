@@ -1,6 +1,6 @@
 package cofh.core.block;
 
-import cofh.api.tileentity.ISecurable;
+import cofh.api.core.ISecurable;
 import cofh.core.init.CoreProps;
 import cofh.core.network.PacketCoFHBase;
 import cofh.core.network.PacketHandler;
@@ -8,7 +8,7 @@ import cofh.core.network.PacketTile;
 import cofh.core.network.PacketTileInfo;
 import cofh.core.util.CoreUtils;
 import cofh.core.util.RegistrySocial;
-import cofh.lib.util.helpers.SecurityHelper;
+import cofh.core.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.ServerHelper;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.state.IBlockState;

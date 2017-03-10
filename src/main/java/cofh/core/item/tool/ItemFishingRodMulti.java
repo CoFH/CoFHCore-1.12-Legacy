@@ -1,10 +1,10 @@
 package cofh.core.item.tool;
 
-import cofh.api.core.IModelRegister;
+import cofh.core.render.IModelRegister;
 import cofh.core.entity.EntityFishHookCore;
 import cofh.core.render.FontRendererCore;
 import cofh.lib.util.helpers.ItemHelper;
-import cofh.lib.util.helpers.SecurityHelper;
+import cofh.core.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.ServerHelper;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
