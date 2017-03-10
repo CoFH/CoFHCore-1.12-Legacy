@@ -2,6 +2,7 @@ package cofh.core.item.tool;
 
 import cofh.core.init.CoreEnchantments;
 import cofh.lib.util.helpers.ItemHelper;
+import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -163,7 +164,7 @@ public class ItemBowCore extends ItemBow {
 
 				if ((double) f >= 0.1D) {
 					if (!world.isRemote) {
-						int enchantMultishot = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, stack);
+						int enchantMultishot = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, stack), 0, 10);
 						int punchLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
 						int powerLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
 						boolean flame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;

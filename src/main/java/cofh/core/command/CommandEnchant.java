@@ -56,26 +56,31 @@ public class CommandEnchant implements ISubCommand {
 				if (player == null) {
 					player = CommandBase.getCommandSenderAsPlayer(sender);
 				}
-				int id = CommandBase.parseInt(args[i++], 0, Enchantment.REGISTRY.getKeys().size() - 1);
+				String loc = args[i++];
 				int level = 1;
-				ItemStack itemstack = player.getHeldItem(EnumHand.MAIN_HAND);
-				if (itemstack == null) {
-					itemstack = player.getHeldItem(EnumHand.OFF_HAND);
+				ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
+				if (stack == null) {
+					stack = player.getHeldItem(EnumHand.OFF_HAND);
 				}
 
-				if (itemstack == null) {
+				if (stack == null) {
 					throw new CommandException("commands.enchant.noItem", new Object[0]);
 				} else {
-					Enchantment enchantment = Enchantment.getEnchantmentByID(id);
+					Enchantment enchantment;
+
+					try {
+						enchantment = Enchantment.getEnchantmentByID(CommandBase.parseInt(loc, 0, Enchantment.REGISTRY.getKeys().size() - 1));
+					} catch (NumberInvalidException e) {
+						enchantment = Enchantment.getEnchantmentByLocation(loc);
+					}
 
 					if (enchantment == null) {
-						throw new NumberInvalidException("commands.enchant.notFound", new Object[] { Integer.valueOf(id) });
+						throw new NumberInvalidException("commands.enchant.notFound", new Object[] { Integer.valueOf(Enchantment.getEnchantmentID(enchantment)) });
 					}
 					if (i < l) {
 						level = CommandBase.parseInt(args[i++]);
 					}
-
-					itemstack.addEnchantment(enchantment, level);
+					stack.addEnchantment(enchantment, level);
 					CommandHandler.logAdminCommand(sender, this, "commands.enchant.success");
 				}
 		}
