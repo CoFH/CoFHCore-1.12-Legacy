@@ -36,8 +36,8 @@ public class CoFHCore {
 	public static final String MOD_ID = "cofhcore";
 	public static final String MOD_NAME = "CoFH Core";
 
-	public static final String VERSION = "4.0.2";
-	public static final String VERSION_MAX = "4.1.0";
+	public static final String VERSION = "4.1.0";
+	public static final String VERSION_MAX = "4.2.0";
 	public static final String VERSION_GROUP = "required-after:" + MOD_ID + "@[" + VERSION + "," + VERSION_MAX + ");";
 	public static final String UPDATE_URL = "https://raw.github.com/cofh/version/master/" + MOD_ID + "_update.json";
 
