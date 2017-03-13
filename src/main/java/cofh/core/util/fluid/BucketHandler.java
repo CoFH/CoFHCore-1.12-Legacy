@@ -59,7 +59,7 @@ public class BucketHandler {
 
 	private void onBucketFill(FillBucketEvent event, boolean pre) {
 
-		if (ServerHelper.isClientWorld(event.world) | event.result != null || event.getResult() != Result.DEFAULT) {
+		if (ServerHelper.isClientWorld(event.world) || event.result != null || event.getResult() != Result.DEFAULT) {
 			return;
 		}
 		ItemStack current = event.current;
