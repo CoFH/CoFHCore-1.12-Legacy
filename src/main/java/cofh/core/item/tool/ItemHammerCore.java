@@ -1,7 +1,7 @@
 package cofh.core.item.tool;
 
 import cofh.lib.util.RayTracer;
-import cofh.lib.util.helpers.BlockHelper;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -52,6 +52,7 @@ public class ItemHammerCore extends ItemToolCore {
 			return false;
 		}
 		int used = 0;
+		world.playEvent(2001, pos, Block.getStateId(state));
 
 		float refStrength = ForgeHooks.blockStrength(state, player, world, pos);
 		if (refStrength != 0.0F) {
