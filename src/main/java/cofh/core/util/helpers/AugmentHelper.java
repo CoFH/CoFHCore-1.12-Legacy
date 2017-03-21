@@ -3,7 +3,7 @@ package cofh.core.util.helpers;
 import cofh.api.item.IAugmentItem;
 import cofh.api.item.IAugmentItem.AugmentType;
 import cofh.api.item.IUpgradeItem;
-import cofh.api.tileentity.IAugmentable;
+import cofh.api.core.IAugmentable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
