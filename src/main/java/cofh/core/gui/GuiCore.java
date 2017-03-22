@@ -10,6 +10,18 @@ import net.minecraft.util.ResourceLocation;
 
 public abstract class GuiCore extends GuiBase {
 
+	/* SIDE TYPES */
+	public static final int NONE = 0;
+	public static final int INPUT_ALL = 1;
+	public static final int OUTPUT_PRIMARY = 2;
+	public static final int OUTPUT_SECONDARY = 3;
+	public static final int OUTPUT_ALL = 4;
+	public static final int INPUT_PRIMARY = 5;
+	public static final int INPUT_SECONDARY = 6;
+	public static final int OPEN = 7;
+	public static final int OMNI = 8;
+
+	/* PROGRESS TEXTURES */
 	public static final String TEX_ARROW_LEFT = GuiProps.PATH_ELEMENTS + "progress_arrow_left.png";
 	public static final String TEX_ARROW_RIGHT = GuiProps.PATH_ELEMENTS + "progress_arrow_right.png";
 	public static final String TEX_ARROW_FLUID_LEFT = GuiProps.PATH_ELEMENTS + "progress_arrow_fluid_left.png";
@@ -17,6 +29,7 @@ public abstract class GuiCore extends GuiBase {
 	public static final String TEX_DROP_LEFT = GuiProps.PATH_ELEMENTS + "progress_fluid_left.png";
 	public static final String TEX_DROP_RIGHT = GuiProps.PATH_ELEMENTS + "progress_fluid_right.png";
 
+	/* SPEED / INTENSITY TEXTURES */
 	public static final String TEX_ALCHEMY = GuiProps.PATH_ELEMENTS + "scale_alchemy.png";
 	public static final String TEX_BUBBLE = GuiProps.PATH_ELEMENTS + "scale_bubble.png";
 	public static final String TEX_COMPACT = GuiProps.PATH_ELEMENTS + "scale_compact.png";
