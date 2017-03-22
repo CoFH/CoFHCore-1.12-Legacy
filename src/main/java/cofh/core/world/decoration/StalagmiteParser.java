@@ -1,8 +1,8 @@
 package cofh.core.world.decoration;
 
-import cofh.lib.world.IGeneratorParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.world.IGeneratorParser;
 import cofh.lib.world.WorldGenStalactite;
 import cofh.lib.world.WorldGenStalagmite;
 import com.typesafe.config.Config;

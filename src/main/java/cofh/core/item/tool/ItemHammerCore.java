@@ -1,6 +1,7 @@
 package cofh.core.item.tool;
 
-import cofh.lib.util.helpers.BlockHelper;
+import cofh.lib.util.RayTracer;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -51,11 +52,11 @@ public class ItemHammerCore extends ItemToolCore {
 			return false;
 		}
 		int used = 0;
+		world.playEvent(2001, pos, Block.getStateId(state));
 
 		float refStrength = ForgeHooks.blockStrength(state, player, world, pos);
 		if (refStrength != 0.0F) {
-			RayTraceResult traceResult = BlockHelper.getCurrentMovingObjectPosition(player, true);
-			BlockPos tracePos = traceResult.getBlockPos();
+			RayTraceResult traceResult = RayTracer.retrace(player);
 			IBlockState adjBlock;
 			float strength;
 
@@ -66,8 +67,8 @@ public class ItemHammerCore extends ItemToolCore {
 			switch (traceResult.sideHit) {
 				case DOWN:
 				case UP:
-					for (x = tracePos.getX() - 1; x <= tracePos.getX() + 1; x++) {
-						for (z = tracePos.getZ() - 1; z <= tracePos.getZ() + 1; z++) {
+					for (x = pos.getX() - 1; x <= pos.getX() + 1; x++) {
+						for (z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
 							BlockPos adjPos = new BlockPos(x, y, z);
 							adjBlock = world.getBlockState(adjPos);
 							strength = ForgeHooks.blockStrength(adjBlock, player, world, adjPos);
@@ -81,8 +82,8 @@ public class ItemHammerCore extends ItemToolCore {
 					break;
 				case NORTH:
 				case SOUTH:
-					for (x = tracePos.getX() - 1; x <= tracePos.getX() + 1; x++) {
-						for (y = tracePos.getY() - 1; y <= tracePos.getY() + 1; y++) {
+					for (x = pos.getX() - 1; x <= pos.getX() + 1; x++) {
+						for (y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
 							BlockPos adjPos = new BlockPos(x, y, z);
 							adjBlock = world.getBlockState(adjPos);
 							strength = ForgeHooks.blockStrength(adjBlock, player, world, adjPos);
@@ -96,8 +97,8 @@ public class ItemHammerCore extends ItemToolCore {
 					break;
 				case WEST:
 				case EAST:
-					for (y = tracePos.getY() - 1; y <= tracePos.getY() + 1; y++) {
-						for (z = tracePos.getZ() - 1; z <= tracePos.getZ() + 1; z++) {
+					for (y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
+						for (z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
 							BlockPos adjPos = new BlockPos(x, y, z);
 							adjBlock = world.getBlockState(adjPos);
 							strength = ForgeHooks.blockStrength(adjBlock, player, world, adjPos);

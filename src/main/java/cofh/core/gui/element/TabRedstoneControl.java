@@ -1,7 +1,7 @@
 package cofh.core.gui.element;
 
-import cofh.core.util.tileentity.IRedstoneControl;
 import cofh.core.init.CoreTextures;
+import cofh.core.util.tileentity.IRedstoneControl;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.TabBase;
 import cofh.lib.util.helpers.StringHelper;

@@ -148,16 +148,16 @@ public class ItemBowCore extends ItemBow {
 		if (livingBase instanceof EntityPlayer) {
 			EntityPlayer entityplayer = (EntityPlayer) livingBase;
 			boolean flag = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-			ItemStack itemstack = this.findAmmo(entityplayer);
+			ItemStack arrowStack = this.findAmmo(entityplayer);
 
 			int i = this.getMaxItemUseDuration(stack) - timeLeft;
-			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) livingBase, i, itemstack != null || flag);
+			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) livingBase, i, arrowStack != null || flag);
 			if (i < 0) {
 				return;
 			}
-			if (itemstack != null || flag) {
-				if (itemstack == null) {
-					itemstack = new ItemStack(Items.ARROW);
+			if (arrowStack != null || flag) {
+				if (arrowStack == null) {
+					arrowStack = new ItemStack(Items.ARROW);
 				}
 				float f = getArrowVelocity(i);
 				float speedMod = 1 + arrowSpeedMultiplier;
@@ -171,10 +171,9 @@ public class ItemBowCore extends ItemBow {
 						onBowFired(entityplayer, stack);
 
 						for (int shot = 0; shot <= enchantMultishot; shot++) {
-							ItemArrow itemarrow = (ItemArrow) (itemstack.getItem() instanceof ItemArrow ? itemstack.getItem() : Items.ARROW);
-							EntityArrow arrow = itemarrow.createArrow(world, itemstack, entityplayer);
-							arrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
-							arrow.setVelocity(arrow.motionX * speedMod, arrow.motionY * speedMod, arrow.motionZ * speedMod);
+							ItemArrow itemarrow = (ItemArrow) (arrowStack.getItem() instanceof ItemArrow ? arrowStack.getItem() : Items.ARROW);
+							EntityArrow arrow = itemarrow.createArrow(world, arrowStack, entityplayer);
+							arrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F);
 							arrow.setDamage(arrow.getDamage() * (1 + arrowDamageMultiplier));
 
 							if (f >= 1.0F) {
@@ -199,10 +198,10 @@ public class ItemBowCore extends ItemBow {
 					world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
 					if (!flag) {
-						--itemstack.stackSize;
+						--arrowStack.stackSize;
 
-						if (itemstack.stackSize == 0) {
-							entityplayer.inventory.deleteStack(itemstack);
+						if (arrowStack.stackSize == 0) {
+							entityplayer.inventory.deleteStack(arrowStack);
 						}
 					}
 					entityplayer.addStat(StatList.getObjectUseStats(this));
