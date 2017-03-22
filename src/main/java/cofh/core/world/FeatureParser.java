@@ -1,8 +1,5 @@
 package cofh.core.world;
 
-import cofh.lib.world.IFeatureGenerator;
-import cofh.lib.world.IFeatureParser;
-import cofh.lib.world.IGeneratorParser;
 import cofh.asm.ASMCore;
 import cofh.core.init.CoreProps;
 import cofh.core.util.CoreUtils;
@@ -18,6 +15,9 @@ import cofh.lib.util.numbers.ConstantProvider;
 import cofh.lib.util.numbers.INumberProvider;
 import cofh.lib.util.numbers.SkellamRandomProvider;
 import cofh.lib.util.numbers.UniformRandomProvider;
+import cofh.lib.world.IFeatureGenerator;
+import cofh.lib.world.IFeatureParser;
+import cofh.lib.world.IGeneratorParser;
 import cofh.lib.world.WorldGenMulti;
 import cofh.lib.world.biome.BiomeInfo;
 import cofh.lib.world.biome.BiomeInfoRarity;

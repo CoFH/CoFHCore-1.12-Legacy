@@ -1,12 +1,12 @@
 package cofh.core.world;
 
 import cofh.CoFHCore;
-import cofh.lib.world.IFeatureGenerator;
-import cofh.lib.world.IFeatureHandler;
 import cofh.asm.hooks.ASMHooks;
 import cofh.core.world.TickHandlerWorld.RetroChunkCoord;
 import cofh.lib.util.ChunkCoord;
 import cofh.lib.util.LinkedHashList;
+import cofh.lib.world.IFeatureGenerator;
+import cofh.lib.world.IFeatureHandler;
 import gnu.trove.set.hash.THashSet;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;

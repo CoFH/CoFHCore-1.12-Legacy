@@ -1,10 +1,10 @@
 package cofh.core.fluid;
 
-import cofh.core.util.core.IInitializer;
-import cofh.core.render.IModelRegister;
 import cofh.core.block.IFogOverlay;
-import cofh.core.util.StateMapper;
+import cofh.core.render.IModelRegister;
 import cofh.core.render.particle.EntityDropParticleFX;
+import cofh.core.util.StateMapper;
+import cofh.core.util.core.IInitializer;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

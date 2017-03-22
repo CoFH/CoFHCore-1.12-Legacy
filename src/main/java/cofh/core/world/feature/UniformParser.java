@@ -1,11 +1,11 @@
 package cofh.core.world.feature;
 
-import cofh.lib.world.IFeatureGenerator;
-import cofh.lib.world.IFeatureParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.numbers.INumberProvider;
+import cofh.lib.world.IFeatureGenerator;
+import cofh.lib.world.IFeatureParser;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenUniform;
