@@ -16,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.*;
 
@@ -156,7 +157,7 @@ public class ASMCore {
 							{
 								for (MethodNode m : cn.methods) {
 									if (info.method.equals(m.name) && mn.desc.equals(m.desc)) {
-										mn.instructions.add(m.instructions);
+										mn.instructions.add(cloneList(m.instructions));
 										break l;
 									}
 								}
@@ -359,6 +360,39 @@ public class ASMCore {
 	}
 
 	// }
+
+	private static InsnList cloneList(InsnList list) {
+
+		ListIterator<AbstractInsnNode> iter = list.iterator();
+		IdentityHashMap<LabelNode, LabelNode> some_form_of_bullshit_map = new IdentityHashMap<>();
+		{
+			IdentityHashMap<Label, Label> backing_bullshit = new IdentityHashMap<>();
+			while (iter.hasNext()) {
+				AbstractInsnNode n = iter.next();
+				if (n instanceof LabelNode) {
+					LabelNode node = (LabelNode) n;
+					Label label = backing_bullshit.get(node.getLabel());
+					if (label == null) {
+						backing_bullshit.put(node.getLabel(), label = new Label());
+					}
+					some_form_of_bullshit_map.put(node, new LabelNode(label));
+				/**
+				 * Look. I don't know. InsnNode.clone requires this map. InsnList and Method
+				 * do not provide clone, so I need to build this map to do this for no reason
+				 * I can think of. This is all bullshit, but apparently required bullshit.
+				 * Basic features? Pfft. Who would ever want to use those?
+				 */
+				}
+			}
+		}
+
+		InsnList ret = new InsnList();
+		iter = list.iterator();
+		while (iter.hasNext()) {
+			ret.add(iter.next().clone(some_form_of_bullshit_map));
+		}
+		return ret;
+	}
 
 	private static Map<String, ModContainer> mods;
 
