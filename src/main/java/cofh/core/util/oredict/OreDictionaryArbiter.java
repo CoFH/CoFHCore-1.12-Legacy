@@ -49,7 +49,7 @@ public class OreDictionaryArbiter {
 		oreNames = OreDictionary.getOreNames();
 
 		for (String name : oreNames) {
-			List<ItemStack> ores = OreDictionary.getOres(name);
+			List<ItemStack> ores = OreDictionary.getOres(name, false);
 			for (ItemStack ore : ores) {
 				registerOreDictionaryEntry(ore, name);
 			}

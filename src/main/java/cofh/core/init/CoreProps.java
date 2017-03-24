@@ -1,6 +1,8 @@
 package cofh.core.init;
 
 import cofh.CoFHCore;
+import cofh.core.enchantment.EnchantmentHolding;
+import cofh.core.enchantment.EnchantmentMultishot;
 import cofh.lib.util.helpers.StringHelper;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
@@ -42,6 +44,15 @@ public class CoreProps {
 
 		comment = "If TRUE, death messages are displayed for any named entity.";
 		enableLivingEntityDeathMessages = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableGenericDeathMessage", category, enableLivingEntityDeathMessages, comment);
+
+		/* ENCHANTS */
+		category = "Enchantment";
+
+		comment = "If TRUE, the Holding Enchantment is available for various Storage Items.";
+		EnchantmentHolding.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableHoldingEnchant", category, EnchantmentHolding.enable, comment);
+
+		comment = "If TRUE, the Multishot Enchantment is available for various Bows.";
+		EnchantmentMultishot.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableMultishotEnchant", category, EnchantmentMultishot.enable, comment);
 
 		/* HOLIDAY */
 		category = "Holidays";

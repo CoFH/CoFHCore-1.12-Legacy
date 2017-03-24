@@ -1,6 +1,7 @@
 package cofh.core.item.tool;
 
 import cofh.core.init.CoreEnchantments;
+import cofh.core.item.IEnchantable;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.creativetab.CreativeTabs;
@@ -24,7 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemBowCore extends ItemBow {
+public class ItemBowCore extends ItemBow implements IEnchantable {
 
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
@@ -212,6 +213,13 @@ public class ItemBowCore extends ItemBow {
 
 	public void onBowFired(EntityPlayer player, ItemStack stack) {
 
+	}
+
+	/* IEnchantable */
+	@Override
+	public boolean canEnchant(ItemStack stack, Enchantment enchantment) {
+
+		return enchantment == CoreEnchantments.multishot;
 	}
 
 }

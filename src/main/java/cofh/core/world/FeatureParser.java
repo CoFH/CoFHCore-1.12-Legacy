@@ -821,7 +821,7 @@ public class FeatureParser {
 					log.error("Invalid ore name for item at line %d!", genElement.origin().lineNumber());
 					return null;
 				}
-				ItemStack oreStack = OreDictionary.getOres(oreName).get(0);
+				ItemStack oreStack = OreDictionary.getOres(oreName, false).get(0);
 				stack = ItemHelper.cloneStack(oreStack, stackSize);
 			} else {
 				if (!item.hasPath("name")) {

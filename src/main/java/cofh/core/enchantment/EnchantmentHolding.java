@@ -1,12 +1,14 @@
 package cofh.core.enchantment;
 
-import cofh.api.item.IInventoryContainerItem;
 import cofh.core.init.CoreEnchantments;
+import cofh.core.item.IEnchantable;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
 public class EnchantmentHolding extends Enchantment {
+
+	public static boolean enable = true;
 
 	public EnchantmentHolding(String id) {
 
@@ -41,7 +43,13 @@ public class EnchantmentHolding extends Enchantment {
 	@Override
 	public boolean canApply(ItemStack stack) {
 
-		return (stack.getItem() instanceof IInventoryContainerItem);
+		return enable && stack.getItem() instanceof IEnchantable && ((IEnchantable) stack.getItem()).canEnchant(stack, this);
+	}
+
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack) {
+
+		return canApply(stack);
 	}
 
 	@Override
