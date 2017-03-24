@@ -217,7 +217,7 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 	}
 
 	/* IFogOverlay */
-	public Vec3d getFog(IBlockState state, Entity renderViewEntity, float fogColourRed, float fogColourGreen, float fogColourBlue) {
+	public Vec3d getFog(IBlockState state, Entity renderViewEntity, float fogColorRed, float fogColorGreen, float fogColorBlue) {
 
 		return new Vec3d(particleRed, particleGreen, particleBlue);
 	}

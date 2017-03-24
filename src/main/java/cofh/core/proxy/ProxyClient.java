@@ -147,9 +147,9 @@ public class ProxyClient extends Proxy {
 
 				RenderHelper.bindTexture(UNDERWATER_GRAYSCALE);
 				float brightness = player.getBrightness(event.getRenderPartialTicks());
-				Vec3d colour = ((IFogOverlay) block).getFog(state, player, 0.0F, 0.0F, 0.0F).scale(brightness);
+				Vec3d color = ((IFogOverlay) block).getFog(state, player, 0.0F, 0.0F, 0.0F).scale(brightness);
 
-				GlStateManager.color((float) colour.xCoord, (float) colour.yCoord, (float) colour.zCoord, 0.5F);
+				GlStateManager.color((float) color.xCoord, (float) color.yCoord, (float) color.zCoord, 0.5F);
 				GlStateManager.enableBlend();
 				GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
 				GlStateManager.pushMatrix();

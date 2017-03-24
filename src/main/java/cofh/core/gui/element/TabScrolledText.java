@@ -72,11 +72,9 @@ public abstract class TabScrolledText extends TabBase {
 		if (!isFullyOpened()) {
 			return false;
 		}
-
 		if (shiftedMouseX < 108) {
 			return super.onMousePressed(mouseX, mouseY, mouseButton);
 		}
-
 		if (shiftedMouseY < 52) {
 			firstLine = MathHelper.clamp(firstLine - 1, 0, maxFirstLine);
 		} else {

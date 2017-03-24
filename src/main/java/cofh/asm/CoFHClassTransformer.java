@@ -57,7 +57,7 @@ public class CoFHClassTransformer implements IClassTransformer {
 		transformer.add(new MethodInjector(mapping, blocks.get("i_postGenWorld"), false));
 
 		mapping = new ObfMapping("net/minecraft/client/renderer/EntityRenderer", "func_78466_h", "(F)V");
-		transformer.add(new MethodInjector(mapping, blocks.get("n_fogColour"), blocks.get("i_fogColour"), true));
+		transformer.add(new MethodInjector(mapping, blocks.get("n_fogColor"), blocks.get("i_fogColor"), true));
 
 	}
 }

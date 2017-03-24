@@ -35,6 +35,7 @@ public abstract class GuiCore extends GuiBase {
 	public static final String TEX_COMPACT = GuiProps.PATH_ELEMENTS + "scale_compact.png";
 	public static final String TEX_CRUSH = GuiProps.PATH_ELEMENTS + "scale_crush.png";
 	public static final String TEX_FLAME = GuiProps.PATH_ELEMENTS + "scale_flame.png";
+	public static final String TEX_FLAME_GREEN = GuiProps.PATH_ELEMENTS + "scale_flame_green.png";
 	public static final String TEX_FLUX = GuiProps.PATH_ELEMENTS + "scale_flux.png";
 	public static final String TEX_SAW = GuiProps.PATH_ELEMENTS + "scale_saw.png";
 	public static final String TEX_SUN = GuiProps.PATH_ELEMENTS + "scale_sun.png";

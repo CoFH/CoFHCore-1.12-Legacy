@@ -50,22 +50,23 @@ public class TabAugment extends TabBase {
 
 		numAugments = myContainer.getAugmentSlots().length;
 
-		for (int i = 0; i < numAugments; i++) {
-			myContainer.getAugmentSlots()[i].xDisplayPosition = -gui.getGuiLeft() - 16;
-			myContainer.getAugmentSlots()[i].yDisplayPosition = -gui.getGuiTop() - 16;
-		}
-		myContainer.setAugmentLock(true);
-		switch (numAugments) {
-			case 4:
-				slotsBorderX1 += 9;
-			case 5:
-			case 6:
-				break;
-			default:
-				slotsBorderX1 += 9 * (3 - numAugments);
-				slotsBorderX2 = slotsBorderX1 + 18 * numAugments + 6;
-				slotsBorderY1 += 9;
-				slotsBorderY2 -= 9;
+		if (numAugments > 0) {
+			for (int i = 0; i < numAugments; i++) {
+				myContainer.getAugmentSlots()[i].xDisplayPosition = -gui.getGuiLeft() - 16;
+				myContainer.getAugmentSlots()[i].yDisplayPosition = -gui.getGuiTop() - 16;
+			}
+			switch (numAugments) {
+				case 4:
+					slotsBorderX1 += 9;
+				case 5:
+				case 6:
+					break;
+				default:
+					slotsBorderX1 += 9 * (3 - numAugments);
+					slotsBorderX2 = slotsBorderX1 + 18 * numAugments + 6;
+					slotsBorderY1 += 9;
+					slotsBorderY2 -= 9;
+			}
 		}
 		myContainer.setAugmentLock(true);
 	}
@@ -75,12 +76,18 @@ public class TabAugment extends TabBase {
 
 		if (!isFullyOpened()) {
 			list.add(StringHelper.localize("info.cofh.augmentation"));
+			if (numAugments == 0) {
+				list.add(StringHelper.YELLOW + StringHelper.localize("info.cofh.upgradeRequired"));
+			}
 		}
 	}
 
 	@Override
 	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
 
+		if (numAugments == 0) {
+			return true;
+		}
 		if (!isFullyOpened()) {
 			return false;
 		}
@@ -93,7 +100,6 @@ public class TabAugment extends TabBase {
 		if (mouseX < slotsBorderX1 + sideOffset() || mouseX >= slotsBorderX2 + sideOffset() || mouseY < slotsBorderY1 || mouseY >= slotsBorderY2) {
 			return false;
 		}
-
 		return true;
 	}
 
@@ -110,29 +116,31 @@ public class TabAugment extends TabBase {
 		float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
 		GlStateManager.color(colorR, colorG, colorB, 1.0F);
 
-		if (numAugments > 3) {
-			gui.drawTexturedModalRect(posXOffset() + slotsBorderX1, posY + slotsBorderY1, 16, 20, (numAugments > 4 ? 18 * 3 : 18 * 2) + 6, 24 + 18);
-		} else {
-			gui.drawTexturedModalRect(posXOffset() + slotsBorderX1, posY + slotsBorderY1, 16, 20, 18 * numAugments + 6, 24);
-		}
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderHelper.bindTexture(GRID_TEXTURE);
+		if (numAugments > 0) {
+			if (numAugments > 3) {
+				gui.drawTexturedModalRect(posXOffset() + slotsBorderX1, posY + slotsBorderY1, 16, 20, (numAugments > 4 ? 18 * 3 : 18 * 2) + 6, 24 + 18);
+			} else {
+				gui.drawTexturedModalRect(posXOffset() + slotsBorderX1, posY + slotsBorderY1, 16, 20, 18 * numAugments + 6, 24);
+			}
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderHelper.bindTexture(GRID_TEXTURE);
 
-		switch (numAugments) {
-			case 4:
-				drawSlots(0, 0, 2);
-				drawSlots(0, 1, 2);
-				break;
-			case 5:
-				drawSlots(0, 0, 3);
-				drawSlots(1, 1, 2);
-				break;
-			case 6:
-				drawSlots(0, 0, 3);
-				drawSlots(0, 1, 3);
-				break;
-			default:
-				drawSlots(0, 0, numAugments);
+			switch (numAugments) {
+				case 4:
+					drawSlots(0, 0, 2);
+					drawSlots(0, 1, 2);
+					break;
+				case 5:
+					drawSlots(0, 0, 3);
+					drawSlots(1, 1, 2);
+					break;
+				case 6:
+					drawSlots(0, 0, 3);
+					drawSlots(0, 1, 3);
+					break;
+				default:
+					drawSlots(0, 0, numAugments);
+			}
 		}
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
@@ -152,6 +160,9 @@ public class TabAugment extends TabBase {
 	@Override
 	public void setFullyOpen() {
 
+		if (numAugments == 0) {
+			return;
+		}
 		super.setFullyOpen();
 
 		switch (numAugments) {

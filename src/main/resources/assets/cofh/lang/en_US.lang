@@ -161,6 +161,7 @@ info.cofh.tutorial.tabRedstone=The Redstone Control tab configures how this bloc
 info.cofh.tutorial.tabSecurity=The Security tab allows the owner to control who can access this block.
 info.cofh.tutorial=Tutorial
 info.cofh.unlocked=Unlocked
+info.cofh.upgradeRequired=Upgrade Required
 
 item.invalid.name=Invalid Item (Destroy)
 

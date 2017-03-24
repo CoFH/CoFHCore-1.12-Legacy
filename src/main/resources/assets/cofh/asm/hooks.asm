@@ -10,7 +10,7 @@ ILOAD 0
 ILOAD 1
 INVOKESTATIC cofh/asm/hooks/ASMHooks.postGenerateWorld(Lnet/minecraft/world/World;II)V
 
-list n_fogColour
+list n_fogColor
 ALOAD 0
 GETFIELD net/minecraft/client/renderer/EntityRenderer.field_78535_ad : F
 ALOAD 0
@@ -18,7 +18,7 @@ GETFIELD net/minecraft/client/renderer/EntityRenderer.field_78539_ae : F
 ALOAD 0
 GETFIELD net/minecraft/client/renderer/EntityRenderer.field_78535_ad : F
 
-list i_fogColour
+list i_fogColor
 ALOAD 12
 INVOKEINTERFACE net/minecraft/block/state/IBlockState.func_177230_c ()Lnet/minecraft/block/Block;
 INSTANCEOF cofh/core/block/IFogOverlay
