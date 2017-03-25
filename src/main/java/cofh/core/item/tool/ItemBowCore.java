@@ -2,12 +2,12 @@ package cofh.core.item.tool;
 
 import cofh.core.init.CoreEnchantments;
 import cofh.core.item.IEnchantable;
+import cofh.core.item.IFOVUpdateItem;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.MathHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -25,13 +25,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemBowCore extends ItemBow implements IEnchantable {
+public class ItemBowCore extends ItemBow implements IEnchantable, IFOVUpdateItem {
 
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
 
 	protected float arrowDamageMultiplier = 0.0F;
 	protected float arrowSpeedMultiplier = 0.0F;
+	protected float zoomMultiplier = 0.15F;
 
 	protected boolean showInCreative = true;
 
@@ -49,7 +50,7 @@ public class ItemBowCore extends ItemBow implements IEnchantable {
 					return 0.0F;
 				} else {
 					ItemStack itemstack = entityIn.getActiveItemStack();
-					return itemstack != null && itemstack.getItem() instanceof ItemBow ? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+					return itemstack != null && itemstack.getItem() instanceof ItemBowCore ? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
 				}
 			}
 		});
@@ -60,17 +61,6 @@ public class ItemBowCore extends ItemBow implements IEnchantable {
 				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
 			}
 		});
-	}
-
-	public int cofh_canEnchantApply(ItemStack stack, Enchantment ench) {
-
-		if (ench == Enchantments.LOOTING) {
-			return 1;
-		}
-		if (ench.type == EnumEnchantmentType.BOW) {
-			return 1;
-		}
-		return -1;
 	}
 
 	public ItemBowCore setRepairIngot(String repairIngot) {
@@ -88,6 +78,12 @@ public class ItemBowCore extends ItemBow implements IEnchantable {
 	public ItemBowCore setArrowSpeed(float multiplier) {
 
 		this.arrowSpeedMultiplier = multiplier;
+		return this;
+	}
+
+	public ItemBowCore setZoomMultiplier(float multiplier) {
+
+		this.zoomMultiplier = multiplier;
 		return this;
 	}
 
@@ -220,6 +216,14 @@ public class ItemBowCore extends ItemBow implements IEnchantable {
 	public boolean canEnchant(ItemStack stack, Enchantment enchantment) {
 
 		return enchantment == CoreEnchantments.multishot;
+	}
+
+	/* IFOVUpdateItem */
+	@Override
+	public float getFOVMod(ItemStack stack, EntityPlayer player) {
+
+		float progress = MathHelper.clamp((stack.getMaxItemUseDuration() - player.getItemInUseCount()) / 20.0F, 0, 1.0F);
+		return progress * progress * zoomMultiplier;
 	}
 
 }

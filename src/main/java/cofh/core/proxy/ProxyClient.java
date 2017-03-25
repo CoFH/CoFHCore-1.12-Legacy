@@ -9,6 +9,7 @@ import cofh.core.key.KeyBindingItemMultiMode;
 import cofh.core.key.KeyHandlerCore;
 import cofh.core.render.CustomEffectRenderer;
 import cofh.core.render.FontRendererCore;
+import cofh.core.render.RenderEventHandler;
 import cofh.core.render.ShaderHelper;
 import cofh.core.util.RegistrySocial;
 import cofh.lib.util.RayTracer;
@@ -35,6 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -67,6 +69,7 @@ public class ProxyClient extends Proxy {
 			CoFHCore.LOG.info("Replacing EffectRenderer - Particles have been disabled.");
 			Minecraft.getMinecraft().effectRenderer = new CustomEffectRenderer();
 		}
+		MinecraftForge.EVENT_BUS.register(RenderEventHandler.instance);
 	}
 
 	@Override
