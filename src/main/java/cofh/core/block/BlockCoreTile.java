@@ -37,7 +37,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -196,7 +195,7 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 		if (tile instanceof ISecurable && !((ISecurable) tile).canPlayerAccess(player)) {
 			return -1;
 		}
-		return ForgeHooks.blockStrength(world.getBlockState(pos), player, world, pos);
+		return state.getPlayerRelativeBlockHardness(player, world, pos);
 	}
 
 	@Override
@@ -229,7 +228,7 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 	public boolean eventReceived(IBlockState state, World world, BlockPos pos, int id, int param) {
 
 		TileEntity tile = world.getTileEntity(pos);
-		return tile != null ? tile.receiveClientEvent(id, param) : false;
+		return tile != null && tile.receiveClientEvent(id, param);
 	}
 
 	@Override

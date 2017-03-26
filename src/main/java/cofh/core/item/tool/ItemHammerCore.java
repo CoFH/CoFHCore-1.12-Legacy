@@ -10,9 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 
-public class ItemHammerCore extends ItemToolCore {
+public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 
 	public ItemHammerCore(ToolMaterial toolMaterial) {
 
@@ -54,10 +53,10 @@ public class ItemHammerCore extends ItemToolCore {
 		int used = 0;
 		world.playEvent(2001, pos, Block.getStateId(state));
 
-		float refStrength = ForgeHooks.blockStrength(state, player, world, pos);
+		float refStrength = state.getPlayerRelativeBlockHardness(player, world, pos);
 		if (refStrength != 0.0F) {
 			RayTraceResult traceResult = RayTracer.retrace(player);
-			IBlockState adjBlock;
+			IBlockState adjState;
 			float strength;
 
 			int x = pos.getX();
@@ -70,8 +69,8 @@ public class ItemHammerCore extends ItemToolCore {
 					for (x = pos.getX() - 1; x <= pos.getX() + 1; x++) {
 						for (z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
 							BlockPos adjPos = new BlockPos(x, y, z);
-							adjBlock = world.getBlockState(adjPos);
-							strength = ForgeHooks.blockStrength(adjBlock, player, world, adjPos);
+							adjState = world.getBlockState(adjPos);
+							strength = adjState.getPlayerRelativeBlockHardness(player, world, pos);
 							if (strength > 0F && refStrength / strength <= 10F) {
 								if (harvestBlock(world, adjPos, player)) {
 									used++;
@@ -85,8 +84,8 @@ public class ItemHammerCore extends ItemToolCore {
 					for (x = pos.getX() - 1; x <= pos.getX() + 1; x++) {
 						for (y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
 							BlockPos adjPos = new BlockPos(x, y, z);
-							adjBlock = world.getBlockState(adjPos);
-							strength = ForgeHooks.blockStrength(adjBlock, player, world, adjPos);
+							adjState = world.getBlockState(adjPos);
+							strength = adjState.getPlayerRelativeBlockHardness(player, world, pos);
 							if (strength > 0F && refStrength / strength <= 10F) {
 								if (harvestBlock(world, adjPos, player)) {
 									used++;
@@ -100,8 +99,8 @@ public class ItemHammerCore extends ItemToolCore {
 					for (y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
 						for (z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
 							BlockPos adjPos = new BlockPos(x, y, z);
-							adjBlock = world.getBlockState(adjPos);
-							strength = ForgeHooks.blockStrength(adjBlock, player, world, adjPos);
+							adjState = world.getBlockState(adjPos);
+							strength = adjState.getPlayerRelativeBlockHardness(player, world, pos);
 							if (strength > 0F && refStrength / strength <= 10F) {
 								if (harvestBlock(world, adjPos, player)) {
 									used++;
@@ -117,5 +116,35 @@ public class ItemHammerCore extends ItemToolCore {
 		}
 		return false;
 	}
+
+	//	/* IAOEBreakItem */
+	//	@Override
+	//	public ImmutableList<BlockPos> getAOEBlocks(ItemStack stack, BlockPos pos, EntityPlayer player) {
+	//
+	//		Iterable<BlockPos> area;
+	//		RayTraceResult traceResult = RayTracer.retrace(player);
+	//
+	//		switch (traceResult.sideHit) {
+	//			case DOWN:
+	//				area = BlockPos.getAllInBox(pos.add(-1, -1, -1), pos.add(1, -1, 1));
+	//				break;
+	//			case UP:
+	//				area = BlockPos.getAllInBox(pos.add(-1, 1, -1), pos.add(1, 1, 1));
+	//				break;
+	//			case NORTH:
+	//				area = BlockPos.getAllInBox(pos.add(-1, -1, -1), pos.add(1, 1, -1));
+	//				break;
+	//			case SOUTH:
+	//				area = BlockPos.getAllInBox(pos.add(-1, -1, 1), pos.add(1, 1, 1));
+	//				break;
+	//			case WEST:
+	//				area = BlockPos.getAllInBox(pos.add(-1, -1, -1), pos.add(-1, 1, 1));
+	//				break;
+	//			default:
+	//				area = BlockPos.getAllInBox(pos.add(1, -1, -1), pos.add(1, 1, 1));
+	//				break;
+	//		}
+	//		return ImmutableList.copyOf(area);
+	//	}
 
 }

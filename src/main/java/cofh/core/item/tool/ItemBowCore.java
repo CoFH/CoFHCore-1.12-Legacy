@@ -1,7 +1,7 @@
 package cofh.core.item.tool;
 
 import cofh.core.init.CoreEnchantments;
-import cofh.core.item.IEnchantable;
+import cofh.core.item.IEnchantableItem;
 import cofh.core.item.IFOVUpdateItem;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.MathHelper;
@@ -25,7 +25,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemBowCore extends ItemBow implements IEnchantable, IFOVUpdateItem {
+public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdateItem {
 
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
@@ -211,7 +211,7 @@ public class ItemBowCore extends ItemBow implements IEnchantable, IFOVUpdateItem
 
 	}
 
-	/* IEnchantable */
+	/* IEnchantableItem */
 	@Override
 	public boolean canEnchant(ItemStack stack, Enchantment enchantment) {
 
