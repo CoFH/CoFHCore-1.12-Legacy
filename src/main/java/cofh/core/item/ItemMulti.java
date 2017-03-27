@@ -102,8 +102,8 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 	@SideOnly (Side.CLIENT)
 	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
 
-		for (int i = 0; i < itemList.size(); i++) {
-			list.add(new ItemStack(item, 1, itemList.get(i)));
+		for (int metadata : itemList) {
+			list.add(new ItemStack(item, 1, metadata));
 		}
 	}
 

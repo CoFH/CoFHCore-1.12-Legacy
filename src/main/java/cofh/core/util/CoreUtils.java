@@ -51,7 +51,7 @@ public class CoreUtils {
 		return player instanceof EntityPlayerMP;
 	}
 
-	public static boolean isFakePlayer(EntityPlayer player) {
+	public static boolean isFakePlayer(Entity player) {
 
 		return (player instanceof FakePlayer);
 	}

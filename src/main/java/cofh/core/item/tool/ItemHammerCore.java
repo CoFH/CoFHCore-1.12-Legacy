@@ -70,7 +70,7 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 						for (z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
 							BlockPos adjPos = new BlockPos(x, y, z);
 							adjState = world.getBlockState(adjPos);
-							strength = adjState.getPlayerRelativeBlockHardness(player, world, pos);
+							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
 								if (harvestBlock(world, adjPos, player)) {
 									used++;
@@ -85,7 +85,7 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 						for (y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
 							BlockPos adjPos = new BlockPos(x, y, z);
 							adjState = world.getBlockState(adjPos);
-							strength = adjState.getPlayerRelativeBlockHardness(player, world, pos);
+							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
 								if (harvestBlock(world, adjPos, player)) {
 									used++;
@@ -100,7 +100,7 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 						for (z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
 							BlockPos adjPos = new BlockPos(x, y, z);
 							adjState = world.getBlockState(adjPos);
-							strength = adjState.getPlayerRelativeBlockHardness(player, world, pos);
+							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
 								if (harvestBlock(world, adjPos, player)) {
 									used++;
