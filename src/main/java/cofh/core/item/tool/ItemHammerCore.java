@@ -56,6 +56,11 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 		float refStrength = state.getPlayerRelativeBlockHardness(player, world, pos);
 		if (refStrength != 0.0F) {
 			RayTraceResult traceResult = RayTracer.retrace(player);
+
+			if (traceResult == null) {
+				return false;
+			}
+			BlockPos adjPos;
 			IBlockState adjState;
 			float strength;
 
@@ -68,7 +73,7 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 				case UP:
 					for (x = pos.getX() - 1; x <= pos.getX() + 1; x++) {
 						for (z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
-							BlockPos adjPos = new BlockPos(x, y, z);
+							adjPos = new BlockPos(x, y, z);
 							adjState = world.getBlockState(adjPos);
 							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
@@ -83,7 +88,7 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 				case SOUTH:
 					for (x = pos.getX() - 1; x <= pos.getX() + 1; x++) {
 						for (y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
-							BlockPos adjPos = new BlockPos(x, y, z);
+							adjPos = new BlockPos(x, y, z);
 							adjState = world.getBlockState(adjPos);
 							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
@@ -98,7 +103,7 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 				case EAST:
 					for (y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
 						for (z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
-							BlockPos adjPos = new BlockPos(x, y, z);
+							adjPos = new BlockPos(x, y, z);
 							adjState = world.getBlockState(adjPos);
 							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
