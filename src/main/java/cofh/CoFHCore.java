@@ -71,6 +71,7 @@ public class CoFHCore {
 		CONFIG_CLIENT.setConfiguration(new Configuration(new File(CoreProps.configDir, "/cofh/core/client.cfg"), true));
 
 		CoreProps.preInit();
+		CoreEnchantments.preInit();
 		PacketHandler.preInit();
 		addOreDictionaryEntries();
 
@@ -91,7 +92,6 @@ public class CoFHCore {
 
 		OreDictionaryArbiter.initialize();
 
-		CoreEnchantments.postInit();
 		PacketHandler.postInit();
 
 		proxy.postInit(event);
@@ -105,7 +105,7 @@ public class CoFHCore {
 		CONFIG_CLIENT.cleanUp(false, true);
 
 		try {
-			FeatureParser.parseGenerationFile();
+			FeatureParser.parseGenerationFiles();
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
@@ -115,15 +115,20 @@ public class CoFHCore {
 	@EventHandler
 	public void serverStart(FMLServerAboutToStartEvent event) {
 
+		CoreProps.server = event.getServer();
 	}
 
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 
-		OreDictionaryArbiter.initialize();
 		CommandHandler.initCommands(event);
+	}
 
-		CoreProps.server = event.getServer();
+	@EventHandler
+	public void handleIdMappingEvent(FMLModIdMappingEvent event) {
+
+		OreDictionaryArbiter.refresh();
+		FurnaceFuelHandler.refresh();
 	}
 
 	/* HELPERS */

@@ -40,7 +40,7 @@ public class FurnaceFuelHandler implements IFuelHandler {
 		return true;
 	}
 
-	public static void refreshMap() {
+	public static void refresh() {
 
 		THashMap<ItemWrapper, Integer> tempMap = new THashMap<>();
 

@@ -23,11 +23,11 @@ import java.util.List;
  */
 public class OreDictionaryArbiter {
 
-	private static BiMap<String, Integer> oreIDs = HashBiMap.create();
-	private static TMap<Integer, ArrayList<ItemStack>> oreStacks = new THashMap<>();
+	private static BiMap<String, Integer> oreIDs = HashBiMap.create(32);
+	private static TMap<Integer, ArrayList<ItemStack>> oreStacks = new THashMap<>(128);
 
-	private static TMap<ItemWrapper, ArrayList<Integer>> stackIDs = new THashMap<>();
-	private static TMap<ItemWrapper, ArrayList<String>> stackNames = new THashMap<>();
+	private static TMap<ItemWrapper, ArrayList<Integer>> stackIDs = new THashMap<>(128);
+	private static TMap<ItemWrapper, ArrayList<String>> stackNames = new THashMap<>(128);
 
 	private static String[] oreNames = new String[] {};
 
@@ -36,15 +36,15 @@ public class OreDictionaryArbiter {
 	public static final int WILDCARD_VALUE = Short.MAX_VALUE;
 
 	/**
-	 * Initializes all of the entries. Called on server start to make sure everything is in sync.
+	 * Initializes all of the entries. Called on ID Remapping to make sure everything is in sync.
 	 */
 	public static void initialize() {
 
-		oreIDs = HashBiMap.create(oreIDs == null ? 32 : oreIDs.size());
-		oreStacks = new THashMap<>(oreStacks == null ? 32 : oreStacks.size());
+		oreIDs = HashBiMap.create(oreIDs.size());
+		oreStacks = new THashMap<>(oreStacks.size());
 
-		stackIDs = new THashMap<>(stackIDs == null ? 32 : stackIDs.size());
-		stackNames = new THashMap<>(stackNames == null ? 32 : stackNames.size());
+		stackIDs = new THashMap<>(stackIDs.size());
+		stackNames = new THashMap<>(stackNames.size());
 
 		oreNames = OreDictionary.getOreNames();
 
@@ -64,6 +64,14 @@ public class OreDictionaryArbiter {
 			}
 		}
 		ItemHelper.oreProxy = new OreDictionaryArbiterProxy();
+	}
+
+	/**
+	 * Called on ID Remapping to make sure everything is in sync.
+	 */
+	public static void refresh() {
+
+		initialize();
 	}
 
 	/**

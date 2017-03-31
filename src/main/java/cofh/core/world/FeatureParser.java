@@ -228,7 +228,7 @@ public class FeatureParser {
 		}
 	}
 
-	public static void parseGenerationFile() {
+	public static void parseGenerationFiles() {
 
 		ArrayList<File> worldGenList = new ArrayList<>(5);
 		{
@@ -307,6 +307,7 @@ public class FeatureParser {
 				}
 				log.info("Finished reading %s", file);
 			} else {
+
 			}
 		}
 	}

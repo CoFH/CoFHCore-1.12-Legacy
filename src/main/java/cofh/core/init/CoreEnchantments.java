@@ -17,7 +17,7 @@ public class CoreEnchantments {
 	}
 
 	/* INIT */
-	public static void postInit() {
+	public static void preInit() {
 
 		holding = new EnchantmentHolding("cofhcore:holding");
 		multishot = new EnchantmentMultishot("cofhcore:multishot");

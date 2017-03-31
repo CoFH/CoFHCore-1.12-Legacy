@@ -38,7 +38,7 @@ public class FMLEventHandler {
 	@EventHandler
 	public void handleIdMappingEvent(FMLModIdMappingEvent event) {
 
-		FurnaceFuelHandler.refreshMap();
+		FurnaceFuelHandler.refresh();
 		OreDictionaryArbiter.initialize();
 	}
 
