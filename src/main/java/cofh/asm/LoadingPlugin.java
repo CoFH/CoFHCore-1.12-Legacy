@@ -78,13 +78,12 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 	@Override
 	public void injectData(Map<String, Object> data) {
 
-        loader = (LaunchClassLoader) data.get("classLoader");
+		loader = (LaunchClassLoader) data.get("classLoader");
 		runtimeDeobfEnabled = (Boolean) data.get("runtimeDeobfuscationEnabled");
 		if (data.containsKey("coremodLocation")) {
 			myLocation = (File) data.get("coremodLocation");
 		}
 	}
-
 
 	public File myLocation;
 
@@ -184,6 +183,5 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 			}
 		}
 	}
-
 
 }
