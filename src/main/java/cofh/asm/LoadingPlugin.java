@@ -27,7 +27,7 @@ import java.util.zip.ZipEntry;
 @IFMLLoadingPlugin.TransformerExclusions ({ "cofh.asm." })
 @IFMLLoadingPlugin.SortingIndex (1001)
 @IFMLLoadingPlugin.Name ("CoFH Loading Plugin")
-public class LoadingPlugin implements IFMLLoadingPlugin, IFMLCallHook {
+public class LoadingPlugin implements IFMLLoadingPlugin {
 
 	public static final String MC_VERSION = "[1.10.2]";
 	public static boolean runtimeDeobfEnabled = false;
@@ -72,7 +72,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin, IFMLCallHook {
 	@Override
 	public String getSetupClass() {
 
-		return LoadingPlugin.class.getName();
+		return CallHook.class.getName();
 	}
 
 	@Override
@@ -85,71 +85,10 @@ public class LoadingPlugin implements IFMLLoadingPlugin, IFMLCallHook {
 		}
 	}
 
-    @Override
-    public Void call() throws Exception {
-
-        scanMods();
-        return null;
-    }
-
-
-    private void scanMods() {
-
-        File modsDir = new File(minecraftDir, "mods");
-        for (File file : modsDir.listFiles()) {
-            scanMod(file);
-        }
-        File versionModsDir = new File(minecraftDir, "mods/" + currentMcVersion);
-        if (versionModsDir.exists()) {
-            for (File file : versionModsDir.listFiles()) {
-                scanMod(file);
-            }
-        }
-    }
-
-    private void scanMod(File file) {
-
-        {
-            String name = file.getName().toLowerCase();
-            if (file.isDirectory() || !name.endsWith(".jar") && !name.endsWith(".zip")) {
-                return;
-            }
-        }
-
-        try {
-            try (JarFile jar = new JarFile(file)) {
-                l:
-                {
-                    Manifest manifest = jar.getManifest();
-                    if (manifest == null) {
-                        break l;
-                    }
-                    Attributes attr = manifest.getMainAttributes();
-                    if (attr == null) {
-                        break l;
-                    }
-
-                    String transformers = attr.getValue("CoFHAT");
-                    if (transformers != null) {
-                        for (String t : transformers.split(" ")) {
-                            ZipEntry at = jar.getEntry("META-INF/" + t);
-                            if (at != null) {
-                                FMLLog.log("CoFHASM", Level.DEBUG, "Adding CoFHAT: " + t + " from: " + file.getName());
-                                CoFHAccessTransformer.processATFile(new InputStreamReader(jar.getInputStream(at)));
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-
-        }
-    }
-
 
 	public File myLocation;
 
-	public static class CoFHDummyContainer extends DummyModContainer{
+	public static class CoFHDummyContainer extends DummyModContainer {
 
 		public CoFHDummyContainer() {
 
@@ -176,5 +115,75 @@ public class LoadingPlugin implements IFMLLoadingPlugin, IFMLCallHook {
 			CoFHClassTransformer.scrapeData(ASM_DATA);
 		}
 	}
+
+	public static class CallHook implements IFMLCallHook {
+
+		@Override
+		public void injectData(Map<String, Object> data) {
+
+			loader = (LaunchClassLoader) data.get("classLoader");
+		}
+
+		@Override
+		public Void call() throws Exception {
+
+			scanMods();
+			return null;
+		}
+
+		private void scanMods() {
+
+			File modsDir = new File(minecraftDir, "mods");
+			for (File file : modsDir.listFiles()) {
+				scanMod(file);
+			}
+			File versionModsDir = new File(minecraftDir, "mods/" + currentMcVersion);
+			if (versionModsDir.exists()) {
+				for (File file : versionModsDir.listFiles()) {
+					scanMod(file);
+				}
+			}
+		}
+
+		private void scanMod(File file) {
+
+			{
+				String name = file.getName().toLowerCase();
+				if (file.isDirectory() || !name.endsWith(".jar") && !name.endsWith(".zip")) {
+					return;
+				}
+			}
+
+			try {
+				try (JarFile jar = new JarFile(file)) {
+					l:
+					{
+						Manifest manifest = jar.getManifest();
+						if (manifest == null) {
+							break l;
+						}
+						Attributes attr = manifest.getMainAttributes();
+						if (attr == null) {
+							break l;
+						}
+
+						String transformers = attr.getValue("CoFHAT");
+						if (transformers != null) {
+							for (String t : transformers.split(" ")) {
+								ZipEntry at = jar.getEntry("META-INF/" + t);
+								if (at != null) {
+									FMLLog.log("CoFHASM", Level.DEBUG, "Adding CoFHAT: " + t + " from: " + file.getName());
+									CoFHAccessTransformer.processATFile(new InputStreamReader(jar.getInputStream(at)));
+								}
+							}
+						}
+					}
+				}
+			} catch (Exception e) {
+
+			}
+		}
+	}
+
 
 }
