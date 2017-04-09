@@ -207,7 +207,7 @@ public class CrashHelper {
 
 		category.addCrashSection("Class", (Callable<Object>) () -> object.getClass().getName());
 
-		category.addCrashSection("ToString", (Callable<Object>) () -> object.toString());
+		category.addCrashSection("ToString", (Callable<Object>) object::toString);
 
 		if (object instanceof TileEntity) {
 			final TileEntity tile = (TileEntity) object;

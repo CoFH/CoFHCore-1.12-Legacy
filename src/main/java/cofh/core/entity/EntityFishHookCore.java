@@ -128,9 +128,7 @@ public class EntityFishHookCore extends EntityFishHook {
 				List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expandXyz(1.0D));
 				double d0 = 0.0D;
 
-				for (int j = 0; j < list.size(); ++j) {
-					Entity entity1 = (Entity) list.get(j);
-
+				for (Entity entity1 : list) {
 					if (this.canBeHooked(entity1) && (entity1 != this.angler || this.ticksInAir >= 5)) {
 						AxisAlignedBB axisalignedbb1 = entity1.getEntityBoundingBox().expandXyz(0.30000001192092896D);
 						RayTraceResult raytraceresult1 = axisalignedbb1.calculateIntercept(vec3d1, vec3d);
@@ -149,7 +147,6 @@ public class EntityFishHookCore extends EntityFishHook {
 				if (entity != null) {
 					raytraceresult = new RayTraceResult(entity);
 				}
-
 				if (raytraceresult != null) {
 					if (raytraceresult.entityHit != null) {
 						this.caughtEntity = raytraceresult.entityHit;
@@ -163,12 +160,13 @@ public class EntityFishHookCore extends EntityFishHook {
 			if (!this.inGround) {
 				this.moveEntity(this.motionX, this.motionY, this.motionZ);
 				float f2 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionZ * this.motionZ);
+
+				this.rotationPitch = (float) (MathHelper.atan2(this.motionY, (double) f2) * (180D / Math.PI));
 				this.rotationYaw = (float) (MathHelper.atan2(this.motionX, this.motionZ) * (180D / Math.PI));
 
-				for (this.rotationPitch = (float) (MathHelper.atan2(this.motionY, (double) f2) * (180D / Math.PI)); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
-					;
+				while (this.rotationPitch - this.prevRotationPitch < -180.0F) {
+					this.prevRotationPitch -= 360.0F;
 				}
-
 				while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
 					this.prevRotationPitch += 360.0F;
 				}
@@ -176,11 +174,9 @@ public class EntityFishHookCore extends EntityFishHook {
 				while (this.rotationYaw - this.prevRotationYaw < -180.0F) {
 					this.prevRotationYaw -= 360.0F;
 				}
-
 				while (this.rotationYaw - this.prevRotationYaw >= 180.0F) {
 					this.prevRotationYaw += 360.0F;
 				}
-
 				this.rotationPitch = this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * 0.2F;
 				this.rotationYaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * 0.2F;
 				float f3 = 0.92F;
@@ -188,8 +184,6 @@ public class EntityFishHookCore extends EntityFishHook {
 				if (this.onGround || this.isCollidedHorizontally) {
 					f3 = 0.5F;
 				}
-
-				int k = 5;
 				double d5 = 0.0D;
 
 				for (int l = 0; l < 5; ++l) {
@@ -203,7 +197,6 @@ public class EntityFishHookCore extends EntityFishHook {
 						d5 += 0.2D;
 					}
 				}
-
 				if (!this.worldObj.isRemote && d5 > 0.0D) {
 					WorldServer worldserver = (WorldServer) this.worldObj;
 					int i1 = 1;
@@ -212,11 +205,9 @@ public class EntityFishHookCore extends EntityFishHook {
 					if (this.rand.nextFloat() < 0.25F && this.worldObj.isRainingAt(blockpos)) {
 						i1 = 2;
 					}
-
 					if (this.rand.nextFloat() < 0.5F && !this.worldObj.canSeeSky(blockpos)) {
 						--i1;
 					}
-
 					if (this.ticksCatchable > 0) {
 						--this.ticksCatchable;
 
@@ -266,7 +257,6 @@ public class EntityFishHookCore extends EntityFishHook {
 						} else if (this.ticksCaughtDelay < 60) {
 							f4 = (float) ((double) f4 + (double) (60 - this.ticksCaughtDelay) * 0.01D);
 						}
-
 						if (this.rand.nextFloat() < f4) {
 							float f7 = MathHelper.randomFloatClamp(this.rand, 0.0F, 360.0F) * 0.017453292F;
 							float f9 = MathHelper.randomFloatClamp(this.rand, 25.0F, 60.0F);
@@ -288,7 +278,6 @@ public class EntityFishHookCore extends EntityFishHook {
 						this.ticksCaughtDelay = MathHelper.getRandomIntegerInRange(this.rand, 100, 900);
 						this.ticksCaughtDelay -= EnchantmentHelper.getLureModifier(this.angler) * 20 * 5;
 					}
-
 					if (this.ticksCatchable > 0) {
 						this.motionY -= (double) (this.rand.nextFloat() * this.rand.nextFloat() * this.rand.nextFloat()) * 0.2D;
 					}
@@ -301,7 +290,6 @@ public class EntityFishHookCore extends EntityFishHook {
 					f3 = (float) ((double) f3 * 0.9D);
 					this.motionY *= 0.8D;
 				}
-
 				this.motionX *= (double) f3;
 				this.motionY *= (double) f3;
 				this.motionZ *= (double) f3;
@@ -357,21 +345,10 @@ public class EntityFishHookCore extends EntityFishHook {
 			if (this.inGround) {
 				i = 2;
 			}
-
 			this.setDead();
 			this.angler.fishEntity = null;
 			return i;
 		}
 	}
-
-	//    protected ItemStack func_146033_f() {
-	//
-	//        float f = this.worldObj.rand.nextFloat();
-	//        int i = EnchantmentHelper.func_151386_g(this.field_146042_b) + luckModifier;
-	//        int j = EnchantmentHelper.func_151387_h(this.field_146042_b) + speedModifier;
-	//
-	//        this.field_146042_b.addStat(net.minecraftforge.common.FishingHooks.getFishableCategory(f, i, j).stat, 1);
-	//        return net.minecraftforge.common.FishingHooks.getRandomFishable(this.rand, f, i, j);
-	//    }
 
 }

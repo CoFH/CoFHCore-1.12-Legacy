@@ -18,10 +18,10 @@ import java.lang.annotation.*;
 @Target ({ ElementType.METHOD, ElementType.CONSTRUCTOR, ElementType.FIELD, ElementType.TYPE })
 public @interface Strippable {
 
-	public String[] value();
+	String[] value();
 
 	/**
 	 * The side from which these interfaces will *always* be stripped.
 	 */
-	public CoFHSide side() default CoFHSide.NONE;
+	CoFHSide side() default CoFHSide.NONE;
 }

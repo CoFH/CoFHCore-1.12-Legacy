@@ -60,7 +60,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 			return;
 		}
 		instance.isPostInitialised = true;
-		Collections.sort(instance.packets, (packetClass1, packetClass2) -> {
+		(instance.packets).sort((packetClass1, packetClass2) -> {
 
 			int com = String.CASE_INSENSITIVE_ORDER.compare(packetClass1.getCanonicalName(), packetClass2.getCanonicalName());
 			if (com == 0) {

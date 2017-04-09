@@ -57,8 +57,7 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 		itemMap.put(number, entry);
 		itemList.add(number);
 
-		ItemStack stack = new ItemStack(this, 1, number);
-		return stack;
+		return new ItemStack(this, 1, number);
 	}
 
 	public ItemStack addItem(int number, String name, EnumRarity rarity) {

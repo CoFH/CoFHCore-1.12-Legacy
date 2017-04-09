@@ -18,13 +18,13 @@ import java.lang.annotation.*;
 @Target ({ ElementType.METHOD })
 public @interface Substitutable {
 
-	public String[] value();
+	String[] value();
 
-	public String method();
+	String method();
 
 	/**
 	 * The side from which this method will *always* be substituted.
 	 */
-	public CoFHSide side() default CoFHSide.NONE;
+	CoFHSide side() default CoFHSide.NONE;
 
 }

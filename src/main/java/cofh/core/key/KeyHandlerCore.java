@@ -47,8 +47,7 @@ public class KeyHandlerCore {
 	@SideOnly (Side.CLIENT)
 	public void handleKeyInputEvent(KeyInputEvent event) {
 
-		for (int i = 0, e = keys.size(); i < e; ++i) {
-			IKeyBinding key = keys.get(i);
+		for (IKeyBinding key : keys) {
 			int button = key.getKey();
 			if (button > 0 && Keyboard.isKeyDown(button)) {
 				if (key.keyPressClient() && key.hasServerSide()) {
@@ -62,8 +61,7 @@ public class KeyHandlerCore {
 	@SideOnly (Side.CLIENT)
 	public void handleMouseInputEvent(MouseInputEvent event) {
 
-		for (int i = 0, e = keys.size(); i < e; ++i) {
-			IKeyBinding key = keys.get(i);
+		for (IKeyBinding key : keys) {
 			int button = key.getKey(); // value saved as button - 100 instead of -button because moderp
 			if (button < 0 && Mouse.isButtonDown(button + 100)) {
 				if (key.keyPressClient() && key.hasServerSide()) {

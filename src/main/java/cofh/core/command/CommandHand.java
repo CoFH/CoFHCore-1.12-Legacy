@@ -132,7 +132,7 @@ public class CommandHand implements ISubCommand {
 		return CommandBase.getListOfStringsMatchingLastWord(args, infoMap.keySet());
 	}
 
-	private static enum InfoType {
+	private enum InfoType {
 		Name("generic") {
 			@Override
 			public ITextComponent processStack(ItemStack stack) {

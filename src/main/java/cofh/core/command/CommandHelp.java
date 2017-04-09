@@ -10,7 +10,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CommandHelp implements ISubCommand {
@@ -34,7 +33,7 @@ public class CommandHelp implements ISubCommand {
 	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
 		List<String> commandList = new ArrayList<>(CommandHandler.getCommandList());
-		Collections.sort(commandList, String.CASE_INSENSITIVE_ORDER);
+		commandList.sort(String.CASE_INSENSITIVE_ORDER);
 		commandList.remove(getCommandName());
 		for (int i = 0; i < commandList.size(); ++i) {
 			String name = commandList.get(i);

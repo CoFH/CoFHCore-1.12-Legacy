@@ -37,8 +37,8 @@ public class GuiConfigCore extends GuiConfig {
 
 		List<IConfigElement> list = new ArrayList<>();
 
-		for (int i = 0; i < CATEGORIES_CLIENT.length; i++) {
-			list.add(new ConfigElement(CoFHCore.CONFIG_CLIENT.getCategory(CATEGORIES_CLIENT[i])));
+		for (String category : CATEGORIES_CLIENT) {
+			list.add(new ConfigElement(CoFHCore.CONFIG_CLIENT.getCategory(category)));
 		}
 		return list;
 	}
@@ -47,8 +47,8 @@ public class GuiConfigCore extends GuiConfig {
 
 		List<IConfigElement> list = new ArrayList<>();
 
-		for (int i = 0; i < CATEGORIES_CORE.length; i++) {
-			list.add(new ConfigElement(CoFHCore.CONFIG_CORE.getCategory(CATEGORIES_CORE[i])));
+		for (String category : CATEGORIES_CORE) {
+			list.add(new ConfigElement(CoFHCore.CONFIG_CORE.getCategory(category)));
 		}
 		return list;
 	}
@@ -57,8 +57,8 @@ public class GuiConfigCore extends GuiConfig {
 
 		List<IConfigElement> list = new ArrayList<>();
 
-		for (int i = 0; i < CATEGORIES_LOOT.length; i++) {
-			list.add(new ConfigElement(CoFHCore.CONFIG_LOOT.getCategory(CATEGORIES_LOOT[i])));
+		for (String category : CATEGORIES_LOOT) {
+			list.add(new ConfigElement(CoFHCore.CONFIG_LOOT.getCategory(category)));
 		}
 		return list;
 	}

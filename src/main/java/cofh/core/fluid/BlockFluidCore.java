@@ -56,7 +56,7 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 
 	public BlockFluidCore setParticleColor(int c) {
 
-		return setParticleColor(((c >> 16) & 255) / 255f, ((c >> 8) & 255) / 255f, ((c >> 0) & 255) / 255f);
+		return setParticleColor(((c >> 16) & 255) / 255f, ((c >> 8) & 255) / 255f, (c & 255) / 255f);
 	}
 
 	public BlockFluidCore setParticleColor(float particleRed, float particleGreen, float particleBlue) {

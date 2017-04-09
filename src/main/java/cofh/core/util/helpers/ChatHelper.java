@@ -108,8 +108,8 @@ public class ChatHelper {
 				}
 			}
 		} else {
-			for (int i = 0; i < messages.size(); i++) {
-				player.addChatComponentMessage(messages.get(i));
+			for (ITextComponent message : messages) {
+				player.addChatComponentMessage(message);
 			}
 		}
 	}

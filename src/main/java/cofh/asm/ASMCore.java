@@ -376,11 +376,11 @@ public class ASMCore {
 						backing_bullshit.put(node.getLabel(), label = new Label());
 					}
 					some_form_of_bullshit_map.put(node, new LabelNode(label));
-					/**
-					 * Look. I don't know. InsnNode.clone requires this map. InsnList and Method
-					 * do not provide clone, so I need to build this map to do this for no reason
-					 * I can think of. This is all bullshit, but apparently required bullshit.
-					 * Basic features? Pfft. Who would ever want to use those?
+					/*
+					  Look. I don't know. InsnNode.clone requires this map. InsnList and Method
+					  do not provide clone, so I need to build this map to do this for no reason
+					  I can think of. This is all bullshit, but apparently required bullshit.
+					  Basic features? Pfft. Who would ever want to use those?
 					 */
 				}
 			}

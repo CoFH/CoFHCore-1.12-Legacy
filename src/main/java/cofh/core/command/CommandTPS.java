@@ -31,10 +31,9 @@ public class CommandTPS implements ISubCommand {
 		if (times == null) {
 			return 0.0D;
 		}
-		for (int i = 0; i < times.length; i++) {
-			timesum += times[i];
+		for (long time : times) {
+			timesum += time;
 		}
-
 		return timesum / times.length;
 	}
 

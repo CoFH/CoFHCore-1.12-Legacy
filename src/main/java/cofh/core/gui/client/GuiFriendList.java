@@ -121,18 +121,25 @@ public class GuiFriendList extends GuiCore {
 	@Override
 	public void handleElementButtonClick(String buttonName, int mouseButton) {
 
-		if (buttonName.equals("SetName")) {
-			PacketHandler.sendToServer(new PacketSocial().addByte(PacketTypes.ADD_FRIEND.ordinal()).addString(tbName.getText()));
-		} else if (buttonName.equals("RemoveName")) {
-			PacketHandler.sendToServer(new PacketSocial().addByte(PacketTypes.REMOVE_FRIEND.ordinal()).addString(tbName.getText()));
-		} else if (buttonName.equals("OnlineUp")) {
-			taOnlineList.scrollDown();
-		} else if (buttonName.equals("OnlineDown")) {
-			taOnlineList.scrollUp();
-		} else if (buttonName.equals("FriendsUp")) {
-			taFriendList.scrollDown();
-		} else if (buttonName.equals("FriendsDown")) {
-			taFriendList.scrollUp();
+		switch (buttonName) {
+			case "SetName":
+				PacketHandler.sendToServer(new PacketSocial().addByte(PacketTypes.ADD_FRIEND.ordinal()).addString(tbName.getText()));
+				break;
+			case "RemoveName":
+				PacketHandler.sendToServer(new PacketSocial().addByte(PacketTypes.REMOVE_FRIEND.ordinal()).addString(tbName.getText()));
+				break;
+			case "OnlineUp":
+				taOnlineList.scrollDown();
+				break;
+			case "OnlineDown":
+				taOnlineList.scrollUp();
+				break;
+			case "FriendsUp":
+				taFriendList.scrollDown();
+				break;
+			case "FriendsDown":
+				taFriendList.scrollUp();
+				break;
 		}
 	}
 

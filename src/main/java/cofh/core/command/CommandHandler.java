@@ -42,7 +42,6 @@ public class CommandHandler extends CommandBase {
 		registerSubCommand(CommandFriend.instance);
 
 		if (!LoadingPlugin.obfuscated) { // in-dev commands
-			;
 		}
 	}
 

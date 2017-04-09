@@ -10,10 +10,10 @@ import java.lang.annotation.*;
 @Target ({ ElementType.TYPE })
 public @interface Implementable {
 
-	public String[] value();
+	String[] value();
 
 	/**
 	 * The *only* side on which these interfaces will be implemented if present (NONE == BOTH)
 	 */
-	public CoFHSide side() default CoFHSide.NONE;
+	CoFHSide side() default CoFHSide.NONE;
 }

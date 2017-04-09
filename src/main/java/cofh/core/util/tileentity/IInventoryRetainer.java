@@ -9,8 +9,6 @@ public interface IInventoryRetainer {
 
 	/**
 	 * Simple boolean check to see if the Tile is going to keep its inventory at the time of query.
-	 *
-	 * @return
 	 */
 	boolean retainInventory();
 

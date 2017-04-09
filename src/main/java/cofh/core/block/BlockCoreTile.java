@@ -121,7 +121,7 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 				GameProfile stackOwner = SecurityHelper.getOwner(stack);
 
 				if (((ISecurable) tile).setOwner(stackOwner)) {
-					; // cool, set the owner
+					// cool, set the owner
 				} else if (placer instanceof ICommandSender) {
 					((ISecurable) tile).setOwnerName(placer.getName());
 				}
