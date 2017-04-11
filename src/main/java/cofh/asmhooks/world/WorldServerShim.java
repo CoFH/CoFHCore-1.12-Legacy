@@ -1,4 +1,4 @@
-package cofh.asm.hooks.world;
+package cofh.asmhooks.world;
 
 import net.minecraft.profiler.Profiler;
 import net.minecraft.server.MinecraftServer;

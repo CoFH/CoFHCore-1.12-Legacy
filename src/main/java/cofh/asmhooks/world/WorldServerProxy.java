@@ -1,4 +1,4 @@
-package cofh.asm.hooks.world;
+package cofh.asmhooks.world;
 
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
