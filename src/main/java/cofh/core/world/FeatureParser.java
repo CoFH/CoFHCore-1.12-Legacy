@@ -879,21 +879,22 @@ public class FeatureParser {
 
 		switch (genElement.valueType()) {
 			case NUMBER:
-				return new ConstantProvider((Number) genElement.unwrapped());
+				return new ConstantProvider(boundCheck((Number) genElement.unwrapped(), min, max));
 			case OBJECT:
 				ConfigObject genData = (ConfigObject) genElement;
 				Config genProp = genData.toConfig();
 				switch (genData.size()) {
 					case 1:
 						if (genData.containsKey("value")) {
-							return new ConstantProvider(genProp.getNumber("value"));
+							return new ConstantProvider(boundCheck(genProp.getNumber("value"), min, max));
 						} else if (genData.containsKey("variance")) {
-							return new SkellamRandomProvider(genProp.getNumber("variance"));
+							return new SkellamRandomProvider(boundCheck(genProp.getNumber("variance"), min, max));
 						}
 						break;
 					case 2:
 						if (genData.containsKey("min") && genData.containsKey("max")) {
-							return new UniformRandomProvider(genProp.getNumber("min"), genProp.getNumber("max"));
+							return new UniformRandomProvider(boundCheck(genProp.getNumber("min"), min, max),
+									boundCheck(genProp.getNumber("max"), min, max));
 						}
 						break;
 					default:
@@ -905,6 +906,17 @@ public class FeatureParser {
 			default:
 				throw new Error(String.format("Unsupported data type at line %s", genElement.origin().lineNumber()));
 		}
+	}
+
+	private static Number boundCheck(Number value, long min, long max) {
+
+		if (value.longValue() >= min) {
+			if (value.longValue() <= max) {
+				return value;
+			}
+			return new Long(max);
+		}
+		return new Long(min);
 	}
 
 }
