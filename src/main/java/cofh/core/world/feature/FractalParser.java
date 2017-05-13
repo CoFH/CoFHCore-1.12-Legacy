@@ -31,8 +31,8 @@ public class FractalParser extends UniformParser {
 		INumberProvider minY = FeatureParser.parseNumberValue(genData.get("min-height"));
 		INumberProvider h = FeatureParser.parseNumberValue(genData.get("vein-height"));
 		INumberProvider d = FeatureParser.parseNumberValue(genData.get("vein-diameter"));
-		INumberProvider vD = FeatureParser.parseNumberValue(genData.get("vertical-density"));
-		INumberProvider hD = FeatureParser.parseNumberValue(genData.get("horizontal-density"));
+		INumberProvider vD = FeatureParser.parseNumberValue(genData.get("vertical-density"), 0, 100);
+		INumberProvider hD = FeatureParser.parseNumberValue(genData.get("horizontal-density"), 0, 100);
 
 		return new FeatureGenLargeVein(featureName, gen, numClusters, minY, biomeRes, retrogen, dimRes, h, d, vD, hD);
 	}
