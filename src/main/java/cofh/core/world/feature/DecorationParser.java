@@ -62,7 +62,7 @@ public class DecorationParser extends SurfaceParser implements IGeneratorParser 
 	@Override
 	protected List<WeightedRandomBlock> generateDefaultMaterial() {
 
-		return Collections.singletonList(new WeightedRandomBlock(Blocks.AIR, -1));
+		return Collections.singletonList(new WeightedRandomBlock(Blocks.GRASS, -1));
 	}
 
 	@Override
