@@ -195,7 +195,7 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 		if (tile instanceof ISecurable && !((ISecurable) tile).canPlayerAccess(player)) {
 			return -1;
 		}
-		return state.getPlayerRelativeBlockHardness(player, world, pos);
+		return super.getPlayerRelativeBlockHardness(state, player, world, pos);
 	}
 
 	@Override
