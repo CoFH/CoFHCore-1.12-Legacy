@@ -80,7 +80,6 @@ public class ChatHelper {
 		if (player.worldObj == null || player instanceof FakePlayer) {
 			return;
 		}
-
 		if (indexChat) {
 			if (!player.worldObj.isRemote) {
 				PacketHandler.sendTo(new PacketIndexedChat(message, cofhTempChatIndexServer), player);
@@ -98,7 +97,6 @@ public class ChatHelper {
 		if (player.worldObj == null || player instanceof FakePlayer) {
 			return;
 		}
-
 		if (indexChat) {
 			for (int i = 0; i < messages.size(); i++) {
 				if (!player.worldObj.isRemote) {

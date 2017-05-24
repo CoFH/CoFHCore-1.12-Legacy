@@ -10,6 +10,10 @@ import cofh.core.network.*;
 import cofh.core.proxy.Proxy;
 import cofh.core.util.ConfigHandler;
 import cofh.core.util.RegistrySocial;
+import cofh.core.util.crafting.RecipeSecure;
+import cofh.core.util.crafting.RecipeShapelessOreFluid;
+import cofh.core.util.crafting.RecipeUpgrade;
+import cofh.core.util.crafting.RecipeUpgradeOverride;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
@@ -25,6 +29,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -151,6 +156,11 @@ public class CoFHCore {
 		PacketKey.initialize();
 		PacketTileInfo.initialize();
 		PacketTile.initialize();
+
+		RecipeSorter.register("cofhcore:shapelessorefluid", RecipeShapelessOreFluid.class, RecipeSorter.Category.SHAPELESS, "after:forge:shapelessore");
+		RecipeSorter.register("cofhcore:secure", RecipeSecure.class, RecipeSorter.Category.SHAPED, "before:cofhcore:upgrade");
+		RecipeSorter.register("cofhcore:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
+		RecipeSorter.register("cofhcore:upgradeoverride", RecipeUpgradeOverride.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 	}
 
 	private void addOreDictionaryEntries() {

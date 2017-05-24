@@ -77,6 +77,10 @@ public abstract class TileCore extends TileEntity {
 		}
 	}
 
+	public void onLoad() {
+		// TODO: Revisit in 1.11.
+	}
+
 	public void onNeighborBlockChange() {
 
 	}
