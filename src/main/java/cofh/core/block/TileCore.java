@@ -77,6 +77,7 @@ public abstract class TileCore extends TileEntity {
 		}
 	}
 
+	@Override
 	public void onLoad() {
 		// TODO: Revisit in 1.11.
 	}
