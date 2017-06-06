@@ -21,6 +21,10 @@ public abstract class GuiCore extends GuiBase {
 	public static final int OPEN = 7;
 	public static final int OMNI = 8;
 
+	/* INFO TEXTURES */
+	public static final String TEX_INFO_INPUT = GuiProps.PATH_ELEMENTS + "info_input.png";
+	public static final String TEX_INFO_OUTPUT = GuiProps.PATH_ELEMENTS + "info_output.png";
+
 	/* PROGRESS TEXTURES */
 	public static final String TEX_ARROW_LEFT = GuiProps.PATH_ELEMENTS + "progress_arrow_left.png";
 	public static final String TEX_ARROW_RIGHT = GuiProps.PATH_ELEMENTS + "progress_arrow_right.png";

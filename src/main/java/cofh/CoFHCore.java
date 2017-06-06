@@ -35,14 +35,17 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
+import static cofh.lib.util.helpers.ItemHelper.ShapedRecipe;
+import static cofh.lib.util.helpers.ItemHelper.addRecipe;
+
 @Mod (modid = CoFHCore.MOD_ID, name = CoFHCore.MOD_NAME, version = CoFHCore.VERSION, dependencies = CoFHCore.DEPENDENCIES, updateJSON = CoFHCore.UPDATE_URL)
 public class CoFHCore {
 
 	public static final String MOD_ID = "cofhcore";
 	public static final String MOD_NAME = "CoFH Core";
 
-	public static final String VERSION = "4.1.1";
-	public static final String VERSION_MAX = "4.2.0";
+	public static final String VERSION = "4.2.0";
+	public static final String VERSION_MAX = "4.3.0";
 	public static final String VERSION_GROUP = "required-after:" + MOD_ID + "@[" + VERSION + "," + VERSION_MAX + ");";
 	public static final String UPDATE_URL = "https://raw.github.com/cofh/version/master/" + MOD_ID + "_update.json";
 
@@ -88,6 +91,8 @@ public class CoFHCore {
 
 	@EventHandler
 	public void initialize(FMLInitializationEvent event) {
+
+		addCraftingRecipes();
 
 		proxy.initialize(event);
 	}
@@ -161,6 +166,49 @@ public class CoFHCore {
 		RecipeSorter.register("cofhcore:secure", RecipeSecure.class, RecipeSorter.Category.SHAPED, "before:cofhcore:upgrade");
 		RecipeSorter.register("cofhcore:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 		RecipeSorter.register("cofhcore:upgradeoverride", RecipeUpgradeOverride.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
+	}
+
+	private void addCraftingRecipes() {
+
+		// @formatter:off
+		if (CoreProps.enableHorseArmorCrafting) {
+			addRecipe(ShapedRecipe(Items.IRON_HORSE_ARMOR,
+					"  H",
+					"ICI",
+					"III",
+					'C', "blockWool",
+					'H', Items.IRON_HELMET,
+					'I', "ingotIron"
+			));
+
+			addRecipe(ShapedRecipe(Items.GOLDEN_HORSE_ARMOR,
+					"  H",
+					"ICI",
+					"III",
+					'C', "blockWool",
+					'H', Items.GOLDEN_HELMET,
+					'I', "ingotGold"
+			));
+
+			addRecipe(ShapedRecipe(Items.DIAMOND_HORSE_ARMOR,
+					"  H",
+					"ICI",
+					"III",
+					'C', "blockWool",
+					'H', Items.DIAMOND_HELMET,
+					'I', "gemDiamond"
+			));
+		}
+		if (CoreProps.enableSaddleCrafting) {
+			addRecipe(ShapedRecipe(Items.SADDLE,
+					"LLL",
+					"LIL",
+					"I I",
+					'I', "ingotIron",
+					'L', Items.LEATHER
+			));
+		}
+		// @formatter:on
 	}
 
 	private void addOreDictionaryEntries() {
