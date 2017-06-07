@@ -200,7 +200,7 @@ public class CoreProps {
 	public static final int[] SINGLE_INVENTORY = { 0 };
 	public static final List<ItemStack> EMPTY_DROPS = new ArrayList<>();
 
-	public static final int[] STORAGE_SIZE = { 1, 9, 18, 27, 36, 45, 54, 63, 72, 80, 88, 96, 104 };
+	public static final int[] STORAGE_SIZE = { 1, 9, 18, 27, 36, 45, 54, 63, 72, 81, 90, 99, 108, 117, 126 };
 	public static final int[][] SLOTS = new int[STORAGE_SIZE.length][];
 
 	static {
