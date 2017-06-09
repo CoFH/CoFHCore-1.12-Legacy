@@ -66,7 +66,7 @@ public abstract class TileCore extends TileEntity {
 
 	public void markChunkDirty() {
 
-		worldObj.markChunkDirty(this.pos, this);
+		worldObj.markChunkDirty(pos, this);
 	}
 
 	@Override
