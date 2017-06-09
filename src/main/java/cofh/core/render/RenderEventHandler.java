@@ -74,7 +74,6 @@ public class RenderEventHandler implements IResourceManagerReloadListener {
 	//		if (controllerMP.isHittingBlock) {
 	//			if (tool != null && tool.getItem() instanceof IAOEBreakItem) {
 	//
-	//				System.out.println("render!!");
 	//
 	//				BlockPos pos = controllerMP.currentBlock;
 	//				drawBlockDamageTexture(Tessellator.getInstance(), Tessellator.getInstance().getBuffer(), player, event.getPartialTicks(), world, ((IAOEBreakItem) tool.getItem()).getAOEBlocks(tool, pos, player));
@@ -93,8 +92,6 @@ public class RenderEventHandler implements IResourceManagerReloadListener {
 
 		TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
 		int progress = (int) (Minecraft.getMinecraft().playerController.curBlockDamageMP * 10.0F) - 1;
-
-		System.out.println(blocks.size());
 
 		if (progress < 0) {
 			return;
