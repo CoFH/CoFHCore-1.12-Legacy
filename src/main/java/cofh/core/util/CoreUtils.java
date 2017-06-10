@@ -34,10 +34,9 @@ import java.nio.channels.FileChannel;
 public class CoreUtils {
 
 	/* MOD UTILS */
-	@Deprecated
 	public static String getModName(Item item) {
 
-		return item.getRegistryName().getResourcePath();
+		return item.getRegistryName().getResourceDomain();
 	}
 
 	/* PLAYER UTILS */
