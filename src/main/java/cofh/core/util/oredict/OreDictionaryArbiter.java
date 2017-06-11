@@ -5,14 +5,13 @@ import cofh.lib.util.helpers.ItemHelper;
 import com.google.common.base.Strings;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
-
-import java.util.ArrayList;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class exists to optimize OreDictionary functionality, as it is embarrassingly slow otherwise.
@@ -21,15 +20,14 @@ import net.minecraftforge.oredict.OreDictionary;
  * They are typically unsafe if you are stupid. Don't be stupid.
  *
  * @author King Lemming
- *
  */
 public class OreDictionaryArbiter {
 
-	private static BiMap<String, Integer> oreIDs = HashBiMap.create();
-	private static TMap<Integer, ArrayList<ItemStack>> oreStacks = new THashMap<Integer, ArrayList<ItemStack>>();
+	private static BiMap<String, Integer> oreIDs = HashBiMap.create(32);
+	private static TMap<Integer, ArrayList<ItemStack>> oreStacks = new THashMap<>(128);
 
-	private static TMap<ItemWrapper, ArrayList<Integer>> stackIDs = new THashMap<ItemWrapper, ArrayList<Integer>>();
-	private static TMap<ItemWrapper, ArrayList<String>> stackNames = new THashMap<ItemWrapper, ArrayList<String>>();
+	private static TMap<ItemWrapper, ArrayList<Integer>> stackIDs = new THashMap<>(128);
+	private static TMap<ItemWrapper, ArrayList<String>> stackNames = new THashMap<>(128);
 
 	private static String[] oreNames = new String[] {};
 
@@ -38,23 +36,22 @@ public class OreDictionaryArbiter {
 	public static final int WILDCARD_VALUE = Short.MAX_VALUE;
 
 	/**
-	 * Initializes all of the entries. Called on server start to make sure everything is in sync.
+	 * Initializes all of the entries. Called on ID Remapping to make sure everything is in sync.
 	 */
 	public static void initialize() {
 
-		oreIDs = HashBiMap.create(oreIDs == null ? 32 : oreIDs.size());
-		oreStacks = new THashMap<Integer, ArrayList<ItemStack>>(oreStacks == null ? 32 : oreStacks.size());
+		oreIDs = HashBiMap.create(oreIDs.size());
+		oreStacks = new THashMap<>(oreStacks.size());
 
-		stackIDs = new THashMap<ItemWrapper, ArrayList<Integer>>(stackIDs == null ? 32 : stackIDs.size());
-		stackNames = new THashMap<ItemWrapper, ArrayList<String>>(stackNames == null ? 32 : stackNames.size());
+		stackIDs = new THashMap<>(stackIDs.size());
+		stackNames = new THashMap<>(stackNames.size());
 
 		oreNames = OreDictionary.getOreNames();
 
-		for (int i = 0; i < oreNames.length; i++) {
-			ArrayList<ItemStack> ores = OreDictionary.getOres(oreNames[i]);
-
-			for (int j = 0; j < ores.size(); j++) {
-				registerOreDictionaryEntry(ores.get(j), oreNames[i]);
+		for (String name : oreNames) {
+			List<ItemStack> ores = OreDictionary.getOres(name, false);
+			for (ItemStack ore : ores) {
+				registerOreDictionaryEntry(ore, name);
 			}
 		}
 		for (ItemWrapper wrapper : stackIDs.keySet()) {
@@ -70,6 +67,14 @@ public class OreDictionaryArbiter {
 	}
 
 	/**
+	 * Called on ID Remapping to make sure everything is in sync.
+	 */
+	public static void refresh() {
+
+		initialize();
+	}
+
+	/**
 	 * Register an Ore Dictionary Entry.
 	 */
 	public static void registerOreDictionaryEntry(ItemStack stack, String name) {
@@ -82,15 +87,15 @@ public class OreDictionaryArbiter {
 		oreIDs.put(name, id);
 
 		if (!oreStacks.containsKey(id)) {
-			oreStacks.put(id, new ArrayList<ItemStack>());
+			oreStacks.put(id, new ArrayList<>());
 		}
 		oreStacks.get(id).add(stack);
 
 		ItemWrapper item = ItemWrapper.fromItemStack(stack);
 
 		if (!stackIDs.containsKey(item)) {
-			stackIDs.put(item, new ArrayList<Integer>());
-			stackNames.put(item, new ArrayList<String>());
+			stackIDs.put(item, new ArrayList<>());
+			stackNames.put(item, new ArrayList<>());
 		}
 		stackIDs.get(item).add(id);
 		stackNames.get(item).add(name);
@@ -212,6 +217,11 @@ public class OreDictionaryArbiter {
 	public static String[] getOreNames() {
 
 		return oreNames;
+	}
+
+	private OreDictionaryArbiter() {
+
+		throw new IllegalArgumentException();
 	}
 
 }

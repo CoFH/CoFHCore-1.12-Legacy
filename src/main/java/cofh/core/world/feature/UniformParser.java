@@ -1,29 +1,29 @@
 package cofh.core.world.feature;
 
-import cofh.api.world.IFeatureGenerator;
-import cofh.api.world.IFeatureParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.helpers.MathHelper;
+import cofh.lib.util.numbers.INumberProvider;
+import cofh.lib.world.IFeatureGenerator;
+import cofh.lib.world.IFeatureParser;
 import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenUniform;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigList;
+import com.typesafe.config.ConfigValue;
+import com.typesafe.config.ConfigValueType;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.gen.feature.WorldGenerator;
-
-import org.apache.logging.log4j.Logger;
+import java.util.Locale;
 
 public class UniformParser implements IFeatureParser {
 
-	private final List<WeightedRandomBlock> defaultMaterial;
+	protected final List<WeightedRandomBlock> defaultMaterial;
 
 	public UniformParser() {
 
@@ -32,104 +32,119 @@ public class UniformParser implements IFeatureParser {
 
 	protected List<WeightedRandomBlock> generateDefaultMaterial() {
 
-		return Arrays.asList(new WeightedRandomBlock(new ItemStack(Blocks.stone, 1, -1)));
+		return Arrays.asList(new WeightedRandomBlock(Blocks.STONE, -1));
 	}
 
 	@Override
-	public IFeatureGenerator parseFeature(String featureName, JsonObject genObject, Logger log) {
+	public IFeatureGenerator parseFeature(String featureName, Config genObject, Logger log) {
 
-		List<WeightedRandomBlock> resList = new ArrayList<WeightedRandomBlock>();
-		if (!FeatureParser.parseResList(genObject.get("block"), resList, true)) {
-			return null;
-		}
-		int clusterSize = 0;
-		if (genObject.has("clusterSize")) {
-			clusterSize = genObject.get("clusterSize").getAsInt();
-		}
-		int numClusters = 0;
-		if (genObject.has("numClusters")) {
-			numClusters = genObject.get("numClusters").getAsInt();
-		}
-		if (clusterSize < 0 || numClusters <= 0) {
-			log.error("Invalid cluster size or count specified in \"" + featureName + "\"");
-			return null;
-		}
+		INumberProvider numClusters = FeatureParser.parseNumberValue(genObject.getValue("cluster-count"), 0, Long.MAX_VALUE);
 		boolean retrogen = false;
-		if (genObject.has("retrogen")) {
-			retrogen = genObject.get("retrogen").getAsBoolean();
+		if (genObject.hasPath("retrogen")) {
+			retrogen = genObject.getBoolean("retrogen");
 		}
 		GenRestriction biomeRes = GenRestriction.NONE;
-		if (genObject.has("biomeRestriction")) {
-			biomeRes = GenRestriction.get(genObject.get("biomeRestriction").getAsString());
+		if (genObject.hasPath("biome")) {
+			ConfigValue data = genObject.getValue("biome");
+			if (data.valueType() == ConfigValueType.STRING) {
+				biomeRes = GenRestriction.get(genObject.getString("biome"));
+				if (biomeRes != GenRestriction.NONE) {
+					log.error("Invalid biome restriction %2$s on '%1$s'. Must be an object to meaningfully function", featureName, biomeRes.name().toLowerCase(Locale.US));
+					return null;
+				}
+			} else if (data.valueType() == ConfigValueType.OBJECT) {
+				biomeRes = GenRestriction.get(genObject.getString("biome.restriction"));
+			}
 		}
 		GenRestriction dimRes = GenRestriction.NONE;
-		if (genObject.has("dimensionRestriction")) {
-			dimRes = GenRestriction.get(genObject.get("dimensionRestriction").getAsString());
+		if (genObject.hasPath("dimension")) {
+			ConfigValue data = genObject.getValue("dimension");
+			switch (data.valueType()) {
+				case STRING:
+					dimRes = GenRestriction.get(genObject.getString("dimension"));
+					if (dimRes != GenRestriction.NONE) {
+						log.error("Invalid dimension restriction %2$s on '%1$s'. Must be an object to meaningfully function", featureName, dimRes.name().toLowerCase(Locale.US));
+						return null;
+					}
+					break;
+				case OBJECT:
+					dimRes = GenRestriction.get(genObject.getString("dimension.restriction"));
+					break;
+				case LIST:
+				case NUMBER:
+					dimRes = GenRestriction.WHITELIST;
+			}
 		}
-		List<WeightedRandomBlock> matList = parseMaterial(genObject, log);
 
-		WorldGenerator generator = FeatureParser.parseGenerator(getDefaultTemplate(), genObject, resList, clusterSize, matList);
-		FeatureBase feature = getFeature(featureName, genObject, generator, matList, numClusters, biomeRes, retrogen, dimRes, log);
+		WorldGenerator generator = FeatureParser.parseGenerator(getDefaultGenerator(), genObject, defaultMaterial);
+		if (generator == null) {
+			log.warn("Invalid generator for '%s'!", featureName);
+			return null;
+		}
+		FeatureBase feature = getFeature(featureName, genObject, generator, numClusters, biomeRes, retrogen, dimRes, log);
 
 		if (feature != null) {
-			if (genObject.has("chunkChance")) {
-				int rarity = MathHelper.clamp(genObject.get("chunkChance").getAsInt(), 1, 1000000);
+			if (genObject.hasPath("chunk-chance")) {
+				int rarity = MathHelper.clamp(genObject.getInt("chunk-chance"), 1, 1000000000);
 				feature.setRarity(rarity);
 			}
 			addFeatureRestrictions(feature, genObject);
+			if (genObject.hasPath("in-village")) {
+				feature.withVillage = genObject.getBoolean("in-village");
+			}
 		}
 		return feature;
 	}
 
-	protected FeatureBase getFeature(String featureName, JsonObject genObject, WorldGenerator gen, List<WeightedRandomBlock> matList, int numClusters,
-			GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
+	protected FeatureBase getFeature(String featureName, Config genObject, WorldGenerator gen, INumberProvider numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
-		if (!(genObject.has("minHeight") && genObject.has("maxHeight"))) {
+		if (!(genObject.hasPath("min-height") && genObject.hasPath("max-height"))) {
 			log.error("Height parameters for 'uniform' template not specified in \"" + featureName + "\"");
 			return null;
 		}
 
-		int minHeight = genObject.get("minHeight").getAsInt();
-		int maxHeight = genObject.get("maxHeight").getAsInt();
-
-		if (minHeight >= maxHeight || minHeight < 0) {
-			log.error("Invalid height parameters specified in \"" + featureName + "\"");
-			return null;
-		}
+		INumberProvider minHeight = FeatureParser.parseNumberValue(genObject.root().get("min-height"));
+		INumberProvider maxHeight = FeatureParser.parseNumberValue(genObject.root().get("max-height"));
 
 		return new FeatureGenUniform(featureName, gen, numClusters, minHeight, maxHeight, biomeRes, retrogen, dimRes);
 	}
 
-	protected String getDefaultTemplate() {
+	protected String getDefaultGenerator() {
 
 		return "cluster";
 	}
 
-	protected List<WeightedRandomBlock> parseMaterial(JsonObject genObject, Logger log) {
-
-		List<WeightedRandomBlock> matList = defaultMaterial;
-		if (genObject.has("material")) {
-			matList = new ArrayList<WeightedRandomBlock>();
-			if (!FeatureParser.parseResList(genObject.get("material"), matList, false)) {
-				log.warn("Invalid material list! Using default list.");
-				matList = defaultMaterial;
-			}
-		}
-		return matList;
-	}
-
-	protected static boolean addFeatureRestrictions(FeatureBase feature, JsonObject genObject) {
+	protected static void addFeatureRestrictions(FeatureBase feature, Config genObject) {
 
 		if (feature.biomeRestriction != GenRestriction.NONE) {
-			feature.addBiomes(FeatureParser.parseBiomeRestrictions(genObject));
+			feature.addBiomes(FeatureParser.parseBiomeRestrictions(genObject.getConfig("biome")));
 		}
-		if (feature.dimensionRestriction != GenRestriction.NONE && genObject.has("dimensions")) {
-			JsonArray restrictionList = genObject.getAsJsonArray("dimensions");
-			for (int i = 0; i < restrictionList.size(); i++) {
-				feature.addDimension(restrictionList.get(i).getAsInt());
+		if (feature.dimensionRestriction != GenRestriction.NONE) {
+			String field = "dimension";
+			ConfigValue data = genObject.getValue(field);
+			ConfigList restrictionList = null;
+			switch (data.valueType()) {
+				case OBJECT:
+					field += ".value";
+				case LIST:
+					restrictionList = genObject.getList(field);
+					break;
+				case NUMBER:
+					feature.addDimension(genObject.getNumber(field).intValue());
+					break;
+				default:
+					// unreachable
+					break;
+			}
+			if (restrictionList != null) {
+				for (int i = 0; i < restrictionList.size(); i++) {
+					ConfigValue val = restrictionList.get(i);
+					if (val.valueType() == ConfigValueType.NUMBER) {
+						feature.addDimension(((Number) val.unwrapped()).intValue());
+					}
+				}
 			}
 		}
-		return true;
 	}
 
 }

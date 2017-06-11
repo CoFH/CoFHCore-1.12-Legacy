@@ -1,25 +1,14 @@
 #es_ES
 
-#death.attack.pyrotheum=%1$s mistook Pyrotheum for Water!
-#death.attack.pyrotheum.player=%1$s burned alive trying to escape %2$s!
-#death.attack.cryotheum=%1$s froze to death!
-#death.attack.cryotheum.player=%1$s froze to death trying to escape %2$s!
-#death.attack.mana=%1$s was torn apart by raw Mana!
-#death.attack.mana.player=%1$s ran into another state of being attempting to escape %2$s!
-death.attack.flux=%1$s fue despedazado por el Flujo!
-death.attack.flux.player=%1$s fue desmaterializado en Flujo por %2$s!
-
 info.cofh.access=Acceso
 info.cofh.accessMode=Modo de Acceso
+info.cofh.accessPrivate=Solo su Dueño
 info.cofh.accessPublic=Acceso Público
 info.cofh.accessRestricted=Restringido
-info.cofh.accessPrivate=Solo su Dueño
 info.cofh.all=Todo
 info.cofh.amount=Cantidad
-#info.cofh.augmentation
 info.cofh.blank=en Blanco
 info.cofh.charge=Carga
-info.cofh.configuration=Configuración
 info.cofh.contents=Contenidos
 info.cofh.controlStatus=Control de Estado
 info.cofh.damageAttack=Daño de Ataque
@@ -33,18 +22,16 @@ info.cofh.energyProduce=Energía Producida
 info.cofh.energyStored=Energía Almacenada
 info.cofh.fluid=Fluido
 info.cofh.frequency=Frecuencia
-info.cofh.friendsList=Lista de Amigos
 info.cofh.high=Alta
 info.cofh.ignored=Ignorada
-info.cofh.information=Información
 info.cofh.infinite=Infinito
+info.cofh.information=Información
 info.cofh.item=Objeto
 info.cofh.items=Objetos
 info.cofh.level=Nivel
 info.cofh.locked=Bloqueado
 info.cofh.low=Baja
-info.cofh.maxEnergyPerTick=Potencia Máxica
-info.cofh.none=None
+info.cofh.maxPower=Potencia Máxica
 info.cofh.owner=Dueño
 info.cofh.press=Presionar
 info.cofh.receive=Recivir
@@ -56,38 +43,8 @@ info.cofh.sending=Enviando
 info.cofh.signal=Señal
 info.cofh.signalRequired=Señal Requerida
 info.cofh.source=Origen
-info.cofh.tutorial=Tutorial
+info.cofh.tutorial.fluxRequired=Necesita un flujo de redstone para funcionar.
+info.cofh.tutorial.tabRedstone=La pestaña de control de redstone configura cómo este dispositivo reacciona a las señales de redstone.
 info.cofh.unlocked=Desbloqueado
 
-info.cofh.tutorial.fluxRequired=Necesita un flujo de redstone para funcionar.
-info.cofh.tutorial.tabConfiguration.0=La pestaña de configuración determina de que manera los objetos entran y salen de este dispositivo.
-info.cofh.tutorial.tabConfiguration.2=La pestaña de configuración determina los modos de funcionamiento de este dispositivo.
-info.cofh.tutorial.tabRedstone=La pestaña de control de redstone configura cómo este dispositivo reacciona a las señales de redstone.
-
 item.invalid.name=Objeto Invalido (Destruir)
-
-message.cofh.holdShift1=Presiona
-message.cofh.holdShift2=Mayusculas
-message.cofh.holdShift3=para más Detalles
-message.cofh.secure1=Esto es privado y pertenece a
-message.cofh.secure2=¡Podrías haber perdido la mano!
-message.cofh.secureWarning=Notice: Los "Ops" del servidor pueden acceder libremente a bloques 'seguros' en este servidor.
-message.cofh.receiveConfig=Reciviendo la configuración del servidor...
-message.cofh.restoreConfig=Restaurando la configuración del cliente...
-
-#Fluid Name Fixes
-
-#fluid.tile.water=
-#fluid.tile.lava=
-#fluid.fuel=
-#fluid.oil=
-
-#CoFHLexicon
-
-info.cofh.lexicon1=Convierte objetos a formas similares.
-info.cofh.lexicon2=Click derecho (abrir) para estudiar.
-info.cofh.lexicon3=¡Usar mientras se está agachado para ganar sabiduría!
-info.cofh.lexicon4=Click derecho (abrir) para transmutar objetos.
-info.cofh.lexicon5=Usar mientras se está agachado para dejar conocimientos.
-item.cofh.tool.lexicon.name=Forge Lexicon
-item.cofh.tool.lexiconActive.name=Forge Lexicon (Activo)

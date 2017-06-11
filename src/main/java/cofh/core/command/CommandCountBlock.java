@@ -1,20 +1,22 @@
 package cofh.core.command;
 
 import com.google.common.base.Throwables;
-
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+
+import java.util.List;
 
 public class CommandCountBlock implements ISubCommand {
 
@@ -33,40 +35,39 @@ public class CommandCountBlock implements ISubCommand {
 	}
 
 	@Override
-	public void handleCommand(ICommandSender sender, String[] args) {
+	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
 		if (args.length < 6) {
-			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
-			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
+			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+			throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 		}
 		World world = sender.getEntityWorld();
 		if (world.isRemote) {
 			return;
 		}
-
-		ChunkCoordinates center = null;
+		BlockPos center = null;
 		int i = 1;
 		int xS, xL;
 		if ("@".equals(args[i])) {
-			center = sender.getPlayerCoordinates();
+			center = sender.getPosition();
 			++i;
-			xS = CommandBase.parseInt(sender, args[i++]);
+			xS = CommandBase.parseInt(args[i++]);
 		} else {
 			try {
-				xS = CommandBase.parseInt(sender, args[i++]);
+				xS = CommandBase.parseInt(args[i++]);
 			} catch (Throwable t) {
-				center = CommandBase.getPlayer(sender, args[i - 1]).getPlayerCoordinates();
-				xS = CommandBase.parseInt(sender, args[i++]);
+				center = CommandBase.getPlayer(server, sender, args[i - 1]).getPosition();
+				xS = CommandBase.parseInt(args[i++]);
 			}
 		}
-		int yS = CommandBase.parseInt(sender, args[i++]), yL;
-		int zS = CommandBase.parseInt(sender, args[i++]), zL;
+		int yS = CommandBase.parseInt(args[i++]), yL;
+		int zS = CommandBase.parseInt(args[i++]), zL;
 		int t = i + 1;
 
 		try {
-			xL = CommandBase.parseInt(sender, args[i++]);
-			yL = CommandBase.parseInt(sender, args[i++]);
-			zL = CommandBase.parseInt(sender, args[i++]);
+			xL = CommandBase.parseInt(args[i++]);
+			yL = CommandBase.parseInt(args[i++]);
+			zL = CommandBase.parseInt(args[i++]);
 		} catch (Throwable e) {
 			if (i > t || center == null) {
 				throw Throwables.propagate(e);
@@ -76,17 +77,15 @@ public class CommandCountBlock implements ISubCommand {
 			yL = yS;
 			zL = zS;
 		}
-
 		if (center != null) {
-			xS = center.posX - xS;
-			yS = center.posY - yS;
-			zS = center.posZ - zS;
+			xS = center.getX() - xS;
+			yS = center.getY() - yS;
+			zS = center.getZ() - zS;
 
-			xL = center.posX + xL;
-			yL = center.posY + yL;
-			zL = center.posZ + zL;
+			xL = center.getX() + xL;
+			yL = center.getY() + yL;
+			zL = center.getZ() + zL;
 		}
-
 		yS &= ~yS >> 31; // max(yS, 0)
 		yL &= ~yL >> 31; // max(yL, 0)
 
@@ -105,17 +104,15 @@ public class CommandCountBlock implements ISubCommand {
 			zS = zL;
 			zL = t;
 		}
-
 		if (yS > 255) {
-			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
-			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
+			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
 			return;
 		} else if (yL > 255) {
 			yL = 255;
 		}
-
 		long blockCounter = ((long) xL - xS) * ((long) yL - yS) * ((long) zL - zS);
-		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.countblocks.start", blockCounter, xS, yS, zS, xL, yL, zL);
+		CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.countblocks.start", blockCounter, xS, yS, zS, xL, yL, zL);
 
 		blockCounter = 0;
 		for (int e = args.length; i < e; ++i) {
@@ -124,11 +121,12 @@ public class CommandCountBlock implements ISubCommand {
 				if (blockRaw.equals("*fluid")) {
 					for (int x = xS; x <= xL; ++x) {
 						for (int z = zS; z <= zL; ++z) {
-							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
 							int cX = x & 15, cZ = z & 15;
 							for (int y = yS; y <= yL; ++y) {
-								Block block = chunk.getBlock(cX, y, cZ);
-								if (block.getMaterial().isLiquid()) {
+								BlockPos pos = new BlockPos(x, y, z);
+								IBlockState state = chunk.getBlockState(pos);
+								if (state.getMaterial().isLiquid()) {
 									++blockCounter;
 								}
 							}
@@ -137,11 +135,12 @@ public class CommandCountBlock implements ISubCommand {
 				} else if (blockRaw.equals("*tree")) {
 					for (int x = xS; x <= xL; ++x) {
 						for (int z = zS; z <= zL; ++z) {
-							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
 							int cX = x & 15, cZ = z & 15;
 							for (int y = yS; y <= yL; ++y) {
-								Block block = chunk.getBlock(cX, y, cZ);
-								if (block.isWood(world, x, y, z) || block.isLeaves(world, x, y, z)) {
+								BlockPos pos = new BlockPos(x, y, z);
+								IBlockState state = chunk.getBlockState(pos);
+								if (state.getBlock().isWood(world, pos) || state.getBlock().isLeaves(state, world, pos)) {
 									++blockCounter;
 								}
 							}
@@ -150,11 +149,12 @@ public class CommandCountBlock implements ISubCommand {
 				} else if (blockRaw.startsWith("*repl")) {
 					for (int x = xS; x <= xL; ++x) {
 						for (int z = zS; z <= zL; ++z) {
-							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
 							int cX = x & 15, cZ = z & 15;
 							for (int y = yS; y <= yL; ++y) {
-								Block block = chunk.getBlock(cX, y, cZ);
-								if (block.isReplaceable(world, x, y, z)) {
+								BlockPos pos = new BlockPos(x, y, z);
+								IBlockState state = chunk.getBlockState(pos);
+								if (state.getBlock().isReplaceable(world, pos)) {
 									++blockCounter;
 								}
 							}
@@ -163,12 +163,13 @@ public class CommandCountBlock implements ISubCommand {
 				} else if (blockRaw.equals("*stone")) {
 					for (int x = xS; x <= xL; ++x) {
 						for (int z = zS; z <= zL; ++z) {
-							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
 							int cX = x & 15, cZ = z & 15;
 							for (int y = yS; y <= yL; ++y) {
-								Block block = chunk.getBlock(cX, y, cZ);
-								if (block.isReplaceableOreGen(world, x, y, z, Blocks.stone) || block.isReplaceableOreGen(world, x, y, z, Blocks.netherrack)
-										|| block.isReplaceableOreGen(world, x, y, z, Blocks.end_stone)) {
+								BlockPos pos = new BlockPos(x, y, z);
+								IBlockState state = chunk.getBlockState(pos);
+								Block block = state.getBlock();
+								if (block.isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(Blocks.STONE)) || block.isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(Blocks.NETHERRACK)) || block.isReplaceableOreGen(state, world, pos, BlockMatcher.forBlock(Blocks.END_STONE))) {
 									++blockCounter;
 								}
 							}
@@ -177,11 +178,12 @@ public class CommandCountBlock implements ISubCommand {
 				} else if (blockRaw.equals("*rock")) {
 					for (int x = xS; x <= xL; ++x) {
 						for (int z = zS; z <= zL; ++z) {
-							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
 							int cX = x & 15, cZ = z & 15;
 							for (int y = yS; y <= yL; ++y) {
-								Block block = chunk.getBlock(cX, y, cZ);
-								if (block.getMaterial() == Material.rock) {
+								BlockPos pos = new BlockPos(x, y, z);
+								IBlockState state = chunk.getBlockState(pos);
+								if (state.getMaterial() == Material.ROCK) {
 									++blockCounter;
 								}
 							}
@@ -190,11 +192,12 @@ public class CommandCountBlock implements ISubCommand {
 				} else if (blockRaw.equals("*sand")) {
 					for (int x = xS; x <= xL; ++x) {
 						for (int z = zS; z <= zL; ++z) {
-							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
 							int cX = x & 15, cZ = z & 15;
 							for (int y = yS; y <= yL; ++y) {
-								Block block = chunk.getBlock(cX, y, cZ);
-								if (block.getMaterial() == Material.sand) {
+								BlockPos pos = new BlockPos(x, y, z);
+								IBlockState state = chunk.getBlockState(pos);
+								if (state.getMaterial() == Material.SAND) {
 									++blockCounter;
 								}
 							}
@@ -203,13 +206,13 @@ public class CommandCountBlock implements ISubCommand {
 				} else if (blockRaw.equals("*dirt")) {
 					for (int x = xS; x <= xL; ++x) {
 						for (int z = zS; z <= zL; ++z) {
-							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
 							int cX = x & 15, cZ = z & 15;
 							for (int y = yS; y <= yL; ++y) {
-								Block block = chunk.getBlock(cX, y, cZ);
-								Material m = block.getMaterial();
-								if (m == Material.grass || m == Material.ground || m == Material.clay || m == Material.snow || m == Material.craftedSnow
-										|| m == Material.ice || m == Material.packedIce) {
+								BlockPos pos = new BlockPos(x, y, z);
+								IBlockState state = chunk.getBlockState(pos);
+								Material m = state.getMaterial();
+								if (m == Material.GRASS || m == Material.GROUND || m == Material.CLAY || m == Material.SNOW || m == Material.CRAFTED_SNOW || m == Material.ICE || m == Material.PACKED_ICE) {
 									++blockCounter;
 								}
 							}
@@ -218,12 +221,13 @@ public class CommandCountBlock implements ISubCommand {
 				} else if (blockRaw.startsWith("*plant")) {
 					for (int x = xS; x <= xL; ++x) {
 						for (int z = zS; z <= zL; ++z) {
-							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
 							int cX = x & 15, cZ = z & 15;
 							for (int y = yS; y <= yL; ++y) {
-								Block block = chunk.getBlock(cX, y, cZ);
-								Material m = block.getMaterial();
-								if (m == Material.plants || m == Material.vine || m == Material.cactus || m == Material.leaves) {
+								BlockPos pos = new BlockPos(x, y, z);
+								IBlockState state = chunk.getBlockState(pos);
+								Material m = state.getMaterial();
+								if (m == Material.PLANTS || m == Material.VINE || m == Material.CACTUS || m == Material.LEAVES) {
 									++blockCounter;
 								}
 							}
@@ -232,12 +236,13 @@ public class CommandCountBlock implements ISubCommand {
 				} else if (blockRaw.equals("*fire")) {
 					for (int x = xS; x <= xL; ++x) {
 						for (int z = zS; z <= zL; ++z) {
-							Chunk chunk = world.getChunkFromBlockCoords(x, z);
+							Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
 							int cX = x & 15, cZ = z & 15;
 							for (int y = yS; y <= yL; ++y) {
-								Block block = chunk.getBlock(cX, y, cZ);
-								Material m = block.getMaterial();
-								if (m == Material.fire || m == Material.lava || block.isBurning(world, x, y, z)) {
+								BlockPos pos = new BlockPos(x, y, z);
+								IBlockState state = chunk.getBlockState(pos);
+								Material m = state.getMaterial();
+								if (m == Material.FIRE || m == Material.LAVA || state.getBlock().isBurning(world, pos)) {
 									++blockCounter;
 								}
 							}
@@ -249,21 +254,22 @@ public class CommandCountBlock implements ISubCommand {
 			int meta = -1;
 			t = blockRaw.indexOf('#');
 			if (t > 0) {
-				meta = CommandBase.parseInt(sender, blockRaw.substring(t + 1));
+				meta = CommandBase.parseInt(blockRaw.substring(t + 1));
 				blockRaw = blockRaw.substring(0, t);
 			}
 			Block block = Block.getBlockFromName(blockRaw);
-			if (block == Blocks.air) {
+			if (block == Blocks.AIR) {
 				continue;
 			}
-
 			for (int x = xS; x <= xL; ++x) {
 				for (int z = zS; z <= zL; ++z) {
-					Chunk chunk = world.getChunkFromBlockCoords(x, z);
+					Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
 					int cX = x & 15, cZ = z & 15;
 					for (int y = yS; y <= yL; ++y) {
-						boolean v = meta == -1 || chunk.getBlockMetadata(cX, y, cZ) == meta;
-						if (v && chunk.getBlock(cX, y, cZ) == block) {
+						BlockPos pos = new BlockPos(x, y, z);
+						IBlockState state = chunk.getBlockState(pos);
+						boolean v = meta == -1 || state.getBlock().getMetaFromState(state) == meta;
+						if (v && state.getBlock() == block) {
 							++blockCounter;
 						}
 					}
@@ -271,17 +277,17 @@ public class CommandCountBlock implements ISubCommand {
 			}
 		}
 		if (blockCounter != 0) {
-			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.countblocks.success", blockCounter, xS, yS, zS, xL, yL, zL);
+			CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.countblocks.success", blockCounter, xS, yS, zS, xL, yL, zL);
 		} else {
-			CommandHandler.logAdminCommand(sender, this, "info.cofh.command.countblocks.failure");
+			CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.countblocks.failure");
 		}
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
+	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
 		if (args.length == 2) {
-			return CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames());
+			return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
 		}
 		return null;
 	}

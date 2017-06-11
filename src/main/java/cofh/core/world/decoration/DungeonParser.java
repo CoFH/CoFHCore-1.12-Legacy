@@ -1,31 +1,26 @@
 package cofh.core.world.decoration;
 
-import cofh.api.world.IGeneratorParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
 import cofh.lib.util.WeightedRandomNBTTag;
-import cofh.lib.util.helpers.MathHelper;
-import cofh.lib.world.WorldGenDungeon;
-import com.google.gson.JsonObject;
+import cofh.lib.world.IGeneratorParser;
+import com.typesafe.config.Config;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraftforge.common.DungeonHooks.DungeonMob;
-
-import org.apache.logging.log4j.Logger;
-
+@Deprecated//TODO
 public class DungeonParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
-			List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String name, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
 
-		ArrayList<WeightedRandomNBTTag> mobList = new ArrayList<WeightedRandomNBTTag>();
-		if (genObject.has("spawnEntity")) {
-			if (!FeatureParser.parseEntityList(genObject.get("spawnEntity"), mobList)) {
+		ArrayList<WeightedRandomNBTTag> mobList = new ArrayList<>();
+		if (genObject.hasPath("spawnEntity")) {
+			if (!FeatureParser.parseEntityList(genObject.root().get("spawnEntity"), mobList)) {
 				log.warn("Entry specifies invalid entity list for 'dungeon' generator! Using 'Pig'!");
 				mobList.clear();
 				NBTTagCompound tag = new NBTTagCompound();
@@ -38,7 +33,7 @@ public class DungeonParser implements IGeneratorParser {
 			tag.setString("EntityId", "Pig");
 			mobList.add(new WeightedRandomNBTTag(100, tag));
 		}
-		WorldGenDungeon r = new WorldGenDungeon(resList, matList, mobList);
+		/*WorldGenDungeon r = new WorldGenDungeon(resList, matList, mobList);
 		if (genObject.has("spawnerFloor")) {
 			resList = new ArrayList<WeightedRandomBlock>();
 			if (FeatureParser.parseResList(genObject.get("spawnerFloor"), resList, true)) {
@@ -89,8 +84,8 @@ public class DungeonParser implements IGeneratorParser {
 			if (genObject.has("maxWidthZ")) {
 				r.maxWidthZ = genObject.get("maxWidthZ").getAsInt();
 			}
-		}
-		return r;
+		}*/
+		return null;
 	}
 
 }

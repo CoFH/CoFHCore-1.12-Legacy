@@ -1,56 +1,48 @@
 package cofh.core.world.decoration;
 
-import cofh.api.world.IGeneratorParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.world.IGeneratorParser;
 import cofh.lib.world.WorldGenAdvLakes;
-import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.world.gen.feature.WorldGenerator;
-
-import org.apache.logging.log4j.Logger;
 
 public class LakeParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
-			List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String name, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
 
 		boolean useMaterial = false;
 		{
-			useMaterial = genObject.has("useMaterial") ? genObject.get("useMaterial").getAsBoolean() : useMaterial;
+			useMaterial = genObject.hasPath("use-material") ? genObject.getBoolean("use-material") : useMaterial;
 		}
 		WorldGenAdvLakes r = new WorldGenAdvLakes(resList, useMaterial ? matList : null);
 		{
-			if (genObject.has("outlineWithStone")) {
-				r.outlineBlock = genObject.get("outlineWithStone").getAsBoolean() ? Arrays.asList(new WeightedRandomBlock(Blocks.stone, 0)) : null;
-			}
-			ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
-			if (genObject.has("outlineBlock")) {
-				if (!FeatureParser.parseResList(genObject.get("outlineBlock"), list, true)) {
-					log.warn("Entry specifies invalid outlineBlock for 'lake' generator! Not filling!");
+			ArrayList<WeightedRandomBlock> list = new ArrayList<>();
+			if (genObject.hasPath("outline-block")) {
+				if (!FeatureParser.parseResList(genObject.root().get("outline-block"), list, true)) {
+					log.warn("Entry specifies invalid outline-block for 'lake' generator! Not outlining!");
 				} else {
-					r.outlineBlock = list;
+					r.setOutlineBlock(list);
 				}
-				list = new ArrayList<WeightedRandomBlock>();
+				list = new ArrayList<>();
 			}
-			if (genObject.has("gapBlock")) {
-				if (!FeatureParser.parseResList(genObject.get("gapBlock"), list, true)) {
-					log.warn("Entry specifies invalid gapBlock for 'lake' generator! Not filling!");
+			if (genObject.hasPath("gap-block")) {
+				if (!FeatureParser.parseResList(genObject.getValue("gap-block"), list, true)) {
+					log.warn("Entry specifies invalid gap block for 'lake' generator! Not filling!");
 				} else {
-					r.gapBlock = list;
+					r.setGapBlock(list);
 				}
 			}
-			if (genObject.has("solidOutline")) {
-				r.solidOutline = genObject.get("solidOutline").getAsBoolean();
+			if (genObject.hasPath("solid-outline")) {
+				r.setSolidOutline(genObject.getBoolean("solid-outline"));
 			}
-			if (genObject.has("totalOutline")) {
-				r.totalOutline = genObject.get("totalOutline").getAsBoolean();
+			if (genObject.hasPath("total-outline")) {
+				r.setTotalOutline(genObject.getBoolean("total-outline"));
 			}
 		}
 		return r;

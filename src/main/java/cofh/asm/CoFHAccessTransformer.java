@@ -1,56 +1,40 @@
 package cofh.asm;
 
-import static org.objectweb.asm.Opcodes.*;
-
-import cofh.repack.codechicken.lib.asm.ObfMapping;
-import cofh.repack.immibis.bon.JoinMapping;
-import cofh.repack.immibis.bon.Mapping;
-import cofh.repack.immibis.bon.mcp.CsvFile;
-import cofh.repack.immibis.bon.mcp.SrgFile;
+import cofh.asm.repack.codechicken.lib.asm.ObfMapping;
+import cofh.asm.repack.immibis.bon.JoinMapping;
+import cofh.asm.repack.immibis.bon.Mapping;
+import cofh.asm.repack.immibis.bon.mcp.CsvFile;
+import cofh.asm.repack.immibis.bon.mcp.SrgFile;
 import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
+import net.minecraft.launchwrapper.IClassTransformer;
+import net.minecraft.launchwrapper.LaunchClassLoader;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.tree.*;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Resource;
+import java.util.*;
 
-import net.minecraft.launchwrapper.IClassTransformer;
-import net.minecraft.launchwrapper.LaunchClassLoader;
+import static org.objectweb.asm.Opcodes.*;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InnerClassNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-
-@Resource // magic annoation to avoid having sponge do special logic to us
+@Resource // magic annotation to avoid having sponge do special logic to us
 public class CoFHAccessTransformer implements IClassTransformer {
 
-	private static List<String> mapFileList = new LinkedList<String>();
+	private static List<String> mapFileList = new LinkedList<>();
 
 	public CoFHAccessTransformer() throws IOException {
 
 		super();
 
 		superClasses.put(null, null);
-
-		// file names are case sensitive. do not alter.
-		mapFileList.add("CoFH_at.cfg");
-		// CoFH_at.cfg must also contain all entries from cofhlib_at.cfg
 
 		for (String file : mapFileList) {
 			readMapFile(file);
@@ -80,7 +64,8 @@ public class CoFHAccessTransformer implements IClassTransformer {
 		}
 
 		ClassReader classReader = new ClassReader(bytes);
-		l: {
+		l:
+		{
 			String owner = classReader.getClassName(), zuper = classReader.getSuperName();
 			superClasses.put(owner, zuper);
 			if (!superClasses.containsKey(zuper)) {
@@ -144,23 +129,23 @@ public class CoFHAccessTransformer implements IClassTransformer {
 					methodAccess.put(entry, overrideAll);
 				} else {
 					switch (m.getFixedAccess(ACC_PRIVATE)) {
-					case ACC_PRIVATE:
-						if (overrideAll.getFixedAccess(ACC_PRIVATE) == 0) {
-							methodAccess.put(entry, overrideAll);
+						case ACC_PRIVATE:
+							if (overrideAll.getFixedAccess(ACC_PRIVATE) == 0) {
+								methodAccess.put(entry, overrideAll);
+								break;
+							}
+						case 0: // ACC_DEFAULT
+							if (overrideAll.getFixedAccess(0) == ACC_PROTECTED) {
+								methodAccess.put(entry, overrideAll);
+								break;
+							}
+						case ACC_PROTECTED:
+							if (overrideAll.getFixedAccess(ACC_PROTECTED) == ACC_PUBLIC) {
+								methodAccess.put(entry, overrideAll);
+								break;
+							}
+						case ACC_PUBLIC:
 							break;
-						}
-					case 0: // ACC_DEFAULT
-						if (overrideAll.getFixedAccess(0) == ACC_PROTECTED) {
-							methodAccess.put(entry, overrideAll);
-							break;
-						}
-					case ACC_PROTECTED:
-						if (overrideAll.getFixedAccess(ACC_PROTECTED) == ACC_PUBLIC) {
-							methodAccess.put(entry, overrideAll);
-							break;
-						}
-					case ACC_PUBLIC:
-						break;
 					}
 				}
 			}
@@ -186,7 +171,7 @@ public class CoFHAccessTransformer implements IClassTransformer {
 	private void replaceInvokeSpecial(ClassNode clazz, List<MethodNode> toReplace) {
 
 		for (MethodNode method : clazz.methods) {
-			for (Iterator<AbstractInsnNode> it = method.instructions.iterator(); it.hasNext();) {
+			for (Iterator<AbstractInsnNode> it = method.instructions.iterator(); it.hasNext(); ) {
 				AbstractInsnNode insn = it.next();
 				if (insn.getOpcode() == INVOKESPECIAL) {
 					MethodInsnNode mInsn = (MethodInsnNode) insn;
@@ -205,6 +190,7 @@ public class CoFHAccessTransformer implements IClassTransformer {
 	}
 
 	private static Mapping mapping = null;
+
 	static void initForDeobf() throws IOException {
 
 		File[] data = ObfMapping.MCPRemapper.getConfFiles();
@@ -215,9 +201,9 @@ public class CoFHAccessTransformer implements IClassTransformer {
 
 		forwardSRG.setDefaultPackage("net/minecraft/src/");
 
-		HashMap<String, HashSet<String>> srgMethodDescriptors = new HashMap<String, HashSet<String>>();
-		HashMap<String, HashSet<String>> srgMethodOwners = new HashMap<String, HashSet<String>>();
-		HashMap<String, HashSet<String>> srgFieldOwners = new HashMap<String, HashSet<String>>();
+		HashMap<String, HashSet<String>> srgMethodDescriptors = new HashMap<>();
+		HashMap<String, HashSet<String>> srgMethodOwners = new HashMap<>();
+		HashMap<String, HashSet<String>> srgFieldOwners = new HashMap<>();
 
 		for (Map.Entry<String, String> entry : srg.classes.entrySet()) {
 			String obfClass = entry.getKey();
@@ -237,12 +223,14 @@ public class CoFHAccessTransformer implements IClassTransformer {
 
 			// Enum values don't use the CSV and don't start with field_
 			if (srgName.startsWith("field_")) {
-				if (srgFieldOwners.containsKey(srgName))
-					System.out.println("SRG field "+srgName+" appears in multiple classes (at least "+srgFieldOwners.get(srgName)+" and "+srgOwner+")");
+				if (srgFieldOwners.containsKey(srgName)) {
+					System.out.println("SRG field " + srgName + " appears in multiple classes (at least " + srgFieldOwners.get(srgName) + " and " + srgOwner + ")");
+				}
 
 				HashSet<String> owners = srgFieldOwners.get(srgName);
-				if (owners == null)
-					srgFieldOwners.put(srgName, owners = new HashSet<String>());
+				if (owners == null) {
+					srgFieldOwners.put(srgName, owners = new HashSet<>());
+				}
 				owners.add(srgOwner);
 			}
 
@@ -262,19 +250,21 @@ public class CoFHAccessTransformer implements IClassTransformer {
 			String srgOwner = srg.classes.get(obfOwner);
 
 			HashSet<String> srgMethodDescriptorsThis = srgMethodDescriptors.get(srgName);
-			if(srgMethodDescriptorsThis == null)
-				srgMethodDescriptors.put(srgName, srgMethodDescriptorsThis = new HashSet<String>());
+			if (srgMethodDescriptorsThis == null) {
+				srgMethodDescriptors.put(srgName, srgMethodDescriptorsThis = new HashSet<>());
+			}
 			srgMethodDescriptorsThis.add(srgDesc);
 
 			HashSet<String> srgMethodOwnersThis = srgMethodOwners.get(srgName);
-			if (srgMethodOwnersThis == null)
-				srgMethodOwners.put(srgName, srgMethodOwnersThis = new HashSet<String>());
+			if (srgMethodOwnersThis == null) {
+				srgMethodOwners.put(srgName, srgMethodOwnersThis = new HashSet<>());
+			}
 			srgMethodOwnersThis.add(srgOwner);
 
 			forwardSRG.setMethod(obfOwner, obfName, obfDesc, srgName);
 		}
 
-		int[] sideNumbers = {2, 1, 0};
+		int[] sideNumbers = { 2, 1, 0 };
 		Map<String, String> fieldNames = CsvFile.read(data[2], sideNumbers);
 		Map<String, String> methodNames = CsvFile.read(data[1], sideNumbers);
 
@@ -306,15 +296,15 @@ public class CoFHAccessTransformer implements IClassTransformer {
 		mapping = new JoinMapping(forwardSRG, forwardCSV);
 	}
 
-	private static HashMap<String, String> modifiers = new HashMap<String, String>();
-	private static HashMap<String, String> superClasses = new HashMap<String, String>();
-	private static HashMap<String, Modifier> classAccess = new HashMap<String, Modifier>();
-	private static HashMap<String, Modifier> fieldAccess = new HashMap<String, Modifier>();
-	private static HashMap<String, Modifier> methodAccess = new HashMap<String, Modifier>();
+	private static HashMap<String, String> modifiers = new HashMap<>();
+	private static HashMap<String, String> superClasses = new HashMap<>();
+	private static HashMap<String, Modifier> classAccess = new HashMap<>();
+	private static HashMap<String, Modifier> fieldAccess = new HashMap<>();
+	private static HashMap<String, Modifier> methodAccess = new HashMap<>();
 
 	static void processATFile(Reader rules) throws IOException {
 
-		for (LineReader reader = new LineReader(rules);;) {
+		for (LineReader reader = new LineReader(rules); ; ) {
 
 			String input = reader.readLine(), line;
 			if (input == null) {
@@ -333,7 +323,9 @@ public class CoFHAccessTransformer implements IClassTransformer {
 
 			String desc = "";
 			String lookupName = parts[1].replace('.', '/'), originalName = lookupName;
-			if (mapping != null) lookupName = mapping.getClass(lookupName);
+			if (mapping != null) {
+				lookupName = mapping.getClass(lookupName);
+			}
 			modifiers.put(lookupName, null);
 
 			HashMap<String, Modifier> map;
@@ -342,7 +334,9 @@ public class CoFHAccessTransformer implements IClassTransformer {
 				map = classAccess;
 			} else {
 				String nameReference = parts[2];
-				if (mapping != null) nameReference = mapping.getField(originalName, nameReference, "V");
+				if (mapping != null) {
+					nameReference = mapping.getField(originalName, nameReference, "V");
+				}
 				lookupName += '/' + nameReference;
 
 				int parenIdx = nameReference.indexOf('(');
@@ -390,24 +384,24 @@ public class CoFHAccessTransformer implements IClassTransformer {
 		public void setTargetAccess(String name) {
 
 			switch (targetAccess) {
-			// there is no need to check to see if access mode is private, we can never lower visibility
-			case ACC_PRIVATE:
-				if (name.startsWith("default")) {
-					targetAccess = 0;
-				}
-				// continue
-			case 0:
-				if (name.startsWith("protected")) {
-					targetAccess = ACC_PROTECTED;
-				}
-				// continue
-			case ACC_PROTECTED:
-				if (name.startsWith("public")) {
-					targetAccess = ACC_PUBLIC;
-				}
-				// continue
-			case ACC_PUBLIC:
-				break;
+				// there is no need to check to see if access mode is private, we can never lower visibility
+				case ACC_PRIVATE:
+					if (name.startsWith("default")) {
+						targetAccess = 0;
+					}
+					// continue
+				case 0:
+					if (name.startsWith("protected")) {
+						targetAccess = ACC_PROTECTED;
+					}
+					// continue
+				case ACC_PROTECTED:
+					if (name.startsWith("public")) {
+						targetAccess = ACC_PUBLIC;
+					}
+					// continue
+				case ACC_PUBLIC:
+					break;
 			}
 
 			if (name.endsWith("-f")) {
@@ -425,20 +419,20 @@ public class CoFHAccessTransformer implements IClassTransformer {
 			int ret = (access & ~7);
 
 			switch (access & 7) {
-			case ACC_PRIVATE:
-				ret |= t;
-				break;
-			case 0: // default
-				ret |= (t != ACC_PRIVATE ? t : 0 /* default */);
-				break;
-			case ACC_PROTECTED:
-				ret |= (t != ACC_PRIVATE && t != 0 /* default */? t : ACC_PROTECTED);
-				break;
-			case ACC_PUBLIC:
-				ret |= ACC_PUBLIC;
-				break;
-			default:
-				throw new RuntimeException("The fuck?");
+				case ACC_PRIVATE:
+					ret |= t;
+					break;
+				case 0: // default
+					ret |= (t != ACC_PRIVATE ? t : 0 /* default */);
+					break;
+				case ACC_PROTECTED:
+					ret |= (t != ACC_PRIVATE && t != 0 /* default */ ? t : ACC_PROTECTED);
+					break;
+				case ACC_PUBLIC:
+					ret |= ACC_PUBLIC;
+					break;
+				default:
+					throw new RuntimeException("The fuck?");
 			}
 
 			if (changeFinal) {
@@ -594,7 +588,6 @@ public class CoFHAccessTransformer implements IClassTransformer {
 			if (loader != null) {
 				return loader;
 			}
-
 			return LoadingPlugin.loader;
 		}
 

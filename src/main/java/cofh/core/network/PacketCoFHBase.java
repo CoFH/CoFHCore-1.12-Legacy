@@ -2,25 +2,19 @@ package cofh.core.network;
 
 import cofh.lib.util.helpers.FluidHelper;
 import cofh.lib.util.helpers.ItemHelper;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.UUID;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidStack;
+
+import java.io.*;
+import java.util.UUID;
 
 public abstract class PacketCoFHBase extends PacketBase {
 
@@ -81,6 +75,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 	}
 
 	public PacketCoFHBase addVarInt(int theInteger) {
+
 		try {
 			int v = 0x00;
 			if (theInteger < 0) {
@@ -184,9 +179,9 @@ public abstract class PacketCoFHBase extends PacketBase {
 
 	public PacketCoFHBase addCoords(TileEntity theTile) {
 
-		addInt(theTile.xCoord);
-		addInt(theTile.yCoord);
-		return addInt(theTile.zCoord);
+		addInt(theTile.getPos().getX());
+		addInt(theTile.getPos().getY());
+		return addInt(theTile.getPos().getZ());
 	}
 
 	public PacketCoFHBase addCoords(int x, int y, int z) {
@@ -239,6 +234,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 	}
 
 	public int getVarInt() {
+
 		try {
 			int v = datain.readByte(), r = v & 0x3F;
 			boolean n = (v & 0x40) != 0;
@@ -322,9 +318,9 @@ public abstract class PacketCoFHBase extends PacketBase {
 		}
 	}
 
-	public int[] getCoords() {
+	public BlockPos getCoords() {
 
-		return new int[] { getInt(), getInt(), getInt() };
+		return new BlockPos(getInt(), getInt(), getInt());
 	}
 
 	private void writeItemStack(ItemStack theStack) throws IOException {
@@ -335,7 +331,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 			addShort(Item.getIdFromItem(theStack.getItem()));
 			addByte(theStack.stackSize);
 			addShort(ItemHelper.getItemDamage(theStack));
-			writeNBT(theStack.stackTagCompound);
+			writeNBT(theStack.getTagCompound());
 		}
 	}
 
@@ -348,7 +344,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 			byte stackSize = getByte();
 			short damage = getShort();
 			stack = new ItemStack(Item.getItemById(itemID), stackSize, damage);
-			stack.stackTagCompound = readNBT();
+			stack.setTagCompound(readNBT());
 		}
 
 		return stack;
@@ -359,7 +355,9 @@ public abstract class PacketCoFHBase extends PacketBase {
 		if (nbt == null) {
 			addShort(-1);
 		} else {
-			byte[] abyte = CompressedStreamTools.compress(nbt);
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			CompressedStreamTools.writeCompressed(nbt, byteArrayOutputStream);
+			byte[] abyte = byteArrayOutputStream.toByteArray();
 			addShort((short) abyte.length);
 			addByteArray(abyte);
 		}
@@ -374,7 +372,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 		} else {
 			byte[] abyte = new byte[nbtLength];
 			getByteArray(abyte);
-			return CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L));
+			return CompressedStreamTools.readCompressed(new ByteArrayInputStream(abyte));
 		}
 	}
 

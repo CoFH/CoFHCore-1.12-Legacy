@@ -2,19 +2,23 @@ package cofh.core.entity;
 
 import cofh.lib.util.helpers.ItemHelper;
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.FMLCommonHandler;
-
-import java.util.UUID;
-
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import java.util.UUID;
 
 public class CoFHFakePlayer extends FakePlayer {
 
@@ -27,21 +31,21 @@ public class CoFHFakePlayer extends FakePlayer {
 	public CoFHFakePlayer(WorldServer world) {
 
 		super(world, NAME);
-		playerNetServerHandler = new NetServerHandlerFake(FMLCommonHandler.instance().getMinecraftServerInstance(), this);
+		connection = new NetServerHandlerFake(FMLCommonHandler.instance().getMinecraftServerInstance(), this);
 		this.addedToChunk = false;
 	}
 
-	public static boolean isBlockBreakable(CoFHFakePlayer myFakePlayer, World worldObj, int x, int y, int z) {
+	public static boolean isBlockBreakable(CoFHFakePlayer myFakePlayer, World worldObj, BlockPos pos) {
 
-		Block block = worldObj.getBlock(x, y, z);
+		IBlockState state = worldObj.getBlockState(pos);
 
-		if (block.isAir(worldObj, x, y, z)) {
+		if (state.getBlock().isAir(state, worldObj, pos)) {
 			return false;
 		}
 		if (myFakePlayer == null) {
-			return block.getBlockHardness(worldObj, x, y, z) > -1;
+			return state.getBlockHardness(worldObj, pos) > -1;
 		} else {
-			return block.getPlayerRelativeBlockHardness(myFakePlayer, worldObj, x, y, z) > -1;
+			return state.getPlayerRelativeBlockHardness(myFakePlayer, worldObj, pos) > -1;
 		}
 	}
 
@@ -78,83 +82,85 @@ public class CoFHFakePlayer extends FakePlayer {
 	public void onUpdate() {
 
 		ItemStack itemstack = previousItem;
-		ItemStack itemstack1 = getHeldItem();
+		ItemStack itemstack1 = getHeldItem(EnumHand.MAIN_HAND);
 
 		if (!ItemStack.areItemStacksEqual(itemstack1, itemstack)) {
 			if (itemstack != null) {
-				getAttributeMap().removeAttributeModifiers(itemstack.getAttributeModifiers());
+				getAttributeMap().removeAttributeModifiers(itemstack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND));
 			}
 			if (itemstack1 != null) {
-				getAttributeMap().applyAttributeModifiers(itemstack1.getAttributeModifiers());
+				getAttributeMap().applyAttributeModifiers(itemstack1.getAttributeModifiers(EntityEquipmentSlot.MAINHAND));
 			}
 			myName = "[CoFH]" + (itemstack1 != null ? " using " + itemstack1.getDisplayName() : "");
 		}
 		previousItem = itemstack1 == null ? null : itemstack1.copy();
-		theItemInWorldManager.updateBlockRemoving();
+		interactionManager.updateBlockRemoving();
 
-		if (itemInUse != null) {
-			// tickItemInUse(itemstack);
-		}
+		//This was commented out beforehand fyi.
+		//if (itemInUse != null) {
+		// tickItemInUse(itemstack);
+		//}
 	}
 
 	public void tickItemInUse(ItemStack updateItem) {
 
-		if (updateItem != null && ItemHelper.itemsEqualWithMetadata(previousItem, itemInUse)) {
+		if (updateItem != null && ItemHelper.itemsEqualWithMetadata(previousItem, activeItemStack)) {
 
-			itemInUseCount = ForgeEventFactory.onItemUseTick(this, itemInUse, itemInUseCount);
-			if (itemInUseCount <= 0) {
+			activeItemStackUseCount = ForgeEventFactory.onItemUseTick(this, activeItemStack, activeItemStackUseCount);
+			if (activeItemStackUseCount <= 0) {
 				onItemUseFinish();
 			} else {
-				itemInUse.getItem().onUsingTick(itemInUse, this, itemInUseCount);
-				if (itemInUseCount <= 25 && itemInUseCount % 4 == 0) {
+				activeItemStack.getItem().onUsingTick(activeItemStack, this, activeItemStackUseCount);
+				if (activeItemStackUseCount <= 25 && activeItemStackUseCount % 4 == 0) {
 					updateItemUse(updateItem, 5);
 				}
-				if (--itemInUseCount == 0 && !worldObj.isRemote) {
+				if (--activeItemStackUseCount == 0 && !worldObj.isRemote) {
 					onItemUseFinish();
 				}
 			}
 		} else {
-			clearItemInUse();
+			resetActiveHand();
 		}
 	}
 
 	@Override
 	protected void updateItemUse(ItemStack par1ItemStack, int par2) {
 
-		if (par1ItemStack.getItemUseAction() == EnumAction.drink) {
-			this.playSound("random.drink", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+		if (par1ItemStack.getItemUseAction() == EnumAction.DRINK) {
+			this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 		}
 
-		if (par1ItemStack.getItemUseAction() == EnumAction.eat) {
-			this.playSound("random.eat", 0.5F + 0.5F * this.rand.nextInt(2), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+		if (par1ItemStack.getItemUseAction() == EnumAction.EAT) {
+			this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 0.5F + 0.5F * this.rand.nextInt(2), (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 		}
 	}
 
 	@Override
-	public String getDisplayName() {
+	public ITextComponent getDisplayName() {
 
-		return getCommandSenderName();
+		return new TextComponentString(getName());
 	}
 
 	@Override
 	public float getEyeHeight() {
 
+		return getDefaultEyeHeight() + eyeHeight;
+	}
+
+	@Override
+	public float getDefaultEyeHeight() {
+
 		return 1.1F;
 	}
 
-	@Override
+	//@Override TODO
 	public ItemStack getCurrentArmor(int par1) {
 
-		return new ItemStack(Items.diamond_chestplate);
+		return new ItemStack(Items.DIAMOND_CHESTPLATE);
 	}
 
 	@Override
-	public void addChatMessage(IChatComponent chatmessagecomponent) {
-
-	}
-
-	@Override
-	public void addChatComponentMessage(IChatComponent chatmessagecomponent) {
+	public void addChatMessage(ITextComponent component) {
 
 	}
 

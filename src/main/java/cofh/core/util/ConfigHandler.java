@@ -1,16 +1,15 @@
 package cofh.core.util;
 
-import java.util.Set;
-
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
+import java.util.Set;
 
 /**
  * This is effectively a wrapper for Forge Configurations. It allows for easier manipulation of Config files.
  *
  * @author King Lemming
- *
  */
 public class ConfigHandler {
 
@@ -55,7 +54,7 @@ public class ConfigHandler {
 		modConfiguration.save();
 	}
 
-	/* Shortcuts */
+	/* SHORTCUTS */
 	public double get(String category, String key, double defaultValue) {
 
 		return modConfiguration.get(category, key, defaultValue, null).getDouble(0);
@@ -116,7 +115,7 @@ public class ConfigHandler {
 		getProperty(category, key, value).set(value);
 	}
 
-	/* Properties */
+	/* PROPERTIES */
 	public Property getProperty(String category, String key, double defaultValue) {
 
 		return modConfiguration.get(category, key, defaultValue);
@@ -277,10 +276,6 @@ public class ConfigHandler {
 
 	public void cleanUp(boolean delConfig, boolean saveVersion) {
 
-		removeProperty("version", "version");
-		removeProperty("version", "Version");
-		removeProperty("general", "version");
-		removeProperty("general", "Version");
 		removeProperty("Version", "Identifier");
 
 		if (saveVersion) {

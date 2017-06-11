@@ -1,30 +1,25 @@
 package cofh.core.fluid;
 
-import cofh.CoFHCore;
-import cofh.core.util.IBakeable;
-import cofh.lib.util.BlockWrapper;
-
-import gnu.trove.map.TMap;
-import gnu.trove.map.hash.THashMap;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fluids.Fluid;
 
-public class BlockFluidInteractive extends BlockFluidCoFHBase implements IBakeable {
+import java.util.HashMap;
 
-	protected final TMap<BlockWrapper, BlockWrapper> collisionMap = new THashMap<BlockWrapper, BlockWrapper>();
+public class BlockFluidInteractive extends BlockFluidCore {
+
+	private final HashMap<IBlockState, IBlockState> collisionMap = new HashMap<>();
+	private final HashMap<Block, IBlockState> anyState = new HashMap<>();
 
 	public BlockFluidInteractive(Fluid fluid, Material material, String name) {
 
 		super(fluid, material, name);
-		CoFHCore.registerBakeable(this);
 	}
 
-	public BlockFluidInteractive(String modName, Fluid fluid, Material material, String name) {
+	public BlockFluidInteractive(Fluid fluid, Material material, String modName, String name) {
 
-		super(modName, fluid, material, name);
-		CoFHCore.registerBakeable(this);
+		super(fluid, material, modName, name);
 	}
 
 	public boolean addInteraction(Block preBlock, Block postBlock) {
@@ -32,47 +27,43 @@ public class BlockFluidInteractive extends BlockFluidCoFHBase implements IBakeab
 		if (preBlock == null || postBlock == null) {
 			return false;
 		}
-		return addInteraction(preBlock, -1, postBlock, 0);
+		return addInteraction(preBlock.getDefaultState(), postBlock.getDefaultState(), true);
 	}
 
-	public boolean addInteraction(Block preBlock, int preMeta, Block postBlock, int postMeta) {
+	public boolean addInteraction(IBlockState pre, IBlockState post) {
 
-		if (preBlock == null || postBlock == null || postMeta < 0) {
+		return addInteraction(pre, post, false);
+	}
+
+	public boolean addInteraction(IBlockState pre, IBlockState post, boolean anyState) {
+
+		if (pre == null || post == null) {
 			return false;
 		}
-		if (preMeta < 0) {
-			collisionMap.put(new BlockWrapper(preBlock, preMeta), new BlockWrapper(postBlock, postMeta));
+		if (anyState) {
+			this.anyState.put(pre.getBlock(), post);
 		} else {
-			collisionMap.put(new BlockWrapper(preBlock, preMeta), new BlockWrapper(postBlock, postMeta));
+			collisionMap.put(pre, post);
 		}
 		return true;
 	}
 
-	public boolean addInteraction(Block preBlock, int preMeta, Block postBlock) {
+	public boolean addInteraction(IBlockState pre, Block postBlock) {
 
-		return addInteraction(preBlock, preMeta, postBlock, 0);
+		return addInteraction(pre, postBlock.getDefaultState(), false);
 	}
 
-	public boolean hasInteraction(Block preBlock, int preMeta) {
+	public boolean hasInteraction(IBlockState state) {
 
-		return collisionMap.containsKey(new BlockWrapper(preBlock, preMeta)) || collisionMap.containsKey(new BlockWrapper(preBlock, -1));
+		return collisionMap.containsKey(state) || anyState.containsKey(state.getBlock());
 	}
 
-	public BlockWrapper getInteraction(Block preBlock, int preMeta) {
+	public IBlockState getInteraction(IBlockState state) {
 
-		if (collisionMap.containsKey(new BlockWrapper(preBlock, preMeta))) {
-			return collisionMap.get(new BlockWrapper(preBlock, preMeta));
+		if (collisionMap.containsKey(state)) {
+			return collisionMap.get(state);
 		}
-		return collisionMap.get(new BlockWrapper(preBlock, -1));
-	}
-
-	@Override
-	public void bake() {
-
-		TMap<BlockWrapper, BlockWrapper> temp = new THashMap<BlockWrapper, BlockWrapper>();
-		temp.putAll(collisionMap);
-		collisionMap.clear();
-		collisionMap.putAll(temp);
+		return anyState.get(state.getBlock());
 	}
 
 }

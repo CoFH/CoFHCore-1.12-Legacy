@@ -1,31 +1,22 @@
 package cofh.core.util.crafting;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagByte;
-import net.minecraft.nbt.NBTTagByteArray;
-import net.minecraft.nbt.NBTTagDouble;
-import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.nbt.NBTTagIntArray;
-import net.minecraft.nbt.NBTTagLong;
-import net.minecraft.nbt.NBTTagShort;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RecipeUpgradeOverride extends RecipeUpgrade {
 
 	HashMap<String, NBTBase[]> overrides = new HashMap<String, NBTBase[]>();
 
-	public RecipeUpgradeOverride(ItemStack result, Object[] recipe) {
+	public RecipeUpgradeOverride(ItemStack result, Object... recipe) {
 
 		super(result, recipe);
 	}
 
-	public RecipeUpgradeOverride(int slot, ItemStack result, Object[] recipe) {
+	public RecipeUpgradeOverride(int slot, ItemStack result, Object... recipe) {
 
 		super(slot, result, recipe);
 	}
@@ -35,10 +26,10 @@ public class RecipeUpgradeOverride extends RecipeUpgrade {
 
 		ItemStack craftingResult = super.getCraftingResult(craftMatrix);
 
-		if (craftingResult.stackTagCompound != null) {
+		if (craftingResult.hasTagCompound()) {
 			for (Map.Entry<String, NBTBase[]> override : overrides.entrySet()) {
-				if (override.getValue()[0] == null || override.getValue()[0].equals(craftingResult.stackTagCompound.getTag(override.getKey()))) {
-					craftingResult.stackTagCompound.setTag(override.getKey(), override.getValue()[1].copy());
+				if (override.getValue()[0] == null || override.getValue()[0].equals(craftingResult.getTagCompound().getTag(override.getKey()))) {
+					craftingResult.getTagCompound().setTag(override.getKey(), override.getValue()[1].copy());
 				}
 			}
 		}

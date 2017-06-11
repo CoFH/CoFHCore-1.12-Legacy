@@ -1,53 +1,42 @@
 package cofh.core.util;
 
 import cofh.CoFHCore;
-import cofh.core.CoFHProps;
 import cofh.core.entity.EntityLightningBoltFake;
-import cofh.lib.util.position.BlockPosition;
-import cpw.mods.fml.common.registry.GameData;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.channels.FileChannel;
-
+import cofh.core.init.CoreProps;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
-
 import org.apache.logging.log4j.core.helpers.Loader;
 
+import java.io.*;
+import java.nio.channels.FileChannel;
+
 public class CoreUtils {
-
-	public static int entityId = 0;
-
-	public static int getEntityId() {
-
-		entityId++;
-		return entityId;
-	}
 
 	/* MOD UTILS */
 	public static String getModName(Item item) {
 
-		String s = GameData.getItemRegistry().getNameForObject(item);
-		return s.substring(0, s.indexOf(':'));
+		return item.getRegistryName().getResourceDomain();
 	}
 
 	/* PLAYER UTILS */
@@ -61,14 +50,14 @@ public class CoreUtils {
 		return player instanceof EntityPlayerMP;
 	}
 
-	public static boolean isFakePlayer(EntityPlayer player) {
+	public static boolean isFakePlayer(Entity player) {
 
 		return (player instanceof FakePlayer);
 	}
 
 	public static boolean isOp(EntityPlayer player) {
 
-		return CoFHCore.proxy.isOp(player.getCommandSenderName());
+		return CoFHCore.proxy.isOp(player.getName());
 	}
 
 	public static boolean isOp(String playerName) {
@@ -88,20 +77,21 @@ public class CoreUtils {
 	}
 
 	/* BLOCK UTILS */
-	public static boolean isBlockUnbreakable(World world, int x, int y, int z) {
+	public static boolean isBlockUnbreakable(World world, BlockPos pos) {
 
-		Block b = world.getBlock(x, y, z);
-		return b instanceof BlockLiquid || b.getBlockHardness(world, x, y, z) < 0;
+		IBlockState state = world.getBlockState(pos);
+		return state.getBlock() instanceof BlockLiquid || state.getBlockHardness(world, pos) < 0;
 	}
 
-	public static boolean isRedstonePowered(World world, int x, int y, int z) {
+	public static boolean isRedstonePowered(World world, BlockPos pos) {
 
-		if (world.isBlockIndirectlyGettingPowered(x, y, z)) {
+		if (world.isBlockIndirectlyGettingPowered(pos) > 0) {
 			return true;
 		}
-		for (BlockPosition bp : new BlockPosition(x, y, z).getAdjacent(false)) {
-			Block block = world.getBlock(bp.x, bp.y, bp.z);
-			if (block.equals(Blocks.redstone_wire) && block.isProvidingStrongPower(world, bp.x, bp.y, bp.z, 1) > 0) {
+		for (EnumFacing face : EnumFacing.VALUES) {
+			BlockPos step = pos.offset(face);
+			IBlockState state = world.getBlockState(step);
+			if (state.equals(Blocks.REDSTONE_WIRE) && state.getWeakPower(world, step, EnumFacing.UP) > 0) {//TODO
 				return true;
 			}
 		}
@@ -110,13 +100,13 @@ public class CoreUtils {
 
 	public static boolean isRedstonePowered(TileEntity tile) {
 
-		return isRedstonePowered(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
+		return isRedstonePowered(tile.getWorld(), tile.getPos());
 	}
 
-	public static void dismantleLog(String playerName, Block block, int metadata, double x, double y, double z) {
+	public static void dismantleLog(String playerName, Block block, int metadata, BlockPos pos) {
 
-		if (CoFHProps.enableDismantleLogging) {
-			CoFHCore.log.info("Player " + playerName + " dismantled " + " (" + block + ":" + metadata + ") at (" + x + "," + y + "," + z + ")");
+		if (CoreProps.enableDismantleLogging) {
+			CoFHCore.LOG.info("Player " + playerName + " dismantled " + " (" + block + ":" + metadata + ") at (" + pos.getX() + "," + pos.getY() + "," + pos.getZ() + ")");
 		}
 	}
 
@@ -128,52 +118,52 @@ public class CoreUtils {
 
 	public static void copyFileUsingStream(String source, File dest) throws IOException {
 
-		try (
-				InputStream is = Loader.getResource(source, null).openStream();
-				OutputStream os = new FileOutputStream(dest);) {
-
-			byte[] buffer = new byte[1024];
-			int length;
-			while ((length = is.read(buffer)) > 0) {
-				os.write(buffer, 0, length);
-			}
+		InputStream is = Loader.getResource(source, null).openStream();
+		OutputStream os = new FileOutputStream(dest);
+		byte[] buffer = new byte[1024];
+		int length;
+		while ((length = is.read(buffer)) > 0) {
+			os.write(buffer, 0, length);
 		}
 	}
 
 	public static void copyFileUsingChannel(File source, File dest) throws IOException {
 
-		try (
-				FileInputStream sourceStream = new FileInputStream(source);
-				FileChannel sourceChannel = sourceStream.getChannel();
-				FileOutputStream outputStream = new FileOutputStream(dest);) {
-			outputStream.getChannel().transferFrom(sourceChannel, 0, sourceChannel.size());
-		}
+		FileInputStream sourceStream = new FileInputStream(source);
+		FileChannel sourceChannel = sourceStream.getChannel();
+		FileOutputStream outputStream = new FileOutputStream(dest);
+		outputStream.getChannel().transferFrom(sourceChannel, 0, sourceChannel.size());
 	}
 
 	/* SOUND UTILS */
-	public static final String getSoundName(String modId, String soundpath) {
+	public static String getSoundName(String modId, String soundpath) {
 
 		soundpath = soundpath.replaceAll("/", ".");
 		return String.format("%s:%s", modId, soundpath);
 	}
 
-	public static final float getSoundVolume(int category) {
+	public static float getSoundVolume(int category) {
 
 		return CoFHCore.proxy.getSoundVolume(category);
 	}
 
 	/* ENTITY UTILS */
-	public static boolean dropItemStackIntoWorld(ItemStack stack, World world, double x, double y, double z) {
+	public static boolean dropItemStackIntoWorld(ItemStack stack, World world, Vec3d pos) {
 
-		return dropItemStackIntoWorld(stack, world, x, y, z, false);
+		return dropItemStackIntoWorld(stack, world, pos, false);
 	}
 
-	public static boolean dropItemStackIntoWorldWithVelocity(ItemStack stack, World world, double x, double y, double z) {
+	public static boolean dropItemStackIntoWorldWithVelocity(ItemStack stack, World world, BlockPos pos) {
 
-		return dropItemStackIntoWorld(stack, world, x, y, z, true);
+		return dropItemStackIntoWorld(stack, world, new Vec3d(pos), true);
 	}
 
-	public static boolean dropItemStackIntoWorld(ItemStack stack, World world, double x, double y, double z, boolean velocity) {
+	public static boolean dropItemStackIntoWorldWithVelocity(ItemStack stack, World world, Vec3d pos) {
+
+		return dropItemStackIntoWorld(stack, world, pos, true);
+	}
+
+	public static boolean dropItemStackIntoWorld(ItemStack stack, World world, Vec3d pos, boolean velocity) {
 
 		if (stack == null) {
 			return false;
@@ -187,7 +177,7 @@ public class CoreUtils {
 			y2 = world.rand.nextFloat() * 0.8F + 0.1F;
 			z2 = world.rand.nextFloat() * 0.8F + 0.1F;
 		}
-		EntityItem entity = new EntityItem(world, x + x2, y + y2, z + z2, stack.copy());
+		EntityItem entity = new EntityItem(world, pos.xCoord + x2, pos.yCoord + y2, pos.zCoord + z2, stack.copy());
 
 		if (velocity) {
 			entity.motionX = (float) world.rand.nextGaussian() * 0.05F;
@@ -205,10 +195,10 @@ public class CoreUtils {
 
 	public static void doFakeExplosion(World world, double x, double y, double z, boolean playSound) {
 
-		world.spawnParticle("largeexplode", x, y + 1, z, 0.0D, 0.0D, 0.0D);
+		world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, x, y + 1, z, 0.0D, 0.0D, 0.0D);
 
 		if (playSound) {
-			world.playSound(x, y, z, "random.explode", 1.0F, 1.0F, true);
+			world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		}
 	}
 
@@ -218,13 +208,18 @@ public class CoreUtils {
 		world.addWeatherEffect(bolt);
 	}
 
+	public static boolean teleportEntityTo(Entity entity, BlockPos pos) {
+
+		return teleportEntityTo(entity, pos.getX(), pos.getY(), pos.getZ());
+	}
+
 	public static boolean teleportEntityTo(Entity entity, double x, double y, double z) {
 
 		if (entity instanceof EntityLivingBase) {
 			return teleportEntityTo((EntityLivingBase) entity, x, y, z);
 		} else {
 			entity.setLocationAndAngles(x, y, z, entity.rotationYaw, entity.rotationPitch);
-			entity.worldObj.playSoundAtEntity(entity, "mob.endermen.portal", 1.0F, 1.0F);
+			entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
 		}
 		return true;
 	}
@@ -236,8 +231,8 @@ public class CoreUtils {
 			return false;
 		}
 
-		entity.setPositionAndUpdate(event.targetX, event.targetY, event.targetZ);
-		entity.worldObj.playSoundAtEntity(entity, "mob.endermen.portal", 1.0F, 1.0F);
+		entity.setPositionAndUpdate(event.getTargetX(), event.getTargetY(), event.getTargetZ());
+		entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
 
 		return true;
 	}

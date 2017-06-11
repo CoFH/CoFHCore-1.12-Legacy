@@ -2,7 +2,6 @@ package cofh.core.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
 import net.minecraft.entity.player.EntityPlayer;
 
 public abstract class PacketBase {

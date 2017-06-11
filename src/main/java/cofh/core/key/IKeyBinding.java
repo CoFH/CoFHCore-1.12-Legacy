@@ -4,14 +4,14 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public interface IKeyBinding {
 
-	public boolean keyPress();
+	String getUUID();
 
-	public void keyPressServer(EntityPlayer player);
+	int getKey();
 
-	public String getUUID();
+	boolean hasServerSide();
 
-	public int getKey();
+	boolean keyPressClient();
 
-	public boolean hasServerSide();
+	boolean keyPressServer(EntityPlayer player);
 
 }

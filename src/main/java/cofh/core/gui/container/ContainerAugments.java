@@ -2,7 +2,6 @@ package cofh.core.gui.container;
 
 import cofh.core.gui.slot.SlotPlayerAugment;
 import cofh.lib.gui.container.ContainerBase;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 

@@ -1,19 +1,17 @@
 package cofh.core.world.decoration;
 
-import cofh.api.world.IGeneratorParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.world.IGeneratorParser;
 import cofh.lib.world.WorldGenStalactite;
 import cofh.lib.world.WorldGenStalagmite;
-import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.init.Blocks;
-import net.minecraft.world.gen.feature.WorldGenerator;
-
-import org.apache.logging.log4j.Logger;
 
 public class StalagmiteParser implements IGeneratorParser {
 
@@ -25,45 +23,45 @@ public class StalagmiteParser implements IGeneratorParser {
 	}
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
-			List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String generatorName, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
 
-		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
-		if (!genObject.has("genBody")) {
-			log.info("Entry does not specify genBody for 'stalagmite' generator. Using air.");
-			list.add(new WeightedRandomBlock(Blocks.air));
+		// TODO: these names need revised
+		ArrayList<WeightedRandomBlock> list = new ArrayList<>();
+		if (!genObject.hasPath("gen-body")) {
+			log.info("Entry does not specify gen body for 'stalagmite' generator. Using air.");
+			list.add(new WeightedRandomBlock(Blocks.AIR));
 		} else {
-			if (!FeatureParser.parseResList(genObject.get("genBody"), list, false)) {
-				log.warn("Entry specifies invalid genBody for 'stalagmite' generator! Using air!");
+			if (!FeatureParser.parseResList(genObject.root().get("gen-body"), list, false)) {
+				log.warn("Entry specifies invalid gen body for 'stalagmite' generator! Using air!");
 				list.clear();
-				list.add(new WeightedRandomBlock(Blocks.air));
+				list.add(new WeightedRandomBlock(Blocks.AIR));
 			}
 		}
 		WorldGenStalagmite r = stalactite ? new WorldGenStalactite(resList, matList, list) : new WorldGenStalagmite(resList, matList, list);
 		{
-			if (genObject.has("minHeight")) {
-				r.minHeight = genObject.get("minHeight").getAsInt();
+			if (genObject.hasPath("min-height")) {
+				r.minHeight = genObject.getInt("min-height");
 			}
-			if (genObject.has("heightVariance")) {
-				r.heightVariance = genObject.get("heightVariance").getAsInt();
+			if (genObject.hasPath("height-variance")) {
+				r.heightVariance = genObject.getInt("height-variance");
 			}
-			if (genObject.has("sizeVariance")) {
-				r.sizeVariance = genObject.get("sizeVariance").getAsInt();
+			if (genObject.hasPath("size-variance")) {
+				r.sizeVariance = genObject.getInt("size-variance");
 			}
-			if (genObject.has("heightMod")) {
-				r.heightMod = genObject.get("heightMod").getAsInt();
+			if (genObject.hasPath("height-mod")) {
+				r.heightMod = genObject.getInt("height-mod");
 			}
-			if (genObject.has("genSize")) {
-				r.genSize = genObject.get("genSize").getAsInt();
+			if (genObject.hasPath("gen-size")) {
+				r.genSize = genObject.getInt("gen-size");
 			}
-			if (genObject.has("smooth")) {
-				r.smooth = genObject.get("smooth").getAsBoolean();
+			if (genObject.hasPath("smooth")) {
+				r.smooth = genObject.getBoolean("smooth");
 			}
-			if (genObject.has("fat")) {
-				r.fat = genObject.get("fat").getAsBoolean();
+			if (genObject.hasPath("fat")) {
+				r.fat = genObject.getBoolean("fat");
 			}
-			if (genObject.has("altSinc")) {
-				r.altSinc = genObject.get("altSinc").getAsBoolean();
+			if (genObject.hasPath("alt-sinc")) {
+				r.altSinc = genObject.getBoolean("alt-sinc");
 			}
 		}
 		return r;

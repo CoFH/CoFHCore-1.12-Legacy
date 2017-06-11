@@ -1,11 +1,6 @@
 package cofh.asm.relauncher;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
+import java.lang.annotation.*;
 
 /**
  * This annotation will replace the bytecode of the annotated method with that of the named method if the <tt>value</tt> condition is not met.
@@ -19,17 +14,17 @@ import java.lang.annotation.Target;
  * Mod and API values can have a version range associated e.g., "mod:ThermalExpansion@[4.0.0, 4.1.0)"
  */
 @Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.METHOD })
+@Retention (RetentionPolicy.RUNTIME)
+@Target ({ ElementType.METHOD })
 public @interface Substitutable {
 
-	public String[] value();
+	String[] value();
 
-	public String method();
+	String method();
 
 	/**
 	 * The side from which this method will *always* be substituted.
 	 */
-	public CoFHSide side() default CoFHSide.NONE;
+	CoFHSide side() default CoFHSide.NONE;
 
 }

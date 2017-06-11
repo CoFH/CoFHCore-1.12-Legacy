@@ -2,19 +2,20 @@ package cofh.core.command;
 
 import cofh.asm.LoadingPlugin;
 import cofh.lib.util.helpers.StringHelper;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
-
-import java.util.List;
-import java.util.Set;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandNotFoundException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class CommandHandler extends CommandBase {
 
@@ -22,7 +23,7 @@ public class CommandHandler extends CommandBase {
 
 	public static CommandHandler instance = new CommandHandler();
 
-	private static TMap<String, ISubCommand> commands = new THashMap<String, ISubCommand>();
+	private static TMap<String, ISubCommand> commands = new THashMap<>();
 
 	static {
 		registerSubCommand(CommandHelp.instance);
@@ -38,9 +39,9 @@ public class CommandHandler extends CommandBase {
 		registerSubCommand(CommandReloadWorldgen.instance);
 		registerSubCommand(CommandCountBlock.instance);
 		registerSubCommand(CommandHand.instance);
+		registerSubCommand(CommandFriend.instance);
 
 		if (!LoadingPlugin.obfuscated) { // in-dev commands
-			registerSubCommand(CommandFixMojangsShit.instance);
 		}
 	}
 
@@ -77,7 +78,7 @@ public class CommandHandler extends CommandBase {
 
 		if (getCommandExists(name)) {
 			return sender.canCommandSenderUseCommand(permission, "cofh " + name) ||
-			// this check below is because mojang is incompetent, as always
+					// this check below is because mojang is incompetent, as always
 					(sender instanceof EntityPlayerMP && permission <= 0);
 		}
 		return false;
@@ -105,7 +106,7 @@ public class CommandHandler extends CommandBase {
 				}
 			}
 		}
-		CommandBase.func_152373_a(sender, dummy, info, data);
+		CommandBase.notifyCommandListener(sender, dummy, info, data);
 	}
 
 	@Override
@@ -115,9 +116,9 @@ public class CommandHandler extends CommandBase {
 	}
 
 	@Override
-	public List getCommandAliases() {
+	public List<String> getCommandAliases() {
 
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -127,13 +128,13 @@ public class CommandHandler extends CommandBase {
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender sender) {
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
 
 		return true;
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] arguments) {
+	public void execute(MinecraftServer minecraftServer, ICommandSender sender, String[] arguments) throws CommandException {
 
 		if (arguments.length < 1) {
 			arguments = new String[] { "help" };
@@ -141,21 +142,21 @@ public class CommandHandler extends CommandBase {
 		ISubCommand command = commands.get(arguments[0]);
 		if (command != null) {
 			if (canUseCommand(sender, command.getPermissionLevel(), command.getCommandName())) {
-				command.handleCommand(sender, arguments);
+				command.handleCommand(minecraftServer, sender, arguments);
 				return;
 			}
 			throw new CommandException("commands.generic.permission");
 		}
-		throw new CommandNotFoundException("info.cofh.command.notFound");
+		throw new CommandNotFoundException("chat.cofh.command.notFound");
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] par2ArrayOfStr) {
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
 
-		if (par2ArrayOfStr.length == 1) {
-			return getListOfStringsFromIterableMatchingLastWord(par2ArrayOfStr, commands.keySet());
-		} else if (commands.containsKey(par2ArrayOfStr[0])) {
-			return commands.get(par2ArrayOfStr[0]).addTabCompletionOptions(par1ICommandSender, par2ArrayOfStr);
+		if (args.length == 1) {
+			return getListOfStringsMatchingLastWord(args, commands.keySet());
+		} else if (commands.containsKey(args[0])) {
+			return commands.get(args[0]).addTabCompletionOptions(server, sender, args);
 		}
 		return null;
 	}
@@ -190,7 +191,7 @@ public class CommandHandler extends CommandBase {
 		}
 
 		@Override
-		public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_) {
+		public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
 		}
 

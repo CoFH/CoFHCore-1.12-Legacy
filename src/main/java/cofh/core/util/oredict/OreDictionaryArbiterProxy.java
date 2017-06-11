@@ -2,16 +2,14 @@ package cofh.core.util.oredict;
 
 import cofh.lib.util.OreDictionaryProxy;
 import cofh.lib.util.helpers.ItemHelper;
-
 import net.minecraft.item.ItemStack;
 
 /**
  * If CoFHCore is present, an instance of this class is initialized by the OreDictionaryArbiter and the functionality in ItemHelper is much improved.
- *
+ * <p>
  * Translation: Don't touch.
  *
  * @author King Lemming
- *
  */
 public class OreDictionaryArbiterProxy extends OreDictionaryProxy {
 

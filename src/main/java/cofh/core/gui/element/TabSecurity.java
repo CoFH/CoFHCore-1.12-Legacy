@@ -1,21 +1,18 @@
 package cofh.core.gui.element;
 
-import cofh.CoFHCore;
-import cofh.api.tileentity.ISecurable;
+import cofh.api.core.ISecurable;
+import cofh.core.init.CoreTextures;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.TabBase;
-import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.List;
 import java.util.UUID;
 
-import org.lwjgl.opengl.GL11;
-
 public class TabSecurity extends TabBase {
 
-	public static boolean enable;
-	public static int defaultSide = 1;
+	public static int defaultSide = 0;
 	public static int defaultHeaderColor = 0xe1c92f;
 	public static int defaultSubHeaderColor = 0xaaafb8;
 	public static int defaultTextColor = 0x000000;
@@ -23,20 +20,8 @@ public class TabSecurity extends TabBase {
 
 	// public static int defaultBackgroundColor = 0xe66a10;
 
-	public static void initialize() {
-
-		String category = "Tab.Security";
-		// enable = CoFHCore.configClient.get(category, "Enable", true);
-		defaultSide = MathHelper.clamp(CoFHCore.configClient.get(category, "Side", defaultSide), 0, 1);
-		defaultHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorHeader", defaultHeaderColor), 0, 0xffffff);
-		defaultSubHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorSubHeader", defaultSubHeaderColor), 0, 0xffffff);
-		defaultTextColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorText", defaultTextColor), 0, 0xffffff);
-		defaultBackgroundColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorBackground", defaultBackgroundColor), 0, 0xffffff);
-		CoFHCore.configClient.save();
-	}
-
-	ISecurable myContainer;
-	UUID myPlayer;
+	private ISecurable myContainer;
+	private UUID myPlayer;
 
 	public TabSecurity(GuiBase gui, ISecurable container, UUID playerName) {
 
@@ -97,17 +82,17 @@ public class TabSecurity extends TabBase {
 		if (28 <= mouseX && mouseX < 44 && 20 <= mouseY && mouseY < 36) {
 			if (!myContainer.getAccess().isPublic()) {
 				myContainer.setAccess(ISecurable.AccessMode.PUBLIC);
-				GuiBase.playSound("random.click", 1.0F, 0.4F);
+				GuiBase.playClickSound(1.0F, 0.4F);
 			}
 		} else if (48 <= mouseX && mouseX < 64 && 20 <= mouseY && mouseY < 36) {
-			if (!myContainer.getAccess().isRestricted()) {
-				myContainer.setAccess(ISecurable.AccessMode.RESTRICTED);
-				GuiBase.playSound("random.click", 1.0F, 0.6F);
+			if (!myContainer.getAccess().isFriendsOnly()) {
+				myContainer.setAccess(ISecurable.AccessMode.FRIENDS);
+				GuiBase.playClickSound(1.0F, 0.6F);
 			}
 		} else if (68 <= mouseX && mouseX < 84 && 20 <= mouseY && mouseY < 36) {
 			if (!myContainer.getAccess().isPrivate()) {
 				myContainer.setAccess(ISecurable.AccessMode.PRIVATE);
-				GuiBase.playSound("random.click", 1.0F, 0.8F);
+				GuiBase.playClickSound(1.0F, 0.8F);
 			}
 		}
 		return true;
@@ -124,44 +109,44 @@ public class TabSecurity extends TabBase {
 		float colorR = (backgroundColor >> 16 & 255) / 255.0F * 0.6F;
 		float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
 		float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
-		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
+		GlStateManager.color(colorR, colorG, colorB, 1.0F);
 		gui.drawTexturedModalRect(posX() + 24, posY + 16, 16, 20, 64, 24);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
 	protected void drawForeground() {
 
 		if (myContainer.getAccess().isPublic()) {
-			drawTabIcon("IconAccessPublic");
-		} else if (myContainer.getAccess().isRestricted()) {
-			drawTabIcon("IconAccessFriends");
+			drawTabIcon(CoreTextures.ICON_ACCESS_PUBLIC);
+		} else if (myContainer.getAccess().isFriendsOnly()) {
+			drawTabIcon(CoreTextures.ICON_ACCESS_FRIENDS);
 		} else if (myContainer.getAccess().isPrivate()) {
-			drawTabIcon("IconAccessPrivate");
+			drawTabIcon(CoreTextures.ICON_ACCESS_PRIVATE);
 		}
 		if (!isFullyOpened()) {
 			return;
 		}
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.security"), posXOffset() + 18, posY + 6, headerColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.accessMode") + ":", posXOffset() + 6, posY + 42, subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.access") + ":", posXOffset() + 6, posY + 42, subheaderColor);
 
 		if (myContainer.getAccess().isPublic()) {
-			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 1);
-			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 0);
-			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 0);
+			gui.drawButton(CoreTextures.ICON_ACCESS_PUBLIC, posX() + 28, posY + 20, 1);
+			gui.drawButton(CoreTextures.ICON_ACCESS_FRIENDS, posX() + 48, posY + 20, 0);
+			gui.drawButton(CoreTextures.ICON_ACCESS_PRIVATE, posX() + 68, posY + 20, 0);
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPublic"), posXOffset() + 14, posY + 54, textColor);
-		} else if (myContainer.getAccess().isRestricted()) {
-			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 0);
-			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 1);
-			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 0);
+		} else if (myContainer.getAccess().isFriendsOnly()) {
+			gui.drawButton(CoreTextures.ICON_ACCESS_PUBLIC, posX() + 28, posY + 20, 0);
+			gui.drawButton(CoreTextures.ICON_ACCESS_FRIENDS, posX() + 48, posY + 20, 1);
+			gui.drawButton(CoreTextures.ICON_ACCESS_PRIVATE, posX() + 68, posY + 20, 0);
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessRestricted"), posXOffset() + 14, posY + 54, textColor);
 		} else if (myContainer.getAccess().isPrivate()) {
-			gui.drawButton("IconAccessPublic", posX() + 28, posY + 20, 1, 0);
-			gui.drawButton("IconAccessFriends", posX() + 48, posY + 20, 1, 0);
-			gui.drawButton("IconAccessPrivate", posX() + 68, posY + 20, 1, 1);
+			gui.drawButton(CoreTextures.ICON_ACCESS_PUBLIC, posX() + 28, posY + 20, 0);
+			gui.drawButton(CoreTextures.ICON_ACCESS_FRIENDS, posX() + 48, posY + 20, 0);
+			gui.drawButton(CoreTextures.ICON_ACCESS_PRIVATE, posX() + 68, posY + 20, 1);
 			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPrivate"), posXOffset() + 14, posY + 54, textColor);
 		}
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

@@ -1,9 +1,11 @@
 package cofh.core.entity;
 
-import net.minecraft.command.IEntitySelector;
+import com.google.common.base.Predicate;
 import net.minecraft.entity.Entity;
 
-public class EntitySelectorInRangeByType implements IEntitySelector {
+import javax.annotation.Nullable;
+
+public class EntitySelectorInRangeByType implements Predicate<Entity> {
 
 	private final double origX;
 	private final double origY;
@@ -26,9 +28,11 @@ public class EntitySelectorInRangeByType implements IEntitySelector {
 	}
 
 	@Override
-	public boolean isEntityApplicable(Entity entity) {
-
+	public boolean apply(@Nullable Entity entity) {
 		// Out of range? Not applicable.
+		if (entity == null) {
+			return false;
+		}
 		if (entity.getDistanceSq(origX, origY, origZ) > distance * distance) {
 			return false;
 		}
@@ -45,5 +49,4 @@ public class EntitySelectorInRangeByType implements IEntitySelector {
 		// ...otherwise, not.
 		return false;
 	}
-
 }

@@ -1,41 +1,44 @@
 package cofh.core.world.decoration;
 
-import cofh.api.world.IGeneratorParser;
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.world.IGeneratorParser;
 import cofh.lib.world.WorldGenBoulder;
-import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
-
-import net.minecraft.world.gen.feature.WorldGenerator;
-
-import org.apache.logging.log4j.Logger;
 
 public class BoulderParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
-			List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String name, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
+
+		int clusterSize = genObject.getInt("diameter");
+		if (clusterSize <= 0) {
+			log.warn("Invalid diameter for generator '%s'", name);
+			return null;
+		}
 
 		WorldGenBoulder r = new WorldGenBoulder(resList, clusterSize, matList);
 		{
-			if (genObject.has("sizeVariance")) {
-				r.sizeVariance = genObject.get("sizeVariance").getAsInt();
+			if (genObject.hasPath("size-variance")) {
+				r.sizeVariance = genObject.getInt("size-variance");
 			}
-			if (genObject.has("count")) {
-				r.clusters = genObject.get("count").getAsInt();
+			if (genObject.hasPath("count")) {
+				r.clusters = genObject.getInt("count");
 			}
-			if (genObject.has("countVariance")) {
-				r.clusterVariance = genObject.get("countVariance").getAsInt();
+			if (genObject.hasPath("count-variance")) {
+				r.clusterVariance = genObject.getInt("count-variance");
 			}
-			if (genObject.has("hollow")) {
-				r.hollow = genObject.get("hollow").getAsBoolean();
+			if (genObject.hasPath("hollow")) {
+				r.hollow = genObject.getBoolean("hollow");
 			}
-			if (genObject.has("hollowSize")) {
-				r.hollowAmt = genObject.get("hollowSize").getAsFloat();
+			if (genObject.hasPath("hollow-size")) {
+				r.hollowAmt = (float) genObject.getDouble("hollow-size");
 			}
-			if (genObject.has("hollowVariance")) {
-				r.hollowVar = genObject.get("hollowVariance").getAsFloat();
+			if (genObject.hasPath("hollow-variance")) {
+				r.hollowVar = (float) genObject.getDouble("hollow-variance");
 			}
 		}
 		return r;

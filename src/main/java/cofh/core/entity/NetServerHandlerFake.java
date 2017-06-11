@@ -1,45 +1,22 @@
 package cofh.core.entity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.*;
+import net.minecraft.network.play.client.*;
+import net.minecraft.network.play.server.SPacketPlayerPosLook.EnumFlags;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.crypto.SecretKey;
 import java.net.InetAddress;
 import java.net.SocketAddress;
-import javax.crypto.SecretKey;
-
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.EnumConnectionState;
-import net.minecraft.network.INetHandler;
-import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.client.C00PacketKeepAlive;
-import net.minecraft.network.play.client.C01PacketChatMessage;
-import net.minecraft.network.play.client.C02PacketUseEntity;
-import net.minecraft.network.play.client.C03PacketPlayer;
-import net.minecraft.network.play.client.C07PacketPlayerDigging;
-import net.minecraft.network.play.client.C08PacketPlayerBlockPlacement;
-import net.minecraft.network.play.client.C09PacketHeldItemChange;
-import net.minecraft.network.play.client.C0APacketAnimation;
-import net.minecraft.network.play.client.C0BPacketEntityAction;
-import net.minecraft.network.play.client.C0CPacketInput;
-import net.minecraft.network.play.client.C0DPacketCloseWindow;
-import net.minecraft.network.play.client.C0EPacketClickWindow;
-import net.minecraft.network.play.client.C0FPacketConfirmTransaction;
-import net.minecraft.network.play.client.C10PacketCreativeInventoryAction;
-import net.minecraft.network.play.client.C11PacketEnchantItem;
-import net.minecraft.network.play.client.C12PacketUpdateSign;
-import net.minecraft.network.play.client.C13PacketPlayerAbilities;
-import net.minecraft.network.play.client.C14PacketTabComplete;
-import net.minecraft.network.play.client.C15PacketClientSettings;
-import net.minecraft.network.play.client.C16PacketClientStatus;
-import net.minecraft.network.play.client.C17PacketCustomPayload;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.IChatComponent;
+import java.util.Set;
 
 public class NetServerHandlerFake extends NetHandlerPlayServer {
 
@@ -47,7 +24,7 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 
 		public NetworkManagerFake() {
 
-			super(false);
+			super(EnumPacketDirection.CLIENTBOUND);
 		}
 
 		@Override
@@ -76,7 +53,12 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 		}
 
 		@Override
-		public void scheduleOutboundPacket(Packet p_150725_1_, GenericFutureListener... p_150725_2_) {
+		public void sendPacket(Packet p_150725_1_) {
+
+		}
+
+		@Override
+		public void sendPacket(Packet<?> packetIn, GenericFutureListener<? extends Future<? super Void>> listener, GenericFutureListener<? extends Future<? super Void>>... listeners) {
 
 		}
 
@@ -86,14 +68,9 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 		}
 
 		@Override
-		public SocketAddress getSocketAddress() {
+		public SocketAddress getRemoteAddress() {
 
 			return null;
-		}
-
-		@Override
-		public void closeChannel(IChatComponent p_150718_1_) {
-
 		}
 
 		@Override
@@ -102,13 +79,13 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 			return false;
 		}
 
-		@SideOnly(Side.CLIENT)
+		@SideOnly (Side.CLIENT)
 		public static NetworkManager provideLanClient(InetAddress p_150726_0_, int p_150726_1_) {
 
 			return null;
 		}
 
-		@SideOnly(Side.CLIENT)
+		@SideOnly (Side.CLIENT)
 		public static NetworkManager provideLocalClient(SocketAddress p_150722_0_) {
 
 			return null;
@@ -132,13 +109,23 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 		}
 
 		@Override
-		public IChatComponent getExitMessage() {
+		public ITextComponent getExitMessage() {
 
 			return null;
 		}
 
 		@Override
+		public void setCompressionThreshold(int threshold) {
+
+		}
+
+		@Override
 		public void disableAutoRead() {
+
+		}
+
+		@Override
+		public void checkDisconnected() {
 
 		}
 
@@ -156,7 +143,7 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 	}
 
 	@Override
-	public void onNetworkTick() {
+	public void update() {
 
 	}
 
@@ -166,12 +153,22 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 	}
 
 	@Override
-	public void processInput(C0CPacketInput p_147358_1_) {
+	public void processInput(CPacketInput p_147358_1_) {
 
 	}
 
 	@Override
-	public void processPlayer(C03PacketPlayer p_147347_1_) {
+	public void processVehicleMove(CPacketVehicleMove packetIn) {
+
+	}
+
+	@Override
+	public void processConfirmTeleport(CPacketConfirmTeleport packetIn) {
+
+	}
+
+	@Override
+	public void processPlayer(CPacketPlayer p_147347_1_) {
 
 	}
 
@@ -181,17 +178,42 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 	}
 
 	@Override
-	public void processPlayerDigging(C07PacketPlayerDigging p_147345_1_) {
+	public void setPlayerLocation(double x, double y, double z, float yaw, float pitch, Set<EnumFlags> relativeSet) {
 
 	}
 
 	@Override
-	public void processPlayerBlockPlacement(C08PacketPlayerBlockPlacement p_147346_1_) {
+	public void processPlayerDigging(CPacketPlayerDigging p_147345_1_) {
 
 	}
 
 	@Override
-	public void onDisconnect(IChatComponent p_147231_1_) {
+	public void processRightClickBlock(CPacketPlayerTryUseItemOnBlock packetIn) {
+
+	}
+
+	@Override
+	public void processPlayerBlockPlacement(CPacketPlayerTryUseItem p_147346_1_) {
+
+	}
+
+	@Override
+	public void handleSpectate(CPacketSpectate packetIn) {
+
+	}
+
+	@Override
+	public void handleResourcePackStatus(CPacketResourcePackStatus packetIn) {
+
+	}
+
+	@Override
+	public void processSteerBoat(CPacketSteerBoat packetIn) {
+
+	}
+
+	@Override
+	public void onDisconnect(ITextComponent p_147231_1_) {
 
 	}
 
@@ -201,92 +223,87 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 	}
 
 	@Override
-	public void processHeldItemChange(C09PacketHeldItemChange p_147355_1_) {
+	public void processHeldItemChange(CPacketHeldItemChange p_147355_1_) {
 
 	}
 
 	@Override
-	public void processChatMessage(C01PacketChatMessage p_147354_1_) {
+	public void processChatMessage(CPacketChatMessage p_147354_1_) {
 
 	}
 
 	@Override
-	public void processAnimation(C0APacketAnimation p_147350_1_) {
+	public void handleAnimation(CPacketAnimation p_147350_1_) {
 
 	}
 
 	@Override
-	public void processEntityAction(C0BPacketEntityAction p_147357_1_) {
+	public void processEntityAction(CPacketEntityAction p_147357_1_) {
 
 	}
 
 	@Override
-	public void processUseEntity(C02PacketUseEntity p_147340_1_) {
+	public void processUseEntity(CPacketUseEntity p_147340_1_) {
 
 	}
 
 	@Override
-	public void processClientStatus(C16PacketClientStatus p_147342_1_) {
+	public void processClientStatus(CPacketClientStatus p_147342_1_) {
 
 	}
 
 	@Override
-	public void processCloseWindow(C0DPacketCloseWindow p_147356_1_) {
+	public void processCloseWindow(CPacketCloseWindow p_147356_1_) {
 
 	}
 
 	@Override
-	public void processClickWindow(C0EPacketClickWindow p_147351_1_) {
+	public void processClickWindow(CPacketClickWindow p_147351_1_) {
 
 	}
 
 	@Override
-	public void processEnchantItem(C11PacketEnchantItem p_147338_1_) {
+	public void processEnchantItem(CPacketEnchantItem p_147338_1_) {
 
 	}
 
 	@Override
-	public void processCreativeInventoryAction(C10PacketCreativeInventoryAction p_147344_1_) {
+	public void processCreativeInventoryAction(CPacketCreativeInventoryAction p_147344_1_) {
 
 	}
 
 	@Override
-	public void processConfirmTransaction(C0FPacketConfirmTransaction p_147339_1_) {
+	public void processConfirmTransaction(CPacketConfirmTransaction p_147339_1_) {
 
 	}
 
 	@Override
-	public void processUpdateSign(C12PacketUpdateSign p_147343_1_) {
+	public void processUpdateSign(CPacketUpdateSign p_147343_1_) {
 
 	}
 
 	@Override
-	public void processKeepAlive(C00PacketKeepAlive p_147353_1_) {
+	public void processKeepAlive(CPacketKeepAlive p_147353_1_) {
 
 	}
 
 	@Override
-	public void processPlayerAbilities(C13PacketPlayerAbilities p_147348_1_) {
+	public void processPlayerAbilities(CPacketPlayerAbilities p_147348_1_) {
 
 	}
 
 	@Override
-	public void processTabComplete(C14PacketTabComplete p_147341_1_) {
+	public void processTabComplete(CPacketTabComplete p_147341_1_) {
 
 	}
 
 	@Override
-	public void processClientSettings(C15PacketClientSettings p_147352_1_) {
+	public void processClientSettings(CPacketClientSettings p_147352_1_) {
 
 	}
 
 	@Override
-	public void processVanilla250Packet(C17PacketCustomPayload p_147349_1_) {
-
-	}
-
-	@Override
-	public void onConnectionStateTransition(EnumConnectionState p_147232_1_, EnumConnectionState p_147232_2_) {
+	public void processCustomPayload(CPacketCustomPayload p_147349_1_) {
 
 	}
 }

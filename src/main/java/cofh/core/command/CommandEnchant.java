@@ -1,18 +1,16 @@
 package cofh.core.command;
 
-import java.util.List;
-
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.CommandException;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.command.NumberInvalidException;
-import net.minecraft.command.WrongUsageException;
+import net.minecraft.command.*;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
 
+import java.util.List;
+
+//TODO Move command to Resource location ID's for enchantments.
 public class CommandEnchant implements ISubCommand {
 
 	public static ISubCommand instance = new CommandEnchant();
@@ -30,62 +28,70 @@ public class CommandEnchant implements ISubCommand {
 	}
 
 	@Override
-	public void handleCommand(ICommandSender sender, String[] args) {
+	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
 		int l = args.length;
 		int i = 1;
 		EntityPlayerMP player = null;
 		switch (l) {
 
-		case 0:
-		case 1:
-			sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
-			throw new WrongUsageException("info.cofh.command." + getCommandName() + ".syntax");
-		default:
-		case 4:
-		case 3:
-			try {
-				player = CommandBase.getPlayer(sender, args[i++]);
-			} catch (CommandException t) {
-				if (l != 3) {
-					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command.syntaxError"));
-					sender.addChatMessage(new ChatComponentTranslation("info.cofh.command." + getCommandName() + ".syntax"));
-					throw t;
+			case 0:
+			case 1:
+				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+				throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
+			default:
+			case 4:
+			case 3:
+				try {
+					player = CommandBase.getPlayer(server, sender, args[i++]);
+				} catch (CommandException t) {
+					if (l != 3) {
+						sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+						sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
+						throw t;
+					}
+					--i;
 				}
-				--i;
-			}
-		case 2:
-			if (player == null) {
-				player = CommandBase.getCommandSenderAsPlayer(sender);
-			}
-			int id = CommandBase.parseIntBounded(sender, args[i++], 0, Enchantment.enchantmentsList.length - 1);
-			int level = 1;
-			ItemStack itemstack = player.getCurrentEquippedItem();
-
-			if (itemstack == null) {
-				throw new CommandException("commands.enchant.noItem", new Object[0]);
-			} else {
-				Enchantment enchantment = Enchantment.enchantmentsList[id];
-
-				if (enchantment == null) {
-					throw new NumberInvalidException("commands.enchant.notFound", new Object[] { Integer.valueOf(id) });
+			case 2:
+				if (player == null) {
+					player = CommandBase.getCommandSenderAsPlayer(sender);
 				}
-				if (i < l) {
-					level = CommandBase.parseInt(sender, args[i++]);
+				String loc = args[i++];
+				int level = 1;
+				ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
+				if (stack == null) {
+					stack = player.getHeldItem(EnumHand.OFF_HAND);
 				}
 
-				itemstack.addEnchantment(enchantment, level);
-				CommandHandler.logAdminCommand(sender, this, "commands.enchant.success");
-			}
+				if (stack == null) {
+					throw new CommandException("commands.enchant.noItem", new Object[0]);
+				} else {
+					Enchantment enchantment;
+
+					try {
+						enchantment = Enchantment.getEnchantmentByID(CommandBase.parseInt(loc, 0, Enchantment.REGISTRY.getKeys().size() - 1));
+					} catch (NumberInvalidException e) {
+						enchantment = Enchantment.getEnchantmentByLocation(loc);
+					}
+
+					if (enchantment == null) {
+						throw new NumberInvalidException("commands.enchant.notFound", new Object[] { Integer.valueOf(Enchantment.getEnchantmentID(enchantment)) });
+					}
+					if (i < l) {
+						level = CommandBase.parseInt(args[i++]);
+					}
+					stack.addEnchantment(enchantment, level);
+					CommandHandler.logAdminCommand(sender, this, "commands.enchant.success");
+				}
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings ("unchecked")
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
+	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
 		if (args.length == 2) {
-			return CommandBase.getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames());
+			return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
 		}
 		return null;
 	}

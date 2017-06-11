@@ -1,12 +1,14 @@
 package cofh.core.gui.element;
 
+import cofh.core.init.CoreTextures;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.TabBase;
 import cofh.lib.util.helpers.MathHelper;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 
+import java.io.IOException;
 import java.util.List;
-
-import org.lwjgl.opengl.GL11;
 
 public abstract class TabScrolledText extends TabBase {
 
@@ -25,7 +27,7 @@ public abstract class TabScrolledText extends TabBase {
 		maxFirstLine = myText.size() - numLines;
 	}
 
-	public abstract String getIcon();
+	public abstract TextureAtlasSprite getIcon();
 
 	public abstract String getTitle();
 
@@ -37,20 +39,20 @@ public abstract class TabScrolledText extends TabBase {
 			return;
 		}
 		if (firstLine > 0) {
-			gui.drawIcon("IconArrowUp1", posXOffset() + maxWidth - 20, posY + 16, 1);
+			gui.drawIcon(CoreTextures.ICON_ARROW_UP, posXOffset() + maxWidth - 20, posY + 16);
 		} else {
-			gui.drawIcon("IconArrowUp0", posXOffset() + maxWidth - 20, posY + 16, 1);
+			gui.drawIcon(CoreTextures.ICON_ARROW_UP_INACTIVE, posXOffset() + maxWidth - 20, posY + 16);
 		}
 		if (firstLine < maxFirstLine) {
-			gui.drawIcon("IconArrowDown1", posXOffset() + maxWidth - 20, posY + 76, 1);
+			gui.drawIcon(CoreTextures.ICON_ARROW_DOWN, posXOffset() + maxWidth - 20, posY + 76);
 		} else {
-			gui.drawIcon("IconArrowDown0", posXOffset() + maxWidth - 20, posY + 76, 1);
+			gui.drawIcon(CoreTextures.ICON_ARROW_DOWN_INACTIVE, posXOffset() + maxWidth - 20, posY + 76);
 		}
 		getFontRenderer().drawStringWithShadow(getTitle(), posXOffset() + 18, posY + 6, headerColor);
 		for (int i = firstLine; i < firstLine + numLines; i++) {
 			getFontRenderer().drawString(myText.get(i), posXOffset() + 2, posY + 20 + (i - firstLine) * getFontRenderer().FONT_HEIGHT, textColor);
 		}
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
@@ -58,12 +60,11 @@ public abstract class TabScrolledText extends TabBase {
 
 		if (!isFullyOpened()) {
 			list.add(getTitle());
-			return;
 		}
 	}
 
 	@Override
-	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
+	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) throws IOException {
 
 		int shiftedMouseX = mouseX - this.posX();
 		int shiftedMouseY = mouseY - this.posY;
@@ -71,11 +72,9 @@ public abstract class TabScrolledText extends TabBase {
 		if (!isFullyOpened()) {
 			return false;
 		}
-
 		if (shiftedMouseX < 108) {
 			return super.onMousePressed(mouseX, mouseY, mouseButton);
 		}
-
 		if (shiftedMouseY < 52) {
 			firstLine = MathHelper.clamp(firstLine - 1, 0, maxFirstLine);
 		} else {

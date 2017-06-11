@@ -1,13 +1,14 @@
 package cofh.core.command;
 
-import cofh.api.world.IFeatureGenerator;
 import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
+import cofh.lib.world.IFeatureGenerator;
 import com.google.common.base.Throwables;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
 
 import java.util.List;
-
-import net.minecraft.command.ICommandSender;
 
 public class CommandReloadWorldgen implements ISubCommand {
 
@@ -26,24 +27,23 @@ public class CommandReloadWorldgen implements ISubCommand {
 	}
 
 	@Override
-	public void handleCommand(ICommandSender sender, String[] args) {
+	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
 		for (IFeatureGenerator g : FeatureParser.parsedFeatures) {
 			WorldHandler.instance.removeFeature(g);
 		}
-
 		FeatureParser.parsedFeatures.clear();
 
 		try {
-			FeatureParser.parseGenerationFile();
+			FeatureParser.parseGenerationFiles();
 		} catch (Throwable t) {
 			Throwables.propagate(t);
 		}
-		CommandHandler.logAdminCommand(sender, this, "info.cofh.command.reloadworldgen.success");
+		CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.reloadworldgen.success");
 	}
 
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
+	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
 		return null;
 	}

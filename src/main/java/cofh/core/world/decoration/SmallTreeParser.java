@@ -1,43 +1,36 @@
 package cofh.core.world.decoration;
 
-import cofh.api.world.IGeneratorParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.world.IGeneratorParser;
 import cofh.lib.world.WorldGenSmallTree;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.world.gen.feature.WorldGenerator;
-
-import org.apache.logging.log4j.Logger;
-
 public class SmallTreeParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
-			List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String name, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
 
-		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
-		ArrayList<WeightedRandomBlock> blocks = new ArrayList<WeightedRandomBlock>();
-		if (genObject.has("genMaterial")) {
-			JsonElement entry = genObject.get("genMaterial");
-			if (!entry.isJsonNull() && !FeatureParser.parseResList(entry, blocks, false)) {
-				log.warn("Entry specifies invalid genMaterial for 'smalltree' generator! Using air!");
+		ArrayList<WeightedRandomBlock> list = new ArrayList<>();
+		ArrayList<WeightedRandomBlock> blocks = new ArrayList<>();
+		if (genObject.hasPath("surface")) {
+			if (!FeatureParser.parseResList(genObject.root().get("surface"), blocks, false)) {
+				log.warn("Entry specifies invalid surface for 'smalltree' generator! Using dirt!");
 				blocks.clear();
-				blocks.add(new WeightedRandomBlock(Blocks.air));
+				blocks.add(new WeightedRandomBlock(Blocks.GRASS));
+				blocks.add(new WeightedRandomBlock(Blocks.DIRT));
 			}
-		} else {
-			log.info("Entry does not specify genMaterial for 'smalltree' generator! There are no restrictions!");
 		}
 
-		if (genObject.has("leaves")) {
-			list = new ArrayList<WeightedRandomBlock>();
-			JsonElement entry = genObject.get("leaves");
-			if (!entry.isJsonNull() && !FeatureParser.parseResList(entry, list, true)) {
+		if (genObject.hasPath("leaves")) {
+			list = new ArrayList<>();
+			if (!FeatureParser.parseResList(genObject.root().get("leaves"), list, true)) {
 				log.warn("Entry specifies invalid leaves for 'smalltree' generator!");
 				list.clear();
 			}
@@ -45,28 +38,30 @@ public class SmallTreeParser implements IGeneratorParser {
 			log.info("Entry does not specify leaves for 'smalltree' generator! There are none!");
 		}
 
-		WorldGenSmallTree r = new WorldGenSmallTree(resList, list, blocks);
+		WorldGenSmallTree r = new WorldGenSmallTree(resList, list, matList);
 		{
-			r.genSurface = matList.toArray(new WeightedRandomBlock[matList.size()]);
-
-			if (genObject.has("minHeight")) {
-				r.minHeight = genObject.get("minHeight").getAsInt();
-			}
-			if (genObject.has("heightVariance")) {
-				r.heightVariance = genObject.get("heightVariance").getAsInt();
+			if (blocks.size() > 0) {
+				r.genSurface = blocks.toArray(new WeightedRandomBlock[blocks.size()]);
 			}
 
-			if (genObject.has("treeChecks")) {
-				r.treeChecks = genObject.get("treeChecks").getAsBoolean();
+			if (genObject.hasPath("min-height")) {
+				r.minHeight = genObject.getInt("min-height");
 			}
-			if (genObject.has("relaxedGrowth")) {
-				r.relaxedGrowth = genObject.get("relaxedGrowth").getAsBoolean();
+			if (genObject.hasPath("height-variance")) {
+				r.heightVariance = genObject.getInt("height-variance");
 			}
-			if (genObject.has("waterLoving")) {
-				r.waterLoving = genObject.get("waterLoving").getAsBoolean();
+
+			if (genObject.hasPath("tree-checks")) {
+				r.treeChecks = genObject.getBoolean("tree-checks");
 			}
-			if (genObject.has("leafVariance")) {
-				r.leafVariance = genObject.get("leafVariance").getAsBoolean();
+			if (genObject.hasPath("relaxed-growth")) {
+				r.relaxedGrowth = genObject.getBoolean("relaxed-growth");
+			}
+			if (genObject.hasPath("water-loving")) {
+				r.waterLoving = genObject.getBoolean("water-loving");
+			}
+			if (genObject.hasPath("leaf-variance")) {
+				r.leafVariance = genObject.getBoolean("leaf-variance");
 			}
 		}
 		return r;

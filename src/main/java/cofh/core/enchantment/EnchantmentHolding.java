@@ -1,16 +1,19 @@
 package cofh.core.enchantment;
 
-import cofh.api.item.IInventoryContainerItem;
-
+import cofh.core.init.CoreEnchantments;
+import cofh.core.item.IEnchantableItem;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
 public class EnchantmentHolding extends Enchantment {
 
-	public EnchantmentHolding(int id) {
+	public static boolean enable = true;
 
-		super(id, 2, EnumEnchantmentType.all);
+	public EnchantmentHolding(String id) {
+
+		super(Rarity.RARE, CoreEnchantments.ENCHANTMENT_TYPE_STORAGE, EntityEquipmentSlot.values());
+		setRegistryName(id);
 	}
 
 	@Override
@@ -40,7 +43,13 @@ public class EnchantmentHolding extends Enchantment {
 	@Override
 	public boolean canApply(ItemStack stack) {
 
-		return (stack.getItem() instanceof IInventoryContainerItem);
+		return enable && stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this);
+	}
+
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack) {
+
+		return canApply(stack);
 	}
 
 	@Override

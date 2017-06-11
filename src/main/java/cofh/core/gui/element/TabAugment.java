@@ -1,50 +1,34 @@
 package cofh.core.gui.element;
 
-import cofh.CoFHCore;
+import cofh.core.init.CoreTextures;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import cofh.lib.gui.container.IAugmentableContainer;
 import cofh.lib.gui.element.TabBase;
-import cofh.lib.render.RenderHelper;
-import cofh.lib.util.helpers.MathHelper;
+import cofh.lib.util.helpers.RenderHelper;
 import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
 public class TabAugment extends TabBase {
 
-	public static boolean enable;
 	public static int defaultSide = 1;
 	public static int defaultHeaderColor = 0xe1c92f;
 	public static int defaultSubHeaderColor = 0xaaafb8;
 	public static int defaultTextColor = 0x000000;
 	public static int defaultBackgroundColor = 0x089e4c;
 
-	public static void initialize() {
-
-		String category = "Tab.Augment";
-		// enable = CoFHCore.configClient.get(category, "Enable", true);
-		defaultSide = MathHelper.clamp(CoFHCore.configClient.get(category, "Side", defaultSide), 0, 1);
-		defaultHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorHeader", defaultHeaderColor), 0, 0xffffff);
-		defaultSubHeaderColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorSubHeader", defaultSubHeaderColor), 0, 0xffffff);
-		defaultTextColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorText", defaultTextColor), 0, 0xffffff);
-		defaultBackgroundColor = MathHelper.clamp(CoFHCore.configClient.get(category, "ColorBackground", defaultBackgroundColor), 0, 0xffffff);
-		CoFHCore.configClient.save();
-	}
-
-	public static ResourceLocation GRID_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "Slot_Grid_Augment.png");
+	public static ResourceLocation GRID_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "slot_grid_augment.png");
 
 	IAugmentableContainer myContainer;
 
-	int numAugments = 0;
-	int slotsBorderX1 = 18;
-	int slotsBorderX2 = slotsBorderX1 + 60;
-	int slotsBorderY1 = 20;
-	int slotsBorderY2 = slotsBorderY1 + 42;
+	private int numAugments = 0;
+	private int slotsBorderX1 = 18;
+	private int slotsBorderX2 = slotsBorderX1 + 60;
+	private int slotsBorderY1 = 20;
+	private int slotsBorderY2 = slotsBorderY1 + 42;
 
 	public TabAugment(GuiBase gui, IAugmentableContainer container) {
 
@@ -66,22 +50,23 @@ public class TabAugment extends TabBase {
 
 		numAugments = myContainer.getAugmentSlots().length;
 
-		for (int i = 0; i < numAugments; i++) {
-			myContainer.getAugmentSlots()[i].xDisplayPosition = -gui.getGuiLeft() - 16;
-			myContainer.getAugmentSlots()[i].yDisplayPosition = -gui.getGuiTop() - 16;
-		}
-		myContainer.setAugmentLock(true);
-		switch (numAugments) {
-		case 4:
-			slotsBorderX1 += 9;
-		case 5:
-		case 6:
-			break;
-		default:
-			slotsBorderX1 += 9 * (3 - numAugments);
-			slotsBorderX2 = slotsBorderX1 + 18 * numAugments + 6;
-			slotsBorderY1 += 9;
-			slotsBorderY2 -= 9;
+		if (numAugments > 0) {
+			for (int i = 0; i < numAugments; i++) {
+				myContainer.getAugmentSlots()[i].xDisplayPosition = -gui.getGuiLeft() - 16;
+				myContainer.getAugmentSlots()[i].yDisplayPosition = -gui.getGuiTop() - 16;
+			}
+			switch (numAugments) {
+				case 4:
+					slotsBorderX1 += 9;
+				case 5:
+				case 6:
+					break;
+				default:
+					slotsBorderX1 += 9 * (3 - numAugments);
+					slotsBorderX2 = slotsBorderX1 + 18 * numAugments + 6;
+					slotsBorderY1 += 9;
+					slotsBorderY2 -= 9;
+			}
 		}
 		myContainer.setAugmentLock(true);
 	}
@@ -91,12 +76,18 @@ public class TabAugment extends TabBase {
 
 		if (!isFullyOpened()) {
 			list.add(StringHelper.localize("info.cofh.augmentation"));
+			if (numAugments == 0) {
+				list.add(StringHelper.YELLOW + StringHelper.localize("info.cofh.upgradeRequired"));
+			}
 		}
 	}
 
 	@Override
 	public boolean onMousePressed(int mouseX, int mouseY, int mouseButton) {
 
+		if (numAugments == 0) {
+			return true;
+		}
 		if (!isFullyOpened()) {
 			return false;
 		}
@@ -109,7 +100,6 @@ public class TabAugment extends TabBase {
 		if (mouseX < slotsBorderX1 + sideOffset() || mouseX >= slotsBorderX2 + sideOffset() || mouseY < slotsBorderY1 || mouseY >= slotsBorderY2) {
 			return false;
 		}
-
 		return true;
 	}
 
@@ -124,70 +114,75 @@ public class TabAugment extends TabBase {
 		float colorR = (backgroundColor >> 16 & 255) / 255.0F * 0.6F;
 		float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
 		float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
-		GL11.glColor4f(colorR, colorG, colorB, 1.0F);
+		GlStateManager.color(colorR, colorG, colorB, 1.0F);
 
-		if (numAugments > 3) {
-			gui.drawTexturedModalRect(posXOffset() + slotsBorderX1, posY + slotsBorderY1, 16, 20, (numAugments > 4 ? 18 * 3 : 18 * 2) + 6, 24 + 18);
-		} else {
-			gui.drawTexturedModalRect(posXOffset() + slotsBorderX1, posY + slotsBorderY1, 16, 20, 18 * numAugments + 6, 24);
-		}
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderHelper.bindTexture(GRID_TEXTURE);
+		if (numAugments > 0) {
+			if (numAugments > 3) {
+				gui.drawTexturedModalRect(posXOffset() + slotsBorderX1, posY + slotsBorderY1, 16, 20, (numAugments > 4 ? 18 * 3 : 18 * 2) + 6, 24 + 18);
+			} else {
+				gui.drawTexturedModalRect(posXOffset() + slotsBorderX1, posY + slotsBorderY1, 16, 20, 18 * numAugments + 6, 24);
+			}
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			RenderHelper.bindTexture(GRID_TEXTURE);
 
-		switch (numAugments) {
-		case 4:
-			drawSlots(0, 0, 2);
-			drawSlots(0, 1, 2);
-			break;
-		case 5:
-			drawSlots(0, 0, 3);
-			drawSlots(1, 1, 2);
-			break;
-		case 6:
-			drawSlots(0, 0, 3);
-			drawSlots(0, 1, 3);
-			break;
-		default:
-			drawSlots(0, 0, numAugments);
+			switch (numAugments) {
+				case 4:
+					drawSlots(0, 0, 2);
+					drawSlots(0, 1, 2);
+					break;
+				case 5:
+					drawSlots(0, 0, 3);
+					drawSlots(1, 1, 2);
+					break;
+				case 6:
+					drawSlots(0, 0, 3);
+					drawSlots(0, 1, 3);
+					break;
+				default:
+					drawSlots(0, 0, numAugments);
+			}
 		}
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
 	protected void drawForeground() {
 
-		drawTabIcon("IconAugment");
+		drawTabIcon(CoreTextures.ICON_AUGMENT);
 		if (!isFullyOpened()) {
 			return;
 		}
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.augmentation"), posXOffset() + 18, posY + 6, headerColor);
 
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override
 	public void setFullyOpen() {
 
+		if (numAugments == 0) {
+			return;
+		}
 		super.setFullyOpen();
 
 		switch (numAugments) {
-		case 4:
-			for (int i = 0; i < numAugments; i++) {
-				myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 2);
-				myContainer.getAugmentSlots()[i].yDisplayPosition = posY + slotsBorderY1 + 4 + 18 * (i / 2);
-			}
-			break;
-		case 5:
-			for (int i = 0; i < numAugments; i++) {
-				myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 3) + 9 * (i / 3);
-				myContainer.getAugmentSlots()[i].yDisplayPosition = posY + slotsBorderY1 + 4 + 18 * (i / 3);
-			}
-			break;
-		default:
-			for (int i = 0; i < numAugments; i++) {
-				myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 3);
-				myContainer.getAugmentSlots()[i].yDisplayPosition = posY + slotsBorderY1 + 4 + 18 * (i / 3);
-			}
+			case 4:
+				for (int i = 0; i < numAugments; i++) {
+					myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 2);
+					myContainer.getAugmentSlots()[i].yDisplayPosition = posY + slotsBorderY1 + 4 + 18 * (i / 2);
+				}
+				break;
+			case 5:
+				for (int i = 0; i < numAugments; i++) {
+					myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 3) + 9 * (i / 3);
+					myContainer.getAugmentSlots()[i].yDisplayPosition = posY + slotsBorderY1 + 4 + 18 * (i / 3);
+				}
+				break;
+			default:
+				for (int i = 0; i < numAugments; i++) {
+					myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 3);
+					myContainer.getAugmentSlots()[i].yDisplayPosition = posY + slotsBorderY1 + 4 + 18 * (i / 3);
+				}
 		}
 		myContainer.setAugmentLock(false);
 	}

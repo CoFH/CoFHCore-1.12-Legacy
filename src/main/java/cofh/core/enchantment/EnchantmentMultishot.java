@@ -1,16 +1,19 @@
 package cofh.core.enchantment;
 
-import cofh.core.item.tool.ItemBowAdv;
-
+import cofh.core.item.IEnchantableItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
 public class EnchantmentMultishot extends Enchantment {
 
-	public EnchantmentMultishot(int id) {
+	public static boolean enable = true;
 
-		super(id, 5, EnumEnchantmentType.bow);
+	public EnchantmentMultishot(String id) {
+
+		super(Rarity.UNCOMMON, EnumEnchantmentType.BOW, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
+		setRegistryName(id);
 	}
 
 	@Override
@@ -40,7 +43,13 @@ public class EnchantmentMultishot extends Enchantment {
 	@Override
 	public boolean canApply(ItemStack stack) {
 
-		return (stack.getItem() instanceof ItemBowAdv);
+		return enable && stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this);
+	}
+
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack) {
+
+		return canApply(stack);
 	}
 
 	@Override

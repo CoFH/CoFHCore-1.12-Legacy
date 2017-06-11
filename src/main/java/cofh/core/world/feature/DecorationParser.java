@@ -1,56 +1,60 @@
 package cofh.core.world.feature;
 
-import cofh.api.world.IGeneratorParser;
 import cofh.core.world.FeatureParser;
 import cofh.lib.util.WeightedRandomBlock;
-import cofh.lib.util.helpers.MathHelper;
+import cofh.lib.world.IGeneratorParser;
 import cofh.lib.world.WorldGenDecoration;
-import com.google.gson.JsonObject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigObject;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenerator;
-
 import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class DecorationParser extends SurfaceParser implements IGeneratorParser {
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
-			List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String name, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
 
-		ArrayList<WeightedRandomBlock> list = new ArrayList<WeightedRandomBlock>();
-		if (!genObject.has("genSurface")) {
-			log.info("Entry does not specify genSurface for 'decoration' generator. Using grass.");
-			list.add(new WeightedRandomBlock(Blocks.grass));
+		int clusterSize = genObject.getInt("cluster-size"); // TODO: another name?
+		if (clusterSize <= 0) {
+			log.warn("Invalid cluster size for generator '%s'", name);
+			return null;
+		}
+
+		ArrayList<WeightedRandomBlock> list = new ArrayList<>();
+		ConfigObject genData = genObject.root();
+		if (!genObject.hasPath("surface")) {
+			log.info("Entry does not specify surface for 'decoration' generator. Using grass.");
+			list.add(new WeightedRandomBlock(Blocks.GRASS));
 		} else {
-			if (!FeatureParser.parseResList(genObject.get("genSurface"), list, false)) {
-				log.warn("Entry specifies invalid genSurface for 'decoration' generator! Using grass!");
+			if (!FeatureParser.parseResList(genData.get("surface"), list, false)) {
+				log.warn("Entry specifies invalid surface for 'decoration' generator! Using grass!");
 				list.clear();
-				list.add(new WeightedRandomBlock(Blocks.grass));
+				list.add(new WeightedRandomBlock(Blocks.GRASS));
 			}
 		}
 		WorldGenDecoration r = new WorldGenDecoration(resList, clusterSize, matList, list);
-		if (genObject.has("genSky")) {
-			r.seeSky = genObject.get("genSky").getAsBoolean();
+		if (genObject.hasPath("see-sky")) {
+			r.setSeeSky(genObject.getBoolean("see-sky"));
 		}
-		if (genObject.has("checkStay")) {
-			r.checkStay = genObject.get("checkStay").getAsBoolean();
+		if (genObject.hasPath("check-stay")) {
+			r.setCheckStay(genObject.getBoolean("check-stay"));
 		}
-		if (genObject.has("stackHeight")) {
-			r.stackHeight = genObject.get("stackHeight").getAsInt();
+		if (genObject.hasPath("stack-height")) {
+			r.setStackHeight(FeatureParser.parseNumberValue(genData.get("stack-height")));
 		}
-		if (genObject.has("xVariance")) {
-			r.xVar = MathHelper.clamp(genObject.get("xVariance").getAsInt(), 1, 15);
+		if (genObject.hasPath("x-variance")) {
+			r.setXVar(FeatureParser.parseNumberValue(genData.get("x-variance"), 1, 15));
 		}
-		if (genObject.has("yVariance")) {
-			r.yVar = MathHelper.clamp(genObject.get("yVariance").getAsInt(), 0, 15);
+		if (genObject.hasPath("y-variance")) {
+			r.setYVar(FeatureParser.parseNumberValue(genData.get("y-variance"), 0, 15));
 		}
-		if (genObject.has("zVariance")) {
-			r.zVar = MathHelper.clamp(genObject.get("zVariance").getAsInt(), 1, 15);
+		if (genObject.hasPath("z-variance")) {
+			r.setZVar(FeatureParser.parseNumberValue(genData.get("z-variance"), 1, 15));
 		}
 		return r;
 	}
@@ -58,11 +62,11 @@ public class DecorationParser extends SurfaceParser implements IGeneratorParser 
 	@Override
 	protected List<WeightedRandomBlock> generateDefaultMaterial() {
 
-		return Arrays.asList(new WeightedRandomBlock(Blocks.air, -1));
+		return Collections.singletonList(new WeightedRandomBlock(Blocks.GRASS, -1));
 	}
 
 	@Override
-	protected String getDefaultTemplate() {
+	protected String getDefaultGenerator() {
 
 		return "decoration";
 	}

@@ -1,16 +1,14 @@
 package cofh.core.world.decoration;
 
-import cofh.api.world.IGeneratorParser;
 import cofh.lib.util.WeightedRandomBlock;
+import cofh.lib.world.IGeneratorParser;
 import cofh.lib.world.WorldGenMinableCluster;
 import cofh.lib.world.WorldGenSparseMinableCluster;
-import com.google.gson.JsonObject;
+import com.typesafe.config.Config;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
-
-import net.minecraft.world.gen.feature.WorldGenerator;
-
-import org.apache.logging.log4j.Logger;
 
 public class ClusterParser implements IGeneratorParser {
 
@@ -22,13 +20,17 @@ public class ClusterParser implements IGeneratorParser {
 	}
 
 	@Override
-	public WorldGenerator parseGenerator(String generatorName, JsonObject genObject, Logger log, List<WeightedRandomBlock> resList, int clusterSize,
-			List<WeightedRandomBlock> matList) {
+	public WorldGenerator parseGenerator(String name, Config genObject, Logger log, List<WeightedRandomBlock> resList, List<WeightedRandomBlock> matList) {
+
+		int clusterSize = genObject.getInt("cluster-size");
+		if (clusterSize <= 0) {
+			log.warn("Invalid cluster size for generator '%s'", name);
+			return null;
+		}
 
 		if (sparse) {
 			return new WorldGenSparseMinableCluster(resList, clusterSize, matList);
 		}
-
 		return new WorldGenMinableCluster(resList, clusterSize, matList);
 	}
 

@@ -1,12 +1,11 @@
 package cofh.core.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
+@SideOnly (Side.CLIENT)
 public class GuiTextEntry extends Gui {
 
 	public static final int X_OFFSET = 4;
@@ -24,7 +23,9 @@ public class GuiTextEntry extends Gui {
 	public boolean isEnabled = true;
 	public boolean isFocused = false;
 
-	/** Color Configuration */
+	/**
+	 * Color Configuration
+	 */
 	public int borderColor = -6250336;
 	public int backgroundColor = -16777216;
 	public int selectedLineColor = -16777216;

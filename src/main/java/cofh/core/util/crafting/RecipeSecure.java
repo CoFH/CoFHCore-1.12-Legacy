@@ -1,8 +1,7 @@
 package cofh.core.util.crafting;
 
+import cofh.core.util.helpers.SecurityHelper;
 import cofh.lib.util.helpers.ItemHelper;
-import cofh.lib.util.helpers.SecurityHelper;
-
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -11,12 +10,12 @@ public class RecipeSecure extends ShapedOreRecipe {
 
 	int targetSlot = 4;
 
-	public RecipeSecure(ItemStack result, Object[] recipe) {
+	public RecipeSecure(ItemStack result, Object... recipe) {
 
 		super(result, recipe);
 	}
 
-	public RecipeSecure(int slot, ItemStack result, Object[] recipe) {
+	public RecipeSecure(int slot, ItemStack result, Object... recipe) {
 
 		super(result, recipe);
 		targetSlot = slot;
