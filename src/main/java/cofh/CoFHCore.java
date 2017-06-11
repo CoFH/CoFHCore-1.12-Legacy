@@ -35,6 +35,18 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
+@Mod(modid = CoFHCore.modId, name = CoFHCore.modName, version = CoFHCore.version, dependencies = CoFHCore.dependencies, guiFactory = CoFHCore.modGuiFactory,
+		customProperties = @CustomProperty(k = "cofhversion", v = "true"))
+public class CoFHCore extends BaseMod {
+
+	public static final String modId = "CoFHCore";
+	public static final String modName = "CoFH Core";
+	public static final String version = "1.7.10R3.1.4";
+	public static final String version_max = "1.7.10R3.2.0";
+	public static final String dependencies = CoFHProps.FORGE_DEP;
+	public static final String modGuiFactory = "cofh.core.gui.GuiConfigCoreFactory";
+
+
 import static cofh.lib.util.helpers.ItemHelper.ShapedRecipe;
 import static cofh.lib.util.helpers.ItemHelper.addRecipe;
 

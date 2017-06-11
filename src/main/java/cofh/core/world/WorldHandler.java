@@ -352,6 +352,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			/* This is a hack because Mojang coded The End wrong. Are you surprised? */
 				filler = Blocks.END_STONE.getDefaultState();
 				break;
+
 		}
 		for (int blockX = 0; blockX < 16; blockX++) {
 			for (int blockZ = 0; blockZ < 16; blockZ++) {
