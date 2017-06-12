@@ -132,6 +132,32 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 		return super.displaceIfPossible(world, pos);
 	}
 
+	/* ACCESSORS */
+	public int getDensity() {
+
+		return density;
+	}
+
+	public int getDensityDir() {
+
+		return densityDir;
+	}
+
+	public float getParticleRed() {
+
+		return particleRed;
+	}
+
+	public float getParticleGreen() {
+
+		return particleGreen;
+	}
+
+	public float getParticleBlue() {
+
+		return particleBlue;
+	}
+
 	/* Implementing https://github.com/MinecraftForge/MinecraftForge/pull/3747 TODO Remove in 1.11 */
 
 	private boolean isFluid(IBlockState state) {
