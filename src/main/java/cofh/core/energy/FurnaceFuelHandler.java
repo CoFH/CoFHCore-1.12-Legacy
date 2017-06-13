@@ -25,7 +25,7 @@ public class FurnaceFuelHandler implements IFuelHandler {
 	@Override
 	public int getBurnTime(ItemStack fuel) {
 
-		if (fuel == null || !fuels.containsKey(new ItemWrapper(fuel))) {
+		if (fuel.isEmpty() || !fuels.containsKey(new ItemWrapper(fuel))) {
 			return 0;
 		}
 		return fuels.get(new ItemWrapper(fuel));
@@ -33,7 +33,7 @@ public class FurnaceFuelHandler implements IFuelHandler {
 
 	public static boolean registerFuel(ItemStack fuel, int burnTime) {
 
-		if (fuel == null || burnTime <= 0 || fuels.containsKey(new ItemWrapper(fuel))) {
+		if (fuel.isEmpty() || burnTime <= 0 || fuels.containsKey(new ItemWrapper(fuel))) {
 			return false;
 		}
 		fuels.put(new ItemWrapper(fuel), burnTime);

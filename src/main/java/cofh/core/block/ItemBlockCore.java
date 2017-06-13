@@ -42,7 +42,7 @@ public class ItemBlockCore extends ItemBlock {
 	}
 
 	@Override
-	public boolean isItemTool(ItemStack stack) {
+	public boolean isEnchantable(ItemStack stack) {
 
 		return false;
 	}

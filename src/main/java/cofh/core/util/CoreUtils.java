@@ -165,7 +165,7 @@ public class CoreUtils {
 
 	public static boolean dropItemStackIntoWorld(ItemStack stack, World world, Vec3d pos, boolean velocity) {
 
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return false;
 		}
 		float x2 = 0.5F;
@@ -188,7 +188,7 @@ public class CoreUtils {
 			entity.motionX = 0;
 			entity.motionZ = 0;
 		}
-		world.spawnEntityInWorld(entity);
+		world.spawnEntity(entity);
 
 		return true;
 	}
@@ -241,7 +241,7 @@ public class CoreUtils {
 
 		if (cooldown) {
 			NBTTagCompound tag = entity.getEntityData();
-			long time = entity.worldObj.getTotalWorldTime();
+			long time = entity.world.getTotalWorldTime();
 			if (tag.getLong("cofh:tD") > time) {
 				return false;
 			}

@@ -35,7 +35,7 @@ public class KeyBindingPlayerAugments implements IKeyBinding {
 	@Override
 	public boolean keyPressServer(EntityPlayer player) {
 
-		player.openGui(CoFHCore.instance, GuiHandler.AUGMENTS_ID, player.worldObj, (int) player.posX, (int) player.posY, (int) player.posZ);
+		player.openGui(CoFHCore.instance, GuiHandler.AUGMENTS_ID, player.world, (int) player.posX, (int) player.posY, (int) player.posZ);
 		return true;
 	}
 

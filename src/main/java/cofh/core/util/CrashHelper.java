@@ -246,7 +246,7 @@ public class CrashHelper {
 					continue;
 				}
 
-				builder.append(stackInSlot == null ? "Null" : stackInSlot.toString()).append("\n");
+				builder.append(stackInSlot.isEmpty() ? "Empty" : stackInSlot.toString()).append("\n");
 			}
 			builder.append("\n\n");
 			return builder.toString();
@@ -276,7 +276,7 @@ public class CrashHelper {
 					continue;
 				}
 
-				builder.append(stackInSlot == null ? "Null" : stackInSlot.toString()).append("\n");
+				builder.append(stackInSlot.isEmpty() ? "Empty" : stackInSlot.toString()).append("\n");
 			}
 			builder.append("\n\n");
 			return builder.toString();

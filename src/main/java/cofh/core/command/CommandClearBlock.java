@@ -44,7 +44,7 @@ public class CommandClearBlock implements ISubCommand {
 	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
 		if (args.length < 6) {
-			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+			sender.sendMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
 			throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 		}
 		World world = sender.getEntityWorld();
@@ -111,8 +111,8 @@ public class CommandClearBlock implements ISubCommand {
 			zL = t;
 		}
 		if (yS > 255) {
-			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
-			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
+			sender.sendMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+			sender.sendMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
 			return;
 		} else if (yL > 255) {
 			yL = 255;
@@ -346,7 +346,7 @@ public class CommandClearBlock implements ISubCommand {
 	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
 		if (args.length == 2) {
-			return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+			return CommandBase.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 		}
 		return null;
 	}

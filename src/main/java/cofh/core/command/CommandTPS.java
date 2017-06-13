@@ -68,47 +68,47 @@ public class CommandTPS implements ISubCommand {
 			double tps = getTps(null);
 			double tickms = getTickMs(null);
 
-			sender.addChatMessage(new TextComponentString("Overall: " + floatfmt.format(tps) + " TPS/" + floatfmt.format(tickms) + "MS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
+			sender.sendMessage(new TextComponentString("Overall: " + floatfmt.format(tps) + " TPS/" + floatfmt.format(tickms) + "MS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
 
-			for (World world : CoreProps.server.worldServers) {
+			for (World world : CoreProps.server.worlds) {
 				tps = getTps(world);
 				tickms = getTickMs(world);
-				sender.addChatMessage(new TextComponentString(world.provider.getDimensionType().getName() + " [" + world.provider.getDimension() + "]: " + floatfmt.format(tps) + " TPS/" + floatfmt.format(tickms) + "MS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
+				sender.sendMessage(new TextComponentString(world.provider.getDimensionType().getName() + " [" + world.provider.getDimension() + "]: " + floatfmt.format(tps) + " TPS/" + floatfmt.format(tickms) + "MS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
 			}
 		} else if (arguments[1].toLowerCase(Locale.US).charAt(0) == 'o') {
 			double tickms = getTickMs(null);
 			double tps = getTps(null);
 
-			sender.addChatMessage(new TextComponentString("Overall server tick"));
-			sender.addChatMessage(new TextComponentString("TPS: " + floatfmt.format(tps) + " TPS of " + floatfmt.format(20L) + " TPS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
-			sender.addChatMessage(new TextComponentString("Tick time: " + floatfmt.format(tickms) + " ms of " + floatfmt.format(50L) + " ms"));
+			sender.sendMessage(new TextComponentString("Overall server tick"));
+			sender.sendMessage(new TextComponentString("TPS: " + floatfmt.format(tps) + " TPS of " + floatfmt.format(20L) + " TPS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
+			sender.sendMessage(new TextComponentString("Tick time: " + floatfmt.format(tickms) + " ms of " + floatfmt.format(50L) + " ms"));
 		} else if (arguments[1].toLowerCase(Locale.US).charAt(0) == 'a') {
 			double tickms = getTickMs(null);
 			double tps = getTps(null);
 
-			sender.addChatMessage(new TextComponentString("Overall server tick"));
-			sender.addChatMessage(new TextComponentString("TPS: " + floatfmt.format(tps) + " TPS of " + floatfmt.format(20L) + " TPS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
-			sender.addChatMessage(new TextComponentString("Tick time: " + floatfmt.format(tickms) + " ms of " + floatfmt.format(50L) + " ms"));
+			sender.sendMessage(new TextComponentString("Overall server tick"));
+			sender.sendMessage(new TextComponentString("TPS: " + floatfmt.format(tps) + " TPS of " + floatfmt.format(20L) + " TPS (" + (int) (tps / 20.0D * 100.0D) + "%)"));
+			sender.sendMessage(new TextComponentString("Tick time: " + floatfmt.format(tickms) + " ms of " + floatfmt.format(50L) + " ms"));
 			int loadedChunks = 0;
 			int entities = 0;
 			int te = 0;
 			int worlds = 0;
 
-			for (WorldServer world : CoreProps.server.worldServers) {
+			for (WorldServer world : CoreProps.server.worlds) {
 				loadedChunks += world.getChunkProvider().getLoadedChunkCount();
 				entities += world.loadedEntityList.size();
 				te += world.loadedTileEntityList.size();
 				worlds += 1;
 			}
-			sender.addChatMessage(new TextComponentString("Total Loaded Worlds/Chunks: " + worlds + "/" + loadedChunks));
-			sender.addChatMessage(new TextComponentString("Total Entities/TileEntities: " + entities + "/" + te));
+			sender.sendMessage(new TextComponentString("Total Loaded Worlds/Chunks: " + worlds + "/" + loadedChunks));
+			sender.sendMessage(new TextComponentString("Total Entities/TileEntities: " + entities + "/" + te));
 		} else {
 			int dim = 0;
 			try {
 				dim = CommandBase.parseInt(arguments[1]);
 			} catch (Throwable e) {
-				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
-				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
+				sender.sendMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+				sender.sendMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
 				Throwables.propagate(e);
 			}
 
@@ -120,9 +120,9 @@ public class CommandTPS implements ISubCommand {
 			double tickms = getTickMs(world);
 			double tps = getTps(world);
 
-			sender.addChatMessage(new TextComponentString("World " + world.provider.getDimension() + ": " + world.provider.getDimensionType().getName() + " - Loaded chunks: " + world.getChunkProvider().getLoadedChunkCount()));
-			sender.addChatMessage(new TextComponentString("TPS: " + floatfmt.format(tps) + "/" + floatfmt.format(20L) + " TPS (" + (int) (tps / 20.0D * 100.0D) + "%) - Tick: " + floatfmt.format(tickms) + " ms of " + floatfmt.format(50L) + " ms"));
-			sender.addChatMessage(new TextComponentString("Entities: " + world.loadedEntityList.size() + " - Tile entities: " + world.loadedTileEntityList.size()));
+			sender.sendMessage(new TextComponentString("World " + world.provider.getDimension() + ": " + world.provider.getDimensionType().getName() + " - Loaded chunks: " + world.getChunkProvider().getLoadedChunkCount()));
+			sender.sendMessage(new TextComponentString("TPS: " + floatfmt.format(tps) + "/" + floatfmt.format(20L) + " TPS (" + (int) (tps / 20.0D * 100.0D) + "%) - Tick: " + floatfmt.format(tickms) + " ms of " + floatfmt.format(50L) + " ms"));
+			sender.sendMessage(new TextComponentString("Entities: " + world.loadedEntityList.size() + " - Tile entities: " + world.loadedTileEntityList.size()));
 		}
 	}
 
@@ -133,7 +133,7 @@ public class CommandTPS implements ISubCommand {
 			List<String> worldIDs = new ArrayList<>();
 			worldIDs.add("o");
 			worldIDs.add("a");
-			for (World world : CoreProps.server.worldServers) {
+			for (World world : CoreProps.server.worlds) {
 				worldIDs.add(Integer.toString(world.provider.getDimension()));
 			}
 			return CommandBase.getListOfStringsMatchingLastWord(args, worldIDs.toArray(new String[] { "" }));

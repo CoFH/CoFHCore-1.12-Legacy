@@ -77,29 +77,29 @@ public class ChatHelper {
 
 	public static void sendIndexedChatMessageToPlayer(EntityPlayer player, ITextComponent message) {
 
-		if (player.worldObj == null || player instanceof FakePlayer) {
+		if (player.world == null || player instanceof FakePlayer) {
 			return;
 		}
 		if (indexChat) {
-			if (!player.worldObj.isRemote) {
+			if (!player.world.isRemote) {
 				PacketHandler.sendTo(new PacketIndexedChat(message, cofhTempChatIndexServer), player);
 			} else {
 				CoFHCore.proxy.addIndexedChatMessage(message, cofhTempChatIndexClient);
 			}
 		} else {
 
-			player.addChatComponentMessage(message);
+			player.sendMessage(message);
 		}
 	}
 
 	public static void sendIndexedChatMessagesToPlayer(EntityPlayer player, List<ITextComponent> messages) {
 
-		if (player.worldObj == null || player instanceof FakePlayer) {
+		if (player.world == null || player instanceof FakePlayer) {
 			return;
 		}
 		if (indexChat) {
 			for (int i = 0; i < messages.size(); i++) {
-				if (!player.worldObj.isRemote) {
+				if (!player.world.isRemote) {
 					PacketHandler.sendTo(new PacketIndexedChat(messages.get(i), cofhTempChatIndexServer + i), player);
 				} else {
 					CoFHCore.proxy.addIndexedChatMessage(messages.get(i), cofhTempChatIndexClient + i);
@@ -107,7 +107,7 @@ public class ChatHelper {
 			}
 		} else {
 			for (ITextComponent message : messages) {
-				player.addChatComponentMessage(message);
+				player.sendMessage(message);
 			}
 		}
 	}

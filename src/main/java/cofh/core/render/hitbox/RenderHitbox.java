@@ -26,7 +26,7 @@ public class RenderHitbox {
 			GlStateManager.glLineWidth(2.0F);
 			GlStateManager.disableTexture2D();
 			GlStateManager.depthMask(false);
-			IBlockState state = player.worldObj.getBlockState(rayTraceResult.getBlockPos());
+			IBlockState state = player.world.getBlockState(rayTraceResult.getBlockPos());
 
 			if (state.getMaterial() != Material.AIR) {
 				//block.setBlockBoundsBasedOnState(thePlayer.worldObj, rayTraceResult.blockX, rayTraceResult.blockY, rayTraceResult.blockZ);

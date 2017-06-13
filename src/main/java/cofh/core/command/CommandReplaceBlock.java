@@ -44,7 +44,7 @@ public class CommandReplaceBlock implements ISubCommand {
 	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
 		if (args.length < 7) {
-			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+			sender.sendMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
 			throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 		}
 		World world = sender.getEntityWorld();
@@ -115,8 +115,8 @@ public class CommandReplaceBlock implements ISubCommand {
 		}
 
 		if (yS > 255) {
-			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
-			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
+			sender.sendMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+			sender.sendMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
 			return;
 		} else if (yL > 255) {
 			yL = 255;
@@ -135,8 +135,8 @@ public class CommandReplaceBlock implements ISubCommand {
 			}
 			Block block = Block.getBlockFromName(blockRaw);
 			if (block == Blocks.AIR || meta > 15 || meta < 0) {
-				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
-				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
+				sender.sendMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+				sender.sendMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
 				// TODO: more descriptive error
 				return;
 			}
@@ -367,7 +367,7 @@ public class CommandReplaceBlock implements ISubCommand {
 	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
 		if (args.length == 2) {
-			return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+			return CommandBase.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 		}
 		return null;
 	}

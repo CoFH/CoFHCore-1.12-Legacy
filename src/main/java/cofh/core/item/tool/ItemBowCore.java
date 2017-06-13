@@ -23,7 +23,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdateItem {
 
@@ -50,7 +49,7 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdate
 					return 0.0F;
 				} else {
 					ItemStack itemstack = entityIn.getActiveItemStack();
-					return itemstack != null && itemstack.getItem() instanceof ItemBowCore ? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+					return !itemstack.isEmpty() && itemstack.getItem() instanceof ItemBowCore ? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
 				}
 			}
 		});
@@ -95,7 +94,7 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdate
 
 	@Override
 	@SideOnly (Side.CLIENT)
-	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 
 		if (showInCreative) {
 			list.add(new ItemStack(item, 1, 0));
@@ -109,7 +108,7 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdate
 	}
 
 	@Override
-	public boolean isItemTool(ItemStack stack) {
+	public boolean isEnchantable(ItemStack stack) {
 
 		return true;
 	}
@@ -121,9 +120,10 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdate
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 
-		boolean flag = this.findAmmo(player) != null;
+		ItemStack itemStack = player.getHeldItem(hand);
+		boolean flag = !this.findAmmo(player).isEmpty();
 
 		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemStack, world, player, hand, flag);
 		if (ret != null) {
@@ -148,12 +148,12 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdate
 			ItemStack arrowStack = this.findAmmo(entityplayer);
 
 			int i = this.getMaxItemUseDuration(stack) - timeLeft;
-			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) livingBase, i, arrowStack != null || flag);
+			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) livingBase, i, !arrowStack.isEmpty() || flag);
 			if (i < 0) {
 				return;
 			}
-			if (arrowStack != null || flag) {
-				if (arrowStack == null) {
+			if (!arrowStack.isEmpty() || flag) {
+				if (arrowStack.isEmpty()) {
 					arrowStack = new ItemStack(Items.ARROW);
 				}
 				float f = getArrowVelocity(i);
@@ -188,16 +188,16 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdate
 							if (flag) {
 								arrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
 							}
-							world.spawnEntityInWorld(arrow);
+							world.spawnEntity(arrow);
 						}
 						stack.damageItem(1, entityplayer);
 					}
 					world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
 					if (!flag) {
-						--arrowStack.stackSize;
+						arrowStack.shrink(1);
 
-						if (arrowStack.stackSize == 0) {
+						if (arrowStack.getCount() == 0) {
 							entityplayer.inventory.deleteStack(arrowStack);
 						}
 					}

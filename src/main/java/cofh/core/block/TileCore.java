@@ -50,23 +50,23 @@ public abstract class TileCore extends TileEntity {
 
 	public void callBlockUpdate() {
 
-		IBlockState state = worldObj.getBlockState(pos);
-		worldObj.notifyBlockUpdate(pos, state, state, 3);
+		IBlockState state = world.getBlockState(pos);
+		world.notifyBlockUpdate(pos, state, state, 3);
 	}
 
 	public void callNeighborStateChange() {
 
-		worldObj.notifyNeighborsOfStateChange(pos, getBlockType());
+		world.notifyNeighborsOfStateChange(pos, getBlockType(), false);//TODO, updateObservers?
 	}
 
 	public void callNeighborTileChange() {
 
-		worldObj.updateComparatorOutputLevel(pos, getBlockType());
+		world.updateComparatorOutputLevel(pos, getBlockType());
 	}
 
 	public void markChunkDirty() {
 
-		worldObj.markChunkDirty(pos, this);
+		world.markChunkDirty(pos, this);
 	}
 
 	@Override
@@ -79,7 +79,8 @@ public abstract class TileCore extends TileEntity {
 
 	@Override
 	public void onLoad() {
-		// TODO: Revisit in 1.11.
+
+		validate();
 	}
 
 	public void onNeighborBlockChange() {
@@ -119,7 +120,7 @@ public abstract class TileCore extends TileEntity {
 
 	public boolean isUsable(EntityPlayer player) {
 
-		return player.getDistanceSq(pos) <= 64D && worldObj.getTileEntity(pos) == this;
+		return player.getDistanceSq(pos) <= 64D && world.getTileEntity(pos) == this;
 	}
 
 	public boolean onWrench(EntityPlayer player, EnumFacing side) {
@@ -146,22 +147,22 @@ public abstract class TileCore extends TileEntity {
 	/* TIME CHECKS */
 	protected final boolean timeCheck() {
 
-		return worldObj.getTotalWorldTime() % CoreProps.TIME_CONSTANT == 0;
+		return world.getTotalWorldTime() % CoreProps.TIME_CONSTANT == 0;
 	}
 
 	protected final boolean timeCheckHalf() {
 
-		return worldObj.getTotalWorldTime() % CoreProps.TIME_CONSTANT_HALF == 0;
+		return world.getTotalWorldTime() % CoreProps.TIME_CONSTANT_HALF == 0;
 	}
 
 	protected final boolean timeCheckQuarter() {
 
-		return worldObj.getTotalWorldTime() % CoreProps.TIME_CONSTANT_QUARTER == 0;
+		return world.getTotalWorldTime() % CoreProps.TIME_CONSTANT_QUARTER == 0;
 	}
 
 	protected final boolean timeCheckEighth() {
 
-		return worldObj.getTotalWorldTime() % CoreProps.TIME_CONSTANT_EIGHTH == 0;
+		return world.getTotalWorldTime() % CoreProps.TIME_CONSTANT_EIGHTH == 0;
 	}
 
 	/* NETWORK METHODS */
@@ -230,21 +231,21 @@ public abstract class TileCore extends TileEntity {
 
 	public void sendAccessPacket() {
 
-		if (ServerHelper.isClientWorld(worldObj)) {
+		if (ServerHelper.isClientWorld(world)) {
 			PacketHandler.sendToServer(getAccessPacket());
 		}
 	}
 
 	public void sendConfigPacket() {
 
-		if (ServerHelper.isClientWorld(worldObj)) {
+		if (ServerHelper.isClientWorld(world)) {
 			PacketHandler.sendToServer(getConfigPacket());
 		}
 	}
 
 	public void sendModePacket() {
 
-		if (ServerHelper.isClientWorld(worldObj)) {
+		if (ServerHelper.isClientWorld(world)) {
 			PacketHandler.sendToServer(getModePacket());
 		}
 	}
@@ -279,27 +280,27 @@ public abstract class TileCore extends TileEntity {
 
 	public void sendFluidPacket() {
 
-		PacketHandler.sendToDimension(getFluidPacket(), worldObj.provider.getDimension());
+		PacketHandler.sendToDimension(getFluidPacket(), world.provider.getDimension());
 	}
 
 	public void sendTilePacket(Side side) {
 
-		if (worldObj == null) {
+		if (world == null) {
 			return;
 		}
-		if (side == Side.CLIENT && ServerHelper.isServerWorld(worldObj)) {
+		if (side == Side.CLIENT && ServerHelper.isServerWorld(world)) {
 			PacketHandler.sendToAllAround(getTilePacket(), this);
-		} else if (side == Side.SERVER && ServerHelper.isClientWorld(worldObj)) {
+		} else if (side == Side.SERVER && ServerHelper.isClientWorld(world)) {
 			PacketHandler.sendToServer(getTilePacket());
 		}
 	}
 
 	protected void updateLighting() {
 
-		int light2 = worldObj.getLightFor(EnumSkyBlock.BLOCK, getPos()), light1 = getLightValue();
-		if (light1 != light2 && worldObj.checkLightFor(EnumSkyBlock.BLOCK, getPos())) {
-			IBlockState state = worldObj.getBlockState(getPos());
-			worldObj.notifyBlockUpdate(pos, state, state, 3);
+		int light2 = world.getLightFor(EnumSkyBlock.BLOCK, getPos()), light1 = getLightValue();
+		if (light1 != light2 && world.checkLightFor(EnumSkyBlock.BLOCK, getPos())) {
+			IBlockState state = world.getBlockState(getPos());
+			world.notifyBlockUpdate(pos, state, state, 3);
 		}
 	}
 

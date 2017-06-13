@@ -43,11 +43,11 @@ public class SecurityHelper {
 
 	private static UUID getClientId(EntityPlayer player) {
 
-		if (player != Minecraft.getMinecraft().thePlayer) {
+		if (player != Minecraft.getMinecraft().player) {
 			return player.getGameProfile().getId();
 		}
 		if (cachedId == null) {
-			cachedId = Minecraft.getMinecraft().thePlayer.getGameProfile().getId();
+			cachedId = Minecraft.getMinecraft().player.getGameProfile().getId();
 		}
 		return cachedId;
 	}

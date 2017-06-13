@@ -18,7 +18,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemFishingRodCore extends ItemFishingRod {
 
@@ -71,7 +70,7 @@ public class ItemFishingRodCore extends ItemFishingRod {
 
 	@Override
 	@SideOnly (Side.CLIENT)
-	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 
 		if (showInCreative) {
 			list.add(new ItemStack(item, 1, 0));
@@ -85,7 +84,7 @@ public class ItemFishingRodCore extends ItemFishingRod {
 	}
 
 	@Override
-	public boolean isItemTool(ItemStack stack) {
+	public boolean isEnchantable(ItemStack stack) {
 
 		return true;
 	}
@@ -97,8 +96,9 @@ public class ItemFishingRodCore extends ItemFishingRod {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 
+		ItemStack stack = player.getHeldItem(hand);
 		if (player.fishEntity != null) {
 			int i = player.fishEntity.handleHookRetraction();
 			stack.damageItem(i, player);
@@ -107,7 +107,7 @@ public class ItemFishingRodCore extends ItemFishingRod {
 			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 			if (ServerHelper.isServerWorld(world)) {
-				world.spawnEntityInWorld(new EntityFishHookCore(world, player, luckModifier, speedModifier));
+				world.spawnEntity(new EntityFishHookCore(world, player, luckModifier, speedModifier));
 			}
 			player.swingArm(hand);
 		}

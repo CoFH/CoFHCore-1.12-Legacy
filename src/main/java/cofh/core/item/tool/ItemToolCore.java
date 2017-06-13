@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.server.SPacketBlockChange;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
@@ -23,7 +24,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Set;
 
 public abstract class ItemToolCore extends ItemTool {
@@ -146,7 +146,7 @@ public abstract class ItemToolCore extends ItemTool {
 
 	@Override
 	@SideOnly (Side.CLIENT)
-	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 
 		if (showInCreative) {
 			list.add(new ItemStack(item, 1, 0));
@@ -165,8 +165,8 @@ public abstract class ItemToolCore extends ItemTool {
 		return ItemHelper.isOreNameEqual(stack, repairIngot);
 	}
 
-	@Override
-	public boolean isItemTool(ItemStack stack) {
+	@Override//TODO, Used to be isTool..
+	public boolean isEnchantable(ItemStack stack) {
 
 		return true;
 	}

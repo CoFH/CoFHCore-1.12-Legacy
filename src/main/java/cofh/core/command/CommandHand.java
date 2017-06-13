@@ -59,11 +59,11 @@ public class CommandHand implements ISubCommand {
 		int l = args.length;
 		int i = 0;
 		EntityPlayerMP player = null;
-		ItemStack itemstack = null;
+		ItemStack itemstack = ItemStack.EMPTY;
 
 		switch (l) {
 			case 0:
-				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+				sender.sendMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
 				throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 			default:
 			case 2:
@@ -84,13 +84,13 @@ public class CommandHand implements ISubCommand {
 					player = CommandBase.getCommandSenderAsPlayer(sender);
 				}
 				itemstack = player.getHeldItem(EnumHand.MAIN_HAND);
-				if (itemstack == null) {
+				if (itemstack.isEmpty()) {
 					player.getHeldItem(EnumHand.OFF_HAND);
 				}
 		}
 
-		if (itemstack == null) {
-			sender.addChatMessage(new TextComponentTranslation("commands.enchant.noItem"));
+		if (itemstack.isEmpty()) {
+			sender.sendMessage(new TextComponentTranslation("commands.enchant.noItem"));
 			return;
 		}
 
@@ -102,7 +102,7 @@ public class CommandHand implements ISubCommand {
 			for (; i < l; ++i) {
 				InfoType type = infoMap.get(args[i].toLowerCase());
 				if (type == null) {
-					sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+					sender.sendMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
 					throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 				}
 				list.add(type);
@@ -115,9 +115,9 @@ public class CommandHand implements ISubCommand {
 			if (data.length >= 1 && data[0] != null) {
 				msg.appendSibling(data[0]);
 			}
-			sender.addChatMessage(msg);
+			sender.sendMessage(msg);
 			for (i = 1; i < data.length; ++i) {
-				sender.addChatMessage(data[i]);
+				sender.sendMessage(data[i]);
 			}
 		}
 	}
@@ -127,7 +127,7 @@ public class CommandHand implements ISubCommand {
 	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
 		if (args.length == 2) {
-			return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+			return CommandBase.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 		}
 		return CommandBase.getListOfStringsMatchingLastWord(args, infoMap.keySet());
 	}
@@ -160,7 +160,7 @@ public class CommandHand implements ISubCommand {
 			@Override
 			public ITextComponent processStack(ItemStack stack) {
 
-				return new TextComponentString(String.valueOf(stack.stackSize));
+				return new TextComponentString(String.valueOf(stack.getCount()));
 			}
 		}, Metadata("damage", "alt") {
 			@Override

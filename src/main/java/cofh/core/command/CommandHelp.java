@@ -52,19 +52,19 @@ public class CommandHelp implements ISubCommand {
 			if (!CommandHandler.getCommandExists(commandName)) {
 				throw new CommandNotFoundException("chat.cofh.command.notFound");
 			}
-			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + commandName));
+			sender.sendMessage(new TextComponentTranslation("chat.cofh.command." + commandName));
 			return;
 		}
 
 		int maxIndex = Math.min((page + 1) * pageSize, commandList.size());
 		ITextComponent chatcomponenttranslation1 = new TextComponentTranslation("commands.help.header", page + 1, maxPages + 1);
 		chatcomponenttranslation1.getStyle().setColor(TextFormatting.DARK_GREEN);
-		sender.addChatMessage(chatcomponenttranslation1);
+		sender.sendMessage(chatcomponenttranslation1);
 
 		for (int i = page * pageSize; i < maxIndex; ++i) {
 			ITextComponent chatcomponenttranslation = new TextComponentString("/cofh " + StringHelper.YELLOW + commandList.get(i));
 			chatcomponenttranslation.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/cofh " + commandList.get(i)));
-			sender.addChatMessage(chatcomponenttranslation);
+			sender.sendMessage(chatcomponenttranslation);
 		}
 	}
 

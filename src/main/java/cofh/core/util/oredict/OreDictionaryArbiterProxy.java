@@ -17,7 +17,7 @@ public class OreDictionaryArbiterProxy extends OreDictionaryProxy {
 	public final ItemStack getOre(String oreName) {
 
 		if (OreDictionaryArbiter.getOres(oreName) == null) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 		return ItemHelper.cloneStack(OreDictionaryArbiter.getOres(oreName).get(0), 1);
 	}

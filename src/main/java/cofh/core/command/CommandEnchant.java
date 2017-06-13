@@ -37,7 +37,7 @@ public class CommandEnchant implements ISubCommand {
 
 			case 0:
 			case 1:
-				sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+				sender.sendMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
 				throw new WrongUsageException("chat.cofh.command." + getCommandName() + ".syntax");
 			default:
 			case 4:
@@ -46,8 +46,8 @@ public class CommandEnchant implements ISubCommand {
 					player = CommandBase.getPlayer(server, sender, args[i++]);
 				} catch (CommandException t) {
 					if (l != 3) {
-						sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
-						sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
+						sender.sendMessage(new TextComponentTranslation("chat.cofh.command.syntaxError"));
+						sender.sendMessage(new TextComponentTranslation("chat.cofh.command." + getCommandName() + ".syntax"));
 						throw t;
 					}
 					--i;
@@ -59,11 +59,11 @@ public class CommandEnchant implements ISubCommand {
 				String loc = args[i++];
 				int level = 1;
 				ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
-				if (stack == null) {
+				if (stack.isEmpty()) {
 					stack = player.getHeldItem(EnumHand.OFF_HAND);
 				}
 
-				if (stack == null) {
+				if (stack.isEmpty()) {
 					throw new CommandException("commands.enchant.noItem", new Object[0]);
 				} else {
 					Enchantment enchantment;
@@ -91,7 +91,7 @@ public class CommandEnchant implements ISubCommand {
 	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
 		if (args.length == 2) {
-			return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+			return CommandBase.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 		}
 		return null;
 	}

@@ -29,7 +29,7 @@ public class FMLEventHandler {
 
 		EntityPlayer player = event.player;
 		if (ServerHelper.isMultiPlayerServer() && CoreProps.enableOpSecureAccess && CoreProps.enableOpSecureAccessWarning) {
-			player.addChatMessage(new TextComponentString(StringHelper.YELLOW + "[CoFH] ").appendSibling(new TextComponentTranslation("chat.cofh.secure.notice")));
+			player.sendMessage(new TextComponentString(StringHelper.YELLOW + "[CoFH] ").appendSibling(new TextComponentTranslation("chat.cofh.secure.notice")));
 		}
 		PacketCore.sendConfigSyncPacketToClient(event.player);
 		handleIdMappingEvent(null);

@@ -4,10 +4,7 @@ import cofh.lib.util.helpers.MathHelper;
 import cofh.lib.util.helpers.NBTHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.monster.SkeletonType;
+import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
@@ -37,12 +34,12 @@ public class DropHandler {
 	@SubscribeEvent
 	public void onLivingDrops(LivingDropsEvent event) {
 
-		if (!event.getEntityLiving().worldObj.getGameRules().getBoolean("doMobLoot")) {
+		if (!event.getEntityLiving().world.getGameRules().getBoolean("doMobLoot")) {
 			return;
 		}
 
 		int randPerc = MathHelper.RANDOM.nextInt(100);
-		ItemStack itemSkull = null;
+		ItemStack itemSkull = ItemStack.EMPTY;
 
 		if (event.getEntity() instanceof EntityPlayerMP) {
 			if (event.isRecentlyHit() || !playerPvPOnly) {
@@ -53,12 +50,12 @@ public class DropHandler {
 				}
 			}
 		} else if (event.isRecentlyHit() || !mobPvEOnly) {
-			if (event.getEntity() instanceof EntitySkeleton) {
-				EntitySkeleton theEntity = (EntitySkeleton) event.getEntity();
+			if (event.getEntity() instanceof AbstractSkeleton) {
+				AbstractSkeleton skeleton = (AbstractSkeleton) event.getEntity();
 
-				if (theEntity.getSkeletonType() == SkeletonType.NORMAL && skeletonEnabled && randPerc < skeletonChance) {
+				if (skeleton instanceof EntitySkeleton && skeletonEnabled && randPerc < skeletonChance) {
 					itemSkull = new ItemStack(Items.SKULL, 1, 0);
-				} else if (theEntity.getSkeletonType() == SkeletonType.WITHER && witherSkeletonEnabled && randPerc < witherSkeletonChance) {
+				} else if (skeleton instanceof EntityWitherSkeleton && witherSkeletonEnabled && randPerc < witherSkeletonChance) {
 					itemSkull = new ItemStack(Items.SKULL, 1, 1);
 				}
 			} else if (event.getEntity() instanceof EntityZombie && zombieEnabled && randPerc < zombieChance) {
@@ -67,11 +64,11 @@ public class DropHandler {
 				itemSkull = new ItemStack(Items.SKULL, 1, 4);
 			}
 		}
-		if (itemSkull == null) {
+		if (itemSkull.isEmpty()) {
 			return;
 		}
 		EntityLivingBase living = event.getEntityLiving();
-		EntityItem theDrop = new EntityItem(living.worldObj, living.posX, living.posY, living.posZ, itemSkull);
+		EntityItem theDrop = new EntityItem(living.world, living.posX, living.posY, living.posZ, itemSkull);
 		theDrop.setPickupDelay(10);
 		event.getDrops().add(theDrop);
 	}

@@ -10,7 +10,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CommandSyntax implements ISubCommand {
@@ -53,19 +52,19 @@ public class CommandSyntax implements ISubCommand {
 			if (!CommandHandler.getCommandExists(commandName)) {
 				throw new CommandNotFoundException("chat.cofh.command.notFound");
 			}
-			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command." + commandName + ".syntax"));
+			sender.sendMessage(new TextComponentTranslation("chat.cofh.command." + commandName + ".syntax"));
 			return;
 		}
 
 		int maxIndex = Math.min((page + 1) * pageSize, commandList.size());
 		ITextComponent chatcomponenttranslation1 = new TextComponentTranslation("commands.help.header", page + 1, maxPages + 1);
 		chatcomponenttranslation1.getStyle().setColor(TextFormatting.DARK_GREEN);
-		sender.addChatMessage(chatcomponenttranslation1);
+		sender.sendMessage(chatcomponenttranslation1);
 
 		for (int i = page * pageSize; i < maxIndex; ++i) {
 			ITextComponent chatcomponenttranslation = new TextComponentString("/cofh " + StringHelper.YELLOW + commandList.get(i));
 			chatcomponenttranslation.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/cofh syntax " + commandList.get(i)));
-			sender.addChatMessage(chatcomponenttranslation);
+			sender.sendMessage(chatcomponenttranslation);
 		}
 	}
 

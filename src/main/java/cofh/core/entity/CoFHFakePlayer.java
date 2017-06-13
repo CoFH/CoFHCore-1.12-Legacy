@@ -25,7 +25,7 @@ public class CoFHFakePlayer extends FakePlayer {
 	private static GameProfile NAME = new GameProfile(UUID.fromString("5ae51d0b-e8bc-5a02-09f4-b5dbb05963da"), "[CoFH]");
 
 	public boolean isSneaking = false;
-	public ItemStack previousItem = null;
+	public ItemStack previousItem = ItemStack.EMPTY;
 	public String myName = "[CoFH]";
 
 	public CoFHFakePlayer(WorldServer world) {
@@ -85,15 +85,15 @@ public class CoFHFakePlayer extends FakePlayer {
 		ItemStack itemstack1 = getHeldItem(EnumHand.MAIN_HAND);
 
 		if (!ItemStack.areItemStacksEqual(itemstack1, itemstack)) {
-			if (itemstack != null) {
+			if (!itemstack.isEmpty()) {
 				getAttributeMap().removeAttributeModifiers(itemstack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND));
 			}
-			if (itemstack1 != null) {
+			if (!itemstack1.isEmpty()) {
 				getAttributeMap().applyAttributeModifiers(itemstack1.getAttributeModifiers(EntityEquipmentSlot.MAINHAND));
 			}
-			myName = "[CoFH]" + (itemstack1 != null ? " using " + itemstack1.getDisplayName() : "");
+			myName = "[CoFH]" + (!itemstack1.isEmpty() ? " using " + itemstack1.getDisplayName() : "");
 		}
-		previousItem = itemstack1 == null ? null : itemstack1.copy();
+		previousItem = itemstack1.isEmpty() ? ItemStack.EMPTY : itemstack1.copy();
 		interactionManager.updateBlockRemoving();
 
 		//This was commented out beforehand fyi.
@@ -104,7 +104,7 @@ public class CoFHFakePlayer extends FakePlayer {
 
 	public void tickItemInUse(ItemStack updateItem) {
 
-		if (updateItem != null && ItemHelper.itemsEqualWithMetadata(previousItem, activeItemStack)) {
+		if (!updateItem.isEmpty() && ItemHelper.itemsEqualWithMetadata(previousItem, activeItemStack)) {
 
 			activeItemStackUseCount = ForgeEventFactory.onItemUseTick(this, activeItemStack, activeItemStackUseCount);
 			if (activeItemStackUseCount <= 0) {
@@ -114,7 +114,7 @@ public class CoFHFakePlayer extends FakePlayer {
 				if (activeItemStackUseCount <= 25 && activeItemStackUseCount % 4 == 0) {
 					updateItemUse(updateItem, 5);
 				}
-				if (--activeItemStackUseCount == 0 && !worldObj.isRemote) {
+				if (--activeItemStackUseCount == 0 && !world.isRemote) {
 					onItemUseFinish();
 				}
 			}
@@ -127,7 +127,7 @@ public class CoFHFakePlayer extends FakePlayer {
 	protected void updateItemUse(ItemStack par1ItemStack, int par2) {
 
 		if (par1ItemStack.getItemUseAction() == EnumAction.DRINK) {
-			this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+			this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
 		}
 
 		if (par1ItemStack.getItemUseAction() == EnumAction.EAT) {
@@ -157,11 +157,6 @@ public class CoFHFakePlayer extends FakePlayer {
 	public ItemStack getCurrentArmor(int par1) {
 
 		return new ItemStack(Items.DIAMOND_CHESTPLATE);
-	}
-
-	@Override
-	public void addChatMessage(ITextComponent component) {
-
 	}
 
 }

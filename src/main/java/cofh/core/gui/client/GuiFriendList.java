@@ -178,7 +178,7 @@ public class GuiFriendList extends GuiCore {
 
 		this.tbName.textboxKeyTyped(i, j);
 		if (j == 1) { // esc
-			this.mc.thePlayer.closeScreen();
+			this.mc.player.closeScreen();
 			return;
 		}
 		if (this.tbName.isFocused()) {
@@ -305,7 +305,7 @@ public class GuiFriendList extends GuiCore {
 	public List<String> getOnlineNames() {
 
 		List<String> online = new LinkedList<>();
-		for (NetworkPlayerInfo playerInfo : Minecraft.getMinecraft().thePlayer.connection.getPlayerInfoMap()) {
+		for (NetworkPlayerInfo playerInfo : Minecraft.getMinecraft().player.connection.getPlayerInfoMap()) {
 			online.add(playerInfo.getGameProfile().getName());
 		}
 		return online;

@@ -178,11 +178,11 @@ public final class NBTTagSmartByteArray extends NBTTagByteArray {
 	public NBTTagSmartByteArray addItemStack(ItemStack theStack) {
 
 		try {
-			if (theStack == null) {
+			if (theStack.isEmpty()) {
 				addShort(-1);
 			} else {
 				addShort(Item.getIdFromItem(theStack.getItem()));
-				addByte(theStack.stackSize);
+				addByte(theStack.getCount());
 				addShort(ItemHelper.getItemDamage(theStack));
 				addNBT(theStack.getTagCompound());
 			}

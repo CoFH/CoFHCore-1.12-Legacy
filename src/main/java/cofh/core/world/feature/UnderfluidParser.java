@@ -7,7 +7,6 @@ import cofh.lib.world.feature.FeatureBase;
 import cofh.lib.world.feature.FeatureBase.GenRestriction;
 import cofh.lib.world.feature.FeatureGenUnderfluid;
 import com.typesafe.config.Config;
-import gnu.trove.set.hash.TIntHashSet;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.DungeonHooks.DungeonMob;
@@ -15,9 +14,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class UnderfluidParser extends UniformParser {
 
@@ -38,7 +35,7 @@ public class UnderfluidParser extends UniformParser {
 	protected FeatureBase getFeature(String featureName, Config genObject, WorldGenerator gen, INumberProvider numClusters, GenRestriction biomeRes, boolean retrogen, GenRestriction dimRes, Logger log) {
 
 		boolean water = true;
-		int[] fluidList = null;
+		Set<String> fluidList = new HashSet<>();
 		l:
 		if (genObject.hasPath("fluid")) {
 			ArrayList<DungeonMob> list = new ArrayList<>();
@@ -46,16 +43,14 @@ public class UnderfluidParser extends UniformParser {
 				break l;
 			}
 			water = false;
-			TIntHashSet ints = new TIntHashSet();
 			for (DungeonMob str : list) {
 				// ints.add(FluidRegistry.getFluidID(str.type));
 				// NOPE. this NPEs.
-				Fluid fluid = FluidRegistry.getFluid(str.type);
+				Fluid fluid = FluidRegistry.getFluid(str.type.getResourcePath());
 				if (fluid != null) {
-					ints.add(FluidRegistry.getFluidID(fluid));
+					fluidList.add(fluid.getName());
 				}
 			}
-			fluidList = ints.toArray();
 		}
 
 		// TODO: WorldGeneratorAdv that allows access to its material list
@@ -70,7 +65,7 @@ public class UnderfluidParser extends UniformParser {
 		if (water) {
 			return new FeatureGenUnderfluid(featureName, gen, matList, numClusters, biomeRes, retrogen, dimRes);
 		} else {
-			return new FeatureGenUnderfluid(featureName, gen, matList, fluidList, numClusters, biomeRes, retrogen, dimRes);
+			return new FeatureGenUnderfluid(featureName, gen, matList, fluidList.toArray(new String[0]), numClusters, biomeRes, retrogen, dimRes);
 		}
 	}
 

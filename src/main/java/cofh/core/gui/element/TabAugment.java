@@ -52,8 +52,8 @@ public class TabAugment extends TabBase {
 
 		if (numAugments > 0) {
 			for (int i = 0; i < numAugments; i++) {
-				myContainer.getAugmentSlots()[i].xDisplayPosition = -gui.getGuiLeft() - 16;
-				myContainer.getAugmentSlots()[i].yDisplayPosition = -gui.getGuiTop() - 16;
+				myContainer.getAugmentSlots()[i].xPos = -gui.getGuiLeft() - 16;
+				myContainer.getAugmentSlots()[i].yPos = -gui.getGuiTop() - 16;
 			}
 			switch (numAugments) {
 				case 4:
@@ -168,20 +168,20 @@ public class TabAugment extends TabBase {
 		switch (numAugments) {
 			case 4:
 				for (int i = 0; i < numAugments; i++) {
-					myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 2);
-					myContainer.getAugmentSlots()[i].yDisplayPosition = posY + slotsBorderY1 + 4 + 18 * (i / 2);
+					myContainer.getAugmentSlots()[i].xPos = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 2);
+					myContainer.getAugmentSlots()[i].yPos = posY + slotsBorderY1 + 4 + 18 * (i / 2);
 				}
 				break;
 			case 5:
 				for (int i = 0; i < numAugments; i++) {
-					myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 3) + 9 * (i / 3);
-					myContainer.getAugmentSlots()[i].yDisplayPosition = posY + slotsBorderY1 + 4 + 18 * (i / 3);
+					myContainer.getAugmentSlots()[i].xPos = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 3) + 9 * (i / 3);
+					myContainer.getAugmentSlots()[i].yPos = posY + slotsBorderY1 + 4 + 18 * (i / 3);
 				}
 				break;
 			default:
 				for (int i = 0; i < numAugments; i++) {
-					myContainer.getAugmentSlots()[i].xDisplayPosition = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 3);
-					myContainer.getAugmentSlots()[i].yDisplayPosition = posY + slotsBorderY1 + 4 + 18 * (i / 3);
+					myContainer.getAugmentSlots()[i].xPos = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 3);
+					myContainer.getAugmentSlots()[i].yPos = posY + slotsBorderY1 + 4 + 18 * (i / 3);
 				}
 		}
 		myContainer.setAugmentLock(false);
@@ -192,8 +192,8 @@ public class TabAugment extends TabBase {
 
 		if (open) {
 			for (int i = 0; i < numAugments; i++) {
-				myContainer.getAugmentSlots()[i].xDisplayPosition = -gui.getGuiLeft() - 16;
-				myContainer.getAugmentSlots()[i].yDisplayPosition = -gui.getGuiTop() - 16;
+				myContainer.getAugmentSlots()[i].xPos = -gui.getGuiLeft() - 16;
+				myContainer.getAugmentSlots()[i].yPos = -gui.getGuiTop() - 16;
 			}
 			myContainer.setAugmentLock(true);
 		}

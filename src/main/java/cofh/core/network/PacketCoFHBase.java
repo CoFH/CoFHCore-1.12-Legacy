@@ -304,7 +304,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 			return readItemStack();
 		} catch (IOException e) {
 			e.printStackTrace();
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -325,11 +325,11 @@ public abstract class PacketCoFHBase extends PacketBase {
 
 	private void writeItemStack(ItemStack theStack) throws IOException {
 
-		if (theStack == null) {
+		if (theStack.isEmpty()) {
 			addShort(-1);
 		} else {
 			addShort(Item.getIdFromItem(theStack.getItem()));
-			addByte(theStack.stackSize);
+			addByte(theStack.getCount());
 			addShort(ItemHelper.getItemDamage(theStack));
 			writeNBT(theStack.getTagCompound());
 		}
@@ -337,7 +337,7 @@ public abstract class PacketCoFHBase extends PacketBase {
 
 	public ItemStack readItemStack() throws IOException {
 
-		ItemStack stack = null;
+		ItemStack stack = ItemStack.EMPTY;
 		short itemID = getShort();
 
 		if (itemID >= 0) {

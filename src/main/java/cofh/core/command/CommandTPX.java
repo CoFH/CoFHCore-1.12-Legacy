@@ -180,7 +180,7 @@ public class CommandTPX implements ISubCommand {
 	public List<String> addTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args) {
 
 		if (args.length == 2 || args.length == 3) {
-			return CommandBase.getListOfStringsMatchingLastWord(args, server.getAllUsernames());
+			return CommandBase.getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 		} else if (args.length >= 6) {
 			Integer[] ids = DimensionManager.getIDs();
 			String[] strings = new String[ids.length];

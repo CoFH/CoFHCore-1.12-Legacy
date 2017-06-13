@@ -42,7 +42,7 @@ public class RenderUtils {
 
 	public static final void renderItemOnBlockSide(TileEntity tile, ItemStack stack, int side, double x, double y, double z) {
 
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return;
 		}
 		GlStateManager.pushMatrix();

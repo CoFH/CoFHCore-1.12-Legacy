@@ -25,9 +25,9 @@ public class RecipeSecure extends ShapedOreRecipe {
 	public ItemStack getCraftingResult(InventoryCrafting craftMatrix) {
 
 		if (SecurityHelper.isSecure(craftMatrix.getStackInSlot(targetSlot))) {
-			return null;
+			return ItemStack.EMPTY;
 		}
-		if (craftMatrix.getStackInSlot(targetSlot) == null) {
+		if (craftMatrix.getStackInSlot(targetSlot).isEmpty()) {
 			return super.getCraftingResult(craftMatrix);
 		}
 		ItemStack secureStack = ItemHelper.copyTag(getRecipeOutput().copy(), craftMatrix.getStackInSlot(targetSlot));

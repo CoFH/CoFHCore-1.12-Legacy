@@ -167,7 +167,7 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
 
 		TileEntity tile = world.getTileEntity(pos);
 
@@ -201,14 +201,14 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 	public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
 
 		TileEntity tile = world.getTileEntity(pos);
-		return tile instanceof TileCore && tile.hasWorldObj() ? ((TileCore) tile).getComparatorInputOverride() : 0;
+		return tile instanceof TileCore && tile.hasWorld() ? ((TileCore) tile).getComparatorInputOverride() : 0;
 	}
 
 	@Override
 	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
 
 		TileEntity tile = world.getTileEntity(pos);
-		return tile instanceof TileCore && tile.hasWorldObj() ? ((TileCore) tile).getLightValue() : 0;
+		return tile instanceof TileCore && tile.hasWorld() ? ((TileCore) tile).getLightValue() : 0;
 	}
 
 	@Override
@@ -242,7 +242,7 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 		Item item = Item.getItemFromBlock(this);
 
 		if (item == null) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 		int bMeta = state.getBlock().getMetaFromState(state);
 		ItemStack retStack = new ItemStack(item, 1, bMeta);

@@ -41,7 +41,7 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 	@Override
 	public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, EntityPlayer player) {
 
-		World world = player.worldObj;
+		World world = player.world;
 		IBlockState state = world.getBlockState(pos);
 
 		if (!canHarvestBlock(state, stack)) {

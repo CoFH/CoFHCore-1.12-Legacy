@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ForgeModContainer;
@@ -54,22 +55,22 @@ public class RecipeShapelessOreFluid extends ShapelessOreRecipe {
 	}
 
 	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
 
-		ItemStack[] ret = new ItemStack[inv.getSizeInventory()];
-		for (int i = 0; i < ret.length; i++) {
+		NonNullList<ItemStack> ret = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+		for (int i = 0; i < ret.size(); i++) {
 			ItemStack stackInSlot = inv.getStackInSlot(i);
 			IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stackInSlot);
 			if (fluidHandler == null) {
-				ret[i] = ForgeHooks.getContainerItem(stackInSlot);
+				ret.set(i, ForgeHooks.getContainerItem(stackInSlot));
 			} else {
 				ItemStack copy = stackInSlot.copy();
-				copy.stackSize = 1;
+				copy.setCount(1);
 				Validate.notNull(FluidUtil.getFluidHandler(copy)).drain(Fluid.BUCKET_VOLUME, true);
-				if (copy.getItem() != null && copy.stackSize > 0 && (!copy.isItemStackDamageable() || copy.getMetadata() <= copy.getMaxDamage())) {
-					ret[i] = copy;
+				if (copy.getCount() > 0 && (!copy.isItemStackDamageable() || copy.getMetadata() <= copy.getMaxDamage())) {
+					ret.set(i, copy);
 				} else {
-					ret[i] = null;
+					ret.set(i, ItemStack.EMPTY);
 				}
 			}
 		}
@@ -84,7 +85,7 @@ public class RecipeShapelessOreFluid extends ShapelessOreRecipe {
 		for (int i = 0; i < inventoryCrafting.getSizeInventory(); i++) {
 			ItemStack stackInSlot = inventoryCrafting.getStackInSlot(i);
 
-			if (stackInSlot != null) {
+			if (!stackInSlot.isEmpty()) {
 				boolean inRecipe = false;
 
 				for (Object aRequired : required) {

@@ -143,7 +143,7 @@ public class ProxyClient extends Proxy {
 		if (event.getOverlayType() == OverlayType.WATER) {
 			EntityPlayer player = event.getPlayer();
 			Vec3d playerEyePos = RayTracer.getCorrectedHeadVec(player);
-			IBlockState state = player.worldObj.getBlockState(new BlockPos(playerEyePos));
+			IBlockState state = player.world.getBlockState(new BlockPos(playerEyePos));
 			Block block = state.getBlock();
 
 			if (block instanceof IFogOverlay) {
@@ -202,7 +202,7 @@ public class ProxyClient extends Proxy {
 	@Override
 	public World getClientWorld() {
 
-		return Minecraft.getMinecraft().theWorld;
+		return Minecraft.getMinecraft().world;
 	}
 
 	@Override
@@ -221,7 +221,7 @@ public class ProxyClient extends Proxy {
 	@Override
 	public EntityPlayer findPlayer(String playerName) {
 
-		for (EntityPlayer player : FMLClientHandler.instance().getClient().theWorld.playerEntities) {
+		for (EntityPlayer player : FMLClientHandler.instance().getClient().world.playerEntities) {
 			if (player.getName().toLowerCase(Locale.US).equals(playerName.toLowerCase(Locale.US))) {
 				return player;
 			}
@@ -232,7 +232,7 @@ public class ProxyClient extends Proxy {
 	@Override
 	public EntityPlayer getClientPlayer() {
 
-		return Minecraft.getMinecraft().thePlayer;
+		return Minecraft.getMinecraft().player;
 	}
 
 	@Override

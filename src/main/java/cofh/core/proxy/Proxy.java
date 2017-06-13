@@ -71,24 +71,24 @@ public class Proxy {
 		if ((event.getEntityLiving() instanceof EntityPlayer)) {
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
-			if (player.getActiveItemStack() != null) {
+			if (!player.getActiveItemStack().isEmpty()) {
 				ItemStack stack = player.getActiveItemStack();
 				float damage = event.getAmount();
 
-				if (damage >= 3.0F && stack != null && ((stack.getItem() instanceof ItemShieldCore))) {
+				if (damage >= 3.0F && !stack.isEmpty() && ((stack.getItem() instanceof ItemShieldCore))) {
 					((ItemShieldCore) stack.getItem()).damageShield(stack, 1 + MathHelper.floor(damage), player, event.getSource().getEntity());
 
-					if (stack.stackSize <= 0) {
+					if (stack.getCount() <= 0) {
 						EnumHand enumhand = player.getActiveHand();
 						ForgeEventFactory.onPlayerDestroyItem(player, player.activeItemStack, enumhand);
 
 						if (enumhand == EnumHand.MAIN_HAND) {
-							player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
+							player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
 						} else {
-							player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, null);
+							player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
 						}
-						player.activeItemStack = null;
-						player.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + player.worldObj.rand.nextFloat() * 0.4F);
+						player.activeItemStack = ItemStack.EMPTY;
+						player.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + player.world.rand.nextFloat() * 0.4F);
 					}
 				}
 			}
@@ -100,10 +100,10 @@ public class Proxy {
 
 		Entity entity = event.getEntity();
 
-		if (!CoreProps.enableLivingEntityDeathMessages || entity.worldObj.isRemote || !(entity instanceof EntityLiving) || !event.getEntityLiving().hasCustomName()) {
+		if (!CoreProps.enableLivingEntityDeathMessages || entity.world.isRemote || !(entity instanceof EntityLiving) || !event.getEntityLiving().hasCustomName()) {
 			return;
 		}
-		entity.worldObj.getMinecraftServer().getPlayerList().sendChatMsg(event.getEntityLiving().getCombatTracker().getDeathMessage());
+		entity.world.getMinecraftServer().getPlayerList().sendMessage(event.getEntityLiving().getCombatTracker().getDeathMessage());
 	}
 
 	@SubscribeEvent
@@ -173,9 +173,9 @@ public class Proxy {
 
 		List<EntityPlayer> result = new LinkedList<>();
 
-		for (int i = 0; i < FMLCommonHandler.instance().getMinecraftServerInstance().worldServers.length; i++) {
-			if (FMLCommonHandler.instance().getMinecraftServerInstance().worldServers[i] != null) {
-				result.addAll(FMLCommonHandler.instance().getMinecraftServerInstance().worldServers[i].playerEntities);
+		for (int i = 0; i < FMLCommonHandler.instance().getMinecraftServerInstance().worlds.length; i++) {
+			if (FMLCommonHandler.instance().getMinecraftServerInstance().worlds[i] != null) {
+				result.addAll(FMLCommonHandler.instance().getMinecraftServerInstance().worlds[i].playerEntities);
 			}
 		}
 		return result;

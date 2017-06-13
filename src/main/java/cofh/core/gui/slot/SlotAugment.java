@@ -19,7 +19,7 @@ public class SlotAugment extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack stack) {
 
-		return stack != null && myTile.isValidAugment(stack);
+		return !stack.isEmpty() && myTile.isValidAugment(stack);
 	}
 
 	@Override
@@ -51,11 +51,11 @@ public class SlotAugment extends Slot {
 	@Override
 	public ItemStack decrStackSize(int amount) {
 
-		if (myTile.getAugmentSlots()[getSlotIndex()] == null) {
-			return null;
+		if (myTile.getAugmentSlots()[getSlotIndex()] == ItemStack.EMPTY) {
+			return ItemStack.EMPTY;
 		}
 		ItemStack stack = myTile.getAugmentSlots()[getSlotIndex()].splitStack(1);
-		myTile.getAugmentSlots()[getSlotIndex()] = null;
+		myTile.getAugmentSlots()[getSlotIndex()] = ItemStack.EMPTY;
 
 		return stack;
 	}

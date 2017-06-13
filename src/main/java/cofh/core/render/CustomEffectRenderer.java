@@ -11,7 +11,7 @@ public class CustomEffectRenderer extends ParticleManager {
 
 	public CustomEffectRenderer() {
 
-		super(Minecraft.getMinecraft().theWorld, Minecraft.getMinecraft().renderEngine);
+		super(Minecraft.getMinecraft().world, Minecraft.getMinecraft().renderEngine);
 	}
 
 	@Override

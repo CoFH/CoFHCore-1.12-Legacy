@@ -35,7 +35,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DungeonHooks.DungeonMob;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
@@ -519,7 +518,8 @@ public class FeatureParser {
 				} else {
 					Object data;
 					int t;
-					if (type.equalsIgnoreCase("dictionary")) {
+					//TODO, Skyboy, Seems there is no generic "hey, give me this type" methods anymore...
+					/*if (type.equalsIgnoreCase("dictionary")) {
 						if (array != null) {
 							ArrayList<Type> tags = new ArrayList<>(array.size());
 							for (int k = 0, j = array.size(); k < j; k++) {
@@ -531,7 +531,8 @@ public class FeatureParser {
 							data = Type.valueOf(entry);
 							t = 2;
 						}
-					} else if (type.equalsIgnoreCase("id")) {
+					} else*/
+					if (type.equalsIgnoreCase("id")) {
 						if (array != null) {
 							ArrayList<ResourceLocation> ids = new ArrayList<>(array.size());
 							for (int k = 0, j = array.size(); k < j; ++k) {
@@ -762,7 +763,7 @@ public class FeatureParser {
 				type = String.valueOf(genElement.unwrapped());
 				break;
 		}
-		return new DungeonMob(weight, type);
+		return new DungeonMob(weight, new ResourceLocation(type));
 	}
 
 	public static boolean parseWeightedStringList(ConfigValue genElement, List<DungeonMob> list) {
@@ -841,10 +842,6 @@ public class FeatureParser {
 				}
 			}
 		}
-		if (stack.getItem() == null) {
-			log.error("Invalid item name at line %d!", genElement.origin().lineNumber());
-			return null;
-		}
 		return new WeightedRandomItemStack(stack, chance);
 	}
 
@@ -893,8 +890,7 @@ public class FeatureParser {
 						break;
 					case 2:
 						if (genData.containsKey("min") && genData.containsKey("max")) {
-							return new UniformRandomProvider(boundCheck(genProp.getNumber("min"), min, max),
-									boundCheck(genProp.getNumber("max"), min, max));
+							return new UniformRandomProvider(boundCheck(genProp.getNumber("min"), min, max), boundCheck(genProp.getNumber("max"), min, max));
 						}
 						break;
 					default:

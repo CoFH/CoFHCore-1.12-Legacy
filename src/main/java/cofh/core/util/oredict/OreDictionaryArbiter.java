@@ -79,7 +79,7 @@ public class OreDictionaryArbiter {
 	 */
 	public static void registerOreDictionaryEntry(ItemStack stack, String name) {
 
-		if (stack.getItem() == null || Strings.isNullOrEmpty(name)) {
+		if (Strings.isNullOrEmpty(name)) {
 			return;
 		}
 		int id = OreDictionary.getOreID(name);
@@ -122,7 +122,7 @@ public class OreDictionaryArbiter {
 	 */
 	public static int getOreID(ItemStack stack) {
 
-		if (stack == null) {
+		if (stack.isEmpty()) {
 			return UNKNOWN_ID;
 		}
 		ArrayList<Integer> ids = stackIDs.get(new ItemWrapper(stack));

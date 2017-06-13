@@ -77,7 +77,7 @@ public class CommandHandler extends CommandBase {
 	public static boolean canUseCommand(ICommandSender sender, int permission, String name) {
 
 		if (getCommandExists(name)) {
-			return sender.canCommandSenderUseCommand(permission, "cofh " + name) ||
+			return sender.canUseCommand(permission, "cofh " + name) ||
 					// this check below is because mojang is incompetent, as always
 					(sender instanceof EntityPlayerMP && permission <= 0);
 		}
@@ -110,21 +110,21 @@ public class CommandHandler extends CommandBase {
 	}
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 
 		return "cofh";
 	}
 
 	@Override
-	public List<String> getCommandAliases() {
+	public List<String> getAliases() {
 
 		return new ArrayList<>();
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 
-		return "/" + getCommandName() + " help";
+		return "/" + getName() + " help";
 	}
 
 	@Override
@@ -151,7 +151,7 @@ public class CommandHandler extends CommandBase {
 	}
 
 	@Override
-	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos) {
 
 		if (args.length == 1) {
 			return getListOfStringsMatchingLastWord(args, commands.keySet());
@@ -173,7 +173,7 @@ public class CommandHandler extends CommandBase {
 		}
 
 		@Override
-		public String getCommandName() {
+		public String getName() {
 
 			return "cofh " + name;
 		}
@@ -185,7 +185,7 @@ public class CommandHandler extends CommandBase {
 		}
 
 		@Override
-		public String getCommandUsage(ICommandSender p_71518_1_) {
+		public String getUsage(ICommandSender sender) {
 
 			return "";
 		}

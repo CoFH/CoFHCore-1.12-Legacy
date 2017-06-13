@@ -54,7 +54,7 @@ public class EntityDropParticleFX extends Particle {
 		} else {
 			this.setParticleTextureIndex(112);
 		}
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.move(this.motionX, this.motionY, this.motionZ);
 		this.motionX *= 0.9800000190734863D;
 		this.motionY *= 0.9800000190734863D;
 		this.motionZ *= 0.9800000190734863D;
@@ -62,7 +62,7 @@ public class EntityDropParticleFX extends Particle {
 		if (this.particleMaxAge-- <= 0) {
 			this.setExpired();
 		}
-		if (this.isCollided) {
+		if (this.onGround) {
 			this.setParticleTextureIndex(114);
 			this.motionX *= 0.699999988079071D;
 			this.motionZ *= 0.699999988079071D;
@@ -71,7 +71,7 @@ public class EntityDropParticleFX extends Particle {
 		BlockPos posCeli = new BlockPos(MathHelper.ceil(posX), MathHelper.ceil(posY), MathHelper.ceil(posZ));
 		if (this.particleGravity > 0) {
 
-			IBlockState state = worldObj.getBlockState(posFloor);
+			IBlockState state = world.getBlockState(posFloor);
 			Material material = state.getMaterial();
 
 			if (material.isLiquid() || material.isSolid()) {
@@ -81,7 +81,7 @@ public class EntityDropParticleFX extends Particle {
 				}
 			}
 		} else {
-			IBlockState state = worldObj.getBlockState(posCeli);
+			IBlockState state = world.getBlockState(posCeli);
 			Material material = state.getMaterial();
 
 			if (material.isLiquid() || material.isSolid()) {

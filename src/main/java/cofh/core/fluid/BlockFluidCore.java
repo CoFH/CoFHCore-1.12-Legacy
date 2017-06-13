@@ -18,10 +18,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -156,90 +154,6 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 	public float getParticleBlue() {
 
 		return particleBlue;
-	}
-
-	/* Implementing https://github.com/MinecraftForge/MinecraftForge/pull/3747 TODO Remove in 1.11 */
-
-	private boolean isFluid(IBlockState state) {
-
-		return state.getMaterial().isLiquid() || state.getBlock() instanceof IFluidBlock;
-	}
-
-	private float getFluidHeightForRender(IBlockAccess world, BlockPos pos, IBlockState up) {
-
-		IBlockState here = world.getBlockState(pos);
-		if (here.getBlock() == this) {
-			if (isFluid(up)) {
-				return 1.0F;
-			}
-			if (getMetaFromState(here) == getMaxRenderHeightMeta()) {
-				return 0.875F;
-			}
-		}
-		if (here.getBlock() instanceof BlockLiquid) {
-			return Math.min(1 - BlockLiquid.getLiquidHeightPercent(here.getValue(BlockLiquid.LEVEL)), 14F / 16F);
-		}
-		return !here.getMaterial().isSolid() && up.getBlock() == this ? 1 : this.getQuantaPercentage(world, pos) * 0.875F;
-	}
-
-	@Override
-	public IBlockState getExtendedState(IBlockState oldState, IBlockAccess worldIn, BlockPos pos) {
-
-		IExtendedBlockState state = (IExtendedBlockState) oldState;
-		state = state.withProperty(FLOW_DIRECTION, (float) getFlowDirection(worldIn, pos));
-		IBlockState[][] upBlockState = new IBlockState[3][3];
-		float[][] height = new float[3][3];
-		float[][] corner = new float[2][2];
-		upBlockState[1][1] = worldIn.getBlockState(pos.down(densityDir));
-		height[1][1] = getFluidHeightForRender(worldIn, pos, upBlockState[1][1]);
-		if (height[1][1] == 1) {
-			for (int i = 0; i < 2; i++) {
-				for (int j = 0; j < 2; j++) {
-					corner[i][j] = 1;
-				}
-			}
-		} else {
-			for (int i = 0; i < 3; i++) {
-				for (int j = 0; j < 3; j++) {
-					if (i != 1 || j != 1) {
-						upBlockState[i][j] = worldIn.getBlockState(pos.add(i - 1, 0, j - 1).down(densityDir));
-						height[i][j] = getFluidHeightForRender(worldIn, pos.add(i - 1, 0, j - 1), upBlockState[i][j]);
-					}
-				}
-			}
-			for (int i = 0; i < 2; i++) {
-				for (int j = 0; j < 2; j++) {
-					corner[i][j] = getFluidHeightAverage(height[i][j], height[i][j + 1], height[i + 1][j], height[i + 1][j + 1]);
-				}
-			}
-			//check for downflow above corners
-			boolean n = isFluid(upBlockState[0][1]);
-			boolean s = isFluid(upBlockState[2][1]);
-			boolean w = isFluid(upBlockState[1][0]);
-			boolean e = isFluid(upBlockState[1][2]);
-			boolean nw = isFluid(upBlockState[0][0]);
-			boolean ne = isFluid(upBlockState[0][2]);
-			boolean sw = isFluid(upBlockState[2][0]);
-			boolean se = isFluid(upBlockState[2][2]);
-			if (nw || n || w) {
-				corner[0][0] = 1;
-			}
-			if (ne || n || e) {
-				corner[0][1] = 1;
-			}
-			if (sw || s || w) {
-				corner[1][0] = 1;
-			}
-			if (se || s || e) {
-				corner[1][1] = 1;
-			}
-		}
-
-		state = state.withProperty(LEVEL_CORNERS[0], corner[0][0]);
-		state = state.withProperty(LEVEL_CORNERS[1], corner[0][1]);
-		state = state.withProperty(LEVEL_CORNERS[2], corner[1][1]);
-		state = state.withProperty(LEVEL_CORNERS[3], corner[1][0]);
-		return state;
 	}
 
 	/* IFogOverlay */

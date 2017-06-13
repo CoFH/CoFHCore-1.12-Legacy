@@ -38,7 +38,7 @@ public class PacketTileInfo extends PacketCoFHBase {
 	@Override
 	public void handlePacket(EntityPlayer player, boolean isServer) {
 
-		TileEntity tile = player.worldObj.getTileEntity(new BlockPos(getInt(), getInt(), getInt()));
+		TileEntity tile = player.world.getTileEntity(new BlockPos(getInt(), getInt(), getInt()));
 
 		if (tile instanceof ITileInfoPacketHandler) {
 			((ITileInfoPacketHandler) tile).handleTileInfoPacket(this, isServer, player);

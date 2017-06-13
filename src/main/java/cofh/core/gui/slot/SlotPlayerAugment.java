@@ -20,23 +20,23 @@ public class SlotPlayerAugment extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack stack) {
 
-		return stack != null;
+		return !stack.isEmpty();
 	}
 
 	@Override
 	public ItemStack getStack() {
 
 		if (thePlayer.getEntityData().hasKey(AUGMENT_KEY + getSlotIndex())) {
-			return ItemStack.loadItemStackFromNBT(thePlayer.getEntityData().getCompoundTag("cofhAugment" + getSlotIndex()));
+			return new ItemStack(thePlayer.getEntityData().getCompoundTag("cofhAugment" + getSlotIndex()));
 		}
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
 	public void putStack(ItemStack newStack) {
 
-		if (newStack == null || newStack.stackSize <= 0) {
+		if (newStack.isEmpty() || newStack.getCount() <= 0) {
 			thePlayer.getEntityData().removeTag(AUGMENT_KEY + getSlotIndex());
 		} else {
 			NBTTagCompound temp = new NBTTagCompound();
@@ -61,17 +61,17 @@ public class SlotPlayerAugment extends Slot {
 	public ItemStack decrStackSize(int amt) {
 
 		ItemStack tempStack = getStack();
-		if (tempStack != null) {
+		if (!tempStack.isEmpty()) {
 			ItemStack itemstack;
 
-			if (tempStack.stackSize <= amt) {
-				putStack(null);
+			if (tempStack.getCount() <= amt) {
+				putStack(ItemStack.EMPTY);
 				return tempStack;
 			} else {
 				itemstack = tempStack.splitStack(amt);
 
-				if (tempStack.stackSize == 0) {
-					putStack(null);
+				if (tempStack.getCount() == 0) {
+					putStack(ItemStack.EMPTY);
 				} else {
 					putStack(tempStack);
 				}
@@ -79,7 +79,7 @@ public class SlotPlayerAugment extends Slot {
 				return itemstack;
 			}
 		} else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 

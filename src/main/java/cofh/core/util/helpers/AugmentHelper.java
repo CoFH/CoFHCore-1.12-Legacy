@@ -34,7 +34,7 @@ public class AugmentHelper {
 		}
 		NBTTagList list = new NBTTagList();
 		for (int i = 0; i < augments.length; i++) {
-			if (augments[i] != null) {
+			if (!augments[i].isEmpty()) {
 				NBTTagCompound tag = new NBTTagCompound();
 				tag.setInteger("Slot", i);
 				augments[i].writeToNBT(tag);
@@ -47,7 +47,7 @@ public class AugmentHelper {
 	/* ITEM HELPERS */
 	public static boolean isAugmentItem(ItemStack stack) {
 
-		return stack != null && stack.getItem() instanceof IAugmentItem;
+		return !stack.isEmpty() && stack.getItem() instanceof IAugmentItem;
 	}
 
 	public static AugmentType getAugmentType(ItemStack stack) {
@@ -62,7 +62,7 @@ public class AugmentHelper {
 
 	public static boolean isUpgradeItem(ItemStack stack) {
 
-		return stack != null && stack.getItem() instanceof IUpgradeItem;
+		return !stack.isEmpty() && stack.getItem() instanceof IUpgradeItem;
 	}
 
 }

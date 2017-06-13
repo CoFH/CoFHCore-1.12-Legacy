@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -52,7 +53,7 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 	public ItemStack addItem(int number, ItemEntry entry) {
 
 		if (itemMap.containsKey(number)) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 		itemMap.put(number, entry);
 		itemList.add(number);
@@ -99,7 +100,7 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 	/* STANDARD METHODS */
 	@Override
 	@SideOnly (Side.CLIENT)
-	public void getSubItems(@Nonnull Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubItems(@Nonnull Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 
 		for (int metadata : itemList) {
 			list.add(new ItemStack(item, 1, metadata));

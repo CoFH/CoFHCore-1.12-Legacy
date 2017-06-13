@@ -1,43 +1,21 @@
 package cofh.core.entity;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFishHook;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemFishingRod;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.*;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 public class EntityFishHookCore extends EntityFishHook {
 
 	int luckModifier = 0;
 	int speedModifier = 0;
 
-	public EntityFishHookCore(World world) {
-
-		super(world);
-	}
-
 	@SideOnly (Side.CLIENT)
 	public EntityFishHookCore(World world, double x, double y, double z, EntityPlayer player) {
 
-		super(world, x, y, z, player);
+		super(world, player, x, y, z);
 
 	}
 
@@ -48,16 +26,16 @@ public class EntityFishHookCore extends EntityFishHook {
 		speedModifier = speedMod;
 	}
 
-	@Override
+	/*@Override//TODO, FishHooks got rewritten, again..
 	public void onUpdate() {
 
 		onEntityUpdate();
 
-		if (this.worldObj.isRemote) {
+		if (this.world.isRemote) {
 			int i = this.getDataManager().get(DATA_HOOKED_ENTITY);
 
 			if (i > 0 && this.caughtEntity == null) {
-				this.caughtEntity = this.worldObj.getEntityByID(i - 1);
+				this.caughtEntity = this.world.getEntityByID(i - 1);
 			}
 		} else {
 			ItemStack itemstack = this.angler.getHeldItemMainhand();
@@ -296,7 +274,7 @@ public class EntityFishHookCore extends EntityFishHook {
 				this.setPosition(this.posX, this.posY, this.posZ);
 			}
 		}
-	}
+	}*/
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
@@ -310,19 +288,19 @@ public class EntityFishHookCore extends EntityFishHook {
 		super.readEntityFromNBT(nbt);
 	}
 
-	public int handleHookRetraction() {
+	/*public int handleHookRetraction() {
 
-		if (this.worldObj.isRemote) {
+		if (this.world.isRemote) {
 			return 0;
 		} else {
 			int i = 0;
 
 			if (this.caughtEntity != null) {
 				this.bringInHookedEntity();
-				this.worldObj.setEntityState(this, (byte) 31);
+				this.world.setEntityState(this, (byte) 31);
 				i = this.caughtEntity instanceof EntityItem ? 3 : 5;
 			} else if (this.ticksCatchable > 0) {
-				LootContext.Builder lootcontext$builder = new LootContext.Builder((WorldServer) this.worldObj);
+				LootContext.Builder lootcontext$builder = new LootContext.Builder((WorldServer) this.world);
 				lootcontext$builder.withLuck((float) EnchantmentHelper.getLuckOfSeaModifier(this.angler) + this.angler.getLuck() + luckModifier);
 
 				for (ItemStack itemstack : this.worldObj.getLootTableManager().getLootTableFromLocation(LootTableList.GAMEPLAY_FISHING).generateLootForPools(this.rand, lootcontext$builder.build())) {
@@ -349,6 +327,6 @@ public class EntityFishHookCore extends EntityFishHook {
 			this.angler.fishEntity = null;
 			return i;
 		}
-	}
+	}*/
 
 }

@@ -47,7 +47,7 @@ public class CommandKillAll implements ISubCommand {
 			target = arguments[1].toLowerCase(Locale.US);
 			all = "*".equals(target);
 		}
-		for (WorldServer theWorld : CoreProps.server.worldServers) {
+		for (WorldServer theWorld : CoreProps.server.worlds) {
 			synchronized (theWorld) {
 				List<Entity> list = theWorld.loadedEntityList;
 				for (int i = list.size(); i-- > 0; ) {
@@ -82,7 +82,7 @@ public class CommandKillAll implements ISubCommand {
 			finalNames = finalNames.substring(0, finalNames.length() - 2);
 			CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.killall.success" + (target != null ? "" : "Hostile"), killCount, finalNames);
 		} else {
-			sender.addChatMessage(new TextComponentTranslation("chat.cofh.command.killall.no" + (target != null ? "Match" : "Hostile")));
+			sender.sendMessage(new TextComponentTranslation("chat.cofh.command.killall.no" + (target != null ? "Match" : "Hostile")));
 		}
 	}
 

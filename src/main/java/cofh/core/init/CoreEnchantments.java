@@ -1,5 +1,6 @@
 package cofh.core.init;
 
+import cofh.api.item.IInventoryContainerItem;
 import cofh.core.enchantment.EnchantmentHolding;
 import cofh.core.enchantment.EnchantmentMultishot;
 import net.minecraft.enchantment.Enchantment;
@@ -79,6 +80,7 @@ public class CoreEnchantments {
 	public static Enchantment vorpal;
 
 	/* TYPES */
-	public static final EnumEnchantmentType ENCHANTMENT_TYPE_STORAGE = EnumHelper.addEnchantmentType("COFH:STORAGE");
+	//TODO Lemming, Enchantments are smart now.
+	public static final EnumEnchantmentType ENCHANTMENT_TYPE_STORAGE = EnumHelper.addEnchantmentType("COFH:STORAGE", item -> item instanceof IInventoryContainerItem);
 
 }

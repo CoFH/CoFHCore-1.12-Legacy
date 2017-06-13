@@ -1,30 +1,15 @@
 package cofh.core.plugins.jei;
 
-import mezz.jei.api.*;
-import mezz.jei.api.ingredients.IModIngredientRegistration;
+import mezz.jei.api.BlankModPlugin;
+import mezz.jei.api.IModRegistry;
+import mezz.jei.api.JEIPlugin;
 
 @JEIPlugin
-public class JEIPluginCore implements IModPlugin {
-
-	@Override
-	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
-
-	}
-
-	@Override
-	public void registerIngredients(IModIngredientRegistration registry) {
-
-	}
+public class JEIPluginCore extends BlankModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
 
 		registry.addAdvancedGuiHandlers(new SlotMover());
 	}
-
-	@Override
-	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-
-	}
-
 }
