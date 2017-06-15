@@ -1,10 +1,11 @@
 {
 	"populate": {
+
 		"dirt": {
 			"distribution": "uniform",
 			"generator": {
 				"block": "dirt",
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 33
 			},
 			"cluster-count": 10,
@@ -20,11 +21,12 @@
 				]
 			}
 		},
+
 		"gravel": {
 			"distribution": "uniform",
 			"generator": {
 				"block": "gravel",
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 33
 			},
 			"cluster-count": 8,
@@ -40,6 +42,7 @@
 				]
 			}
 		},
+
 		"diorite": {
 			"distribution": "uniform",
 			"generator": {
@@ -49,7 +52,7 @@
 						"variant": "diorite"
 					}
 				},
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 33
 			},
 			"cluster-count": 10,
@@ -65,6 +68,7 @@
 				]
 			}
 		},
+
 		"granite": {
 			"distribution": "uniform",
 			"generator": {
@@ -74,7 +78,7 @@
 						"variant": "granite"
 					}
 				},
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 33
 			},
 			"cluster-count": 10,
@@ -90,6 +94,7 @@
 				]
 			}
 		},
+
 		"andesite": {
 			"distribution": "uniform",
 			"generator": {
@@ -99,7 +104,7 @@
 						"variant": "andesite"
 					}
 				},
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 33
 			},
 			"cluster-count": 10,
@@ -115,11 +120,12 @@
 				]
 			}
 		},
+
 		"coal": {
 			"distribution": "uniform",
 			"generator": {
 				"block": "coal_ore",
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 17
 			},
 			"cluster-count": 20,
@@ -135,11 +141,12 @@
 				]
 			}
 		},
+
 		"iron": {
 			"distribution": "uniform",
 			"generator": {
 				"block": "iron_ore",
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 9
 			},
 			"cluster-count": 20,
@@ -155,11 +162,12 @@
 				]
 			}
 		},
+
 		"gold": {
 			"distribution": "uniform",
 			"generator": {
 				"block": "gold_ore",
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 9
 			},
 			"cluster-count": 2,
@@ -175,11 +183,12 @@
 				]
 			}
 		},
+
 		"redstone": {
 			"distribution": "uniform",
 			"generator": {
 				"block": "redstone_ore",
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 8
 			},
 			"cluster-count": 8,
@@ -195,11 +204,12 @@
 				]
 			}
 		},
+
 		"diamond": {
 			"distribution": "uniform",
 			"generator": {
 				"block": "diamond_ore",
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 8
 			},
 			"cluster-count": 1,
@@ -215,11 +225,12 @@
 				]
 			}
 		},
+
 		"lapis": {
 			"distribution": "gaussian",
 			"generator": {
 				"block": "lapis_ore",
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 7
 			},
 			"cluster-count": 1,
@@ -235,6 +246,7 @@
 				]
 			}
 		},
+
 		"mesa_gold": {
 			"enabled": false,
 			"distribution": "uniform",
@@ -242,7 +254,7 @@
 				"block": {
 					"name": "gold_ore"
 				},
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 9
 			},
 			"cluster-count": 20,
@@ -273,13 +285,14 @@
 				]
 			}
 		},
+
 		"emerald": {
 			"distribution": "uniform",
 			"generator": {
 				"block": {
 					"name": "emerald_ore"
 				},
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 1
 			},
 			"cluster-count": {
@@ -312,6 +325,7 @@
 				]
 			}
 		},
+
 		"silverfish": {
 			"distribution": "uniform",
 			"generator": {
@@ -321,7 +335,7 @@
 						"variant": "stone"
 					}
 				},
-				"material": "stone",
+				"material": "minecraft:stone",
 				"cluster-size": 9
 			},
 			"cluster-count": 7,
@@ -351,11 +365,12 @@
 				]
 			}
 		},
+
 		"quartz": {
 			"distribution": "uniform",
 			"generator": {
 				"block": "quartz_ore",
-				"material": "netherrack",
+				"material": "minecraft:netherrack",
 				"cluster-size": 14
 			},
 			"cluster-count": 16,
