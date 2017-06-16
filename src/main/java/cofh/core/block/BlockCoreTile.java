@@ -162,7 +162,6 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 			}
 		}
 		if (tile instanceof TileCore) {
-			((TileCore) tile).onNeighborBlockChange();
 			((TileCore) tile).blockPlaced();
 		}
 	}
