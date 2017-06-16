@@ -1,6 +1,7 @@
 package cofh.core.item.tool;
 
 import cofh.lib.util.helpers.ItemHelper;
+import cofh.lib.util.helpers.ServerHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -11,7 +12,6 @@ import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -97,73 +97,32 @@ public class ItemFishingRodCore extends ItemFishingRod {
 		return toolMaterial.getEnchantability();
 	}
 
-//	@Override
-//	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-//
-//		ItemStack stack = player.getHeldItem(hand);
-//
-//		if (player.fishEntity != null) {
-//			int i = player.fishEntity.handleHookRetraction();
-//			stack.damageItem(i, player);
-//			player.swingArm(hand);
-//		} else {
-//			world.playSound( null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-//
-//			if (ServerHelper.isServerWorld(world)) {
-//				EntityFishHook hook = new EntityFishHook(world, player);
-//
-//				int enchantSpeed = EnchantmentHelper.func_191528_c(stack);
-//				hook.func_191516_a(speedModifier + enchantSpeed);
-//
-//				int enchantLuck = EnchantmentHelper.func_191529_b(stack);
-//				hook.func_191517_b(luckModifier + enchantLuck);
-//
-//				world.spawnEntity(hook);
-//			}
-//			player.swingArm(hand);
-//		}
-//		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
-//	}
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
-	{
-		ItemStack itemstack = playerIn.getHeldItem(handIn);
+		ItemStack stack = player.getHeldItem(hand);
 
-		if (playerIn.fishEntity != null)
-		{
-			int i = playerIn.fishEntity.handleHookRetraction();
-			itemstack.damageItem(i, playerIn);
-			playerIn.swingArm(handIn);
-		}
-		else
-		{
-			worldIn.playSound((EntityPlayer)null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+		if (player.fishEntity != null) {
+			int i = player.fishEntity.handleHookRetraction();
+			stack.damageItem(i, player);
+			player.swingArm(hand);
+		} else {
+			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
-			if (!worldIn.isRemote)
-			{
-				EntityFishHook entityfishhook = new EntityFishHook(worldIn, playerIn);
-				int j = EnchantmentHelper.func_191528_c(itemstack);
+			if (ServerHelper.isServerWorld(world)) {
+				EntityFishHook hook = new EntityFishHook(world, player);
 
-				if (j > 0)
-				{
-					entityfishhook.func_191516_a(j);
-				}
+				int enchantSpeed = EnchantmentHelper.func_191528_c(stack);
+				hook.func_191516_a(speedModifier + enchantSpeed);
 
-				int k = EnchantmentHelper.func_191529_b(itemstack);
+				int enchantLuck = EnchantmentHelper.func_191529_b(stack);
+				hook.func_191517_b(luckModifier + enchantLuck);
 
-				if (k > 0)
-				{
-					entityfishhook.func_191517_b(k);
-				}
-
-				worldIn.spawnEntity(entityfishhook);
+				world.spawnEntity(hook);
 			}
-
-			playerIn.swingArm(handIn);
-			playerIn.addStat(StatList.getObjectUseStats(this));
+			player.swingArm(hand);
 		}
-
-		return new ActionResult(EnumActionResult.SUCCESS, itemstack);
+		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
 }
