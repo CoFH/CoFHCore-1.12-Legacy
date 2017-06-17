@@ -321,8 +321,8 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		if (!genFlatBedrock | !newGen & !retroFlatBedrock) {
 			return;
 		}
-		int offsetX = chunkX * 16;
-		int offsetZ = chunkZ * 16;
+		int offsetX = chunkX * 16 + 8;
+		int offsetZ = chunkZ * 16 + 8;
 
 		/* Determine if this is a void age; halt if so. */
 		boolean isVoidAge = !world.getBlockState(new BlockPos(offsetX, 0, offsetZ)).getBlock().isAssociatedBlock(Blocks.BEDROCK);

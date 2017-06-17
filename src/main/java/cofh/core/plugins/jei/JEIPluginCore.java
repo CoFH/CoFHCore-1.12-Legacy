@@ -12,4 +12,5 @@ public class JEIPluginCore extends BlankModPlugin {
 
 		registry.addAdvancedGuiHandlers(new SlotMover());
 	}
+
 }
