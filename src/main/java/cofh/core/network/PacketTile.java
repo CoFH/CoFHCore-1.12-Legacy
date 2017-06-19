@@ -29,13 +29,10 @@ public class PacketTile extends PacketCoFHBase {
 
 		TileEntity tile = player.worldObj.getTileEntity(new BlockPos(getInt(), getInt(), getInt()));
 
-		if (tile instanceof ITilePacketHandler) {
-			((ITilePacketHandler) tile).handleTilePacket(this, isServer);
+		if (tile instanceof ITilePacketHandler && !isServer) {
+			((ITilePacketHandler) tile).handleTilePacket(this);
 			IBlockState state = tile.getWorld().getBlockState(tile.getPos());
 			tile.getWorld().notifyBlockUpdate(tile.getPos(), state, state, 3);
-			if (isServer) {
-				tile.getWorld().updateComparatorOutputLevel(tile.getPos(), tile.getBlockType());
-			}
 		} else {
 			// TODO: Throw error, bad packet
 		}
