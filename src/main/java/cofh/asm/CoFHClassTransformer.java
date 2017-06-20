@@ -82,6 +82,9 @@ public class CoFHClassTransformer implements IClassTransformer {
 			serverSig = "(Lnet/minecraft/server/MinecraftServer;" + sigBody + ")V";
 			worldSig = "(" + sigBody + ")V";
 		}
+		final ObfMapping worldServerMapping = new ObfMapping(worldServer).toRuntime();
+		final ObfMapping worldMapping = new ObfMapping(world).toRuntime();
+
 		ObfMapping serverMapping = new ObfMapping(worldServer, "<init>", serverSig);
 
 		transformer.add(new ModularASMTransformer.MethodTransformer(serverMapping) {
@@ -131,7 +134,7 @@ public class CoFHClassTransformer implements IClassTransformer {
 
 			public String className() {
 
-				return worldServer.replace('/', '.');
+				return worldServerMapping.javaClass();
 			}
 
 			public void transform(ClassNode cn) {
@@ -146,7 +149,7 @@ public class CoFHClassTransformer implements IClassTransformer {
 
 			public String className() {
 
-				return world.replace('/', '.');
+				return worldMapping.javaClass();
 			}
 
 			public void transform(ClassNode cn) {
