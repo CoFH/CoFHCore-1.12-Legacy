@@ -12,7 +12,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.UniversalBucket;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import org.apache.commons.lang3.Validate;
@@ -46,7 +46,7 @@ public class RecipeShapelessOreFluid extends ShapelessOreRecipe {
 				array[i] = filledBucket;
 			} else if (obj instanceof FluidStack) {
 				ItemStack bucket = ForgeModContainer.getInstance().universalBucket.getEmpty().copy();
-				IFluidHandler handler = Validate.notNull(FluidUtil.getFluidHandler(bucket));
+				IFluidHandlerItem handler = FluidUtil.getFluidHandler(bucket);
 				handler.fill((FluidStack) obj, true);
 				array[i] = bucket;
 			}
@@ -60,18 +60,12 @@ public class RecipeShapelessOreFluid extends ShapelessOreRecipe {
 		NonNullList<ItemStack> ret = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 		for (int i = 0; i < ret.size(); i++) {
 			ItemStack stackInSlot = inv.getStackInSlot(i);
-			IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stackInSlot);
+			IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(stackInSlot);
 			if (fluidHandler == null) {
-				ret.set(i, ForgeHooks.getContainerItem(stackInSlot));
+				ret.set(i, ForgeHooks.getContainerItem(stackInSlot).copy());
 			} else {
-				ItemStack copy = stackInSlot.copy();
-				copy.setCount(1);
-				Validate.notNull(FluidUtil.getFluidHandler(copy)).drain(Fluid.BUCKET_VOLUME, true);
-				if (copy.getCount() > 0 && (!copy.isItemStackDamageable() || copy.getMetadata() <= copy.getMaxDamage())) {
-					ret.set(i, copy);
-				} else {
-					ret.set(i, ItemStack.EMPTY);
-				}
+				fluidHandler.drain(Fluid.BUCKET_VOLUME, true);
+				ret.set(i, fluidHandler.getContainer().copy());
 			}
 		}
 		return ret;
@@ -94,15 +88,15 @@ public class RecipeShapelessOreFluid extends ShapelessOreRecipe {
 					if (aRequired instanceof ItemStack) {
 						ItemStack requiredStack = (ItemStack) aRequired;
 						if (requiredStack.getItem() == ForgeModContainer.getInstance().universalBucket) {
-							FluidStack fluidStack = Validate.notNull(FluidUtil.getFluidContained(requiredStack));
-							IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stackInSlot);
+							FluidStack fluidStack = FluidUtil.getFluidContained(requiredStack);
+							IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(stackInSlot);
 							if (fluidHandler != null) {
 								if (fluidStack.isFluidStackIdentical(fluidHandler.drain(Fluid.BUCKET_VOLUME, false))) {
 									match = true;
 								}
 							}
 						} else {
-							IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stackInSlot);
+							IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(stackInSlot);
 							if (fluidHandler == null) {
 								match = OreDictionary.itemMatches(requiredStack, stackInSlot, false);
 							}
