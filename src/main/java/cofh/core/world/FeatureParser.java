@@ -11,10 +11,7 @@ import cofh.lib.util.WeightedRandomNBTTag;
 import cofh.lib.util.WeightedRandomWorldGenerator;
 import cofh.lib.util.helpers.ItemHelper;
 import cofh.lib.util.helpers.MathHelper;
-import cofh.lib.util.numbers.ConstantProvider;
-import cofh.lib.util.numbers.INumberProvider;
-import cofh.lib.util.numbers.SkellamRandomProvider;
-import cofh.lib.util.numbers.UniformRandomProvider;
+import cofh.lib.util.numbers.*;
 import cofh.lib.util.numbers.world.WorldValueProvider;
 import cofh.lib.world.IFeatureGenerator;
 import cofh.lib.world.IFeatureParser;
@@ -900,7 +897,19 @@ public class FeatureParser {
 							return new WorldValueProvider(
 									parseNumberValue(genProp.getValue("offset")),
 									genProp.getString("type"),
-									min, max); // because we cannot bound-check the world data we pass the bounds to the provider instead
+									min, max
+							); // because we cannot bound-check the world data we pass the bounds to the provider instead
+						}
+						break;
+					case 3:
+						final String valueA = "operand-a", valueB = "operand-b";
+						if (genData.containsKey("operation") && genData.containsKey(valueA) && genData.containsKey(valueB)) {
+							return new OperationProvider(
+									parseNumberValue(genProp.getValue(valueA)),
+									parseNumberValue(genProp.getValue(valueB)),
+									genProp.getString("operation"),
+									min, max
+							); // because we cannot bound-check the depths of recursion, we pass the bounds to the provider instead
 						}
 						break;
 					default:
