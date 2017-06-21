@@ -15,6 +15,7 @@ import cofh.lib.util.numbers.ConstantProvider;
 import cofh.lib.util.numbers.INumberProvider;
 import cofh.lib.util.numbers.SkellamRandomProvider;
 import cofh.lib.util.numbers.UniformRandomProvider;
+import cofh.lib.util.numbers.world.WorldValueProvider;
 import cofh.lib.world.IFeatureGenerator;
 import cofh.lib.world.IFeatureParser;
 import cofh.lib.world.IGeneratorParser;
@@ -895,6 +896,11 @@ public class FeatureParser {
 						if (genData.containsKey("min") && genData.containsKey("max")) {
 							return new UniformRandomProvider(boundCheck(genProp.getNumber("min"), min, max),
 									boundCheck(genProp.getNumber("max"), min, max));
+						} else if (genData.containsKey("offset") && genData.containsKey("type")) {
+							return new WorldValueProvider(
+									parseNumberValue(genProp.getValue("offset")),
+									genProp.getString("type"),
+									min, max); // because we cannot bound-check the world data we pass the bounds to the provider instead
 						}
 						break;
 					default:
