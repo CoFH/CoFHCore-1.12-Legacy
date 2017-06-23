@@ -891,25 +891,15 @@ public class FeatureParser {
 						break;
 					case 2:
 						if (genData.containsKey("min") && genData.containsKey("max")) {
-							return new UniformRandomProvider(boundCheck(genProp.getNumber("min"), min, max),
-									boundCheck(genProp.getNumber("max"), min, max));
+							return new UniformRandomProvider(boundCheck(genProp.getNumber("min"), min, max), boundCheck(genProp.getNumber("max"), min, max));
 						} else if (genData.containsKey("offset") && genData.containsKey("type")) {
-							return new WorldValueProvider(
-									parseNumberValue(genProp.getValue("offset")),
-									genProp.getString("type"),
-									min, max
-							); // because we cannot bound-check the world data we pass the bounds to the provider instead
+							return new WorldValueProvider(parseNumberValue(genProp.getValue("offset")), genProp.getString("type"), min, max); // because we cannot bound-check the world data we pass the bounds to the provider instead
 						}
 						break;
 					case 3:
 						final String valueA = "operand-a", valueB = "operand-b";
 						if (genData.containsKey("operation") && genData.containsKey(valueA) && genData.containsKey(valueB)) {
-							return new OperationProvider(
-									parseNumberValue(genProp.getValue(valueA)),
-									parseNumberValue(genProp.getValue(valueB)),
-									genProp.getString("operation"),
-									min, max
-							); // because we cannot bound-check the depths of recursion, we pass the bounds to the provider instead
+							return new OperationProvider(parseNumberValue(genProp.getValue(valueA)), parseNumberValue(genProp.getValue(valueB)), genProp.getString("operation"), min, max); // because we cannot bound-check the depths of recursion, we pass the bounds to the provider instead
 						}
 						break;
 					default:
