@@ -248,7 +248,7 @@
 		},
 
 		"mesa_gold": {
-			"enabled": false,
+			"enabled": true,
 			"distribution": "uniform",
 			"generator": {
 				"block": {
