@@ -61,15 +61,15 @@ IRETURN
 list n_renderFishHook
 GETSTATIC net/minecraft/init/Items.field_151112_aM : Lnet/minecraft/item/ItemFishingRod;
 IF_ACMPEQ LEND
-ILOAD 13
+ILOAD 22
 INEG
-ISTORE 13
+ISTORE 22
 LEND
 
 list i_renderFishHook
 INSTANCEOF net/minecraft/item/ItemFishingRod
 IFNE LEND
-ILOAD 13
+ILOAD 22
 INEG
-ISTORE 13
+ISTORE 22
 LEND
