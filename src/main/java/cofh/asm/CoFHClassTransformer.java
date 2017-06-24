@@ -51,7 +51,7 @@ public class CoFHClassTransformer implements IClassTransformer {
 			bytes = parse(name, transformedName, bytes);
 		}
 
-		bytes = transformer.transform(name, bytes);
+		bytes = transformer.transform(transformedName, bytes);
 
 		return bytes;
 	}
