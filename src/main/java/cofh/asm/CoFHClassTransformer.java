@@ -69,21 +69,6 @@ public class CoFHClassTransformer implements IClassTransformer {
 		mapping = new ObfMapping("net/minecraft/client/renderer/EntityRenderer", "func_78466_h", "(F)V");
 		transformer.add(new MethodInjector(mapping, blocks.get("n_fogColor"), blocks.get("i_fogColor"), true));
 
-		mapping = new ObfMapping("net/minecraft/entity/projectile/EntityFishHook", "func_190625_o", "()Z");
-		transformer.add(new MethodInjector(mapping, blocks.get("i_shouldStopFishing"), true));
-
-		mapping = new ObfMapping("net/minecraft/client/renderer/entity/RenderFish", "func_76986_a", "(Lnet/minecraft/entity/projectile/EntityFishHook;DDDFF)V");
-		transformer.add(new MethodReplacer(mapping, blocks.get("n_renderFishHook"), blocks.get("i_renderFishHook")) {
-			@Override
-			public void transform(MethodNode mv) {
-				try {
-					super.transform(mv);
-				} catch (Exception ignore) {
-					ASMCore.log.warn("Failed to apply Fishing Hook patch, Assuming Patched forge..");
-				}
-			}
-		});
-
 		loadWorldProxy();
 	}
 

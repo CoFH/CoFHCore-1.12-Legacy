@@ -52,24 +52,3 @@ D2F
 PUTFIELD net/minecraft/client/renderer/EntityRenderer.field_175081_S : F
 GOTO LEND
 LEND
-
-list i_shouldStopFishing
-ALOAD 0
-INVOKESTATIC cofh/asm/hooks/ASMHooks.shouldStopFishing(Lnet/minecraft/entity/projectile/EntityFishHook;)Z
-IRETURN
-
-list n_renderFishHook
-GETSTATIC net/minecraft/init/Items.field_151112_aM : Lnet/minecraft/item/ItemFishingRod;
-IF_ACMPEQ LEND
-ILOAD 22
-INEG
-ISTORE 22
-LEND
-
-list i_renderFishHook
-INSTANCEOF net/minecraft/item/ItemFishingRod
-IFNE LEND
-ILOAD 22
-INEG
-ISTORE 22
-LEND

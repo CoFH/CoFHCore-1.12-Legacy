@@ -174,7 +174,7 @@ public class CoreProps {
 		//		MinecraftForge.EVENT_BUS.register(DropHandler.instance);
 	}
 
-	private static final String BUILD = "2315";
+	private static final String BUILD = "2366";
 	private static final String FORGE_REQ = "13.20.0." + BUILD;
 	private static final String FORGE_REQ_MAX = "13.21.0.0";
 
