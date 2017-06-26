@@ -1,7 +1,6 @@
 package cofh.core.world;
 
 import cofh.CoFHCore;
-import cofh.asm.hooks.ASMHooks;
 import cofh.core.world.TickHandlerWorld.RetroChunkCoord;
 import cofh.lib.util.ChunkCoord;
 import cofh.lib.util.LinkedHashList;
@@ -104,7 +103,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		MinecraftForge.EVENT_BUS.register(instance);
 		MinecraftForge.ORE_GEN_BUS.register(instance);
 
-		ASMHooks.registerPostGenHook((world, chunkX, chunkZ) -> populatingChunks.remove(new ChunkReference(world.provider.getDimension(), chunkX, chunkZ)));
+        GameRegistry.registerWorldGenerator((random, chunkX, chunkZ, world, chunkGenerator, chunkProvider) -> populatingChunks.remove(new ChunkReference(world.provider.getDimension(), chunkX, chunkZ)), Integer.MAX_VALUE);
 
 		if (genFlatBedrock & retroFlatBedrock | retroGeneration) {
 			// TODO: remove this condition when pregen works? (see handler for alternate)
