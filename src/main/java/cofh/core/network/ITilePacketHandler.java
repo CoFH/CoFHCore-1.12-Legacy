@@ -5,7 +5,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface ITilePacketHandler {
 
-	@SideOnly(Side.CLIENT)
+	@SideOnly (Side.CLIENT)
 	void handleTilePacket(PacketCoFHBase payload);
 
 }

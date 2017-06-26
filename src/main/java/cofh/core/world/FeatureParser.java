@@ -531,8 +531,7 @@ public class FeatureParser {
 							data = Type.getType(entry);
 							t = 2;
 						}
-					} else
-					if (type.equalsIgnoreCase("id")) {
+					} else if (type.equalsIgnoreCase("id")) {
 						if (array != null) {
 							ArrayList<ResourceLocation> ids = new ArrayList<>(array.size());
 							for (int k = 0, j = array.size(); k < j; ++k) {
