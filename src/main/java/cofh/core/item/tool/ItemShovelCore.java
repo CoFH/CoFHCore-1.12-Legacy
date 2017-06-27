@@ -32,20 +32,21 @@ public class ItemShovelCore extends ItemToolCore {
 		effectiveMaterials.add(Material.CLAY);
 	}
 
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 
-		if (!playerIn.canPlayerEdit(pos.offset(facing), facing, stack)) {
+		ItemStack stack = player.getHeldItem(hand);
+		if (!player.canPlayerEdit(pos.offset(facing), facing, stack)) {
 			return EnumActionResult.FAIL;
 		} else {
 			IBlockState state = worldIn.getBlockState(pos);
 			Block block = state.getBlock();
 
 			if (facing != EnumFacing.DOWN && worldIn.getBlockState(pos.up()).getMaterial() == Material.AIR && block == Blocks.GRASS) {
-				worldIn.playSound(playerIn, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				worldIn.playSound(player, pos, SoundEvents.ITEM_SHOVEL_FLATTEN, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
 				if (!worldIn.isRemote) {
 					worldIn.setBlockState(pos, Blocks.GRASS_PATH.getDefaultState(), 11);
-					stack.damageItem(1, playerIn);
+					stack.damageItem(1, player);
 				}
 				return EnumActionResult.SUCCESS;
 			} else {
