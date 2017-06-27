@@ -5,6 +5,7 @@ import cofh.core.energy.FurnaceFuelHandler;
 import cofh.core.gui.GuiHandler;
 import cofh.core.init.CoreEnchantments;
 import cofh.core.init.CoreProps;
+import cofh.core.key.KeyHandlerCore;
 import cofh.core.key.PacketKey;
 import cofh.core.network.*;
 import cofh.core.proxy.Proxy;
@@ -145,6 +146,7 @@ public class CoFHCore {
 	private void registerHandlers() {
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, GUI_HANDLER);
+		MinecraftForge.EVENT_BUS.register(KeyHandlerCore.instance);
 		MinecraftForge.EVENT_BUS.register(proxy);
 		MinecraftForge.TERRAIN_GEN_BUS.register(proxy);
 

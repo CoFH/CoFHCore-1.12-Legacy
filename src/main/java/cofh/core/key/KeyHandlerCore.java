@@ -15,13 +15,11 @@ import java.util.ArrayList;
 
 public class KeyHandlerCore {
 
-	private static TMap<String, IKeyBinding> clientBinds = new THashMap<>();
-	static TMap<String, IKeyBinding> serverBinds = new THashMap<>();
-	private static ArrayList<IKeyBinding> keys = new ArrayList<>();
+	public static KeyHandlerCore instance = new KeyHandlerCore();
 
-	static {
-		MinecraftForge.EVENT_BUS.register(new KeyHandlerCore());
-	}
+	static TMap<String, IKeyBinding> clientBinds = new THashMap<>();
+	static TMap<String, IKeyBinding> serverBinds = new THashMap<>();
+	static ArrayList<IKeyBinding> keys = new ArrayList<>();
 
 	public static boolean isKeyDown(int key) {
 
