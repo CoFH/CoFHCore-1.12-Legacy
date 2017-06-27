@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Level;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Locale;
 import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
@@ -49,6 +50,13 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 		currentMcVersion = (String) FMLInjectionData.data()[4];
 		minecraftDir = (File) FMLInjectionData.data()[6];
 		loader = Launch.classLoader;
+		if (!obfuscated) {
+			try {
+				CoFHAccessTransformer.initForDeobf();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
@@ -130,13 +138,13 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 			return null;
 		}
 
-		private void scanMods() {
+		private void scanMods() throws IOException {
 
-			File modsDir = new File(minecraftDir, "mods");
+			File modsDir = new File(minecraftDir.getCanonicalFile(), "mods");
 			for (File file : modsDir.listFiles()) {
 				scanMod(file);
 			}
-			File versionModsDir = new File(minecraftDir, "mods/" + currentMcVersion);
+			File versionModsDir = new File(modsDir, currentMcVersion);
 			if (versionModsDir.exists()) {
 				for (File file : versionModsDir.listFiles()) {
 					scanMod(file);
@@ -147,8 +155,8 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 		private void scanMod(File file) {
 
 			{
-				String name = file.getName().toLowerCase();
-				if (file.isDirectory() || !name.endsWith(".jar") && !name.endsWith(".zip")) {
+				String name = file.getName().toLowerCase(Locale.US);
+				if (file.isDirectory() || (!name.endsWith(".jar") && !name.endsWith(".zip"))) {
 					return;
 				}
 			}
