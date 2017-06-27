@@ -1,7 +1,6 @@
 package cofh.core.world;
 
 import cofh.CoFHCore;
-import cofh.asm.hooks.ASMHooks;
 import cofh.core.world.TickHandlerWorld.RetroChunkCoord;
 import cofh.lib.util.ChunkCoord;
 import cofh.lib.util.LinkedHashList;
