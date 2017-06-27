@@ -262,22 +262,7 @@ public class ProxyClient extends Proxy {
 	/* REFERENCES */
 	public static FontRendererCore fontRenderer;
 
-	public static final KeyBind KEYBINDING_MULTIMODE = new KeyBind("key.cofh.multimode", Keyboard.KEY_V, "key.cofh.category");
-	public static final KeyBind KEYBINDING_AUGMENTS = null; //new KeyBind("key.cofh.augments", Keyboard.KEY_C, "key.cofh.category");
-
-	/* KEYBIND CLASS */
-	public static class KeyBind extends KeyBinding {
-
-		public KeyBind(String name, int key, String category) {
-
-			super(name, key, category);
-		}
-
-		public int cofh_conflictCode() {
-
-			return 0;
-		}
-
-	}
+	public static final KeyBinding KEYBINDING_MULTIMODE = new KeyBinding("key.cofh.multimode", Keyboard.KEY_V, "key.cofh.category");
+	public static final KeyBinding KEYBINDING_AUGMENTS = null; //new KeyBinding("key.cofh.augments", Keyboard.KEY_C, "key.cofh.category");
 
 }

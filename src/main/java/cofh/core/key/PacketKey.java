@@ -42,4 +42,5 @@ public class PacketKey extends PacketCoFHBase {
 		addString(uuid);
 		PacketHandler.sendToServer(this);
 	}
+
 }

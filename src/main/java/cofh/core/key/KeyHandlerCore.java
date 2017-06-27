@@ -23,6 +23,11 @@ public class KeyHandlerCore {
 		MinecraftForge.EVENT_BUS.register(new KeyHandlerCore());
 	}
 
+	public static boolean isKeyDown(int key) {
+
+		return (key != 0 && key < 256) && (key < 0 ? Mouse.isButtonDown(key + 100) : Keyboard.isKeyDown(key));
+	}
+
 	public static boolean addClientKeyBind(IKeyBinding binding) {
 
 		if (!clientBinds.containsKey(binding.getUUID())) {
@@ -48,8 +53,8 @@ public class KeyHandlerCore {
 	public void handleKeyInputEvent(KeyInputEvent event) {
 
 		for (IKeyBinding key : keys) {
-			int button = key.getKey();
-			if (button > 0 && Keyboard.isKeyDown(button)) {
+			int press = key.getKey();
+			if (press > 0 && isKeyDown(press)) {
 				if (key.keyPressClient() && key.hasServerSide()) {
 					PacketKey.sendToServer(key.getUUID());
 				}
@@ -62,8 +67,8 @@ public class KeyHandlerCore {
 	public void handleMouseInputEvent(MouseInputEvent event) {
 
 		for (IKeyBinding key : keys) {
-			int button = key.getKey(); // value saved as button - 100 instead of -button because moderp
-			if (button < 0 && Mouse.isButtonDown(button + 100)) {
+			int press = key.getKey();
+			if (press < 0 && isKeyDown(press)) {
 				if (key.keyPressClient() && key.hasServerSide()) {
 					PacketKey.sendToServer(key.getUUID());
 				}
