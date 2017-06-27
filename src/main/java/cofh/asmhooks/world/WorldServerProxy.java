@@ -32,7 +32,7 @@ public abstract class WorldServerProxy extends WorldServerShim {
 		ReflectionHelper.setPrivateValue(World.class, this, world.playerEntities, "field_73010_i", "playerEntities");
 		ReflectionHelper.setPrivateValue(World.class, this, world.weatherEffects, "field_73007_j", "weatherEffects");
 		ReflectionHelper.setPrivateValue(World.class, this, world.provider, "field_73011_w", "provider");
-		ReflectionHelper.setPrivateValue(World.class, this, world.rand, "field_75169_l", "rand");
+		ReflectionHelper.setPrivateValue(World.class, this, world.rand, "field_73012_v", "rand");
 
 		mapStorage = world.getMapStorage();
 		cofh_updateProps();
