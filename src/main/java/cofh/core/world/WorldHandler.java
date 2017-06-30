@@ -25,6 +25,8 @@ import net.minecraftforge.event.terraingen.OreGenEvent.GenerateMinable.EventType
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.ModAPIManager;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -73,6 +75,20 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		vanillaGenEvents.add(EventType.QUARTZ);
 
 		vanillaGenEvents.add(EventType.SILVERFISH);
+	}
+
+	//TODO FIXME, Where is the propper place for this, Only used by FeatureParser
+	private static Map<String, ModContainer> apis;
+
+	public static Map<String, ModContainer> getLoadedAPIs() {
+
+		if (apis == null) {
+			apis = new HashMap<>();
+			for (ModContainer m : ModAPIManager.INSTANCE.getAPIList()) {
+				apis.put(m.getModId(), m);
+			}
+		}
+		return apis;
 	}
 
 	public static void initialize() {

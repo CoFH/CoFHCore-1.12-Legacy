@@ -1,6 +1,5 @@
 package cofh.core.fluid;
 
-import cofh.core.block.IFogOverlay;
 import cofh.core.render.IModelRegister;
 import cofh.core.render.particle.EntityDropParticleFX;
 import cofh.core.util.StateMapper;
@@ -26,7 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-public abstract class BlockFluidCore extends BlockFluidClassic implements IInitializer, IFogOverlay, IModelRegister {
+public abstract class BlockFluidCore extends BlockFluidClassic implements IInitializer, IModelRegister {
 
 	protected String modName;
 	protected String name;
@@ -156,10 +155,10 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 		return particleBlue;
 	}
 
-	/* IFogOverlay */
-	public Vec3d getFog(IBlockState state, Entity renderViewEntity, float fogColorRed, float fogColorGreen, float fogColorBlue) {
-
-		return new Vec3d(particleRed, particleGreen, particleBlue);
+	@Override
+	@SideOnly (Side.CLIENT)
+	public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks) {
+		return new Vec3d(getParticleRed(), getParticleGreen(), getParticleBlue());
 	}
 
 	/* IModelRegister */

@@ -1,6 +1,5 @@
 package cofh.core.command;
 
-import cofh.asm.LoadingPlugin;
 import cofh.lib.util.helpers.StringHelper;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
@@ -40,9 +39,6 @@ public class CommandHandler extends CommandBase {
 		registerSubCommand(CommandCountBlock.instance);
 		registerSubCommand(CommandHand.instance);
 		registerSubCommand(CommandFriend.instance);
-
-		if (!LoadingPlugin.obfuscated) { // in-dev commands
-		}
 	}
 
 	public static void initCommands(FMLServerStartingEvent event) {

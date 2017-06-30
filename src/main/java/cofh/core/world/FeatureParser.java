@@ -1,6 +1,5 @@
 package cofh.core.world;
 
-import cofh.asm.ASMCore;
 import cofh.core.init.CoreProps;
 import cofh.core.util.CoreUtils;
 import cofh.core.world.decoration.*;
@@ -358,7 +357,7 @@ public class FeatureParser {
 				return false;
 		}
 		if (con == null) {
-			con = ASMCore.getLoadedAPIs().get(id);
+			con = WorldHandler.getLoadedAPIs().get(id);
 			if (con == null) {
 				log.debug("Dependency '%s' is not loaded.", id);
 				return false == retComp;
