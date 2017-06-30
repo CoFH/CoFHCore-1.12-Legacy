@@ -11,10 +11,6 @@ import cofh.core.network.*;
 import cofh.core.proxy.Proxy;
 import cofh.core.util.ConfigHandler;
 import cofh.core.util.RegistrySocial;
-import cofh.core.util.crafting.RecipeSecure;
-import cofh.core.util.crafting.RecipeShapelessOreFluid;
-import cofh.core.util.crafting.RecipeUpgrade;
-import cofh.core.util.crafting.RecipeUpgradeOverride;
 import cofh.core.util.oredict.OreDictionaryArbiter;
 import cofh.core.world.FeatureParser;
 import cofh.core.world.WorldHandler;
@@ -30,14 +26,12 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.RecipeSorter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-import static cofh.lib.util.helpers.ItemHelper.ShapedRecipe;
-import static cofh.lib.util.helpers.ItemHelper.addRecipe;
+import static cofh.lib.util.helpers.RecipeHelper.addShapedRecipe;
 
 @Mod (modid = CoFHCore.MOD_ID, name = CoFHCore.MOD_NAME, version = CoFHCore.VERSION, dependencies = CoFHCore.DEPENDENCIES, updateJSON = CoFHCore.UPDATE_URL)
 public class CoFHCore {
@@ -164,51 +158,52 @@ public class CoFHCore {
 		PacketTileInfo.initialize();
 		PacketTile.initialize();
 
-		RecipeSorter.register("cofhcore:shapelessorefluid", RecipeShapelessOreFluid.class, RecipeSorter.Category.SHAPELESS, "after:forge:shapelessore");
-		RecipeSorter.register("cofhcore:secure", RecipeSecure.class, RecipeSorter.Category.SHAPED, "before:cofhcore:upgrade");
-		RecipeSorter.register("cofhcore:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
-		RecipeSorter.register("cofhcore:upgradeoverride", RecipeUpgradeOverride.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
+		// TODO: FIXME.
+		//		RecipeSorter.register("cofhcore:shapelessorefluid", RecipeShapelessOreFluid.class, RecipeSorter.Category.SHAPELESS, "after:forge:shapelessore");
+		//		RecipeSorter.register("cofhcore:secure", RecipeSecure.class, RecipeSorter.Category.SHAPED, "before:cofhcore:upgrade");
+		//		RecipeSorter.register("cofhcore:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
+		//		RecipeSorter.register("cofhcore:upgradeoverride", RecipeUpgradeOverride.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 	}
 
 	private void addCraftingRecipes() {
 
 		// @formatter:off
 		if (CoreProps.enableHorseArmorCrafting) {
-			addRecipe(ShapedRecipe(Items.IRON_HORSE_ARMOR,
+			addShapedRecipe(new ItemStack(Items.IRON_HORSE_ARMOR, 1),
 					"  H",
 					"ICI",
 					"III",
 					'C', "blockWool",
 					'H', Items.IRON_HELMET,
 					'I', "ingotIron"
-			));
+			);
 
-			addRecipe(ShapedRecipe(Items.GOLDEN_HORSE_ARMOR,
+			addShapedRecipe(new ItemStack(Items.GOLDEN_HORSE_ARMOR),
 					"  H",
 					"ICI",
 					"III",
 					'C', "blockWool",
 					'H', Items.GOLDEN_HELMET,
 					'I', "ingotGold"
-			));
+			);
 
-			addRecipe(ShapedRecipe(Items.DIAMOND_HORSE_ARMOR,
+			addShapedRecipe(new ItemStack(Items.DIAMOND_HORSE_ARMOR),
 					"  H",
 					"ICI",
 					"III",
 					'C', "blockWool",
 					'H', Items.DIAMOND_HELMET,
 					'I', "gemDiamond"
-			));
+			);
 		}
 		if (CoreProps.enableSaddleCrafting) {
-			addRecipe(ShapedRecipe(Items.SADDLE,
+			addShapedRecipe(new ItemStack(Items.SADDLE),
 					"LLL",
 					"LIL",
 					"I I",
 					'I', "ingotIron",
 					'L', Items.LEATHER
-			));
+			);
 		}
 		// @formatter:on
 	}

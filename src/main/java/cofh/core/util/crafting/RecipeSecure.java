@@ -10,14 +10,15 @@ public class RecipeSecure extends ShapedOreRecipe {
 
 	int targetSlot = 4;
 
+	// TODO: FIXME. Obviously do NOT PASS NULL.
 	public RecipeSecure(ItemStack result, Object... recipe) {
 
-		super(result, recipe);
+		super(null, result, recipe);
 	}
 
 	public RecipeSecure(int slot, ItemStack result, Object... recipe) {
 
-		super(result, recipe);
+		super(null, result, recipe);
 		targetSlot = slot;
 	}
 

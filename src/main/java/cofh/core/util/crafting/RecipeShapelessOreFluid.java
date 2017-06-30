@@ -11,7 +11,6 @@ import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -21,27 +20,28 @@ import java.util.List;
 
 public class RecipeShapelessOreFluid extends ShapelessOreRecipe {
 
+	// TODO: FIXME. Obviously do NOT PASS NULL.
 	public RecipeShapelessOreFluid(Block result, Object... recipe) {
 
-		super(result, replaceFluidWithUniversalBucket(recipe));
+		super(null, result, replaceFluidWithUniversalBucket(recipe));
 	}
 
 	public RecipeShapelessOreFluid(Item result, Object... recipe) {
 
-		super(result, replaceFluidWithUniversalBucket(recipe));
+		super(null, result, replaceFluidWithUniversalBucket(recipe));
 	}
 
 	public RecipeShapelessOreFluid(ItemStack result, Object... recipe) {
 
-		super(result, replaceFluidWithUniversalBucket(recipe));
+		super(null, result, replaceFluidWithUniversalBucket(recipe));
 	}
 
 	public static Object[] replaceFluidWithUniversalBucket(Object[] array) {
 
 		for (int i = 0; i < array.length; i++) {
 			Object obj = array[i];
-			if (obj instanceof Fluid) {
-				ItemStack filledBucket = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, (Fluid) obj);
+			if (obj instanceof FluidStack) {
+				ItemStack filledBucket = FluidUtil.getFilledBucket((FluidStack) obj);
 				array[i] = filledBucket;
 			} else if (obj instanceof FluidStack) {
 				ItemStack bucket = ForgeModContainer.getInstance().universalBucket.getEmpty().copy();
