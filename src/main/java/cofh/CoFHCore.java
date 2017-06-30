@@ -157,12 +157,6 @@ public class CoFHCore {
 		PacketKey.initialize();
 		PacketTileInfo.initialize();
 		PacketTile.initialize();
-
-		// TODO: FIXME.
-		//		RecipeSorter.register("cofhcore:shapelessorefluid", RecipeShapelessOreFluid.class, RecipeSorter.Category.SHAPELESS, "after:forge:shapelessore");
-		//		RecipeSorter.register("cofhcore:secure", RecipeSecure.class, RecipeSorter.Category.SHAPED, "before:cofhcore:upgrade");
-		//		RecipeSorter.register("cofhcore:upgrade", RecipeUpgrade.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
-		//		RecipeSorter.register("cofhcore:upgradeoverride", RecipeUpgradeOverride.class, RecipeSorter.Category.SHAPED, "before:forge:shapedore");
 	}
 
 	private void addCraftingRecipes() {
