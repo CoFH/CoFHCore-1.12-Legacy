@@ -13,12 +13,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -99,11 +98,12 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 
 	/* STANDARD METHODS */
 	@Override
-	@SideOnly (Side.CLIENT)
-	public void getSubItems(@Nonnull Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 
-		for (int metadata : itemList) {
-			list.add(new ItemStack(item, 1, metadata));
+		if (isInCreativeTab(tab)) {
+			for (int metadata : itemList) {
+				items.add(new ItemStack(this, 1, metadata));
+			}
 		}
 	}
 
@@ -131,7 +131,7 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 	@Override
 	public Item setUnlocalizedName(String name) {
 
-		GameRegistry.register(setRegistryName(name));
+		ForgeRegistries.ITEMS.register(setRegistryName(name));
 		this.name = name;
 		name = modName + "." + name;
 		return super.setUnlocalizedName(name);
@@ -139,7 +139,7 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 
 	public Item setUnlocalizedName(String name, String registrationName) {
 
-		GameRegistry.register(setRegistryName(registrationName));
+		ForgeRegistries.ITEMS.register(setRegistryName(registrationName));
 		this.name = name;
 		name = modName + "." + name;
 		return super.setUnlocalizedName(name);

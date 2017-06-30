@@ -2,14 +2,9 @@ package cofh.core.item.tool;
 
 import cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nonnull;
 
 public class ItemSwordCore extends ItemSword {
 
@@ -35,11 +30,10 @@ public class ItemSwordCore extends ItemSword {
 	}
 
 	@Override
-	@SideOnly (Side.CLIENT)
-	public void getSubItems(@Nonnull Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 
-		if (showInCreative) {
-			list.add(new ItemStack(item, 1, 0));
+		if (isInCreativeTab(tab) && showInCreative) {
+			items.add(new ItemStack(this, 1, 0));
 		}
 	}
 

@@ -2,9 +2,9 @@ package cofh.core.render.hitbox;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.RayTraceResult;
@@ -48,7 +48,7 @@ public class RenderHitbox {
 	public static void drawOutlinedBoundingBox(CustomHitBox hitbox) {
 
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(1, DefaultVertexFormats.POSITION);
 
 		// Top and Bottom faces
@@ -65,7 +65,7 @@ public class RenderHitbox {
 		tessellator.draw();
 	}
 
-	public static void addVerticalVertexs(CustomHitBox hitbox, VertexBuffer buffer) {
+	public static void addVerticalVertexs(CustomHitBox hitbox, BufferBuilder buffer) {
 
 		if (hitbox.drawSide[2]) {
 			buffer.pos(hitbox.minX, hitbox.minY, hitbox.minZ - hitbox.sideLength[2]).endVertex();
@@ -116,7 +116,7 @@ public class RenderHitbox {
 
 	}
 
-	public static void addTopBottomVertex(CustomHitBox hitbox, int side, double sideLength, double heightToAdd, VertexBuffer buffer) {
+	public static void addTopBottomVertex(CustomHitBox hitbox, int side, double sideLength, double heightToAdd, BufferBuilder buffer) {
 
 		if (hitbox.drawSide[side]) {
 			// Draw Square - I assume this is faster then drawing/changing modes/drawing/changing modes to go from line -> square -> line mode
@@ -145,7 +145,7 @@ public class RenderHitbox {
 		}
 	}
 
-	public static void addMainVertex(CustomHitBox hitbox, int side, double heightToAdd, VertexBuffer buffer) {
+	public static void addMainVertex(CustomHitBox hitbox, int side, double heightToAdd, BufferBuilder buffer) {
 
 		if (!hitbox.drawSide[side]) {
 			if (!hitbox.drawSide[4]) {

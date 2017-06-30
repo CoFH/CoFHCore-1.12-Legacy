@@ -4,7 +4,6 @@ import cofh.asm.repack.codechicken.lib.asm.ASMBlock;
 import cofh.asm.repack.codechicken.lib.asm.ASMReader;
 import cofh.asm.repack.codechicken.lib.asm.ModularASMTransformer;
 import cofh.asm.repack.codechicken.lib.asm.ModularASMTransformer.MethodInjector;
-import cofh.asm.repack.codechicken.lib.asm.ModularASMTransformer.MethodReplacer;
 import cofh.asm.repack.codechicken.lib.asm.ObfMapping;
 import com.google.common.base.Throwables;
 import net.minecraft.launchwrapper.IClassTransformer;

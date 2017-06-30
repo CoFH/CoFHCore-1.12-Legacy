@@ -12,7 +12,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ItemShieldCore extends Item {
@@ -57,11 +56,10 @@ public class ItemShieldCore extends Item {
 	}
 
 	@Override
-	@SideOnly (Side.CLIENT)
-	public void getSubItems(@Nonnull Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 
-		if (showInCreative) {
-			list.add(new ItemStack(item, 1, 0));
+		if (isInCreativeTab(tab) && showInCreative) {
+			items.add(new ItemStack(this, 1, 0));
 		}
 	}
 

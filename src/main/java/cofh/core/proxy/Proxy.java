@@ -76,7 +76,7 @@ public class Proxy {
 				float damage = event.getAmount();
 
 				if (damage >= 3.0F && !stack.isEmpty() && ((stack.getItem() instanceof ItemShieldCore))) {
-					((ItemShieldCore) stack.getItem()).damageShield(stack, 1 + MathHelper.floor(damage), player, event.getSource().getEntity());
+					((ItemShieldCore) stack.getItem()).damageShield(stack, 1 + MathHelper.floor(damage), player, event.getSource().getTrueSource());
 
 					if (stack.getCount() <= 0) {
 						EnumHand enumhand = player.getActiveHand();

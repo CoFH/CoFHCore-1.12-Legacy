@@ -41,9 +41,9 @@ public class CommandUnloadChunk implements ISubCommand {
 		//		Set<Long> o = player.getServerWorld().getChunkProvider().droppedChunksSet;
 		//		o.add(ChunkPos.asLong(chunk.xPosition, chunk.zPosition));
 
-		player.getServerWorld().getChunkProvider().unload(chunk);
+		player.getServerWorld().getChunkProvider().queueUnload(chunk);
 
-		CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.unloadchunk.success", chunk.xPosition, chunk.zPosition);
+		CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.unloadchunk.success", chunk.x, chunk.z);
 	}
 
 	@Override

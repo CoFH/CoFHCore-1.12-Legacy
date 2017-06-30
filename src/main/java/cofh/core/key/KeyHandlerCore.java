@@ -2,7 +2,6 @@ package cofh.core.key;
 
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.MouseInputEvent;

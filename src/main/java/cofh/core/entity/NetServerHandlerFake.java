@@ -10,11 +10,8 @@ import net.minecraft.network.play.client.*;
 import net.minecraft.network.play.server.SPacketPlayerPosLook.EnumFlags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.crypto.SecretKey;
-import java.net.InetAddress;
 import java.net.SocketAddress;
 import java.util.Set;
 
@@ -33,7 +30,7 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 		}
 
 		@Override
-		public void setConnectionState(EnumConnectionState p_150723_1_) {
+		public void setConnectionState(EnumConnectionState newState) {
 
 		}
 
@@ -48,12 +45,12 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 		}
 
 		@Override
-		public void setNetHandler(INetHandler p_150719_1_) {
+		public void setNetHandler(INetHandler handler) {
 
 		}
 
 		@Override
-		public void sendPacket(Packet p_150725_1_) {
+		public void sendPacket(Packet<?> packetIn) {
 
 		}
 
@@ -79,20 +76,8 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 			return false;
 		}
 
-		@SideOnly (Side.CLIENT)
-		public static NetworkManager provideLanClient(InetAddress p_150726_0_, int p_150726_1_) {
-
-			return null;
-		}
-
-		@SideOnly (Side.CLIENT)
-		public static NetworkManager provideLocalClient(SocketAddress p_150722_0_) {
-
-			return null;
-		}
-
 		@Override
-		public void enableEncryption(SecretKey p_150727_1_) {
+		public void enableEncryption(SecretKey key) {
 
 		}
 
@@ -137,9 +122,9 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 
 	}
 
-	public NetServerHandlerFake(MinecraftServer par1MinecraftServer, EntityPlayerMP par3EntityPlayerMP) {
+	public NetServerHandlerFake(MinecraftServer server, EntityPlayerMP playerIn) {
 
-		super(par1MinecraftServer, new NetworkManagerFake(), par3EntityPlayerMP);
+		super(server, new NetworkManagerFake(), playerIn);
 	}
 
 	@Override
@@ -148,12 +133,12 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 	}
 
 	@Override
-	public void disconnect(String p_147360_1_) {
+	public void disconnect(final ITextComponent textComponent) {
 
 	}
 
 	@Override
-	public void processInput(CPacketInput p_147358_1_) {
+	public void processInput(CPacketInput packetIn) {
 
 	}
 
@@ -168,12 +153,12 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 	}
 
 	@Override
-	public void processPlayer(CPacketPlayer p_147347_1_) {
+	public void processPlayer(CPacketPlayer packetIn) {
 
 	}
 
 	@Override
-	public void setPlayerLocation(double p_147364_1_, double p_147364_3_, double p_147364_5_, float p_147364_7_, float p_147364_8_) {
+	public void setPlayerLocation(double x, double y, double z, float yaw, float pitch) {
 
 	}
 
@@ -183,7 +168,7 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 	}
 
 	@Override
-	public void processPlayerDigging(CPacketPlayerDigging p_147345_1_) {
+	public void processPlayerDigging(CPacketPlayerDigging packetIn) {
 
 	}
 
@@ -193,7 +178,7 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 	}
 
 	@Override
-	public void processTryUseItem(CPacketPlayerTryUseItem p_147346_1_) {
+	public void processTryUseItem(CPacketPlayerTryUseItem packetIn) {
 
 	}
 
@@ -213,97 +198,98 @@ public class NetServerHandlerFake extends NetHandlerPlayServer {
 	}
 
 	@Override
-	public void onDisconnect(ITextComponent p_147231_1_) {
+	public void onDisconnect(ITextComponent reason) {
 
 	}
 
 	@Override
-	public void sendPacket(final Packet p_147359_1_) {
+	public void sendPacket(final Packet<?> packetIn) {
 
 	}
 
 	@Override
-	public void processHeldItemChange(CPacketHeldItemChange p_147355_1_) {
+	public void processHeldItemChange(CPacketHeldItemChange packetIn) {
 
 	}
 
 	@Override
-	public void processChatMessage(CPacketChatMessage p_147354_1_) {
+	public void processChatMessage(CPacketChatMessage packetIn) {
 
 	}
 
 	@Override
-	public void handleAnimation(CPacketAnimation p_147350_1_) {
+	public void handleAnimation(CPacketAnimation packetIn) {
 
 	}
 
 	@Override
-	public void processEntityAction(CPacketEntityAction p_147357_1_) {
+	public void processEntityAction(CPacketEntityAction packetIn) {
 
 	}
 
 	@Override
-	public void processUseEntity(CPacketUseEntity p_147340_1_) {
+	public void processUseEntity(CPacketUseEntity packetIn) {
 
 	}
 
 	@Override
-	public void processClientStatus(CPacketClientStatus p_147342_1_) {
+	public void processClientStatus(CPacketClientStatus packetIn) {
 
 	}
 
 	@Override
-	public void processCloseWindow(CPacketCloseWindow p_147356_1_) {
+	public void processCloseWindow(CPacketCloseWindow packetIn) {
 
 	}
 
 	@Override
-	public void processClickWindow(CPacketClickWindow p_147351_1_) {
+	public void processClickWindow(CPacketClickWindow packetIn) {
 
 	}
 
 	@Override
-	public void processEnchantItem(CPacketEnchantItem p_147338_1_) {
+	public void processEnchantItem(CPacketEnchantItem packetIn) {
 
 	}
 
 	@Override
-	public void processCreativeInventoryAction(CPacketCreativeInventoryAction p_147344_1_) {
+	public void processCreativeInventoryAction(CPacketCreativeInventoryAction packetIn) {
 
 	}
 
 	@Override
-	public void processConfirmTransaction(CPacketConfirmTransaction p_147339_1_) {
+	public void processConfirmTransaction(CPacketConfirmTransaction packetIn) {
 
 	}
 
 	@Override
-	public void processUpdateSign(CPacketUpdateSign p_147343_1_) {
+	public void processUpdateSign(CPacketUpdateSign packetIn) {
 
 	}
 
 	@Override
-	public void processKeepAlive(CPacketKeepAlive p_147353_1_) {
+	public void processKeepAlive(CPacketKeepAlive packetIn) {
 
 	}
 
 	@Override
-	public void processPlayerAbilities(CPacketPlayerAbilities p_147348_1_) {
+	public void processPlayerAbilities(CPacketPlayerAbilities packetIn) {
 
 	}
 
 	@Override
-	public void processTabComplete(CPacketTabComplete p_147341_1_) {
+	public void processTabComplete(CPacketTabComplete packetIn) {
 
 	}
 
 	@Override
-	public void processClientSettings(CPacketClientSettings p_147352_1_) {
+	public void processClientSettings(CPacketClientSettings packetIn) {
 
 	}
 
 	@Override
-	public void processCustomPayload(CPacketCustomPayload p_147349_1_) {
+	public void processCustomPayload(CPacketCustomPayload packetIn) {
 
 	}
+
 }

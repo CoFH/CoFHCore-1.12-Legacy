@@ -9,7 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
@@ -17,7 +16,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ItemFishingRodCore extends ItemFishingRod {
@@ -71,11 +69,10 @@ public class ItemFishingRodCore extends ItemFishingRod {
 	}
 
 	@Override
-	@SideOnly (Side.CLIENT)
-	public void getSubItems(@Nonnull Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 
-		if (showInCreative) {
-			list.add(new ItemStack(item, 1, 0));
+		if (isInCreativeTab(tab) && showInCreative) {
+			items.add(new ItemStack(this, 1, 0));
 		}
 	}
 
@@ -112,11 +109,11 @@ public class ItemFishingRodCore extends ItemFishingRod {
 			if (ServerHelper.isServerWorld(world)) {
 				EntityFishHook hook = new EntityFishHook(world, player);
 
-				int enchantSpeed = EnchantmentHelper.func_191528_c(stack);
-				hook.func_191516_a(speedModifier + enchantSpeed);
+				int enchantSpeed = EnchantmentHelper.getFishingSpeedBonus(stack);
+				hook.setLureSpeed(speedModifier + enchantSpeed);
 
-				int enchantLuck = EnchantmentHelper.func_191529_b(stack);
-				hook.func_191517_b(luckModifier + enchantLuck);
+				int enchantLuck = EnchantmentHelper.getFishingLuckBonus(stack);
+				hook.setLuck(luckModifier + enchantLuck);
 
 				world.spawnEntity(hook);
 			}

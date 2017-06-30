@@ -4,9 +4,9 @@ import cofh.core.item.IFOVUpdateItem;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -84,7 +84,7 @@ public class RenderEventHandler implements IResourceManagerReloadListener {
 	/* HELPERS */
 
 	// Copy of RenderGlobal.drawBlockDamageTexture
-	public void drawBlockDamageTexture(Tessellator tessellatorIn, VertexBuffer vertexBuffer, Entity entityIn, float partialTicks, World world, List<BlockPos> blocks) {
+	public void drawBlockDamageTexture(Tessellator tessellatorIn, BufferBuilder buffer, Entity entityIn, float partialTicks, World world, List<BlockPos> blocks) {
 
 		double d0 = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * (double) partialTicks;
 		double d1 = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * (double) partialTicks;
@@ -99,9 +99,9 @@ public class RenderEventHandler implements IResourceManagerReloadListener {
 		renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		preRenderDamagedBlocks();
 
-		vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-		vertexBuffer.setTranslation(-d0, -d1, -d2);
-		vertexBuffer.noColor();
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+		buffer.setTranslation(-d0, -d1, -d2);
+		buffer.noColor();
 
 		for (BlockPos blockpos : blocks) {
 			TileEntity tile = world.getTileEntity(blockpos);
@@ -115,7 +115,7 @@ public class RenderEventHandler implements IResourceManagerReloadListener {
 			}
 		}
 		tessellatorIn.draw();
-		vertexBuffer.setTranslation(0.0D, 0.0D, 0.0D);
+		buffer.setTranslation(0.0D, 0.0D, 0.0D);
 		postRenderDamagedBlocks();
 	}
 

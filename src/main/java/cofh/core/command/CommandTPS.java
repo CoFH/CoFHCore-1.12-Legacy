@@ -112,7 +112,7 @@ public class CommandTPS implements ISubCommand {
 				Throwables.propagate(e);
 			}
 
-			WorldServer world = CoreProps.server.worldServerForDimension(dim);
+			WorldServer world = CoreProps.server.getWorld(dim);
 			if (world == null) {
 				throw new CommandException("chat.cofh.command.world.notFound");
 			}

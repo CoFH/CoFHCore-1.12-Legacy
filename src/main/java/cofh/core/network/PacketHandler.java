@@ -107,7 +107,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 				break;
 			case SERVER:
 				INetHandler netHandler = ctx.channel().attr(NetworkRegistry.NET_HANDLER).get();
-				player = ((NetHandlerPlayServer) netHandler).playerEntity;
+				player = ((NetHandlerPlayServer) netHandler).player;
 				handlePacketServer(pkt, player);
 				break;
 			default:

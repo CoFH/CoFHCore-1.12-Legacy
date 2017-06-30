@@ -82,19 +82,19 @@ public class GuiFriendList extends GuiCore {
 		if (tbName != null) { // Stops GUI resize deleting text.
 			temp = tbName.getText();
 		}
-		tbName = new GuiTextField(0, this.fontRendererObj, tbNameX, tbNameY, 128, TB_HEIGHT);
+		tbName = new GuiTextField(0, this.fontRenderer, tbNameX, tbNameY, 128, TB_HEIGHT);
 		tbName.setMaxStringLength(20);
 		tbName.setText(temp);
 		tbName.setEnableBackgroundDrawing(false);
 
 		// Setup Text Area
 
-		taFriendList = new GuiTextList(this.fontRendererObj, taflX, taflY, 128, 10);
+		taFriendList = new GuiTextList(this.fontRenderer, taflX, taflY, 128, 10);
 		taFriendList.textLines = RegistrySocial.clientPlayerFriends;
 		taFriendList.drawBackground = false;
 		taFriendList.drawBorder = false;
 
-		taOnlineList = new GuiTextList(this.fontRendererObj, taX, taY, 128, 4);
+		taOnlineList = new GuiTextList(this.fontRenderer, taX, taY, 128, 4);
 		taOnlineList.textLines = getOnlineNames();
 		taOnlineList.drawBackground = false;
 		taOnlineList.drawBorder = false;

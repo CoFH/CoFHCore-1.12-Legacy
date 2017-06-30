@@ -22,7 +22,7 @@ public abstract class WorldProxy extends World {
 
 	public WorldProxy(World world) {
 
-		super(world.getSaveHandler(), world.getWorldInfo(), world.provider, world.theProfiler, world.isRemote);
+		super(world.getSaveHandler(), world.getWorldInfo(), world.provider, world.profiler, world.isRemote);
 		this.proxiedWorld = world;
 
 		ReflectionHelper.setPrivateValue(World.class, this, world.getPerWorldStorage(), "perWorldStorage"); // forge-added, no reobf
@@ -50,7 +50,7 @@ public abstract class WorldProxy extends World {
 		chunkProvider = proxiedWorld.getChunkProvider();
 		captureBlockSnapshots = proxiedWorld.captureBlockSnapshots;
 		restoringBlockSnapshots = proxiedWorld.restoringBlockSnapshots;
-		villageCollectionObj = proxiedWorld.villageCollectionObj;
+		villageCollection = proxiedWorld.villageCollection;
 	}
 
 	@Override

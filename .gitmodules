@@ -1,4 +1,0 @@
-[submodule "CoFHLib"]
-	path = CoFHLib
-	url = https://github.com/CoFH/CoFHLib
-	branch = 1.10.2

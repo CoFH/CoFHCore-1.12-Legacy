@@ -16,8 +16,8 @@ import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.terraingen.OreGenEvent;
@@ -174,7 +174,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		NBTTagCompound tag = (NBTTagCompound) event.getData().getTag(TAG_NAME);
 
 		if (tag != null && tag.getBoolean("Populating")) {
-			ChunkReference chunk = new ChunkReference(dim, event.getChunk().xPosition, event.getChunk().zPosition);
+			ChunkReference chunk = new ChunkReference(dim, event.getChunk().x, event.getChunk().z);
 			chunk.hasVillage = tag.getBoolean("HasVillage");
 			populatingChunks.add(chunk);
 			return;
@@ -281,7 +281,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		}
 		BlockFalling.fallInstantly = false;
 		if (!newGen) {
-			world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
+			world.getChunkFromChunkCoords(chunkX, chunkZ).markDirty();
 		}
 	}
 
@@ -311,7 +311,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		}
 		BlockFalling.fallInstantly = false;
 		if (!newGen) {
-			world.getChunkFromChunkCoords(chunkX, chunkZ).setChunkModified();
+			world.getChunkFromChunkCoords(chunkX, chunkZ).markDirty();
 		}
 	}
 
@@ -422,7 +422,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 			if (o == null || o.getClass() != getClass()) {
 				if (o instanceof Chunk) {
 					Chunk other = (Chunk) o;
-					return xPos == other.xPosition && zPos == other.zPosition && dimension == other.getWorld().provider.getDimension();
+					return xPos == other.x && zPos == other.z && dimension == other.getWorld().provider.getDimension();
 				}
 				return false;
 			}

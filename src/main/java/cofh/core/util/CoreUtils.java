@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
-import org.apache.logging.log4j.core.helpers.Loader;
+import org.apache.logging.log4j.core.util.Loader;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
@@ -177,7 +177,7 @@ public class CoreUtils {
 			y2 = world.rand.nextFloat() * 0.8F + 0.1F;
 			z2 = world.rand.nextFloat() * 0.8F + 0.1F;
 		}
-		EntityItem entity = new EntityItem(world, pos.xCoord + x2, pos.yCoord + y2, pos.zCoord + z2, stack.copy());
+		EntityItem entity = new EntityItem(world, pos.x + x2, pos.y + y2, pos.z + z2, stack.copy());
 
 		if (velocity) {
 			entity.motionX = (float) world.rand.nextGaussian() * 0.05F;

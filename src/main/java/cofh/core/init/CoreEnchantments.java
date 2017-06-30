@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class CoreEnchantments {
 
@@ -24,8 +24,8 @@ public class CoreEnchantments {
 		multishot = new EnchantmentMultishot("cofhcore:multishot");
 		// vorpal = new EnchantmentVorpal("cofhcore:vorpal");
 
-		GameRegistry.register(holding);
-		GameRegistry.register(multishot);
+		ForgeRegistries.ENCHANTMENTS.register(holding);
+		ForgeRegistries.ENCHANTMENTS.register(multishot);
 	}
 
 	/* HELPERS */

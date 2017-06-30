@@ -1,6 +1,6 @@
 package cofh.core.energy;
 
-import cofh.api.energy.EnergyStorage;
+import cofh.redstoneflux.impl.EnergyStorage;
 
 public class EnergyStorageCore extends EnergyStorage {
 

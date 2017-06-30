@@ -355,7 +355,7 @@ public class CommandReplaceBlock implements ISubCommand {
 				if (manager == null) {
 					return;
 				}
-				PlayerChunkMapEntry watcher = manager.getEntry(chunk.xPosition, chunk.zPosition);
+				PlayerChunkMapEntry watcher = manager.getEntry(chunk.x, chunk.z);
 				if (watcher != null) {
 					watcher.sendPacket(new SPacketChunkData(chunk, -1));
 				}
