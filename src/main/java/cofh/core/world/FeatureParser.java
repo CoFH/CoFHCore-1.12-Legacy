@@ -627,7 +627,7 @@ public class FeatureParser {
 					return new WeightedRandomBlock(block, metadata, weight);
 				}
 			case STRING:
-			    String name = (String) genElement.unwrapped();
+				String name = (String) genElement.unwrapped();
 				block = parseBlockName(name);
 				if (block == Blocks.AIR && !name.equalsIgnoreCase("minecraft:air")) {
 					log.error("Invalid block entry!");

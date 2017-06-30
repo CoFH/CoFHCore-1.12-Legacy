@@ -158,6 +158,7 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 	@Override
 	@SideOnly (Side.CLIENT)
 	public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks) {
+
 		return new Vec3d(getParticleRed(), getParticleGreen(), getParticleBlue());
 	}
 

@@ -17,7 +17,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import javax.annotation.Nonnull;
 
-public class UpgradeRecipeFactory implements IRecipeFactory {
+public class ShapedUpgradeRecipeFactory implements IRecipeFactory {
 
 	@Override
 	public IRecipe parse(JsonContext context, JsonObject json) {
@@ -30,13 +30,13 @@ public class UpgradeRecipeFactory implements IRecipeFactory {
 		primer.mirrored = JsonUtils.getBoolean(json, "mirrored", true);
 		primer.input = recipe.getIngredients();
 
-		return new UpgradeRecipe(new ResourceLocation(CoFHCore.MOD_ID, "upgrade"), recipe.getRecipeOutput(), primer);
+		return new ShapedUpgradeRecipe(new ResourceLocation(CoFHCore.MOD_ID, "upgrade_shaped"), recipe.getRecipeOutput(), primer);
 	}
 
 	/* RECIPE */
-	public static class UpgradeRecipe extends ShapedOreRecipe {
+	public static class ShapedUpgradeRecipe extends ShapedOreRecipe {
 
-		public UpgradeRecipe(ResourceLocation group, ItemStack result, ShapedPrimer primer) {
+		public ShapedUpgradeRecipe(ResourceLocation group, ItemStack result, ShapedPrimer primer) {
 
 			super(group, result, primer);
 		}

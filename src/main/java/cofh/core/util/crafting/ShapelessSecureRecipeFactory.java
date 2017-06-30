@@ -8,37 +8,29 @@ import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
 import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
-import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import javax.annotation.Nonnull;
 
-public class SecureRecipeFactory implements IRecipeFactory {
+public class ShapelessSecureRecipeFactory implements IRecipeFactory {
 
 	@Override
 	public IRecipe parse(JsonContext context, JsonObject json) {
 
-		ShapedOreRecipe recipe = ShapedOreRecipe.factory(context, json);
+		ShapelessOreRecipe recipe = ShapelessOreRecipe.factory(context, json);
 
-		ShapedPrimer primer = new ShapedPrimer();
-		primer.width = recipe.getWidth();
-		primer.height = recipe.getHeight();
-		primer.mirrored = JsonUtils.getBoolean(json, "mirrored", true);
-		primer.input = recipe.getIngredients();
-
-		return new SecureRecipe(new ResourceLocation("cofh", "secure"), recipe.getRecipeOutput(), primer);
+		return new ShapelessSecureRecipe(new ResourceLocation("cofh", "secure_shapeless"), recipe.getRecipeOutput(), recipe.getIngredients().toArray());
 	}
 
 	/* RECIPE */
-	public static class SecureRecipe extends ShapedOreRecipe {
+	public static class ShapelessSecureRecipe extends ShapelessOreRecipe {
 
-		public SecureRecipe(ResourceLocation group, ItemStack result, ShapedPrimer primer) {
+		public ShapelessSecureRecipe(ResourceLocation group, ItemStack result, Object... recipe) {
 
-			super(group, result, primer);
+			super(group, result, recipe);
 		}
 
 		@Override
