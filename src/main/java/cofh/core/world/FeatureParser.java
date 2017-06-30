@@ -27,6 +27,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
@@ -579,7 +580,7 @@ public class FeatureParser {
 
 	public static Block parseBlockName(String blockRaw) {
 
-		return Block.REGISTRY.getObjectBypass(new ResourceLocation(blockRaw));
+		return ForgeRegistries.BLOCKS.getValue(new ResourceLocation(blockRaw));
 	}
 
 	public static WeightedRandomBlock parseBlockEntry(ConfigValue genElement, boolean clamp) {
@@ -598,7 +599,7 @@ public class FeatureParser {
 				}
 				String blockName;
 				block = parseBlockName(blockName = blockElement.getString("name"));
-				if (block == null) {
+				if (block == Blocks.AIR && !blockName.equalsIgnoreCase("minecraft:air")) {
 					log.error("Invalid block entry!");
 					return null;
 				}
@@ -627,8 +628,9 @@ public class FeatureParser {
 					return new WeightedRandomBlock(block, metadata, weight);
 				}
 			case STRING:
-				block = parseBlockName((String) genElement.unwrapped());
-				if (block == null) {
+			    String name = (String) genElement.unwrapped();
+				block = parseBlockName(name);
+				if (block == Blocks.AIR && !name.equalsIgnoreCase("minecraft:air")) {
 					log.error("Invalid block entry!");
 					return null;
 				}
