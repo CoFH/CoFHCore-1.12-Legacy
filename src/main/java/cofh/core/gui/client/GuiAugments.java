@@ -1,8 +1,8 @@
 package cofh.core.gui.client;
 
 import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiProps;
 import cofh.core.gui.container.ContainerAugments;
-import cofh.lib.gui.GuiProps;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 

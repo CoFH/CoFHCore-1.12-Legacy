@@ -4,7 +4,7 @@ import cofh.core.init.CoreProps;
 import cofh.core.item.tool.ItemShieldCore;
 import cofh.core.key.KeyBindingItemMultiMode;
 import cofh.core.key.KeyHandlerCore;
-import cofh.lib.util.helpers.MathHelper;
+import cofh.core.util.helpers.MathHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;

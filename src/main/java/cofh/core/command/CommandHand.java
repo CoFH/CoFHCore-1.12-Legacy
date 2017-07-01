@@ -1,9 +1,9 @@
 package cofh.core.command;
 
 import cofh.core.util.RegistrySocial;
+import cofh.core.util.helpers.ItemHelper;
+import cofh.core.util.helpers.StringHelper;
 import cofh.core.util.oredict.OreDictionaryArbiter;
-import cofh.lib.util.helpers.ItemHelper;
-import cofh.lib.util.helpers.StringHelper;
 import com.google.common.collect.Multimap;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

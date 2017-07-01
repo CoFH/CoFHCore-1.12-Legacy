@@ -1,10 +1,9 @@
 package cofh.core.gui.container;
 
-import cofh.lib.gui.container.ContainerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class ContainerFriendsList extends ContainerBase {
+public class ContainerFriendsList extends ContainerCore {
 
 	public ContainerFriendsList(InventoryPlayer inventory) {
 

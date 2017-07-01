@@ -1,8 +1,8 @@
 package cofh.core.item;
 
 import cofh.core.render.IModelRegister;
-import cofh.lib.util.helpers.ItemHelper;
-import cofh.lib.util.helpers.StringHelper;
+import cofh.core.util.helpers.ItemHelper;
+import cofh.core.util.helpers.StringHelper;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;

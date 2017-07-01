@@ -1,14 +1,12 @@
 package cofh.core.world.feature;
 
+import cofh.core.util.WeightedRandomBlock;
+import cofh.core.util.helpers.MathHelper;
+import cofh.core.util.numbers.INumberProvider;
 import cofh.core.world.FeatureParser;
-import cofh.lib.util.WeightedRandomBlock;
-import cofh.lib.util.helpers.MathHelper;
-import cofh.lib.util.numbers.INumberProvider;
-import cofh.lib.world.IFeatureGenerator;
-import cofh.lib.world.IFeatureParser;
-import cofh.lib.world.feature.FeatureBase;
-import cofh.lib.world.feature.FeatureBase.GenRestriction;
-import cofh.lib.world.feature.FeatureGenUniform;
+import cofh.core.world.IFeatureGenerator;
+import cofh.core.world.IFeatureParser;
+import cofh.core.world.feature.FeatureBase.GenRestriction;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigList;
 import com.typesafe.config.ConfigValue;

@@ -1,6 +1,6 @@
 package cofh.core.render.particle;
 
-import cofh.lib.util.helpers.MathHelper;
+import cofh.core.util.helpers.MathHelper;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

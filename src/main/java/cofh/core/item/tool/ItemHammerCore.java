@@ -1,6 +1,6 @@
 package cofh.core.item.tool;
 
-import cofh.lib.util.RayTracer;
+import cofh.core.util.RayTracer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

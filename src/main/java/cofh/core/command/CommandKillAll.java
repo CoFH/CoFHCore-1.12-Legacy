@@ -1,7 +1,7 @@
 package cofh.core.command;
 
 import cofh.core.init.CoreProps;
-import cofh.lib.util.helpers.StringHelper;
+import cofh.core.util.helpers.StringHelper;
 import gnu.trove.iterator.TObjectIntIterator;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.command.CommandException;

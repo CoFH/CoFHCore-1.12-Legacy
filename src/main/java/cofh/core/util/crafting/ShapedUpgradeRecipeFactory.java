@@ -2,7 +2,7 @@ package cofh.core.util.crafting;
 
 import cofh.CoFHCore;
 import cofh.api.item.INBTCopyIngredient;
-import cofh.lib.util.helpers.ItemHelper;
+import cofh.core.util.helpers.ItemHelper;
 import com.google.gson.JsonObject;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;

@@ -1,8 +1,7 @@
 package cofh.core.util.helpers;
 
-import cofh.core.util.tileentity.IRedstoneControl;
-import cofh.core.util.tileentity.IRedstoneControl.ControlMode;
-import cofh.lib.util.helpers.StringHelper;
+import cofh.api.tileentity.IRedstoneControl;
+import cofh.api.tileentity.IRedstoneControl.ControlMode;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 

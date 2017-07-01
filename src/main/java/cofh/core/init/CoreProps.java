@@ -3,7 +3,7 @@ package cofh.core.init;
 import cofh.CoFHCore;
 import cofh.core.enchantment.EnchantmentHolding;
 import cofh.core.enchantment.EnchantmentMultishot;
-import cofh.lib.util.helpers.StringHelper;
+import cofh.core.util.helpers.StringHelper;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;

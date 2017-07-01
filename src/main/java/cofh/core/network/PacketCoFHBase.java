@@ -1,7 +1,7 @@
 package cofh.core.network;
 
-import cofh.lib.util.helpers.FluidHelper;
-import cofh.lib.util.helpers.ItemHelper;
+import cofh.core.util.helpers.FluidHelper;
+import cofh.core.util.helpers.ItemHelper;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;

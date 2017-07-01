@@ -1,7 +1,7 @@
 package cofh.core.render.font;
 
 import cofh.core.render.FontRendererCore;
-import cofh.lib.util.helpers.RenderHelper;
+import cofh.core.util.helpers.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import org.lwjgl.opengl.GL11;
 

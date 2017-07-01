@@ -1,8 +1,8 @@
 package cofh.core.world.decoration;
 
-import cofh.lib.util.WeightedRandomBlock;
-import cofh.lib.world.IGeneratorParser;
-import cofh.lib.world.WorldGenBoulder;
+import cofh.core.util.WeightedRandomBlock;
+import cofh.core.world.IGeneratorParser;
+import cofh.core.world.WorldGenBoulder;
 import com.typesafe.config.Config;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;

@@ -1,6 +1,6 @@
 package cofh.core.item.tool;
 
-import cofh.lib.util.helpers.ItemHelper;
+import cofh.core.util.helpers.ItemHelper;
 import gnu.trove.set.hash.THashSet;
 import gnu.trove.set.hash.TLinkedHashSet;
 import net.minecraft.block.Block;

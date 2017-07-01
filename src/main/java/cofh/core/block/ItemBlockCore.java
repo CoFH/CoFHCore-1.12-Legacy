@@ -2,7 +2,7 @@ package cofh.core.block;
 
 import cofh.core.render.FontRendererCore;
 import cofh.core.util.helpers.SecurityHelper;
-import cofh.lib.util.helpers.StringHelper;
+import cofh.core.util.helpers.StringHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;

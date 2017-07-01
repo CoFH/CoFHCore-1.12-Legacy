@@ -9,7 +9,7 @@ import cofh.core.network.PacketTileInfo;
 import cofh.core.util.CoreUtils;
 import cofh.core.util.RegistrySocial;
 import cofh.core.util.helpers.SecurityHelper;
-import cofh.lib.util.helpers.ServerHelper;
+import cofh.core.util.helpers.ServerHelper;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

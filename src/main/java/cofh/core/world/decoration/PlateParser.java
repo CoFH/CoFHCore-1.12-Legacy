@@ -1,10 +1,10 @@
 package cofh.core.world.decoration;
 
+import cofh.core.util.WeightedRandomBlock;
+import cofh.core.util.helpers.MathHelper;
 import cofh.core.world.FeatureParser;
-import cofh.lib.util.WeightedRandomBlock;
-import cofh.lib.util.helpers.MathHelper;
-import cofh.lib.world.IGeneratorParser;
-import cofh.lib.world.WorldGenMinablePlate;
+import cofh.core.world.IGeneratorParser;
+import cofh.core.world.WorldGenMinablePlate;
 import com.typesafe.config.Config;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;

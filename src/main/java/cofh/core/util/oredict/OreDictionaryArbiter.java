@@ -1,7 +1,7 @@
 package cofh.core.util.oredict;
 
-import cofh.lib.util.ItemWrapper;
-import cofh.lib.util.helpers.ItemHelper;
+import cofh.core.util.ItemWrapper;
+import cofh.core.util.helpers.ItemHelper;
 import com.google.common.base.Strings;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

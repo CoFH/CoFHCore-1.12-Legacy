@@ -1,9 +1,7 @@
 package cofh.core.world.feature;
 
-import cofh.lib.util.numbers.INumberProvider;
-import cofh.lib.world.feature.FeatureBase;
-import cofh.lib.world.feature.FeatureBase.GenRestriction;
-import cofh.lib.world.feature.FeatureGenCave;
+import cofh.core.util.numbers.INumberProvider;
+import cofh.core.world.feature.FeatureBase.GenRestriction;
 import com.typesafe.config.Config;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.apache.logging.log4j.Logger;

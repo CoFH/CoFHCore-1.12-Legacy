@@ -1,7 +1,7 @@
 package cofh.core.util.oredict;
 
-import cofh.lib.util.OreDictionaryProxy;
-import cofh.lib.util.helpers.ItemHelper;
+import cofh.core.util.OreDictionaryProxy;
+import cofh.core.util.helpers.ItemHelper;
 import net.minecraft.item.ItemStack;
 
 /**

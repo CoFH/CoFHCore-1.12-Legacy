@@ -1,7 +1,7 @@
 package cofh.core.entity;
 
-import cofh.lib.util.helpers.MathHelper;
-import cofh.lib.util.helpers.NBTHelper;
+import cofh.core.util.helpers.MathHelper;
+import cofh.core.util.helpers.NBTHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.*;

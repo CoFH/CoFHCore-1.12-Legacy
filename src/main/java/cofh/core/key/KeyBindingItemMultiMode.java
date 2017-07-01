@@ -3,7 +3,7 @@ package cofh.core.key;
 import cofh.CoFHCore;
 import cofh.api.item.IMultiModeItem;
 import cofh.core.util.CoreUtils;
-import cofh.lib.util.helpers.ItemHelper;
+import cofh.core.util.helpers.ItemHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 

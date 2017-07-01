@@ -1,7 +1,7 @@
 package cofh.core.item.tool;
 
-import cofh.lib.util.helpers.ItemHelper;
-import cofh.lib.util.helpers.ServerHelper;
+import cofh.core.util.helpers.ItemHelper;
+import cofh.core.util.helpers.ServerHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;

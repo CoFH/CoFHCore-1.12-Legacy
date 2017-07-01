@@ -1,7 +1,7 @@
 package cofh.core.command;
 
+import cofh.core.util.ChunkCoord;
 import cofh.core.world.TickHandlerWorld;
-import cofh.lib.util.ChunkCoord;
 import com.google.common.base.Throwables;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

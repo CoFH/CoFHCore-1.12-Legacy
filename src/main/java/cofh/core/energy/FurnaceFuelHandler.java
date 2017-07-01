@@ -1,6 +1,6 @@
 package cofh.core.energy;
 
-import cofh.lib.util.ItemWrapper;
+import cofh.core.util.ItemWrapper;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.IFuelHandler;

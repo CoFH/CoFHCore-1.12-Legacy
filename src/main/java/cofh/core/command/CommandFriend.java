@@ -3,7 +3,7 @@ package cofh.core.command;
 import cofh.CoFHCore;
 import cofh.core.gui.GuiHandler;
 import cofh.core.util.RegistrySocial;
-import cofh.lib.util.helpers.StringHelper;
+import cofh.core.util.helpers.StringHelper;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
