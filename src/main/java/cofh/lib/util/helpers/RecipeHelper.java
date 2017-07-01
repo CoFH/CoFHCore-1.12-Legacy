@@ -1,5 +1,6 @@
 package cofh.lib.util.helpers;
 
+import cofh.core.util.crafting.ShapelessFluidRecipeFactory.ShapelessFluidRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,6 +36,14 @@ public class RecipeHelper {
 		ResourceLocation location = getNameForRecipe(output);
 		CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(input);
 		ShapedRecipes recipe = new ShapedRecipes(output.getItem().getRegistryName().toString(), primer.width, primer.height, primer.input, output);
+		recipe.setRegistryName(location);
+		GameData.register_impl(recipe);
+	}
+
+	public static void addShapelessFluidRecipe(ItemStack output, Object... input) {
+
+		ResourceLocation location = getNameForRecipe(output);
+		ShapelessFluidRecipe recipe = new ShapelessFluidRecipe(location, output, input);
 		recipe.setRegistryName(location);
 		GameData.register_impl(recipe);
 	}
