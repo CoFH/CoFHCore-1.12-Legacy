@@ -5,6 +5,7 @@ import cofh.core.gui.element.ElementBase;
 import cofh.core.gui.element.tab.TabBase;
 import cofh.core.gui.element.tab.TabTracker;
 import cofh.core.gui.slot.SlotFalseCopy;
+import cofh.core.init.CoreTextures;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.StringHelper;
 import net.minecraft.client.audio.SoundHandler;
@@ -533,6 +534,17 @@ public abstract class GuiCore extends GuiContainer {
 	 */
 	public void drawButton(TextureAtlasSprite icon, int x, int y, int mode) {
 
+		switch (mode) {
+			case 0:
+				drawIcon(CoreTextures.ICON_BUTTON, x, y);
+				break;
+			case 1:
+				drawIcon(CoreTextures.ICON_BUTTON_HIGHLIGHT, x, y);
+				break;
+			default:
+				drawIcon(CoreTextures.ICON_BUTTON_INACTIVE, x, y);
+				break;
+		}
 		drawIcon(icon, x, y);
 	}
 

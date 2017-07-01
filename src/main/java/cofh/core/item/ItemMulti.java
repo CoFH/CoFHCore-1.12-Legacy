@@ -37,17 +37,6 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 		super(modName);
 	}
 
-	protected void addInformationDelegate(ItemStack stack, EntityPlayer player, List<String> list, boolean check) {
-
-		int i = ItemHelper.getItemDamage(stack);
-		if (!itemMap.containsKey(i)) {
-			return;
-		}
-		ItemEntry item = itemMap.get(i);
-
-		list.add(StringHelper.getInfoText("info." + modName + "." + name + "." + item.name));
-	}
-
 	/* ADD ITEMS */
 	public ItemStack addItem(int number, ItemEntry entry) {
 

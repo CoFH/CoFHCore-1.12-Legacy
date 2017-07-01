@@ -1,9 +1,9 @@
 package cofh.core.gui.element.tab;
 
+import cofh.api.tileentity.IRedstoneControl;
 import cofh.core.gui.GuiCore;
 import cofh.core.init.CoreTextures;
 import cofh.core.util.helpers.StringHelper;
-import cofh.api.tileentity.IRedstoneControl;
 import net.minecraft.client.renderer.GlStateManager;
 
 import java.util.List;

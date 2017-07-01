@@ -1,7 +1,7 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
 import cofh.core.gui.GuiColor;
+import cofh.core.gui.GuiCore;
 import net.minecraft.client.renderer.GlStateManager;
 
 import static cofh.core.gui.element.ElementButtonBase.*;

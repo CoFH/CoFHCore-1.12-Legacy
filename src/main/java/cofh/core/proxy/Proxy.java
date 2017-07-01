@@ -20,12 +20,10 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.event.terraingen.SaplingGrowTreeEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.LinkedList;
@@ -109,14 +107,6 @@ public class Proxy {
 	@SubscribeEvent
 	public void handleLivingDropsEvent(LivingDropsEvent event) {
 
-	}
-
-	@SubscribeEvent
-	public void handleSaplingGrowTreeEvent(SaplingGrowTreeEvent event) {
-
-		if (CoreProps.treeGrowthChance < 100 && event.getWorld().rand.nextInt(100) >= CoreProps.treeGrowthChance) {
-			event.setResult(Result.DENY);
-		}
 	}
 
 	/* SERVER UTILS */

@@ -1,7 +1,7 @@
 package cofh.core.command;
 
-import cofh.core.util.ChunkCoord;
-import cofh.core.world.TickHandlerWorld;
+import cofh.cofhworld.util.ChunkCoord;
+import cofh.cofhworld.init.WorldTickHandler;
 import com.google.common.base.Throwables;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -92,8 +92,8 @@ public class CommandPregen implements ISubCommand {
 			zL = t;
 		}
 
-		synchronized (TickHandlerWorld.chunksToPreGen) {
-			ArrayDeque<ChunkCoord> chunks = TickHandlerWorld.chunksToPreGen.get(world.provider.getDimension());
+		synchronized (WorldTickHandler.chunksToPreGen) {
+			ArrayDeque<ChunkCoord> chunks = WorldTickHandler.chunksToPreGen.get(world.provider.getDimension());
 			if (chunks == null) {
 				chunks = new ArrayDeque<>();
 			}
@@ -103,7 +103,7 @@ public class CommandPregen implements ISubCommand {
 					chunks.addLast(new ChunkCoord(x, z));
 				}
 			}
-			TickHandlerWorld.chunksToPreGen.put(world.provider.getDimension(), chunks);
+			WorldTickHandler.chunksToPreGen.put(world.provider.getDimension(), chunks);
 			CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.pregen.start", (xL - xS) * (zL - zS), xS, zS, xL, zL);
 		}
 	}

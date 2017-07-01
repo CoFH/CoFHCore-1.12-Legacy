@@ -1,14 +1,14 @@
 package cofh.core.gui.element.tab;
 
 import cofh.api.tileentity.IReconfigurableFacing;
+import cofh.api.tileentity.IReconfigurableSides;
+import cofh.api.tileentity.ITransferControl;
 import cofh.core.gui.GuiCore;
 import cofh.core.init.CoreTextures;
 import cofh.core.render.ISidedTexture;
 import cofh.core.util.helpers.BlockHelper;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.StringHelper;
-import cofh.api.tileentity.IReconfigurableSides;
-import cofh.api.tileentity.ITransferControl;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;

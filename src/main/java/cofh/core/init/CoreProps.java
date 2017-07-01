@@ -77,12 +77,6 @@ public class CoreProps {
 
 		comment = "If TRUE, Server Ops can access \"secure\" blocks. Your players will be warned upon server connection.";
 		enableOpSecureAccess = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("OpsCanAccessSecureBlocks", category, enableOpSecureAccess, comment);
-
-		/* WORLD TWEAKS */
-		category = "World";
-
-		comment = "This adjusts the % chance that a tree will grow as normal when it is meant to. Reducing this value will mean that trees take longer to grow, on average.";
-		treeGrowthChance = CoFHCore.CONFIG_CORE.getConfiguration().getInt("TreeGrowthChance", category, treeGrowthChance, 1, 100, comment);
 	}
 
 	private static void configClient() {
@@ -215,6 +209,7 @@ public class CoreProps {
 	/* TEXTURES */
 	public static final String PATH_GFX = "cofh:textures/";
 	public static final String PATH_GUI = PATH_GFX + "gui/";
+	public static final String PATH_ELEMENTS = PATH_GUI + "elements/";
 	public static final String PATH_GUI_STORAGE = PATH_GUI + "storage/";
 
 	public static final ResourceLocation[] TEXTURE_STORAGE = new ResourceLocation[STORAGE_SIZE.length];
@@ -252,8 +247,5 @@ public class CoreProps {
 	/* SECURITY */
 	public static boolean enableOpSecureAccess = false;
 	public static boolean enableOpSecureAccessWarning = true;
-
-	/* WORLD */
-	public static int treeGrowthChance = 100;
 
 }

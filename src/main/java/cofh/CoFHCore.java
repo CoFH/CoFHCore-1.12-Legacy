@@ -12,8 +12,6 @@ import cofh.core.proxy.Proxy;
 import cofh.core.util.ConfigHandler;
 import cofh.core.util.RegistrySocial;
 import cofh.core.util.oredict.OreDictionaryArbiter;
-import cofh.core.world.FeatureParser;
-import cofh.core.world.WorldHandler;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -39,8 +37,8 @@ public class CoFHCore {
 	public static final String MOD_ID = "cofhcore";
 	public static final String MOD_NAME = "CoFH Core";
 
-	public static final String VERSION = "4.2.5";
-	public static final String VERSION_MAX = "4.3.0";
+	public static final String VERSION = "4.3.0";
+	public static final String VERSION_MAX = "4.4.0";
 	public static final String VERSION_GROUP = "required-after:" + MOD_ID + "@[" + VERSION + "," + VERSION_MAX + ");";
 	public static final String UPDATE_URL = "https://raw.github.com/cofh/version/master/" + MOD_ID + "_update.json";
 
@@ -109,11 +107,6 @@ public class CoFHCore {
 		CONFIG_CORE.cleanUp(false, true);
 		CONFIG_CLIENT.cleanUp(false, true);
 
-		try {
-			FeatureParser.parseGenerationFiles();
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
 		LOG.info(MOD_NAME + ": Load Complete.");
 	}
 
@@ -142,12 +135,8 @@ public class CoFHCore {
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, GUI_HANDLER);
 		MinecraftForge.EVENT_BUS.register(KeyHandlerCore.instance);
 		MinecraftForge.EVENT_BUS.register(proxy);
-		MinecraftForge.TERRAIN_GEN_BUS.register(proxy);
 
 		FurnaceFuelHandler.initialize();
-
-		FeatureParser.initialize();
-		WorldHandler.initialize();
 
 		RegistrySocial.initialize();
 

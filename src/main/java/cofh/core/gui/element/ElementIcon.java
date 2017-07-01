@@ -1,7 +1,7 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
 import cofh.core.gui.GuiColor;
+import cofh.core.gui.GuiCore;
 import cofh.core.util.helpers.RenderHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

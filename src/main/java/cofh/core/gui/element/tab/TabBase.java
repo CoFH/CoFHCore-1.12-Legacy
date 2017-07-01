@@ -1,8 +1,8 @@
 package cofh.core.gui.element.tab;
 
 import cofh.core.gui.GuiCore;
-import cofh.core.gui.GuiProps;
 import cofh.core.gui.element.ElementBase;
+import cofh.core.init.CoreProps;
 import cofh.core.util.Rectangle4i;
 import cofh.core.util.helpers.RenderHelper;
 import net.minecraft.client.renderer.GlStateManager;
@@ -51,8 +51,8 @@ public abstract class TabBase extends ElementBase {
 
 	protected ArrayList<ElementBase> elements = new ArrayList<>();
 
-	public static final ResourceLocation DEFAULT_TEXTURE_LEFT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "tab_left.png");
-	public static final ResourceLocation DEFAULT_TEXTURE_RIGHT = new ResourceLocation(GuiProps.PATH_ELEMENTS + "tab_right.png");
+	public static final ResourceLocation DEFAULT_TEXTURE_LEFT = new ResourceLocation(CoreProps.PATH_ELEMENTS + "tab_left.png");
+	public static final ResourceLocation DEFAULT_TEXTURE_RIGHT = new ResourceLocation(CoreProps.PATH_ELEMENTS + "tab_right.png");
 
 	public TabBase(GuiCore gui) {
 

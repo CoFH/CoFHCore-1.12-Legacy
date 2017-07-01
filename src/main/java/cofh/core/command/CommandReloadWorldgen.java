@@ -1,8 +1,8 @@
 package cofh.core.command;
 
-import cofh.core.world.FeatureParser;
-import cofh.core.world.IFeatureGenerator;
-import cofh.core.world.WorldHandler;
+import cofh.cofhworld.init.FeatureParser;
+import cofh.cofhworld.feature.IFeatureGenerator;
+import cofh.cofhworld.init.WorldHandler;
 import com.google.common.base.Throwables;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -30,7 +30,7 @@ public class CommandReloadWorldgen implements ISubCommand {
 	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 
 		for (IFeatureGenerator g : FeatureParser.parsedFeatures) {
-			WorldHandler.instance.removeFeature(g);
+			WorldHandler.removeFeature(g);
 		}
 		FeatureParser.parsedFeatures.clear();
 

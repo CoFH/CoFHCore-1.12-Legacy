@@ -1,8 +1,8 @@
 package cofh.core.gui.element.tab;
 
 import cofh.core.gui.GuiCore;
-import cofh.core.gui.GuiProps;
 import cofh.core.gui.container.IAugmentableContainer;
+import cofh.core.init.CoreProps;
 import cofh.core.init.CoreTextures;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.StringHelper;
@@ -19,7 +19,7 @@ public class TabAugment extends TabBase {
 	public static int defaultTextColor = 0x000000;
 	public static int defaultBackgroundColor = 0x089e4c;
 
-	public static ResourceLocation GRID_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "slot_grid_augment.png");
+	public static ResourceLocation GRID_TEXTURE = new ResourceLocation(CoreProps.PATH_ELEMENTS + "slot_grid_augment.png");
 
 	IAugmentableContainer myContainer;
 
