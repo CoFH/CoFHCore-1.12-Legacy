@@ -7,7 +7,7 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
 	}
 }
 
@@ -36,10 +36,15 @@ repositories {
 		name = "JEI Maven"
 		url = "http://dvs1.progwml6.com/files/maven"
 	}
+	maven {
+		name = "CoFH Maven"
+		url = "http://maven.covers1624.net"
+	}
 }
 
 dependencies {
 	compile "mezz.jei:jei_${config.mc_version}:${config.jei_version}"
+	compile "cofh:RedstoneFlux:${config.mc_version}-${config.rf_version}:deobf"
 }
 
 version = "${project.config.mod_version}." + (System.getenv("BUILD_NUMBER") ?: "1")
@@ -68,8 +73,6 @@ processResources {
 version = "${project.minecraft.version}-${project.version}"
 def commonManifest = {
 	attributes 'FMLAT': 'cofh_at.cfg'
-	attributes 'FMLCorePlugin': 'cofh.asm.LoadingPlugin'
-	attributes 'FMLCorePluginContainsFMLMod': 'true'
 }
 
 jar {
@@ -94,12 +97,6 @@ artifacts {
 	archives deobfJar
 	archives srcJar
 }
-
-// Set custom sourceSets, allows us to pack Lib inside Core.
-def CoFHLibDir = new File(project.projectDir, "CoFHLib/")
-
-sourceSets.main.java.srcDir new File(CoFHLibDir, "src/main/java")
-sourceSets.main.resources.srcDir new File(CoFHLibDir, 'src/main/resources')
 
 // Configure an upload task.
 uploadArchives {
