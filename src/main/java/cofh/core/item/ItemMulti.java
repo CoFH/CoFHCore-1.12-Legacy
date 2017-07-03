@@ -2,12 +2,10 @@ package cofh.core.item;
 
 import cofh.core.render.IModelRegister;
 import cofh.core.util.helpers.ItemHelper;
-import cofh.core.util.helpers.StringHelper;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,7 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class ItemMulti extends ItemCore implements IModelRegister {

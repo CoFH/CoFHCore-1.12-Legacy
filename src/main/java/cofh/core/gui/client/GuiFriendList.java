@@ -1,11 +1,11 @@
 package cofh.core.gui.client;
 
 import cofh.core.gui.GuiCore;
-import cofh.core.gui.GuiProps;
 import cofh.core.gui.GuiTextList;
 import cofh.core.gui.container.ContainerFriendsList;
 import cofh.core.gui.element.ElementButton;
 import cofh.core.gui.element.tab.TabInfo;
+import cofh.core.init.CoreProps;
 import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketSocial;
 import cofh.core.network.PacketSocial.PacketTypes;
@@ -25,7 +25,7 @@ import java.util.Locale;
 
 public class GuiFriendList extends GuiCore {
 
-	static final String TEXTURE_PATH = GuiProps.PATH_GUI + "friend_list.png";
+	static final String TEXTURE_PATH = CoreProps.PATH_GUI + "friend_list.png";
 	static final ResourceLocation TEXTURE = new ResourceLocation(TEXTURE_PATH);
 
 	static final int TB_HEIGHT = 12;

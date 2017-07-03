@@ -1,7 +1,7 @@
 package cofh.core.gui.element;
 
 import cofh.core.gui.GuiCore;
-import cofh.core.gui.GuiProps;
+import cofh.core.init.CoreProps;
 import cofh.core.util.helpers.MathHelper;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.StringHelper;
@@ -13,9 +13,9 @@ import java.util.List;
 
 public class ElementFluidTank extends ElementBase {
 
-	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "fluid_tank.png");
-	public static final ResourceLocation SHORT_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "fluid_tank_short.png");
-	public static final ResourceLocation THIN_TEXTURE = new ResourceLocation(GuiProps.PATH_ELEMENTS + "fluid_tank_thin.png");
+	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(CoreProps.PATH_ELEMENTS + "fluid_tank.png");
+	public static final ResourceLocation SHORT_TEXTURE = new ResourceLocation(CoreProps.PATH_ELEMENTS + "fluid_tank_short.png");
+	public static final ResourceLocation THIN_TEXTURE = new ResourceLocation(CoreProps.PATH_ELEMENTS + "fluid_tank_thin.png");
 
 	protected IFluidTank tank;
 	protected int gaugeType;

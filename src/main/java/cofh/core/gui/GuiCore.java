@@ -5,6 +5,7 @@ import cofh.core.gui.element.ElementBase;
 import cofh.core.gui.element.tab.TabBase;
 import cofh.core.gui.element.tab.TabTracker;
 import cofh.core.gui.slot.SlotFalseCopy;
+import cofh.core.init.CoreProps;
 import cofh.core.init.CoreTextures;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.StringHelper;
@@ -57,31 +58,31 @@ public abstract class GuiCore extends GuiContainer {
 	public static final int OMNI = 8;
 
 	/* INFO TEXTURES */
-	public static final String TEX_INFO_INPUT = GuiProps.PATH_ELEMENTS + "info_input.png";
-	public static final String TEX_INFO_OUTPUT = GuiProps.PATH_ELEMENTS + "info_output.png";
+	public static final String TEX_INFO_INPUT = CoreProps.PATH_ELEMENTS + "info_input.png";
+	public static final String TEX_INFO_OUTPUT = CoreProps.PATH_ELEMENTS + "info_output.png";
 
 	/* PROGRESS TEXTURES */
-	public static final String TEX_ARROW_LEFT = GuiProps.PATH_ELEMENTS + "progress_arrow_left.png";
-	public static final String TEX_ARROW_RIGHT = GuiProps.PATH_ELEMENTS + "progress_arrow_right.png";
-	public static final String TEX_ARROW_FLUID_LEFT = GuiProps.PATH_ELEMENTS + "progress_arrow_fluid_left.png";
-	public static final String TEX_ARROW_FLUID_RIGHT = GuiProps.PATH_ELEMENTS + "progress_arrow_fluid_right.png";
-	public static final String TEX_DROP_LEFT = GuiProps.PATH_ELEMENTS + "progress_fluid_left.png";
-	public static final String TEX_DROP_RIGHT = GuiProps.PATH_ELEMENTS + "progress_fluid_right.png";
+	public static final String TEX_ARROW_LEFT = CoreProps.PATH_ELEMENTS + "progress_arrow_left.png";
+	public static final String TEX_ARROW_RIGHT = CoreProps.PATH_ELEMENTS + "progress_arrow_right.png";
+	public static final String TEX_ARROW_FLUID_LEFT = CoreProps.PATH_ELEMENTS + "progress_arrow_fluid_left.png";
+	public static final String TEX_ARROW_FLUID_RIGHT = CoreProps.PATH_ELEMENTS + "progress_arrow_fluid_right.png";
+	public static final String TEX_DROP_LEFT = CoreProps.PATH_ELEMENTS + "progress_fluid_left.png";
+	public static final String TEX_DROP_RIGHT = CoreProps.PATH_ELEMENTS + "progress_fluid_right.png";
 
 	/* SPEED / INTENSITY TEXTURES */
-	public static final String TEX_ALCHEMY = GuiProps.PATH_ELEMENTS + "scale_alchemy.png";
-	public static final String TEX_BUBBLE = GuiProps.PATH_ELEMENTS + "scale_bubble.png";
-	public static final String TEX_COMPACT = GuiProps.PATH_ELEMENTS + "scale_compact.png";
-	public static final String TEX_CRUSH = GuiProps.PATH_ELEMENTS + "scale_crush.png";
-	public static final String TEX_FLAME = GuiProps.PATH_ELEMENTS + "scale_flame.png";
-	public static final String TEX_FLAME_GREEN = GuiProps.PATH_ELEMENTS + "scale_flame_green.png";
-	public static final String TEX_FLUX = GuiProps.PATH_ELEMENTS + "scale_flux.png";
-	public static final String TEX_SAW = GuiProps.PATH_ELEMENTS + "scale_saw.png";
-	public static final String TEX_SPIN = GuiProps.PATH_ELEMENTS + "scale_spin.png";
-	public static final String TEX_SUN = GuiProps.PATH_ELEMENTS + "scale_sun.png";
-	public static final String TEX_SNOWFLAKE = GuiProps.PATH_ELEMENTS + "scale_snowflake.png";
+	public static final String TEX_ALCHEMY = CoreProps.PATH_ELEMENTS + "scale_alchemy.png";
+	public static final String TEX_BUBBLE = CoreProps.PATH_ELEMENTS + "scale_bubble.png";
+	public static final String TEX_COMPACT = CoreProps.PATH_ELEMENTS + "scale_compact.png";
+	public static final String TEX_CRUSH = CoreProps.PATH_ELEMENTS + "scale_crush.png";
+	public static final String TEX_FLAME = CoreProps.PATH_ELEMENTS + "scale_flame.png";
+	public static final String TEX_FLAME_GREEN = CoreProps.PATH_ELEMENTS + "scale_flame_green.png";
+	public static final String TEX_FLUX = CoreProps.PATH_ELEMENTS + "scale_flux.png";
+	public static final String TEX_SAW = CoreProps.PATH_ELEMENTS + "scale_saw.png";
+	public static final String TEX_SPIN = CoreProps.PATH_ELEMENTS + "scale_spin.png";
+	public static final String TEX_SUN = CoreProps.PATH_ELEMENTS + "scale_sun.png";
+	public static final String TEX_SNOWFLAKE = CoreProps.PATH_ELEMENTS + "scale_snowflake.png";
 
-	public static final String TEX_BUTTONS = GuiProps.PATH_ELEMENTS + "buttons.png";
+	public static final String TEX_BUTTONS = CoreProps.PATH_ELEMENTS + "buttons.png";
 
 	public static final int PROGRESS = 24;
 	public static final int SPEED = 16;
@@ -138,7 +139,9 @@ public abstract class GuiCore extends GuiContainer {
 
 		updateElementInformation();
 
+		drawDefaultBackground();
 		super.drawScreen(x, y, partialTick);
+		renderHoveredToolTip(mouseX, mouseY);
 
 		if (tooltips && mc.player.inventory.getItemStack().isEmpty()) {
 			addTooltips(tooltip);
