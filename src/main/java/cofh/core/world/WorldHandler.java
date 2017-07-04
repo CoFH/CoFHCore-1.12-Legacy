@@ -138,7 +138,11 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	@SubscribeEvent
 	public void populateChunkEvent(PopulateChunkEvent.Post event) {
 
-		populatingChunks.get(new ChunkReference(event.getWorld().provider.getDimension(), event.getChunkX(), event.getChunkZ())).hasVillage = event.isHasVillageGenerated();
+		ChunkReference pos = populatingChunks.get(new ChunkReference(event.getWorld().provider.getDimension(), event.getChunkX(), event.getChunkZ()));
+
+		if (pos != null) {
+			pos.hasVillage = event.isHasVillageGenerated();
+		}
 	}
 
 	@SubscribeEvent
