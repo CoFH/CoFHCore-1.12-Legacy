@@ -103,7 +103,7 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 		MinecraftForge.EVENT_BUS.register(instance);
 		MinecraftForge.ORE_GEN_BUS.register(instance);
 
-        GameRegistry.registerWorldGenerator((random, chunkX, chunkZ, world, chunkGenerator, chunkProvider) -> populatingChunks.remove(new ChunkReference(world.provider.getDimension(), chunkX, chunkZ)), Integer.MAX_VALUE);
+		GameRegistry.registerWorldGenerator((random, chunkX, chunkZ, world, chunkGenerator, chunkProvider) -> populatingChunks.remove(new ChunkReference(world.provider.getDimension(), chunkX, chunkZ)), Integer.MAX_VALUE);
 
 		if (genFlatBedrock & retroFlatBedrock | retroGeneration) {
 			// TODO: remove this condition when pregen works? (see handler for alternate)
@@ -138,7 +138,11 @@ public class WorldHandler implements IWorldGenerator, IFeatureHandler {
 	@SubscribeEvent
 	public void populateChunkEvent(PopulateChunkEvent.Post event) {
 
-		populatingChunks.get(new ChunkReference(event.getWorld().provider.getDimension(), event.getChunkX(), event.getChunkZ())).hasVillage = event.isHasVillageGenerated();
+		ChunkReference pos = populatingChunks.get(new ChunkReference(event.getWorld().provider.getDimension(), event.getChunkX(), event.getChunkZ()));
+
+		if (pos != null) {
+			pos.hasVillage = event.isHasVillageGenerated();
+		}
 	}
 
 	@SubscribeEvent
