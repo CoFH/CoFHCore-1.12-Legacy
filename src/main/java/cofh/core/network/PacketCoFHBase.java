@@ -385,12 +385,9 @@ public abstract class PacketCoFHBase extends PacketBase {
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 
-		datain = new DataInputStream(new ByteArrayInputStream(buffer.array()));
-		try {
-			datain.skipBytes(1);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		byte[] bytes = new byte[buffer.capacity()];
+		buffer.getBytes(0, bytes);
+		datain = new DataInputStream(new ByteArrayInputStream(bytes));
 	}
 
 	@Override
