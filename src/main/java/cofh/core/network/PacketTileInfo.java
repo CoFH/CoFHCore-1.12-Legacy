@@ -8,7 +8,7 @@ public class PacketTileInfo extends PacketCoFHBase {
 
 	public static void initialize() {
 
-		PacketHandler.instance.registerPacket(PacketTileInfo.class);
+		PacketHandler.INSTANCE.registerPacket(PacketTileInfo.class);
 	}
 
 	public PacketTileInfo() {

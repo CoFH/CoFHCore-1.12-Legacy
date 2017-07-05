@@ -20,29 +20,29 @@ public class CommandHandler extends CommandBase {
 
 	public static final String COMMAND_DISALLOWED = StringHelper.LIGHT_RED + "You are not allowed to use this command.";
 
-	public static CommandHandler instance = new CommandHandler();
+	public static final CommandHandler INSTANCE = new CommandHandler();
 
 	private static TMap<String, ISubCommand> commands = new THashMap<>();
 
 	static {
-		registerSubCommand(CommandHelp.instance);
-		registerSubCommand(CommandSyntax.instance);
-		registerSubCommand(CommandVersion.instance);
-		registerSubCommand(CommandKillAll.instance);
-		registerSubCommand(CommandTPS.instance);
-		registerSubCommand(CommandTPX.instance);
-		registerSubCommand(CommandEnchant.instance);
-		registerSubCommand(CommandClearBlock.instance);
-		registerSubCommand(CommandReplaceBlock.instance);
-		registerSubCommand(CommandUnloadChunk.instance);
-		registerSubCommand(CommandCountBlock.instance);
-		registerSubCommand(CommandHand.instance);
-		registerSubCommand(CommandFriend.instance);
+		registerSubCommand(CommandHelp.INSTANCE);
+		registerSubCommand(CommandSyntax.INSTANCE);
+		registerSubCommand(CommandVersion.INSTANCE);
+		registerSubCommand(CommandKillAll.INSTANCE);
+		registerSubCommand(CommandTPS.INSTANCE);
+		registerSubCommand(CommandTPX.INSTANCE);
+		registerSubCommand(CommandEnchant.INSTANCE);
+		registerSubCommand(CommandClearBlock.INSTANCE);
+		registerSubCommand(CommandReplaceBlock.INSTANCE);
+		registerSubCommand(CommandUnloadChunk.INSTANCE);
+		registerSubCommand(CommandCountBlock.INSTANCE);
+		registerSubCommand(CommandHand.INSTANCE);
+		registerSubCommand(CommandFriend.INSTANCE);
 	}
 
 	public static void initCommands(FMLServerStartingEvent event) {
 
-		event.registerServerCommand(instance);
+		event.registerServerCommand(INSTANCE);
 	}
 
 	public static boolean registerSubCommand(ISubCommand subCommand) {

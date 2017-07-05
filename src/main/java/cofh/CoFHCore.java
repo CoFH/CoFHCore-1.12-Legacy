@@ -80,13 +80,13 @@ public class CoFHCore {
 		/* Register Handlers */
 		registerHandlers();
 
+		addCraftingRecipes();
+
 		proxy.preInit(event);
 	}
 
 	@EventHandler
 	public void initialize(FMLInitializationEvent event) {
-
-		addCraftingRecipes();
 
 		proxy.initialize(event);
 	}
@@ -134,7 +134,7 @@ public class CoFHCore {
 	private void registerHandlers() {
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, GUI_HANDLER);
-		MinecraftForge.EVENT_BUS.register(KeyHandlerCore.instance);
+		MinecraftForge.EVENT_BUS.register(KeyHandlerCore.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(proxy);
 
 		FurnaceFuelHandler.initialize();

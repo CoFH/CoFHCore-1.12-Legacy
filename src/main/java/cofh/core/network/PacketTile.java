@@ -9,7 +9,7 @@ public class PacketTile extends PacketCoFHBase {
 
 	public static void initialize() {
 
-		PacketHandler.instance.registerPacket(PacketTile.class);
+		PacketHandler.INSTANCE.registerPacket(PacketTile.class);
 	}
 
 	public PacketTile() {

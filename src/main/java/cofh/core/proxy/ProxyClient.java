@@ -54,7 +54,7 @@ public class ProxyClient extends Proxy {
 			CoFHCore.LOG.info("Replacing EffectRenderer - Particles have been disabled.");
 			Minecraft.getMinecraft().effectRenderer = new CustomEffectRenderer();
 		}
-		MinecraftForge.EVENT_BUS.register(RenderEventHandler.instance);
+		MinecraftForge.EVENT_BUS.register(RenderEventHandler.INSTANCE);
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class ProxyClient extends Proxy {
 
 		super.registerKeyBinds();
 
-		KeyHandlerCore.addClientKeyBind(KeyBindingItemMultiMode.instance);
+		KeyHandlerCore.addClientKeyBind(KeyBindingItemMultiMode.INSTANCE);
 		// KeyHandlerCore.addClientKeyBind(KeyBindingPlayerAugments.instance);
 
 		ClientRegistry.registerKeyBinding(KEYBINDING_MULTIMODE);

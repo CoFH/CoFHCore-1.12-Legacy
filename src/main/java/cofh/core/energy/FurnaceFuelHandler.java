@@ -10,12 +10,12 @@ import java.util.Map.Entry;
 
 public class FurnaceFuelHandler implements IFuelHandler {
 
-	public static FurnaceFuelHandler instance = new FurnaceFuelHandler();
+	public static final FurnaceFuelHandler INSTANCE = new FurnaceFuelHandler();
 	private static THashMap<ItemWrapper, Integer> fuels = new THashMap<>();
 
 	public static void initialize() {
 
-		GameRegistry.registerFuelHandler(instance);
+		GameRegistry.registerFuelHandler(INSTANCE);
 	}
 
 	private FurnaceFuelHandler() {

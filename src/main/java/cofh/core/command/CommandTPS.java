@@ -18,7 +18,7 @@ import java.util.Locale;
 
 public class CommandTPS implements ISubCommand {
 
-	public static CommandTPS instance = new CommandTPS();
+	public static final CommandTPS INSTANCE = new CommandTPS();
 
 	private static DecimalFormat floatfmt = new DecimalFormat("##0.00");
 

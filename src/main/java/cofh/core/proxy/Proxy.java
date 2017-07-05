@@ -48,7 +48,7 @@ public class Proxy {
 	/* REGISTRATION */
 	public void registerKeyBinds() {
 
-		KeyHandlerCore.addServerKeyBind(KeyBindingItemMultiMode.instance);
+		KeyHandlerCore.addServerKeyBind(KeyBindingItemMultiMode.INSTANCE);
 		// KeyHandlerCore.addServerKeyBind(KeyBindingPlayerAugments.instance);
 	}
 
@@ -62,7 +62,7 @@ public class Proxy {
 
 	}
 
-	/* EVENT HANDLERS */
+	/* EVENT HANDLING */
 	@SubscribeEvent
 	public void handleLivingAttackEvent(LivingAttackEvent event) {
 

@@ -7,7 +7,7 @@ public class PacketCore extends PacketCoFHBase {
 
 	public static void initialize() {
 
-		PacketHandler.instance.registerPacket(PacketCore.class);
+		PacketHandler.INSTANCE.registerPacket(PacketCore.class);
 	}
 
 	public enum PacketTypes {

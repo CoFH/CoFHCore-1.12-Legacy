@@ -33,7 +33,7 @@ import java.util.Map.Entry;
 
 public class CommandHand implements ISubCommand {
 
-	public static ISubCommand instance = new CommandHand();
+	public static final CommandHand INSTANCE = new CommandHand();
 
 	@Override
 	public String getCommandName() {

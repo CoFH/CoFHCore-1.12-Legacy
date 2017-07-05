@@ -26,7 +26,7 @@ import java.util.List;
 
 public class CommandClearBlock implements ISubCommand {
 
-	public static ISubCommand instance = new CommandClearBlock();
+	public static CommandClearBlock INSTANCE = new CommandClearBlock();
 
 	@Override
 	public String getCommandName() {

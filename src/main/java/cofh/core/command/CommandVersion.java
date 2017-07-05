@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CommandVersion implements ISubCommand {
 
-	public static CommandVersion instance = new CommandVersion();
+	public static final CommandVersion INSTANCE = new CommandVersion();
 
 	/* ISubCommand */
 	@Override

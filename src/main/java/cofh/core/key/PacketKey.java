@@ -9,7 +9,7 @@ public class PacketKey extends PacketCoFHBase {
 
 	public static void initialize() {
 
-		PacketHandler.instance.registerPacket(PacketKey.class);
+		PacketHandler.INSTANCE.registerPacket(PacketKey.class);
 	}
 
 	public static void sendToServer(String uuid) {

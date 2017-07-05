@@ -8,10 +8,14 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class CoreEnchantments {
+
+	public static final CoreEnchantments INSTANCE = new CoreEnchantments();
 
 	private CoreEnchantments() {
 
@@ -24,8 +28,15 @@ public class CoreEnchantments {
 		multishot = new EnchantmentMultishot("cofhcore:multishot");
 		// vorpal = new EnchantmentVorpal("cofhcore:vorpal");
 
-		ForgeRegistries.ENCHANTMENTS.register(holding);
-		ForgeRegistries.ENCHANTMENTS.register(multishot);
+		MinecraftForge.EVENT_BUS.register(INSTANCE);
+	}
+
+	/* EVENT HANDLING */
+	@SubscribeEvent
+	public void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
+
+		event.getRegistry().register(holding);
+		event.getRegistry().register(multishot);
 	}
 
 	/* HELPERS */
@@ -80,7 +91,7 @@ public class CoreEnchantments {
 	public static Enchantment vorpal;
 
 	/* TYPES */
-	//TODO Lemming, Enchantments are smart now.
+	//TODO Enchantments are smart now - is this necessary?
 	public static final EnumEnchantmentType ENCHANTMENT_TYPE_STORAGE = EnumHelper.addEnchantmentType("COFH:STORAGE", item -> item instanceof IInventoryContainerItem);
 
 }

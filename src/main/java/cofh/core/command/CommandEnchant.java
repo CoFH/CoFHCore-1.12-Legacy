@@ -13,7 +13,7 @@ import java.util.List;
 //TODO Move command to Resource location ID's for enchantments.
 public class CommandEnchant implements ISubCommand {
 
-	public static ISubCommand instance = new CommandEnchant();
+	public static final CommandEnchant INSTANCE = new CommandEnchant();
 
 	@Override
 	public String getCommandName() {

@@ -19,7 +19,7 @@ import java.util.Locale;
 
 public class CommandKillAll implements ISubCommand {
 
-	public static CommandKillAll instance = new CommandKillAll();
+	public static final CommandKillAll INSTANCE = new CommandKillAll();
 
 	/* ISubCommand */
 	@Override

@@ -11,7 +11,7 @@ public class PacketIndexedChat extends PacketCoFHBase {
 
 	public static void initialize() {
 
-		PacketHandler.instance.registerPacket(PacketIndexedChat.class);
+		PacketHandler.INSTANCE.registerPacket(PacketIndexedChat.class);
 	}
 
 	public PacketIndexedChat() {

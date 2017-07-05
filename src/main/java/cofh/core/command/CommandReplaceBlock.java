@@ -26,7 +26,7 @@ import java.util.List;
 
 public class CommandReplaceBlock implements ISubCommand {
 
-	public static ISubCommand instance = new CommandReplaceBlock();
+	public static final CommandReplaceBlock INSTANCE = new CommandReplaceBlock();
 
 	@Override
 	public String getCommandName() {

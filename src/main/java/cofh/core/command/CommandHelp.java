@@ -14,7 +14,7 @@ import java.util.List;
 
 public class CommandHelp implements ISubCommand {
 
-	public static CommandHelp instance = new CommandHelp();
+	public static final CommandHelp INSTANCE = new CommandHelp();
 
 	/* ISubCommand */
 	@Override

@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class KeyBindingPlayerAugments implements IKeyBinding {
 
-	public static KeyBindingPlayerAugments instance = new KeyBindingPlayerAugments();
+	public static final KeyBindingPlayerAugments INSTANCE = new KeyBindingPlayerAugments();
 
 	@Override
 	public String getUUID() {

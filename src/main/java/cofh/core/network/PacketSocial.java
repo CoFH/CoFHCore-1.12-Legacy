@@ -11,7 +11,7 @@ public class PacketSocial extends PacketCoFHBase {
 
 	public static void initialize() {
 
-		PacketHandler.instance.registerPacket(PacketSocial.class);
+		PacketHandler.INSTANCE.registerPacket(PacketSocial.class);
 	}
 
 	public enum PacketTypes {

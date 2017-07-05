@@ -41,7 +41,7 @@ import java.util.List;
 @ChannelHandler.Sharable
 public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketBase> {
 
-	public static final PacketHandler instance = new PacketHandler();
+	public static final PacketHandler INSTANCE = new PacketHandler();
 
 	private EnumMap<Side, FMLEmbeddedChannel> channels;
 	private final LinkedList<Class<? extends PacketBase>> packets = new LinkedList<>();
@@ -50,16 +50,16 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	/* INIT */
 	public static void preInit() {
 
-		instance.channels = NetworkRegistry.INSTANCE.newChannel("CoFH", instance);
+		INSTANCE.channels = NetworkRegistry.INSTANCE.newChannel("CoFH", INSTANCE);
 	}
 
 	public static void postInit() {
 
-		if (instance.isPostInitialised) {
+		if (INSTANCE.isPostInitialised) {
 			return;
 		}
-		instance.isPostInitialised = true;
-		(instance.packets).sort((packetClass1, packetClass2) -> {
+		INSTANCE.isPostInitialised = true;
+		(INSTANCE.packets).sort((packetClass1, packetClass2) -> {
 
 			int com = String.CASE_INSENSITIVE_ORDER.compare(packetClass1.getCanonicalName(), packetClass2.getCanonicalName());
 			if (com == 0) {
@@ -171,7 +171,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	public static void handleNBTPacket(NBTTagCompound tagCompound) {
 
 		try {
-			instance.injectPacket(tagCompound.getByteArray("CoFH:data"));
+			INSTANCE.injectPacket(tagCompound.getByteArray("CoFH:data"));
 		} catch (Exception e) {
 			FMLLog.severe("Unable to handle CoFH packet!");
 			e.printStackTrace();
@@ -181,68 +181,68 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	/* TRANSMISSION */
 	public static void sendToAll(PacketBase message) {
 
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
-		instance.channels.get(Side.SERVER).writeAndFlush(message);
+		INSTANCE.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
+		INSTANCE.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendTo(PacketBase message, EntityPlayerMP player) {
 
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
-		instance.channels.get(Side.SERVER).writeAndFlush(message);
+		INSTANCE.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
+		INSTANCE.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
+		INSTANCE.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendTo(PacketBase message, EntityPlayer player) {
 
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
-		instance.channels.get(Side.SERVER).writeAndFlush(message);
+		INSTANCE.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
+		INSTANCE.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
+		INSTANCE.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendToAllAround(PacketBase message, NetworkRegistry.TargetPoint point) {
 
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
-		instance.channels.get(Side.SERVER).writeAndFlush(message);
+		INSTANCE.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+		INSTANCE.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
+		INSTANCE.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendToAllAround(PacketBase message, TileEntity theTile) {
 
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(new TargetPoint(theTile.getWorld().provider.getDimension(), theTile.getPos().getX(), theTile.getPos().getY(), theTile.getPos().getZ(), CoreProps.NETWORK_UPDATE_RANGE));
-		instance.channels.get(Side.SERVER).writeAndFlush(message);
+		INSTANCE.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+		INSTANCE.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(new TargetPoint(theTile.getWorld().provider.getDimension(), theTile.getPos().getX(), theTile.getPos().getY(), theTile.getPos().getZ(), CoreProps.NETWORK_UPDATE_RANGE));
+		INSTANCE.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendToAllAround(PacketBase message, World world, int x, int y, int z) {
 
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(new TargetPoint(world.provider.getDimension(), x, y, z, CoreProps.NETWORK_UPDATE_RANGE));
-		instance.channels.get(Side.SERVER).writeAndFlush(message);
+		INSTANCE.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+		INSTANCE.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(new TargetPoint(world.provider.getDimension(), x, y, z, CoreProps.NETWORK_UPDATE_RANGE));
+		INSTANCE.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendToDimension(PacketBase message, int dimensionId) {
 
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DIMENSION);
-		instance.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimensionId);
-		instance.channels.get(Side.SERVER).writeAndFlush(message);
+		INSTANCE.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.DIMENSION);
+		INSTANCE.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(dimensionId);
+		INSTANCE.channels.get(Side.SERVER).writeAndFlush(message);
 	}
 
 	public static void sendToServer(PacketBase message) {
 
-		instance.channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
-		instance.channels.get(Side.CLIENT).writeAndFlush(message);
+		INSTANCE.channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+		INSTANCE.channels.get(Side.CLIENT).writeAndFlush(message);
 	}
 
 	/* CONVERSION */
 	public static Packet toMCPacket(PacketBase packet) {
 
-		return instance.channels.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
+		return INSTANCE.channels.get(FMLCommonHandler.instance().getEffectiveSide()).generatePacketFrom(packet);
 	}
 
 	public static NBTTagCompound toNBTTag(PacketBase packetBase, NBTTagCompound inputTag) {
 
 		ByteBuf buf = Unpooled.buffer();
-		byte discriminator = (byte) instance.packets.indexOf(packetBase.getClass());
+		byte discriminator = (byte) INSTANCE.packets.indexOf(packetBase.getClass());
 		buf.writeByte(discriminator);
 		packetBase.encodeInto(null, buf);
 		inputTag.setByteArray("CoFH:data", buf.array());

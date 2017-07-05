@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 
 public class KeyBindingItemMultiMode implements IKeyBinding {
 
-	public static KeyBindingItemMultiMode instance = new KeyBindingItemMultiMode();
+	public static final KeyBindingItemMultiMode INSTANCE = new KeyBindingItemMultiMode();
 
 	@Override
 	public String getUUID() {

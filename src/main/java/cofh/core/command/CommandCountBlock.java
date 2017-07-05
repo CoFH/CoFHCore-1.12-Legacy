@@ -20,7 +20,7 @@ import java.util.List;
 
 public class CommandCountBlock implements ISubCommand {
 
-	public static ISubCommand instance = new CommandCountBlock();
+	public static final CommandCountBlock INSTANCE = new CommandCountBlock();
 
 	@Override
 	public String getCommandName() {

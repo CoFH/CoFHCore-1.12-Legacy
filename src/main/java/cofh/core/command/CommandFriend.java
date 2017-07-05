@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CommandFriend implements ISubCommand {
 
-	public static CommandFriend instance = new CommandFriend();
+	public static final CommandFriend INSTANCE = new CommandFriend();
 
 	public boolean validUsername(String username) {
 

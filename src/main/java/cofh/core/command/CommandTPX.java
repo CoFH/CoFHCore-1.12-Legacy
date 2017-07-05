@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CommandTPX implements ISubCommand {
 
-	public static CommandTPX instance = new CommandTPX();
+	public static final CommandTPX INSTANCE = new CommandTPX();
 
 	@Override
 	public String getCommandName() {

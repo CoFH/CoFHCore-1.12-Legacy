@@ -30,7 +30,7 @@ import java.util.List;
 @SideOnly (Side.CLIENT)
 public class RenderEventHandler implements IResourceManagerReloadListener {
 
-	public static final RenderEventHandler instance = new RenderEventHandler();
+	public static final RenderEventHandler INSTANCE = new RenderEventHandler();
 
 	@SubscribeEvent
 	public void handleFOVUpdateEvent(FOVUpdateEvent event) {

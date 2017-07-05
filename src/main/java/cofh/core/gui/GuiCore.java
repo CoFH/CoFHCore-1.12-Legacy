@@ -141,7 +141,7 @@ public abstract class GuiCore extends GuiContainer {
 
 		drawDefaultBackground();
 		super.drawScreen(x, y, partialTick);
-		renderHoveredToolTip(mouseX, mouseY);
+		renderHoveredToolTip(x, y);
 
 		if (tooltips && mc.player.inventory.getItemStack().isEmpty()) {
 			addTooltips(tooltip);

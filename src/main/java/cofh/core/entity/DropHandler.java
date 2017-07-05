@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class DropHandler {
 
-	public static DropHandler instance = new DropHandler();
+	public static final DropHandler INSTANCE = new DropHandler();
 
 	public static boolean playerPvPOnly = true;
 	public static boolean mobPvEOnly = true;

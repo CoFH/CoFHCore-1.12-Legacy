@@ -12,7 +12,7 @@ import java.util.List;
 
 public class CommandUnloadChunk implements ISubCommand {
 
-	public static ISubCommand instance = new CommandUnloadChunk();
+	public static final CommandUnloadChunk INSTANCE = new CommandUnloadChunk();
 
 	@Override
 	public String getCommandName() {

@@ -14,7 +14,7 @@ import java.util.List;
 
 public class CommandSyntax implements ISubCommand {
 
-	public static CommandSyntax instance = new CommandSyntax();
+	public static final CommandSyntax INSTANCE = new CommandSyntax();
 
 	/* ISubCommand */
 	@Override

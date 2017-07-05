@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class KeyHandlerCore {
 
-	public static KeyHandlerCore instance = new KeyHandlerCore();
+	public static final KeyHandlerCore INSTANCE = new KeyHandlerCore();
 
 	static TMap<String, IKeyBinding> clientBinds = new THashMap<>();
 	static TMap<String, IKeyBinding> serverBinds = new THashMap<>();
