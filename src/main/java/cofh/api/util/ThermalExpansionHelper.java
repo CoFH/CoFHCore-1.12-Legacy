@@ -14,6 +14,19 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
  */
 public class ThermalExpansionHelper {
 
+	static final String MOD_ID = "thermalexpansion";
+
+	static final String ENERGY = "energy";
+	static final String FLUID_NAME = "fluidName";
+
+	static final String INPUT = "input";
+	static final String OUTPUT = "output";
+	static final String PRIMARY_INPUT = "primaryInput";
+	static final String SECONDARY_INPUT = "secondaryInput";
+	static final String PRIMARY_OUTPUT = "primaryOutput";
+	static final String SECONDARY_OUTPUT = "secondaryOutput";
+	static final String SECONDARY_CHANCE = "secondaryChance";
+
 	private ThermalExpansionHelper() {
 
 	}
@@ -30,13 +43,13 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setInteger("energy", energy);
-		toSend.setTag("input", new NBTTagCompound());
-		toSend.setTag("output", new NBTTagCompound());
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(OUTPUT, new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		output.writeToNBT(toSend.getCompoundTag("output"));
-		FMLInterModComms.sendMessage("thermalexpansion", "AddFurnaceRecipe", toSend);
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "AddFurnaceRecipe", toSend);
 	}
 
 	public static void removeFurnaceRecipe(ItemStack input) {
@@ -46,10 +59,10 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setTag("input", new NBTTagCompound());
+		toSend.setTag(INPUT, new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		FMLInterModComms.sendMessage("thermalexpansion", "RemoveFurnaceRecipe", toSend);
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "RemoveFurnaceRecipe", toSend);
 	}
 
 	/* PULVERIZER */
@@ -70,19 +83,19 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setInteger("energy", energy);
-		toSend.setTag("input", new NBTTagCompound());
-		toSend.setTag("primaryOutput", new NBTTagCompound());
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(PRIMARY_OUTPUT, new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		primaryOutput.writeToNBT(toSend.getCompoundTag("primaryOutput"));
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		primaryOutput.writeToNBT(toSend.getCompoundTag(PRIMARY_OUTPUT));
 
 		if (!secondaryOutput.isEmpty()) {
-			toSend.setTag("secondaryOutput", new NBTTagCompound());
-			secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
-			toSend.setInteger("secondaryChance", secondaryChance);
+			toSend.setTag(SECONDARY_OUTPUT, new NBTTagCompound());
+			secondaryOutput.writeToNBT(toSend.getCompoundTag(SECONDARY_OUTPUT));
+			toSend.setInteger(SECONDARY_CHANCE, secondaryChance);
 		}
-		FMLInterModComms.sendMessage("thermalexpansion", "AddPulverizerRecipe", toSend);
+		FMLInterModComms.sendMessage(MOD_ID, "AddPulverizerRecipe", toSend);
 	}
 
 	public static void removePulverizerRecipe(ItemStack input) {
@@ -92,10 +105,10 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setTag("input", new NBTTagCompound());
+		toSend.setTag(INPUT, new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		FMLInterModComms.sendMessage("thermalexpansion", "RemovePulverizerRecipe", toSend);
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "RemovePulverizerRecipe", toSend);
 	}
 
 	/* SAWMILL */
@@ -116,20 +129,20 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setInteger("energy", energy);
-		toSend.setTag("input", new NBTTagCompound());
-		toSend.setTag("primaryOutput", new NBTTagCompound());
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(PRIMARY_OUTPUT, new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		primaryOutput.writeToNBT(toSend.getCompoundTag("primaryOutput"));
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		primaryOutput.writeToNBT(toSend.getCompoundTag(PRIMARY_OUTPUT));
 
 		if (!secondaryOutput.isEmpty()) {
-			toSend.setTag("secondaryOutput", new NBTTagCompound());
-			secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
-			toSend.setInteger("secondaryChance", secondaryChance);
+			toSend.setTag(SECONDARY_OUTPUT, new NBTTagCompound());
+			secondaryOutput.writeToNBT(toSend.getCompoundTag(SECONDARY_OUTPUT));
+			toSend.setInteger(SECONDARY_CHANCE, secondaryChance);
 		}
 
-		FMLInterModComms.sendMessage("thermalexpansion", "AddSawmillRecipe", toSend);
+		FMLInterModComms.sendMessage(MOD_ID, "AddSawmillRecipe", toSend);
 	}
 
 	public static void removeSawmillRecipe(ItemStack input) {
@@ -139,10 +152,10 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setTag("input", new NBTTagCompound());
+		toSend.setTag(INPUT, new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		FMLInterModComms.sendMessage("thermalexpansion", "RemoveSawmillRecipe", toSend);
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "RemoveSawmillRecipe", toSend);
 	}
 
 	/* SMELTER */
@@ -163,21 +176,21 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setInteger("energy", energy);
-		toSend.setTag("primaryInput", new NBTTagCompound());
-		toSend.setTag("secondaryInput", new NBTTagCompound());
-		toSend.setTag("primaryOutput", new NBTTagCompound());
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(PRIMARY_INPUT, new NBTTagCompound());
+		toSend.setTag(SECONDARY_INPUT, new NBTTagCompound());
+		toSend.setTag(PRIMARY_OUTPUT, new NBTTagCompound());
 
-		primaryInput.writeToNBT(toSend.getCompoundTag("primaryInput"));
-		secondaryInput.writeToNBT(toSend.getCompoundTag("secondaryInput"));
-		primaryOutput.writeToNBT(toSend.getCompoundTag("primaryOutput"));
+		primaryInput.writeToNBT(toSend.getCompoundTag(PRIMARY_INPUT));
+		secondaryInput.writeToNBT(toSend.getCompoundTag(SECONDARY_INPUT));
+		primaryOutput.writeToNBT(toSend.getCompoundTag(PRIMARY_OUTPUT));
 
 		if (!secondaryOutput.isEmpty()) {
-			toSend.setTag("secondaryOutput", new NBTTagCompound());
-			secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
-			toSend.setInteger("secondaryChance", secondaryChance);
+			toSend.setTag(SECONDARY_OUTPUT, new NBTTagCompound());
+			secondaryOutput.writeToNBT(toSend.getCompoundTag(SECONDARY_OUTPUT));
+			toSend.setInteger(SECONDARY_CHANCE, secondaryChance);
 		}
-		FMLInterModComms.sendMessage("thermalexpansion", "AddSmelterRecipe", toSend);
+		FMLInterModComms.sendMessage(MOD_ID, "AddSmelterRecipe", toSend);
 	}
 
 	public static void removeSmelterRecipe(ItemStack primaryInput, ItemStack secondaryInput) {
@@ -187,12 +200,12 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setTag("primaryInput", new NBTTagCompound());
-		toSend.setTag("secondaryInput", new NBTTagCompound());
+		toSend.setTag(PRIMARY_INPUT, new NBTTagCompound());
+		toSend.setTag(SECONDARY_INPUT, new NBTTagCompound());
 
-		primaryInput.writeToNBT(toSend.getCompoundTag("primaryInput"));
-		secondaryInput.writeToNBT(toSend.getCompoundTag("secondaryInput"));
-		FMLInterModComms.sendMessage("thermalexpansion", "RemoveSmelterRecipe", toSend);
+		primaryInput.writeToNBT(toSend.getCompoundTag(PRIMARY_INPUT));
+		secondaryInput.writeToNBT(toSend.getCompoundTag(SECONDARY_INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "RemoveSmelterRecipe", toSend);
 	}
 
 	/* INSOLATOR */
@@ -213,21 +226,21 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setInteger("energy", energy);
-		toSend.setTag("primaryInput", new NBTTagCompound());
-		toSend.setTag("secondaryInput", new NBTTagCompound());
-		toSend.setTag("primaryOutput", new NBTTagCompound());
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(PRIMARY_INPUT, new NBTTagCompound());
+		toSend.setTag(SECONDARY_INPUT, new NBTTagCompound());
+		toSend.setTag(PRIMARY_OUTPUT, new NBTTagCompound());
 
-		primaryInput.writeToNBT(toSend.getCompoundTag("primaryInput"));
-		secondaryInput.writeToNBT(toSend.getCompoundTag("secondaryInput"));
-		primaryOutput.writeToNBT(toSend.getCompoundTag("primaryOutput"));
+		primaryInput.writeToNBT(toSend.getCompoundTag(PRIMARY_INPUT));
+		secondaryInput.writeToNBT(toSend.getCompoundTag(SECONDARY_INPUT));
+		primaryOutput.writeToNBT(toSend.getCompoundTag(PRIMARY_OUTPUT));
 
 		if (!secondaryOutput.isEmpty()) {
-			toSend.setTag("secondaryOutput", new NBTTagCompound());
-			secondaryOutput.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
-			toSend.setInteger("secondaryChance", secondaryChance);
+			toSend.setTag(SECONDARY_OUTPUT, new NBTTagCompound());
+			secondaryOutput.writeToNBT(toSend.getCompoundTag(SECONDARY_OUTPUT));
+			toSend.setInteger(SECONDARY_CHANCE, secondaryChance);
 		}
-		FMLInterModComms.sendMessage("thermalexpansion", "AddInsolatorRecipe", toSend);
+		FMLInterModComms.sendMessage(MOD_ID, "AddInsolatorRecipe", toSend);
 	}
 
 	public static void removeInsolatorRecipe(ItemStack primaryInput, ItemStack secondaryInput) {
@@ -237,12 +250,100 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setTag("primaryInput", new NBTTagCompound());
-		toSend.setTag("secondaryInput", new NBTTagCompound());
+		toSend.setTag(PRIMARY_INPUT, new NBTTagCompound());
+		toSend.setTag(SECONDARY_INPUT, new NBTTagCompound());
 
-		primaryInput.writeToNBT(toSend.getCompoundTag("primaryInput"));
-		secondaryInput.writeToNBT(toSend.getCompoundTag("secondaryInput"));
-		FMLInterModComms.sendMessage("thermalexpansion", "RemoveInsolatorRecipe", toSend);
+		primaryInput.writeToNBT(toSend.getCompoundTag(PRIMARY_INPUT));
+		secondaryInput.writeToNBT(toSend.getCompoundTag(SECONDARY_INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "RemoveInsolatorRecipe", toSend);
+	}
+
+	/* COMPACTOR */
+	public static void addCompactorPressRecipe(int energy, ItemStack input, ItemStack output) {
+
+		if (input.isEmpty() || output.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(OUTPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "AddCompactorPressRecipe", toSend);
+	}
+
+	public static void addCompactorStorageRecipe(int energy, ItemStack input, ItemStack output) {
+
+		if (input.isEmpty() || output.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(OUTPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "AddCompactorStorageRecipe", toSend);
+	}
+
+	public static void addCompactorMintRecipe(int energy, ItemStack input, ItemStack output) {
+
+		if (input.isEmpty() || output.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(OUTPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "AddCompactorMintRecipe", toSend);
+	}
+
+	public static void removeCompactorPressRecipe(ItemStack input) {
+
+		if (input.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setTag(INPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "RemoveCompactorPressRecipe", toSend);
+	}
+
+	public static void removeCompactorStorageRecipe(ItemStack input) {
+
+		if (input.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setTag(INPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "RemoveCompactorStorageRecipe", toSend);
+	}
+
+	public static void removeCompactorMintRecipe(ItemStack input) {
+
+		if (input.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setTag(INPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "RemoveCompactorMintRecipe", toSend);
 	}
 
 	/* CRUCIBLE */
@@ -253,14 +354,14 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setInteger("energy", energy);
-		toSend.setTag("input", new NBTTagCompound());
-		toSend.setTag("output", new NBTTagCompound());
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(OUTPUT, new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		output.writeToNBT(toSend.getCompoundTag("output"));
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
 
-		FMLInterModComms.sendMessage("thermalexpansion", "AddCrucibleRecipe", toSend);
+		FMLInterModComms.sendMessage(MOD_ID, "AddCrucibleRecipe", toSend);
 	}
 
 	public static void removeCrucibleRecipe(ItemStack input) {
@@ -270,10 +371,10 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setTag("input", new NBTTagCompound());
+		toSend.setTag(INPUT, new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		FMLInterModComms.sendMessage("thermalexpansion", "RemoveCrucibleRecipe", toSend);
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "RemoveCrucibleRecipe", toSend);
 	}
 
 	/* REFINERY */
@@ -284,18 +385,18 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setInteger("energy", energy);
-		toSend.setTag("input", new NBTTagCompound());
-		toSend.setTag("output", new NBTTagCompound());
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(OUTPUT, new NBTTagCompound());
 
 		if (!outputItem.isEmpty()) {
-			toSend.setTag("secondaryOutput", new NBTTagCompound());
-			outputItem.writeToNBT(toSend.getCompoundTag("secondaryOutput"));
+			toSend.setTag(SECONDARY_OUTPUT, new NBTTagCompound());
+			outputItem.writeToNBT(toSend.getCompoundTag(SECONDARY_OUTPUT));
 		}
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		output.writeToNBT(toSend.getCompoundTag("output"));
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
 
-		FMLInterModComms.sendMessage("thermalexpansion", "AddRefineryRecipe", toSend);
+		FMLInterModComms.sendMessage(MOD_ID, "AddRefineryRecipe", toSend);
 	}
 
 	public static void removeRefineryRecipe(FluidStack input) {
@@ -305,10 +406,10 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setTag("input", new NBTTagCompound());
+		toSend.setTag(INPUT, new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		FMLInterModComms.sendMessage("thermalexpansion", "RemoveRefineryRecipe", toSend);
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "RemoveRefineryRecipe", toSend);
 	}
 
 	/* TRANSPOSER */
@@ -319,17 +420,17 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setInteger("energy", energy);
-		toSend.setTag("input", new NBTTagCompound());
-		toSend.setTag("output", new NBTTagCompound());
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(OUTPUT, new NBTTagCompound());
 		toSend.setTag("fluid", new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		output.writeToNBT(toSend.getCompoundTag("output"));
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
 		toSend.setBoolean("reversible", reversible);
 		fluid.writeToNBT(toSend.getCompoundTag("fluid"));
 
-		FMLInterModComms.sendMessage("thermalexpansion", "AddTransposerFillRecipe", toSend);
+		FMLInterModComms.sendMessage(MOD_ID, "AddTransposerFillRecipe", toSend);
 	}
 
 	public static void addTransposerExtract(int energy, ItemStack input, ItemStack output, FluidStack fluid, int chance, boolean reversible) {
@@ -339,18 +440,18 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setInteger("energy", energy);
-		toSend.setTag("input", new NBTTagCompound());
-		toSend.setTag("output", new NBTTagCompound());
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(OUTPUT, new NBTTagCompound());
 		toSend.setTag("fluid", new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		output.writeToNBT(toSend.getCompoundTag("output"));
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
 		toSend.setBoolean("reversible", reversible);
 		toSend.setInteger("chance", chance);
 		fluid.writeToNBT(toSend.getCompoundTag("fluid"));
 
-		FMLInterModComms.sendMessage("thermalexpansion", "AddTransposerExtractRecipe", toSend);
+		FMLInterModComms.sendMessage(MOD_ID, "AddTransposerExtractRecipe", toSend);
 	}
 
 	public static void removeTransposerFill(ItemStack input, FluidStack fluid) {
@@ -360,12 +461,12 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setTag("input", new NBTTagCompound());
+		toSend.setTag(INPUT, new NBTTagCompound());
 		toSend.setTag("fluid", new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		fluid.writeToNBT(toSend.getCompoundTag("fluid"));
-		FMLInterModComms.sendMessage("thermalexpansion", "RemoveTransposerFillRecipe", toSend);
+		FMLInterModComms.sendMessage(MOD_ID, "RemoveTransposerFillRecipe", toSend);
 	}
 
 	public static void removeTransposerExtract(ItemStack input) {
@@ -375,10 +476,10 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setTag("input", new NBTTagCompound());
+		toSend.setTag(INPUT, new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		FMLInterModComms.sendMessage("thermalexpansion", "RemoveTransposerExtractRecipe", toSend);
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "RemoveTransposerExtractRecipe", toSend);
 	}
 
 	/* CHARGER */
@@ -389,13 +490,13 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setInteger("energy", energy);
-		toSend.setTag("input", new NBTTagCompound());
-		toSend.setTag("output", new NBTTagCompound());
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(OUTPUT, new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		output.writeToNBT(toSend.getCompoundTag("output"));
-		FMLInterModComms.sendMessage("thermalexpansion", "AddChargerRecipe", toSend);
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "AddChargerRecipe", toSend);
 	}
 
 	public static void removeChargerRecipe(ItemStack input) {
@@ -405,10 +506,10 @@ public class ThermalExpansionHelper {
 		}
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setTag("input", new NBTTagCompound());
+		toSend.setTag(INPUT, new NBTTagCompound());
 
-		input.writeToNBT(toSend.getCompoundTag("input"));
-		FMLInterModComms.sendMessage("thermalexpansion", "RemoveChargerRecipe", toSend);
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, "RemoveChargerRecipe", toSend);
 	}
 
 	/**
@@ -420,10 +521,10 @@ public class ThermalExpansionHelper {
 
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setString("fluidName", fluidName);
-		toSend.setInteger("energy", energy);
+		toSend.setString(FLUID_NAME, fluidName);
+		toSend.setInteger(ENERGY, energy);
 
-		FMLInterModComms.sendMessage("thermalexpansion", "MagmaticFuel", toSend);
+		FMLInterModComms.sendMessage(MOD_ID, "MagmaticFuel", toSend);
 	}
 
 	/* COMPRESSION */
@@ -431,10 +532,10 @@ public class ThermalExpansionHelper {
 
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setString("fluidName", fluidName);
-		toSend.setInteger("energy", energy);
+		toSend.setString(FLUID_NAME, fluidName);
+		toSend.setInteger(ENERGY, energy);
 
-		FMLInterModComms.sendMessage("thermalexpansion", "CompressionFuel", toSend);
+		FMLInterModComms.sendMessage(MOD_ID, "CompressionFuel", toSend);
 	}
 
 	/* REACTANT */
@@ -442,10 +543,10 @@ public class ThermalExpansionHelper {
 
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setString("fluidName", fluidName);
-		toSend.setInteger("energy", energy);
+		toSend.setString(FLUID_NAME, fluidName);
+		toSend.setInteger(ENERGY, energy);
 
-		FMLInterModComms.sendMessage("thermalexpansion", "ReactantFuel", toSend);
+		FMLInterModComms.sendMessage(MOD_ID, "ReactantFuel", toSend);
 	}
 
 	/* COOLANT */
@@ -453,10 +554,10 @@ public class ThermalExpansionHelper {
 
 		NBTTagCompound toSend = new NBTTagCompound();
 
-		toSend.setString("fluidName", fluidName);
-		toSend.setInteger("energy", energy);
+		toSend.setString(FLUID_NAME, fluidName);
+		toSend.setInteger(ENERGY, energy);
 
-		FMLInterModComms.sendMessage("thermalexpansion", "Coolant", toSend);
+		FMLInterModComms.sendMessage(MOD_ID, "Coolant", toSend);
 	}
 
 }

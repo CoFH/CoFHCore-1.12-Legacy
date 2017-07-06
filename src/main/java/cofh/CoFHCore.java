@@ -95,7 +95,6 @@ public class CoFHCore {
 	public void postInit(FMLPostInitializationEvent event) {
 
 		OreDictionaryArbiter.initialize();
-
 		PacketHandler.postInit();
 
 		proxy.postInit(event);

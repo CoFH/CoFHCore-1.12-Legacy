@@ -40,7 +40,7 @@ public class RenderUtils {
 		angleBaseXPos[5][1] = pi / 2;
 	}
 
-	public static final void renderItemOnBlockSide(TileEntity tile, ItemStack stack, int side, double x, double y, double z) {
+	public static void renderItemOnBlockSide(TileEntity tile, ItemStack stack, int side, double x, double y, double z) {
 
 		if (stack.isEmpty()) {
 			return;
