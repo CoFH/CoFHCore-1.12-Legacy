@@ -50,7 +50,7 @@ public class ItemSickleCore extends ItemToolCore {
 			return false;
 		}
 		int x = pos.getX();
-		// int y = pos.getY();
+		int y = pos.getY();
 		int z = pos.getZ();
 
 		int used = 0;
@@ -58,7 +58,7 @@ public class ItemSickleCore extends ItemToolCore {
 
 		for (int i = x - radius; i <= x + radius; i++) {
 			for (int k = z - radius; k <= z + radius; k++) {
-				if (harvestBlock(world, new BlockPos(i, pos.getY(), k), player)) {
+				if (harvestBlock(world, new BlockPos(i, y, k), player)) {
 					used++;
 				}
 			}

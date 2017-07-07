@@ -26,10 +26,6 @@ public class CoreProps {
 		configClient();
 	}
 
-	public static void loadComplete() {
-
-	}
-
 	/* HELPERS */
 	private static void configCommon() {
 

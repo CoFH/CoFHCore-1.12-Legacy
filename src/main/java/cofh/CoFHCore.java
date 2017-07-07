@@ -103,7 +103,6 @@ public class CoFHCore {
 	@EventHandler
 	public void loadComplete(FMLLoadCompleteEvent event) {
 
-		CoreProps.loadComplete();
 		CONFIG_CORE.cleanUp(false, true);
 		CONFIG_CLIENT.cleanUp(false, true);
 

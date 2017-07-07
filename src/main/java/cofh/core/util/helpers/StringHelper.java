@@ -179,7 +179,7 @@ public final class StringHelper {
 
 	public static String getFlavorText(String key) {
 
-		return LIGHT_GRAY + localize(key) + END;
+		return WHITE + localize(key) + END;
 	}
 
 	public static String getRarity(int level) {
