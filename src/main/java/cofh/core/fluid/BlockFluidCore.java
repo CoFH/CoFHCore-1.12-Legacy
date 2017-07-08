@@ -90,8 +90,6 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 	@SideOnly (Side.CLIENT)
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 
-		super.randomDisplayTick(state, world, pos, rand);
-
 		double px = pos.getX() + rand.nextFloat();
 		double py = pos.getY() - 1.05D;
 		double pz = pos.getZ() + rand.nextFloat();
