@@ -168,11 +168,11 @@ public class TabConfigurationTransfer extends TabBase {
 
 		if (direction == 0) {
 			if (myTileControl.setTransferIn(!myTileControl.getTransferIn())) {
-				GuiCore.playClickSound(1.0F, myTileControl.getTransferIn() ? 0.8F : 0.4F);
+				GuiCore.playClickSound(myTileControl.getTransferIn() ? 0.8F : 0.4F);
 			}
 		} else {
 			if (myTileControl.setTransferOut(!myTileControl.getTransferOut())) {
-				GuiCore.playClickSound(1.0F, myTileControl.getTransferOut() ? 0.8F : 0.4F);
+				GuiCore.playClickSound(myTileControl.getTransferOut() ? 0.8F : 0.4F);
 			}
 		}
 	}
@@ -182,20 +182,20 @@ public class TabConfigurationTransfer extends TabBase {
 		if (GuiScreen.isShiftKeyDown()) {
 			if (side == myTileFacing.getFacing()) {
 				if (myTileSides.resetSides()) {
-					GuiCore.playClickSound(1.0F, 0.2F);
+					GuiCore.playClickSound(0.2F);
 				}
 			} else if (myTileSides.setSide(side, 0)) {
-				GuiCore.playClickSound(1.0F, 0.4F);
+				GuiCore.playClickSound(0.4F);
 			}
 			return;
 		}
 		if (mouseButton == 0) {
 			if (myTileSides.incrSide(side)) {
-				GuiCore.playClickSound(1.0F, 0.8F);
+				GuiCore.playClickSound(0.8F);
 			}
 		} else if (mouseButton == 1) {
 			if (myTileSides.decrSide(side)) {
-				GuiCore.playClickSound(1.0F, 0.6F);
+				GuiCore.playClickSound(0.6F);
 			}
 		}
 	}

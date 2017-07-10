@@ -184,7 +184,7 @@ public class GuiFriendList extends GuiCore {
 		if (this.tbName.isFocused()) {
 
 			if (j == 28) { // enter
-				playClickSound(1.0F, 0.7F);
+				playClickSound(0.7F);
 			}
 		}
 		updateButtons();

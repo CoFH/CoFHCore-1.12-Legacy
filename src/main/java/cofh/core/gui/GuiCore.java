@@ -45,6 +45,7 @@ import java.util.List;
 public abstract class GuiCore extends GuiContainer {
 
 	public static final SoundHandler guiSoundManager = FMLClientHandler.instance().getClient().getSoundHandler();
+	public static final float CLICK_VOLUME = 0.3F;
 
 	/* SIDE TYPES */
 	public static final int NONE = 0;
@@ -110,9 +111,9 @@ public abstract class GuiCore extends GuiContainer {
 		guiSoundManager.playSound(new SoundBase(name, category, volume, pitch));
 	}
 
-	public static void playClickSound(float volume, float pitch) {
+	public static void playClickSound(float pitch) {
 
-		guiSoundManager.playSound(new SoundBase(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, volume, pitch));
+		guiSoundManager.playSound(new SoundBase(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, CLICK_VOLUME, pitch));
 	}
 
 	public GuiCore(Container container) {

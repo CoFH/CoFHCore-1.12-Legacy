@@ -81,17 +81,17 @@ public class TabSecurity extends TabBase {
 		if (28 <= mouseX && mouseX < 44 && 20 <= mouseY && mouseY < 36) {
 			if (!myContainer.getAccess().isPublic()) {
 				myContainer.setAccess(ISecurable.AccessMode.PUBLIC);
-				GuiCore.playClickSound(1.0F, 0.4F);
+				GuiCore.playClickSound(0.4F);
 			}
 		} else if (48 <= mouseX && mouseX < 64 && 20 <= mouseY && mouseY < 36) {
 			if (!myContainer.getAccess().isFriendsOnly()) {
 				myContainer.setAccess(ISecurable.AccessMode.FRIENDS);
-				GuiCore.playClickSound(1.0F, 0.6F);
+				GuiCore.playClickSound(0.6F);
 			}
 		} else if (68 <= mouseX && mouseX < 84 && 20 <= mouseY && mouseY < 36) {
 			if (!myContainer.getAccess().isPrivate()) {
 				myContainer.setAccess(ISecurable.AccessMode.PRIVATE);
-				GuiCore.playClickSound(1.0F, 0.8F);
+				GuiCore.playClickSound(0.8F);
 			}
 		}
 		return true;
