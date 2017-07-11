@@ -227,10 +227,10 @@ public class CoreUtils {
 	public static boolean teleportEntityTo(EntityLivingBase entity, double x, double y, double z) {
 
 		EnderTeleportEvent event = new EnderTeleportEvent(entity, x, y, z, 0);
+
 		if (MinecraftForge.EVENT_BUS.post(event)) {
 			return false;
 		}
-
 		entity.setPositionAndUpdate(event.getTargetX(), event.getTargetY(), event.getTargetZ());
 		entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
 
@@ -242,12 +242,12 @@ public class CoreUtils {
 		if (cooldown) {
 			NBTTagCompound tag = entity.getEntityData();
 			long time = entity.world.getTotalWorldTime();
-			if (tag.getLong("cofh:tD") > time) {
+
+			if (tag.getLong("cofh:teleport_delay") > time) {
 				return false;
 			}
-			tag.setLong("cofh:tD", time + 35);
+			tag.setLong("cofh:teleport_delay", time + 35);
 		}
-
 		return teleportEntityTo(entity, x, y, z);
 	}
 
