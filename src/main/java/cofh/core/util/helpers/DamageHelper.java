@@ -82,6 +82,11 @@ public class DamageHelper {
 	}
 
 	/* HELPERS */
+	public static DamageSource causeEntityFluxDamage(String type, Entity entity) {
+
+		return new EntityDamageSourceFlux(type, entity);
+	}
+
 	public static DamageSource causePlayerFluxDamage(EntityPlayer entityPlayer) {
 
 		return new EntityDamageSourceFlux("player", entityPlayer);

@@ -139,14 +139,13 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdate
 		}
 	}
 
-	//TODO Multishot enchant can use Arrow Loose Event for better mod compatibility.
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase livingBase, int timeLeft) {
 
 		if (livingBase instanceof EntityPlayer) {
 			EntityPlayer entityplayer = (EntityPlayer) livingBase;
-			boolean flag = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 			ItemStack arrowStack = this.findAmmo(entityplayer);
+			boolean flag = entityplayer.capabilities.isCreativeMode || (arrowStack.getItem() instanceof ItemArrow && ((ItemArrow) arrowStack.getItem()).isInfinite(arrowStack, stack, entityplayer));
 
 			int i = this.getMaxItemUseDuration(stack) - timeLeft;
 			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) livingBase, i, !arrowStack.isEmpty() || flag);
@@ -168,10 +167,11 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdate
 						boolean flame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;
 						onBowFired(entityplayer, stack);
 
+						ItemArrow arrowItem = (ItemArrow) (arrowStack.getItem() instanceof ItemArrow ? arrowStack.getItem() : Items.ARROW);
+
 						for (int shot = 0; shot <= enchantMultishot; shot++) {
-							ItemArrow itemarrow = (ItemArrow) (arrowStack.getItem() instanceof ItemArrow ? arrowStack.getItem() : Items.ARROW);
-							EntityArrow arrow = itemarrow.createArrow(world, arrowStack, entityplayer);
-							arrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F);
+							EntityArrow arrow = arrowItem.createArrow(world, arrowStack, entityplayer);
+							arrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F + 1.2F * shot);
 							arrow.setDamage(arrow.getDamage() * (1 + arrowDamageMultiplier));
 
 							if (f >= 1.0F) {
