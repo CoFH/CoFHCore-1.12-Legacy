@@ -59,15 +59,6 @@ public class CoreProps {
 		comment = "If TRUE, Christmas cheer is disabled. Scrooge. :(";
 		holidayChristmas = !CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("HoHoNo", category, !holidayChristmas, comment);
 
-		/* ITEMS */
-		category = "Items";
-
-		comment = "If TRUE, Horse Armor will be craftable.";
-		enableHorseArmorCrafting = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableHorseArmorCrafting", category, enableHorseArmorCrafting, comment);
-
-		comment = "If TRUE, Saddles will be craftable.";
-		enableSaddleCrafting = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableSaddleCrafting", category, enableSaddleCrafting, comment);
-
 		/* SECURITY */
 		category = "Security";
 
@@ -238,10 +229,6 @@ public class CoreProps {
 	/* HOLIDAY */
 	public static boolean holidayAprilFools = true;
 	public static boolean holidayChristmas = true;
-
-	/* ITEMS */
-	public static boolean enableHorseArmorCrafting = true;
-	public static boolean enableSaddleCrafting = true;
 
 	/* SECURITY */
 	public static boolean enableOpSecureAccess = false;

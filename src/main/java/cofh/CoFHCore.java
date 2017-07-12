@@ -80,8 +80,6 @@ public class CoFHCore {
 		/* Register Handlers */
 		registerHandlers();
 
-		addCraftingRecipes();
-
 		proxy.preInit(event);
 	}
 
@@ -145,49 +143,6 @@ public class CoFHCore {
 		PacketKey.initialize();
 		PacketTileInfo.initialize();
 		PacketTile.initialize();
-	}
-
-	private void addCraftingRecipes() {
-
-		// @formatter:off
-		if (CoreProps.enableHorseArmorCrafting) {
-			addShapedRecipe(new ItemStack(Items.IRON_HORSE_ARMOR, 1),
-					"  H",
-					"ICI",
-					"III",
-					'C', "blockWool",
-					'H', Items.IRON_HELMET,
-					'I', "ingotIron"
-			);
-
-			addShapedRecipe(new ItemStack(Items.GOLDEN_HORSE_ARMOR),
-					"  H",
-					"ICI",
-					"III",
-					'C', "blockWool",
-					'H', Items.GOLDEN_HELMET,
-					'I', "ingotGold"
-			);
-
-			addShapedRecipe(new ItemStack(Items.DIAMOND_HORSE_ARMOR),
-					"  H",
-					"ICI",
-					"III",
-					'C', "blockWool",
-					'H', Items.DIAMOND_HELMET,
-					'I', "gemDiamond"
-			);
-		}
-		if (CoreProps.enableSaddleCrafting) {
-			addShapedRecipe(new ItemStack(Items.SADDLE),
-					"LLL",
-					"LIL",
-					"I I",
-					'I', "ingotIron",
-					'L', Items.LEATHER
-			);
-		}
-		// @formatter:on
 	}
 
 	private void addOreDictionaryEntries() {

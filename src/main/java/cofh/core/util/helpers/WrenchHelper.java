@@ -7,7 +7,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 
-// TODO: Update for 1.8.9 APIs.
 public final class WrenchHelper {
 
 	private WrenchHelper() {
@@ -16,6 +15,9 @@ public final class WrenchHelper {
 
 	public static boolean isHoldingUsableWrench(EntityPlayer player, RayTraceResult traceResult) {
 
+		if (player == null || traceResult == null) {
+			return false;
+		}
 		EnumHand hand = EnumHand.MAIN_HAND;
 		ItemStack stack = player.getHeldItem(hand);
 		if (stack.isEmpty()) {
@@ -36,6 +38,9 @@ public final class WrenchHelper {
 
 	public static void usedWrench(EntityPlayer player, RayTraceResult traceResult) {
 
+		if (player == null || traceResult == null) {
+			return;
+		}
 		EnumHand hand = EnumHand.MAIN_HAND;
 		ItemStack stack = player.getHeldItem(hand);
 		if (stack.isEmpty()) {
