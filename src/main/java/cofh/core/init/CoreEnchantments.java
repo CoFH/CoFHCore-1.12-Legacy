@@ -37,6 +37,7 @@ public class CoreEnchantments {
 
 		event.getRegistry().register(holding);
 		event.getRegistry().register(multishot);
+		// event.getRegistry().register(vorpal);
 	}
 
 	/* HELPERS */

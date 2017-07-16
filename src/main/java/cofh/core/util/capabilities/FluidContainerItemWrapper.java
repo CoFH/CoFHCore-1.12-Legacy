@@ -43,7 +43,7 @@ public class FluidContainerItemWrapper implements ICapabilityProvider {
 			@Override
 			public IFluidTankProperties[] getTankProperties() {
 
-				return new IFluidTankProperties[] { new FluidTankProperties(container.getFluid(stack), container.getCapacity(stack), true, false) };
+				return new IFluidTankProperties[] { new FluidTankProperties(container.getFluid(stack), container.getCapacity(stack), true, true) };
 			}
 
 			@Override

@@ -30,8 +30,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-import static cofh.core.util.helpers.RecipeHelper.addShapedRecipe;
-
 @Mod (modid = CoFHCore.MOD_ID, name = CoFHCore.MOD_NAME, version = CoFHCore.VERSION, dependencies = CoFHCore.DEPENDENCIES, updateJSON = CoFHCore.UPDATE_URL)
 public class CoFHCore {
 

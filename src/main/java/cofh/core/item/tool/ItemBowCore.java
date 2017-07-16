@@ -3,6 +3,7 @@ package cofh.core.item.tool;
 import cofh.core.init.CoreEnchantments;
 import cofh.core.item.IEnchantableItem;
 import cofh.core.item.IFOVUpdateItem;
+import cofh.core.util.core.IBowImproved;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.helpers.MathHelper;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdateItem {
+public class ItemBowCore extends ItemBow implements IEnchantableItem, IBowImproved, IFOVUpdateItem {
 
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
@@ -130,7 +131,6 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdate
 		if (ret != null) {
 			return ret;
 		}
-
 		if (!player.capabilities.isCreativeMode && !flag) {
 			return !flag ? new ActionResult<>(EnumActionResult.FAIL, itemStack) : new ActionResult<>(EnumActionResult.PASS, itemStack);
 		} else {
@@ -143,47 +143,47 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdate
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase livingBase, int timeLeft) {
 
 		if (livingBase instanceof EntityPlayer) {
-			EntityPlayer entityplayer = (EntityPlayer) livingBase;
-			ItemStack arrowStack = this.findAmmo(entityplayer);
-			boolean flag = entityplayer.capabilities.isCreativeMode || (arrowStack.getItem() instanceof ItemArrow && ((ItemArrow) arrowStack.getItem()).isInfinite(arrowStack, stack, entityplayer));
+			EntityPlayer player = (EntityPlayer) livingBase;
+			ItemStack arrowStack = this.findAmmo(player);
+			boolean flag = player.capabilities.isCreativeMode || (arrowStack.getItem() instanceof ItemArrow && ((ItemArrow) arrowStack.getItem()).isInfinite(arrowStack, stack, player));
 
-			int i = this.getMaxItemUseDuration(stack) - timeLeft;
-			i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) livingBase, i, !arrowStack.isEmpty() || flag);
-			if (i < 0) {
+			int charge = this.getMaxItemUseDuration(stack) - timeLeft;
+			charge = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) livingBase, charge, !arrowStack.isEmpty() || flag);
+			if (charge < 0) {
 				return;
 			}
 			if (!arrowStack.isEmpty() || flag) {
 				if (arrowStack.isEmpty()) {
 					arrowStack = new ItemStack(Items.ARROW);
 				}
-				float f = getArrowVelocity(i);
-				float speedMod = 1 + arrowSpeedMultiplier;
+				float f = getArrowVelocity(charge);
+				float speedMod = 1.0F + arrowSpeedMultiplier;
 
 				if ((double) f >= 0.1D) {
 					if (!world.isRemote) {
-						int enchantMultishot = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, stack), 0, 10);
-						int punchLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
-						int powerLvl = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
-						boolean flame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;
-						onBowFired(entityplayer, stack);
+						int encMultishot = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, stack), 0, 10);
+						int encPunch = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
+						int encPower = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
+						boolean encFlame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;
+						onBowFired(player, stack);
 
 						ItemArrow arrowItem = (ItemArrow) (arrowStack.getItem() instanceof ItemArrow ? arrowStack.getItem() : Items.ARROW);
 
-						for (int shot = 0; shot <= enchantMultishot; shot++) {
-							EntityArrow arrow = arrowItem.createArrow(world, arrowStack, entityplayer);
-							arrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F + (2.5F - f ) * shot);
+						for (int shot = 0; shot <= encMultishot; shot++) {
+							EntityArrow arrow = arrowItem.createArrow(world, arrowStack, player);
+							arrow.setAim(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F + (1.5F - f) * shot);
 							arrow.setDamage(arrow.getDamage() * (1 + arrowDamageMultiplier));
 
 							if (f >= 1.0F) {
 								arrow.setIsCritical(true);
 							}
-							if (powerLvl > 0) {
-								arrow.setDamage(arrow.getDamage() + (double) powerLvl * 0.5D + 0.5D);
+							if (encPower > 0) {
+								arrow.setDamage(arrow.getDamage() + (double) encPower * 0.5D + 0.5D);
 							}
-							if (punchLvl > 0) {
-								arrow.setKnockbackStrength(punchLvl);
+							if (encPunch > 0) {
+								arrow.setKnockbackStrength(encPunch);
 							}
-							if (flame) {
+							if (encFlame) {
 								arrow.setFire(100);
 							}
 							if (flag) {
@@ -191,25 +191,39 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdate
 							}
 							world.spawnEntity(arrow);
 						}
-						stack.damageItem(1, entityplayer);
+						stack.damageItem(1, player);
 					}
-					world.playSound(null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+					world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
 					if (!flag) {
 						arrowStack.shrink(1);
 
 						if (arrowStack.getCount() == 0) {
-							entityplayer.inventory.deleteStack(arrowStack);
+							player.inventory.deleteStack(arrowStack);
 						}
 					}
-					entityplayer.addStat(StatList.getObjectUseStats(this));
+					player.addStat(StatList.getObjectUseStats(this));
 				}
 			}
 		}
 	}
 
+	/* IBowImproved */
+	@Override
 	public void onBowFired(EntityPlayer player, ItemStack stack) {
 
+	}
+
+	@Override
+	public float getArrowDamageMultiplier() {
+
+		return arrowDamageMultiplier;
+	}
+
+	@Override
+	public float getArrowSpeedMultiplier() {
+
+		return arrowSpeedMultiplier;
 	}
 
 	/* IEnchantableItem */
