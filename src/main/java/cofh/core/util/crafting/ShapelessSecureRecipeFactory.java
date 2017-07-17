@@ -40,7 +40,7 @@ public class ShapelessSecureRecipeFactory implements IRecipeFactory {
 			ItemStack inputStack = ItemStack.EMPTY;
 			ItemStack outputStack = output.copy();
 
-			for (int i = 0; i < inv.getSizeInventory(); ++i) {
+			for (int i = 0; i < inv.getSizeInventory(); i++) {
 				ItemStack stack = inv.getStackInSlot(i);
 
 				if (!stack.isEmpty()) {

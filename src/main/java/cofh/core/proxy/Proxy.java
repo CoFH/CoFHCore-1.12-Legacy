@@ -75,7 +75,7 @@ public class Proxy {
 
 	}
 
-	public ItemStack findAmmo(ItemBow bow, EntityPlayer player) {
+	public ItemStack findAmmo(EntityPlayer player) {
 
 		ItemStack offHand = player.getHeldItemOffhand();
 		ItemStack mainHand = player.getHeldItemMainhand();
@@ -127,7 +127,7 @@ public class Proxy {
 		ItemBow bowItem = (ItemBow) stack.getItem();
 		IBowImproved bowImproved = null;
 		EntityPlayer player = event.getEntityPlayer();
-		ItemStack arrowStack = findAmmo(bowItem, player);
+		ItemStack arrowStack = findAmmo(player);
 		World world = event.getWorld();
 
 		if (bowItem instanceof IBowImproved) {
@@ -204,11 +204,13 @@ public class Proxy {
 			return;
 		}
 		ItemStack stack = event.getBow();
-		ItemBow bowItem = (ItemBow) stack.getItem();
 		EntityPlayer player = event.getEntityPlayer();
-		ItemStack arrowStack = findAmmo(bowItem, player);
+		ItemStack arrowStack = findAmmo(player);
 
-		if (arrowStack.isEmpty()) {
+		if (arrowStack.isEmpty() && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0) {
+			arrowStack = new ItemStack(Items.ARROW);
+		}
+		if (arrowStack.isEmpty() && !player.capabilities.isCreativeMode) {
 			event.setAction(new ActionResult<>(EnumActionResult.FAIL, stack));
 		}
 	}
