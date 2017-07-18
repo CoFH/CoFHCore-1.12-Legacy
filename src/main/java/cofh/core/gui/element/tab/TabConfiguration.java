@@ -52,7 +52,6 @@ public class TabConfiguration extends TabBase {
 
 		if (!isFullyOpened()) {
 			list.add(StringHelper.localize("info.cofh.configuration"));
-			return;
 		}
 	}
 

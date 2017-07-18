@@ -20,6 +20,9 @@ public class TabEnergy extends TabBase {
 	private IEnergyInfo myContainer;
 	private boolean isProducer;
 
+	static final String UNIT_INSTANT = " RF/t";
+	static final String UNIT_STORAGE = " RF";
+
 	public TabEnergy(GuiCore gui, IEnergyInfo container, boolean isProducer) {
 
 		this(gui, defaultSide, container, isProducer);
@@ -47,15 +50,15 @@ public class TabEnergy extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		String powerDirection = isProducer ? "info.cofh.energyProduce" : "info.cofh.energyConsume";
+		String flowDirection = isProducer ? "info.cofh.energyProduce" : "info.cofh.energyConsume";
 
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energy"), posXOffset() + 20, posY + 6, headerColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize(powerDirection) + ":", posXOffset() + 6, posY + 18, subheaderColor);
-		getFontRenderer().drawString(myContainer.getInfoEnergyPerTick() + " RF/t", posXOffset() + 14, posY + 30, textColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.maxPower") + ":", posXOffset() + 6, posY + 42, subheaderColor);
-		getFontRenderer().drawString(myContainer.getInfoMaxEnergyPerTick() + " RF/t", posXOffset() + 14, posY + 54, textColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize(flowDirection) + ":", posXOffset() + 6, posY + 18, subheaderColor);
+		getFontRenderer().drawString(myContainer.getInfoEnergyPerTick() + UNIT_INSTANT, posXOffset() + 14, posY + 30, textColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energyMax") + ":", posXOffset() + 6, posY + 42, subheaderColor);
+		getFontRenderer().drawString(myContainer.getInfoMaxEnergyPerTick() + UNIT_INSTANT, posXOffset() + 14, posY + 54, textColor);
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energyStored") + ":", posXOffset() + 6, posY + 66, subheaderColor);
-		getFontRenderer().drawString(myContainer.getInfoEnergyStored() + " RF", posXOffset() + 14, posY + 78, textColor);
+		getFontRenderer().drawString(myContainer.getInfoEnergyStored() + UNIT_STORAGE, posXOffset() + 14, posY + 78, textColor);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
@@ -63,8 +66,7 @@ public class TabEnergy extends TabBase {
 	public void addTooltip(List<String> list) {
 
 		if (!isFullyOpened()) {
-			list.add(myContainer.getInfoEnergyPerTick() + " RF/t");
-			return;
+			list.add(myContainer.getInfoEnergyPerTick() + UNIT_INSTANT);
 		}
 	}
 

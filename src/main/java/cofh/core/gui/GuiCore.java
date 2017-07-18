@@ -466,6 +466,25 @@ public abstract class GuiCore extends GuiContainer {
 		return tab;
 	}
 
+	public TabBase addTab(TabBase tab, int index) {
+
+		int yOffset = 4;
+		for (TabBase tab1 : tabs) {
+			if (tab1.side == tab.side && tab1.isVisible()) {
+				yOffset += tab1.currentHeight;
+			}
+		}
+		tab.setPosition(tab.side == TabBase.LEFT ? 0 : xSize, yOffset);
+		tabs.add(index, tab);
+
+		if (TabTracker.getOpenedLeftTab() != null && tab.getClass().equals(TabTracker.getOpenedLeftTab())) {
+			tab.setFullyOpen();
+		} else if (TabTracker.getOpenedRightTab() != null && tab.getClass().equals(TabTracker.getOpenedRightTab())) {
+			tab.setFullyOpen();
+		}
+		return tab;
+	}
+
 	protected ElementBase getElementAtPosition(int mX, int mY) {
 
 		for (int i = elements.size(); i-- > 0; ) {

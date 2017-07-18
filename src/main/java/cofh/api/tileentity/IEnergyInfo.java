@@ -24,9 +24,4 @@ public interface IEnergyInfo {
 	 */
 	int getInfoEnergyStored();
 
-	/**
-	 * Returns maximum energy stored (RF).
-	 */
-	int getInfoMaxEnergyStored();
-
 }

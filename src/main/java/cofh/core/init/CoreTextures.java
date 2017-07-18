@@ -32,6 +32,7 @@ public class CoreTextures {
 		ICON_ENERGY = register(map, ICONS_ + "icon_energy");
 		ICON_NOPE = register(map, ICONS_ + "icon_nope");
 		ICON_INFORMATION = register(map, ICONS_ + "icon_information");
+		ICON_STEAM = register(map, ICONS_ + "icon_steam");
 		ICON_TUTORIAL = register(map, ICONS_ + "icon_tutorial");
 
 		ICON_INPUT = register(map, ICONS_ + "icon_input");
@@ -56,8 +57,7 @@ public class CoreTextures {
 		return map.registerSprite(new ResourceLocation(sprite));
 	}
 
-	private static final String ITEMS_ = "cofh:items/";
-	private static final String ICONS_ = ITEMS_ + "icons/";
+	private static final String ICONS_ = "cofh:gui/icons/";
 
 	public static TextureAtlasSprite ICON_ACCESS_PUBLIC;
 	public static TextureAtlasSprite ICON_ACCESS_TEAM;
@@ -76,6 +76,7 @@ public class CoreTextures {
 	public static TextureAtlasSprite ICON_ENERGY;
 	public static TextureAtlasSprite ICON_NOPE;
 	public static TextureAtlasSprite ICON_INFORMATION;
+	public static TextureAtlasSprite ICON_STEAM;
 	public static TextureAtlasSprite ICON_TUTORIAL;
 
 	public static TextureAtlasSprite ICON_INPUT;
