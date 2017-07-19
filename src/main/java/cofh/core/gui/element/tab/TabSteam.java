@@ -68,7 +68,6 @@ public class TabSteam extends TabBase {
 		}
 	}
 
-
 	public void setProducer(boolean producer) {
 
 		backgroundColor = producer ? defaultBackgroundColorOut : defaultBackgroundColorIn;

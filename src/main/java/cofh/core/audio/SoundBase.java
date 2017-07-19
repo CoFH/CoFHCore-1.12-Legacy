@@ -13,11 +13,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  * @author skyboy
  *
- *         Now with 50% more constructors!
- *         I didnt see the need for this to extend ISound. Maybe in the past that was needed but now positioned sound does everything this does.
- *         So now this entire class is basically just a giant constructor passthrough for PositionedSound.
+ * Now with 50% more constructors!
+ * I didnt see the need for this to extend ISound. Maybe in the past that was needed but now positioned sound does everything this does.
+ * So now this entire class is basically just a giant constructor passthrough for PositionedSound.
  *
- *         -brandon3055
+ * -brandon3055
  */
 @SideOnly (Side.CLIENT)
 public class SoundBase extends PositionedSound {
