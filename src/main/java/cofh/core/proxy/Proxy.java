@@ -111,7 +111,7 @@ public class Proxy {
 			return ((ItemArrow) stack.getItem()).createArrow(world, stack, player);
 		}
 		if (isQuiver(stack)) {
-			return ((IQuiverItem) stack.getItem()).createArrow(world, stack, player);
+			return ((IQuiverItem) stack.getItem()).createEntityArrow(world, stack, player);
 		}
 		return ((ItemArrow) Items.ARROW).createArrow(world, stack, player);
 	}

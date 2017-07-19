@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 public interface IQuiverItem {
 
-	EntityArrow createArrow(World world, ItemStack stack, EntityLivingBase shooter);
+	EntityArrow createEntityArrow(World world, ItemStack stack, EntityLivingBase shooter);
 
 	boolean isEmpty(ItemStack stack, EntityLivingBase shooter);
 
