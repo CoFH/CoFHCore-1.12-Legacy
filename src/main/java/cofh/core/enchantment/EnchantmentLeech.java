@@ -5,13 +5,12 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 
-public class EnchantmentVorpal extends Enchantment {
+public class EnchantmentLeech extends Enchantment {
 
 	public static boolean enable = true;
 
-	public EnchantmentVorpal(String id) {
+	public EnchantmentLeech(String id) {
 
 		super(Rarity.RARE, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
 		setRegistryName(id);
@@ -38,19 +37,25 @@ public class EnchantmentVorpal extends Enchantment {
 	@Override
 	public String getName() {
 
-		return "enchant.cofh.vorpal";
+		return "enchant.cofh.leech";
 	}
 
 	@Override
 	public boolean canApply(ItemStack stack) {
 
-		return enable && (stack.getItem() instanceof ItemSword || stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this));
+		return enable && stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this);
+	}
+
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack) {
+
+		return canApply(stack);
 	}
 
 	@Override
 	public boolean isAllowedOnBooks() {
 
-		return false;
+		return true;
 	}
 
 }

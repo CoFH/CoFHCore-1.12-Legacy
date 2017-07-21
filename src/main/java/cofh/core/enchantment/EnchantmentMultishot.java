@@ -4,6 +4,7 @@ import cofh.core.item.IEnchantableItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 
 public class EnchantmentMultishot extends Enchantment {
@@ -43,7 +44,7 @@ public class EnchantmentMultishot extends Enchantment {
 	@Override
 	public boolean canApply(ItemStack stack) {
 
-		return enable && stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this);
+		return enable && (stack.getItem() instanceof ItemBow || stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this));
 	}
 
 	@Override

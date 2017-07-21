@@ -2,6 +2,7 @@ package cofh.core.init;
 
 import cofh.api.item.IInventoryContainerItem;
 import cofh.core.enchantment.EnchantmentHolding;
+import cofh.core.enchantment.EnchantmentLeech;
 import cofh.core.enchantment.EnchantmentMultishot;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -25,6 +26,7 @@ public class CoreEnchantments {
 	public static void preInit() {
 
 		holding = new EnchantmentHolding("cofhcore:holding");
+		// leech = new EnchantmentLeech("cofhcore:leech");
 		multishot = new EnchantmentMultishot("cofhcore:multishot");
 		// vorpal = new EnchantmentVorpal("cofhcore:vorpal");
 
@@ -36,6 +38,7 @@ public class CoreEnchantments {
 	public void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
 
 		event.getRegistry().register(holding);
+		// event.getRegistry().register(leech);
 		event.getRegistry().register(multishot);
 		// event.getRegistry().register(vorpal);
 	}
@@ -88,6 +91,7 @@ public class CoreEnchantments {
 
 	/* REFERENCES */
 	public static Enchantment holding;
+	public static Enchantment leech;
 	public static Enchantment multishot;
 	public static Enchantment vorpal;
 

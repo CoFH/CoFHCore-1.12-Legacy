@@ -1,5 +1,6 @@
 package cofh.core.util;
 
+import cofh.core.util.helpers.ItemHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -8,26 +9,63 @@ import net.minecraft.item.ItemStack;
  *
  * @author King Lemming
  */
-public final class ItemWrapper extends ComparableItem {
+public final class ItemWrapper {
 
 	public static ItemWrapper fromItemStack(ItemStack stack) {
 
 		return new ItemWrapper(stack);
 	}
 
+	public Item item;
+	public int metadata;
+
 	public ItemWrapper(Item item, int metadata) {
 
-		super(item, metadata);
+		this.item = item;
+		this.metadata = metadata;
 	}
 
 	public ItemWrapper(ItemStack stack) {
 
-		super(stack);
+		this(stack.getItem(), ItemHelper.getItemDamage(stack));
 	}
 
-	public ItemWrapper(ItemWrapper stack) {
+	public ItemWrapper(ItemWrapper wrapper) {
 
-		super(stack);
+		this(wrapper.item, wrapper.metadata);
+	}
+
+	public ItemWrapper set(ItemStack stack) {
+
+		if (stack != null) {
+			this.item = stack.getItem();
+			this.metadata = ItemHelper.getItemDamage(stack);
+		} else {
+			this.item = null;
+			this.metadata = 0;
+		}
+		return this;
+	}
+
+	public boolean isEqual(ItemWrapper other) {
+
+		if (other == null) {
+			return false;
+		}
+		if (metadata == other.metadata) {
+			if (item == other.item) {
+				return true;
+			}
+			if (item != null && other.item != null) {
+				return item.delegate.get() == other.item.delegate.get();
+			}
+		}
+		return false;
+	}
+
+	public int getId() {
+
+		return Item.getIdFromItem(item); // '0' is null. '-1' is an unmapped item (missing in this World)
 	}
 
 	@Override
@@ -39,10 +77,19 @@ public final class ItemWrapper extends ComparableItem {
 	@Override
 	public boolean equals(Object o) {
 
-		if (!(o instanceof ItemWrapper)) {
-			return false;
-		}
-		return isEqual((ItemWrapper) o);
+		return o instanceof ItemWrapper && isEqual((ItemWrapper) o);
+	}
+
+	@Override
+	public int hashCode() {
+
+		return (metadata & 65535) | getId() << 16;
+	}
+
+	@Override
+	public String toString() {
+
+		return getClass().getName() + '@' + System.identityHashCode(this) + '{' + "m:" + metadata + ", i:" + (item == null ? null : item.getClass().getName()) + '@' + System.identityHashCode(item) + ", v:" + getId() + '}';
 	}
 
 }

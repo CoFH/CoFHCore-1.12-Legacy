@@ -1,8 +1,11 @@
 package cofh.core.inventory;
 
 import cofh.core.util.helpers.ItemHelper;
+import cofh.core.util.oredict.OreDictionaryArbiter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
 
 /**
  * This is basically a default "safe" implementation of a ComparableItemStack - the OreID will only be used for the 5 "basic" conventions.
@@ -24,12 +27,16 @@ public class ComparableItemStackSafe extends ComparableItemStack {
 
 	public static int getOreID(ItemStack stack) {
 
-		int id = ItemHelper.oreProxy.getOreID(stack);
+		ArrayList<Integer> ids = OreDictionaryArbiter.getAllOreIDs(stack);
 
-		if (!safeOreType(ItemHelper.oreProxy.getOreName(id))) {
-			return -1;
+		if (ids != null) {
+			for (Integer id : ids) {
+				if (id != -1 && safeOreType(ItemHelper.oreProxy.getOreName(id))) {
+					return id;
+				}
+			}
 		}
-		return id;
+		return -1;
 	}
 
 	public static int getOreID(String oreName) {

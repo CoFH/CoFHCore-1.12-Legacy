@@ -257,7 +257,6 @@ public final class ItemHelper {
 	/**
 	 * Gets a vanilla CraftingManager recipe.
 	 */
-	@Deprecated
 	public static IRecipe getCraftingRecipe(InventoryCrafting inv, World world) {
 
 		return CraftingManager.findMatchingRecipe(inv, world);
@@ -266,7 +265,6 @@ public final class ItemHelper {
 	/**
 	 * Gets a vanilla CraftingManager result.
 	 */
-	@Deprecated
 	public static ItemStack getCraftingResult(InventoryCrafting inv, World world) {
 
 		return CraftingManager.findMatchingResult(inv, world);

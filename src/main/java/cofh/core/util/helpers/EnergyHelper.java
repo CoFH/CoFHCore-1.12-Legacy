@@ -1,9 +1,6 @@
 package cofh.core.util.helpers;
 
-import cofh.redstoneflux.api.IEnergyConnection;
-import cofh.redstoneflux.api.IEnergyContainerItem;
-import cofh.redstoneflux.api.IEnergyProvider;
-import cofh.redstoneflux.api.IEnergyReceiver;
+import cofh.redstoneflux.api.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -166,6 +163,34 @@ public class EnergyHelper {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
 		return handler != null && handler.hasCapability(ENERGY_HANDLER, side.getOpposite());
+	}
+
+	public static boolean canAdjacentEnergyHandlerExtract(TileEntity tile, EnumFacing side) {
+
+		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
+
+		if (handler != null && handler.hasCapability(ENERGY_HANDLER, side.getOpposite())) {
+			IEnergyStorage storage = handler.getCapability(ENERGY_HANDLER, side.getOpposite());
+
+			if (storage != null) {
+				return storage.canExtract();
+			}
+		}
+		return false;
+	}
+
+	public static boolean canAdjacentEnergyHandlerReceive(TileEntity tile, EnumFacing side) {
+
+		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
+
+		if (handler != null && handler.hasCapability(ENERGY_HANDLER, side.getOpposite())) {
+			IEnergyStorage storage = handler.getCapability(ENERGY_HANDLER, side.getOpposite());
+
+			if (storage != null) {
+				return storage.canReceive();
+			}
+		}
+		return false;
 	}
 
 	/**
