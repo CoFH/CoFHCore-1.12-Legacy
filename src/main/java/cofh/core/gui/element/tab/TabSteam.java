@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TabSteam extends TabBase {
 
-	public static int defaultSide = 1;
+	public static int defaultSide = 0;
 	public static int defaultHeaderColor = 0xe1c92f;
 	public static int defaultSubHeaderColor = 0xaaafb8;
 	public static int defaultTextColor = 0x000000;
