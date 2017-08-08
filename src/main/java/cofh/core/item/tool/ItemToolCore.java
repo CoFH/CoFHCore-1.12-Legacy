@@ -160,7 +160,7 @@ public abstract class ItemToolCore extends ItemTool {
 		return ItemHelper.isOreNameEqual(stack, repairIngot);
 	}
 
-	@Override//TODO, Used to be isTool..
+	@Override
 	public boolean isEnchantable(ItemStack stack) {
 
 		return true;

@@ -242,7 +242,7 @@ public class Proxy {
 						if (encFlame) {
 							arrow.setFire(100);
 						}
-						if (flag) {
+						if (flag || shot > 0) {
 							arrow.pickupStatus = PickupStatus.CREATIVE_ONLY;
 						}
 						world.spawnEntity(arrow);
@@ -252,7 +252,6 @@ public class Proxy {
 				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (world.rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
 				if (!flag && !player.capabilities.isCreativeMode) {
-
 					if (isQuiver(arrowStack)) {
 						((IQuiverItem) arrowStack.getItem()).onArrowFired(arrowStack, player);
 					} else {

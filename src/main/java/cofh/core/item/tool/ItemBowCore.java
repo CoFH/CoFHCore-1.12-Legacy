@@ -186,7 +186,7 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IBowImprov
 							if (encFlame) {
 								arrow.setFire(100);
 							}
-							if (flag) {
+							if (flag || shot > 0) {
 								arrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
 							}
 							world.spawnEntity(arrow);
