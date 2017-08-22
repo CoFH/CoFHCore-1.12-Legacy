@@ -1,6 +1,9 @@
 package cofh.core.util.helpers;
 
-import cofh.redstoneflux.api.*;
+import cofh.redstoneflux.api.IEnergyConnection;
+import cofh.redstoneflux.api.IEnergyContainerItem;
+import cofh.redstoneflux.api.IEnergyProvider;
+import cofh.redstoneflux.api.IEnergyReceiver;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

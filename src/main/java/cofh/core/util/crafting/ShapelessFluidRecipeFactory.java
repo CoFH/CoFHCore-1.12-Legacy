@@ -42,7 +42,7 @@ public class ShapelessFluidRecipeFactory implements IRecipeFactory {
 				IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(stack);
 
 				if (fluidHandler == null) {
-					ret.set(i, ForgeHooks.getContainerItem(stack).copy());
+					ret.set(i, ForgeHooks.getContainerItem(stack));
 				} else {
 					fluidHandler.drain(Fluid.BUCKET_VOLUME, true);
 					ret.set(i, fluidHandler.getContainer().copy());

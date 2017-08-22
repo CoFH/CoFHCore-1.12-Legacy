@@ -3,6 +3,9 @@ package cofh.core.fluid;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
 import java.util.HashMap;
@@ -56,6 +59,25 @@ public class BlockFluidInteractive extends BlockFluidCore {
 	public boolean hasInteraction(IBlockState state) {
 
 		return collisionMap.containsKey(state) || anyState.containsKey(state.getBlock());
+	}
+
+	protected void checkForInteraction(World world, BlockPos pos) {
+
+		if (world.getBlockState(pos).getBlock() != this) {
+			return;
+		}
+		for (EnumFacing face : EnumFacing.VALUES) {
+			interactWithBlock(world, pos.offset(face));
+		}
+		//Corners
+		interactWithBlock(world, pos.add(-1, 0, -1));
+		interactWithBlock(world, pos.add(-1, 0, 1));
+		interactWithBlock(world, pos.add(1, 0, -1));
+		interactWithBlock(world, pos.add(1, 0, 1));
+	}
+
+	protected void interactWithBlock(World world, BlockPos pos) {
+
 	}
 
 	public IBlockState getInteraction(IBlockState state) {
