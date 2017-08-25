@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.LogManager;
@@ -90,7 +91,6 @@ public class CoFHCore {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 
-		OreDictionaryArbiter.initialize();
 		PacketHandler.postInit();
 
 		proxy.postInit(event);
@@ -122,6 +122,12 @@ public class CoFHCore {
 
 		OreDictionaryArbiter.refresh();
 		FurnaceFuelHandler.refresh();
+	}
+
+	@EventHandler
+	public void handleIMC(IMCEvent event) {
+
+		OreDictionaryArbiter.initialize();
 	}
 
 	/* HELPERS */

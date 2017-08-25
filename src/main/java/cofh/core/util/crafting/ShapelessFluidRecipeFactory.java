@@ -1,5 +1,6 @@
 package cofh.core.util.crafting;
 
+import cofh.core.util.helpers.ItemHelper;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -39,13 +40,13 @@ public class ShapelessFluidRecipeFactory implements IRecipeFactory {
 
 			for (int i = 0; i < ret.size(); i++) {
 				ItemStack stack = inv.getStackInSlot(i);
-				IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(stack);
+				IFluidHandlerItem handler = stack.getCount() > 1 ? FluidUtil.getFluidHandler(ItemHelper.cloneStack(stack, 1)) : FluidUtil.getFluidHandler(stack);
 
-				if (fluidHandler == null) {
+				if (handler == null) {
 					ret.set(i, ForgeHooks.getContainerItem(stack));
 				} else {
-					fluidHandler.drain(Fluid.BUCKET_VOLUME, true);
-					ret.set(i, fluidHandler.getContainer().copy());
+					handler.drain(Fluid.BUCKET_VOLUME, true);
+					ret.set(i, handler.getContainer().copy());
 				}
 			}
 			return ret;

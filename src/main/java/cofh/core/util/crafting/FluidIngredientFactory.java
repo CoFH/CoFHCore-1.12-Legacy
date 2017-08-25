@@ -1,5 +1,6 @@
 package cofh.core.util.crafting;
 
+import cofh.core.util.helpers.ItemHelper;
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -43,7 +44,7 @@ public class FluidIngredientFactory implements IIngredientFactory {
 			if (input == null || input.isEmpty()) {
 				return false;
 			}
-			IFluidHandlerItem handler = FluidUtil.getFluidHandler(input);
+			IFluidHandlerItem handler = input.getCount() > 1 ? FluidUtil.getFluidHandler(ItemHelper.cloneStack(input, 1)) : FluidUtil.getFluidHandler(input);
 
 			if (handler == null) {
 				return false;
