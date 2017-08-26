@@ -14,12 +14,12 @@ import net.minecraft.item.ItemStack;
 public class OreDictionaryArbiterProxy extends OreDictionaryProxy {
 
 	@Override
-	public final ItemStack getOre(String oreName) {
+	public final ItemStack getOre(String oreName, int amount) {
 
 		if (OreDictionaryArbiter.getOres(oreName) == null) {
 			return ItemStack.EMPTY;
 		}
-		return ItemHelper.cloneStack(OreDictionaryArbiter.getOres(oreName).get(0), 1);
+		return ItemHelper.cloneStack(OreDictionaryArbiter.getOres(oreName).get(0), amount);
 	}
 
 	@Override

@@ -276,6 +276,11 @@ public final class ItemHelper {
 		return oreProxy.getOre(oreName);
 	}
 
+	public static ItemStack getOre(String oreName, int amount) {
+
+		return oreProxy.getOre(oreName, amount);
+	}
+
 	public static String getOreName(ItemStack stack) {
 
 		return oreProxy.getOreName(stack);

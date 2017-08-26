@@ -107,6 +107,7 @@ info.cofh.access=Access
 info.cofh.accessPrivate=Owner Only
 info.cofh.accessPublic=Public Access
 info.cofh.accessRestricted=Restricted
+info.cofh.accessTeam=Team Only
 info.cofh.amount=Amount
 info.cofh.anotherplayer=Another Player
 info.cofh.area=Area

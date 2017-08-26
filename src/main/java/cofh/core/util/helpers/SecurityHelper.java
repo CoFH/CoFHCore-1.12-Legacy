@@ -90,14 +90,17 @@ public class SecurityHelper {
 
 		if (SecurityHelper.isSecure(stack)) {
 			String accessString = "";
-			switch (stack.getTagCompound().getByte("Access")) {
-				case 0:
+			switch (ISecurable.AccessMode.values()[stack.getTagCompound().getByte("Access")]) {
+				case PUBLIC:
 					accessString = StringHelper.localize("info.cofh.accessPublic");
 					break;
-				case 1:
+				case FRIENDS:
 					accessString = StringHelper.localize("info.cofh.accessRestricted");
 					break;
-				case 2:
+				case TEAM:
+					accessString = StringHelper.localize("info.cofh.accessTeam");
+					break;
+				case PRIVATE:
 					accessString = StringHelper.localize("info.cofh.accessPrivate");
 					break;
 			}

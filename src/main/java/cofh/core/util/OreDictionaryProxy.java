@@ -15,10 +15,15 @@ public class OreDictionaryProxy {
 
 	public ItemStack getOre(String oreName) {
 
+		return getOre(oreName, 1);
+	}
+
+	public ItemStack getOre(String oreName, int amount) {
+
 		if (!oreNameExists(oreName)) {
 			return ItemStack.EMPTY;
 		}
-		return ItemHelper.cloneStack(OreDictionary.getOres(oreName, false).get(0), 1);
+		return ItemHelper.cloneStack(OreDictionary.getOres(oreName, false).get(0), amount);
 	}
 
 	public int getOreID(ItemStack stack) {

@@ -56,9 +56,7 @@ public class FontRendererCore extends FontRenderer {
 
 					k = 0;
 				}
-
 				i += k;
-
 				if (flag) {
 					i++;
 				}
