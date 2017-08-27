@@ -36,13 +36,12 @@ public class RenderPlayerFace implements ICustomCharRenderer {
 		if (profile == null) {
 			return null;
 		}
-
 		if (profile.isComplete()) {
 			GameProfile newProfile = textureCache.get(profile);
+
 			if (newProfile != null) {
 				return newProfile;
 			}
-
 			if (!profile.getProperties().containsKey("textures")) {
 				Property property = (Property) Iterables.getFirst(profile.getProperties().get("textures"), (Object) null);
 
@@ -58,10 +57,10 @@ public class RenderPlayerFace implements ICustomCharRenderer {
 	public static FontRendererCore loadProfile(ItemStack item) {
 
 		GameProfile profile = SecurityHelper.getOwner(item);
+
 		if (profile == SecurityHelper.UNKNOWN_GAME_PROFILE) {
 			profile = null;
 		}
-
 		return setProfile(profile);
 	}
 
@@ -84,35 +83,34 @@ public class RenderPlayerFace implements ICustomCharRenderer {
 				resourcelocation = minecraft.getSkinManager().loadSkin((MinecraftProfileTexture) map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
 			}
 		}
-
 		fontRenderer.bindTexture(resourcelocation);
-
 		GL11.glColor4f(1, 1, 1, 1);
-
 		float italicOffset = italicFlag ? 1.0F : 0.0F;
 
 		float innerFace = 0F;// 0.5F / 9F * 8F;
 		GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
-		GL11.glTexCoord2f(8F / 64F, 8F / 32F);
+		float width = 64F;
+		float height = 64F;
+		GL11.glTexCoord2f(8F / width, 8F / height);
 		GL11.glVertex3f(x + innerFace + italicOffset, y + innerFace, 0.0F);
-		GL11.glTexCoord2f(8F / 64F, (8F + 8F) / 32F);
+		GL11.glTexCoord2f(8F / width, (8F + 8F) / height);
 		GL11.glVertex3f(x + innerFace - italicOffset, y + 7.99F - innerFace, 0.0F);
-		GL11.glTexCoord2f((8F + 8F) / 64F, 8F / 32F);
+		GL11.glTexCoord2f((8F + 8F) / width, 8F / height);
 		GL11.glVertex3f(x + 7.99F - innerFace + italicOffset, y + innerFace, 0.0F);
-		GL11.glTexCoord2f((8F + 8F) / 64F, (8F + 8F) / 32F);
+		GL11.glTexCoord2f((8F + 8F) / width, (8F + 8F) / height);
 		GL11.glVertex3f(x + 7.99F - innerFace - italicOffset, y + 7.99F - innerFace, 0.0F);
 		GL11.glEnd();
 
 		float hatZ = 0.01F;
 		float outerFace = 0.5F / 9F * 8F;
 		GL11.glBegin(GL11.GL_TRIANGLE_STRIP);
-		GL11.glTexCoord2f(40F / 64F, 8F / 32F);
+		GL11.glTexCoord2f(40F / width, 8F / height);
 		GL11.glVertex3f(x + italicOffset - outerFace, y - outerFace, hatZ);
-		GL11.glTexCoord2f(40F / 64F, (8F + 8F) / 32F);
+		GL11.glTexCoord2f(40F / width, (8F + 8F) / height);
 		GL11.glVertex3f(x - italicOffset - outerFace, y + 7.99F + outerFace, hatZ);
-		GL11.glTexCoord2f((40F + 8F) / 64F, 8F / 32F);
+		GL11.glTexCoord2f((40F + 8F) / width, 8F / height);
 		GL11.glVertex3f(x + 7.99F + italicOffset + outerFace, y - outerFace, hatZ);
-		GL11.glTexCoord2f((40F + 8F) / 64F, (8F + 8F) / 32F);
+		GL11.glTexCoord2f((40F + 8F) / width, (8F + 8F) / height);
 		GL11.glVertex3f(x + 7.99F - italicOffset + outerFace, y + 7.99F + outerFace, hatZ);
 		GL11.glEnd();
 
