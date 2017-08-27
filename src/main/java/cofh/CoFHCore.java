@@ -28,6 +28,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
@@ -45,7 +46,7 @@ public class CoFHCore {
 	public static final String MOD_ID = "cofhcore";
 	public static final String MOD_NAME = "CoFH Core";
 
-	public static final String VERSION = "4.1.11";
+	public static final String VERSION = "4.1.12";
 	public static final String VERSION_MAX = "4.2.0";
 	public static final String VERSION_GROUP = "required-after:" + MOD_ID + "@[" + VERSION + "," + VERSION_MAX + ");";
 	public static final String UPDATE_URL = "https://raw.github.com/cofh/version/master/" + MOD_ID + "_update.json";
@@ -101,8 +102,6 @@ public class CoFHCore {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 
-		OreDictionaryArbiter.initialize();
-
 		PacketHandler.postInit();
 
 		proxy.postInit(event);
@@ -140,6 +139,12 @@ public class CoFHCore {
 
 		OreDictionaryArbiter.refresh();
 		FurnaceFuelHandler.refresh();
+	}
+
+	@EventHandler
+	public void handleIMC(IMCEvent event) {
+
+		OreDictionaryArbiter.initialize();
 	}
 
 	/* HELPERS */
