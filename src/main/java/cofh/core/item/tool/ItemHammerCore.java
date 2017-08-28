@@ -73,6 +73,9 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 				case UP:
 					for (x = pos.getX() - 1; x <= pos.getX() + 1; x++) {
 						for (z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
+							if (x == pos.getX() && z == pos.getZ()) {
+								continue;
+							}
 							adjPos = new BlockPos(x, y, z);
 							adjState = world.getBlockState(adjPos);
 							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
@@ -88,6 +91,9 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 				case SOUTH:
 					for (x = pos.getX() - 1; x <= pos.getX() + 1; x++) {
 						for (y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
+							if (x == pos.getX() && y == pos.getY()) {
+								continue;
+							}
 							adjPos = new BlockPos(x, y, z);
 							adjState = world.getBlockState(adjPos);
 							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
@@ -103,6 +109,9 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 				case EAST:
 					for (y = pos.getY() - 1; y <= pos.getY() + 1; y++) {
 						for (z = pos.getZ() - 1; z <= pos.getZ() + 1; z++) {
+							if (y == pos.getY() && z == pos.getZ()) {
+								continue;
+							}
 							adjPos = new BlockPos(x, y, z);
 							adjState = world.getBlockState(adjPos);
 							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);

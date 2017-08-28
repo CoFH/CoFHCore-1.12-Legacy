@@ -20,19 +20,19 @@ public class EnchantmentVorpal extends Enchantment {
 	@Override
 	public int getMinEnchantability(int level) {
 
-		return 5 + (level - 1) * 10;
+		return 15 + (level - 1) * 9;
 	}
 
 	@Override
 	public int getMaxEnchantability(int level) {
 
-		return getMinEnchantability(level) + 15;
+		return getMinEnchantability(level) + 50;
 	}
 
 	@Override
 	public int getMaxLevel() {
 
-		return 4;
+		return 3;
 	}
 
 	@Override

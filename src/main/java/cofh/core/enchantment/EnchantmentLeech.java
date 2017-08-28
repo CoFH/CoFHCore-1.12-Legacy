@@ -5,6 +5,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 
 public class EnchantmentLeech extends Enchantment {
 
@@ -12,7 +13,7 @@ public class EnchantmentLeech extends Enchantment {
 
 	public EnchantmentLeech(String id) {
 
-		super(Rarity.RARE, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
+		super(Rarity.UNCOMMON, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
 		setRegistryName(id);
 	}
 
@@ -25,7 +26,7 @@ public class EnchantmentLeech extends Enchantment {
 	@Override
 	public int getMaxEnchantability(int level) {
 
-		return getMinEnchantability(level) + 15;
+		return getMinEnchantability(level) + 50;
 	}
 
 	@Override
@@ -43,7 +44,7 @@ public class EnchantmentLeech extends Enchantment {
 	@Override
 	public boolean canApply(ItemStack stack) {
 
-		return enable && stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this);
+		return enable && (stack.getItem() instanceof ItemSword || stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this));
 	}
 
 	@Override

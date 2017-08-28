@@ -87,6 +87,8 @@ chat.cofh.secure.notice=Notice: Server Ops are able to freely access 'secure' bl
 chat.cofh.secure.warning=This is private and belongs to %s! You could have lost your hand!
 
 enchant.cofh.holding=Holding
+enchant.cofh.insight=Insight
+enchant.cofh.leech=Leech
 enchant.cofh.multishot=Multishot
 enchant.cofh.vorpal=Vorpal
 

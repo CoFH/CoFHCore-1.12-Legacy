@@ -1,11 +1,12 @@
 package cofh.core.init;
 
 import cofh.api.item.IInventoryContainerItem;
-import cofh.core.enchantment.EnchantmentHolding;
-import cofh.core.enchantment.EnchantmentMultishot;
+import cofh.core.enchantment.*;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.MinecraftForge;
@@ -25,7 +26,8 @@ public class CoreEnchantments {
 	public static void preInit() {
 
 		holding = new EnchantmentHolding("cofhcore:holding");
-		// leech = new EnchantmentLeech("cofhcore:leech");
+		insight = new EnchantmentInsight("cofhcore:insight");
+		leech = new EnchantmentLeech("cofhcore:leech");
 		multishot = new EnchantmentMultishot("cofhcore:multishot");
 		// vorpal = new EnchantmentVorpal("cofhcore:vorpal");
 
@@ -37,7 +39,8 @@ public class CoreEnchantments {
 	public void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
 
 		event.getRegistry().register(holding);
-		// event.getRegistry().register(leech);
+		event.getRegistry().register(insight);
+		event.getRegistry().register(leech);
 		event.getRegistry().register(multishot);
 		// event.getRegistry().register(vorpal);
 	}
@@ -90,12 +93,13 @@ public class CoreEnchantments {
 
 	/* REFERENCES */
 	public static Enchantment holding;
+	public static Enchantment insight;
 	public static Enchantment leech;
 	public static Enchantment multishot;
 	public static Enchantment vorpal;
 
 	/* TYPES */
-	//TODO Enchantments are smart now - is this necessary?
 	public static final EnumEnchantmentType ENCHANTMENT_TYPE_STORAGE = EnumHelper.addEnchantmentType("COFH:STORAGE", item -> item instanceof IInventoryContainerItem);
+	public static final EnumEnchantmentType ENCHANTMENT_TYPE_WEAPON_TOOL = EnumHelper.addEnchantmentType("COFH:WEAPON_TOOL", item -> item instanceof ItemSword || item instanceof ItemTool);
 
 }

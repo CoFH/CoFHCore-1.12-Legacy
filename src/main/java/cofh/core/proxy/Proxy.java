@@ -8,9 +8,11 @@ import cofh.core.key.KeyHandlerCore;
 import cofh.core.util.core.IBowImproved;
 import cofh.core.util.core.IQuiverItem;
 import cofh.core.util.helpers.MathHelper;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityArrow.PickupStatus;
@@ -32,6 +34,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -114,6 +117,11 @@ public class Proxy {
 			}
 		}
 		return ItemStack.EMPTY;
+	}
+
+	public int getHeldEnchantmentLevel(EntityPlayer player, Enchantment enc) {
+
+		return MathHelper.clamp(Math.max(EnchantmentHelper.getEnchantmentLevel(enc, player.getHeldItemMainhand()), EnchantmentHelper.getEnchantmentLevel(enc, player.getHeldItemOffhand())), 0, enc.getMaxLevel());
 	}
 
 	/* SERVER UTILS */
@@ -215,7 +223,7 @@ public class Proxy {
 
 			if ((double) f >= 0.1D) {
 				if (!world.isRemote) {
-					int encMultishot = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, stack), 0, 10);
+					int encMultishot = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, stack), 0, CoreEnchantments.multishot.getMaxLevel());
 					int encPunch = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
 					int encPower = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
 					boolean encFlame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;
@@ -322,7 +330,19 @@ public class Proxy {
 	public void handleLivingDeathEvent(LivingDeathEvent event) {
 
 		Entity entity = event.getEntity();
+		Entity attacker = event.getSource().getTrueSource();
 
+		if (attacker instanceof EntityPlayer) {
+			int encLeech = getHeldEnchantmentLevel((EntityPlayer) attacker, CoreEnchantments.leech);
+			int encInsight = getHeldEnchantmentLevel((EntityPlayer) attacker, CoreEnchantments.insight);
+
+			if (encLeech > 0) {
+				((EntityPlayer) attacker).heal(encLeech);
+			}
+			if (encInsight > 0) {
+				entity.world.spawnEntity(new EntityXPOrb(entity.world, entity.posX, entity.posY + 0.5D, entity.posZ, encInsight + entity.world.rand.nextInt(1 + encInsight * 3)));
+			}
+		}
 		if (!CoreProps.enableLivingEntityDeathMessages || entity.world.isRemote || !(entity instanceof EntityLiving) || !event.getEntityLiving().hasCustomName()) {
 			return;
 		}
@@ -330,8 +350,27 @@ public class Proxy {
 	}
 
 	@SubscribeEvent
+	public void handleBlockBreakEvent(BlockEvent.BreakEvent event) {
+
+		EntityPlayer player = event.getPlayer();
+
+		if (event.getExpToDrop() > 0) {
+			int encInsight = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.insight, player.getHeldItemMainhand()), 0, CoreEnchantments.insight.getMaxLevel());
+
+			if (encInsight > 0) {
+				event.setExpToDrop(event.getExpToDrop() + encInsight + player.world.rand.nextInt(1 + encInsight * 3));
+			}
+		}
+	}
+
+	@SubscribeEvent
 	public void handleLivingDropsEvent(LivingDropsEvent event) {
 
 	}
+	//
+	//	@SubscribeEvent
+	//	public void handlePlayerPickupXpEvent(PlayerPickupXpEvent event) {
+	//
+	//	}
 
 }

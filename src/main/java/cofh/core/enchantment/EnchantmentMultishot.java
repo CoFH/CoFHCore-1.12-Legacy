@@ -20,13 +20,13 @@ public class EnchantmentMultishot extends Enchantment {
 	@Override
 	public int getMinEnchantability(int level) {
 
-		return 5 + (level - 1) * 10;
+		return 1 + (level - 1) * 10;
 	}
 
 	@Override
 	public int getMaxEnchantability(int level) {
 
-		return getMinEnchantability(level) + 15;
+		return getMinEnchantability(level) + 50;
 	}
 
 	@Override

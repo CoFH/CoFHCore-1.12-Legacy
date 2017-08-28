@@ -39,8 +39,6 @@ import java.util.Locale;
 @SideOnly (Side.CLIENT)
 public class ProxyClient extends Proxy {
 
-	private static final ResourceLocation UNDERWATER_GRAYSCALE = new ResourceLocation("cofh:textures/misc/underwater_grayscale.png");
-
 	/* INIT */
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {

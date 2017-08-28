@@ -3,23 +3,26 @@ package cofh.core.enchantment;
 import cofh.core.init.CoreEnchantments;
 import cofh.core.item.IEnchantableItem;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 
-public class EnchantmentHolding extends Enchantment {
+public class EnchantmentInsight extends Enchantment {
 
 	public static boolean enable = true;
 
-	public EnchantmentHolding(String id) {
+	public EnchantmentInsight(String id) {
 
-		super(Rarity.UNCOMMON, CoreEnchantments.ENCHANTMENT_TYPE_STORAGE, EntityEquipmentSlot.values());
+		super(Rarity.UNCOMMON, CoreEnchantments.ENCHANTMENT_TYPE_WEAPON_TOOL, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
 		setRegistryName(id);
 	}
 
 	@Override
 	public int getMinEnchantability(int level) {
 
-		return 1 + (level - 1) * 10;
+		return 10 + (level - 1) * 9;
 	}
 
 	@Override
@@ -31,25 +34,30 @@ public class EnchantmentHolding extends Enchantment {
 	@Override
 	public int getMaxLevel() {
 
-		return 4;
+		return 3;
 	}
 
 	@Override
 	public String getName() {
 
-		return "enchant.cofh.holding";
+		return "enchant.cofh.insight";
 	}
 
 	@Override
 	public boolean canApply(ItemStack stack) {
 
-		return enable && stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this);
+		return enable && (stack.getItem() instanceof ItemSword || stack.getItem() instanceof ItemTool || stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this));
 	}
 
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack) {
 
 		return canApply(stack);
+	}
+
+	public boolean canApplyTogether(Enchantment ench) {
+
+		return super.canApplyTogether(ench) && ench != Enchantments.SILK_TOUCH;
 	}
 
 	@Override
