@@ -93,13 +93,12 @@ public class RecipeHelper {
 	/* STORAGE */
 	public static void addStorageRecipe(ItemStack one, String nine) {
 
-		addShapelessRecipe(one, nine, nine, nine, nine, nine, nine, nine, nine, nine);
+		addShapedRecipe(one, "XXX", "XXX", "XXX", 'X', nine);
 	}
 
 	public static void addStorageRecipe(ItemStack one, ItemStack nine) {
 
-		nine = cloneStack(nine, 1);
-		addShapelessRecipe(one, nine, nine, nine, nine, nine, nine, nine, nine, nine);
+		addShapedRecipe(one, "XXX", "XXX", "XXX", 'X', cloneStack(nine, 1));
 	}
 
 	public static void addSmallStorageRecipe(ItemStack one, String four) {
