@@ -186,7 +186,6 @@ public class ThermalExpansionHelper {
 			secondaryOutput.writeToNBT(toSend.getCompoundTag(SECONDARY_OUTPUT));
 			toSend.setInteger(SECONDARY_CHANCE, secondaryChance);
 		}
-
 		FMLInterModComms.sendMessage(MOD_ID, ADD_SAWMILL_RECIPE, toSend);
 	}
 

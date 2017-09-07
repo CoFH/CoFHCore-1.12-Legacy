@@ -17,11 +17,11 @@ public class DamageHelper {
 	}
 
 	/* DAMAGE SOURCES */
-	public static final DamageSourcePyrotheum pyrotheum = new DamageSourcePyrotheum();
-	public static final DamageSourceCryotheum cryotheum = new DamageSourceCryotheum();
-	public static final DamageSourcePetrotheum petrotheum = new DamageSourcePetrotheum();
-	public static final DamageSourceMana mana = new DamageSourceMana();
-	public static final DamageSourceFlux flux = new DamageSourceFlux();
+	public static final DamageSourcePyrotheum PYROTHEUM = new DamageSourcePyrotheum();
+	public static final DamageSourceCryotheum CRYOTHEUM = new DamageSourceCryotheum();
+	public static final DamageSourcePetrotheum PETROTHEUM = new DamageSourcePetrotheum();
+	public static final DamageSourceMana MANA = new DamageSourceMana();
+	public static final DamageSourceFlux FLUX = new DamageSourceFlux();
 
 	/* DAMAGE SOURCE CLASSES */
 	public static class DamageSourcePyrotheum extends DamageSource {

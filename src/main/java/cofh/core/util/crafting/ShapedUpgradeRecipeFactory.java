@@ -2,6 +2,7 @@ package cofh.core.util.crafting;
 
 import cofh.CoFHCore;
 import cofh.api.item.INBTCopyIngredient;
+import cofh.core.util.helpers.AugmentHelper;
 import cofh.core.util.helpers.ItemHelper;
 import com.google.gson.JsonObject;
 import net.minecraft.block.Block;
@@ -59,7 +60,15 @@ public class ShapedUpgradeRecipeFactory implements IRecipeFactory {
 					}
 				}
 			}
+			if (inputStack.isEmpty()) {
+				return ItemStack.EMPTY;
+			}
+			int outputLevel = AugmentHelper.getLevel(outputStack);
 			outputStack = ItemHelper.copyTag(outputStack, inputStack);
+
+			if (outputLevel != -1) {
+				AugmentHelper.setLevel(outputStack, outputLevel);
+			}
 			return outputStack;
 		}
 	}

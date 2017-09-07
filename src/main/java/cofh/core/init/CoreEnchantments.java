@@ -1,7 +1,10 @@
 package cofh.core.init;
 
 import cofh.api.item.IInventoryContainerItem;
-import cofh.core.enchantment.*;
+import cofh.core.enchantment.EnchantmentHolding;
+import cofh.core.enchantment.EnchantmentInsight;
+import cofh.core.enchantment.EnchantmentLeech;
+import cofh.core.enchantment.EnchantmentMultishot;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemStack;

@@ -1,6 +1,8 @@
 package cofh.core.util.helpers;
 
+import cofh.core.util.crafting.ShapedUpgradeRecipeFactory.ShapedUpgradeRecipe;
 import cofh.core.util.crafting.ShapelessFluidRecipeFactory.ShapelessFluidRecipe;
+import cofh.core.util.crafting.ShapelessUpgradeKitRecipeFactory.ShapelessUpgradeKitRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,6 +25,15 @@ import static cofh.core.util.helpers.ItemHelper.cloneStack;
 public class RecipeHelper {
 
 	/* GENERAL */
+	public static void addShapedRecipe(ItemStack output, Object... input) {
+
+		ResourceLocation location = getNameForRecipe(output);
+		CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(input);
+		ShapedRecipes recipe = new ShapedRecipes(output.getItem().getRegistryName().toString(), primer.width, primer.height, primer.input, output);
+		recipe.setRegistryName(location);
+		GameData.register_impl(recipe);
+	}
+
 	public static void addShapedOreRecipe(ItemStack output, Object... input) {
 
 		ResourceLocation location = getNameForRecipe(output);
@@ -31,11 +42,19 @@ public class RecipeHelper {
 		GameData.register_impl(recipe);
 	}
 
-	public static void addShapedRecipe(ItemStack output, Object... input) {
+	public static void addShapedUpgradeRecipe(ItemStack output, Object... input) {
 
 		ResourceLocation location = getNameForRecipe(output);
 		CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(input);
-		ShapedRecipes recipe = new ShapedRecipes(output.getItem().getRegistryName().toString(), primer.width, primer.height, primer.input, output);
+		ShapedUpgradeRecipe recipe = new ShapedUpgradeRecipe(location, output, primer);
+		recipe.setRegistryName(location);
+		GameData.register_impl(recipe);
+	}
+
+	public static void addShapelessRecipe(ItemStack output, Object... input) {
+
+		ResourceLocation location = getNameForRecipe(output);
+		ShapelessRecipes recipe = new ShapelessRecipes(location.getResourceDomain(), output, buildInput(input));
 		recipe.setRegistryName(location);
 		GameData.register_impl(recipe);
 	}
@@ -56,10 +75,10 @@ public class RecipeHelper {
 		GameData.register_impl(recipe);
 	}
 
-	public static void addShapelessRecipe(ItemStack output, Object... input) {
+	public static void addShapelessUpgradeKitRecipe(ItemStack output, Object... input) {
 
 		ResourceLocation location = getNameForRecipe(output);
-		ShapelessRecipes recipe = new ShapelessRecipes(location.getResourceDomain(), output, buildInput(input));
+		ShapelessUpgradeKitRecipe recipe = new ShapelessUpgradeKitRecipe(location, output, input);
 		recipe.setRegistryName(location);
 		GameData.register_impl(recipe);
 	}

@@ -25,6 +25,6 @@ public interface IUpgradeItem {
 	 * @param stack ItemStack representing the Upgrade.
 	 * @return Upgrade Level of the stack; -1 for a Creative Upgrade.
 	 */
-	int getUpgradeLevel(ItemStack stack);
+	byte getUpgradeLevel(ItemStack stack);
 
 }
