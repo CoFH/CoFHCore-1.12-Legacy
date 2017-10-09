@@ -35,7 +35,7 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 		effectiveMaterials.add(Material.GLASS);
 		effectiveMaterials.add(Material.REDSTONE_LIGHT);
 
-		damageVsEntity = damageVsEntity + 2;
+		attackDamage = attackDamage + 2;
 	}
 
 	@Override

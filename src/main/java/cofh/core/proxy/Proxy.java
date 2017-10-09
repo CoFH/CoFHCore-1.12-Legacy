@@ -233,7 +233,7 @@ public class Proxy {
 					}
 					for (int shot = 0; shot <= encMultishot; shot++) {
 						EntityArrow arrow = createArrow(world, arrowStack, player);
-						arrow.setAim(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F + (1.5F - f) * shot);
+						arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F + (1.5F - f) * shot);
 
 						if (bowImproved != null) {
 							arrow.setDamage(arrow.getDamage() * (1 + bowImproved.getArrowDamageMultiplier()));

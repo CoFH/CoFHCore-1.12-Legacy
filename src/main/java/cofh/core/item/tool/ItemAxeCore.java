@@ -23,7 +23,7 @@ public class ItemAxeCore extends ItemToolCore {
 		effectiveMaterials.add(Material.CACTUS);
 		effectiveMaterials.add(Material.GOURD);
 
-		damageVsEntity = damageVsEntity + 1;
+		attackDamage = attackDamage + 1;
 	}
 
 }

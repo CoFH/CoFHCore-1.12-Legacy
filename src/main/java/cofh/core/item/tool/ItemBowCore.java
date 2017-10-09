@@ -171,7 +171,7 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IBowImprov
 
 						for (int shot = 0; shot <= encMultishot; shot++) {
 							EntityArrow arrow = arrowItem.createArrow(world, arrowStack, player);
-							arrow.setAim(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F + (1.5F - f) * shot);
+							arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F + (1.5F - f) * shot);
 							arrow.setDamage(arrow.getDamage() * (1 + arrowDamageMultiplier));
 
 							if (f >= 1.0F) {
