@@ -1,8 +1,8 @@
 package cofh.core.enchantment;
 
-import cofh.core.init.CoreEnchantments;
 import cofh.core.item.IEnchantableItem;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -15,7 +15,7 @@ public class EnchantmentInsight extends Enchantment {
 
 	public EnchantmentInsight(String id) {
 
-		super(Rarity.UNCOMMON, CoreEnchantments.ENCHANTMENT_TYPE_WEAPON_TOOL, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
+		super(Rarity.UNCOMMON, EnumEnchantmentType.DIGGER, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
 		setRegistryName(id);
 	}
 
@@ -55,6 +55,7 @@ public class EnchantmentInsight extends Enchantment {
 		return canApply(stack);
 	}
 
+	@Override
 	public boolean canApplyTogether(Enchantment ench) {
 
 		return super.canApplyTogether(ench) && ench != Enchantments.SILK_TOUCH;

@@ -1,8 +1,8 @@
 package cofh.core.enchantment;
 
-import cofh.core.init.CoreEnchantments;
 import cofh.core.item.IEnchantableItem;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
@@ -12,7 +12,7 @@ public class EnchantmentHolding extends Enchantment {
 
 	public EnchantmentHolding(String id) {
 
-		super(Rarity.UNCOMMON, CoreEnchantments.ENCHANTMENT_TYPE_STORAGE, EntityEquipmentSlot.values());
+		super(Rarity.UNCOMMON, EnumEnchantmentType.ALL, EntityEquipmentSlot.values());
 		setRegistryName(id);
 	}
 

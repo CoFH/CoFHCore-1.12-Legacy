@@ -1,8 +1,12 @@
 package cofh.core.enchantment;
 
+import cofh.core.item.IEnchantableItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 
 public class EnchantmentSmelting extends Enchantment {
 
@@ -38,17 +42,23 @@ public class EnchantmentSmelting extends Enchantment {
 		return "enchant.cofh.smelting";
 	}
 
-	//	@Override
-	//	public boolean canApply(ItemStack stack) {
-	//
-	//		return enable && stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this);
-	//	}
-	//
-	//	@Override
-	//	public boolean canApplyAtEnchantingTable(ItemStack stack) {
-	//
-	//		return canApply(stack);
-	//	}
+	@Override
+	public boolean canApply(ItemStack stack) {
+
+		return enable && (stack.getItem() instanceof ItemTool || stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this));
+	}
+
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack) {
+
+		return canApply(stack);
+	}
+
+	@Override
+	public boolean canApplyTogether(Enchantment ench) {
+
+		return super.canApplyTogether(ench) && ench != Enchantments.SILK_TOUCH;
+	}
 
 	@Override
 	public boolean isAllowedOnBooks() {

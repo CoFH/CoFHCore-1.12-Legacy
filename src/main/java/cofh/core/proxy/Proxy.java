@@ -1,5 +1,6 @@
 package cofh.core.proxy;
 
+import cofh.core.enchantment.EnchantmentVorpal;
 import cofh.core.init.CoreEnchantments;
 import cofh.core.init.CoreProps;
 import cofh.core.item.tool.ItemShieldCore;
@@ -8,12 +9,19 @@ import cofh.core.key.KeyHandlerCore;
 import cofh.core.util.core.IBowImproved;
 import cofh.core.util.core.IQuiverItem;
 import cofh.core.util.helpers.MathHelper;
+import cofh.core.util.helpers.NBTHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityWitherSkeleton;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityArrow.PickupStatus;
 import net.minecraft.init.Enchantments;
@@ -23,6 +31,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
@@ -32,6 +41,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -296,31 +306,34 @@ public class Proxy {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent (priority = EventPriority.HIGH)
 	public void handleLivingAttackEvent(LivingAttackEvent event) {
 
-		if ((event.getEntityLiving() instanceof EntityPlayer)) {
-			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+		Entity entity = event.getEntity();
 
-			if (!player.getActiveItemStack().isEmpty()) {
-				ItemStack stack = player.getActiveItemStack();
-				float damage = event.getAmount();
+		if (!(entity instanceof EntityPlayer)) {
+			return;
+		}
+		EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
-				if (damage >= 3.0F && !stack.isEmpty() && ((stack.getItem() instanceof ItemShieldCore))) {
-					((ItemShieldCore) stack.getItem()).damageShield(stack, 1 + MathHelper.floor(damage), player, event.getSource().getTrueSource());
+		if (!player.getActiveItemStack().isEmpty()) {
+			ItemStack stack = player.getActiveItemStack();
+			float damage = event.getAmount();
 
-					if (stack.getCount() <= 0) {
-						EnumHand enumhand = player.getActiveHand();
-						ForgeEventFactory.onPlayerDestroyItem(player, player.activeItemStack, enumhand);
+			if (damage >= 3.0F && !stack.isEmpty() && ((stack.getItem() instanceof ItemShieldCore))) {
+				((ItemShieldCore) stack.getItem()).damageShield(stack, 1 + MathHelper.floor(damage), player, event.getSource().getTrueSource());
 
-						if (enumhand == EnumHand.MAIN_HAND) {
-							player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
-						} else {
-							player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
-						}
-						player.activeItemStack = ItemStack.EMPTY;
-						player.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + player.world.rand.nextFloat() * 0.4F);
+				if (stack.getCount() <= 0) {
+					EnumHand enumhand = player.getActiveHand();
+					ForgeEventFactory.onPlayerDestroyItem(player, player.activeItemStack, enumhand);
+
+					if (enumhand == EnumHand.MAIN_HAND) {
+						player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
+					} else {
+						player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
 					}
+					player.activeItemStack = ItemStack.EMPTY;
+					player.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + player.world.rand.nextFloat() * 0.4F);
 				}
 			}
 		}
@@ -350,10 +363,28 @@ public class Proxy {
 	}
 
 	@SubscribeEvent
+	public void handleLivingHurtEvent(LivingHurtEvent event) {
+
+		Entity entity = event.getEntity();
+		Entity attacker = event.getSource().getTrueSource();
+
+		if (attacker instanceof EntityPlayer) {
+			int encVorpal = getHeldEnchantmentLevel((EntityPlayer) attacker, CoreEnchantments.vorpal);
+
+			if (encVorpal > 0 && entity.world.rand.nextInt(100) < EnchantmentVorpal.CRIT_CHANCE * encVorpal) {
+				event.setAmount(event.getAmount() * EnchantmentVorpal.CRIT_DAMAGE);
+			}
+		}
+	}
+
+	@SubscribeEvent
 	public void handleBlockBreakEvent(BlockEvent.BreakEvent event) {
 
 		EntityPlayer player = event.getPlayer();
 
+		if (player == null) {
+			return;
+		}
 		if (event.getExpToDrop() > 0) {
 			int encInsight = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.insight, player.getHeldItemMainhand()), 0, CoreEnchantments.insight.getMaxLevel());
 
@@ -363,11 +394,67 @@ public class Proxy {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent (priority = EventPriority.HIGHEST)
+	public void handleHarvestDropsEvent(BlockEvent.HarvestDropsEvent event) {
+
+		EntityPlayer player = event.getHarvester();
+
+		if (player == null || event.isSilkTouching()) {
+			return;
+		}
+		int encSmelting = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.smelting, player.getHeldItemMainhand()), 0, CoreEnchantments.smelting.getMaxLevel());
+
+		if (encSmelting > 0) {
+			List<ItemStack> drops = event.getDrops();
+
+			for (int i = 0; i < drops.size(); i++) {
+				ItemStack result = FurnaceRecipes.instance().getSmeltingResult(drops.get(i));
+				if (!result.isEmpty()) {
+					drops.set(i, result.copy());
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent (priority = EventPriority.HIGHEST)
 	public void handleLivingDropsEvent(LivingDropsEvent event) {
 
+		Entity source = event.getSource().getTrueSource();
+
+		if (!(source instanceof EntityPlayer) || !event.isRecentlyHit()) {
+			return;
+		}
+		EntityPlayer player = (EntityPlayer) source;
+		int encVorpal = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.vorpal, player.getHeldItemMainhand()), 0, CoreEnchantments.vorpal.getMaxLevel());
+
+		if (encVorpal > 0) {
+			Entity entity = event.getEntity();
+			ItemStack itemSkull = ItemStack.EMPTY;
+
+			if (entity.world.rand.nextInt(100) < EnchantmentVorpal.HEAD_CHANCE * encVorpal) {
+				if (entity instanceof EntityPlayerMP) {
+					EntityPlayer target = (EntityPlayerMP) event.getEntity();
+					itemSkull = new ItemStack(Items.SKULL, 1, 3);
+					NBTHelper.setString(itemSkull, "SkullOwner", target.getName());
+				} else if (entity instanceof EntitySkeleton) {
+					itemSkull = new ItemStack(Items.SKULL, 1, 0);
+				} else if (entity instanceof EntityWitherSkeleton) {
+					itemSkull = new ItemStack(Items.SKULL, 1, 1);
+				} else if (entity instanceof EntityZombie) {
+					itemSkull = new ItemStack(Items.SKULL, 1, 2);
+				} else if (entity instanceof EntityCreeper) {
+					itemSkull = new ItemStack(Items.SKULL, 1, 4);
+				}
+			}
+			if (itemSkull.isEmpty()) {
+				return;
+			}
+			EntityItem drop = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, itemSkull);
+			drop.setPickupDelay(10);
+			event.getDrops().add(drop);
+		}
 	}
-	//
+
 	//	@SubscribeEvent
 	//	public void handlePlayerPickupXpEvent(PlayerPickupXpEvent event) {
 	//

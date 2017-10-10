@@ -1,8 +1,7 @@
 package cofh.core.init;
 
 import cofh.CoFHCore;
-import cofh.core.enchantment.EnchantmentHolding;
-import cofh.core.enchantment.EnchantmentMultishot;
+import cofh.core.enchantment.*;
 import cofh.core.util.helpers.StringHelper;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.item.ItemStack;
@@ -47,14 +46,20 @@ public class CoreProps {
 		comment = "If TRUE, the Holding Enchantment is available for various Storage Items.";
 		EnchantmentHolding.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableHoldingEnchant", category, EnchantmentHolding.enable, comment);
 
+		comment = "If TRUE, the Insight Enchantment is available for various Tools and Weapons.";
+		EnchantmentInsight.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableInsightEnchant", category, EnchantmentInsight.enable, comment);
+
 		comment = "If TRUE, the Leech Enchantment is available for various Weapons.";
-		// EnchantmentLeech.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableLeechEnchant", category, EnchantmentLeech.enable, comment);
+		EnchantmentLeech.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableLeechEnchant", category, EnchantmentLeech.enable, comment);
 
 		comment = "If TRUE, the Multishot Enchantment is available for various Bows.";
 		EnchantmentMultishot.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableMultishotEnchant", category, EnchantmentMultishot.enable, comment);
 
-		comment = "If TRUE, the Vorpal Enchantment is available for various Swords.";
-		// EnchantmentVorpal.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableVorpalEnchant", category, EnchantmentVorpal.enable, comment);
+		comment = "If TRUE, the Smelting Enchantment is available for various Tools.";
+		EnchantmentSmelting.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableSmeltingEnchant", category, EnchantmentSmelting.enable, comment);
+
+		comment = "If TRUE, the Vorpal Enchantment is available for various Weapons.";
+		EnchantmentVorpal.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableVorpalEnchant", category, EnchantmentVorpal.enable, comment);
 
 		/* HOLIDAY */
 		category = "Holidays";

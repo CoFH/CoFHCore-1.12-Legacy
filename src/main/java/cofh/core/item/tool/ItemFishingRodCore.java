@@ -110,7 +110,7 @@ public class ItemFishingRodCore extends ItemFishingRod {
 				EntityFishHook hook = new EntityFishHook(world, player);
 
 				int enchantSpeed = EnchantmentHelper.getFishingSpeedBonus(stack);
-				hook.setLureSpeed(speedModifier + enchantSpeed);
+				hook.setLureSpeed(Math.min(speedModifier + enchantSpeed, 5));
 
 				int enchantLuck = EnchantmentHelper.getFishingLuckBonus(stack);
 				hook.setLuck(luckModifier + enchantLuck);

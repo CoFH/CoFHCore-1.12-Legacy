@@ -10,6 +10,9 @@ import net.minecraft.item.ItemSword;
 public class EnchantmentVorpal extends Enchantment {
 
 	public static boolean enable = true;
+	public static final int CRIT_CHANCE = 5;
+	public static final int CRIT_DAMAGE = 10;
+	public static final int HEAD_CHANCE = 20;
 
 	public EnchantmentVorpal(String id) {
 
