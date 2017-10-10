@@ -1,6 +1,6 @@
 package cofh.core.plugins.jei;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.gui.element.tab.TabBase;
 import cofh.core.util.Rectangle4i;
 import mezz.jei.api.gui.IAdvancedGuiHandler;
@@ -10,16 +10,16 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SlotMover implements IAdvancedGuiHandler<GuiCore> {
+public class SlotMover implements IAdvancedGuiHandler<GuiContainerCore> {
 
 	@Override
-	public Class<GuiCore> getGuiContainerClass() {
+	public Class<GuiContainerCore> getGuiContainerClass() {
 
-		return GuiCore.class;
+		return GuiContainerCore.class;
 	}
 
 	@Override
-	public List<Rectangle> getGuiExtraAreas(GuiCore guiContainer) {
+	public List<Rectangle> getGuiExtraAreas(GuiContainerCore guiContainer) {
 
 		List<Rectangle> tabBoxes = new ArrayList<>();
 
@@ -32,7 +32,7 @@ public class SlotMover implements IAdvancedGuiHandler<GuiCore> {
 
 	@Nullable
 	@Override
-	public Object getIngredientUnderMouse(GuiCore guiContainer, int mouseX, int mouseY) {
+	public Object getIngredientUnderMouse(GuiContainerCore guiContainer, int mouseX, int mouseY) {
 
 		return null;
 	}

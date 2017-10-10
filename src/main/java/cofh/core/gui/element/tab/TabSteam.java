@@ -1,7 +1,7 @@
 package cofh.core.gui.element.tab;
 
 import cofh.api.tileentity.ISteamInfo;
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.init.CoreTextures;
 import cofh.core.util.helpers.StringHelper;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,15 +19,17 @@ public class TabSteam extends TabBase {
 
 	private ISteamInfo myContainer;
 	private boolean isProducer;
+	private boolean displayMax = true;
+	private boolean displayStored = true;
 
 	static final String UNIT_INSTANT = " mB/t";
 
-	public TabSteam(GuiCore gui, ISteamInfo container, boolean isProducer) {
+	public TabSteam(GuiContainerCore gui, ISteamInfo container, boolean isProducer) {
 
 		this(gui, defaultSide, container, isProducer);
 	}
 
-	public TabSteam(GuiCore gui, int side, ISteamInfo container, boolean producer) {
+	public TabSteam(GuiContainerCore gui, int side, ISteamInfo container, boolean producer) {
 
 		super(gui, side);
 
@@ -40,6 +42,24 @@ public class TabSteam extends TabBase {
 		maxWidth = 100;
 		myContainer = container;
 		isProducer = producer;
+	}
+
+	public TabSteam isProducer(boolean isProducer) {
+
+		this.isProducer = isProducer;
+		return this;
+	}
+
+	public TabSteam displayMax(boolean displayMax) {
+
+		this.displayMax = displayMax;
+		return this;
+	}
+
+	public TabSteam displayStored(boolean displayStored) {
+
+		this.displayStored = displayStored;
+		return this;
 	}
 
 	@Override

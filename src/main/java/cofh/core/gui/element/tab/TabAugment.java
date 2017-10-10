@@ -1,6 +1,6 @@
 package cofh.core.gui.element.tab;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.gui.container.IAugmentableContainer;
 import cofh.core.init.CoreProps;
 import cofh.core.init.CoreTextures;
@@ -29,12 +29,12 @@ public class TabAugment extends TabBase {
 	private int slotsBorderY1 = 20;
 	private int slotsBorderY2 = slotsBorderY1 + 42;
 
-	public TabAugment(GuiCore gui, IAugmentableContainer container) {
+	public TabAugment(GuiContainerCore gui, IAugmentableContainer container) {
 
 		this(gui, defaultSide, container);
 	}
 
-	public TabAugment(GuiCore gui, int side, IAugmentableContainer container) {
+	public TabAugment(GuiContainerCore gui, int side, IAugmentableContainer container) {
 
 		super(gui, side);
 

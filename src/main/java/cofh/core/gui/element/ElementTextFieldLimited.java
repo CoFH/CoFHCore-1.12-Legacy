@@ -1,18 +1,18 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 
 public class ElementTextFieldLimited extends ElementTextField {
 
 	protected boolean includeVanilla = true;
 	protected String filter;
 
-	public ElementTextFieldLimited(GuiCore gui, int posX, int posY, int width, int height) {
+	public ElementTextFieldLimited(GuiContainerCore gui, int posX, int posY, int width, int height) {
 
 		super(gui, posX, posY, width, height);
 	}
 
-	public ElementTextFieldLimited(GuiCore gui, int posX, int posY, int width, int height, short limit) {
+	public ElementTextFieldLimited(GuiContainerCore gui, int posX, int posY, int width, int height, short limit) {
 
 		super(gui, posX, posY, width, height, limit);
 	}

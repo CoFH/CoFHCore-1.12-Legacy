@@ -1,6 +1,6 @@
 package cofh.core.gui.element.tab;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.gui.element.ElementBase;
 import cofh.core.init.CoreProps;
 import cofh.core.util.Rectangle4i;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base class for a tab element. Has self-contained rendering methods and a link back to the {@link GuiCore} it is a part of.
+ * Base class for a tab element. Has self-contained rendering methods and a link back to the {@link GuiContainerCore} it is a part of.
  *
  * @author King Lemming
  */
@@ -54,13 +54,13 @@ public abstract class TabBase extends ElementBase {
 	public static final ResourceLocation DEFAULT_TEXTURE_LEFT = new ResourceLocation(CoreProps.PATH_ELEMENTS + "tab_left.png");
 	public static final ResourceLocation DEFAULT_TEXTURE_RIGHT = new ResourceLocation(CoreProps.PATH_ELEMENTS + "tab_right.png");
 
-	public TabBase(GuiCore gui) {
+	public TabBase(GuiContainerCore gui) {
 
 		super(gui, 0, 0);
 		texture = DEFAULT_TEXTURE_RIGHT;
 	}
 
-	public TabBase(GuiCore gui, int side) {
+	public TabBase(GuiContainerCore gui, int side) {
 
 		super(gui, 0, 0);
 		this.side = side;

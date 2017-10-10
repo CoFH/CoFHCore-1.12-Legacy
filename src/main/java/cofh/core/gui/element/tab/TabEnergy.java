@@ -1,7 +1,7 @@
 package cofh.core.gui.element.tab;
 
 import cofh.api.tileentity.IEnergyInfo;
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.init.CoreTextures;
 import cofh.core.util.helpers.StringHelper;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,16 +19,18 @@ public class TabEnergy extends TabBase {
 
 	private IEnergyInfo myContainer;
 	private boolean isProducer;
+	private boolean displayMax = true;
+	private boolean displayStored = true;
 
 	static final String UNIT_INSTANT = " RF/t";
 	static final String UNIT_STORAGE = " RF";
 
-	public TabEnergy(GuiCore gui, IEnergyInfo container, boolean isProducer) {
+	public TabEnergy(GuiContainerCore gui, IEnergyInfo container, boolean isProducer) {
 
 		this(gui, defaultSide, container, isProducer);
 	}
 
-	public TabEnergy(GuiCore gui, int side, IEnergyInfo container, boolean producer) {
+	public TabEnergy(GuiContainerCore gui, int side, IEnergyInfo container, boolean producer) {
 
 		super(gui, side);
 
@@ -43,6 +45,24 @@ public class TabEnergy extends TabBase {
 		isProducer = producer;
 	}
 
+	public TabEnergy isProducer(boolean isProducer) {
+
+		this.isProducer = isProducer;
+		return this;
+	}
+
+	public TabEnergy displayMax(boolean displayMax) {
+
+		this.displayMax = displayMax;
+		return this;
+	}
+
+	public TabEnergy displayStored(boolean displayStored) {
+
+		this.displayStored = displayStored;
+		return this;
+	}
+
 	@Override
 	protected void drawForeground() {
 
@@ -55,10 +75,15 @@ public class TabEnergy extends TabBase {
 		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energy"), posXOffset() + 20, posY + 6, headerColor);
 		getFontRenderer().drawStringWithShadow(StringHelper.localize(flowDirection) + ":", posXOffset() + 6, posY + 18, subheaderColor);
 		getFontRenderer().drawString(myContainer.getInfoEnergyPerTick() + UNIT_INSTANT, posXOffset() + 14, posY + 30, textColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energyMax") + ":", posXOffset() + 6, posY + 42, subheaderColor);
-		getFontRenderer().drawString(myContainer.getInfoMaxEnergyPerTick() + UNIT_INSTANT, posXOffset() + 14, posY + 54, textColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energyStored") + ":", posXOffset() + 6, posY + 66, subheaderColor);
-		getFontRenderer().drawString(myContainer.getInfoEnergyStored() + UNIT_STORAGE, posXOffset() + 14, posY + 78, textColor);
+
+		if (displayMax) {
+			getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energyMax") + ":", posXOffset() + 6, posY + 42, subheaderColor);
+			getFontRenderer().drawString(myContainer.getInfoMaxEnergyPerTick() + UNIT_INSTANT, posXOffset() + 14, posY + 54, textColor);
+		}
+		if (displayStored) {
+			getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.energyStored") + ":", posXOffset() + 6, posY + 66, subheaderColor);
+			getFontRenderer().drawString(myContainer.getInfoEnergyStored() + UNIT_STORAGE, posXOffset() + 14, posY + 78, textColor);
+		}
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 

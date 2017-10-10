@@ -38,11 +38,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Base class for a modular GUIs. Works with Elements {@link ElementBase} and Tabs {@link TabBase} which are both modular elements.
+ * Base class for modular Container GUIs. Works with Elements {@link ElementBase} and Tabs {@link TabBase} which are both modular elements.
  *
  * @author King Lemming
  */
-public abstract class GuiCore extends GuiContainer {
+public abstract class GuiContainerCore extends GuiContainer {
 
 	public static final SoundHandler guiSoundManager = FMLClientHandler.instance().getClient().getSoundHandler();
 	public static final float CLICK_VOLUME = 0.3F;
@@ -116,12 +116,12 @@ public abstract class GuiCore extends GuiContainer {
 		guiSoundManager.playSound(new SoundBase(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, CLICK_VOLUME, pitch));
 	}
 
-	public GuiCore(Container container) {
+	public GuiContainerCore(Container container) {
 
 		super(container);
 	}
 
-	public GuiCore(Container container, ResourceLocation texture) {
+	public GuiContainerCore(Container container, ResourceLocation texture) {
 
 		super(container);
 		this.texture = texture;

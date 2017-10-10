@@ -1,6 +1,6 @@
 package cofh.core.gui.element.tab;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.init.CoreTextures;
 import cofh.core.util.helpers.MathHelper;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,7 +16,7 @@ public abstract class TabScrolledText extends TabBase {
 	protected int maxFirstLine = 0;
 	protected int numLines = 0;
 
-	public TabScrolledText(GuiCore gui, int side, String infoString) {
+	public TabScrolledText(GuiContainerCore gui, int side, String infoString) {
 
 		super(gui, side);
 

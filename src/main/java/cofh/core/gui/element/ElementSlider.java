@@ -1,7 +1,7 @@
 package cofh.core.gui.element;
 
 import cofh.core.gui.GuiColor;
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import net.minecraft.client.renderer.GlStateManager;
 
 import static cofh.core.gui.element.ElementButtonBase.*;
@@ -19,12 +19,12 @@ public abstract class ElementSlider extends ElementBase {
 	public int borderColor = new GuiColor(120, 120, 120, 255).getColor();
 	public int backgroundColor = new GuiColor(0, 0, 0, 255).getColor();
 
-	protected ElementSlider(GuiCore containerScreen, int x, int y, int width, int height, int maxValue) {
+	protected ElementSlider(GuiContainerCore containerScreen, int x, int y, int width, int height, int maxValue) {
 
 		this(containerScreen, x, y, width, height, maxValue, 0);
 	}
 
-	protected ElementSlider(GuiCore containerScreen, int x, int y, int width, int height, int maxValue, int minValue) {
+	protected ElementSlider(GuiContainerCore containerScreen, int x, int y, int width, int height, int maxValue, int minValue) {
 
 		super(containerScreen, x, y, width, height);
 		_valueMax = maxValue;

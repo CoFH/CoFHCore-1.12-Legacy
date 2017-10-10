@@ -1,6 +1,6 @@
 package cofh.core.gui.client;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.gui.GuiTextList;
 import cofh.core.gui.container.ContainerFriendsList;
 import cofh.core.gui.element.ElementButton;
@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-public class GuiFriendList extends GuiCore {
+public class GuiFriendList extends GuiContainerCore {
 
 	static final String TEXTURE_PATH = CoreProps.PATH_GUI + "friend_list.png";
 	static final ResourceLocation TEXTURE = new ResourceLocation(TEXTURE_PATH);

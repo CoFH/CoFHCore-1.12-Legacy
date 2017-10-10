@@ -1,6 +1,6 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.StringHelper;
 
@@ -18,7 +18,7 @@ public class ElementSimpleTooltip extends ElementBase {
 	boolean tooltipLocalized = false;
 	String tooltip;
 
-	public ElementSimpleTooltip(GuiCore gui, int posX, int posY) {
+	public ElementSimpleTooltip(GuiContainerCore gui, int posX, int posY) {
 
 		super(gui, posX, posY);
 	}

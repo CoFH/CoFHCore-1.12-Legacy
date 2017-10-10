@@ -1,6 +1,6 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +11,7 @@ public abstract class ElementButtonOption extends ElementButtonManaged {
 	private int _currentValue = 0;
 	private int _maxValue;
 
-	public ElementButtonOption(GuiCore containerScreen, int x, int y, int width, int height) {
+	public ElementButtonOption(GuiContainerCore containerScreen, int x, int y, int width, int height) {
 
 		super(containerScreen, x, y, width, height, "");
 	}

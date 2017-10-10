@@ -1,7 +1,7 @@
 package cofh.core.gui.element.tab;
 
 import cofh.api.core.ISecurable;
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.init.CoreTextures;
 import cofh.core.util.helpers.StringHelper;
 import net.minecraft.client.renderer.GlStateManager;
@@ -22,12 +22,12 @@ public class TabSecurity extends TabBase {
 	private ISecurable myContainer;
 	private UUID myPlayer;
 
-	public TabSecurity(GuiCore gui, ISecurable container, UUID playerName) {
+	public TabSecurity(GuiContainerCore gui, ISecurable container, UUID playerName) {
 
 		this(gui, defaultSide, container, playerName);
 	}
 
-	public TabSecurity(GuiCore gui, int side, ISecurable container, UUID playerName) {
+	public TabSecurity(GuiContainerCore gui, int side, ISecurable container, UUID playerName) {
 
 		super(gui, side);
 
@@ -81,17 +81,17 @@ public class TabSecurity extends TabBase {
 		if (28 <= mouseX && mouseX < 44 && 20 <= mouseY && mouseY < 36) {
 			if (!myContainer.getAccess().isPublic()) {
 				myContainer.setAccess(ISecurable.AccessMode.PUBLIC);
-				GuiCore.playClickSound(0.4F);
+				GuiContainerCore.playClickSound(0.4F);
 			}
 		} else if (48 <= mouseX && mouseX < 64 && 20 <= mouseY && mouseY < 36) {
 			if (!myContainer.getAccess().isFriendsOnly()) {
 				myContainer.setAccess(ISecurable.AccessMode.FRIENDS);
-				GuiCore.playClickSound(0.6F);
+				GuiContainerCore.playClickSound(0.6F);
 			}
 		} else if (68 <= mouseX && mouseX < 84 && 20 <= mouseY && mouseY < 36) {
 			if (!myContainer.getAccess().isPrivate()) {
 				myContainer.setAccess(ISecurable.AccessMode.PRIVATE);
-				GuiCore.playClickSound(0.8F);
+				GuiContainerCore.playClickSound(0.8F);
 			}
 		}
 		return true;

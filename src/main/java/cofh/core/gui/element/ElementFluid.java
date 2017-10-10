@@ -1,6 +1,6 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.util.helpers.FluidHelper;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -9,7 +9,7 @@ public class ElementFluid extends ElementBase {
 
 	public FluidStack fluid;
 
-	public ElementFluid(GuiCore gui, int posX, int posY) {
+	public ElementFluid(GuiContainerCore gui, int posX, int posY) {
 
 		super(gui, posX, posY);
 	}

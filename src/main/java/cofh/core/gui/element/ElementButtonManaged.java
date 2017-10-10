@@ -1,13 +1,13 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import net.minecraft.client.renderer.GlStateManager;
 
 public abstract class ElementButtonManaged extends ElementButtonBase {
 
 	private String _text;
 
-	public ElementButtonManaged(GuiCore containerScreen, int posX, int posY, int sizeX, int sizeY, String text) {
+	public ElementButtonManaged(GuiContainerCore containerScreen, int posX, int posY, int sizeX, int sizeY, String text) {
 
 		super(containerScreen, posX, posY, sizeX, sizeY);
 		_text = text;

@@ -3,7 +3,7 @@ package cofh.core.gui.element.tab;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IReconfigurableSides;
 import cofh.api.tileentity.ITransferControl;
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.init.CoreTextures;
 import cofh.core.render.ISidedTexture;
 import cofh.core.util.helpers.BlockHelper;
@@ -29,12 +29,12 @@ public class TabConfigurationTransfer extends TabBase {
 	private ISidedTexture myTileTexture;
 	private ITransferControl myTileControl;
 
-	public TabConfigurationTransfer(GuiCore gui, IReconfigurableSides theTile) {
+	public TabConfigurationTransfer(GuiContainerCore gui, IReconfigurableSides theTile) {
 
 		this(gui, defaultSide, theTile);
 	}
 
-	public TabConfigurationTransfer(GuiCore gui, int side, IReconfigurableSides theTile) {
+	public TabConfigurationTransfer(GuiContainerCore gui, int side, IReconfigurableSides theTile) {
 
 		super(gui, side);
 
@@ -168,11 +168,11 @@ public class TabConfigurationTransfer extends TabBase {
 
 		if (direction == 0) {
 			if (myTileControl.setTransferIn(!myTileControl.getTransferIn())) {
-				GuiCore.playClickSound(myTileControl.getTransferIn() ? 0.8F : 0.4F);
+				GuiContainerCore.playClickSound(myTileControl.getTransferIn() ? 0.8F : 0.4F);
 			}
 		} else {
 			if (myTileControl.setTransferOut(!myTileControl.getTransferOut())) {
-				GuiCore.playClickSound(myTileControl.getTransferOut() ? 0.8F : 0.4F);
+				GuiContainerCore.playClickSound(myTileControl.getTransferOut() ? 0.8F : 0.4F);
 			}
 		}
 	}
@@ -182,20 +182,20 @@ public class TabConfigurationTransfer extends TabBase {
 		if (GuiScreen.isShiftKeyDown()) {
 			if (side == myTileFacing.getFacing()) {
 				if (myTileSides.resetSides()) {
-					GuiCore.playClickSound(0.2F);
+					GuiContainerCore.playClickSound(0.2F);
 				}
 			} else if (myTileSides.setSide(side, 0)) {
-				GuiCore.playClickSound(0.4F);
+				GuiContainerCore.playClickSound(0.4F);
 			}
 			return;
 		}
 		if (mouseButton == 0) {
 			if (myTileSides.incrSide(side)) {
-				GuiCore.playClickSound(0.8F);
+				GuiContainerCore.playClickSound(0.8F);
 			}
 		} else if (mouseButton == 1) {
 			if (myTileSides.decrSide(side)) {
-				GuiCore.playClickSound(0.6F);
+				GuiContainerCore.playClickSound(0.6F);
 			}
 		}
 	}

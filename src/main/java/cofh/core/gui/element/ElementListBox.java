@@ -1,7 +1,7 @@
 package cofh.core.gui.element;
 
 import cofh.core.gui.GuiColor;
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.gui.element.listbox.IListBoxElement;
 import cofh.core.util.helpers.StringHelper;
 
@@ -30,7 +30,7 @@ public class ElementListBox extends ElementBase {
 	protected int _selectedIndex;
 	protected int scrollHoriz;
 
-	public ElementListBox(GuiCore containerScreen, int x, int y, int width, int height) {
+	public ElementListBox(GuiContainerCore containerScreen, int x, int y, int width, int height) {
 
 		super(containerScreen, x, y, width, height);
 	}

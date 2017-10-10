@@ -1,6 +1,6 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.init.CoreProps;
 import cofh.core.util.helpers.MathHelper;
 import cofh.core.util.helpers.RenderHelper;
@@ -20,7 +20,7 @@ public class ElementEnergyStored extends ElementBase {
 	// If this is enabled, 1 pixel of energy will always show in the bar as long as it is non-zero.
 	protected boolean alwaysShowMinimum = false;
 
-	public ElementEnergyStored(GuiCore gui, int posX, int posY, IEnergyStorage storage) {
+	public ElementEnergyStored(GuiContainerCore gui, int posX, int posY, IEnergyStorage storage) {
 
 		super(gui, posX, posY);
 		this.storage = storage;

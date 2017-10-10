@@ -1,6 +1,6 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.init.CoreProps;
 import net.minecraft.util.ResourceLocation;
 
@@ -10,7 +10,7 @@ public abstract class ElementButtonBase extends ElementBase {
 	public static final ResourceLocation ENABLED = new ResourceLocation(CoreProps.PATH_ELEMENTS + "button_enabled.png");
 	public static final ResourceLocation DISABLED = new ResourceLocation(CoreProps.PATH_ELEMENTS + "button_disabled.png");
 
-	public ElementButtonBase(GuiCore containerScreen, int posX, int posY, int sizeX, int sizeY) {
+	public ElementButtonBase(GuiContainerCore containerScreen, int posX, int posY, int sizeX, int sizeY) {
 
 		super(containerScreen, posX, posY, sizeX, sizeY);
 	}
@@ -36,7 +36,7 @@ public abstract class ElementButtonBase extends ElementBase {
 	protected void playSound(int button) {
 
 		if (button == 0) {
-			GuiCore.playClickSound(1.0F);
+			GuiContainerCore.playClickSound(1.0F);
 		}
 	}
 

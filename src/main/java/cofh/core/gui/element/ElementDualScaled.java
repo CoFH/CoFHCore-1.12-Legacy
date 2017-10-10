@@ -1,6 +1,6 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.util.helpers.RenderHelper;
 
 public class ElementDualScaled extends ElementBase {
@@ -9,7 +9,7 @@ public class ElementDualScaled extends ElementBase {
 	public int mode;
 	public boolean background = true;
 
-	public ElementDualScaled(GuiCore gui, int posX, int posY) {
+	public ElementDualScaled(GuiContainerCore gui, int posX, int posY) {
 
 		super(gui, posX, posY);
 	}

@@ -1,12 +1,12 @@
 package cofh.core.gui.client;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.gui.container.ContainerAugments;
 import cofh.core.init.CoreProps;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiAugments extends GuiCore {
+public class GuiAugments extends GuiContainerCore {
 
 	public static final ResourceLocation TEXTURE = new ResourceLocation(CoreProps.PATH_GUI + "augments.png");
 

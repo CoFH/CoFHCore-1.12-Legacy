@@ -1,17 +1,17 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 
 public class ElementSimpleBox extends ElementBase {
 
 	protected int color;
 
-	public ElementSimpleBox(GuiCore gui, int posX, int posY, Number color) {
+	public ElementSimpleBox(GuiContainerCore gui, int posX, int posY, Number color) {
 
 		this(gui, posX, posY, 16, 16, color);
 	}
 
-	public ElementSimpleBox(GuiCore gui, int posX, int posY, int width, int height, Number color) {
+	public ElementSimpleBox(GuiContainerCore gui, int posX, int posY, int width, int height, Number color) {
 
 		super(gui, posX, posY, width, height);
 		setColor(color);

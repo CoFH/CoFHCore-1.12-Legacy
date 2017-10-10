@@ -1,6 +1,6 @@
 package cofh.core.gui.element.tab;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.init.CoreTextures;
 import cofh.core.util.helpers.StringHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -13,12 +13,12 @@ public class TabInfo extends TabScrolledText {
 	public static int defaultTextColor = 0xffffff;
 	public static int defaultBackgroundColor = 0x555555;
 
-	public TabInfo(GuiCore gui, String infoString) {
+	public TabInfo(GuiContainerCore gui, String infoString) {
 
 		this(gui, defaultSide, infoString);
 	}
 
-	public TabInfo(GuiCore gui, int side, String infoString) {
+	public TabInfo(GuiContainerCore gui, int side, String infoString) {
 
 		super(gui, side, infoString);
 

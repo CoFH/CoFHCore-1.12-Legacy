@@ -1,6 +1,6 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.util.helpers.RenderHelper;
 
 /**
@@ -13,7 +13,7 @@ public class ElementSimple extends ElementBase {
 	protected int texU = 0;
 	protected int texV = 0;
 
-	public ElementSimple(GuiCore gui, int posX, int posY) {
+	public ElementSimple(GuiContainerCore gui, int posX, int posY) {
 
 		super(gui, posX, posY);
 	}

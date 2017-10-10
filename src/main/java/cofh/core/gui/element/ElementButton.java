@@ -1,6 +1,6 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.StringHelper;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,7 +19,7 @@ public class ElementButton extends ElementButtonBase {
 	private boolean managedClicks;
 	private String tooltip;
 
-	public ElementButton(GuiCore gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY, String texture) {
+	public ElementButton(GuiContainerCore gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY, String texture) {
 
 		super(gui, posX, posY, sizeX, sizeY);
 		setGuiManagedClicks(false);
@@ -30,14 +30,14 @@ public class ElementButton extends ElementButtonBase {
 		this.hoverY = hoverY;
 	}
 
-	public ElementButton(GuiCore gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY, int disabledX, int disabledY, String texture) {
+	public ElementButton(GuiContainerCore gui, int posX, int posY, int sizeX, int sizeY, int sheetX, int sheetY, int hoverX, int hoverY, int disabledX, int disabledY, String texture) {
 
 		this(gui, posX, posY, sizeX, sizeY, sheetX, sheetY, hoverX, hoverY, texture);
 		this.disabledX = disabledX;
 		this.disabledY = disabledY;
 	}
 
-	public ElementButton(GuiCore gui, int posX, int posY, String name, int sheetX, int sheetY, int hoverX, int hoverY, int sizeX, int sizeY, String texture) {
+	public ElementButton(GuiContainerCore gui, int posX, int posY, String name, int sheetX, int sheetY, int hoverX, int hoverY, int sizeX, int sizeY, String texture) {
 
 		super(gui, posX, posY, sizeX, sizeY);
 		setGuiManagedClicks(true);
@@ -49,7 +49,7 @@ public class ElementButton extends ElementButtonBase {
 		this.hoverY = hoverY;
 	}
 
-	public ElementButton(GuiCore gui, int posX, int posY, String name, int sheetX, int sheetY, int hoverX, int hoverY, int disabledX, int disabledY, int sizeX, int sizeY, String texture) {
+	public ElementButton(GuiContainerCore gui, int posX, int posY, String name, int sheetX, int sheetY, int hoverX, int hoverY, int disabledX, int disabledY, int sizeX, int sizeY, String texture) {
 
 		this(gui, posX, posY, name, sheetX, sheetY, hoverX, hoverY, sizeX, sizeY, texture);
 		this.disabledX = disabledX;

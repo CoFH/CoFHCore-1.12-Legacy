@@ -1,6 +1,6 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -13,13 +13,13 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Base class for a modular GUI element. Has self-contained rendering methods and a link back to the {@link GuiCore} it is a part of.
+ * Base class for a modular GUI element. Has self-contained rendering methods and a link back to the {@link GuiContainerCore} it is a part of.
  *
  * @author King Lemming
  */
 public abstract class ElementBase {
 
-	protected GuiCore gui;
+	protected GuiContainerCore gui;
 	protected ResourceLocation texture;
 	private FontRenderer fontRenderer;
 
@@ -37,14 +37,14 @@ public abstract class ElementBase {
 	private boolean visible = true;
 	private boolean enabled = true;
 
-	public ElementBase(GuiCore gui, int posX, int posY) {
+	public ElementBase(GuiContainerCore gui, int posX, int posY) {
 
 		this.gui = gui;
 		this.posX = posX;
 		this.posY = posY;
 	}
 
-	public ElementBase(GuiCore gui, int posX, int posY, int width, int height) {
+	public ElementBase(GuiContainerCore gui, int posX, int posY, int width, int height) {
 
 		this.gui = gui;
 		this.posX = posX;
@@ -201,7 +201,7 @@ public abstract class ElementBase {
 		return name;
 	}
 
-	public final GuiCore getContainerScreen() {
+	public final GuiContainerCore getContainerScreen() {
 
 		return gui;
 	}

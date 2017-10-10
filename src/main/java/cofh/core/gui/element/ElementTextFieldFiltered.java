@@ -1,6 +1,6 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.util.CharacterSingleton;
 
 import java.util.regex.Matcher;
@@ -12,12 +12,12 @@ public class ElementTextFieldFiltered extends ElementTextField {
 	protected CharacterSingleton seq = new CharacterSingleton();
 	protected Matcher filter;
 
-	public ElementTextFieldFiltered(GuiCore gui, int posX, int posY, int width, int height) {
+	public ElementTextFieldFiltered(GuiContainerCore gui, int posX, int posY, int width, int height) {
 
 		super(gui, posX, posY, width, height);
 	}
 
-	public ElementTextFieldFiltered(GuiCore gui, int posX, int posY, int width, int height, short limit) {
+	public ElementTextFieldFiltered(GuiContainerCore gui, int posX, int posY, int width, int height, short limit) {
 
 		super(gui, posX, posY, width, height, limit);
 	}

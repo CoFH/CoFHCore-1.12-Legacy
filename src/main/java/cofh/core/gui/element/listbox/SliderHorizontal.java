@@ -1,16 +1,16 @@
 package cofh.core.gui.element.listbox;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.gui.element.ElementSlider;
 
 public class SliderHorizontal extends ElementSlider {
 
-	public SliderHorizontal(GuiCore containerScreen, int x, int y, int width, int height, int maxValue) {
+	public SliderHorizontal(GuiContainerCore containerScreen, int x, int y, int width, int height, int maxValue) {
 
 		this(containerScreen, x, y, width, height, maxValue, 0);
 	}
 
-	public SliderHorizontal(GuiCore containerScreen, int x, int y, int width, int height, int maxValue, int minValue) {
+	public SliderHorizontal(GuiContainerCore containerScreen, int x, int y, int width, int height, int maxValue, int minValue) {
 
 		super(containerScreen, x, y, width, height, maxValue, minValue);
 		int dist = maxValue - minValue;

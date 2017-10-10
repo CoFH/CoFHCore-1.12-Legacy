@@ -1,7 +1,7 @@
 package cofh.core.gui.element.tab;
 
 import cofh.api.tileentity.IRedstoneControl;
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.init.CoreTextures;
 import cofh.core.util.helpers.StringHelper;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,12 +18,12 @@ public class TabRedstoneControl extends TabBase {
 
 	private IRedstoneControl myContainer;
 
-	public TabRedstoneControl(GuiCore gui, IRedstoneControl container) {
+	public TabRedstoneControl(GuiContainerCore gui, IRedstoneControl container) {
 
 		this(gui, defaultSide, container);
 	}
 
-	public TabRedstoneControl(GuiCore gui, int side, IRedstoneControl container) {
+	public TabRedstoneControl(GuiContainerCore gui, int side, IRedstoneControl container) {
 
 		super(gui, side);
 
@@ -81,17 +81,17 @@ public class TabRedstoneControl extends TabBase {
 		if (28 <= mouseX && mouseX < 44 && 20 <= mouseY && mouseY < 36) {
 			if (!myContainer.getControl().isDisabled()) {
 				myContainer.setControl(IRedstoneControl.ControlMode.DISABLED);
-				GuiCore.playClickSound(0.4F);
+				GuiContainerCore.playClickSound(0.4F);
 			}
 		} else if (48 <= mouseX && mouseX < 64 && 20 <= mouseY && mouseY < 36) {
 			if (!myContainer.getControl().isLow()) {
 				myContainer.setControl(IRedstoneControl.ControlMode.LOW);
-				GuiCore.playClickSound(0.6F);
+				GuiContainerCore.playClickSound(0.6F);
 			}
 		} else if (68 <= mouseX && mouseX < 84 && 20 <= mouseY && mouseY < 36) {
 			if (!myContainer.getControl().isHigh()) {
 				myContainer.setControl(IRedstoneControl.ControlMode.HIGH);
-				GuiCore.playClickSound(0.8F);
+				GuiContainerCore.playClickSound(0.8F);
 			}
 		}
 		return true;

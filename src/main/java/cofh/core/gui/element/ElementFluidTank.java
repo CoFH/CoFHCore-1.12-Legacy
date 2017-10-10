@@ -1,6 +1,6 @@
 package cofh.core.gui.element;
 
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.init.CoreProps;
 import cofh.core.util.helpers.MathHelper;
 import cofh.core.util.helpers.RenderHelper;
@@ -26,12 +26,12 @@ public class ElementFluidTank extends ElementBase {
 
 	protected TextureAtlasSprite fluidTextureOverride;
 
-	public ElementFluidTank(GuiCore gui, int posX, int posY, IFluidTank tank) {
+	public ElementFluidTank(GuiContainerCore gui, int posX, int posY, IFluidTank tank) {
 
 		this(gui, posX, posY, tank, DEFAULT_TEXTURE);
 	}
 
-	public ElementFluidTank(GuiCore gui, int posX, int posY, IFluidTank tank, ResourceLocation texture) {
+	public ElementFluidTank(GuiContainerCore gui, int posX, int posY, IFluidTank tank, ResourceLocation texture) {
 
 		super(gui, posX, posY);
 		this.tank = tank;

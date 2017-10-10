@@ -1,7 +1,7 @@
 package cofh.core.gui.element;
 
 import cofh.core.gui.GuiColor;
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.util.helpers.MathHelper;
 import cofh.core.util.helpers.StringHelper;
 import net.minecraft.client.Minecraft;
@@ -47,12 +47,12 @@ public class ElementTextField extends ElementBase {
 
 	protected boolean enableStencil = true;
 
-	public ElementTextField(GuiCore gui, int posX, int posY, int width, int height) {
+	public ElementTextField(GuiContainerCore gui, int posX, int posY, int width, int height) {
 
 		this(gui, posX, posY, width, height, (short) 32);
 	}
 
-	public ElementTextField(GuiCore gui, int posX, int posY, int width, int height, short limit) {
+	public ElementTextField(GuiContainerCore gui, int posX, int posY, int width, int height, short limit) {
 
 		super(gui, posX, posY, width, height);
 		setMaxLength(limit);

@@ -1,7 +1,7 @@
 package cofh.core.gui.element;
 
 import cofh.core.gui.GuiColor;
-import cofh.core.gui.GuiCore;
+import cofh.core.gui.GuiContainerCore;
 import cofh.core.util.helpers.RenderHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -11,7 +11,7 @@ public class ElementIcon extends ElementBase {
 	protected TextureAtlasSprite icon;
 	protected GuiColor color = new GuiColor(-1);
 
-	public ElementIcon(GuiCore gui, int posX, int posY, TextureAtlasSprite icon) {
+	public ElementIcon(GuiContainerCore gui, int posX, int posY, TextureAtlasSprite icon) {
 
 		super(gui, posX, posY);
 		this.icon = icon;
