@@ -71,11 +71,6 @@ public class CoreUtils {
 		return CoFHCore.proxy.isClient();
 	}
 
-	public static boolean isServer() {
-
-		return CoFHCore.proxy.isServer();
-	}
-
 	/* BLOCK UTILS */
 	public static boolean isBlockUnbreakable(World world, BlockPos pos) {
 
@@ -140,11 +135,6 @@ public class CoreUtils {
 
 		soundpath = soundpath.replaceAll("/", ".");
 		return String.format("%s:%s", modId, soundpath);
-	}
-
-	public static float getSoundVolume(int category) {
-
-		return CoFHCore.proxy.getSoundVolume(category);
 	}
 
 	/* ENTITY UTILS */

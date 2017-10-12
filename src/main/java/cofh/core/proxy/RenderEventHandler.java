@@ -1,6 +1,5 @@
-package cofh.core.render;
+package cofh.core.proxy;
 
-import cofh.core.item.IFOVUpdateItem;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -14,12 +13,9 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.FOVUpdateEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -31,16 +27,6 @@ import java.util.List;
 public class RenderEventHandler implements IResourceManagerReloadListener {
 
 	public static final RenderEventHandler INSTANCE = new RenderEventHandler();
-
-	@SubscribeEvent
-	public void handleFOVUpdateEvent(FOVUpdateEvent event) {
-
-		ItemStack stack = event.getEntity().getActiveItemStack();
-
-		if (stack != null && stack.getItem() instanceof IFOVUpdateItem) {
-			event.setNewfov(event.getFov() - ((IFOVUpdateItem) stack.getItem()).getFOVMod(stack, event.getEntity()));
-		}
-	}
 
 	//	@SubscribeEvent
 	//	public void renderExtraBlockBreak(RenderWorldLastEvent event) {

@@ -64,38 +64,6 @@ public class ComparableItemStack {
 		this.oreID = stack.oreID;
 	}
 
-	public ComparableItemStack set(ItemStack stack) {
-
-		if (!stack.isEmpty()) {
-			item = stack.getItem();
-			metadata = ItemHelper.getItemDamage(stack);
-			stackSize = stack.getCount();
-			oreID = ItemHelper.oreProxy.getOreID(stack);
-		} else {
-			item = Items.AIR;
-			metadata = -1;
-			stackSize = -1;
-			oreID = -1;
-		}
-		return this;
-	}
-
-	public ComparableItemStack set(ComparableItemStack stack) {
-
-		if (stack != null) {
-			item = stack.item;
-			metadata = stack.metadata;
-			stackSize = stack.stackSize;
-			oreID = stack.oreID;
-		} else {
-			item = Items.AIR;
-			metadata = -1;
-			stackSize = -1;
-			oreID = -1;
-		}
-		return this;
-	}
-
 	public boolean isEqual(ComparableItemStack other) {
 
 		if (other == null) {
@@ -120,11 +88,6 @@ public class ComparableItemStack {
 	public boolean isStackEqual(ComparableItemStack other) {
 
 		return isItemEqual(other) && stackSize == other.stackSize;
-	}
-
-	public boolean isStackValid() {
-
-		return item != Items.AIR;
 	}
 
 	public int getId() {

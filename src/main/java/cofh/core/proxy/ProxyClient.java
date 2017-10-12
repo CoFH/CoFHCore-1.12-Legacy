@@ -3,12 +3,10 @@ package cofh.core.proxy;
 import cofh.CoFHCore;
 import cofh.core.gui.client.GuiFriendList;
 import cofh.core.init.CoreProps;
-import cofh.core.init.CoreTextures;
 import cofh.core.key.KeyBindingItemMultiMode;
 import cofh.core.key.KeyHandlerCore;
 import cofh.core.render.CustomEffectRenderer;
 import cofh.core.render.FontRendererCore;
-import cofh.core.render.RenderEventHandler;
 import cofh.core.render.ShaderHelper;
 import cofh.core.util.RegistrySocial;
 import net.minecraft.client.Minecraft;
@@ -17,17 +15,14 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -44,15 +39,16 @@ public class ProxyClient extends Proxy {
 	public void preInit(FMLPreInitializationEvent event) {
 
 		super.preInit(event);
-		Minecraft.memoryReserve = null;
 
+		MinecraftForge.EVENT_BUS.register(EventHandlerClient.INSTANCE);
+
+		Minecraft.memoryReserve = null;
 		ShaderHelper.initShaders();
 
 		if (CoreProps.disableParticles) {
 			CoFHCore.LOG.info("Replacing EffectRenderer - Particles have been disabled.");
 			Minecraft.getMinecraft().effectRenderer = new CustomEffectRenderer();
 		}
-		MinecraftForge.EVENT_BUS.register(RenderEventHandler.INSTANCE);
 	}
 
 	@Override
@@ -79,12 +75,6 @@ public class ProxyClient extends Proxy {
 	}
 
 	/* REGISTRATION */
-	@SubscribeEvent
-	public void registerIcons(TextureStitchEvent.Pre event) {
-
-		CoreTextures.registerIcons(event);
-	}
-
 	@Override
 	public void registerKeyBinds() {
 
@@ -130,12 +120,6 @@ public class ProxyClient extends Proxy {
 	public boolean isClient() {
 
 		return true;
-	}
-
-	@Override
-	public boolean isServer() {
-
-		return false;
 	}
 
 	@Override
@@ -186,16 +170,6 @@ public class ProxyClient extends Proxy {
 		if (Minecraft.getMinecraft().currentScreen != null) {
 			((GuiFriendList) Minecraft.getMinecraft().currentScreen).taFriendList.textLines = RegistrySocial.clientPlayerFriends;
 		}
-	}
-
-	/* SOUND UTILS */
-	@Override
-	public float getSoundVolume(int category) {
-
-		if (category > SoundCategory.values().length) {
-			return 0;
-		}
-		return FMLClientHandler.instance().getClient().gameSettings.getSoundLevel(SoundCategory.values()[category]);
 	}
 
 	/* REFERENCES */

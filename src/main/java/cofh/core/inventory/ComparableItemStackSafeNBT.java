@@ -8,11 +8,11 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 
 /**
- * This is basically a default "safe" implementation of a ComparableItemStack - the OreID will only be used for the 5 "basic" conventions.
+ * This is basically a default "safe" implementation of a ComparableItemStackNBT - the OreID will only be used for the 5 "basic" conventions.
  *
  * @author King Lemming
  */
-public class ComparableItemStackSafe extends ComparableItemStack {
+public class ComparableItemStackSafeNBT extends ComparableItemStackNBT {
 
 	static final String BLOCK = "block";
 	static final String ORE = "ore";
@@ -47,7 +47,7 @@ public class ComparableItemStackSafe extends ComparableItemStack {
 		return ItemHelper.oreProxy.getOreID(oreName);
 	}
 
-	public ComparableItemStackSafe(ItemStack stack) {
+	public ComparableItemStackSafeNBT(ItemStack stack) {
 
 		super(stack);
 		oreID = getOreID(stack);

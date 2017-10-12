@@ -135,7 +135,6 @@ public class CoFHCore {
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, GUI_HANDLER);
 		MinecraftForge.EVENT_BUS.register(KeyHandlerCore.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(proxy);
 
 		FurnaceFuelHandler.initialize();
 
