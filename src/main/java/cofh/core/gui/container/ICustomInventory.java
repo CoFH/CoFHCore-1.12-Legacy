@@ -17,6 +17,6 @@ public interface ICustomInventory {
 
 	int getSlotStackLimit(int slotIndex);
 
-	void onSlotUpdate();
+	void onSlotUpdate(int slotIndex);
 
 }

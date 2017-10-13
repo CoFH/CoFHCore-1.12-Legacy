@@ -8,9 +8,9 @@ import net.minecraft.item.ItemStack;
 
 public class SlotCustomInventory extends Slot {
 
-	ICustomInventory customInv;
-	int inventoryIndex = 0;
-	boolean canTake = true;
+	protected ICustomInventory customInv;
+	protected int inventoryIndex = 0;
+	protected boolean canTake = true;
 
 	public SlotCustomInventory(ICustomInventory tile, int invIndex, IInventory inventory, int slotIndex, int x, int y, boolean lootable) {
 
@@ -36,7 +36,7 @@ public class SlotCustomInventory extends Slot {
 	@Override
 	public void onSlotChanged() {
 
-		customInv.onSlotUpdate();
+		customInv.onSlotUpdate(getSlotIndex());
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class SlotCustomInventory extends Slot {
 	}
 
 	@Override
-	public boolean canTakeStack(EntityPlayer par1EntityPlayer) {
+	public boolean canTakeStack(EntityPlayer player) {
 
 		return canTake;
 	}
