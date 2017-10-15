@@ -1,7 +1,6 @@
 package cofh.core.gui.slot;
 
 import cofh.core.inventory.ComparableItemStack;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;

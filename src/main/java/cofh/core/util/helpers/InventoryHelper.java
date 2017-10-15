@@ -1,5 +1,6 @@
 package cofh.core.util.helpers;
 
+import cofh.core.gui.slot.SlotFalseCopy;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.Slot;
@@ -106,6 +107,11 @@ public class InventoryHelper {
 		if (stack.isStackable()) {
 			while (stack.getCount() > 0 && (!r && i < length || r && i >= start)) {
 				slot = slots.get(i);
+
+				if (slot instanceof SlotFalseCopy) {
+					i += iterOrder;
+					continue;
+				}
 				existingStack = slot.getStack();
 
 				if (!existingStack.isEmpty()) {
@@ -131,12 +137,15 @@ public class InventoryHelper {
 				i += iterOrder;
 			}
 		}
-
 		if (stack.getCount() > 0) {
 			i = !r ? start : length - 1;
-
 			while (stack.getCount() > 0 && (!r && i < length || r && i >= start)) {
 				slot = slots.get(i);
+
+				if (slot instanceof SlotFalseCopy) {
+					i += iterOrder;
+					continue;
+				}
 				existingStack = slot.getStack();
 
 				if (existingStack.isEmpty()) {
@@ -152,7 +161,6 @@ public class InventoryHelper {
 				i += iterOrder;
 			}
 		}
-
 		return successful;
 	}
 

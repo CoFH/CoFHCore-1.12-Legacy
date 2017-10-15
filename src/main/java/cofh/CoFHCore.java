@@ -4,6 +4,7 @@ import cofh.core.command.CommandHandler;
 import cofh.core.energy.FurnaceFuelHandler;
 import cofh.core.gui.GuiHandler;
 import cofh.core.init.CoreEnchantments;
+import cofh.core.init.CorePotions;
 import cofh.core.init.CoreProps;
 import cofh.core.key.KeyHandlerCore;
 import cofh.core.key.PacketKey;
@@ -73,6 +74,7 @@ public class CoFHCore {
 
 		CoreProps.preInit();
 		CoreEnchantments.preInit();
+		CorePotions.preInit();
 		PacketHandler.preInit();
 		addOreDictionaryEntries();
 

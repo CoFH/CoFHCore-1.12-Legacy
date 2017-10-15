@@ -1,6 +1,5 @@
 package cofh.core.inventory;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -22,6 +21,22 @@ public class ComparableItemStackNBT extends ComparableItemStack {
 		if (!stack.isEmpty() && stack.getTagCompound() != null) {
 			tag = stack.getTagCompound().copy();
 		}
+	}
+
+	public boolean isEqual(ComparableItemStack other) {
+
+		if (other == null) {
+			return false;
+		}
+		if (metadata == other.metadata) {
+			if (item == other.item) {
+				return true;
+			}
+			if (item != null && other.item != null) {
+				return item.delegate.get() == other.item.delegate.get();
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -47,9 +62,15 @@ public class ComparableItemStackNBT extends ComparableItemStack {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+
+		return o instanceof ComparableItemStackNBT && isItemEqual((ComparableItemStack) o) && isStackTagEqual((ComparableItemStackNBT) o);
+	}
+
+	@Override
 	public int hashCode() {
 
-		return oreID != -1 ? oreID : tag != null ? 17 + tag.hashCode() * 31 + (metadata & 65535) | getId() << 16 : (metadata & 65535) | getId() << 16;
+		return oreID != -1 ? oreID : tag != null ? 17 + tag.toString().hashCode() * 31 + (metadata & 65535) | getId() << 16 : (metadata & 65535) | getId() << 16;
 	}
 
 }

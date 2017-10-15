@@ -67,10 +67,17 @@ public class FluidTankCore implements IFluidTank {
 		return nbt;
 	}
 
-	public void clearLock() {
+	public void setLocked() {
+
+		if (locked || this.fluid == null) {
+			return;
+		}
+		locked = true;
+	}
+
+	public void clearLocked() {
 
 		locked = false;
-
 		if (this.getFluidAmount() <= 0) {
 			this.fluid = null;
 		}
@@ -98,6 +105,11 @@ public class FluidTankCore implements IFluidTank {
 		} else if (this.fluid.amount < 0) {
 			this.fluid.amount = 0;
 		}
+	}
+
+	public boolean isLocked() {
+
+		return locked;
 	}
 
 	public int getSpace() {

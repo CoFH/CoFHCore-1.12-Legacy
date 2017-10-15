@@ -2,7 +2,6 @@ package cofh.core.inventory;
 
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.oredict.OreDictionaryArbiter;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
