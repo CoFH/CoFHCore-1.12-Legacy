@@ -18,43 +18,45 @@ public class CorePotions {
 	/* INIT */
 	public static void preInit() {
 
-		haste = new PotionType("haste", new PotionEffect(MobEffects.HASTE, 3600));
-		hasteLong = new PotionType("long_haste", new PotionEffect(MobEffects.HASTE, 9600));
-		hasteStrong = new PotionType("strong_haste", new PotionEffect(MobEffects.HASTE, 1800, 1));
+		int duration = 3600;
+		int durationLong = 9600;
+		int durationStrong = 1800;
 
-		resistance = new PotionType("resistance", new PotionEffect(MobEffects.RESISTANCE, 3600));
-		resistanceLong = new PotionType("long_resistance", new PotionEffect(MobEffects.RESISTANCE, 9600));
-		resistanceStrong = new PotionType("strong_resistance", new PotionEffect(MobEffects.RESISTANCE, 1800, 1));
+		haste = new PotionType("haste", new PotionEffect(MobEffects.HASTE, duration));
+		hasteLong = new PotionType("haste", new PotionEffect(MobEffects.HASTE, durationLong));
+		hasteStrong = new PotionType("haste", new PotionEffect(MobEffects.HASTE, durationStrong, 1));
 
-		levitation = new PotionType("levitation", new PotionEffect(MobEffects.LEVITATION, 3600));
-		levitationLong = new PotionType("long_levitation", new PotionEffect(MobEffects.LEVITATION, 9600));
+		resistance = new PotionType("resistance", new PotionEffect(MobEffects.RESISTANCE, duration));
+		resistanceLong = new PotionType("resistance", new PotionEffect(MobEffects.RESISTANCE, durationLong));
+		resistanceStrong = new PotionType("resistance", new PotionEffect(MobEffects.RESISTANCE, durationStrong, 1));
 
-		absorption = new PotionType("absorption", new PotionEffect(MobEffects.ABSORPTION, 3600));
-		absorptionLong = new PotionType("long_absorption", new PotionEffect(MobEffects.ABSORPTION, 9600));
-		absorptionStrong = new PotionType("strong_absorption", new PotionEffect(MobEffects.ABSORPTION, 1800, 1));
+		levitation = new PotionType("levitation", new PotionEffect(MobEffects.LEVITATION, duration));
+		levitationLong = new PotionType("levitation", new PotionEffect(MobEffects.LEVITATION, durationLong));
 
-		saturation = new PotionType("saturation", new PotionEffect(MobEffects.SATURATION, 3600));
-		saturationLong = new PotionType("long_saturation", new PotionEffect(MobEffects.SATURATION, 9600));
-		saturationStrong = new PotionType("strong_saturation", new PotionEffect(MobEffects.SATURATION, 1800, 1));
+		absorption = new PotionType("absorption", new PotionEffect(MobEffects.ABSORPTION, duration));
+		absorptionLong = new PotionType("absorption", new PotionEffect(MobEffects.ABSORPTION, durationLong));
+		absorptionStrong = new PotionType("absorption", new PotionEffect(MobEffects.ABSORPTION, durationStrong, 1));
+
+		saturation = new PotionType("saturation", new PotionEffect(MobEffects.SATURATION, 1));
+		saturationStrong = new PotionType("saturation", new PotionEffect(MobEffects.SATURATION, 1, 1));
 
 		haste.setRegistryName("haste");
-		hasteLong.setRegistryName("long_haste");
-		hasteStrong.setRegistryName("strong_haste");
+		hasteLong.setRegistryName("haste+");
+		hasteStrong.setRegistryName("haste2");
 
 		resistance.setRegistryName("resistance");
-		resistanceLong.setRegistryName("long_resistance");
-		resistanceStrong.setRegistryName("strong_resistance");
+		resistanceLong.setRegistryName("resistance+");
+		resistanceStrong.setRegistryName("resistance2");
 
 		levitation.setRegistryName("levitation");
-		levitationLong.setRegistryName("long_levitation");
+		levitationLong.setRegistryName("levitation+");
 
 		absorption.setRegistryName("absorption");
-		absorptionLong.setRegistryName("long_absorption");
-		absorptionStrong.setRegistryName("strong_absorption");
+		absorptionLong.setRegistryName("absorption+");
+		absorptionStrong.setRegistryName("absorption2");
 
 		saturation.setRegistryName("saturation");
-		saturationLong.setRegistryName("long_saturation");
-		saturationStrong.setRegistryName("strong_saturation");
+		saturationStrong.setRegistryName("saturation2");
 
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 	}
@@ -79,7 +81,6 @@ public class CorePotions {
 		event.getRegistry().register(absorptionStrong);
 
 		event.getRegistry().register(saturation);
-		event.getRegistry().register(saturationLong);
 		event.getRegistry().register(saturationStrong);
 	}
 
@@ -100,7 +101,6 @@ public class CorePotions {
 	public static PotionType absorptionStrong;
 
 	public static PotionType saturation;
-	public static PotionType saturationLong;
 	public static PotionType saturationStrong;
 
 }

@@ -179,53 +179,20 @@ key.cofh.augments=Open Player Augment GUI
 key.cofh.category=CoFH Keys
 key.cofh.multimode=Cycle Item Mode
 
-lingering_potion.effect.absorption=Potion of Absorption
-lingering_potion.effect.haste=Potion of Haste
-lingering_potion.effect.resistance=Potion of Resistance
-lingering_potion.effect.saturation=Potion of Saturation
-
-lingering_potion.effect.long_absorption=Lingering Potion of Absorption
-lingering_potion.effect.long_haste=Lingering Potion of Haste
-lingering_potion.effect.long_levitation=Lingering Potion of Levitation
-lingering_potion.effect.long_resistance=Lingering Potion of Resistance
-lingering_potion.effect.long_saturation=Lingering Potion of Saturation
-
-lingering_potion.effect.strong_absorption=Lingering Potion of Absorption
-lingering_potion.effect.strong_haste=Lingering Potion of Haste
-lingering_potion.effect.strong_resistance=Lingering Potion of Resistance
-lingering_potion.effect.strong_saturation=Lingering Potion of Saturation
+lingering_potion.effect.absorption=Lingering Potion of Absorption
+lingering_potion.effect.haste=Lingering Potion of Haste
+lingering_potion.effect.resistance=Lingering Potion of Resistance
+lingering_potion.effect.saturation=Lingering Potion of Saturation
 
 potion.effect.absorption=Potion of Absorption
 potion.effect.haste=Potion of Haste
 potion.effect.resistance=Potion of Resistance
 potion.effect.saturation=Potion of Saturation
 
-potion.effect.long_absorption=Potion of Absorption
-potion.effect.long_haste=Potion of Haste
-potion.effect.long_levitation=Potion of Levitation
-potion.effect.long_resistance=Potion of Resistance
-potion.effect.long_saturation=Potion of Saturation
-
-potion.effect.strong_absorption=Potion of Absorption
-potion.effect.strong_haste=Potion of Haste
-potion.effect.strong_resistance=Potion of Resistance
-potion.effect.strong_saturation=Potion of Saturation
-
 splash_potion.effect.absorption=Splash Potion of Absorption
 splash_potion.effect.haste=Splash Potion of Haste
 splash_potion.effect.resistance=Splash Potion of Resistance
 splash_potion.effect.saturation=Splash Potion of Saturation
-
-splash_potion.effect.long_absorption=Splash Potion of Absorption
-splash_potion.effect.long_haste=Splash Potion of Haste
-splash_potion.effect.long_levitation=Splash Potion of Levitation
-splash_potion.effect.long_resistance=Splash Potion of Resistance
-splash_potion.effect.long_saturation=Splash Potion of Saturation
-
-splash_potion.effect.strong_absorption=Splash Potion of Absorption
-splash_potion.effect.strong_haste=Splash Potion of Haste
-splash_potion.effect.strong_resistance=Splash Potion of Resistance
-splash_potion.effect.strong_saturation=Splash Potion of Saturation
 
 tab.cofh.friendList.0=Use this list to add and remove Friends!
 tab.cofh.friendList.1=Friends are able to access your secure blocks and items, if you allow them to.

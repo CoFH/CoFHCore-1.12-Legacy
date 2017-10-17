@@ -357,4 +357,9 @@ public class FluidHelper {
 		return fluidA != null && fluidB != null && fluidA.equals(fluidB);
 	}
 
+	public static int getFluidHash(FluidStack stack) {
+
+		return stack.tag != null ? stack.getFluid().getName().hashCode() + 31 * stack.tag.toString().hashCode() : stack.getFluid().getName().hashCode();
+	}
+
 }
