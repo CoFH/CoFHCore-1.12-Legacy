@@ -2,6 +2,7 @@ package cofh.core.gui.element;
 
 import cofh.core.gui.GuiContainerCore;
 import cofh.core.init.CoreProps;
+import cofh.core.util.helpers.FluidHelper;
 import cofh.core.util.helpers.MathHelper;
 import cofh.core.util.helpers.RenderHelper;
 import cofh.core.util.helpers.StringHelper;
@@ -20,6 +21,7 @@ public class ElementFluidTank extends ElementBase {
 	protected IFluidTank tank;
 	protected int gaugeType;
 	protected boolean drawTank;
+	protected float durationFactor = 1.0F;
 
 	// If this is enabled, 1 pixel of fluid will always show in the tank as long as fluid is present.
 	protected boolean alwaysShowMinimum = false;
@@ -76,7 +78,6 @@ public class ElementFluidTank extends ElementBase {
 
 		this.fluidTextureOverride = fluidTextureOverride;
 		return this;
-
 	}
 
 	public ElementFluidTank drawTank(boolean drawTank) {
@@ -88,6 +89,12 @@ public class ElementFluidTank extends ElementBase {
 	public ElementFluidTank setAlwaysShow(boolean show) {
 
 		alwaysShowMinimum = show;
+		return this;
+	}
+
+	public ElementFluidTank setDurationFactor(float durationFactor) {
+
+		this.durationFactor = durationFactor;
 		return this;
 	}
 
@@ -118,6 +125,9 @@ public class ElementFluidTank extends ElementBase {
 			list.add("Infinite Fluid");
 		} else {
 			list.add(StringHelper.formatNumber(tank.getFluidAmount()) + " / " + StringHelper.formatNumber(tank.getCapacity()) + " mB");
+		}
+		if (FluidHelper.isPotionFluid(tank.getFluid())) {
+			FluidHelper.addPotionTooltip(tank.getFluid(), list, durationFactor);
 		}
 	}
 

@@ -2,9 +2,12 @@ package cofh.core.gui.element;
 
 import cofh.core.gui.GuiContainerCore;
 import cofh.core.util.helpers.RenderHelper;
+import cofh.core.util.helpers.StringHelper;
+
+import java.util.List;
 
 /**
- * Basic element which can render an arbitrary texture.
+ * Basic element which can render an arbitrary texture and may have a tooltip.
  *
  * @author King Lemming
  */
@@ -12,6 +15,8 @@ public class ElementSimple extends ElementBase {
 
 	protected int texU = 0;
 	protected int texV = 0;
+	boolean tooltipLocalized = false;
+	String tooltip;
 
 	public ElementSimple(GuiContainerCore gui, int posX, int posY) {
 
@@ -25,6 +30,24 @@ public class ElementSimple extends ElementBase {
 		return this;
 	}
 
+	public ElementSimple clearToolTip() {
+
+		this.tooltip = null;
+		return this;
+	}
+
+	public ElementSimple setToolTip(String tooltip) {
+
+		this.tooltip = tooltip;
+		return this;
+	}
+
+	public ElementSimple setToolTipLocalized(boolean localized) {
+
+		this.tooltipLocalized = localized;
+		return this;
+	}
+
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
@@ -35,6 +58,18 @@ public class ElementSimple extends ElementBase {
 	@Override
 	public void drawForeground(int mouseX, int mouseY) {
 
+	}
+
+	@Override
+	public void addTooltip(List<String> list) {
+
+		if (tooltip != null) {
+			if (tooltipLocalized) {
+				list.add(tooltip);
+			} else {
+				list.add(StringHelper.localize(tooltip));
+			}
+		}
 	}
 
 }

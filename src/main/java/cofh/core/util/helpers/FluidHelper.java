@@ -1,21 +1,28 @@
 package cofh.core.util.helpers;
 
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fluids.*;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -23,6 +30,9 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
 import java.io.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Contains various helper functions to assist with {@link Fluid} and Fluid-related manipulation and interaction.
@@ -373,6 +383,79 @@ public class FluidHelper {
 	public static int getFluidHash(FluidStack stack) {
 
 		return stack.tag != null ? stack.getFluid().getName().hashCode() + 31 * stack.tag.toString().hashCode() : stack.getFluid().getName().hashCode();
+	}
+
+	/* HELPERS */
+	public static boolean isPotionFluid(FluidStack stack) {
+
+		return stack != null && stack.tag != null && stack.tag.hasKey("Potion");
+	}
+
+	public static void addPotionTooltip(FluidStack stack, List<String> list) {
+
+		addPotionTooltip(stack, list, 1.0F);
+	}
+
+	public static void addPotionTooltip(FluidStack stack, List<String> list, float durationFactor) {
+
+		if (stack == null) {
+			return;
+		}
+		List<PotionEffect> effects = PotionUtils.getEffectsFromTag(stack.tag);
+		List<Tuple<String, AttributeModifier>> list1 = Lists.<Tuple<String, AttributeModifier>>newArrayList();
+
+		if (effects.isEmpty()) {
+			String s = StringHelper.localize("effect.none").trim();
+			list.add(TextFormatting.GRAY + s);
+		} else {
+			for (PotionEffect effect : effects) {
+				String s1 = StringHelper.localize(effect.getEffectName()).trim();
+				Potion potion = effect.getPotion();
+				Map<IAttribute, AttributeModifier> map = potion.getAttributeModifierMap();
+
+				if (!map.isEmpty()) {
+					for (Entry<IAttribute, AttributeModifier> entry : map.entrySet()) {
+						AttributeModifier attributemodifier = entry.getValue();
+						AttributeModifier attributemodifier1 = new AttributeModifier(attributemodifier.getName(), potion.getAttributeModifierAmount(effect.getAmplifier(), attributemodifier), attributemodifier.getOperation());
+						list1.add(new Tuple((entry.getKey()).getName(), attributemodifier1));
+					}
+				}
+				if (effect.getAmplifier() > 0) {
+					s1 = s1 + " " + StringHelper.localize("potion.potency." + effect.getAmplifier()).trim();
+				}
+
+				if (effect.getDuration() > 20) {
+					s1 = s1 + " (" + Potion.getPotionDurationString(effect, durationFactor) + ")";
+				}
+				if (potion.isBadEffect()) {
+					list.add(TextFormatting.RED + s1);
+				} else {
+					list.add(TextFormatting.BLUE + s1);
+				}
+			}
+		}
+		if (!list1.isEmpty()) {
+			list.add("");
+			list.add(TextFormatting.DARK_PURPLE + StringHelper.localize("potion.whenDrank"));
+
+			for (Tuple<String, AttributeModifier> tuple : list1) {
+				AttributeModifier attributemodifier2 = tuple.getSecond();
+				double d0 = attributemodifier2.getAmount();
+				double d1;
+
+				if (attributemodifier2.getOperation() != 1 && attributemodifier2.getOperation() != 2) {
+					d1 = attributemodifier2.getAmount();
+				} else {
+					d1 = attributemodifier2.getAmount() * 100.0D;
+				}
+				if (d0 > 0.0D) {
+					list.add(TextFormatting.BLUE + StringHelper.localizeFormat("attribute.modifier.plus." + attributemodifier2.getOperation(), ItemStack.DECIMALFORMAT.format(d1), StringHelper.localize("attribute.name." + tuple.getFirst())));
+				} else if (d0 < 0.0D) {
+					d1 = d1 * -1.0D;
+					list.add(TextFormatting.RED + StringHelper.localizeFormat("attribute.modifier.take." + attributemodifier2.getOperation(), ItemStack.DECIMALFORMAT.format(d1), StringHelper.localize("attribute.name." + tuple.getFirst())));
+				}
+			}
+		}
 	}
 
 }
