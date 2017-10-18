@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -126,22 +127,34 @@ public class FluidHelper {
 	public static FluidStack extractFluidFromAdjacentFluidHandler(TileEntity tile, EnumFacing side, int maxDrain, boolean doDrain) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
-		boolean isHandler = handler != null && handler.hasCapability(FLUID_HANDLER, side.getOpposite());
-		return isHandler ? handler.getCapability(FLUID_HANDLER, side.getOpposite()).drain(maxDrain, doDrain) : null;
+
+		if (handler != null && handler.hasCapability(FLUID_HANDLER, side.getOpposite())) {
+			IFluidHandler cap = handler.getCapability(FLUID_HANDLER, side.getOpposite());
+			return cap != null ? cap.drain(maxDrain, doDrain) : null;
+		}
+		return null;
 	}
 
 	public static int insertFluidIntoAdjacentFluidHandler(TileEntity tile, EnumFacing side, FluidStack fluid, boolean doFill) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(tile, side);
-		boolean isHandler = handler != null && handler.hasCapability(FLUID_HANDLER, side.getOpposite());
-		return isHandler ? handler.getCapability(FLUID_HANDLER, side.getOpposite()).fill(fluid, doFill) : 0;
+
+		if (handler != null && handler.hasCapability(FLUID_HANDLER, side.getOpposite())) {
+			IFluidHandler cap = handler.getCapability(FLUID_HANDLER, side.getOpposite());
+			return cap != null ? cap.fill(fluid, doFill) : 0;
+		}
+		return 0;
 	}
 
 	public static int insertFluidIntoAdjacentFluidHandler(World world, BlockPos pos, EnumFacing side, FluidStack fluid, boolean doFill) {
 
 		TileEntity handler = BlockHelper.getAdjacentTileEntity(world, pos, side);
-		boolean isHandler = handler != null && handler.hasCapability(FLUID_HANDLER, side.getOpposite());
-		return isHandler ? handler.getCapability(FLUID_HANDLER, side.getOpposite()).fill(fluid, doFill) : 0;
+
+		if (handler != null && handler.hasCapability(FLUID_HANDLER, side.getOpposite())) {
+			IFluidHandler cap = handler.getCapability(FLUID_HANDLER, side.getOpposite());
+			return cap != null ? cap.fill(fluid, doFill) : 0;
+		}
+		return 0;
 	}
 
 	public static boolean isAdjacentFluidHandler(TileEntity tile, EnumFacing side) {
