@@ -187,7 +187,10 @@ public class CoreProps {
 	public static final int LAVA_RF = 200000;
 	public static final int ENTITY_TRACKING_DISTANCE = 64;
 	public static final int TILE_UPDATE_DELAY = 160;
+
 	public static final int BOTTLE_VOLUME = 250;
+	public static final int POTION_MIN = 3;
+	public static final int POTION_MAX = 5;
 
 	public static final int RGB_DURABILITY_FLUX = 0xD01010;
 	public static final int RGB_DURABILITY_WATER = 0x4060FF;

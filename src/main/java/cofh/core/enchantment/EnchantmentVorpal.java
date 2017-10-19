@@ -51,6 +51,12 @@ public class EnchantmentVorpal extends Enchantment {
 	}
 
 	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack) {
+
+		return canApply(stack);
+	}
+
+	@Override
 	public boolean isAllowedOnBooks() {
 
 		return false;

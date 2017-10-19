@@ -1,11 +1,15 @@
 package cofh.core.init;
 
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CorePotions {
 
@@ -37,8 +41,9 @@ public class CorePotions {
 		absorptionLong = new PotionType("absorption", new PotionEffect(MobEffects.ABSORPTION, durationLong));
 		absorptionStrong = new PotionType("absorption", new PotionEffect(MobEffects.ABSORPTION, durationStrong, 1));
 
-		saturation = new PotionType("saturation", new PotionEffect(MobEffects.SATURATION, 1));
-		saturationStrong = new PotionType("saturation", new PotionEffect(MobEffects.SATURATION, 1, 1));
+		wither = new PotionType("wither", new PotionEffect(MobEffects.WITHER, duration / 4));
+		witherLong = new PotionType("wither", new PotionEffect(MobEffects.WITHER, 2 * duration / 4));
+		witherStrong = new PotionType("wither", new PotionEffect(MobEffects.WITHER, durationStrong / 4, 1));
 
 		haste.setRegistryName("haste");
 		hasteLong.setRegistryName("haste+");
@@ -55,8 +60,9 @@ public class CorePotions {
 		absorptionLong.setRegistryName("absorption+");
 		absorptionStrong.setRegistryName("absorption2");
 
-		saturation.setRegistryName("saturation");
-		saturationStrong.setRegistryName("saturation2");
+		wither.setRegistryName("wither");
+		witherLong.setRegistryName("wither+");
+		witherStrong.setRegistryName("wither2");
 
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 	}
@@ -80,8 +86,47 @@ public class CorePotions {
 		event.getRegistry().register(absorptionLong);
 		event.getRegistry().register(absorptionStrong);
 
-		event.getRegistry().register(saturation);
-		event.getRegistry().register(saturationStrong);
+		event.getRegistry().register(wither);
+		event.getRegistry().register(witherLong);
+		event.getRegistry().register(witherStrong);
+
+		final int min = CoreProps.POTION_MIN;
+		final int max = CoreProps.POTION_MAX;
+
+		createStrongPotionTypes(event, PotionTypes.LEAPING, min, max);
+		createStrongPotionTypes(event, PotionTypes.SWIFTNESS, min, max);
+		createStrongPotionTypes(event, PotionTypes.HEALING, min, max);
+		createStrongPotionTypes(event, PotionTypes.HARMING, min, max);
+		createStrongPotionTypes(event, PotionTypes.POISON, min, max);
+		createStrongPotionTypes(event, PotionTypes.REGENERATION, min, max);
+		createStrongPotionTypes(event, PotionTypes.STRENGTH, min, max);
+
+		createStrongPotionTypes(event, CorePotions.haste, min, Math.min(max, 4));
+		createStrongPotionTypes(event, CorePotions.resistance, min, max);
+		createStrongPotionTypes(event, CorePotions.absorption, min, max);
+		createStrongPotionTypes(event, CorePotions.wither, min, max);
+	}
+
+	/* HELPERS */
+	public void createStrongPotionTypes(RegistryEvent.Register<PotionType> event, PotionType type, int minAmplifier, int maxAmplifier) {
+
+		List<PotionEffect> baseEffects = type.getEffects();
+		String baseName = type.getNamePrefixed("");
+
+		if (baseEffects.isEmpty()) {
+			return;
+		}
+		List<PotionEffect> effects = new ArrayList<>();
+
+		for (int i = minAmplifier; i <= maxAmplifier; i++) {
+			effects.clear();
+			for (PotionEffect effect : baseEffects) {
+				effects.add(new PotionEffect(effect.getPotion(), effect.getDuration() / (1 + i), i - 1));
+			}
+			PotionType potion = new PotionType(baseName, effects.toArray(new PotionEffect[effects.size()]));
+			potion.setRegistryName(baseName + i);
+			event.getRegistry().register(potion);
+		}
 	}
 
 	/* REFERENCES */
@@ -100,7 +145,8 @@ public class CorePotions {
 	public static PotionType absorptionLong;
 	public static PotionType absorptionStrong;
 
-	public static PotionType saturation;
-	public static PotionType saturationStrong;
+	public static PotionType wither;
+	public static PotionType witherLong;
+	public static PotionType witherStrong;
 
 }
