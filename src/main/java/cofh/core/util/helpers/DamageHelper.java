@@ -30,7 +30,7 @@ public class DamageHelper {
 
 			super("pyrotheum");
 			this.setDamageBypassesArmor();
-			this.isFireDamage();
+			this.setFireDamage();
 		}
 	}
 
@@ -58,7 +58,7 @@ public class DamageHelper {
 
 			super("mana");
 			this.setDamageBypassesArmor();
-			this.isMagicDamage();
+			this.setMagicDamage();
 		}
 	}
 
@@ -72,6 +72,16 @@ public class DamageHelper {
 	}
 
 	/* ENTITY DAMAGE SOURCES */
+	public static class EntityDamageSourcePyrotheum extends EntityDamageSource {
+
+		public EntityDamageSourcePyrotheum(String type, Entity entity) {
+
+			super(type, entity);
+			this.setDamageBypassesArmor();
+			this.setFireDamage();
+		}
+	}
+
 	public static class EntityDamageSourceFlux extends EntityDamageSource {
 
 		public EntityDamageSourceFlux(String type, Entity entity) {
@@ -82,6 +92,16 @@ public class DamageHelper {
 	}
 
 	/* HELPERS */
+	public static DamageSource causeEntityPyrotheumDamage(String type, Entity entity) {
+
+		return new EntityDamageSourcePyrotheum(type, entity);
+	}
+
+	public static DamageSource causePlayerPyrotheumDamage(EntityPlayer entityPlayer) {
+
+		return new EntityDamageSourcePyrotheum("player", entityPlayer);
+	}
+
 	public static DamageSource causeEntityFluxDamage(String type, Entity entity) {
 
 		return new EntityDamageSourceFlux(type, entity);
