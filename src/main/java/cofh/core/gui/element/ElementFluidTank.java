@@ -120,14 +120,15 @@ public class ElementFluidTank extends ElementBase {
 
 		if (tank.getFluid() != null && tank.getFluidAmount() > 0) {
 			list.add(StringHelper.getFluidName(tank.getFluid()));
+
+			if (FluidHelper.isPotionFluid(tank.getFluid())) {
+				FluidHelper.addPotionTooltip(tank.getFluid(), list, durationFactor);
+			}
 		}
 		if (tank.getCapacity() < 0) {
 			list.add("Infinite Fluid");
 		} else {
 			list.add(StringHelper.formatNumber(tank.getFluidAmount()) + " / " + StringHelper.formatNumber(tank.getCapacity()) + " mB");
-		}
-		if (FluidHelper.isPotionFluid(tank.getFluid())) {
-			FluidHelper.addPotionTooltip(tank.getFluid(), list, durationFactor);
 		}
 	}
 
