@@ -14,7 +14,7 @@ public class RayTracer {
 
 	public static RayTraceResult retrace(EntityPlayer player) {
 
-		return retrace(player, getBlockReachDistance(player));
+		return retrace(player, getBlockReachDistance(player), true);
 	}
 
 	public static RayTraceResult retrace(EntityPlayer player, double reach) {
@@ -24,16 +24,26 @@ public class RayTracer {
 
 	public static RayTraceResult retrace(EntityPlayer player, boolean stopOnFluid) {
 
-		Vec3d startVec = getStartVec(player);
-		Vec3d endVec = getEndVec(player);
-		return player.world.rayTraceBlocks(startVec, endVec, stopOnFluid, false, true);
+		return retrace(player, stopOnFluid, false, true);
 	}
 
-	public static RayTraceResult retrace(EntityPlayer player, double reach, boolean stopOnFluids) {
+	public static RayTraceResult retrace(EntityPlayer player, double reach, boolean stopOnFluid) {
+
+		return retrace(player, reach, stopOnFluid, false, true);
+	}
+
+	public static RayTraceResult retrace(EntityPlayer player, boolean stopOnFluid, boolean ignoreNoBoundingBox, boolean returnUncollidable) {
+
+		Vec3d startVec = getStartVec(player);
+		Vec3d endVec = getEndVec(player);
+		return player.world.rayTraceBlocks(startVec, endVec, stopOnFluid, ignoreNoBoundingBox, returnUncollidable);
+	}
+
+	public static RayTraceResult retrace(EntityPlayer player, double reach, boolean stopOnFluid, boolean ignoreNoBoundingBox, boolean returnUncollidable) {
 
 		Vec3d startVec = getStartVec(player);
 		Vec3d endVec = getEndVec(player, reach);
-		return player.world.rayTraceBlocks(startVec, endVec, stopOnFluids, false, true);
+		return player.world.rayTraceBlocks(startVec, endVec, stopOnFluid, ignoreNoBoundingBox, returnUncollidable);
 	}
 
 	public static RayTraceResult retraceBlock(World world, EntityPlayer player, BlockPos pos) {
