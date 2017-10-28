@@ -119,11 +119,11 @@ public final class StringHelper {
 	public static String getScaledNumber(long number) {
 
 		if (number >= 1000000000) {
-			return number / 1000000000 + "." + (number % 1000000000 / 10000000) + "G";
+			return number / 1000000000 + "." + (number % 1000000000 / 100000000) + (number % 100000000 / 10000000) + "G";
 		} else if (number >= 1000000) {
-			return number / 1000000 + "." + (number % 1000000 / 10000) + "M";
+			return number / 1000000 + "." + (number % 1000000 / 100000) + (number % 100000 / 10000) + "M";
 		} else if (number >= 1000) {
-			return number / 1000 + "." + (number % 1000 / 10) + "k";
+			return number / 1000 + "." + (number % 1000 / 100) + (number % 100 / 10) + "k";
 		} else {
 			return String.valueOf(number);
 		}

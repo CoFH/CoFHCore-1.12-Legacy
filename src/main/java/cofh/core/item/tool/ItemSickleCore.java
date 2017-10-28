@@ -1,15 +1,18 @@
 package cofh.core.item.tool;
 
+import cofh.core.init.CoreEnchantments;
+import cofh.core.item.IEnchantableItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemSickleCore extends ItemToolCore {
+public class ItemSickleCore extends ItemToolCore implements IEnchantableItem {
 
 	protected int radius = 3;
 
@@ -67,6 +70,13 @@ public class ItemSickleCore extends ItemToolCore {
 			stack.damageItem(used, player);
 		}
 		return false;
+	}
+
+	/* IEnchantableItem */
+	@Override
+	public boolean canEnchant(ItemStack stack, Enchantment enchantment) {
+
+		return enchantment == CoreEnchantments.leech || enchantment == CoreEnchantments.vorpal;
 	}
 
 }

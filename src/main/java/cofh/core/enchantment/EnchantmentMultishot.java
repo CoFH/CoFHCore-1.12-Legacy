@@ -4,8 +4,10 @@ import cofh.core.item.IEnchantableItem;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 
 public class EnchantmentMultishot extends Enchantment {
 
@@ -44,19 +46,14 @@ public class EnchantmentMultishot extends Enchantment {
 	@Override
 	public boolean canApply(ItemStack stack) {
 
-		return enable && (stack.getItem() instanceof ItemBow || stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this));
+		Item item = stack.getItem();
+		return enable && (item instanceof ItemBow || item instanceof IEnchantableItem && ((IEnchantableItem) item).canEnchant(stack, this));
 	}
 
 	@Override
 	public boolean canApplyAtEnchantingTable(ItemStack stack) {
 
 		return canApply(stack);
-	}
-
-	@Override
-	public boolean isAllowedOnBooks() {
-
-		return true;
 	}
 
 }

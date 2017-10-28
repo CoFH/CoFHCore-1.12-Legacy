@@ -5,8 +5,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
+import net.minecraft.item.*;
 
 public class EnchantmentSmelting extends Enchantment {
 
@@ -45,7 +44,8 @@ public class EnchantmentSmelting extends Enchantment {
 	@Override
 	public boolean canApply(ItemStack stack) {
 
-		return enable && (stack.getItem() instanceof ItemTool || stack.getItem() instanceof IEnchantableItem && ((IEnchantableItem) stack.getItem()).canEnchant(stack, this));
+		Item item = stack.getItem();
+		return enable && (item instanceof ItemTool || item instanceof IEnchantableItem && ((IEnchantableItem) item).canEnchant(stack, this));
 	}
 
 	@Override
@@ -58,12 +58,6 @@ public class EnchantmentSmelting extends Enchantment {
 	public boolean canApplyTogether(Enchantment ench) {
 
 		return super.canApplyTogether(ench) && ench != Enchantments.SILK_TOUCH;
-	}
-
-	@Override
-	public boolean isAllowedOnBooks() {
-
-		return true;
 	}
 
 }
