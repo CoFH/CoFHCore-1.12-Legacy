@@ -80,6 +80,9 @@ public abstract class TileCore extends TileEntity {
 	@Override
 	public void onLoad() {
 
+		if (ServerHelper.isClientWorld(world) && !hasClientUpdate()) {
+			world.tickableTileEntities.remove(this);
+		}
 		validate();
 	}
 
@@ -116,6 +119,11 @@ public abstract class TileCore extends TileEntity {
 	public boolean canPlayerDismantle(EntityPlayer player) {
 
 		return true;
+	}
+
+	public boolean hasClientUpdate() {
+
+		return false;
 	}
 
 	public boolean isUsable(EntityPlayer player) {
