@@ -20,7 +20,7 @@ public class SlotEnergy extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack stack) {
 
-		return EnergyHelper.isEnergyContainerItem(stack);
+		return EnergyHelper.isEnergyContainerItem(stack) || EnergyHelper.isEnergyHandler(stack);
 	}
 
 }

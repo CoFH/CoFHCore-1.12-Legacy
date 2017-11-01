@@ -15,12 +15,7 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 
 	public ItemHammerCore(ToolMaterial toolMaterial) {
 
-		this(-3.6F, toolMaterial);
-	}
-
-	public ItemHammerCore(float attackSpeed, ToolMaterial toolMaterial) {
-
-		super(4.0F, attackSpeed, toolMaterial);
+		super(4.0F, -3.4F, toolMaterial);
 		addToolClass("pickaxe");
 		addToolClass("hammer");
 
@@ -35,7 +30,13 @@ public class ItemHammerCore extends ItemToolCore { // implements IAOEBreakItem {
 		effectiveMaterials.add(Material.GLASS);
 		effectiveMaterials.add(Material.REDSTONE_LIGHT);
 
-		attackDamage = attackDamage + 2;
+		if (harvestLevel > 0) {
+			attackDamage = 10.0F;
+			attackSpeed = -3.5F + (0.1F * harvestLevel);
+		} else {
+			attackDamage = 7.0F;
+			attackSpeed = -3.4F + (0.1F * (int) (efficiency / 5));
+		}
 	}
 
 	@Override

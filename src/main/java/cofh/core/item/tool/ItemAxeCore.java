@@ -11,12 +11,7 @@ public class ItemAxeCore extends ItemToolCore implements IEnchantableItem {
 
 	public ItemAxeCore(ToolMaterial toolMaterial) {
 
-		this(-3.2F, toolMaterial);
-	}
-
-	public ItemAxeCore(float attackSpeed, ToolMaterial toolMaterial) {
-
-		super(3.0F, attackSpeed, toolMaterial);
+		super(3.0F, -3.2F, toolMaterial);
 		addToolClass("axe");
 
 		effectiveBlocks.addAll(ItemAxe.EFFECTIVE_ON);
@@ -27,7 +22,13 @@ public class ItemAxeCore extends ItemToolCore implements IEnchantableItem {
 		effectiveMaterials.add(Material.CACTUS);
 		effectiveMaterials.add(Material.GOURD);
 
-		attackDamage = attackDamage + 1;
+		if (harvestLevel > 0) {
+			attackDamage = 8.0F;
+			attackSpeed = -3.3F + (0.1F * harvestLevel);
+		} else {
+			attackDamage = 6.0F;
+			attackSpeed = -3.2F + (0.1F * (int) (efficiency / 5));
+		}
 	}
 
 	/* IEnchantableItem */

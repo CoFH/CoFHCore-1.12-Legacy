@@ -38,6 +38,7 @@ public abstract class ItemToolCore extends ItemTool {
 	public ItemToolCore(float baseDamage, float attackSpeed, ToolMaterial toolMaterial) {
 
 		super(baseDamage, attackSpeed, toolMaterial, null);
+		harvestLevel = toolMaterial.getHarvestLevel();
 	}
 
 	public ItemToolCore setHarvestLevel(int harvestLevel) {
@@ -169,13 +170,10 @@ public abstract class ItemToolCore extends ItemTool {
 	@Override
 	public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
 
-		if (harvestLevel != -1) {
-			return harvestLevel;
-		}
 		if (!getToolClasses(stack).contains(toolClass)) {
 			return -1;
 		}
-		return toolMaterial.getHarvestLevel();
+		return harvestLevel != -1 ? harvestLevel : toolMaterial.getHarvestLevel();
 	}
 
 	@Override
