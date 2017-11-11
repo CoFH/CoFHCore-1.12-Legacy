@@ -1,7 +1,18 @@
 #pl_PL
 
 enchant.cofh.holding=Trzymanie
-enchant.cofh.multishot=Multishot
+enchant.cofh.multishot=Wielokrotny strzał
+enchant.cofh.vorpal=Vorpal
+
+gui.cofh.friendList=Lista znajomych
+
+gui.cofh.transferInDisabled=Automatyczne wprowadzanie wyłączone
+gui.cofh.transferInEnabled=Automatyczne wprowadzanie włączone
+gui.cofh.transferInUnavailable=Automatyczne wprowadzanie niedostępne
+
+gui.cofh.transferOutDisabled=Automatyczne wyjście wyłączone
+gui.cofh.transferOutEnabled=Automatyczne wyjście włączone
+gui.cofh.transferOutUnavailable=Automatyczne wyjście niedostępne
 
 fluid.tile.lava=Lawa
 fluid.tile.water=Woda
@@ -12,36 +23,46 @@ info.cofh.accessPrivate=Tylko właściciel
 info.cofh.accessRestricted=Ograniczony
 info.cofh.all=Wszystko
 info.cofh.amount=Ilość
+info.cofh.anotherplayer=Inny Gracz
 info.cofh.augmentation=Zwiększanie
 info.cofh.blank=Czyste
 info.cofh.capacity=Pojemność
+info.cofh.chance=Szansa
+info.cofh.charge=Naładowanie
+info.cofh.configuration=Konfiguracja
+info.cofh.contents=Zawartość
 info.cofh.controlStatus=Status kontrolowania
 info.cofh.damageAttack=Obrażenia ataku
 info.cofh.damageFlux=Obrażenia flux'owe
 info.cofh.disabled=Wyłączone
 info.cofh.dry=Suche
 info.cofh.empty=Puste
-info.cofh.enable=Enable
+info.cofh.enable=Włącz
 info.cofh.enabled=Włączone
 info.cofh.energy=Energia
 info.cofh.energyConsume=Użytek mocy
-info.cofh.energyMax=Maksymalna moc
 info.cofh.energyProduce=Wyjście mocy
 info.cofh.energyStored=Przechowywana energia
+info.cofh.filter=Filtr
 info.cofh.fluid=Ciecz
+info.cofh.fluids=Ciecze
 info.cofh.forDetails=dla detali
 info.cofh.frequency=Częstotliwość
 info.cofh.hasInfo=Ma informacje
 info.cofh.high=Wysoki
+info.cofh.holdShiftForDetails=Przytrzymaj §e§oShift§r§7 aby uzyskać więcej informacji.§r
 info.cofh.hold=Trzyma
 info.cofh.ignored=Ignorowane
 info.cofh.infinite=Nieskończone
+info.cofh.infiniteSource=Nieskończone źródło
 info.cofh.information=Informacje
 info.cofh.item=Przedmiot
 info.cofh.items=Przedmioty
 info.cofh.level=Przedmiot
 info.cofh.locked=Zablokowane
 info.cofh.low=Niski
+info.cofh.maxPower=Maksymalna moc
+info.cofh.modeChange=aby Zmienić Tryb
 info.cofh.none=Żadne
 info.cofh.owner=Właściciel
 info.cofh.perUse=Na użycie
@@ -53,14 +74,28 @@ info.cofh.send=Wyślij
 info.cofh.sending=Wysyłanie
 info.cofh.shift=Przesunięcie
 info.cofh.signal=Sygnał
+info.cofh.signalDisabled=Sygnał: §4Wyłączony§r
+info.cofh.signalEnabledHigh=Sygnał: §aWłączony§7, Wysoki§r
+info.cofh.signalEnabledLow=Sygnał: §aWłączony§7, Niski§r
 info.cofh.signalRequired=Sygnał wymagany
 info.cofh.soaked=Mokry
 info.cofh.source=Źródło
+info.cofh.stored=Przechowywane
 info.cofh.tutorial.fluxRequired=Wymaga redstone'owego flux'u do operacji.
 info.cofh.tutorial.tabAugment=Karta powiększeń zezwala na modularne dodatki.
 info.cofh.tutorial.tabConfiguration=The Configuration tab determines input and output parameters for this block.
 info.cofh.tutorial.tabRedstone=Karta kontroli redstone'a konfiguruje to, jak to urządzenie reaguje na sygnały redstone'a.
 info.cofh.tutorial.tabSecurity=Karta bezpieczeństwa zezwala na kontrolowanie tego, kto ma prawo dostępu do tego urządzenia.
+info.cofh.tutorial=Samouczek
 info.cofh.unlocked=Odblokowany
+info.cofh.upgradeRequired=Ulepszenie wymagane
 
 item.invalid.name=Niepoprawny przedmiot (zniszcz)
+
+key.cofh.augments=Open Player Augment GUI
+key.cofh.category=CoFH Klawisze
+key.cofh.multimode=Cykliczny tryb pozycji
+
+tab.cofh.friendList.0=Użyj tej listy, aby dodać lub usunąć Znajomi!
+tab.cofh.friendList.1=Przyjaciele mają dostęp do zabezpieczonych bloków i elementów, jeśli zechcesz.
+tab.cofh.friendList.2=Znajomi nie są udostępnieni

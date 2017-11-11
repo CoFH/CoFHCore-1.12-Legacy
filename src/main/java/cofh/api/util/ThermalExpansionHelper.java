@@ -46,7 +46,6 @@ public class ThermalExpansionHelper {
 	public static final String ADD_TRANSPOSER_EXTRACT_RECIPE = "addtransposerextractrecipe";
 
 	public static final String ADD_CHARGER_RECIPE = "addchargerrecipe";
-
 	public static final String ADD_CENTRIFUGE_RECIPE = "addcentrifugerecipe";
 
 	public static final String REMOVE_FURNACE_RECIPE = "removefurnacerecipe";
@@ -66,7 +65,6 @@ public class ThermalExpansionHelper {
 	public static final String REMOVE_TRANSPOSER_EXTRACT_RECIPE = "removetransposerextractrecipe";
 
 	public static final String REMOVE_CHARGER_RECIPE = "removechargerrecipe";
-
 	public static final String REMOVE_CENTRIFUGE_RECIPE = "removecentrifugerecipe";
 
 	public static final String ADD_MAGMATIC_FUEL = "addmagmaticfuel";
