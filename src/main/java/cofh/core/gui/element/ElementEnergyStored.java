@@ -16,6 +16,7 @@ public class ElementEnergyStored extends ElementBase {
 	public static final int DEFAULT_SCALE = 42;
 
 	protected IEnergyStorage storage;
+	protected boolean isInfinite;
 
 	// If this is enabled, 1 pixel of energy will always show in the bar as long as it is non-zero.
 	protected boolean alwaysShowMinimum = false;
@@ -39,6 +40,12 @@ public class ElementEnergyStored extends ElementBase {
 		return this;
 	}
 
+	public ElementEnergyStored setInfinite(boolean infinite) {
+
+		isInfinite = infinite;
+		return this;
+	}
+
 	@Override
 	public void drawBackground(int mouseX, int mouseY, float gameTicks) {
 
@@ -56,7 +63,7 @@ public class ElementEnergyStored extends ElementBase {
 	@Override
 	public void addTooltip(List<String> list) {
 
-		if (storage.getMaxEnergyStored() < 0) {
+		if (isInfinite) {
 			list.add("Infinite RF");
 		} else {
 			list.add(StringHelper.formatNumber(storage.getEnergyStored()) + " / " + StringHelper.formatNumber(storage.getMaxEnergyStored()) + " RF");

@@ -185,6 +185,7 @@ public class CoreProps {
 	public static final int TIME_CONSTANT_EIGHTH = TIME_CONSTANT / 8;
 	public static final int RF_PER_MJ = 10;
 	public static final int LAVA_RF = 200000;
+	public static final int MAGMATIC_TEMPERATURE = 1000;
 	public static final int ENTITY_TRACKING_DISTANCE = 64;
 	public static final int TILE_UPDATE_DELAY = 160;
 

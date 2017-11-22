@@ -14,13 +14,15 @@ import java.util.List;
 
 public class ElementFluidTank extends ElementBase {
 
-	public static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(CoreProps.PATH_ELEMENTS + "fluid_tank.png");
-	public static final ResourceLocation SHORT_TEXTURE = new ResourceLocation(CoreProps.PATH_ELEMENTS + "fluid_tank_short.png");
-	public static final ResourceLocation THIN_TEXTURE = new ResourceLocation(CoreProps.PATH_ELEMENTS + "fluid_tank_thin.png");
+	public static final ResourceLocation LARGE_TEXTURE = new ResourceLocation(CoreProps.PATH_ELEMENTS + "fluid_tank_large.png");
+	public static final ResourceLocation MEDIUM_TEXTURE = new ResourceLocation(CoreProps.PATH_ELEMENTS + "fluid_tank_medium.png");
+	public static final ResourceLocation SMALL_TEXTURE = new ResourceLocation(CoreProps.PATH_ELEMENTS + "fluid_tank_small.png");
 
 	protected IFluidTank tank;
 	protected int gaugeType;
 	protected boolean drawTank;
+	protected boolean isInfinite;
+	protected boolean isThin;
 	protected float durationFactor = 1.0F;
 
 	// If this is enabled, 1 pixel of fluid will always show in the tank as long as fluid is present.
@@ -30,7 +32,7 @@ public class ElementFluidTank extends ElementBase {
 
 	public ElementFluidTank(GuiContainerCore gui, int posX, int posY, IFluidTank tank) {
 
-		this(gui, posX, posY, tank, DEFAULT_TEXTURE);
+		this(gui, posX, posY, tank, LARGE_TEXTURE);
 	}
 
 	public ElementFluidTank(GuiContainerCore gui, int posX, int posY, IFluidTank tank, ResourceLocation texture) {
@@ -52,24 +54,24 @@ public class ElementFluidTank extends ElementBase {
 		return this;
 	}
 
-	public ElementFluidTank setDefault() {
+	public ElementFluidTank setLarge() {
 
-		this.texture = DEFAULT_TEXTURE;
+		this.texture = LARGE_TEXTURE;
 		this.sizeX = 16;
 		this.sizeY = 60;
 		return this;
 	}
 
-	public ElementFluidTank setThin() {
+	public ElementFluidTank setMedium() {
 
-		this.texture = THIN_TEXTURE;
-		this.sizeX = 7;
+		this.texture = MEDIUM_TEXTURE;
+		this.sizeY = 40;
 		return this;
 	}
 
-	public ElementFluidTank setShort() {
+	public ElementFluidTank setSmall() {
 
-		this.texture = SHORT_TEXTURE;
+		this.texture = SMALL_TEXTURE;
 		this.sizeY = 30;
 		return this;
 	}
@@ -92,6 +94,19 @@ public class ElementFluidTank extends ElementBase {
 		return this;
 	}
 
+	public ElementFluidTank setInfinite(boolean infinite) {
+
+		isInfinite = infinite;
+		return this;
+	}
+
+	public ElementFluidTank setThin(boolean thin) {
+
+		this.isThin = thin;
+		this.sizeX = 7;
+		return this;
+	}
+
 	public ElementFluidTank setDurationFactor(float durationFactor) {
 
 		this.durationFactor = durationFactor;
@@ -103,11 +118,16 @@ public class ElementFluidTank extends ElementBase {
 
 		if (drawTank) {
 			RenderHelper.bindTexture(texture);
-			drawTexturedModalRect(posX - 1, posY - 1, 0, 0, sizeX + 2, sizeY + 2);
+			if (isThin) {
+				drawTexturedModalRect(posX - 1, posY - 1, 0, 0, sizeX, sizeY + 2);
+				drawTexturedModalRect(posX - 1 + sizeX, posY - 1, sizeX, 0, 2, sizeY + 2);
+			} else {
+				drawTexturedModalRect(posX - 1, posY - 1, 0, 0, sizeX + 2, sizeY + 2);
+			}
 		}
 		drawFluid();
 		RenderHelper.bindTexture(texture);
-		drawTexturedModalRect(posX, posY, 32 + gaugeType * 16, 1, sizeX, sizeY);
+		drawTexturedModalRect(posX, posY, 32 + gaugeType * 16 + (isThin ? 3 : 0), 1, sizeX, sizeY);
 	}
 
 	@Override
@@ -125,7 +145,7 @@ public class ElementFluidTank extends ElementBase {
 				FluidHelper.addPotionTooltip(tank.getFluid(), list, durationFactor);
 			}
 		}
-		if (tank.getCapacity() < 0) {
+		if (isInfinite) {
 			list.add("Infinite Fluid");
 		} else {
 			list.add(StringHelper.formatNumber(tank.getFluidAmount()) + " / " + StringHelper.formatNumber(tank.getCapacity()) + " mB");
