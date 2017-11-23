@@ -323,6 +323,16 @@ public abstract class TileCore extends TileEntity {
 		return null;
 	}
 
+	public Object getConfigGuiClient(InventoryPlayer inventory) {
+
+		return null;
+	}
+
+	public Object getConfigGuiServer(InventoryPlayer inventory) {
+
+		return null;
+	}
+
 	public int getInvSlotCount() {
 
 		return 0;
@@ -333,7 +343,17 @@ public abstract class TileCore extends TileEntity {
 		return false;
 	}
 
+	public boolean hasConfigGui() {
+
+		return false;
+	}
+
 	public boolean openGui(EntityPlayer player) {
+
+		return false;
+	}
+
+	public boolean openConfigGui(EntityPlayer player) {
 
 		return false;
 	}

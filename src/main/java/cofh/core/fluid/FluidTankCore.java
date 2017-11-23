@@ -67,6 +67,15 @@ public class FluidTankCore implements IFluidTank {
 		return nbt;
 	}
 
+	public void setLocked(boolean lock) {
+
+		if (lock) {
+			setLocked();
+		} else {
+			clearLocked();
+		}
+	}
+
 	public void setLocked() {
 
 		if (locked || this.fluid == null) {
