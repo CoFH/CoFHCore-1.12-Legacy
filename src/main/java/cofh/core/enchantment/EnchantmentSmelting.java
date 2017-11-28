@@ -40,7 +40,7 @@ public class EnchantmentSmelting extends Enchantment {
 	@Override
 	public String getName() {
 
-		return "enchant.cofh.smelting";
+		return "enchantment.cofhcore.smelting";
 	}
 
 	@Override

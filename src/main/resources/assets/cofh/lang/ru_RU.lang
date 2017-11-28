@@ -5,8 +5,8 @@ config.Common.tooltip=Настройка главных опций.
 config.Core.tooltip=Настройка опций ядра.
 config.Loot.tooltip=Настройка опций добычи.
 
-enchant.cofh.holding=Удержание
-enchant.cofh.multishot=Мульти-выстрел
+enchantment.cofhcore.holding=Удержание
+enchantment.cofhcore.multishot=Мульти-выстрел
 
 fluid.tile.lava=Лава
 fluid.tile.water=Вода

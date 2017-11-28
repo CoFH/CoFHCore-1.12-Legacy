@@ -2,8 +2,12 @@ package cofh.api.util;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The purpose of this class is to show how to use and provide an interface for Thermal Expansion's IMC Recipe manipulation.
@@ -13,62 +17,6 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
  * @author King Lemming
  */
 public class ThermalExpansionHelper {
-
-	static final String MOD_ID = "thermalexpansion";
-
-	/* IMC STRINGS */
-	static final String ENERGY = "energy";
-	static final String FLUID = "fluid";
-	static final String FLUID_NAME = "fluidName";
-
-	static final String INPUT = "input";
-	static final String OUTPUT = "output";
-	static final String PRIMARY_INPUT = "primaryInput";
-	static final String SECONDARY_INPUT = "secondaryInput";
-	static final String PRIMARY_OUTPUT = "primaryOutput";
-	static final String SECONDARY_OUTPUT = "secondaryOutput";
-	static final String SECONDARY_CHANCE = "secondaryChance";
-
-	public static final String ADD_FURNACE_RECIPE = "addfurnacerecipe";
-	public static final String ADD_PULVERIZER_RECIPE = "addpulverizerrecipe";
-	public static final String ADD_SAWMILL_RECIPE = "addsawmillrecipe";
-	public static final String ADD_SMELTER_RECIPE = "addsmelterrecipe";
-	public static final String ADD_INSOLATOR_RECIPE = "addinsolatorrecipe";
-
-	public static final String ADD_COMPACTOR_PRESS_RECIPE = "addcompactorpressrecipe";
-	public static final String ADD_COMPACTOR_STORAGE_RECIPE = "addcompactorstoragerecipe";
-	public static final String ADD_COMPACTOR_MINT_RECIPE = "addcompactormintrecipe";
-
-	public static final String ADD_CRUCIBLE_RECIPE = "addcruciblerecipe";
-	public static final String ADD_REFINERY_RECIPE = "addrefineryrecipe";
-
-	public static final String ADD_TRANSPOSER_FILL_RECIPE = "addtransposerfillrecipe";
-	public static final String ADD_TRANSPOSER_EXTRACT_RECIPE = "addtransposerextractrecipe";
-
-	public static final String ADD_CHARGER_RECIPE = "addchargerrecipe";
-	public static final String ADD_CENTRIFUGE_RECIPE = "addcentrifugerecipe";
-
-	public static final String REMOVE_FURNACE_RECIPE = "removefurnacerecipe";
-	public static final String REMOVE_PULVERIZER_RECIPE = "removepulverizerrecipe";
-	public static final String REMOVE_SAWMILL_RECIPE = "removesawmillrecipe";
-	public static final String REMOVE_SMELTER_RECIPE = "removesmelterrecipe";
-	public static final String REMOVE_INSOLATOR_RECIPE = "removeinsolatorrecipe";
-
-	public static final String REMOVE_COMPACTOR_PRESS_RECIPE = "removecompactorpressrecipe";
-	public static final String REMOVE_COMPACTOR_STORAGE_RECIPE = "removecompactorstoragerecipe";
-	public static final String REMOVE_COMPACTOR_MINT_RECIPE = "removecompactormintrecipe";
-
-	public static final String REMOVE_CRUCIBLE_RECIPE = "removecruciblerecipe";
-	public static final String REMOVE_REFINERY_RECIPE = "removerefineryrecipe";
-
-	public static final String REMOVE_TRANSPOSER_FILL_RECIPE = "removetransposerfillrecipe";
-	public static final String REMOVE_TRANSPOSER_EXTRACT_RECIPE = "removetransposerextractrecipe";
-
-	public static final String REMOVE_CHARGER_RECIPE = "removechargerrecipe";
-	public static final String REMOVE_CENTRIFUGE_RECIPE = "removecentrifugerecipe";
-
-	public static final String ADD_MAGMATIC_FUEL = "addmagmaticfuel";
-	public static final String ADD_COMPRESSION_FUEL = "addcompressionfuel";
 
 	private ThermalExpansionHelper() {
 
@@ -119,7 +67,7 @@ public class ThermalExpansionHelper {
 		addPulverizerRecipe(energy, input, primaryOutput, secondaryOutput, 100);
 	}
 
-	public static void addPulverizerRecipe(int energy, ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance) {
+	public static void addPulverizerRecipe(int energy, ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput, int chance) {
 
 		if (input.isEmpty() || primaryOutput.isEmpty()) {
 			return;
@@ -136,7 +84,7 @@ public class ThermalExpansionHelper {
 		if (!secondaryOutput.isEmpty()) {
 			toSend.setTag(SECONDARY_OUTPUT, new NBTTagCompound());
 			secondaryOutput.writeToNBT(toSend.getCompoundTag(SECONDARY_OUTPUT));
-			toSend.setInteger(SECONDARY_CHANCE, secondaryChance);
+			toSend.setInteger(CHANCE, chance);
 		}
 		FMLInterModComms.sendMessage(MOD_ID, ADD_PULVERIZER_RECIPE, toSend);
 	}
@@ -165,7 +113,7 @@ public class ThermalExpansionHelper {
 		addSawmillRecipe(energy, input, primaryOutput, secondaryOutput, 100);
 	}
 
-	public static void addSawmillRecipe(int energy, ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance) {
+	public static void addSawmillRecipe(int energy, ItemStack input, ItemStack primaryOutput, ItemStack secondaryOutput, int chance) {
 
 		if (input.isEmpty() || primaryOutput.isEmpty()) {
 			return;
@@ -182,7 +130,7 @@ public class ThermalExpansionHelper {
 		if (!secondaryOutput.isEmpty()) {
 			toSend.setTag(SECONDARY_OUTPUT, new NBTTagCompound());
 			secondaryOutput.writeToNBT(toSend.getCompoundTag(SECONDARY_OUTPUT));
-			toSend.setInteger(SECONDARY_CHANCE, secondaryChance);
+			toSend.setInteger(CHANCE, chance);
 		}
 		FMLInterModComms.sendMessage(MOD_ID, ADD_SAWMILL_RECIPE, toSend);
 	}
@@ -211,7 +159,7 @@ public class ThermalExpansionHelper {
 		addSmelterRecipe(energy, primaryInput, secondaryInput, primaryOutput, secondaryOutput, 100);
 	}
 
-	public static void addSmelterRecipe(int energy, ItemStack primaryInput, ItemStack secondaryInput, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance) {
+	public static void addSmelterRecipe(int energy, ItemStack primaryInput, ItemStack secondaryInput, ItemStack primaryOutput, ItemStack secondaryOutput, int chance) {
 
 		if (primaryInput.isEmpty() || secondaryInput.isEmpty() || primaryOutput.isEmpty()) {
 			return;
@@ -230,7 +178,7 @@ public class ThermalExpansionHelper {
 		if (!secondaryOutput.isEmpty()) {
 			toSend.setTag(SECONDARY_OUTPUT, new NBTTagCompound());
 			secondaryOutput.writeToNBT(toSend.getCompoundTag(SECONDARY_OUTPUT));
-			toSend.setInteger(SECONDARY_CHANCE, secondaryChance);
+			toSend.setInteger(CHANCE, chance);
 		}
 		FMLInterModComms.sendMessage(MOD_ID, ADD_SMELTER_RECIPE, toSend);
 	}
@@ -261,7 +209,7 @@ public class ThermalExpansionHelper {
 		addInsolatorRecipe(energy, primaryInput, secondaryInput, primaryOutput, secondaryOutput, 100);
 	}
 
-	public static void addInsolatorRecipe(int energy, ItemStack primaryInput, ItemStack secondaryInput, ItemStack primaryOutput, ItemStack secondaryOutput, int secondaryChance) {
+	public static void addInsolatorRecipe(int energy, ItemStack primaryInput, ItemStack secondaryInput, ItemStack primaryOutput, ItemStack secondaryOutput, int chance) {
 
 		if (primaryInput.isEmpty() || secondaryInput.isEmpty() || primaryOutput.isEmpty()) {
 			return;
@@ -280,7 +228,7 @@ public class ThermalExpansionHelper {
 		if (!secondaryOutput.isEmpty()) {
 			toSend.setTag(SECONDARY_OUTPUT, new NBTTagCompound());
 			secondaryOutput.writeToNBT(toSend.getCompoundTag(SECONDARY_OUTPUT));
-			toSend.setInteger(SECONDARY_CHANCE, secondaryChance);
+			toSend.setInteger(CHANCE, chance);
 		}
 		FMLInterModComms.sendMessage(MOD_ID, ADD_INSOLATOR_RECIPE, toSend);
 	}
@@ -469,7 +417,7 @@ public class ThermalExpansionHelper {
 
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
-		toSend.setBoolean("reversible", reversible);
+		toSend.setBoolean(REVERSIBLE, reversible);
 		fluid.writeToNBT(toSend.getCompoundTag(FLUID));
 
 		FMLInterModComms.sendMessage(MOD_ID, ADD_TRANSPOSER_FILL_RECIPE, toSend);
@@ -485,13 +433,13 @@ public class ThermalExpansionHelper {
 		toSend.setInteger(ENERGY, energy);
 		toSend.setTag(INPUT, new NBTTagCompound());
 		toSend.setTag(OUTPUT, new NBTTagCompound());
-		toSend.setTag("fluid", new NBTTagCompound());
+		toSend.setTag(FLUID, new NBTTagCompound());
 
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
-		toSend.setBoolean("reversible", reversible);
-		toSend.setInteger("chance", chance);
-		fluid.writeToNBT(toSend.getCompoundTag("fluid"));
+		toSend.setBoolean(REVERSIBLE, reversible);
+		toSend.setInteger(CHANCE, chance);
+		fluid.writeToNBT(toSend.getCompoundTag(FLUID));
 
 		FMLInterModComms.sendMessage(MOD_ID, ADD_TRANSPOSER_EXTRACT_RECIPE, toSend);
 	}
@@ -504,10 +452,10 @@ public class ThermalExpansionHelper {
 		NBTTagCompound toSend = new NBTTagCompound();
 
 		toSend.setTag(INPUT, new NBTTagCompound());
-		toSend.setTag("fluid", new NBTTagCompound());
+		toSend.setTag(FLUID, new NBTTagCompound());
 
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
-		fluid.writeToNBT(toSend.getCompoundTag("fluid"));
+		fluid.writeToNBT(toSend.getCompoundTag(FLUID));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_TRANSPOSER_FILL_RECIPE, toSend);
 	}
 
@@ -555,9 +503,54 @@ public class ThermalExpansionHelper {
 	}
 
 	/* CENTRIFUGE */
-	// TODO: Adding Centrifuge recipes is not supported at this time.
+	public static void addCentrifugeRecipe(int energy, ItemStack input, List<ItemStack> output) {
 
-	public static void setRemoveCentrifugeRecipe(ItemStack input) {
+		addCentrifugeRecipe(energy, input, output, new ArrayList<>(), null);
+	}
+
+	public static void addCentrifugeRecipe(int energy, ItemStack input, List<ItemStack> output, List<Integer> chance) {
+
+		addCentrifugeRecipe(energy, input, output, chance, null);
+	}
+
+	public static void addCentrifugeRecipe(int energy, ItemStack input, FluidStack fluid) {
+
+		addCentrifugeRecipe(energy, input, new ArrayList<>(), new ArrayList<>(), fluid);
+	}
+
+	public static void addCentrifugeRecipe(int energy, ItemStack input, List<ItemStack> output, List<Integer> chance, FluidStack fluid) {
+
+		if (input.isEmpty() || output.size() > 4 || chance.size() > 4 || (!chance.isEmpty() && chance.size() != output.size()) || output.isEmpty() && fluid == null) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+
+		if (!output.isEmpty()) {
+			NBTTagList list = new NBTTagList();
+
+			for (int i = 0; i < output.size(); i++) {
+				NBTTagCompound tag = new NBTTagCompound();
+				output.get(i).writeToNBT(tag);
+				if (!chance.isEmpty()) {
+					tag.setInteger(CHANCE, chance.get(i));
+				}
+				list.appendTag(tag);
+			}
+			toSend.setTag(OUTPUT, list);
+		}
+		if (fluid != null) {
+			toSend.setTag(FLUID, new NBTTagCompound());
+			fluid.writeToNBT(toSend.getCompoundTag(FLUID));
+		}
+		FMLInterModComms.sendMessage(MOD_ID, ADD_CENTRIFUGE_RECIPE, toSend);
+	}
+
+	public static void removeCentrifugeRecipe(ItemStack input) {
 
 		if (input.isEmpty()) {
 			return;
@@ -568,6 +561,77 @@ public class ThermalExpansionHelper {
 
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_CENTRIFUGE_RECIPE, toSend);
+	}
+
+	/* BREWER */
+	public static void addBrewerRecipe(int energy, ItemStack input, FluidStack inputFluid, FluidStack outputFluid) {
+
+		if (input.isEmpty() || inputFluid == null || outputFluid == null) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(PRIMARY_INPUT, new NBTTagCompound());
+		toSend.setTag(SECONDARY_INPUT, new NBTTagCompound());
+		toSend.setTag(OUTPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(PRIMARY_INPUT));
+		inputFluid.writeToNBT(toSend.getCompoundTag(SECONDARY_INPUT));
+		outputFluid.writeToNBT(toSend.getCompoundTag(OUTPUT));
+
+		FMLInterModComms.sendMessage(MOD_ID, ADD_BREWER_RECIPE, toSend);
+	}
+
+	public static void removeBrewerRecipe(ItemStack input, FluidStack fluid) {
+
+		if (input.isEmpty() || fluid == null) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(FLUID, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		fluid.writeToNBT(toSend.getCompoundTag(FLUID));
+		FMLInterModComms.sendMessage(MOD_ID, REMOVE_BREWER_RECIPE, toSend);
+	}
+
+	/* ENCHANTER */
+	public static void addEnchanterRecipe(int energy, ItemStack primaryInput, ItemStack secondaryInput, ItemStack primaryOutput, int fluidExp) {
+
+		if (primaryInput.isEmpty() || secondaryInput.isEmpty() || primaryOutput.isEmpty() || fluidExp < 0) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setInteger(ENERGY, energy);
+		toSend.setInteger(EXPERIENCE, fluidExp);
+		toSend.setTag(PRIMARY_INPUT, new NBTTagCompound());
+		toSend.setTag(SECONDARY_INPUT, new NBTTagCompound());
+		toSend.setTag(PRIMARY_OUTPUT, new NBTTagCompound());
+
+		primaryInput.writeToNBT(toSend.getCompoundTag(PRIMARY_INPUT));
+		secondaryInput.writeToNBT(toSend.getCompoundTag(SECONDARY_INPUT));
+		primaryOutput.writeToNBT(toSend.getCompoundTag(PRIMARY_OUTPUT));
+
+		FMLInterModComms.sendMessage(MOD_ID, ADD_ENCHANTER_RECIPE, toSend);
+	}
+
+	public static void removeEnchanterRecipe(ItemStack primaryInput, ItemStack secondaryInput) {
+
+		if (primaryInput.isEmpty() || secondaryInput.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setTag(PRIMARY_INPUT, new NBTTagCompound());
+		toSend.setTag(SECONDARY_INPUT, new NBTTagCompound());
+
+		primaryInput.writeToNBT(toSend.getCompoundTag(PRIMARY_INPUT));
+		secondaryInput.writeToNBT(toSend.getCompoundTag(SECONDARY_INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, REMOVE_ENCHANTER_RECIPE, toSend);
 	}
 
 	/**
@@ -597,5 +661,59 @@ public class ThermalExpansionHelper {
 
 		FMLInterModComms.sendMessage(MOD_ID, ADD_COMPRESSION_FUEL, toSend);
 	}
+
+	/* IMC STRINGS */
+	static final String MOD_ID = "thermalexpansion";
+
+	static final String ENERGY = "energy";
+	static final String EXPERIENCE = "experience";
+	static final String FLUID = "fluid";
+	static final String FLUID_NAME = "fluidName";
+	static final String REVERSIBLE = "reversible";
+	static final String CHANCE = "chance";
+
+	static final String INPUT = "input";
+	static final String OUTPUT = "output";
+	static final String PRIMARY_INPUT = "primaryInput";
+	static final String SECONDARY_INPUT = "secondaryInput";
+	static final String PRIMARY_OUTPUT = "primaryOutput";
+	static final String SECONDARY_OUTPUT = "secondaryOutput";
+
+	public static final String ADD_FURNACE_RECIPE = "addfurnacerecipe";
+	public static final String ADD_PULVERIZER_RECIPE = "addpulverizerrecipe";
+	public static final String ADD_SAWMILL_RECIPE = "addsawmillrecipe";
+	public static final String ADD_SMELTER_RECIPE = "addsmelterrecipe";
+	public static final String ADD_INSOLATOR_RECIPE = "addinsolatorrecipe";
+	public static final String ADD_COMPACTOR_PRESS_RECIPE = "addcompactorpressrecipe";
+	public static final String ADD_COMPACTOR_STORAGE_RECIPE = "addcompactorstoragerecipe";
+	public static final String ADD_COMPACTOR_MINT_RECIPE = "addcompactormintrecipe";
+	public static final String ADD_CRUCIBLE_RECIPE = "addcruciblerecipe";
+	public static final String ADD_REFINERY_RECIPE = "addrefineryrecipe";
+	public static final String ADD_TRANSPOSER_FILL_RECIPE = "addtransposerfillrecipe";
+	public static final String ADD_TRANSPOSER_EXTRACT_RECIPE = "addtransposerextractrecipe";
+	public static final String ADD_CHARGER_RECIPE = "addchargerrecipe";
+	public static final String ADD_CENTRIFUGE_RECIPE = "addcentrifugerecipe";
+	public static final String ADD_BREWER_RECIPE = "addbrewerrecipe";
+	public static final String ADD_ENCHANTER_RECIPE = "addenchanterrecipe";
+
+	public static final String REMOVE_FURNACE_RECIPE = "removefurnacerecipe";
+	public static final String REMOVE_PULVERIZER_RECIPE = "removepulverizerrecipe";
+	public static final String REMOVE_SAWMILL_RECIPE = "removesawmillrecipe";
+	public static final String REMOVE_SMELTER_RECIPE = "removesmelterrecipe";
+	public static final String REMOVE_INSOLATOR_RECIPE = "removeinsolatorrecipe";
+	public static final String REMOVE_COMPACTOR_PRESS_RECIPE = "removecompactorpressrecipe";
+	public static final String REMOVE_COMPACTOR_STORAGE_RECIPE = "removecompactorstoragerecipe";
+	public static final String REMOVE_COMPACTOR_MINT_RECIPE = "removecompactormintrecipe";
+	public static final String REMOVE_CRUCIBLE_RECIPE = "removecruciblerecipe";
+	public static final String REMOVE_REFINERY_RECIPE = "removerefineryrecipe";
+	public static final String REMOVE_TRANSPOSER_FILL_RECIPE = "removetransposerfillrecipe";
+	public static final String REMOVE_TRANSPOSER_EXTRACT_RECIPE = "removetransposerextractrecipe";
+	public static final String REMOVE_CHARGER_RECIPE = "removechargerrecipe";
+	public static final String REMOVE_CENTRIFUGE_RECIPE = "removecentrifugerecipe";
+	public static final String REMOVE_BREWER_RECIPE = "removebrewerrecipe";
+	public static final String REMOVE_ENCHANTER_RECIPE = "removeenchanterrecipe";
+
+	public static final String ADD_MAGMATIC_FUEL = "addmagmaticfuel";
+	public static final String ADD_COMPRESSION_FUEL = "addcompressionfuel";
 
 }

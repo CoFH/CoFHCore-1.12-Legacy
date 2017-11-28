@@ -40,7 +40,7 @@ public class EnchantmentLeech extends Enchantment {
 	@Override
 	public String getName() {
 
-		return "enchant.cofh.leech";
+		return "enchantment.cofhcore.leech";
 	}
 
 	@Override

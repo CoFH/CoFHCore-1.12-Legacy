@@ -39,7 +39,7 @@ public class EnchantmentMultishot extends Enchantment {
 	@Override
 	public String getName() {
 
-		return "enchant.cofh.multishot";
+		return "enchantment.cofhcore.multishot";
 	}
 
 	@Override

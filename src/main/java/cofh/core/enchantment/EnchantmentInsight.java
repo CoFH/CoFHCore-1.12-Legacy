@@ -41,7 +41,7 @@ public class EnchantmentInsight extends Enchantment {
 	@Override
 	public String getName() {
 
-		return "enchant.cofh.insight";
+		return "enchantment.cofhcore.insight";
 	}
 
 	@Override

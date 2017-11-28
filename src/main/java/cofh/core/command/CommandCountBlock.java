@@ -1,5 +1,6 @@
 package cofh.core.command;
 
+import cofh.CoFHCore;
 import com.google.common.base.Throwables;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -22,6 +23,16 @@ public class CommandCountBlock implements ISubCommand {
 
 	public static final CommandCountBlock INSTANCE = new CommandCountBlock();
 
+	public static int permissionLevel = 3;
+
+	public static void config() {
+
+		String category = "Command." + INSTANCE.getCommandName();
+		String comment = "Adjust this value to change the default permission level for the " + INSTANCE.getCommandName() + " command.";
+		permissionLevel = CoFHCore.CONFIG_CORE.getConfiguration().getInt("PermissionLevel", category, permissionLevel, -1, 4, comment);
+	}
+
+	/* ISubCommand */
 	@Override
 	public String getCommandName() {
 
@@ -31,7 +42,7 @@ public class CommandCountBlock implements ISubCommand {
 	@Override
 	public int getPermissionLevel() {
 
-		return 3;
+		return permissionLevel;
 	}
 
 	@Override

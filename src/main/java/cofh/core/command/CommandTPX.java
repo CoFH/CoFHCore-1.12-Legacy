@@ -1,5 +1,6 @@
 package cofh.core.command;
 
+import cofh.CoFHCore;
 import cofh.core.util.helpers.EntityHelper;
 import net.minecraft.command.*;
 import net.minecraft.entity.Entity;
@@ -14,6 +15,15 @@ public class CommandTPX implements ISubCommand {
 
 	public static final CommandTPX INSTANCE = new CommandTPX();
 
+	public static int permissionLevel = 2;
+
+	public static void config() {
+
+		String category = "Command." + INSTANCE.getCommandName();
+		String comment = "Adjust this value to change the default permission level for the " + INSTANCE.getCommandName() + " command.";
+		permissionLevel = CoFHCore.CONFIG_CORE.getConfiguration().getInt("PermissionLevel", category, permissionLevel, -1, 4, comment);
+	}
+
 	@Override
 	public String getCommandName() {
 
@@ -23,7 +33,7 @@ public class CommandTPX implements ISubCommand {
 	@Override
 	public int getPermissionLevel() {
 
-		return 2;
+		return permissionLevel;
 	}
 
 	@Override

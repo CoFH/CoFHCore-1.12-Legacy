@@ -43,7 +43,7 @@ public class EnchantmentVorpal extends Enchantment {
 	@Override
 	public String getName() {
 
-		return "enchant.cofh.vorpal";
+		return "enchantment.cofhcore.vorpal";
 	}
 
 	@Override

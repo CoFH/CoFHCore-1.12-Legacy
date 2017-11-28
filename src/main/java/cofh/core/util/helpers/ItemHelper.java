@@ -460,14 +460,6 @@ public final class ItemHelper {
 		return theStack.isEmpty() ? null : theStack.getItem();
 	}
 
-	public static boolean areItemsEqual(Item itemA, Item itemB) {
-
-		if (itemA == null | itemB == null) {
-			return false;
-		}
-		return itemA == itemB || itemA.equals(itemB);
-	}
-
 	public static boolean isPlayerHoldingItem(Class<?> item, EntityPlayer player) {
 
 		return item.isInstance(getItemFromStack(getHeldStack(player)));
@@ -478,17 +470,17 @@ public final class ItemHelper {
 	 */
 	public static boolean isPlayerHoldingItem(Item item, EntityPlayer player) {
 
-		return areItemsEqual(item, getItemFromStack(getHeldStack(player)));
+		return itemsEqual(item, getItemFromStack(getHeldStack(player)));
 	}
 
 	public static boolean isPlayerHoldingMainhand(Item item, EntityPlayer player) {
 
-		return areItemsEqual(item, getItemFromStack(getMainhandStack(player)));
+		return itemsEqual(item, getItemFromStack(getMainhandStack(player)));
 	}
 
 	public static boolean isPlayerHoldingOffhand(Item item, EntityPlayer player) {
 
-		return areItemsEqual(item, getItemFromStack(getOffhandStack(player)));
+		return itemsEqual(item, getItemFromStack(getOffhandStack(player)));
 	}
 
 	/**
@@ -507,15 +499,17 @@ public final class ItemHelper {
 		return (!stackA.getHasSubtypes() && stackA.getMaxDamage() == 0) || (getItemDamage(stackA) == getItemDamage(stackB));
 	}
 
+	public static boolean itemsEqual(Item itemA, Item itemB) {
+
+		return itemA != null && itemB != null && (itemA == itemB || itemA.equals(itemB));
+	}
+
 	/**
 	 * Determine if two ItemStacks have the same Item.
 	 */
 	public static boolean itemsEqualWithoutMetadata(ItemStack stackA, ItemStack stackB) {
 
-		if (stackA.isEmpty() || stackB.isEmpty()) {
-			return false;
-		}
-		return areItemsEqual(stackA.getItem(), stackB.getItem());
+		return stackA != null && stackB != null && itemsEqual(stackA.getItem(), stackB.getItem());
 	}
 
 	/**
@@ -555,13 +549,7 @@ public final class ItemHelper {
 	 */
 	public static boolean doNBTsMatch(NBTTagCompound nbtA, NBTTagCompound nbtB) {
 
-		if (nbtA == null & nbtB == null) {
-			return true;
-		}
-		if (nbtA != null & nbtB != null) {
-			return nbtA.equals(nbtB);
-		}
-		return false;
+		return nbtA == null && nbtB == null || nbtA != null && nbtB != null && nbtA.equals(nbtB);
 	}
 
 	public static boolean itemsEqualForCrafting(ItemStack stackA, ItemStack stackB) {

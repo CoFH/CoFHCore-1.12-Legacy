@@ -166,8 +166,8 @@ public class CoreProps {
 		//		MinecraftForge.EVENT_BUS.register(DropHandler.instance);
 	}
 
-	private static final String BUILD = "2443";
-	private static final String FORGE_REQ = "14.21.1." + BUILD;
+	private static final String BUILD = "2555";
+	private static final String FORGE_REQ = "14.23.1." + BUILD;
 	private static final String FORGE_REQ_MAX = "15.0.0.0";
 
 	public static final String FORGE_DEP = "required-after:forge@[" + FORGE_REQ + "," + FORGE_REQ_MAX + ");";
@@ -183,6 +183,7 @@ public class CoreProps {
 	public static final int TIME_CONSTANT_HALF = TIME_CONSTANT / 2;
 	public static final int TIME_CONSTANT_QUARTER = TIME_CONSTANT / 4;
 	public static final int TIME_CONSTANT_EIGHTH = TIME_CONSTANT / 8;
+	public static final int MB_PER_XP = 20;
 	public static final int RF_PER_MJ = 10;
 	public static final int LAVA_RF = 200000;
 	public static final int MAGMATIC_TEMPERATURE = 1000;
@@ -195,6 +196,7 @@ public class CoreProps {
 
 	public static final int RGB_DURABILITY_FLUX = 0xD01010;
 	public static final int RGB_DURABILITY_WATER = 0x4060FF;
+	public static final int RGB_DURABILITY_EXP = 0x7AAC52;
 
 	/* INVENTORIES */
 	public static final int[] EMPTY_INVENTORY = new int[] {};
@@ -235,13 +237,13 @@ public class CoreProps {
 
 	/* GENERAL */
 	public static boolean enableDismantleLogging = false;
-	public static boolean enableItemStacking = true;
 	public static boolean enableLivingEntityDeathMessages = true;
 
 	/* GRAPHICS */
 	public static boolean enableColorBlindTextures = false;
 	public static boolean enableGUISlotBorders = true;
 	public static boolean enableShaderEffects = true;
+	public static boolean useAlternateStarfieldShader = false;
 
 	/* HOLIDAY */
 	public static boolean holidayAprilFools = true;

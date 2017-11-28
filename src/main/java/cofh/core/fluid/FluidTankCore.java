@@ -45,17 +45,6 @@ public class FluidTankCore implements IFluidTank {
 		return this;
 	}
 
-	public FluidTankCore setLock(Fluid fluid) {
-
-		locked = fluid != null;
-		if (locked) {
-			if (this.fluid == null || !this.fluid.getFluid().equals(fluid)) {
-				this.fluid = new FluidStack(fluid, 0);
-			}
-		}
-		return this;
-	}
-
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 
 		if (fluid != null) {
@@ -65,6 +54,17 @@ public class FluidTankCore implements IFluidTank {
 			nbt.setString("Empty", "");
 		}
 		return nbt;
+	}
+
+	public FluidTankCore setLock(Fluid fluid) {
+
+		locked = fluid != null;
+		if (locked) {
+			if (this.fluid == null || !this.fluid.getFluid().equals(fluid)) {
+				this.fluid = new FluidStack(fluid, 0);
+			}
+		}
+		return this;
 	}
 
 	public void setLocked(boolean lock) {

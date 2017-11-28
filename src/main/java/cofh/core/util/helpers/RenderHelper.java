@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL11;
  */
 public final class RenderHelper {
 
-	public static final double RENDER_OFFSET = 1.0D / 1024.0D;
+	public static final double RENDER_OFFSET = 1.0D / 512.0D;
 	public static final ResourceLocation MC_BLOCK_SHEET = new ResourceLocation("textures/atlas/blocks.png");
 	public static final ResourceLocation MC_FONT_DEFAULT = new ResourceLocation("textures/font/ascii.png");
 	public static final ResourceLocation MC_FONT_ALTERNATE = new ResourceLocation("textures/font/ascii_sga.png");

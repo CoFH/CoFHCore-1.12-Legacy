@@ -72,6 +72,7 @@ public abstract class GuiContainerCore extends GuiContainer {
 
 	/* SPEED / INTENSITY TEXTURES */
 	public static final String TEX_ALCHEMY = CoreProps.PATH_ELEMENTS + "scale_alchemy.png";
+	public static final String TEX_BOOK = CoreProps.PATH_ELEMENTS + "scale_book.png";
 	public static final String TEX_BUBBLE = CoreProps.PATH_ELEMENTS + "scale_bubble.png";
 	public static final String TEX_COMPACT = CoreProps.PATH_ELEMENTS + "scale_compact.png";
 	public static final String TEX_CRUSH = CoreProps.PATH_ELEMENTS + "scale_crush.png";

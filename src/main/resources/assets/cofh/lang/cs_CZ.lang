@@ -1,6 +1,6 @@
 #cs_CZ
 
-enchant.cofh.holding=Držení
+enchantment.cofhcore.holding=Držení
 
 fluid.tile.lava=Láva
 fluid.tile.water=Voda

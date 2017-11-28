@@ -1,5 +1,6 @@
 package cofh.core.command;
 
+import cofh.CoFHCore;
 import com.google.common.base.Throwables;
 import gnu.trove.iterator.hash.TObjectHashIterator;
 import gnu.trove.set.hash.THashSet;
@@ -28,6 +29,16 @@ public class CommandReplaceBlock implements ISubCommand {
 
 	public static final CommandReplaceBlock INSTANCE = new CommandReplaceBlock();
 
+	public static int permissionLevel = 3;
+
+	public static void config() {
+
+		String category = "Command." + INSTANCE.getCommandName();
+		String comment = "Adjust this value to change the default permission level for the " + INSTANCE.getCommandName() + " command.";
+		permissionLevel = CoFHCore.CONFIG_CORE.getConfiguration().getInt("PermissionLevel", category, permissionLevel, -1, 4, comment);
+	}
+
+	/* ISubCommand */
 	@Override
 	public String getCommandName() {
 
@@ -37,7 +48,7 @@ public class CommandReplaceBlock implements ISubCommand {
 	@Override
 	public int getPermissionLevel() {
 
-		return 3;
+		return permissionLevel;
 	}
 
 	@Override

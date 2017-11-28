@@ -86,9 +86,8 @@ chat.cofh.secure.item.success=这个物品现在属于你了。
 chat.cofh.secure.notice=注意：本服务器管理员可自由访问任何受保护的方块。
 chat.cofh.secure.warning=此物属于 %s！小心有人砍了你的手！
 
-enchant.cofh.holding=扩容
-enchant.cofh.multishot=万箭齐发
-#enchant.cofh.vorpal=Vorpal
+enchantment.cofhcore.holding=扩容
+enchantment.cofhcore.multishot=万箭齐发
 
 fluid.tile.lava=岩浆
 fluid.tile.water=水

@@ -1,5 +1,6 @@
 package cofh.core.command;
 
+import cofh.CoFHCore;
 import cofh.core.init.CoreProps;
 import com.google.common.base.Throwables;
 import net.minecraft.command.CommandBase;
@@ -19,6 +20,15 @@ import java.util.Locale;
 public class CommandTPS implements ISubCommand {
 
 	public static final CommandTPS INSTANCE = new CommandTPS();
+
+	public static int permissionLevel = 0;
+
+	public static void config() {
+
+		String category = "Command." + INSTANCE.getCommandName();
+		String comment = "Adjust this value to change the default permission level for the " + INSTANCE.getCommandName() + " command.";
+		permissionLevel = CoFHCore.CONFIG_CORE.getConfiguration().getInt("PermissionLevel", category, permissionLevel, -1, 4, comment);
+	}
 
 	private static DecimalFormat floatfmt = new DecimalFormat("##0.00");
 
@@ -58,7 +68,7 @@ public class CommandTPS implements ISubCommand {
 	@Override
 	public int getPermissionLevel() {
 
-		return 0;
+		return permissionLevel;
 	}
 
 	@Override

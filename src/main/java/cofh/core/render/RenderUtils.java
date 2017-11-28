@@ -53,18 +53,18 @@ public class RenderUtils {
 			case 1:
 				break;
 			case 2:
-				GlStateManager.translate(x + 0.75, y + 0.875, z + RenderHelper.RENDER_OFFSET * 145);
+				GlStateManager.translate(x + 0.75, y + 0.84375, z + RenderHelper.RENDER_OFFSET * 145);
 				break;
 			case 3:
-				GlStateManager.translate(x + 0.25, y + 0.875, z + 1 - RenderHelper.RENDER_OFFSET * 145);
+				GlStateManager.translate(x + 0.25, y + 0.84375, z + 1 - RenderHelper.RENDER_OFFSET * 145);
 				GlStateManager.rotate(180, 0, 1, 0);
 				break;
 			case 4:
-				GlStateManager.translate(x + RenderHelper.RENDER_OFFSET * 145, y + 0.875, z + 0.25);
+				GlStateManager.translate(x + RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.25);
 				GlStateManager.rotate(90, 0, 1, 0);
 				break;
 			case 5:
-				GlStateManager.translate(x + 1 - RenderHelper.RENDER_OFFSET * 145, y + 0.875, z + 0.75);
+				GlStateManager.translate(x + 1 - RenderHelper.RENDER_OFFSET * 145, y + 0.84375, z + 0.75);
 				GlStateManager.rotate(-90, 0, 1, 0);
 				break;
 			default:

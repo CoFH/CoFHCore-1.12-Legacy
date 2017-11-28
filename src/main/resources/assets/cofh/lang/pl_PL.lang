@@ -1,8 +1,8 @@
 #pl_PL
 
-enchant.cofh.holding=Trzymanie
-enchant.cofh.multishot=Wielokrotny strzał
-enchant.cofh.vorpal=Vorpal
+enchantment.cofhcore.holding=Trzymanie
+enchantment.cofhcore.multishot=Wielokrotny strzał
+enchantment.cofhcore.vorpal=Vorpal
 
 gui.cofh.friendList=Lista znajomych
 

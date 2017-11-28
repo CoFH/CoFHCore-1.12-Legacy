@@ -5,8 +5,8 @@ config.Common.tooltip=Configura le opzioni generali.
 config.Core.tooltip=Configura le opzioni del modulo Core.
 config.Loot.tooltip=Configura le opzioni del modulo Loot.
 
-enchant.cofh.holding=Spazio
-enchant.cofh.multishot=Multi-tiro
+enchantment.cofhcore.holding=Spazio
+enchantment.cofhcore.multishot=Multi-tiro
 
 fluid.tile.lava=Lava
 fluid.tile.water=Acqua

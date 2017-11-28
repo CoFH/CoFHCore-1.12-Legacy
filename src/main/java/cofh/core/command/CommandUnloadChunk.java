@@ -1,5 +1,6 @@
 package cofh.core.command;
 
+import cofh.CoFHCore;
 import cofh.core.util.RayTracer;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -14,6 +15,15 @@ public class CommandUnloadChunk implements ISubCommand {
 
 	public static final CommandUnloadChunk INSTANCE = new CommandUnloadChunk();
 
+	public static int permissionLevel = 4;
+
+	public static void config() {
+
+		String category = "Command." + INSTANCE.getCommandName();
+		String comment = "Adjust this value to change the default permission level for the " + INSTANCE.getCommandName() + " command.";
+		permissionLevel = CoFHCore.CONFIG_CORE.getConfiguration().getInt("PermissionLevel", category, permissionLevel, -1, 4, comment);
+	}
+
 	@Override
 	public String getCommandName() {
 
@@ -23,7 +33,7 @@ public class CommandUnloadChunk implements ISubCommand {
 	@Override
 	public int getPermissionLevel() {
 
-		return 4;
+		return permissionLevel;
 	}
 
 	@Override
@@ -32,15 +42,9 @@ public class CommandUnloadChunk implements ISubCommand {
 		if (!(sender instanceof EntityPlayerMP)) {
 			return;
 		}
-
 		EntityPlayerMP player = (EntityPlayerMP) sender;
 		RayTraceResult trace = RayTracer.retrace(player, 100);
 		Chunk chunk = player.world.getChunkFromBlockCoords(trace.getBlockPos());
-
-		// TODO: Old way of doing it - is there a specific reason?
-		//		Set<Long> o = player.getServerWorld().getChunkProvider().droppedChunksSet;
-		//		o.add(ChunkPos.asLong(chunk.xPosition, chunk.zPosition));
-
 		player.getServerWorld().getChunkProvider().queueUnload(chunk);
 
 		CommandHandler.logAdminCommand(sender, this, "chat.cofh.command.unloadchunk.success", chunk.x, chunk.z);

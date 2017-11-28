@@ -5,8 +5,8 @@ config.Common.tooltip=Configurer les options générales.
 config.Core.tooltip=Configurer les options du module du noyau.
 config.Loot.tooltip=Configurer les options du module du loot.
 
-enchant.cofh.holding=Contenu
-enchant.cofh.multishot=Multi-tirs
+enchantment.cofhcore.holding=Contenu
+enchantment.cofhcore.multishot=Multi-tirs
 
 fluid.tile.lava=Lave
 fluid.tile.water=Eau

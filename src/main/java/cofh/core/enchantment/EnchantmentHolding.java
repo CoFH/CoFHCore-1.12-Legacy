@@ -38,7 +38,7 @@ public class EnchantmentHolding extends Enchantment {
 	@Override
 	public String getName() {
 
-		return "enchant.cofh.holding";
+		return "enchantment.cofhcore.holding";
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 #ja_JP
 
-enchant.cofh.holding=拡張スロット
-enchant.cofh.multishot=多重射撃
+enchantment.cofhcore.holding=拡張スロット
+enchantment.cofhcore.multishot=多重射撃
 
 fluid.tile.lava=溶岩
 fluid.tile.water=水

@@ -1,6 +1,5 @@
 package cofh.core.command;
 
-import cofh.core.util.helpers.StringHelper;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.command.CommandBase;
@@ -10,7 +9,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,31 +16,35 @@ import java.util.Set;
 
 public class CommandHandler extends CommandBase {
 
-	public static final String COMMAND_DISALLOWED = StringHelper.LIGHT_RED + "You are not allowed to use this command.";
-
 	public static final CommandHandler INSTANCE = new CommandHandler();
-
 	private static TMap<String, ISubCommand> commands = new THashMap<>();
 
-	static {
+	public static void initialize() {
+
+		registerSubCommand(CommandFriend.INSTANCE);
 		registerSubCommand(CommandHelp.INSTANCE);
 		registerSubCommand(CommandSyntax.INSTANCE);
 		registerSubCommand(CommandVersion.INSTANCE);
+
+		registerSubCommand(CommandClearBlock.INSTANCE);
+		registerSubCommand(CommandCountBlock.INSTANCE);
+		registerSubCommand(CommandEnchant.INSTANCE);
+		registerSubCommand(CommandHand.INSTANCE);
 		registerSubCommand(CommandKillAll.INSTANCE);
+		registerSubCommand(CommandReplaceBlock.INSTANCE);
 		registerSubCommand(CommandTPS.INSTANCE);
 		registerSubCommand(CommandTPX.INSTANCE);
-		registerSubCommand(CommandEnchant.INSTANCE);
-		registerSubCommand(CommandClearBlock.INSTANCE);
-		registerSubCommand(CommandReplaceBlock.INSTANCE);
 		registerSubCommand(CommandUnloadChunk.INSTANCE);
-		registerSubCommand(CommandCountBlock.INSTANCE);
-		registerSubCommand(CommandHand.INSTANCE);
-		registerSubCommand(CommandFriend.INSTANCE);
-	}
 
-	public static void initCommands(FMLServerStartingEvent event) {
-
-		event.registerServerCommand(INSTANCE);
+		CommandClearBlock.config();
+		CommandCountBlock.config();
+		CommandEnchant.config();
+		CommandHand.config();
+		CommandKillAll.config();
+		CommandReplaceBlock.config();
+		CommandTPS.config();
+		CommandTPX.config();
+		CommandUnloadChunk.config();
 	}
 
 	public static boolean registerSubCommand(ISubCommand subCommand) {
@@ -71,12 +73,7 @@ public class CommandHandler extends CommandBase {
 
 	public static boolean canUseCommand(ICommandSender sender, int permission, String name) {
 
-		if (getCommandExists(name)) {
-			return sender.canUseCommand(permission, "cofh " + name) ||
-					// this check below is because mojang is incompetent, as always
-					(sender instanceof EntityPlayerMP && permission <= 0);
-		}
-		return false;
+		return getCommandExists(name) && (sender.canUseCommand(permission, "cofh " + name) || (sender instanceof EntityPlayerMP && permission <= 0));
 	}
 
 	@Override

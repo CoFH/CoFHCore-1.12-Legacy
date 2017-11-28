@@ -1,5 +1,6 @@
 package cofh.core.command;
 
+import cofh.CoFHCore;
 import cofh.core.init.CoreProps;
 import cofh.core.util.helpers.StringHelper;
 import gnu.trove.iterator.TObjectIntIterator;
@@ -21,6 +22,15 @@ public class CommandKillAll implements ISubCommand {
 
 	public static final CommandKillAll INSTANCE = new CommandKillAll();
 
+	public static int permissionLevel = 2;
+
+	public static void config() {
+
+		String category = "Command." + INSTANCE.getCommandName();
+		String comment = "Adjust this value to change the default permission level for the " + INSTANCE.getCommandName() + " command.";
+		permissionLevel = CoFHCore.CONFIG_CORE.getConfiguration().getInt("PermissionLevel", category, permissionLevel, -1, 4, comment);
+	}
+
 	/* ISubCommand */
 	@Override
 	public String getCommandName() {
@@ -31,7 +41,7 @@ public class CommandKillAll implements ISubCommand {
 	@Override
 	public int getPermissionLevel() {
 
-		return 2;
+		return permissionLevel;
 	}
 
 	@SuppressWarnings ("unchecked")

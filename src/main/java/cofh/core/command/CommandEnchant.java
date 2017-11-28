@@ -1,5 +1,6 @@
 package cofh.core.command;
 
+import cofh.CoFHCore;
 import net.minecraft.command.*;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -15,6 +16,16 @@ public class CommandEnchant implements ISubCommand {
 
 	public static final CommandEnchant INSTANCE = new CommandEnchant();
 
+	public static int permissionLevel = 2;
+
+	public static void config() {
+
+		String category = "Command." + INSTANCE.getCommandName();
+		String comment = "Adjust this value to change the default permission level for the " + INSTANCE.getCommandName() + " command.";
+		permissionLevel = CoFHCore.CONFIG_CORE.getConfiguration().getInt("PermissionLevel", category, permissionLevel, -1, 4, comment);
+	}
+
+	/* ISubCommand */
 	@Override
 	public String getCommandName() {
 
@@ -24,7 +35,7 @@ public class CommandEnchant implements ISubCommand {
 	@Override
 	public int getPermissionLevel() {
 
-		return 2;
+		return permissionLevel;
 	}
 
 	@Override

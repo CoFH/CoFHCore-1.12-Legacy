@@ -1,5 +1,6 @@
 package cofh.core.command;
 
+import cofh.CoFHCore;
 import cofh.core.util.RegistrySocial;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.helpers.StringHelper;
@@ -35,6 +36,16 @@ public class CommandHand implements ISubCommand {
 
 	public static final CommandHand INSTANCE = new CommandHand();
 
+	public static int permissionLevel = 0;
+
+	public static void config() {
+
+		String category = "Command." + INSTANCE.getCommandName();
+		String comment = "Adjust this value to change the default permission level for the " + INSTANCE.getCommandName() + " command.";
+		permissionLevel = CoFHCore.CONFIG_CORE.getConfiguration().getInt("PermissionLevel", category, permissionLevel, -1, 4, comment);
+	}
+
+	/* ISubCommand */
 	@Override
 	public String getCommandName() {
 
@@ -44,7 +55,7 @@ public class CommandHand implements ISubCommand {
 	@Override
 	public int getPermissionLevel() {
 
-		return 0;
+		return permissionLevel;
 	}
 
 	private static HashMap<String, InfoType> infoMap = new HashMap<>();

@@ -5,8 +5,8 @@ config.common.tooltip=設定一般選項.
 config.core.tooltip=設定核心模組選項.
 config.loot.tooltip=設定戰利品模組選項.
 
-enchant.cofh.holding=保持
-enchant.cofh.multishot=多重射擊
+enchantment.cofhcore.holding=保持
+enchantment.cofhcore.multishot=多重射擊
 
 fluid.tile.lava=岩漿
 fluid.tile.water=水

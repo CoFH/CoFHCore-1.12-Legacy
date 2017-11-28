@@ -79,7 +79,7 @@ public class EventHandler {
 
 			if ((double) f >= 0.1D) {
 				if (!world.isRemote) {
-					int encMultishot = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, stack), 0, CoreEnchantments.multishot.getMaxLevel());
+					int encMultishot = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, stack), 0, CoreEnchantments.multishot.getMaxLevel() + 1);
 					int encPunch = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
 					int encPower = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
 					boolean encFlame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;
@@ -232,7 +232,7 @@ public class EventHandler {
 			return;
 		}
 		if (event.getExpToDrop() > 0) {
-			int encInsight = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.insight, player.getHeldItemMainhand()), 0, CoreEnchantments.insight.getMaxLevel());
+			int encInsight = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.insight, player.getHeldItemMainhand()), 0, CoreEnchantments.insight.getMaxLevel() + 1);
 
 			if (encInsight > 0) {
 				event.setExpToDrop(event.getExpToDrop() + encInsight + player.world.rand.nextInt(1 + encInsight * 3));
@@ -271,7 +271,7 @@ public class EventHandler {
 			return;
 		}
 		EntityPlayer player = (EntityPlayer) source;
-		int encVorpal = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.vorpal, player.getHeldItemMainhand()), 0, CoreEnchantments.vorpal.getMaxLevel());
+		int encVorpal = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.vorpal, player.getHeldItemMainhand()), 0, CoreEnchantments.vorpal.getMaxLevel() + 1);
 
 		if (encVorpal > 0) {
 			Entity entity = event.getEntity();
@@ -300,11 +300,6 @@ public class EventHandler {
 			event.getDrops().add(drop);
 		}
 	}
-
-	//	@SubscribeEvent
-	//	public void handlePlayerPickupXpEvent(PlayerPickupXpEvent event) {
-	//
-	//	}
 
 	/* HELPERS */
 	public boolean isArrow(ItemStack stack) {
@@ -350,7 +345,7 @@ public class EventHandler {
 
 	public int getHeldEnchantmentLevel(EntityPlayer player, Enchantment enc) {
 
-		return MathHelper.clamp(Math.max(EnchantmentHelper.getEnchantmentLevel(enc, player.getHeldItemMainhand()), EnchantmentHelper.getEnchantmentLevel(enc, player.getHeldItemOffhand())), 0, enc.getMaxLevel());
+		return Math.max(EnchantmentHelper.getEnchantmentLevel(enc, player.getHeldItemMainhand()), EnchantmentHelper.getEnchantmentLevel(enc, player.getHeldItemOffhand()));
 	}
 
 }

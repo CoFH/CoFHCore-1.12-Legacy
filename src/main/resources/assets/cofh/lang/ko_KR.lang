@@ -5,8 +5,8 @@ config.Common.tooltip=일반 옵션
 config.Core.tooltip=코어 모듈 옵션
 config.Loot.tooltip=루트 모듈 옵션
 
-enchant.cofh.holding=수송량증가
-enchant.cofh.multishot=다중슬롯
+enchantment.cofhcore.holding=수송량증가
+enchantment.cofhcore.multishot=다중슬롯
 
 fluid.tile.lava=용암
 fluid.tile.water=물

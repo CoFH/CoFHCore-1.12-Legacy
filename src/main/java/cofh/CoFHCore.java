@@ -38,7 +38,7 @@ public class CoFHCore {
 	public static final String MOD_ID = "cofhcore";
 	public static final String MOD_NAME = "CoFH Core";
 
-	public static final String VERSION = "4.3.6";
+	public static final String VERSION = "4.3.7";
 	public static final String VERSION_MAX = "4.4.0";
 	public static final String VERSION_GROUP = "required-after:" + MOD_ID + "@[" + VERSION + "," + VERSION_MAX + ");";
 	public static final String UPDATE_URL = "https://raw.github.com/cofh/version/master/" + MOD_ID + "_update.json";
@@ -116,7 +116,7 @@ public class CoFHCore {
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 
-		CommandHandler.initCommands(event);
+		event.registerServerCommand(CommandHandler.INSTANCE);
 	}
 
 	@EventHandler
@@ -138,6 +138,7 @@ public class CoFHCore {
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, GUI_HANDLER);
 		MinecraftForge.EVENT_BUS.register(KeyHandlerCore.INSTANCE);
 
+		CommandHandler.initialize();
 		FurnaceFuelHandler.initialize();
 
 		RegistrySocial.initialize();

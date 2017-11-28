@@ -86,12 +86,19 @@ chat.cofh.secure.item.success=This item now belongs to you.
 chat.cofh.secure.notice=Notice: Server Ops are able to freely access 'secure' blocks on this server.
 chat.cofh.secure.warning=This is private and belongs to %s! You could have lost your hand!
 
-enchant.cofh.holding=Holding
-enchant.cofh.insight=Insight
-enchant.cofh.leech=Leech
-enchant.cofh.multishot=Multishot
-enchant.cofh.smelting=Smelting
-enchant.cofh.vorpal=Vorpal
+enchantment.cofhcore.holding=Holding
+enchantment.cofhcore.insight=Insight
+enchantment.cofhcore.leech=Leech
+enchantment.cofhcore.multishot=Multishot
+enchantment.cofhcore.smelting=Smelting
+enchantment.cofhcore.vorpal=Vorpal
+
+enchantment.cofhcore.holding.desc=Increases the storage capacity of certain items.
+enchantment.cofhcore.insight.desc=Increases experience gain when using the item.
+enchantment.cofhcore.leech.desc=Restores health when a mob is killed.
+enchantment.cofhcore.multishot.desc=The bow will fire additional arrows with each shot. Only one arrow is consumed.
+enchantment.cofhcore.smelting.desc=Harvested blocks will automatically be smelted, as if by a Furnace.
+enchantment.cofhcore.vorpal.desc=Randomly performs powerful attacks and decapitations.
 
 fluid.tile.lava=Lava
 fluid.tile.water=Water
@@ -133,6 +140,7 @@ info.cofh.energyConsume=Power Usage
 info.cofh.energyMax=Maximum Power
 info.cofh.energyProduce=Power Output
 info.cofh.energyStored=Energy Stored
+info.cofh.experience=Experience
 info.cofh.filter=Filter
 info.cofh.fluid=Fluid
 info.cofh.fluids=Fluids

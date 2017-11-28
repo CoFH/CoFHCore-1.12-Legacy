@@ -19,11 +19,23 @@ public class FluidContainerItemWrapper implements ICapabilityProvider {
 
 	final ItemStack stack;
 	final IFluidContainerItem container;
+	final boolean canFill;
+	final boolean canDrain;
 
 	public FluidContainerItemWrapper(ItemStack stackIn, IFluidContainerItem containerIn) {
 
 		stack = stackIn;
 		container = containerIn;
+		canFill = true;
+		canDrain = true;
+	}
+
+	public FluidContainerItemWrapper(ItemStack stackIn, IFluidContainerItem containerIn, boolean canFillIn, boolean canDrainIn) {
+
+		stack = stackIn;
+		container = containerIn;
+		canFill = canFillIn;
+		canDrain = canDrainIn;
 	}
 
 	@Override
@@ -43,7 +55,7 @@ public class FluidContainerItemWrapper implements ICapabilityProvider {
 			@Override
 			public IFluidTankProperties[] getTankProperties() {
 
-				return new IFluidTankProperties[] { new FluidTankProperties(container.getFluid(stack), container.getCapacity(stack), true, true) };
+				return new IFluidTankProperties[] { new FluidTankProperties(container.getFluid(stack), container.getCapacity(stack), canFill, canDrain) };
 			}
 
 			@Override

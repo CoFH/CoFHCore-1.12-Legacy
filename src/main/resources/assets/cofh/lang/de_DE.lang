@@ -17,9 +17,9 @@
 
 
 
-enchant.cofh.holding=Hält
-enchant.cofh.multishot=Multischuss
-enchant.cofh.vorpal=Vorpal
+enchantment.cofhcore.holding=Hält
+enchantment.cofhcore.multishot=Multischuss
+enchantment.cofhcore.vorpal=Vorpal
 
 fluid.tile.lava=Lava
 fluid.tile.water=Wasser
