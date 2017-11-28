@@ -43,9 +43,9 @@ repositories {
 }
 
 dependencies {
-	compile "cofh:RedstoneFlux:${config.mc_version}-${config.rf_version}:deobf"
+	compile "cofh:RedstoneFlux:${config.rf_mc_version}-${config.rf_version}:deobf"
 
-	compile "mezz.jei:jei_${config.mc_version}:${config.jei_version}"
+	compile "mezz.jei:jei_${config.jei_mc_version}:${config.jei_version}"
 }
 
 version = "${project.config.mod_version}." + (System.getenv("BUILD_NUMBER") ?: "1")
