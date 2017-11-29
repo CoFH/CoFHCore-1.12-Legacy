@@ -56,7 +56,7 @@ public class EventHandler {
 	@SubscribeEvent (priority = EventPriority.HIGHEST)
 	public void handleArrowLooseEvent(ArrowLooseEvent event) {
 
-		if (!(event.getBow().getItem() instanceof ItemBow)) {
+		if (!(event.getBow().getItem() == Items.BOW)|| !(event.getBow().getItem() instanceof IBowImproved)) {
 			return;
 		}
 		ItemStack stack = event.getBow();
@@ -134,7 +134,7 @@ public class EventHandler {
 	@SubscribeEvent (priority = EventPriority.HIGHEST)
 	public void handleArrowNockEvent(ArrowNockEvent event) {
 
-		if (!(event.getBow().getItem() instanceof ItemBow)) {
+		if (!(event.getBow().getItem() == Items.BOW)|| !(event.getBow().getItem() instanceof IBowImproved)) {
 			return;
 		}
 		ItemStack stack = event.getBow();
