@@ -196,6 +196,7 @@ public class CoreProps {
 
 	public static final int RGB_DURABILITY_FLUX = 0xD01010;
 	public static final int RGB_DURABILITY_WATER = 0x4060FF;
+	public static final int RGB_DURABILITY_ENDER = 0x14594D;
 	public static final int RGB_DURABILITY_EXP = 0x7AAC52;
 
 	/* INVENTORIES */

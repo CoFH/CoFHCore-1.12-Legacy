@@ -29,9 +29,10 @@ public interface IReconfigurableFacing {
 	/**
 	 * Set the facing of the block.
 	 *
-	 * @param side The side to set the facing to.
+	 * @param side      The side to set the facing to.
+	 * @param alternate Use "alternate" rotation - this is entirely up to the Tile Entity.
 	 * @return True if the facing was set, false otherwise.
 	 */
-	boolean setFacing(int side);
+	boolean setFacing(int side, boolean alternate);
 
 }

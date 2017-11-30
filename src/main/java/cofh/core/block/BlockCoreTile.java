@@ -131,31 +131,8 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 		}
 		if (tile instanceof IReconfigurableFacing) {
 			IReconfigurableFacing reconfig = (IReconfigurableFacing) tile;
-			int quadrant = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-
-			if (reconfig.allowYAxisFacing()) {
-				quadrant = placer.rotationPitch > 60 ? 4 : placer.rotationPitch < -60 ? 5 : quadrant;
-			}
-			switch (quadrant) {
-				case 0:
-					reconfig.setFacing(EnumFacing.NORTH.ordinal());
-					break;
-				case 1:
-					reconfig.setFacing(EnumFacing.EAST.ordinal());
-					break;
-				case 2:
-					reconfig.setFacing(EnumFacing.SOUTH.ordinal());
-					break;
-				case 3:
-					reconfig.setFacing(EnumFacing.WEST.ordinal());
-					break;
-				case 4:
-					reconfig.setFacing(EnumFacing.UP.ordinal());
-					break;
-				case 5:
-					reconfig.setFacing(EnumFacing.DOWN.ordinal());
-					break;
-			}
+			EnumFacing facing = reconfig.allowYAxisFacing() ? EnumFacing.getDirectionFromEntityLiving(pos, placer) : placer.getHorizontalFacing().getOpposite();
+			reconfig.setFacing(facing.ordinal(), placer.isSneaking());
 		}
 		if (tile instanceof TileCore) {
 			((TileCore) tile).blockPlaced();

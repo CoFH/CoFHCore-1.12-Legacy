@@ -9,6 +9,7 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -57,26 +58,45 @@ public class CommandKillAll implements ISubCommand {
 			target = arguments[1].toLowerCase(Locale.US);
 			all = "*".equals(target);
 		}
-		for (WorldServer theWorld : CoreProps.server.worlds) {
-			synchronized (theWorld) {
-				List<Entity> list = theWorld.loadedEntityList;
-				for (int i = list.size(); i-- > 0; ) {
-					Entity entity = list.get(i);
-					if (entity != null && !(entity instanceof EntityPlayer)) {
-						curName = EntityList.getEntityString(entity);
-						if (target != null | all) {
-							if (all || curName != null && curName.toLowerCase(Locale.US).contains(target)) {
+		if ("item".equals(target) || "items".equals(target)) {
+			for (WorldServer world : CoreProps.server.worlds) {
+				synchronized (world) {
+					List<Entity> list = world.loadedEntityList;
+					for (int i = list.size(); i-- > 0; ) {
+						Entity entity = list.get(i);
+						if (entity != null && (entity instanceof EntityItem)) {
+							curName = EntityList.getEntityString(entity);
+							if (curName != null && curName.toLowerCase(Locale.US).contains(target)) {
 								names.adjustOrPutValue(curName, 1, 1);
 								killCount++;
-								theWorld.removeEntity(entity);
+								world.removeEntity(entity);
 							}
-						} else if (entity instanceof IMob) {
-							if (curName == null) {
-								curName = entity.getClass().getName();
+						}
+					}
+				}
+			}
+		} else {
+			for (WorldServer world : CoreProps.server.worlds) {
+				synchronized (world) {
+					List<Entity> list = world.loadedEntityList;
+					for (int i = list.size(); i-- > 0; ) {
+						Entity entity = list.get(i);
+						if (entity != null && !(entity instanceof EntityPlayer)) {
+							curName = EntityList.getEntityString(entity);
+							if (target != null | all) {
+								if (all || curName != null && curName.toLowerCase(Locale.US).contains(target)) {
+									names.adjustOrPutValue(curName, 1, 1);
+									killCount++;
+									world.removeEntity(entity);
+								}
+							} else if (entity instanceof IMob) {
+								if (curName == null) {
+									curName = entity.getClass().getName();
+								}
+								names.adjustOrPutValue(curName, 1, 1);
+								killCount++;
+								world.removeEntity(entity);
 							}
-							names.adjustOrPutValue(curName, 1, 1);
-							killCount++;
-							theWorld.removeEntity(entity);
 						}
 					}
 				}
