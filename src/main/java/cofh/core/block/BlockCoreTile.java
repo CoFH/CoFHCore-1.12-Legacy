@@ -9,7 +9,10 @@ import cofh.api.tileentity.IRedstoneControl;
 import cofh.api.tileentity.ITileInfo;
 import cofh.core.util.CoreUtils;
 import cofh.core.util.core.IInitializer;
-import cofh.core.util.helpers.*;
+import cofh.core.util.helpers.RedstoneControlHelper;
+import cofh.core.util.helpers.SecurityHelper;
+import cofh.core.util.helpers.ServerHelper;
+import cofh.core.util.helpers.StringHelper;
 import cofh.redstoneflux.api.IEnergyReceiver;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;
@@ -21,6 +24,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -214,7 +218,7 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 
 		Item item = Item.getItemFromBlock(this);
 
-		if (item == null) {
+		if (item == Items.AIR) {
 			return ItemStack.EMPTY;
 		}
 		int bMeta = state.getBlock().getMetaFromState(state);

@@ -41,6 +41,7 @@ public class ProxyClient extends Proxy {
 		super.preInit(event);
 
 		MinecraftForge.EVENT_BUS.register(EventHandlerClient.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(EventHandlerRender.INSTANCE);
 
 		Minecraft.memoryReserve = null;
 		ShaderHelper.initShaders();
@@ -62,16 +63,16 @@ public class ProxyClient extends Proxy {
 
 		super.postInit(event);
 
-		fontRenderer = new FontRendererCore(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"), Minecraft.getMinecraft().renderEngine, false);
+		fontRenderer = new FontRendererCore(Minecraft.getMinecraft().gameSettings, new ResourceLocation("textures/font/ascii.png"), Minecraft.getMinecraft().renderEngine, Minecraft.getMinecraft().gameSettings.forceUnicodeFont);
 
 		if (Minecraft.getMinecraft().gameSettings.language != null) {
-			fontRenderer.setUnicodeFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode());
+			fontRenderer.setUnicodeFlag(Minecraft.getMinecraft().isUnicode());
 			fontRenderer.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
 		}
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(fontRenderer);
+		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(EventHandlerRender.INSTANCE);
 
 		fontRenderer.initSpecialCharacters();
-
 	}
 
 	/* REGISTRATION */

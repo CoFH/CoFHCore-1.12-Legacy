@@ -1,8 +1,11 @@
 package cofh.core.proxy;
 
+import cofh.core.item.IAOEBreakItem;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -13,9 +16,15 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -24,53 +33,47 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 @SideOnly (Side.CLIENT)
-public class RenderEventHandler implements IResourceManagerReloadListener {
+public class EventHandlerRender implements IResourceManagerReloadListener {
 
-	public static final RenderEventHandler INSTANCE = new RenderEventHandler();
+	public static final EventHandlerRender INSTANCE = new EventHandlerRender();
 
-	//	@SubscribeEvent
-	//	public void renderExtraBlockBreak(RenderWorldLastEvent event) {
-	//		PlayerControllerMP controllerMP = Minecraft.getMinecraft().playerController;
-	//
-	//		if (controllerMP == null) {
-	//			return;
-	//		}
-	//		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-	//		World world = player.getEntityWorld();
-	//		ItemStack tool = player.getHeldItemMainhand();
-	//
-	//		if (tool != null) {
-	//			Entity renderEntity = Minecraft.getMinecraft().getRenderViewEntity();
-	//
-	//			if (renderEntity == null) {
-	//				return;
-	//			}
-	//			double distance = controllerMP.getBlockReachDistance();
-	//			RayTraceResult traceResult = renderEntity.rayTrace(distance, event.getPartialTicks());
-	//			if (traceResult != null) {
-	//				if (tool.getItem() instanceof IAOEBreakItem) {
-	//					ImmutableList<BlockPos> extraBlocks = ((IAOEBreakItem) tool.getItem()).getAOEBlocks(tool, traceResult.blockPos, player);
-	//					for (BlockPos pos : extraBlocks) {
-	//						event.getContext().drawSelectionBox(player, new RayTraceResult(new Vec3d(0, 0, 0), null, pos), 0, event.getPartialTicks());
-	//					}
-	//				}
-	//			}
-	//		}
-	//		// extra-blockbreak animation
-	//		if (controllerMP.isHittingBlock) {
-	//			if (tool != null && tool.getItem() instanceof IAOEBreakItem) {
-	//
-	//
-	//				BlockPos pos = controllerMP.currentBlock;
-	//				drawBlockDamageTexture(Tessellator.getInstance(), Tessellator.getInstance().getBuffer(), player, event.getPartialTicks(), world, ((IAOEBreakItem) tool.getItem()).getAOEBlocks(tool, pos, player));
-	//			}
-	//		}
-	//	}
+	@SubscribeEvent
+	public void renderExtraBlockBreak(RenderWorldLastEvent event) {
+
+		PlayerControllerMP controllerMP = Minecraft.getMinecraft().playerController;
+
+		if (controllerMP == null) {
+			return;
+		}
+		EntityPlayer player = Minecraft.getMinecraft().player;
+		ItemStack tool = player.getHeldItemMainhand();
+
+		if (!tool.isEmpty() && tool.getItem() instanceof IAOEBreakItem) {
+			Entity renderEntity = Minecraft.getMinecraft().getRenderViewEntity();
+			if (renderEntity == null) {
+				return;
+			}
+			double distance = controllerMP.getBlockReachDistance();
+			RayTraceResult traceResult = renderEntity.rayTrace(distance, event.getPartialTicks());
+			if (traceResult != null) {
+				ImmutableList<BlockPos> extraBlocks = ((IAOEBreakItem) tool.getItem()).getAOEBlocks(tool, traceResult.getBlockPos(), player);
+				for (BlockPos pos : extraBlocks) {
+					event.getContext().drawSelectionBox(player, new RayTraceResult(new Vec3d(0, 0, 0), null, pos), 0, event.getPartialTicks());
+				}
+			}
+		}
+		if (controllerMP.isHittingBlock) {
+			if (!tool.isEmpty() && tool.getItem() instanceof IAOEBreakItem) {
+				BlockPos pos = controllerMP.currentBlock;
+				drawBlockDamageTexture(Tessellator.getInstance(), Tessellator.getInstance().getBuffer(), player, event.getPartialTicks(), player.getEntityWorld(), ((IAOEBreakItem) tool.getItem()).getAOEBlocks(tool, pos, player));
+			}
+		}
+	}
 
 	/* HELPERS */
 
 	// Copy of RenderGlobal.drawBlockDamageTexture
-	public void drawBlockDamageTexture(Tessellator tessellatorIn, BufferBuilder buffer, Entity entityIn, float partialTicks, World world, List<BlockPos> blocks) {
+	public void drawBlockDamageTexture(Tessellator tessellatorIn, BufferBuilder bufferIn, Entity entityIn, float partialTicks, World world, List<BlockPos> blocks) {
 
 		double d0 = entityIn.lastTickPosX + (entityIn.posX - entityIn.lastTickPosX) * (double) partialTicks;
 		double d1 = entityIn.lastTickPosY + (entityIn.posY - entityIn.lastTickPosY) * (double) partialTicks;
@@ -85,9 +88,9 @@ public class RenderEventHandler implements IResourceManagerReloadListener {
 		renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		preRenderDamagedBlocks();
 
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-		buffer.setTranslation(-d0, -d1, -d2);
-		buffer.noColor();
+		bufferIn.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+		bufferIn.setTranslation(-d0, -d1, -d2);
+		bufferIn.noColor();
 
 		for (BlockPos blockpos : blocks) {
 			TileEntity tile = world.getTileEntity(blockpos);
@@ -101,7 +104,7 @@ public class RenderEventHandler implements IResourceManagerReloadListener {
 			}
 		}
 		tessellatorIn.draw();
-		buffer.setTranslation(0.0D, 0.0D, 0.0D);
+		bufferIn.setTranslation(0.0D, 0.0D, 0.0D);
 		postRenderDamagedBlocks();
 	}
 

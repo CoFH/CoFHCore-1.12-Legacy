@@ -163,7 +163,6 @@ public class FontRendererCore extends FontRenderer {
 				}
 			}
 		}
-
 		return s1;
 	}
 
@@ -209,7 +208,6 @@ public class FontRendererCore extends FontRenderer {
 				return v;
 			}
 		}
-
 		return super.renderUnicodeChar(ch, italic);
 	}
 

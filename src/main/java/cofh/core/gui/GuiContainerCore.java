@@ -26,7 +26,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import org.lwjgl.input.Mouse;
@@ -162,7 +161,7 @@ public abstract class GuiContainerCore extends GuiContainer {
 			fontRenderer.drawString(StringHelper.localize(name), getCenteredOffset(StringHelper.localize(name)), 6, 0x404040);
 		}
 		if (drawInventory) {
-			fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, ySize - 96 + 3, 0x404040);
+			fontRenderer.drawString(StringHelper.localize("container.inventory"), 8, ySize - 96 + 3, 0x404040);
 		}
 		drawElements(0, true);
 		drawTabs(0, true);
@@ -608,10 +607,15 @@ public abstract class GuiContainerCore extends GuiContainer {
 		if (fluid == null) {
 			return;
 		}
+		GL11.glPushMatrix();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
 		RenderHelper.setBlockTextureSheet();
 		int color = fluid.getFluid().getColor(fluid);
 		RenderHelper.setGLColorFromInt(color);
 		drawTiledTexture(x, y, RenderHelper.getTexture(fluid.getFluid().getStill(fluid)), width, height);
+		GL11.glPopMatrix();
 	}
 
 	public void drawTiledTexture(int x, int y, TextureAtlasSprite icon, int width, int height) {
@@ -825,12 +829,12 @@ public abstract class GuiContainerCore extends GuiContainer {
 
 	protected int getCenteredOffset(String string) {
 
-		return this.getCenteredOffset(string, xSize);
+		return this.getCenteredOffset(string, xSize / 2);
 	}
 
-	protected int getCenteredOffset(String string, int xWidth) {
+	protected int getCenteredOffset(String string, int xPos) {
 
-		return (xWidth - fontRenderer.getStringWidth(string)) / 2;
+		return ((xPos * 2) - fontRenderer.getStringWidth(string)) / 2;
 	}
 
 	public int getGuiLeft() {

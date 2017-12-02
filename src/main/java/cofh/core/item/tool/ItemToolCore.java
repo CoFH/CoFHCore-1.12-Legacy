@@ -77,7 +77,7 @@ public abstract class ItemToolCore extends ItemTool {
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 		// only effective materials
-		if (!(toolClasses.contains(state.getBlock().getHarvestTool(state)) || canHarvestBlock(state, player.getHeldItemMainhand()))) {
+		if (!(toolClasses.contains(state.getBlock().getHarvestTool(state)) || !canHarvestBlock(state, player.getHeldItemMainhand()))) {
 			return false;
 		}
 		if (!ForgeHooks.canHarvestBlock(block, player, world, pos)) {
