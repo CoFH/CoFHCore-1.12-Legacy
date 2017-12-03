@@ -1,99 +1,181 @@
 #ru_RU
 
-config.Client.tooltip=Настройка опций клиента.
-config.Common.tooltip=Настройка главных опций.
-config.Core.tooltip=Настройка опций ядра.
-config.Loot.tooltip=Настройка опций добычи.
+chat.cofh.command.clearblocks.failure=Нет блоков для очистки.
+chat.cofh.command.clearblocks.start=Очистка %s блоков от %s:%s:%s до %s:%s:%s.
+chat.cofh.command.clearblocks.success=Успешно очищенно %s блоков от %s:%s:%s до %s:%s:%s.
+chat.cofh.command.clearblocks.syntax=/cofh clearblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} [block#meta] [block#meta] ...
+chat.cofh.command.clearblocks=Очищает указанные блоки от заданной области в мире.
+
+chat.cofh.command.countblocks.failure=В этой области нет блоков.
+chat.cofh.command.countblocks.start=Подсчет %s блоков от %s:%s:%s до %s:%s:%s.
+chat.cofh.command.countblocks.success=Найдено %s блоков от %s:%s:%s до %s:%s:%s.
+chat.cofh.command.countblocks.syntax=/cofh countblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} [block#meta] [block#meta] ...
+chat.cofh.command.countblocks=Подсчитывает указанные блоки из заданной области в мире.
+
+chat.cofh.command.enchant.syntax=/cofh enchant [player] <enchantment ID> [level]
+chat.cofh.command.enchant=Улучшенный /enchant. Не имеет ограничений по уровню или применимости.
+
+chat.cofh.command.friend.0=успешно добавлен в список друзей.
+chat.cofh.command.friend.1=Извините, была проблема добавления
+chat.cofh.command.friend.2=в список друзей.
+chat.cofh.command.friend.3=К сожалению, это не действительное имя игрока.
+chat.cofh.command.friend.4=успешно удален из списка друзей.
+chat.cofh.command.friend.5=не был твоим другом.
+chat.cofh.command.friend.syntax=/cofh friend {gui | add <username> | remove <username>}
+chat.cofh.command.friend=Команды для добавления и удаления игроков из списка друзей.
+
+chat.cofh.command.help.0=Доступны следующие команды:
+chat.cofh.command.help.syntax=/cofh help [command]
+chat.cofh.command.help=Эта команда покажет вам справку по другим командам!
+
+chat.cofh.command.killall.noHostile=Никаких враждебных мобов не найдено!
+chat.cofh.command.killall.noMatch=Соответствующие сущности не найдены!
+chat.cofh.command.killall.success=Удалено %d сущностей. (%s)
+chat.cofh.command.killall.successHostile=Удалено %d враждебных мобов. (%s)
+chat.cofh.command.killall.syntax=/cofh killall [partial name]
+chat.cofh.command.killall=Убивает все сущности данного имени и по умолчанию убивает всех враждебных мобов.
+
+chat.cofh.command.notFound=Неизвестная команда. Используйте /cofh help для получения списка команд
+
+chat.cofh.command.pregen.start=Предварительное генерирование %s чанков от %s:%s до %s:%s.
+chat.cofh.command.pregen.syntax=/cofh pregen {<user> <x chunk radius> <z chunk radius> | <x chunk start> <z chunk start> <x chunk end> <z chunk end>}
+chat.cofh.command.pregen=Предварительно генерирует чанки в указанной области в мире.
+
+chat.cofh.command.reloadworldgen.success=Успешная перезагрузка генераторов миров.
+chat.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
+chat.cofh.command.reloadworldgen=Перезагрузка генератора мира с диска.
+
+chat.cofh.command.replaceblocks.failure=Нет блоков для замены.
+chat.cofh.command.replaceblocks.start=Замена %s блоков от %s:%s:%s до %s:%s:%s на %s.
+chat.cofh.command.replaceblocks.success=Успешно заменено %s блоков от %s:%s:%s до %s:%s:%s на %s.
+chat.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} <replaceBlock#meta> [block#meta] [block#meta] ...
+chat.cofh.command.replaceblocks=Заменяет указанные блоки из указанной области в мире.
+
+chat.cofh.command.syntax.syntax=/cofh syntax [command]
+chat.cofh.command.syntax=Команда справки для помощи с синтаксисом других команд!
+chat.cofh.command.syntaxError=Неверный синтаксис.
+
+chat.cofh.command.tps.syntax=/cofh tps [{o | a | <dim ID>}]
+chat.cofh.command.tps=Получает тики в секунду на сервере. На идеальном сервере значение должно быть 20.
+
+chat.cofh.command.tpx.dimensionOther=Успешный телепорт %s к %2$s на %3$.2f %4$.2f %5$.2f
+chat.cofh.command.tpx.dimensionOtherTo=Успешный телепорт %s к %s в %3$s на %4$.2f %5$.2f %6$.2f
+chat.cofh.command.tpx.dimensionOtherToSelf=Успешный телепорт %s к вам в %2$s на %3$.2f %4$.2f %5$.2f
+chat.cofh.command.tpx.dimensionSelf=Успешный телепорт к %1$s на %2$.2f %3$.2f %4$.2f
+chat.cofh.command.tpx.other=Успешный телепорт %s к %.2f %.2f %.2f
+chat.cofh.command.tpx.otherTo=Успешный телепорт %s к %s на %.2f %.2f %.2f
+chat.cofh.command.tpx.otherToSelf=Успешный телепорт %s к вам в %.2f %.2f %.2f
+chat.cofh.command.tpx.self=Успешный телепорт to %.2f %.2f %.2f
+chat.cofh.command.tpx.snark.0=Успешный телепорт к вам!
+chat.cofh.command.tpx.snark.1=Успешный телепорт %s к вам!
+chat.cofh.command.tpx.syntax=/cofh tpx [player] {(<player> | <dimension>) | <x> <y> <z> [dimension]}
+chat.cofh.command.tpx=Улучшенная версия команды /tp, которая работает между измерениями.
+
+chat.cofh.command.unloadchunk.success=Выгрузка чанка в %s:%s
+chat.cofh.command.unloadchunk.syntax=/cofh unloadchunk
+chat.cofh.command.unloadchunk=Выгрузка чанка на который смотрит игрок.
+
+chat.cofh.command.version.0=Версия мода
+chat.cofh.command.version.syntax=/cofh version
+chat.cofh.command.version=Отображает вам версию мода.
+
+chat.cofh.command.world.notFound=Мир не найден.
+
+chat.cofh.secure.block.success=Этот блок теперь принадлежит вам.
+chat.cofh.secure.item.success=Этот предмет теперь принадлежит вам.
+chat.cofh.secure.notice=Примечание: Оператор сервера имеет доступ к защищенным 'secure' блокам на этом сервере.
+chat.cofh.secure.warning=Это принадлежит %s! Вы могли бы потерять руку!
 
 enchantment.cofhcore.holding=Удержание
+enchantment.cofhcore.insight=В поле зрения
+enchantment.cofhcore.leech=Пиявка
 enchantment.cofhcore.multishot=Мульти-выстрел
+enchantment.cofhcore.smelting=Выплавка
+enchantment.cofhcore.vorpal=Вострый
+
+enchantment.cofhcore.holding.desc=Увеличивает емкость для хранения некоторых предметов.
+enchantment.cofhcore.insight.desc=Увеличивает эффект усиления при использовании предмета.
+enchantment.cofhcore.leech.desc=Восстанавливает здоровье при убийстве моба.
+enchantment.cofhcore.multishot.desc=Лук будет выпускать дополнительную стрелу с каждым выстрелом. Потребляется только одна стрелка.
+enchantment.cofhcore.smelting.desc=Собранные блоки будут автоматически выплавляться, как будто с помощью печи.
+enchantment.cofhcore.vorpal.desc=Случайно выполняет мощные атаки и обезглавливания.
 
 fluid.tile.lava=Лава
 fluid.tile.water=Вода
 
-gui.cofh.configuration=Конфигурация
+gui.cofh.friendList=Список друзей
+
+gui.cofh.transferInDisabled=Автоматический ввод отключен
+gui.cofh.transferInEnabled=Автоматический ввод включен
+gui.cofh.transferInUnavailable=Автоматический ввод недоступен
+
+gui.cofh.transferOutDisabled=Автоматический вывод отключен
+gui.cofh.transferOutEnabled=Автоматический вывод включен
+gui.cofh.transferOutUnavailable=Автоматический вывод недоступен
 
 info.cofh.access=Доступ
-info.cofh.accessMode=Режим доступа
 info.cofh.accessPrivate=Приватный
 info.cofh.accessPublic=Публичный
 info.cofh.accessRestricted=Ограниченный
-info.cofh.addDestination=Добавить назначение
-info.cofh.addFrequency=Добавить частоту
-info.cofh.all=Все
+info.cofh.accessTeam=Для команды
 info.cofh.amount=Количество
-info.cofh.angle=Угол
 info.cofh.anotherplayer=Другой игрок
+info.cofh.area=Область
 info.cofh.augmentation=Улучшение
 info.cofh.blank=Пусто
-info.cofh.buffer=Буфер
 info.cofh.capacity=Ёмкость
 info.cofh.chance=Шанс
 info.cofh.charge=Заряд
-info.cofh.cheater=Жулик!
+info.cofh.configuration=Конфигурация
 info.cofh.contents=Содержит
 info.cofh.controlStatus=Режим управления
 info.cofh.damageAttack=Урон
 info.cofh.damageFlux=Флаксовый урон
-info.cofh.disable=Отключить
 info.cofh.disabled=Выключен
-info.cofh.distance=Дистанция
-info.cofh.dry=Сухая
-info.cofh.duration=Длительность
-info.cofh.efficiency=Эффективность
+info.cofh.duration=Продолжительность
 info.cofh.empty=Пусто
-info.cofh.enable=Включить
 info.cofh.enabled=Включен
 info.cofh.energy=Энергия
 info.cofh.energyConsume=Расход энергии
 info.cofh.energyMax=Макс. энергия
 info.cofh.energyProduce=Выходная энергия
 info.cofh.energyStored=Хранимая энергия
+info.cofh.experience=Опыт
 info.cofh.filter=Фильтр
 info.cofh.fluid=Жидкость
 info.cofh.fluids=Жидкости
-info.cofh.force=Принудительно
-info.cofh.forDetails=для деталей
-info.cofh.frequency=Частота
-info.cofh.hasInfo=Есть информация
 info.cofh.high=Высокий
-info.cofh.hold=Удерживайте
-info.cofh.idle=Простой
+info.cofh.holdShiftForDetails=Зажмите §e§oShift§r§7 для деталей§r
 info.cofh.ignored=Игнорировать
 info.cofh.infinite=Бесконечный
+info.cofh.infiniteSource=Бесконечный источник
 info.cofh.information=Информация
 info.cofh.item=Предмет
 info.cofh.items=Предметы
+info.cofh.input=Вход
 info.cofh.level=Уровень
 info.cofh.locked=Закрыто
-info.cofh.loot=Предметы
 info.cofh.low=Низкий
 info.cofh.modeChange=чтобы изменить режим
 info.cofh.none=Нет
 info.cofh.output=Выход
 info.cofh.owner=Владелец
 info.cofh.perUse=За использование
-info.cofh.preferences=Предпочтения
-info.cofh.press=Нажмите
-info.cofh.receive=Принимает
-info.cofh.receiving=Приём
-info.cofh.redstoneControl=Красный контроль
-info.cofh.removeDestination=Удалить назначение
-info.cofh.removeFrequency=Удалить частоту
+info.cofh.potency=Сила
+info.cofh.receive=Получать
+info.cofh.redstoneControl=Контроль редстоуном
 info.cofh.security=Безопасность
 info.cofh.send=Передаёт
-info.cofh.sending=Передача
-info.cofh.setDestination=Установить назначение
-info.cofh.setFrequency=Установить частоту
-info.cofh.signal=Сигнал
+info.cofh.signalDisabled=Сигнал: §4Выключен§r
+info.cofh.signalEnabledHigh=Сигнал: §aВключен§7, Сильный§r
+info.cofh.signalEnabledLow=Сигнал: §aВключен§7, Слабый§r
 info.cofh.signalRequired=Требуется сигнал
-info.cofh.soaked=Мокрая
-info.cofh.source=Источник
-info.cofh.stored=Накоплено
-info.cofh.strength=Сила
-info.cofh.success=Успех!
-info.cofh.template=Шаблон
-info.cofh.transfer=Передача
+info.cofh.steam=Пар
+info.cofh.steamConsume=Используемый пар
+info.cofh.steamMax=Максимум пара
+info.cofh.steamProduce=Выход пара
+info.cofh.steamStored=Хранимый пар
+info.cofh.stored=Хранится
 info.cofh.tutorial.fluxRequired=Для работы необходим Redstone Flux.
 info.cofh.tutorial.tabAugment=Вкладка "Улучшение" предоставляет модульные дополнения.
 info.cofh.tutorial.tabConfiguration=Вкладка "Конфигурация" позволяет настроить вход и выход для блока.
@@ -101,10 +183,32 @@ info.cofh.tutorial.tabRedstone=Вкладка "Красный контроль" 
 info.cofh.tutorial.tabSecurity=Вкладка "Безопасность" позволяет владельцу контролировать, кто может управлять этим устройством.
 info.cofh.tutorial=Руководство
 info.cofh.unlocked=Открыто
-info.cofh.work=Работа
+info.cofh.upgradeRequired=Требуется обновление
 
 item.invalid.name=Неизвестный предмет (Уничтожить)
 
 key.cofh.augments=Открыть интерфейс расширений
 key.cofh.category=Клавиши CoFH
 key.cofh.multimode=Режим прокрутки предметов
+
+lingering_potion.effect.absorption=Длительное зелье поглощения
+lingering_potion.effect.haste=Длительное зелье спешки
+lingering_potion.effect.resistance=Длительное зелье сопротивления
+lingering_potion.effect.wither=Длительное зелье разложения
+
+potion.effect.absorption=Зелье поглощения
+potion.effect.haste=Зелье спешки
+potion.effect.resistance=Зелье сопротивления
+potion.effect.wither=Зелье разложения
+
+potion.potency.3=IV
+potion.potency.4=V
+
+splash_potion.effect.absorption=Взрывное зелье поглощения
+splash_potion.effect.haste=Взрывное зелье спешки
+splash_potion.effect.resistance=Взрывное зелье сопротивления
+splash_potion.effect.wither=Взрывное зелье разложения
+
+tab.cofh.friendList.0=Используйте этот список для добавления и удаления друзей!
+tab.cofh.friendList.1=Друзья могут получить доступ к вашим защищенным(модом) блокам и элементам, если вы позволите им.
+tab.cofh.friendList.2=Друзья не найдены.
