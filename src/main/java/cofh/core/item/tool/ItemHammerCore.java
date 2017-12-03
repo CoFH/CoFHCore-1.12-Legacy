@@ -2,15 +2,11 @@ package cofh.core.item.tool;
 
 import cofh.core.item.IAOEBreakItem;
 import cofh.core.util.RayTracer;
-import cofh.core.util.helpers.MathHelper;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.EnchantmentDurability;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -20,8 +16,6 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 
 public class ItemHammerCore extends ItemToolCore implements IAOEBreakItem {
-
-	public static boolean craftingIngredient = true;
 
 	public ItemHammerCore(ToolMaterial toolMaterial) {
 
@@ -47,33 +41,6 @@ public class ItemHammerCore extends ItemToolCore implements IAOEBreakItem {
 			attackDamage = 7.0F;
 			attackSpeed = -3.4F + (0.1F * (int) (efficiency / 5));
 		}
-	}
-
-	@Override
-	public ItemStack getContainerItem(ItemStack stack) {
-
-		if (!hasContainerItem(stack)) {
-			return ItemStack.EMPTY;
-		}
-		int encUnbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
-
-		if (encUnbreaking > 0) {
-			if (EnchantmentDurability.negateDamage(stack, encUnbreaking, MathHelper.RANDOM)) {
-				return stack;
-			}
-		}
-		stack.setItemDamage(getDamage(stack) + 1);
-
-		if (getDamage(stack) > getMaxDamage(stack)) {
-			return ItemStack.EMPTY;
-		}
-		return stack.copy();
-	}
-
-	@Override
-	public boolean hasContainerItem(ItemStack stack) {
-
-		return craftingIngredient;
 	}
 
 	@Override
