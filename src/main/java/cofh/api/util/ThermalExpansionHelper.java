@@ -638,7 +638,33 @@ public class ThermalExpansionHelper {
 	 * DYNAMOS
 	 */
 
-	// TODO: Only Magmatic and Compression Dynamo Fuels are supported at this time. Coolants are not supported.
+	/* STEAM */
+	public static void addSteamFuel(ItemStack fuel, int energy) {
+
+		if (fuel.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setInteger(ENERGY, energy);
+
+		fuel.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, ADD_STEAM_FUEL, toSend);
+	}
+
+	public static void removeSteamFuel(ItemStack fuel) {
+
+		if (fuel.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setTag(INPUT, new NBTTagCompound());
+
+		fuel.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, REMOVE_STEAM_FUEL, toSend);
+	}
 
 	/* MAGMATIC */
 	public static void addMagmaticFuel(String fluidName, int energy) {
@@ -649,6 +675,15 @@ public class ThermalExpansionHelper {
 		toSend.setInteger(ENERGY, energy);
 
 		FMLInterModComms.sendMessage(MOD_ID, ADD_MAGMATIC_FUEL, toSend);
+	}
+
+	public static void removeMagmaticFuel(String fluidName) {
+
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setString(FLUID_NAME, fluidName);
+
+		FMLInterModComms.sendMessage(MOD_ID, REMOVE_MAGMATIC_FUEL, toSend);
 	}
 
 	/* COMPRESSION */
@@ -662,6 +697,122 @@ public class ThermalExpansionHelper {
 		FMLInterModComms.sendMessage(MOD_ID, ADD_COMPRESSION_FUEL, toSend);
 	}
 
+	public static void removeCompressionFuel(String fluidName) {
+
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setString(FLUID_NAME, fluidName);
+
+		FMLInterModComms.sendMessage(MOD_ID, REMOVE_COMPRESSION_FUEL, toSend);
+	}
+
+	/* REACTANT */
+	public static void addReactantFuel(ItemStack reactant, String fluidName, int energy) {
+
+		if (reactant.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setString(FLUID_NAME, fluidName);
+		toSend.setInteger(ENERGY, energy);
+
+		reactant.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, ADD_REACTANT_FUEL, toSend);
+	}
+
+	public static void removeReactantFuel(ItemStack reactant, String fluidName) {
+
+		if (reactant.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setString(FLUID_NAME, fluidName);
+
+		reactant.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, REMOVE_REACTANT_FUEL, toSend);
+	}
+
+	/* ENERVATION */
+	public static void addEnervationFuel(ItemStack fuel, int energy) {
+
+		if (fuel.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setInteger(ENERGY, energy);
+
+		fuel.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, ADD_ENERVATION_FUEL, toSend);
+	}
+
+	public static void removeEnervationFuel(ItemStack fuel) {
+
+		if (fuel.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setTag(INPUT, new NBTTagCompound());
+
+		fuel.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, REMOVE_ENERVATION_FUEL, toSend);
+	}
+
+	/* NUMISMATIC */
+	public static void addNumismaticFuel(ItemStack fuel, int energy) {
+
+		if (fuel.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setInteger(ENERGY, energy);
+
+		fuel.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, ADD_NUMISMATIC_FUEL, toSend);
+	}
+
+	public static void removeNumismaticFuel(ItemStack fuel) {
+
+		if (fuel.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setTag(INPUT, new NBTTagCompound());
+
+		fuel.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, REMOVE_NUMISMATIC_FUEL, toSend);
+	}
+
+	/* COOLANT */
+	public static void addCoolant(String fluidName, int energy, int factor) {
+
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setString(FLUID_NAME, fluidName);
+		toSend.setInteger(ENERGY, energy);
+		toSend.setInteger(FACTOR, factor);
+
+		FMLInterModComms.sendMessage(MOD_ID, ADD_COOLANT, toSend);
+	}
+
+	public static void removeCoolant(String fluidName) {
+
+		NBTTagCompound toSend = new NBTTagCompound();
+
+		toSend.setString(FLUID_NAME, fluidName);
+
+		FMLInterModComms.sendMessage(MOD_ID, REMOVE_COOLANT, toSend);
+	}
+
 	/* IMC STRINGS */
 	static final String MOD_ID = "thermalexpansion";
 
@@ -671,6 +822,7 @@ public class ThermalExpansionHelper {
 	static final String FLUID_NAME = "fluidName";
 	static final String REVERSIBLE = "reversible";
 	static final String CHANCE = "chance";
+	static final String FACTOR = "factor";
 
 	static final String INPUT = "input";
 	static final String OUTPUT = "output";
@@ -713,7 +865,21 @@ public class ThermalExpansionHelper {
 	public static final String REMOVE_BREWER_RECIPE = "removebrewerrecipe";
 	public static final String REMOVE_ENCHANTER_RECIPE = "removeenchanterrecipe";
 
+	public static final String ADD_STEAM_FUEL = "addsteamfuel";
 	public static final String ADD_MAGMATIC_FUEL = "addmagmaticfuel";
 	public static final String ADD_COMPRESSION_FUEL = "addcompressionfuel";
+	public static final String ADD_REACTANT_FUEL = "addreactantfuel";
+	public static final String ADD_ENERVATION_FUEL = "addenervationfuel";
+	public static final String ADD_NUMISMATIC_FUEL = "addnumismaticfuel";
+
+	public static final String REMOVE_STEAM_FUEL = "removesteamfuel";
+	public static final String REMOVE_MAGMATIC_FUEL = "removemagmaticfuel";
+	public static final String REMOVE_COMPRESSION_FUEL = "removecompressionfuel";
+	public static final String REMOVE_REACTANT_FUEL = "removereactantfuel";
+	public static final String REMOVE_ENERVATION_FUEL = "removeenervationfuel";
+	public static final String REMOVE_NUMISMATIC_FUEL = "removenumismaticfuel";
+
+	public static final String ADD_COOLANT = "addcoolant";
+	public static final String REMOVE_COOLANT = "removecoolant";
 
 }
