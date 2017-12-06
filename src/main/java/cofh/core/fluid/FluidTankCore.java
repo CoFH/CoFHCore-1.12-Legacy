@@ -107,6 +107,9 @@ public class FluidTankCore implements IFluidTank {
 	 */
 	public void modifyFluidStored(int amount) {
 
+		if (!locked) {
+			return;
+		}
 		this.fluid.amount += amount;
 
 		if (this.fluid.amount > capacity) {

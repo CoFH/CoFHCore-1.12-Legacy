@@ -215,13 +215,13 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IBowImprov
 	}
 
 	@Override
-	public float getArrowDamageMultiplier() {
+	public float getArrowDamageMultiplier(ItemStack stack) {
 
 		return arrowDamageMultiplier;
 	}
 
 	@Override
-	public float getArrowSpeedMultiplier() {
+	public float getArrowSpeedMultiplier(ItemStack stack) {
 
 		return arrowSpeedMultiplier;
 	}

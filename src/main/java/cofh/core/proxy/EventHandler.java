@@ -75,7 +75,7 @@ public class EventHandler {
 				arrowStack = new ItemStack(Items.ARROW);
 			}
 			float f = ItemBow.getArrowVelocity(event.getCharge());
-			float speedMod = bowImproved != null ? 1.0F + bowImproved.getArrowSpeedMultiplier() : 1.0F;
+			float speedMod = bowImproved != null ? 1.0F + bowImproved.getArrowSpeedMultiplier(stack) : 1.0F;
 
 			if ((double) f >= 0.1D) {
 				if (!world.isRemote) {
@@ -92,7 +92,7 @@ public class EventHandler {
 						arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F + (1.5F - f) * shot);
 
 						if (bowImproved != null) {
-							arrow.setDamage(arrow.getDamage() * (1 + bowImproved.getArrowDamageMultiplier()));
+							arrow.setDamage(arrow.getDamage() * (1 + bowImproved.getArrowDamageMultiplier(stack)));
 						}
 						if (f >= 1.0F) {
 							arrow.setIsCritical(true);

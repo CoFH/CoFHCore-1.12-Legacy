@@ -24,6 +24,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
@@ -92,6 +93,12 @@ public abstract class TileCore extends TileEntity {
 
 	public void onNeighborTileChange(BlockPos pos) {
 
+	}
+
+	@Override
+	protected void setWorldCreate(World worldIn) {
+
+		this.world = worldIn;
 	}
 
 	public boolean canPlayerAccess(EntityPlayer player) {

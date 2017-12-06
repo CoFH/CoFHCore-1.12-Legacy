@@ -7,8 +7,8 @@ public interface IBowImproved {
 
 	void onBowFired(EntityPlayer player, ItemStack stack);
 
-	float getArrowDamageMultiplier();
+	float getArrowDamageMultiplier(ItemStack stack);
 
-	float getArrowSpeedMultiplier();
+	float getArrowSpeedMultiplier(ItemStack stack);
 
 }
