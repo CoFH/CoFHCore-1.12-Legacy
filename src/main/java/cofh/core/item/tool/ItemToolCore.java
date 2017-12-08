@@ -20,12 +20,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.Set;
 
 public abstract class ItemToolCore extends ItemTool {
 
-	private final TLinkedHashSet<String> toolClasses = new TLinkedHashSet<>();
-	private final Set<String> immutableClasses = java.util.Collections.unmodifiableSet(toolClasses);
+	protected final TLinkedHashSet<String> toolClasses = new TLinkedHashSet<>();
+	protected final Set<String> immutableClasses = Collections.unmodifiableSet(toolClasses);
 
 	protected String repairIngot = "";
 	protected THashSet<Block> effectiveBlocks = new THashSet<>();

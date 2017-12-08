@@ -89,7 +89,7 @@ public class ItemFishingRodCore extends ItemFishingRod {
 	}
 
 	@Override
-	public int getItemEnchantability() {
+	public int getItemEnchantability(ItemStack stack) {
 
 		return toolMaterial.getEnchantability();
 	}

@@ -70,7 +70,7 @@ public class ItemShieldCore extends Item {
 	}
 
 	@Override
-	public int getItemEnchantability() {
+	public int getItemEnchantability(ItemStack stack) {
 
 		return toolMaterial.getEnchantability();
 	}

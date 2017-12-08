@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -301,15 +302,14 @@ public final class BlockHelper {
 		if (state.getBlockHardness(worldObj, pos) == -1) {
 			return new LinkedList<>();
 		}
-		List<ItemStack> stacks;
+		NonNullList<ItemStack> ret = NonNullList.create();
 		if (silkTouch && state.getBlock().canSilkHarvest(worldObj, pos, state, player)) {
-			stacks = new LinkedList<>();
-			stacks.add(createStackedBlock(state));
+			ret.add(createStackedBlock(state));
 		} else {
-			stacks = state.getBlock().getDrops(worldObj, pos, state, fortune);
+			state.getBlock().getDrops(ret, worldObj, pos, state, fortune);
 		}
 		if (!doBreak) {
-			return stacks;
+			return ret;
 		}
 		worldObj.playEvent(2001, pos, Block.getStateId(state));
 		worldObj.setBlockToAir(pos);
@@ -319,10 +319,10 @@ public final class BlockHelper {
 			if (entity.isDead || entity.getItem().getCount() <= 0) {
 				continue;
 			}
-			stacks.add(entity.getItem());
+			ret.add(entity.getItem());
 			entity.world.removeEntity(entity);
 		}
-		return stacks;
+		return ret;
 	}
 
 	public static ItemStack createStackedBlock(IBlockState state) {

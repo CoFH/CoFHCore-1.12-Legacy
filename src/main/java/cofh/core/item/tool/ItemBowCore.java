@@ -116,7 +116,7 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IBowImprov
 	}
 
 	@Override
-	public int getItemEnchantability() {
+	public int getItemEnchantability(ItemStack stack) {
 
 		return toolMaterial.getEnchantability();
 	}

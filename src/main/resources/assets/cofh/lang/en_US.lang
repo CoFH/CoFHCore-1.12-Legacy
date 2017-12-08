@@ -212,3 +212,8 @@ splash_potion.effect.wither=Splash Potion of Decay
 tab.cofh.friendList.0=Use this list to add and remove Friends!
 tab.cofh.friendList.1=Friends are able to access your secure blocks and items, if you allow them to.
 tab.cofh.friendList.2=Friends not provided.
+
+tipped_arrow.effect.absorption=Arrow of Absorption
+tipped_arrow.effect.haste=Arrow of Haste
+tipped_arrow.effect.resistance=Arrow of Resistance
+tipped_arrow.effect.wither=Arrow of Decay
