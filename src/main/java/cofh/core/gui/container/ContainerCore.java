@@ -29,16 +29,16 @@ public abstract class ContainerCore extends Container {
 
 	protected void bindPlayerInventory(InventoryPlayer inventoryPlayer) {
 
-		int yOff = getPlayerInventoryVerticalOffset();
-		int xOff = getPlayerInventoryHorizontalOffset();
+		int xOffset = getPlayerInventoryHorizontalOffset();
+		int yOffset = getPlayerInventoryVerticalOffset();
+
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, xOff + j * 18, yOff + i * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, xOffset + j * 18, yOffset + i * 18));
 			}
 		}
-
 		for (int i = 0; i < 9; i++) {
-			addSlotToContainer(new Slot(inventoryPlayer, i, xOff + i * 18, yOff + 58));
+			addSlotToContainer(new Slot(inventoryPlayer, i, xOffset + i * 18, yOffset + 58));
 		}
 	}
 

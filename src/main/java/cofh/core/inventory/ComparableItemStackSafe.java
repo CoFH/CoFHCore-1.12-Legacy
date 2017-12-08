@@ -13,22 +13,21 @@ import java.util.ArrayList;
  */
 public class ComparableItemStackSafe extends ComparableItemStack {
 
-	static final String BLOCK = "block";
-	static final String ORE = "ore";
-	static final String DUST = "dust";
-	static final String INGOT = "ingot";
-	static final String NUGGET = "nugget";
+	public static final String BLOCK = "block";
+	public static final String ORE = "ore";
+	public static final String DUST = "dust";
+	public static final String INGOT = "ingot";
+	public static final String NUGGET = "nugget";
 
-	public static boolean safeOreType(String oreName) {
+	public boolean safeOreType(String oreName) {
 
 		return oreName.startsWith(BLOCK) || oreName.startsWith(ORE) || oreName.startsWith(DUST) || oreName.startsWith(INGOT) || oreName.startsWith(NUGGET);
 	}
 
-	public static int getOreID(ItemStack stack) {
+	public int getOreID(ItemStack stack) {
 
 		ArrayList<Integer> ids = OreDictionaryArbiter.getAllOreIDs(stack);
-
-		if (ids != null) {
+		if (!ids.isEmpty()) {
 			for (Integer id : ids) {
 				if (id != -1 && safeOreType(ItemHelper.oreProxy.getOreName(id))) {
 					return id;
@@ -38,7 +37,7 @@ public class ComparableItemStackSafe extends ComparableItemStack {
 		return -1;
 	}
 
-	public static int getOreID(String oreName) {
+	public int getOreID(String oreName) {
 
 		if (!safeOreType(oreName)) {
 			return -1;

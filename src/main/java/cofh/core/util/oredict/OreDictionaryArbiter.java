@@ -134,7 +134,7 @@ public class OreDictionaryArbiter {
 	}
 
 	/**
-	 * Returns a list containing ALL oreIDs for a given ItemStack. Returns NULL if there are none.
+	 * Returns a list containing ALL oreIDs for a given ItemStack. Returns an empty list if there are none.
 	 *
 	 * Input is not validated - don't be dumb!
 	 */
@@ -142,7 +142,13 @@ public class OreDictionaryArbiter {
 
 		ArrayList<Integer> ids = stackIDs.get(new ItemWrapper(stack));
 
-		return ids == null ? stackIDs.get(new ItemWrapper(stack.getItem(), WILDCARD_VALUE)) : ids;
+		if (ids == null) {
+			ids = stackIDs.get(new ItemWrapper(stack.getItem(), WILDCARD_VALUE));
+		}
+		if (ids == null) {
+			ids = new ArrayList<>();
+		}
+		return ids;
 	}
 
 	/**
@@ -172,7 +178,7 @@ public class OreDictionaryArbiter {
 	}
 
 	/**
-	 * Returns a list containing ALL oreNames for a given ItemStack. Returns NULL if there are none.
+	 * Returns a list containing ALL oreNames for a given ItemStack. Returns an empty list if there are none.
 	 *
 	 * Input is not validated - don't be dumb!
 	 */
@@ -180,7 +186,13 @@ public class OreDictionaryArbiter {
 
 		ArrayList<String> names = stackNames.get(new ItemWrapper(stack));
 
-		return names == null ? stackNames.get(new ItemWrapper(stack.getItem(), WILDCARD_VALUE)) : names;
+		if (names == null) {
+			names = stackNames.get(new ItemWrapper(stack.getItem(), WILDCARD_VALUE));
+		}
+		if (names == null) {
+			names = new ArrayList<>();
+		}
+		return names;
 	}
 
 	/**

@@ -256,7 +256,7 @@ public class CommandHand implements ISubCommand {
 			public ITextComponent processStack(ItemStack stack) {
 
 				ArrayList<String> ores = OreDictionaryArbiter.getAllOreNames(stack);
-				int size = ores == null ? 0 : ores.size();
+				int size = ores.isEmpty() ? 0 : ores.size();
 				String arr = StringHelper.toString(ores, "[null]");
 				return new TextComponentString(size + "> " + arr.substring(1, arr.length() - 1));
 			}

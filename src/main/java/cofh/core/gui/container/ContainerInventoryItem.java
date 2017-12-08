@@ -27,16 +27,6 @@ public abstract class ContainerInventoryItem extends ContainerCore {
 		return containerWrapper.getSizeInventory();
 	}
 
-	public ItemStack getContainerStack() {
-
-		return containerWrapper.getContainerStack();
-	}
-
-	public String getInventoryName() {
-
-		return containerWrapper.getName();
-	}
-
 	@Override
 	public void detectAndSendChanges() {
 
@@ -46,14 +36,6 @@ public abstract class ContainerInventoryItem extends ContainerCore {
 			return;
 		}
 		super.detectAndSendChanges();
-	}
-
-	public void onSlotChanged() {
-
-		ItemStack item = player.inventory.mainInventory.get(containerIndex);
-		if (valid && !item.isEmpty() && item.getItem() == containerWrapper.getContainerItem()) {
-			player.inventory.mainInventory.set(containerIndex, containerWrapper.getContainerStack());
-		}
 	}
 
 	@Override
@@ -340,6 +322,25 @@ public abstract class ContainerInventoryItem extends ContainerCore {
 			}
 		}
 		return stack;
+	}
+
+	/* HELPERS */
+	public void onSlotChanged() {
+
+		ItemStack item = player.inventory.mainInventory.get(containerIndex);
+		if (valid && !item.isEmpty() && item.getItem() == containerWrapper.getContainerItem()) {
+			player.inventory.mainInventory.set(containerIndex, containerWrapper.getContainerStack());
+		}
+	}
+
+	public String getInventoryName() {
+
+		return containerWrapper.getName();
+	}
+
+	public ItemStack getContainerStack() {
+
+		return containerWrapper.getContainerStack();
 	}
 
 }

@@ -104,6 +104,26 @@ public class InventoryContainerItemWrapper implements IInventory {
 		return stack;
 	}
 
+	/* IWorldNameable */
+	@Override
+	public String getName() {
+
+		return stack.getDisplayName();
+	}
+
+	@Override
+	public boolean hasCustomName() {
+
+		return stack.hasDisplayName();
+	}
+
+	@Override
+	public ITextComponent getDisplayName() {
+
+		return new TextComponentString(stack.getDisplayName());
+	}
+
+	/* IInventory */
 	@Override
 	public int getSizeInventory() {
 
@@ -138,64 +158,15 @@ public class InventoryContainerItemWrapper implements IInventory {
 	}
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-
-		inventory[i] = itemstack;
-	}
-
-	@Override
 	public ItemStack removeStackFromSlot(int slot) {
 
 		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
 
-		if (!stack.isEmpty() && stack.getItem() instanceof IInventoryContainerItem) {
-			return ((IInventoryContainerItem) stack.getItem()).getSizeInventory(stack) <= 0;
-		}
-		return true;
-	}
-
-	@Override
-	public int getField(int id) {
-
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-
-	}
-
-	@Override
-	public int getFieldCount() {
-
-		return 0;
-	}
-
-	@Override
-	public void clear() {
-
-	}
-
-	@Override
-	public String getName() {
-
-		return stack.getDisplayName();
-	}
-
-	@Override
-	public boolean hasCustomName() {
-
-		return stack.hasDisplayName();
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-
-		return new TextComponentString(stack.getDisplayName());
+		inventory[i] = itemstack;
 	}
 
 	@Override
@@ -219,6 +190,34 @@ public class InventoryContainerItemWrapper implements IInventory {
 	public void closeInventory(EntityPlayer player) {
 
 		markDirty();
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+
+		return stack.isEmpty() || !(stack.getItem() instanceof IInventoryContainerItem) || ((IInventoryContainerItem) stack.getItem()).getSizeInventory(stack) <= 0;
+	}
+
+	@Override
+	public int getField(int id) {
+
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+
+	}
+
+	@Override
+	public int getFieldCount() {
+
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+
 	}
 
 }

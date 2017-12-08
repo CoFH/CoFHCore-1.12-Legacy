@@ -43,8 +43,8 @@ public class ItemShearsCore extends ItemShears {
 	}
 
 	@Override
-	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
-	{
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+
 		return enchantment.type.canEnchantItem(stack.getItem()) || enchantment.canApply(new ItemStack(Items.SHEARS));
 	}
 
