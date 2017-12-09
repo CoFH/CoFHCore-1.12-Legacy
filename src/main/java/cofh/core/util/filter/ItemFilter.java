@@ -79,10 +79,10 @@ public class ItemFilter implements INBTSerializable<NBTTagCompound> {
 			if (item.getItem() != stack.getItem()) {
 				continue;
 			}
-			if (flags[IFilterable.FLAG_META] && item.getItemDamage() != stack.getItemDamage()) {
+			if (flags[IFilterable.FLAG_METADATA] && item.getItemDamage() != stack.getItemDamage()) {
 				continue;
 			}
-			if (flags[IFilterable.FLAG_NBT] && ItemHelper.doNBTsMatch(item.getTagCompound(), stack.getTagCompound())) {
+			if (flags[IFilterable.FLAG_NBT] && !ItemHelper.doNBTsMatch(item.getTagCompound(), stack.getTagCompound())) {
 				continue;
 			}
 			return ret;

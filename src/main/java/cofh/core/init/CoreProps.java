@@ -205,6 +205,7 @@ public class CoreProps {
 	public static final List<ItemStack> EMPTY_DROPS = new ArrayList<>();
 
 	public static final int[] STORAGE_SIZE = { 1, 9, 18, 27, 36, 45, 54, 63, 72, 81, 90, 99, 108, 117, 126 };
+	public static final int[] FILTER_SIZE = { 3, 6, 9, 12, 15 };
 	public static final int[][] SLOTS = new int[STORAGE_SIZE.length][];
 
 	static {
@@ -221,12 +222,17 @@ public class CoreProps {
 	public static final String PATH_GUI = PATH_GFX + "gui/";
 	public static final String PATH_ELEMENTS = PATH_GUI + "elements/";
 	public static final String PATH_GUI_STORAGE = PATH_GUI + "storage/";
+	public static final String PATH_GUI_FILTER = PATH_GUI + "filter/";
 
 	public static final ResourceLocation[] TEXTURE_STORAGE = new ResourceLocation[STORAGE_SIZE.length];
+	public static final ResourceLocation[] TEXTURE_FILTER = new ResourceLocation[FILTER_SIZE.length];
 
 	static {
 		for (int i = 0; i < STORAGE_SIZE.length; i++) {
 			TEXTURE_STORAGE[i] = new ResourceLocation(PATH_GUI_STORAGE + "storage_" + STORAGE_SIZE[i] + ".png");
+		}
+		for (int i = 0; i < FILTER_SIZE.length; i++) {
+			TEXTURE_FILTER[i] = new ResourceLocation(PATH_GUI_FILTER + "filter_" + FILTER_SIZE[i] + ".png");
 		}
 	}
 

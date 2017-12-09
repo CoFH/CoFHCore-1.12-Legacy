@@ -57,6 +57,12 @@ public class ShapelessSecureRecipeFactory implements IRecipeFactory {
 			outputStack = ItemHelper.copyTag(outputStack, inputStack);
 			return SecurityHelper.setSecure(outputStack);
 		}
+
+		@Override
+		public boolean isDynamic() {
+
+			return true;
+		}
 	}
 
 }

@@ -172,8 +172,12 @@ public abstract class GuiContainerCore extends GuiContainer {
 
 		GlStateManager.color(1, 1, 1, 1);
 		bindTexture(texture);
-		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
+		if (xSize > 256 || ySize > 256) {
+			drawSizedTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize, 512, 512);
+		} else {
+			drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+		}
 		mouseX = x - guiLeft;
 		mouseY = y - guiTop;
 
