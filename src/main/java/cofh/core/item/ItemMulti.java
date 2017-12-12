@@ -27,11 +27,13 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 	public ItemMulti() {
 
 		this("cofh");
+		setHasSubtypes(true);
 	}
 
 	public ItemMulti(String modName) {
 
 		super(modName);
+		setHasSubtypes(true);
 	}
 
 	/* ADD ITEMS */

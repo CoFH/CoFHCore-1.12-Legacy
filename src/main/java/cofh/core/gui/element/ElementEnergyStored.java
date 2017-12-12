@@ -64,7 +64,7 @@ public class ElementEnergyStored extends ElementBase {
 	public void addTooltip(List<String> list) {
 
 		if (isInfinite) {
-			list.add("Infinite RF");
+			list.add(StringHelper.localize("info.cofh.infiniteEnergy"));
 		} else {
 			list.add(StringHelper.formatNumber(storage.getEnergyStored()) + " / " + StringHelper.formatNumber(storage.getMaxEnergyStored()) + " RF");
 		}

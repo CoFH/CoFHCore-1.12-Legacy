@@ -70,7 +70,7 @@ public class ItemHammerCore extends ItemToolCore implements IAOEBreakItem {
 			BlockPos adjPos;
 			IBlockState adjState;
 			float strength;
-			int used = 0;
+			int count = 0;
 
 			int x = pos.getX();
 			int y = pos.getY();
@@ -87,7 +87,7 @@ public class ItemHammerCore extends ItemToolCore implements IAOEBreakItem {
 							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
 								if (harvestBlock(world, adjPos, player)) {
-									used++;
+									count++;
 								}
 							}
 						}
@@ -102,7 +102,7 @@ public class ItemHammerCore extends ItemToolCore implements IAOEBreakItem {
 							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
 								if (harvestBlock(world, adjPos, player)) {
-									used++;
+									count++;
 								}
 							}
 						}
@@ -117,15 +117,15 @@ public class ItemHammerCore extends ItemToolCore implements IAOEBreakItem {
 							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
 							if (strength > 0F && refStrength / strength <= 10F) {
 								if (harvestBlock(world, adjPos, player)) {
-									used++;
+									count++;
 								}
 							}
 						}
 					}
 					break;
 			}
-			if (used > 0 && !player.capabilities.isCreativeMode) {
-				stack.damageItem(used, player);
+			if (count > 0 && !player.capabilities.isCreativeMode) {
+				stack.damageItem(count, player);
 			}
 		}
 		return true;

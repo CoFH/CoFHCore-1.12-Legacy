@@ -146,7 +146,7 @@ public class ElementFluidTank extends ElementBase {
 			}
 		}
 		if (isInfinite) {
-			list.add("Infinite Fluid");
+			list.add(StringHelper.localize("info.cofh.infiniteFluid"));
 		} else {
 			list.add(StringHelper.formatNumber(tank.getFluidAmount()) + " / " + StringHelper.formatNumber(tank.getCapacity()) + " mB");
 		}

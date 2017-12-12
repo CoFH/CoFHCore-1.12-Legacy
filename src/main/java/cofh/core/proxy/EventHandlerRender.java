@@ -71,7 +71,6 @@ public class EventHandlerRender implements IResourceManagerReloadListener {
 	}
 
 	/* HELPERS */
-
 	// Copy of RenderGlobal.drawBlockDamageTexture
 	public void drawBlockDamageTexture(Tessellator tessellatorIn, BufferBuilder bufferIn, Entity entityIn, float partialTicks, World world, List<BlockPos> blocks) {
 

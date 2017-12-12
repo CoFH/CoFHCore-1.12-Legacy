@@ -70,6 +70,12 @@ public class ItemShieldCore extends Item {
 	}
 
 	@Override
+	public boolean isShield(ItemStack stack, @Nullable EntityLivingBase entity) {
+
+		return true;
+	}
+
+	@Override
 	public int getItemEnchantability(ItemStack stack) {
 
 		return toolMaterial.getEnchantability();

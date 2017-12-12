@@ -77,10 +77,7 @@ public abstract class ItemToolCore extends ItemTool {
 		}
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		// only effective materials
-		if (!(toolClasses.contains(state.getBlock().getHarvestTool(state)) || !canHarvestBlock(state, player.getHeldItemMainhand()))) {
-			return false;
-		}
+
 		if (!ForgeHooks.canHarvestBlock(block, player, world, pos)) {
 			return false;
 		}
@@ -153,7 +150,7 @@ public abstract class ItemToolCore extends ItemTool {
 	@Override
 	public boolean canHarvestBlock(IBlockState state, ItemStack stack) {
 
-		return getDestroySpeed(stack, state) > 1.0F;
+		return harvestLevel >= state.getBlock().getHarvestLevel(state) && getDestroySpeed(stack, state) > 1.0F;
 	}
 
 	@Override
