@@ -65,7 +65,7 @@ public class ItemFilter implements INBTSerializable<NBTTagCompound> {
 
 	public boolean matches(ItemStack stack) {
 
-		boolean ret = !flags[IFilterable.FLAG_BLACKLIST];
+		boolean ret = flags[IFilterable.FLAG_WHITELIST];
 
 		if (flags[IFilterable.FLAG_ORE_DICT] && !oreIDs.isEmpty()) {
 			List<Integer> ids = OreDictionaryArbiter.getAllOreIDs(stack);

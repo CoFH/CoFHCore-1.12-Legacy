@@ -376,21 +376,11 @@ public abstract class PacketBase {
 		}
 	}
 
-	//	public abstract void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer);
-	//
-	//	public abstract void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer);
-	//
-	//	public abstract void handleClientSide(EntityPlayer player);
-	//
-	//	public abstract void handleServerSide(EntityPlayer player);
-
-	//@Override
 	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 
 		buffer.writeBytes(arrayout.toByteArray());
 	}
 
-	//@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 
 		byte[] bytes = new byte[buffer.capacity()];
@@ -398,7 +388,6 @@ public abstract class PacketBase {
 		datain = new DataInputStream(new ByteArrayInputStream(bytes));
 	}
 
-	//@Override
 	public void handleClientSide(EntityPlayer player) {
 
 		if (player == null) {
@@ -407,7 +396,6 @@ public abstract class PacketBase {
 		handlePacket(player, false);
 	}
 
-	//@Override
 	public void handleServerSide(EntityPlayer player) {
 
 		if (player == null) {
