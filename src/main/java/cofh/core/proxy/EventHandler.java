@@ -12,6 +12,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -212,6 +213,10 @@ public class EventHandler {
 	public void handleLivingHurtEvent(LivingHurtEvent event) {
 
 		Entity entity = event.getEntity();
+
+		if (entity instanceof IProjectile) {
+			return;
+		}
 		Entity attacker = event.getSource().getTrueSource();
 
 		if (attacker instanceof EntityPlayer) {

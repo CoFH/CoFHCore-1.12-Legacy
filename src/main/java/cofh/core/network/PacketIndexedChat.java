@@ -7,7 +7,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PacketIndexedChat extends PacketCoFHBase {
+public class PacketIndexedChat extends PacketBase {
 
 	public static void initialize() {
 

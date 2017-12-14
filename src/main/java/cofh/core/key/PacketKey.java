@@ -1,11 +1,11 @@
 package cofh.core.key;
 
 import cofh.CoFHCore;
-import cofh.core.network.PacketCoFHBase;
+import cofh.core.network.PacketBase;
 import cofh.core.network.PacketHandler;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class PacketKey extends PacketCoFHBase {
+public class PacketKey extends PacketBase {
 
 	public static void initialize() {
 

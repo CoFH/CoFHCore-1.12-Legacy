@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-public class PacketTileInfo extends PacketCoFHBase {
+public class PacketTileInfo extends PacketBase {
 
 	public static void initialize() {
 
@@ -20,7 +20,6 @@ public class PacketTileInfo extends PacketCoFHBase {
 		addInt(tile.getPos().getX());
 		addInt(tile.getPos().getY());
 		addInt(tile.getPos().getZ());
-
 	}
 
 	@Override

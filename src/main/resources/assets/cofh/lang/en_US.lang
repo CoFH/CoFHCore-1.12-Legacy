@@ -172,6 +172,7 @@ info.cofh.output=Output
 info.cofh.owner=Owner
 info.cofh.perUse=Per Use
 info.cofh.potency=Potency
+info.cofh.radius=Radius
 info.cofh.receive=Receive
 info.cofh.redstoneControl=Redstone Control
 info.cofh.security=Security

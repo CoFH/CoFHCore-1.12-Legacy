@@ -6,6 +6,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public interface ITilePacketHandler {
 
 	@SideOnly (Side.CLIENT)
-	void handleTilePacket(PacketCoFHBase payload);
+	void handleTilePacket(PacketBase payload);
 
 }

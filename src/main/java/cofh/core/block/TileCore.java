@@ -2,7 +2,7 @@ package cofh.core.block;
 
 import cofh.api.core.ISecurable;
 import cofh.core.init.CoreProps;
-import cofh.core.network.PacketCoFHBase;
+import cofh.core.network.PacketBase;
 import cofh.core.network.PacketHandler;
 import cofh.core.network.PacketTile;
 import cofh.core.network.PacketTileInfo;
@@ -207,38 +207,38 @@ public abstract class TileCore extends TileEntity {
 	}
 
 	/* CLIENT -> SERVER */
-	public PacketCoFHBase getAccessPacket() {
+	public PacketBase getAccessPacket() {
 
-		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		PacketBase payload = PacketTileInfo.newPacket(this);
 		payload.addByte(TilePacketID.C_ACCESS.ordinal());
 		return payload;
 	}
 
-	public PacketCoFHBase getConfigPacket() {
+	public PacketBase getConfigPacket() {
 
-		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		PacketBase payload = PacketTileInfo.newPacket(this);
 		payload.addByte(TilePacketID.C_CONFIG.ordinal());
 		return payload;
 	}
 
-	public PacketCoFHBase getModePacket() {
+	public PacketBase getModePacket() {
 
-		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		PacketBase payload = PacketTileInfo.newPacket(this);
 		payload.addByte(TilePacketID.C_MODE.ordinal());
 		return payload;
 	}
 
-	protected void handleAccessPacket(PacketCoFHBase payload) {
+	protected void handleAccessPacket(PacketBase payload) {
 
 		markChunkDirty();
 	}
 
-	protected void handleConfigPacket(PacketCoFHBase payload) {
+	protected void handleConfigPacket(PacketBase payload) {
 
 		markChunkDirty();
 	}
 
-	protected void handleModePacket(PacketCoFHBase payload) {
+	protected void handleModePacket(PacketBase payload) {
 
 		markChunkDirty();
 		callNeighborTileChange();
@@ -266,30 +266,30 @@ public abstract class TileCore extends TileEntity {
 	}
 
 	/* SERVER -> CLIENT */
-	public PacketCoFHBase getFluidPacket() {
+	public PacketBase getFluidPacket() {
 
-		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		PacketBase payload = PacketTileInfo.newPacket(this);
 		payload.addByte(TilePacketID.S_FLUID.ordinal());
 		return payload;
 	}
 
-	public PacketCoFHBase getGuiPacket() {
+	public PacketBase getGuiPacket() {
 
-		PacketCoFHBase payload = PacketTileInfo.newPacket(this);
+		PacketBase payload = PacketTileInfo.newPacket(this);
 		payload.addByte(TilePacketID.S_GUI.ordinal());
 		return payload;
 	}
 
-	public PacketCoFHBase getTilePacket() {
+	public PacketBase getTilePacket() {
 
 		return new PacketTile(this);
 	}
 
-	protected void handleFluidPacket(PacketCoFHBase payload) {
+	protected void handleFluidPacket(PacketBase payload) {
 
 	}
 
-	protected void handleGuiPacket(PacketCoFHBase payload) {
+	protected void handleGuiPacket(PacketBase payload) {
 
 	}
 

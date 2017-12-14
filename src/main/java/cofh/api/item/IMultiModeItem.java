@@ -53,7 +53,7 @@ public interface IMultiModeItem {
 			curMode = 0;
 		}
 		stack.getTagCompound().setInteger("Mode", curMode);
-		return true;
+		return getNumModes(stack) > 1;
 	}
 
 	/**
@@ -70,7 +70,7 @@ public interface IMultiModeItem {
 			curMode = getNumModes(stack) - 1;
 		}
 		stack.getTagCompound().setInteger("Mode", curMode);
-		return true;
+		return getNumModes(stack) > 1;
 	}
 
 	/**

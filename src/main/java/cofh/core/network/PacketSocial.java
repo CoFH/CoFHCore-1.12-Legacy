@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 import java.util.LinkedList;
 
-public class PacketSocial extends PacketCoFHBase {
+public class PacketSocial extends PacketBase {
 
 	public static void initialize() {
 
