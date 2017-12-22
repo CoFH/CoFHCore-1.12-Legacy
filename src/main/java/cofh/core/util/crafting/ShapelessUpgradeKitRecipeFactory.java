@@ -72,6 +72,12 @@ public class ShapelessUpgradeKitRecipeFactory implements IRecipeFactory {
 			}
 			return AugmentHelper.setLevel(outputStack, upgradeLevel);
 		}
+
+		@Override
+		public boolean isDynamic() {
+
+			return true;
+		}
 	}
 
 }

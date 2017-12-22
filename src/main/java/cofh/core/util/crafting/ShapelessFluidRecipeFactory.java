@@ -51,6 +51,12 @@ public class ShapelessFluidRecipeFactory implements IRecipeFactory {
 			}
 			return ret;
 		}
+
+		@Override
+		public boolean isDynamic() {
+
+			return true;
+		}
 	}
 
 }

@@ -54,6 +54,12 @@ public class FluidIngredientFactory implements IIngredientFactory {
 			}
 			return false;
 		}
+
+		@Override
+		public boolean isSimple() {
+
+			return false;
+		}
 	}
 
 }

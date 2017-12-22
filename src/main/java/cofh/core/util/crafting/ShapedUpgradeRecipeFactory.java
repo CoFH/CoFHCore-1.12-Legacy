@@ -71,6 +71,12 @@ public class ShapedUpgradeRecipeFactory implements IRecipeFactory {
 			}
 			return outputStack;
 		}
+
+		@Override
+		public boolean isDynamic() {
+
+			return true;
+		}
 	}
 
 }
