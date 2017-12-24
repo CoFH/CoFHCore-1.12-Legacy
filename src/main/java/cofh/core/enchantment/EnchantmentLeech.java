@@ -56,4 +56,10 @@ public class EnchantmentLeech extends Enchantment {
 		return canApply(stack);
 	}
 
+	@Override
+	public boolean isAllowedOnBooks() {
+
+		return enable;
+	}
+
 }

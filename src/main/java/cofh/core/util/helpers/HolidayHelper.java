@@ -158,10 +158,10 @@ public class HolidayHelper {
 		return dateCheck();
 	}
 
-	public static boolean isChristmas() {
+	public static boolean isChristmas(int pre, int post) {
 
-		setDate(holidayStart, Calendar.DECEMBER, 24, false);
-		setDate(holidayEnd, Calendar.DECEMBER, 26, true);
+		setDate(holidayStart, Calendar.DECEMBER, 24 - pre, false);
+		setDate(holidayEnd, Calendar.DECEMBER, 26 + post, true);
 
 		return dateCheck();
 	}

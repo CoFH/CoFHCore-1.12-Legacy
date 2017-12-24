@@ -63,4 +63,10 @@ public class EnchantmentInsight extends Enchantment {
 		return super.canApplyTogether(ench) && ench != Enchantments.SILK_TOUCH;
 	}
 
+	@Override
+	public boolean isAllowedOnBooks() {
+
+		return enable;
+	}
+
 }

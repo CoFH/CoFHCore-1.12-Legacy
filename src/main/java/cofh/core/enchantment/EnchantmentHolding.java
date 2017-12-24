@@ -54,4 +54,10 @@ public class EnchantmentHolding extends Enchantment {
 		return canApply(stack);
 	}
 
+	@Override
+	public boolean isAllowedOnBooks() {
+
+		return enable;
+	}
+
 }

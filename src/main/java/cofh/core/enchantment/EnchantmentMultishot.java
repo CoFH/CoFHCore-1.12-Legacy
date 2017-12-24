@@ -55,4 +55,10 @@ public class EnchantmentMultishot extends Enchantment {
 		return canApply(stack);
 	}
 
+	@Override
+	public boolean isAllowedOnBooks() {
+
+		return enable;
+	}
+
 }
