@@ -95,12 +95,6 @@ public abstract class TileCore extends TileEntity {
 
 	}
 
-	@Override
-	protected void setWorldCreate(World worldIn) {
-
-		this.world = worldIn;
-	}
-
 	public boolean canPlayerAccess(EntityPlayer player) {
 
 		if (!(this instanceof ISecurable)) {
