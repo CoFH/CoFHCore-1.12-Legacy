@@ -141,9 +141,13 @@ public class ItemHammerCore extends ItemToolCore implements IAOEBreakItem {
 		if (!canHarvestBlock(world.getBlockState(pos), stack)) {
 			return ImmutableList.copyOf(area);
 		}
-		RayTraceResult traceResult = RayTracer.retrace(player);
-		BlockPos harvestPos;
 
+		RayTraceResult traceResult = RayTracer.retrace(player);
+		if (traceResult == null) {
+			return ImmutableList.copyOf(area);
+		}
+
+		BlockPos harvestPos;
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
