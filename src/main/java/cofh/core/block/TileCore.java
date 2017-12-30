@@ -2,10 +2,7 @@ package cofh.core.block;
 
 import cofh.api.core.ISecurable;
 import cofh.core.init.CoreProps;
-import cofh.core.network.PacketBase;
-import cofh.core.network.PacketHandler;
-import cofh.core.network.PacketTile;
-import cofh.core.network.PacketTileInfo;
+import cofh.core.network.*;
 import cofh.core.util.CoreUtils;
 import cofh.core.util.RegistrySocial;
 import cofh.core.util.helpers.SecurityHelper;
@@ -30,7 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import javax.annotation.Nullable;
 import java.util.UUID;
 
-public abstract class TileCore extends TileEntity {
+public abstract class TileCore extends TileEntity implements ITileInfoPacketHandler {
 
 	public abstract String getTileName();
 
@@ -310,6 +307,30 @@ public abstract class TileCore extends TileEntity {
 		if (light1 != light2 && world.checkLightFor(EnumSkyBlock.BLOCK, getPos())) {
 			IBlockState state = world.getBlockState(getPos());
 			world.notifyBlockUpdate(pos, state, state, 3);
+		}
+	}
+
+	/* ITileInfoPacketHandler */
+	@Override
+	public void handleTileInfoPacket(PacketBase payload, boolean isServer, EntityPlayer thePlayer) {
+
+		switch (TilePacketID.values()[payload.getByte()]) {
+			case S_GUI:
+				handleGuiPacket(payload);
+				return;
+			case S_FLUID:
+				handleFluidPacket(payload);
+				return;
+			case C_ACCESS:
+				handleAccessPacket(payload);
+				return;
+			case C_CONFIG:
+				handleConfigPacket(payload);
+				return;
+			case C_MODE:
+				handleModePacket(payload);
+				return;
+			default:
 		}
 	}
 
