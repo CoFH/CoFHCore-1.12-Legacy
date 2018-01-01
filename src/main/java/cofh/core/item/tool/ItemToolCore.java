@@ -93,34 +93,21 @@ public abstract class ItemToolCore extends ItemTool {
 				return false;
 			}
 		}
-		// Creative Mode
-		if (player.capabilities.isCreativeMode) {
-			if (!world.isRemote) {
-				if (block.removedByPlayer(state, world, pos, player, false)) {
-					block.onBlockDestroyedByPlayer(world, pos, state);
-				}
-				// always send block update to client
-				playerMP.connection.sendPacket(new SPacketBlockChange(world, pos));
-			} else {
-				if (block.removedByPlayer(state, world, pos, player, false)) {
-					block.onBlockDestroyedByPlayer(world, pos, state);
-				}
-				Minecraft.getMinecraft().getConnection().sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos, Minecraft.getMinecraft().objectMouseOver.sideHit));
-			}
-		}
-		// Otherwise
 		if (!world.isRemote) {
-			if (block.removedByPlayer(state, world, pos, player, true)) {
+			if (block.removedByPlayer(state, world, pos, player, !player.capabilities.isCreativeMode)) {
 				block.onBlockDestroyedByPlayer(world, pos, state);
-				block.harvestBlock(world, player, pos, state, world.getTileEntity(pos), player.getHeldItemMainhand());
-				if (xpToDrop > 0) {
-					block.dropXpOnBlockBreak(world, pos, xpToDrop);
+
+				if (!player.capabilities.isCreativeMode) {
+					block.harvestBlock(world, player, pos, state, world.getTileEntity(pos), player.getHeldItemMainhand());
+					if (xpToDrop > 0) {
+						block.dropXpOnBlockBreak(world, pos, xpToDrop);
+					}
 				}
 			}
 			// always send block update to client
 			playerMP.connection.sendPacket(new SPacketBlockChange(world, pos));
 		} else {
-			if (block.removedByPlayer(state, world, pos, player, true)) {
+			if (block.removedByPlayer(state, world, pos, player, !player.capabilities.isCreativeMode)) {
 				block.onBlockDestroyedByPlayer(world, pos, state);
 			}
 			Minecraft.getMinecraft().getConnection().sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos, Minecraft.getMinecraft().objectMouseOver.sideHit));

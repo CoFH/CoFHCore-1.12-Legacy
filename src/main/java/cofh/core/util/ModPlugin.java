@@ -2,6 +2,7 @@ package cofh.core.util;
 
 import cofh.core.util.core.IInitializer;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -30,7 +31,8 @@ public abstract class ModPlugin implements IInitializer {
 	/* HELPERS */
 	protected Block getBlock(String id, String name) {
 
-		return ForgeRegistries.BLOCKS.getValue(new ResourceLocation(id + ":" + name));
+		Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(id + ":" + name));
+		return block == null ? Blocks.AIR : block;
 	}
 
 	protected Block getBlock(String name) {
