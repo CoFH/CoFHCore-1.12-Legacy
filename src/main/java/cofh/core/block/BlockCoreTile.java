@@ -45,13 +45,6 @@ import java.util.List;
 
 public abstract class BlockCoreTile extends BlockCore implements ITileEntityProvider, IBlockInfo, IDismantleable, IInitializer {
 
-	public BlockCoreTile(Material material) {
-
-		super(material);
-
-		setSoundType(SoundType.STONE);
-	}
-
 	public BlockCoreTile(Material material, String modName) {
 
 		super(material, modName);
@@ -186,7 +179,7 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
 
 		TileEntity tile = world.getTileEntity(pos);
-		return tile instanceof TileCore && tile.hasWorld() ? ((TileCore) tile).getLightValue() : 0;
+		return tile instanceof TileCore && tile.hasWorld() ? ((TileCore) tile).getLightValue() : super.getLightValue(state, world, pos);
 	}
 
 	@Override
