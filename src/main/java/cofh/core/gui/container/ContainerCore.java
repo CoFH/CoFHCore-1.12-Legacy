@@ -120,8 +120,8 @@ public abstract class ContainerCore extends Container {
 		}
 	}
 
-	@SideOnly (Side.CLIENT)
 	@Override
+	@SideOnly (Side.CLIENT)
 	public void setAll(List<ItemStack> stacks) {
 
 		for (int i = 0; i < stacks.size(); ++i) {
