@@ -204,7 +204,7 @@ public class FluidTankCore implements IFluidTank {
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
 
-		if (fluid == null) {
+		if (fluid == null || locked && fluid.amount <= 0) {
 			return null;
 		}
 		int drained = maxDrain;
