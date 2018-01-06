@@ -1,0 +1,214 @@
+#pt_BR
+
+chat.cofh.command.clearblocks.failure=Sem blocos pra limpar.
+chat.cofh.command.clearblocks.start=Limpando %s blocos de %s:%s:%s até %s:%s:%s.
+chat.cofh.command.clearblocks.success=Limpado %s blocos de %s:%s:%s até %s:%s:%s com sucesso.
+chat.cofh.command.clearblocks.syntax=/cofh clearblocks {<pessoa> <tamanho em x> <tamanho em y> <tamanho em z> | <começo em x> <começo emy> <começo em z> <final em x> <final em y> <final em z>} [bloco#meta] [bloco#meta] ...
+chat.cofh.command.clearblocks=Limpa blocos específicos em uma área específica.
+
+chat.cofh.command.countblocks.failure=Não há nenhum bloco nessa área.
+chat.cofh.command.countblocks.start=Contando %s blocos de %s:%s:%s até %s:%s:%s.
+chat.cofh.command.countblocks.success=Encontrados %s blocos de %s:%s:%s até %s:%s:%s.
+chat.cofh.command.countblocks.syntax=/cofh countblocks {<pessoa> <tamanho em x> <tamanho em y> <tamanho em z> | <começo em x> <começo emy> <começo em z> <final em x> <final em y> <final em z>} [bloco#meta] [bloco#meta] ...
+chat.cofh.command.countblocks=Conta blocos específicos em uma área específica.
+
+chat.cofh.command.enchant.syntax=/cofh enchant [jogador] <ID do encantamento> [Nível]
+chat.cofh.command.enchant=O /enchant foi melhorado. Ele não tem mais limites em nível ou em aplicabilidade.
+
+chat.cofh.command.friend.0=foi adicionado em sua lista de amigos.
+chat.cofh.command.friend.1=Foi mal. Houve um problema ao adicionar
+chat.cofh.command.friend.2=a sua lista de amigos.
+chat.cofh.command.friend.3=Foi mal, mas esse não é um nome de usuário válido.
+chat.cofh.command.friend.4=foi removido de sua lista de amigos.
+chat.cofh.command.friend.5=não era seu amigo.
+chat.cofh.command.friend.syntax=/cofh friend {gui | add <nome do usuário> | remove <nome do usuário>}
+chat.cofh.command.friend=O comando que adiciona ou remove amigos de sua lista.
+
+chat.cofh.command.help.0=Os comandos disponíveis são:
+chat.cofh.command.help.syntax=/cofh help [comando]
+chat.cofh.command.help=O comando que te ajuda com outros comandos!
+
+chat.cofh.command.killall.noHostile=Nenhum mob hostil encontrado!
+chat.cofh.command.killall.noMatch=Nenhuma entidade desse tipo encontrada!
+chat.cofh.command.killall.success=Removidos %d entidades. (%s)
+chat.cofh.command.killall.successHostile=Removidos %d mobs hostis. (%s)
+chat.cofh.command.killall.syntax=/cofh killall [nome parcial]
+chat.cofh.command.killall=Mata todas as entidades a partir de um nome dado e mata todos os mobs hostis por padrão.
+
+chat.cofh.command.notFound=Comando desconhecido. Tente /cofh help para uma lista de comandos
+
+chat.cofh.command.pregen.start=Pre-gerando %s chunks de %s:%s até %s:%s.
+chat.cofh.command.pregen.syntax=/cofh pregen {<pessoa> <tamanho em x> <tamanho em y> <tamanho em z> | <começo em x> <começo emy> <começo em z> <final em x> <final em y> <final em z>}
+chat.cofh.command.pregen=Gera previamente chunks em uma área específica no mundo.
+
+chat.cofh.command.reloadworldgen.success=Geradores de mundo recarregados.
+chat.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
+chat.cofh.command.reloadworldgen=Recarrega do disco a geração do mundo.
+
+chat.cofh.command.replaceblocks.failure=Sem blocos para substituir.
+chat.cofh.command.replaceblocks.start=Substituindo %s blocos de %s:%s:%s até %s:%s:%s com %s.
+chat.cofh.command.replaceblocks.success=%s blocos foram substituidos, de %s:%s:%s até %s:%s:%s, com %s.
+chat.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<pessoa> <tamanho em x> <tamanho em y> <tamanho em z> | <começo em x> <começo emy> <começo em z> <final em x> <final em y> <final em z>} <blocoSubstituto#meta> [bloco#meta] [bloco#meta] ...
+chat.cofh.command.replaceblocks=Substitui blocos específicos em uma área específica.
+
+chat.cofh.command.syntax.syntax=/cofh syntax [comando]
+chat.cofh.command.syntax=O comando que te ajuda com a sintaxe de outros comandos!
+chat.cofh.command.syntaxError=Sintaxe inválida.
+
+chat.cofh.command.tps.syntax=/cofh tps [{o | a | <ID da dimensão>}]
+chat.cofh.command.tps=Te mostra os ticks por segundo em uma dimensão. Em um servidor perfeito, o resultado deve ser 20.
+
+chat.cofh.command.tpx.dimensionOther=Teletransportado %s para O %2$s em %3$.2f %4$.2f %5$.2f
+chat.cofh.command.tpx.dimensionOtherTo=Teletransportado %s para %s em %3$s em %4$.2f %5$.2f %6$.2f
+chat.cofh.command.tpx.dimensionOtherToSelf=Teletransportado %s para eles mesmos em %2$s em %3$.2f %4$.2f %5$.2f
+chat.cofh.command.tpx.dimensionSelf=Teletransportado para O %1$s em %2$.2f %3$.2f %4$.2f
+chat.cofh.command.tpx.other=Teletransportado %s para %.2f %.2f %.2f
+chat.cofh.command.tpx.otherTo=Teletransportado %s para %s at %.2f %.2f %.2f
+chat.cofh.command.tpx.otherToSelf=Teletransportado %s para eles mesmos em %.2f %.2f %.2f
+chat.cofh.command.tpx.self=Teletransportado para %.2f %.2f %.2f
+chat.cofh.command.tpx.snark.0=Teletransportado pra si mesmo com sucesso!
+chat.cofh.command.tpx.snark.1=Teletransportado %s para eles mesmos!
+chat.cofh.command.tpx.syntax=/cofh tpx [player] {(<player> | <dimensão>) | <x> <y> <z> [dimensão]}
+chat.cofh.command.tpx=Uma versão melhorada do famoso /tp que funciona entre dimensões.
+
+chat.cofh.command.unloadchunk.success=Descarregando chunk em %s:%s
+chat.cofh.command.unloadchunk.syntax=/cofh unloadchunk
+chat.cofh.command.unloadchunk=Descarrega a chunk que o player estiver olhando.
+
+chat.cofh.command.version.0=Esse mod está na versão
+chat.cofh.command.version.syntax=/cofh version
+chat.cofh.command.version=Te dá a versão deste mod.
+
+chat.cofh.command.world.notFound=Mundo inexistente.
+
+chat.cofh.secure.block.success=Esse bloco não pertence a você, meu chapa!
+chat.cofh.secure.item.success=Esse item não pertence a você, meu chapa!
+chat.cofh.secure.notice=Notícia: Os Ops do servidor são capazes de acessar livremente blocos 'protegidos' nesse servidor.
+chat.cofh.secure.warning=Isso é privado e pertence a %s! Você podia ter ficado sem as mãos!
+
+enchantment.cofhcore.holding=Expansão
+enchantment.cofhcore.insight=Aprendiz
+enchantment.cofhcore.leech=Recuperação
+enchantment.cofhcore.multishot=Multishot
+enchantment.cofhcore.smelting=Fundir
+enchantment.cofhcore.vorpal=Vorpal
+
+enchantment.cofhcore.holding.desc=Aumenta a capacidade de armazenamento de certos itens.
+enchantment.cofhcore.insight.desc=Aumenta o ganho de experiência quando usando o item.
+enchantment.cofhcore.leech.desc=Recupera vida quando um mob é morto.
+enchantment.cofhcore.multishot.desc=O arco lança flechas adicionais em cada tiro. Apenas uma flecha é consumida.
+enchantment.cofhcore.smelting.desc=Os blocos serão automaticamente fundidos, como numa fornalha.
+enchantment.cofhcore.vorpal.desc=Realiza de forma aleatória ataques poderosos e decapitações.
+
+fluid.tile.lava=Lava
+fluid.tile.water=Água
+
+gui.cofh.friendList=Lista de Amigos
+
+gui.cofh.transferInDisabled=Auto-Inserir Desabilitado
+gui.cofh.transferInEnabled=Auto-Inserir Habilitado
+gui.cofh.transferInUnavailable=Auto-Inserir Indisponível
+
+gui.cofh.transferOutDisabled=Auto-Extrair Desabilitado
+gui.cofh.transferOutEnabled=Auto-Extrair Habilitado
+gui.cofh.transferOutUnavailable=Auto-Extrair Indisponível
+
+info.cofh.access=Acesso
+info.cofh.accessPrivate=Privado
+info.cofh.accessPublic=Público
+info.cofh.accessRestricted=Restrito
+info.cofh.accessTeam=Time apenas
+info.cofh.amount=Quantidade
+info.cofh.anotherplayer=Outro Jogador
+info.cofh.area=Área
+info.cofh.augmentation=Melhorias
+info.cofh.blank=Em Branco
+info.cofh.capacity=Capacidade
+info.cofh.chance=Chance
+info.cofh.charge=Carga
+info.cofh.configuration=Configuração
+info.cofh.contents=Conteúdo
+info.cofh.controlStatus=Status do Controle
+info.cofh.damageAttack=Dano de Ataque
+info.cofh.damageFlux=Dano por Flux
+info.cofh.disabled=Desabilitado
+info.cofh.duration=Duração
+info.cofh.empty=Vazio
+info.cofh.enabled=Habilitado
+info.cofh.energy=Energia
+info.cofh.energyConsume=Uso de Energia
+info.cofh.energyMax=Uso Máximo
+info.cofh.energyProduce=Saída de Energia
+info.cofh.energyStored=Armazenada
+info.cofh.experience=Experiência
+info.cofh.filter=Filtro
+info.cofh.fluid=Fluido
+info.cofh.fluids=Fluidos
+info.cofh.high=Alto
+info.cofh.holdShiftForDetails=Segure §e§oShift§r§7 para Detalhes§r
+info.cofh.ignored=Ignorado
+info.cofh.infinite=Infinito
+info.cofh.infiniteSource=Recurso Infinito
+info.cofh.information=Informações
+info.cofh.item=Item
+info.cofh.items=Itens
+info.cofh.input=Entrada
+info.cofh.level=Nível
+info.cofh.locked=Trancado
+info.cofh.low=Baixo
+info.cofh.modeChange=para Alterar os Modos
+info.cofh.none=Nada
+info.cofh.output=Saída
+info.cofh.owner=Dono
+info.cofh.perUse=Por uso
+info.cofh.potency=Potência
+info.cofh.receive=Recebe
+info.cofh.redstoneControl=Redstone
+info.cofh.security=Segurança
+info.cofh.send=Envia
+info.cofh.signalDisabled=Sinal: §4Desabilitado§r
+info.cofh.signalEnabledHigh=Sinal: §aHabilitado§7, Alto§r
+info.cofh.signalEnabledLow=Sinal: §aHabilitado§7, Baixo§r
+info.cofh.signalRequired=Nível de Sinal
+info.cofh.steam=Vapor
+info.cofh.steamConsume=Uso de Vapor
+info.cofh.steamMax=Vapor Máximo
+info.cofh.steamProduce=Saída de Vapor
+info.cofh.steamStored=Vapor Armazenado
+info.cofh.stored=Armazenado
+info.cofh.tutorial.fluxRequired=Requer RF para funcionar.
+info.cofh.tutorial.tabAugment=A aba de melhorias permite adicionar modificações.
+info.cofh.tutorial.tabConfiguration=A aba de configurações define os parâmetros de entrada e saída para esta máquina.
+info.cofh.tutorial.tabRedstone=A aba de Controle de Redstone define como esta máquina reage a sinais de redstone.
+info.cofh.tutorial.tabSecurity=A aba de segurança permite ao dono controlar quem pode acessar esta máquina.
+info.cofh.tutorial=Tutorial
+info.cofh.unlocked=Destravado
+info.cofh.upgradeRequired=Não Liberado
+
+item.invalid.name=Item inválido (Destrua)
+
+key.cofh.augments=Abrir GUI de melhorias
+key.cofh.category=Atalhos do CoFH Core
+key.cofh.multimode=Alternar entre modos do item
+
+lingering_potion.effect.absorption=Poção Prolongada de Absorção
+lingering_potion.effect.haste=Poção Prolongada de Pressa
+lingering_potion.effect.resistance=Poção Prolongada de Resistência
+lingering_potion.effect.wither=Poção Prolongada de Apodrecimento
+
+potion.effect.absorption=Poção de Absorção
+potion.effect.haste=Poção de Pressa
+potion.effect.resistance=Poção de Resistência
+potion.effect.wither=Poção de Apodrecimento
+
+potion.potency.3=IV
+potion.potency.4=V
+
+splash_potion.effect.absorption=Poção Arremessável de Absorção
+splash_potion.effect.haste=Poção Arremessável de Pressa
+splash_potion.effect.resistance=Poção Arremessável de Resistência
+splash_potion.effect.wither=Poção Arremessável de Apodrecimento
+
+tab.cofh.friendList.0=Use essa lista para adicionar ou remover amigos!
+tab.cofh.friendList.1=Amigos podem acessar seus blocos seguros, se você os permitir.
+tab.cofh.friendList.2=Amigos não providenciados.
