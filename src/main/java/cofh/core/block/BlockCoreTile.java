@@ -246,7 +246,7 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 				if (rec.getMaxEnergyStored(side) <= 0) {
 					return;
 				}
-				info.add(new TextComponentString(StringHelper.localize("info.cofh.energy") + ": " + StringHelper.formatNumber(rec.getEnergyStored(side)) + "/" + StringHelper.formatNumber(rec.getMaxEnergyStored(side)) + " RF."));
+				info.add(new TextComponentString(StringHelper.localize("info.cofh.energy") + ": " + StringHelper.formatNumber(rec.getEnergyStored(side)) + " / " + StringHelper.formatNumber(rec.getMaxEnergyStored(side)) + " RF."));
 			}
 		}
 	}
