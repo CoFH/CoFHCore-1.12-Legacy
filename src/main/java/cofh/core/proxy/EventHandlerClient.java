@@ -27,7 +27,7 @@ public class EventHandlerClient {
 
 		ItemStack stack = event.getEntity().getActiveItemStack();
 
-		if (stack != null && stack.getItem() instanceof IFOVUpdateItem) {
+		if (stack.getItem() instanceof IFOVUpdateItem) {
 			event.setNewfov(event.getFov() - ((IFOVUpdateItem) stack.getItem()).getFOVMod(stack, event.getEntity()));
 		}
 	}
