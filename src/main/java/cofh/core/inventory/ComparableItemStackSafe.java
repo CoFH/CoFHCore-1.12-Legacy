@@ -18,10 +18,11 @@ public class ComparableItemStackSafe extends ComparableItemStack {
 	public static final String DUST = "dust";
 	public static final String INGOT = "ingot";
 	public static final String NUGGET = "nugget";
+	public static final String GEM = "gem";
 
 	public boolean safeOreType(String oreName) {
 
-		return oreName.startsWith(BLOCK) || oreName.startsWith(ORE) || oreName.startsWith(DUST) || oreName.startsWith(INGOT) || oreName.startsWith(NUGGET);
+		return oreName.startsWith(BLOCK) || oreName.startsWith(ORE) || oreName.startsWith(DUST) || oreName.startsWith(INGOT) || oreName.startsWith(NUGGET) || oreName.startsWith(GEM);
 	}
 
 	public int getOreID(ItemStack stack) {
