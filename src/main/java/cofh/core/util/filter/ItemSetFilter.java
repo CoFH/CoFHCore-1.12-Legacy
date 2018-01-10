@@ -17,6 +17,7 @@ public class ItemSetFilter implements INBTSerializable<NBTTagCompound> {
 
         filter = new ItemFilter(size);
         stackCounts = new int[size];
+        Arrays.fill(stackCounts, 0);
     }
 
     public ItemFilter getFilter() {
