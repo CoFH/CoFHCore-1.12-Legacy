@@ -50,9 +50,8 @@ public class ItemShieldCore extends Item {
 		return this;
 	}
 
-	public void damageShield(ItemStack stack, int damage, EntityPlayer player, Entity source) {
+	public void onHit(ItemStack stack, EntityPlayer player, Entity source) {
 
-		stack.damageItem(damage, player);
 	}
 
 	@Override

@@ -302,9 +302,9 @@ public abstract class TileCore extends TileEntity implements ITileInfoPacketHand
 
 	protected void updateLighting() {
 
-		int light2 = world.getLightFor(EnumSkyBlock.BLOCK, getPos()), light1 = getLightValue();
-		if (light1 != light2 && world.checkLightFor(EnumSkyBlock.BLOCK, getPos())) {
-			IBlockState state = world.getBlockState(getPos());
+		int light2 = world.getLightFor(EnumSkyBlock.BLOCK, pos), light1 = getLightValue();
+		if (light1 != light2 && world.checkLightFor(EnumSkyBlock.BLOCK, pos)) {
+			IBlockState state = world.getBlockState(pos);
 			world.notifyBlockUpdate(pos, state, state, 3);
 		}
 	}

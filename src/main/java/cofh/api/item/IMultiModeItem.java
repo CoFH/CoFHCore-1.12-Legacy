@@ -29,6 +29,9 @@ public interface IMultiModeItem {
 	 */
 	default boolean setMode(ItemStack stack, int mode) {
 
+		if (getNumModes(stack) <= 1) {
+			return false;
+		}
 		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
@@ -44,6 +47,9 @@ public interface IMultiModeItem {
 	 */
 	default boolean incrMode(ItemStack stack) {
 
+		if (getNumModes(stack) <= 1) {
+			return false;
+		}
 		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
@@ -53,7 +59,7 @@ public interface IMultiModeItem {
 			curMode = 0;
 		}
 		stack.getTagCompound().setInteger("Mode", curMode);
-		return getNumModes(stack) > 1;
+		return true;
 	}
 
 	/**
@@ -61,6 +67,9 @@ public interface IMultiModeItem {
 	 */
 	default boolean decrMode(ItemStack stack) {
 
+		if (getNumModes(stack) <= 1) {
+			return false;
+		}
 		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
@@ -70,7 +79,7 @@ public interface IMultiModeItem {
 			curMode = getNumModes(stack) - 1;
 		}
 		stack.getTagCompound().setInteger("Mode", curMode);
-		return getNumModes(stack) > 1;
+		return true;
 	}
 
 	/**

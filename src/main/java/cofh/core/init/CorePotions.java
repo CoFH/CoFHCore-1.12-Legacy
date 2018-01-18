@@ -121,7 +121,7 @@ public class CorePotions {
 		for (int i = minAmplifier; i <= maxAmplifier; i++) {
 			effects.clear();
 			for (PotionEffect effect : baseEffects) {
-				effects.add(new PotionEffect(effect.getPotion(), effect.getDuration() / (1 + i), i - 1));
+				effects.add(new PotionEffect(effect.getPotion(), Math.max(1, effect.getDuration() / (1 + i)), i - 1));
 			}
 			PotionType potion = new PotionType(baseName, effects.toArray(new PotionEffect[effects.size()]));
 			potion.setRegistryName(baseName + i);

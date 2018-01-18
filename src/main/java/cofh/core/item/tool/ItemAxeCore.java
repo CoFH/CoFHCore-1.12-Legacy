@@ -4,6 +4,7 @@ import cofh.core.init.CoreEnchantments;
 import cofh.core.item.IEnchantableItem;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
@@ -30,6 +31,12 @@ public class ItemAxeCore extends ItemToolCore implements IEnchantableItem {
 			attackDamage = 6.0F;
 			attackSpeed = -3.2F + (0.1F * (int) (efficiency / 5));
 		}
+	}
+
+	@Override
+	public boolean canDisableShield(ItemStack stack, ItemStack shield, EntityLivingBase entity, EntityLivingBase attacker) {
+
+		return true;
 	}
 
 	@Override

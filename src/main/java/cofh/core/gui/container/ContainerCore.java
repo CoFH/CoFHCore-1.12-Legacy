@@ -76,7 +76,6 @@ public abstract class ContainerCore extends Container {
 		if (!supportsShiftClick(player, slotIndex)) {
 			return ItemStack.EMPTY;
 		}
-
 		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = inventorySlots.get(slotIndex);
 
@@ -87,7 +86,6 @@ public abstract class ContainerCore extends Container {
 			if (!performMerge(player, slotIndex, stackInSlot)) {
 				return ItemStack.EMPTY;
 			}
-
 			slot.onSlotChange(stackInSlot, stack);
 
 			if (stackInSlot.getCount() <= 0) {
@@ -95,7 +93,6 @@ public abstract class ContainerCore extends Container {
 			} else {
 				slot.putStack(stackInSlot);
 			}
-
 			if (stackInSlot.getCount() == stack.getCount()) {
 				return ItemStack.EMPTY;
 			}

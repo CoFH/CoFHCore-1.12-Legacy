@@ -26,7 +26,6 @@ import net.minecraft.entity.projectile.EntityArrow.PickupStatus;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
@@ -34,10 +33,8 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -155,34 +152,16 @@ public class EventHandler {
 
 	@SubscribeEvent (priority = EventPriority.HIGH)
 	public void handleLivingAttackEvent(LivingAttackEvent event) {
-
 		Entity entity = event.getEntity();
 
 		if (!(entity instanceof EntityPlayer)) {
 			return;
 		}
 		EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+		ItemStack stack = player.getActiveItemStack();
 
-		if (!player.getActiveItemStack().isEmpty()) {
-			ItemStack stack = player.getActiveItemStack();
-			float damage = event.getAmount();
-
-			if (damage >= 3.0F && !stack.isEmpty() && ((stack.getItem() instanceof ItemShieldCore))) {
-				((ItemShieldCore) stack.getItem()).damageShield(stack, 1 + MathHelper.floor(damage), player, event.getSource().getTrueSource());
-
-				if (stack.getCount() <= 0) {
-					EnumHand enumhand = player.getActiveHand();
-					ForgeEventFactory.onPlayerDestroyItem(player, player.activeItemStack, enumhand);
-
-					if (enumhand == EnumHand.MAIN_HAND) {
-						player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
-					} else {
-						player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
-					}
-					player.activeItemStack = ItemStack.EMPTY;
-					player.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + player.world.rand.nextFloat() * 0.4F);
-				}
-			}
+		if (!stack.isEmpty() && stack.getItem() instanceof ItemShieldCore) {
+			((ItemShieldCore) stack.getItem()).onHit(stack, player, event.getSource().getTrueSource());
 		}
 	}
 
