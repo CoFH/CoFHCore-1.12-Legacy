@@ -8,14 +8,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public abstract class ModPlugin implements IInitializer {
+public abstract class PluginCore implements IInitializer {
 
 	protected final String modId;
 	protected final String modName;
 	protected boolean enable;
 	protected boolean error;
 
-	public ModPlugin(String modId, String modName) {
+	public PluginCore(String modId, String modName) {
 
 		this.modId = modId;
 		this.modName = modName;

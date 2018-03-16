@@ -40,4 +40,5 @@ public interface IFluidContainerItem {
 	 * container.
 	 */
 	FluidStack drain(ItemStack container, int maxDrain, boolean doDrain);
+
 }

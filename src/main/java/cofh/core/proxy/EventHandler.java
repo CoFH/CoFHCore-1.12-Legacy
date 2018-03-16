@@ -152,6 +152,7 @@ public class EventHandler {
 
 	@SubscribeEvent (priority = EventPriority.HIGH)
 	public void handleLivingAttackEvent(LivingAttackEvent event) {
+
 		Entity entity = event.getEntity();
 
 		if (!(entity instanceof EntityPlayer)) {
@@ -224,7 +225,7 @@ public class EventHandler {
 		}
 	}
 
-	@SubscribeEvent (priority = EventPriority.HIGHEST)
+	@SubscribeEvent (priority = EventPriority.LOW)
 	public void handleHarvestDropsEvent(BlockEvent.HarvestDropsEvent event) {
 
 		EntityPlayer player = event.getHarvester();

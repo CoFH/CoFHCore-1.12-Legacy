@@ -8,7 +8,7 @@ public interface IUpgradeItem {
 	 * Enum for Upgrade Types - there aren't many.
 	 */
 	enum UpgradeType {
-		INCREMENTAL, FULL, CREATIVE
+		INCREMENTAL, FULL, ENDER, CREATIVE
 	}
 
 	/**
