@@ -156,6 +156,11 @@ public class CoFHCore {
 		OreDictionary.registerOre("blockWool", new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("coal", new ItemStack(Items.COAL, 1, 0));
 		OreDictionary.registerOre("charcoal", new ItemStack(Items.COAL, 1, 1));
+
+		OreDictionary.registerOre("seedBeetroot", Items.BEETROOT_SEEDS);
+		OreDictionary.registerOre("seedMelon", Items.MELON_SEEDS);
+		OreDictionary.registerOre("seedPumpkin", Items.PUMPKIN_SEEDS);
+		OreDictionary.registerOre("seedWheat", Items.WHEAT_SEEDS);
 	}
 
 }
