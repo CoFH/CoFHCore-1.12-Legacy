@@ -94,7 +94,7 @@ public class RecipeShapelessOreFluid extends ShapelessOreRecipe {
 						ItemStack requiredStack = (ItemStack) aRequired;
 						if (requiredStack.getItem() == ForgeModContainer.getInstance().universalBucket) {
 							FluidStack fluidStack = Validate.notNull(FluidUtil.getFluidContained(requiredStack));
-							IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stackInSlot);
+							IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stackInSlot.copy());
 							if (fluidHandler != null) {
 								if (fluidStack.isFluidStackIdentical(fluidHandler.drain(Fluid.BUCKET_VOLUME, false))) {
 									match = true;
