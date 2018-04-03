@@ -186,7 +186,10 @@ public class EventHandler {
 		if (!CoreProps.enableLivingEntityDeathMessages || entity.world.isRemote || !(entity instanceof EntityLiving) || !event.getEntityLiving().hasCustomName()) {
 			return;
 		}
-		entity.world.getMinecraftServer().getPlayerList().sendMessage(event.getEntityLiving().getCombatTracker().getDeathMessage());
+		
+		if(event.getEntityLiving().getCombatTracker().getDeathMessage() != null) {
+			entity.world.getMinecraftServer().getPlayerList().sendMessage(event.getEntityLiving().getCombatTracker().getDeathMessage());
+		}
 	}
 
 	@SubscribeEvent
