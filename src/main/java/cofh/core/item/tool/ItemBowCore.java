@@ -1,9 +1,9 @@
 package cofh.core.item.tool;
 
+import cofh.api.item.IToolBow;
 import cofh.core.init.CoreEnchantments;
 import cofh.core.item.IEnchantableItem;
 import cofh.core.item.IFOVUpdateItem;
-import cofh.core.util.core.IBowImproved;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.helpers.MathHelper;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class ItemBowCore extends ItemBow implements IEnchantableItem, IBowImproved, IFOVUpdateItem {
+public class ItemBowCore extends ItemBow implements IEnchantableItem, IToolBow, IFOVUpdateItem {
 
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
@@ -208,20 +208,20 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IBowImprov
 		}
 	}
 
-	/* IBowImproved */
+	/* IToolBow */
 	@Override
-	public void onBowFired(EntityPlayer player, ItemStack stack) {
+	public void onBowFired(EntityPlayer player, ItemStack item) {
 
 	}
 
 	@Override
-	public float getArrowDamageMultiplier(ItemStack stack) {
+	public float getArrowDamageMultiplier(ItemStack item) {
 
 		return arrowDamageMultiplier;
 	}
 
 	@Override
-	public float getArrowSpeedMultiplier(ItemStack stack) {
+	public float getArrowSpeedMultiplier(ItemStack item) {
 
 		return arrowSpeedMultiplier;
 	}

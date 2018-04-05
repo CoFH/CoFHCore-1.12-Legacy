@@ -58,6 +58,9 @@ public class CoreProps {
 		comment = "If TRUE, the Smelting Enchantment is available for various Tools.";
 		EnchantmentSmelting.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableSmeltingEnchant", category, EnchantmentSmelting.enable, comment);
 
+		comment = "If TRUE, the Soulbound Enchantment is available.";
+		EnchantmentSoulbound.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableSoulboundEnchant", category, EnchantmentSoulbound.enable, comment);
+
 		comment = "If TRUE, the Vorpal Enchantment is available for various Weapons.";
 		EnchantmentVorpal.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableVorpalEnchant", category, EnchantmentVorpal.enable, comment);
 
@@ -166,8 +169,8 @@ public class CoreProps {
 		//		MinecraftForge.EVENT_BUS.register(DropHandler.instance);
 	}
 
-	private static final String BUILD = "2555";
-	private static final String FORGE_REQ = "14.23.1." + BUILD;
+	private static final String BUILD = "2611";
+	private static final String FORGE_REQ = "14.23.2." + BUILD;
 	private static final String FORGE_REQ_MAX = "15.0.0.0";
 
 	public static final String FORGE_DEP = "required-after:forge@[" + FORGE_REQ + "," + FORGE_REQ_MAX + ");";

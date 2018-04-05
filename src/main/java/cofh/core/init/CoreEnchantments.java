@@ -25,6 +25,7 @@ public class CoreEnchantments {
 		leech = new EnchantmentLeech("cofhcore:leech");
 		multishot = new EnchantmentMultishot("cofhcore:multishot");
 		smelting = new EnchantmentSmelting("cofhcore:smelting");
+		soulbound = new EnchantmentSoulbound("cofhcore:soulbound");
 		vorpal = new EnchantmentVorpal("cofhcore:vorpal");
 
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
@@ -39,6 +40,7 @@ public class CoreEnchantments {
 		event.getRegistry().register(leech);
 		event.getRegistry().register(multishot);
 		event.getRegistry().register(smelting);
+		event.getRegistry().register(soulbound);
 		event.getRegistry().register(vorpal);
 	}
 
@@ -94,6 +96,7 @@ public class CoreEnchantments {
 	public static Enchantment leech;
 	public static Enchantment multishot;
 	public static Enchantment smelting;
+	public static Enchantment soulbound;
 	public static Enchantment vorpal;
 
 }

@@ -19,6 +19,11 @@ public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, I
 		super(modName);
 	}
 
+	public ItemStack setDefaultTag(ItemStack stack, int energy) {
+
+		return EnergyHelper.setDefaultEnergyTag(stack, energy);
+	}
+
 	@Override
 	public boolean isFull3D() {
 
@@ -53,7 +58,7 @@ public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, I
 	public double getDurabilityForDisplay(ItemStack stack) {
 
 		if (stack.getTagCompound() == null) {
-			EnergyHelper.setDefaultEnergyTag(stack, 0);
+			setDefaultTag(stack, 0);
 		}
 		return 1.0D - ((double) stack.getTagCompound().getInteger("Energy") / (double) getMaxEnergyStored(stack));
 	}
@@ -68,7 +73,7 @@ public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, I
 	public int receiveEnergy(ItemStack container, int maxReceive, boolean simulate) {
 
 		if (container.getTagCompound() == null) {
-			EnergyHelper.setDefaultEnergyTag(container, 0);
+			setDefaultTag(container, 0);
 		}
 		int stored = Math.min(container.getTagCompound().getInteger("Energy"), getMaxEnergyStored(container));
 		int receive = Math.min(maxReceive, Math.min(getMaxEnergyStored(container) - stored, getReceive(container)));
@@ -84,7 +89,7 @@ public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, I
 	public int extractEnergy(ItemStack container, int maxExtract, boolean simulate) {
 
 		if (container.getTagCompound() == null) {
-			EnergyHelper.setDefaultEnergyTag(container, 0);
+			setDefaultTag(container, 0);
 		}
 		if (ItemHelper.getItemDamage(container) == CREATIVE) {
 			return maxExtract;
@@ -103,7 +108,7 @@ public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, I
 	public int getEnergyStored(ItemStack container) {
 
 		if (container.getTagCompound() == null) {
-			EnergyHelper.setDefaultEnergyTag(container, 0);
+			setDefaultTag(container, 0);
 		}
 		return Math.min(container.getTagCompound().getInteger("Energy"), getMaxEnergyStored(container));
 	}

@@ -1,11 +1,13 @@
 package cofh.core.proxy;
 
+import cofh.CoFHCore;
+import cofh.api.item.IToolBow;
+import cofh.api.item.IToolQuiver;
 import cofh.core.enchantment.EnchantmentVorpal;
 import cofh.core.init.CoreEnchantments;
 import cofh.core.init.CoreProps;
 import cofh.core.item.tool.ItemShieldCore;
-import cofh.core.util.core.IBowImproved;
-import cofh.core.util.core.IQuiverItem;
+import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.helpers.MathHelper;
 import cofh.core.util.helpers.NBTHelper;
 import net.minecraft.enchantment.Enchantment;
@@ -21,31 +23,39 @@ import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityArrow.PickupStatus;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.server.management.PlayerList;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import net.minecraftforge.event.entity.player.PlayerDropsEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.List;
+import java.util.ListIterator;
 
 public class EventHandler {
 
@@ -54,17 +64,17 @@ public class EventHandler {
 	@SubscribeEvent (priority = EventPriority.HIGHEST)
 	public void handleArrowLooseEvent(ArrowLooseEvent event) {
 
-		if (!(event.getBow().getItem() == Items.BOW) && !(event.getBow().getItem() instanceof IBowImproved)) {
+		if (!(event.getBow().getItem() == Items.BOW) && !(event.getBow().getItem() instanceof IToolBow)) {
 			return;
 		}
 		ItemStack stack = event.getBow();
-		IBowImproved bowImproved = null;
+		IToolBow bowImproved = null;
 		EntityPlayer player = event.getEntityPlayer();
 		ItemStack arrowStack = findAmmo(player);
 		World world = event.getWorld();
 
-		if (stack.getItem() instanceof IBowImproved) {
-			bowImproved = (IBowImproved) stack.getItem();
+		if (stack.getItem() instanceof IToolBow) {
+			bowImproved = (IToolBow) stack.getItem();
 		}
 		boolean flag = player.capabilities.isCreativeMode || (arrowStack.getItem() instanceof ItemArrow && ((ItemArrow) arrowStack.getItem()).isInfinite(arrowStack, stack, player));
 
@@ -115,7 +125,7 @@ public class EventHandler {
 
 				if (!flag && !player.capabilities.isCreativeMode) {
 					if (isQuiver(arrowStack)) {
-						((IQuiverItem) arrowStack.getItem()).onArrowFired(arrowStack, player);
+						((IToolQuiver) arrowStack.getItem()).onArrowFired(arrowStack, player);
 					} else {
 						arrowStack.shrink(1);
 						if (arrowStack.isEmpty()) {
@@ -132,7 +142,7 @@ public class EventHandler {
 	@SubscribeEvent (priority = EventPriority.HIGHEST)
 	public void handleArrowNockEvent(ArrowNockEvent event) {
 
-		if (!(event.getBow().getItem() == Items.BOW) && !(event.getBow().getItem() instanceof IBowImproved)) {
+		if (!(event.getBow().getItem() == Items.BOW) && !(event.getBow().getItem() instanceof IToolBow)) {
 			return;
 		}
 		ItemStack stack = event.getBow();
@@ -186,6 +196,15 @@ public class EventHandler {
 		if (!CoreProps.enableLivingEntityDeathMessages || entity.world.isRemote || !(entity instanceof EntityLiving) || !event.getEntityLiving().hasCustomName()) {
 			return;
 		}
+		PlayerList playerList = entity.world.getMinecraftServer().getPlayerList();
+		ITextComponent deathMessage = event.getEntityLiving().getCombatTracker().getDeathMessage();
+
+		if (playerList == null) {
+			CoFHCore.LOG.error("Null Player List! That's not good.", event);
+		}
+		if (deathMessage == null) {
+			CoFHCore.LOG.error("Null Death Message! Please report to the mod responsible.", event.getSource().getClass());
+		}
 		entity.world.getMinecraftServer().getPlayerList().sendMessage(event.getEntityLiving().getCombatTracker().getDeathMessage());
 	}
 
@@ -230,7 +249,7 @@ public class EventHandler {
 
 		EntityPlayer player = event.getHarvester();
 
-		if (player == null || event.isSilkTouching()) {
+		if (player == null || event.isSilkTouching() || event.isCanceled()) {
 			return;
 		}
 		int encSmelting = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.smelting, player.getHeldItemMainhand()), 0, CoreEnchantments.smelting.getMaxLevel());
@@ -252,7 +271,7 @@ public class EventHandler {
 
 		Entity source = event.getSource().getTrueSource();
 
-		if (!(source instanceof EntityPlayer) || !event.isRecentlyHit()) {
+		if (!(source instanceof EntityPlayer) || !event.isRecentlyHit() || event.isCanceled()) {
 			return;
 		}
 		EntityPlayer player = (EntityPlayer) source;
@@ -286,6 +305,80 @@ public class EventHandler {
 		}
 	}
 
+	@SubscribeEvent (priority = EventPriority.HIGH)
+	public void handlePlayerDropsEvent(PlayerDropsEvent event) {
+
+		if (event.isCanceled()) {
+			return;
+		}
+		EntityPlayer player = event.getEntityPlayer();
+
+		if (player instanceof FakePlayer) {
+			return;
+		}
+		if (player.world.getGameRules().getBoolean("keepInventory")) {
+			return;
+		}
+		ListIterator<EntityItem> iter = event.getDrops().listIterator();
+		while (iter.hasNext()) {
+			EntityItem drop = iter.next();
+			ItemStack stack = drop.getItem();
+			if (isSoulbound(stack)) {
+				if (addToPlayerInventory(player, stack)) {
+					iter.remove();
+				}
+			}
+		}
+		// TODO: Other weirdness? Unsure.
+	}
+
+	@SubscribeEvent (priority = EventPriority.HIGH)
+	public void handlePlayerCloneEvent(PlayerEvent.Clone event) {
+
+		if (event.isCanceled() || !event.isWasDeath()) {
+			return;
+		}
+		EntityPlayer player = event.getEntityPlayer();
+		EntityPlayer oldPlayer = event.getOriginal();
+
+		if (player instanceof FakePlayer) {
+			return;
+		}
+		if (player.world.getGameRules().getBoolean("keepInventory")) {
+			return;
+		}
+		for (int i = 0; i < oldPlayer.inventory.armorInventory.size(); i++) {
+			ItemStack stack = oldPlayer.inventory.armorInventory.get(i);
+			int encSoulbound = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.soulbound, stack), 0, CoreEnchantments.soulbound.getMaxLevel() + 1);
+			if (encSoulbound > 0) {
+				if (MathHelper.RANDOM.nextInt(1 + encSoulbound) == 0) {
+					ItemHelper.removeEnchantment(stack, CoreEnchantments.soulbound);
+					if (encSoulbound > 1) {
+						ItemHelper.addEnchantment(stack, CoreEnchantments.soulbound, encSoulbound - 1);
+					}
+				}
+				if (addToPlayerInventory(player, stack)) {
+					oldPlayer.inventory.armorInventory.set(i, ItemStack.EMPTY);
+				}
+			}
+		}
+		for (int i = 0; i < oldPlayer.inventory.mainInventory.size(); i++) {
+			ItemStack stack = oldPlayer.inventory.mainInventory.get(i);
+			int encSoulbound = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.soulbound, stack), 0, CoreEnchantments.soulbound.getMaxLevel() + 1);
+			if (encSoulbound > 0) {
+				if (MathHelper.RANDOM.nextInt(1 + encSoulbound) == 0) {
+					ItemHelper.removeEnchantment(stack, CoreEnchantments.soulbound);
+					if (encSoulbound > 1) {
+						ItemHelper.addEnchantment(stack, CoreEnchantments.soulbound, encSoulbound - 1);
+					}
+				}
+				if (addToPlayerInventory(player, stack)) {
+					oldPlayer.inventory.mainInventory.set(i, ItemStack.EMPTY);
+				}
+			}
+		}
+	}
+
 	/* HELPERS */
 	public boolean isArrow(ItemStack stack) {
 
@@ -294,7 +387,35 @@ public class EventHandler {
 
 	public boolean isQuiver(ItemStack stack) {
 
-		return stack.getItem() instanceof IQuiverItem;
+		return stack.getItem() instanceof IToolQuiver;
+	}
+
+	public boolean isSoulbound(ItemStack stack) {
+
+		return getEnchantmentLevel(stack, CoreEnchantments.soulbound) > 0;
+	}
+
+	private static boolean addToPlayerInventory(EntityPlayer player, ItemStack stack) {
+
+		if (stack == null || player == null) {
+			return false;
+		}
+		if (stack.getItem() instanceof ItemArmor) {
+			ItemArmor arm = (ItemArmor) stack.getItem();
+			int index = arm.armorType.getIndex();
+			if (player.inventory.armorInventory.get(index).isEmpty()) {
+				player.inventory.armorInventory.set(index, stack);
+				return true;
+			}
+		}
+		InventoryPlayer inv = player.inventory;
+		for (int i = 0; i < inv.mainInventory.size(); i++) {
+			if (inv.mainInventory.get(i).isEmpty()) {
+				inv.mainInventory.set(i, stack.copy());
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public EntityArrow createArrow(World world, ItemStack stack, EntityPlayer player) {
@@ -303,7 +424,7 @@ public class EventHandler {
 			return ((ItemArrow) stack.getItem()).createArrow(world, stack, player);
 		}
 		if (isQuiver(stack)) {
-			return ((IQuiverItem) stack.getItem()).createEntityArrow(world, stack, player);
+			return ((IToolQuiver) stack.getItem()).createEntityArrow(world, stack, player);
 		}
 		return ((ItemArrow) Items.ARROW).createArrow(world, stack, player);
 	}
@@ -313,15 +434,15 @@ public class EventHandler {
 		ItemStack offHand = player.getHeldItemOffhand();
 		ItemStack mainHand = player.getHeldItemMainhand();
 
-		if (isQuiver(offHand) && !((IQuiverItem) offHand.getItem()).isEmpty(offHand, player) || isArrow(offHand)) {
+		if (isQuiver(offHand) && !((IToolQuiver) offHand.getItem()).isEmpty(offHand, player) || isArrow(offHand)) {
 			return offHand;
-		} else if (isQuiver(mainHand) && !((IQuiverItem) mainHand.getItem()).isEmpty(mainHand, player) || isArrow(mainHand)) {
+		} else if (isQuiver(mainHand) && !((IToolQuiver) mainHand.getItem()).isEmpty(mainHand, player) || isArrow(mainHand)) {
 			return mainHand;
 		}
 		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 			ItemStack stack = player.inventory.getStackInSlot(i);
 
-			if (isQuiver(stack) && !((IQuiverItem) stack.getItem()).isEmpty(stack, player) || isArrow(stack)) {
+			if (isQuiver(stack) && !((IToolQuiver) stack.getItem()).isEmpty(stack, player) || isArrow(stack)) {
 				return stack;
 			}
 		}
@@ -331,6 +452,11 @@ public class EventHandler {
 	public int getHeldEnchantmentLevel(EntityPlayer player, Enchantment enc) {
 
 		return Math.max(EnchantmentHelper.getEnchantmentLevel(enc, player.getHeldItemMainhand()), EnchantmentHelper.getEnchantmentLevel(enc, player.getHeldItemOffhand()));
+	}
+
+	public int getEnchantmentLevel(ItemStack item, Enchantment enc) {
+
+		return EnchantmentHelper.getEnchantmentLevel(enc, item);
 	}
 
 }

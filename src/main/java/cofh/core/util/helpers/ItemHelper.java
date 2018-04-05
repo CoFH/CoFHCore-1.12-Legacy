@@ -5,6 +5,7 @@ import cofh.api.item.IMultiModeItem;
 import cofh.core.util.OreDictionaryProxy;
 import com.google.common.base.Strings;
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -390,6 +391,33 @@ public final class ItemHelper {
 	public static void registerWithHandlers(String oreName, ItemStack stack) {
 
 		OreDictionary.registerOre(oreName, stack);
+	}
+
+	/* ENCHANTMENT HELPERS */
+	public static void addEnchantment(ItemStack stack, Enchantment enc, int level) {
+
+		stack.addEnchantment(enc, level);
+	}
+
+	public static void removeEnchantment(ItemStack stack, Enchantment enc) {
+
+		if (stack.getTagCompound() == null) {
+			return;
+		}
+		if (!stack.getTagCompound().hasKey("ench", 9)) {
+			return;
+		}
+		NBTTagList list = stack.getTagCompound().getTagList("ench", 10);
+		int encId = Enchantment.getEnchantmentID(enc);
+
+		for (int i = 0; i < list.tagCount(); i++) {
+			NBTTagCompound tag = list.getCompoundTagAt(i);
+			int id = tag.getInteger("id");
+			if (encId == id) {
+				list.removeTag(i);
+				break;
+			}
+		}
 	}
 
 	/* MULTIMODE ITEM HELPERS */
