@@ -18,7 +18,7 @@ public class ItemSickleCore extends ItemToolCore implements IEnchantableItem {
 
 	public ItemSickleCore(ToolMaterial toolMaterial) {
 
-		super(3.0F, -2.6F, toolMaterial);
+		super(2.5F, -2.6F, toolMaterial);
 		addToolClass("sickle");
 
 		setMaxDamage(toolMaterial.getMaxUses() * 4);

@@ -4,6 +4,7 @@ import cofh.core.util.helpers.ItemHelper;
 import gnu.trove.set.hash.THashSet;
 import gnu.trove.set.hash.TLinkedHashSet;
 import net.minecraft.block.Block;
+import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -108,6 +109,72 @@ public abstract class ItemToolCore extends ItemTool {
 			playerMP.connection.sendPacket(new SPacketBlockChange(world, pos));
 		} else {
 			if (block.removedByPlayer(state, world, pos, player, !player.capabilities.isCreativeMode)) {
+				block.onBlockDestroyedByPlayer(world, pos, state);
+			}
+			Minecraft.getMinecraft().getConnection().sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos, Minecraft.getMinecraft().objectMouseOver.sideHit));
+		}
+		return true;
+	}
+
+	protected boolean harvestGrowable(World world, BlockPos pos, EntityPlayer player) {
+
+		if (world.isAirBlock(pos)) {
+			return false;
+		}
+		EntityPlayerMP playerMP = null;
+		if (player instanceof EntityPlayerMP) {
+			playerMP = (EntityPlayerMP) player;
+		}
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
+
+		// only harvestable plants
+		if (!(block instanceof IGrowable)) {
+			return false;
+		}
+		IGrowable grow = (IGrowable) block;
+		if (grow.canGrow(world, pos, state, world.isRemote)) {
+			return false;
+		}
+		if (!ForgeHooks.canHarvestBlock(block, player, world, pos)) {
+			return false;
+		}
+		// send the blockbreak event
+		int xpToDrop = 0;
+		if (playerMP != null) {
+			xpToDrop = ForgeHooks.onBlockBreakEvent(world, playerMP.interactionManager.getGameType(), playerMP, pos);
+			if (xpToDrop == -1) {
+				return false;
+			}
+		}
+		// Creative Mode
+		if (player.capabilities.isCreativeMode) {
+			if (!world.isRemote) {
+				if (block.removedByPlayer(state, world, pos, player, false)) {
+					block.onBlockDestroyedByPlayer(world, pos, state);
+				}
+				// always send block update to client
+				playerMP.connection.sendPacket(new SPacketBlockChange(world, pos));
+			} else {
+				if (block.removedByPlayer(state, world, pos, player, false)) {
+					block.onBlockDestroyedByPlayer(world, pos, state);
+				}
+				Minecraft.getMinecraft().getConnection().sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos, Minecraft.getMinecraft().objectMouseOver.sideHit));
+			}
+		}
+		// Otherwise
+		if (!world.isRemote) {
+			if (block.removedByPlayer(state, world, pos, player, true)) {
+				block.onBlockDestroyedByPlayer(world, pos, state);
+				block.harvestBlock(world, player, pos, state, world.getTileEntity(pos), player.getHeldItemMainhand());
+				if (xpToDrop > 0) {
+					block.dropXpOnBlockBreak(world, pos, xpToDrop);
+				}
+			}
+			// always send block update to client
+			playerMP.connection.sendPacket(new SPacketBlockChange(world, pos));
+		} else {
+			if (block.removedByPlayer(state, world, pos, player, true)) {
 				block.onBlockDestroyedByPlayer(world, pos, state);
 			}
 			Minecraft.getMinecraft().getConnection().sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, pos, Minecraft.getMinecraft().objectMouseOver.sideHit));

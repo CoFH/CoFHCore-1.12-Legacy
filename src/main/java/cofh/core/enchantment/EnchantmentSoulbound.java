@@ -10,8 +10,6 @@ public class EnchantmentSoulbound extends Enchantment {
 
 	public static boolean enable = true;
 
-	public static final int REUSE_CHANCE = 10;
-
 	public EnchantmentSoulbound(String id) {
 
 		super(Rarity.UNCOMMON, EnumEnchantmentType.ALL, EntityEquipmentSlot.values());

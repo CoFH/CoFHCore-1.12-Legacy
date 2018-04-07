@@ -38,7 +38,7 @@ public class CoFHCore {
 	public static final String MOD_ID = "cofhcore";
 	public static final String MOD_NAME = "CoFH Core";
 
-	public static final String VERSION = "4.3.10";
+	public static final String VERSION = "4.3.11";
 	public static final String VERSION_MAX = "4.4.0";
 	public static final String VERSION_GROUP = "required-after:" + MOD_ID + "@[" + VERSION + "," + VERSION_MAX + ");";
 	public static final String UPDATE_URL = "https://raw.github.com/cofh/version/master/" + MOD_ID + "_update.json";
@@ -154,8 +154,10 @@ public class CoFHCore {
 	private void addOreDictionaryEntries() {
 
 		OreDictionary.registerOre("blockWool", new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE));
-		OreDictionary.registerOre("coal", new ItemStack(Items.COAL, 1, 0));
+		OreDictionary.registerOre("coal", new ItemStack(Items.COAL));
 		OreDictionary.registerOre("charcoal", new ItemStack(Items.COAL, 1, 1));
+		OreDictionary.registerOre("dustBlaze", new ItemStack(Items.BLAZE_POWDER));
+		OreDictionary.registerOre("rodBlaze", new ItemStack(Items.BLAZE_ROD));
 
 		OreDictionary.registerOre("seedBeetroot", Items.BEETROOT_SEEDS);
 		OreDictionary.registerOre("seedMelon", Items.MELON_SEEDS);
