@@ -82,6 +82,9 @@ public class ItemHammerCore extends ItemToolCore implements IAOEBreakItem {
 				case UP:
 					for (int i = x - radius; i <= x + radius; i++) {
 						for (int k = z - radius; k <= z + radius; k++) {
+							if (i == x && k == z) {
+								continue;
+							}
 							adjPos = new BlockPos(i, y, k);
 							adjState = world.getBlockState(adjPos);
 							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
@@ -97,6 +100,9 @@ public class ItemHammerCore extends ItemToolCore implements IAOEBreakItem {
 				case SOUTH:
 					for (int i = x - radius; i <= x + radius; i++) {
 						for (int j = y - radius; j <= y + radius; j++) {
+							if (i == x && j == y) {
+								continue;
+							}
 							adjPos = new BlockPos(i, j, z);
 							adjState = world.getBlockState(adjPos);
 							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
@@ -112,6 +118,9 @@ public class ItemHammerCore extends ItemToolCore implements IAOEBreakItem {
 				case EAST:
 					for (int j = y - radius; j <= y + radius; j++) {
 						for (int k = z - radius; k <= z + radius; k++) {
+							if (j == y && k == z) {
+								continue;
+							}
 							adjPos = new BlockPos(x, j, k);
 							adjState = world.getBlockState(adjPos);
 							strength = adjState.getPlayerRelativeBlockHardness(player, world, adjPos);
@@ -128,7 +137,7 @@ public class ItemHammerCore extends ItemToolCore implements IAOEBreakItem {
 				stack.damageItem(count, player);
 			}
 		}
-		return true;
+		return false;
 	}
 
 	/* IAOEBreakItem */

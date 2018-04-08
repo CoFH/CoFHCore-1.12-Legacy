@@ -1,11 +1,10 @@
 package cofh.core.command;
 
 import cofh.CoFHCore;
-import cofh.core.util.helpers.StringHelper;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class CommandVersion implements ISubCommand {
 	@Override
 	public void handleCommand(MinecraftServer server, ICommandSender sender, String[] arguments) throws CommandException {
 
-		sender.sendMessage(new TextComponentString(StringHelper.localize("chat.cofh.command.version.0") + " " + CoFHCore.VERSION + "."));
+		sender.sendMessage(new TextComponentTranslation("chat.cofh.command.version.0").appendText(" " + CoFHCore.VERSION + "."));
 	}
 
 	@Override

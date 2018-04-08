@@ -40,6 +40,9 @@ public class CoreProps {
 		comment = "If TRUE, death messages are displayed for any named entity.";
 		enableLivingEntityDeathMessages = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableGenericDeathMessage", category, enableLivingEntityDeathMessages, comment);
 
+		comment = "Adjust this value to change the render update delay for most CoFH tiles. You should really only mess with this if you know what you're doing. This is a server-wide setting.";
+		tileUpdateDelay = CoFHCore.CONFIG_CORE.getConfiguration().getInt("TileUpdateDelay", category, tileUpdateDelay, 80, 1600, comment);
+
 		/* ENCHANTS */
 		category = "Enchantment";
 
@@ -120,55 +123,6 @@ public class CoreProps {
 		enableOpSecureAccessWarning = CoFHCore.CONFIG_CLIENT.getConfiguration().getBoolean("OpsCanAccessSecureBlocksWarning", category, enableOpSecureAccessWarning, comment);
 	}
 
-	private static void configLoot() {
-
-		//		CONFIG_LOOT.setConfiguration(new Configuration(new File(configDir, "/cofh/core/loot.cfg"), true));
-		//
-		//		String comment;
-		//		/* GENERAL */
-		//		String category = "General";
-		//
-		//		comment = "Set to false to disable this entire module.";
-		//		boolean enable = CONFIG_LOOT.get(category, "EnableModule", true, comment);
-		//
-		//		if (!enable) {
-		//			CONFIG_LOOT.save();
-		//			return false;
-		//		}
-		//		/* HEADS */
-		//		category = "Heads";
-		//
-		//		comment = "If enabled, mobs only drop heads when killed by players.";
-		//		DropHandler.mobPvEOnly = CONFIG_LOOT.get(category, "MobsDropOnPvEOnly", DropHandler.mobPvEOnly, comment);
-		//
-		//		comment = "If enabled, players only drop heads when killed by other players.";
-		//		DropHandler.playerPvPOnly = CONFIG_LOOT.get(category, "PlayersDropOnPvPOnly", DropHandler.playerPvPOnly, comment);
-		//
-		//		category = "Heads.Players";
-		//		DropHandler.playersEnabled = CONFIG_LOOT.get(category, "Enabled", DropHandler.playersEnabled);
-		//		DropHandler.playerChance = CONFIG_LOOT.get(category, "Chance", DropHandler.playerChance);
-		//
-		//		category = "Heads.Creepers";
-		//		DropHandler.creeperEnabled = CONFIG_LOOT.get(category, "Enabled", DropHandler.creeperEnabled);
-		//		DropHandler.creeperChance = CONFIG_LOOT.get(category, "Chance", DropHandler.creeperChance);
-		//
-		//		category = "Heads.Skeletons";
-		//		DropHandler.skeletonEnabled = CONFIG_LOOT.get(category, "Enabled", DropHandler.skeletonEnabled);
-		//		DropHandler.skeletonChance = CONFIG_LOOT.get(category, "Chance", DropHandler.skeletonChance);
-		//
-		//		category = "Heads.WitherSkeletons";
-		//		DropHandler.skeletonEnabled = CONFIG_LOOT.get(category, "Enabled", DropHandler.witherSkeletonEnabled);
-		//		DropHandler.witherSkeletonChance = CONFIG_LOOT.get(category, "Chance", DropHandler.witherSkeletonChance);
-		//
-		//		category = "Heads.Zombies";
-		//		DropHandler.zombieEnabled = CONFIG_LOOT.get(category, "Enabled", DropHandler.zombieEnabled);
-		//		DropHandler.zombieChance = CONFIG_LOOT.get(category, "Chance", DropHandler.zombieChance);
-		//
-		//		CONFIG_LOOT.save();
-		//
-		//		MinecraftForge.EVENT_BUS.register(DropHandler.instance);
-	}
-
 	private static final String BUILD = "2611";
 	private static final String FORGE_REQ = "14.23.2." + BUILD;
 	private static final String FORGE_REQ_MAX = "15.0.0.0";
@@ -191,7 +145,8 @@ public class CoreProps {
 	public static final int LAVA_RF = 200000;
 	public static final int MAGMATIC_TEMPERATURE = 1000;
 	public static final int ENTITY_TRACKING_DISTANCE = 64;
-	public static final int TILE_UPDATE_DELAY = 160;
+
+	public static int tileUpdateDelay = 160;
 
 	public static final int BOTTLE_VOLUME = 250;
 	public static final int POTION_MIN = 3;

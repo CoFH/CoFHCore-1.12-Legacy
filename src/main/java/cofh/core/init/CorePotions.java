@@ -41,6 +41,14 @@ public class CorePotions {
 		absorptionLong = new PotionType("absorption", new PotionEffect(MobEffects.ABSORPTION, durationLong));
 		absorptionStrong = new PotionType("absorption", new PotionEffect(MobEffects.ABSORPTION, durationStrong, 1));
 
+		luck = new PotionType("luck", new PotionEffect(MobEffects.LUCK, duration));
+		luckLong = new PotionType("luck", new PotionEffect(MobEffects.LUCK, durationLong));
+		luckStrong = new PotionType("luck", new PotionEffect(MobEffects.LUCK, durationStrong, 1));
+
+		unluck = new PotionType("unluck", new PotionEffect(MobEffects.UNLUCK, duration / 2));
+		unluckLong = new PotionType("unluck", new PotionEffect(MobEffects.UNLUCK, durationLong / 2));
+		unluckStrong = new PotionType("unluck", new PotionEffect(MobEffects.UNLUCK, durationStrong / 2, 1));
+
 		wither = new PotionType("wither", new PotionEffect(MobEffects.WITHER, duration / 4));
 		witherLong = new PotionType("wither", new PotionEffect(MobEffects.WITHER, 2 * duration / 4));
 		witherStrong = new PotionType("wither", new PotionEffect(MobEffects.WITHER, durationStrong / 4, 1));
@@ -59,6 +67,14 @@ public class CorePotions {
 		absorption.setRegistryName("absorption");
 		absorptionLong.setRegistryName("absorption+");
 		absorptionStrong.setRegistryName("absorption2");
+
+		luck.setRegistryName("luck");
+		luckLong.setRegistryName("luck+");
+		luckStrong.setRegistryName("luck2");
+
+		unluck.setRegistryName("unluck");
+		unluckLong.setRegistryName("unluck+");
+		unluckStrong.setRegistryName("unluck2");
 
 		wither.setRegistryName("wither");
 		witherLong.setRegistryName("wither+");
@@ -86,12 +102,20 @@ public class CorePotions {
 		event.getRegistry().register(absorptionLong);
 		event.getRegistry().register(absorptionStrong);
 
+		event.getRegistry().register(luck);
+		event.getRegistry().register(luckLong);
+		event.getRegistry().register(luckStrong);
+
+		event.getRegistry().register(unluck);
+		event.getRegistry().register(unluckLong);
+		event.getRegistry().register(unluckStrong);
+
 		event.getRegistry().register(wither);
 		event.getRegistry().register(witherLong);
 		event.getRegistry().register(witherStrong);
 
-		final int min = CoreProps.POTION_MIN;
-		final int max = CoreProps.POTION_MAX;
+		int min = CoreProps.POTION_MIN;
+		int max = CoreProps.POTION_MAX;
 
 		createStrongPotionTypes(event, PotionTypes.LEAPING, min, max);
 		createStrongPotionTypes(event, PotionTypes.SWIFTNESS, min, max);
@@ -104,11 +128,34 @@ public class CorePotions {
 		createStrongPotionTypes(event, CorePotions.haste, min, Math.min(max, 4));
 		createStrongPotionTypes(event, CorePotions.resistance, min, max);
 		createStrongPotionTypes(event, CorePotions.absorption, min, max);
+		createStrongPotionTypes(event, CorePotions.luck, min, max);
+		createStrongPotionTypes(event, CorePotions.unluck, min, max);
 		createStrongPotionTypes(event, CorePotions.wither, min, max);
+
+		min = 2;
+		max = 3;
+
+		createStrongPotionTypes(event, PotionTypes.LONG_LEAPING, min, max, "+");
+		createStrongPotionTypes(event, PotionTypes.LONG_SWIFTNESS, min, max, "+");
+		createStrongPotionTypes(event, PotionTypes.LONG_POISON, min, max, "+");
+		createStrongPotionTypes(event, PotionTypes.LONG_REGENERATION, min, max, "+");
+		createStrongPotionTypes(event, PotionTypes.LONG_STRENGTH, min, max, "+");
+
+		createStrongPotionTypes(event, CorePotions.hasteLong, min, Math.min(max, 4), "+");
+		createStrongPotionTypes(event, CorePotions.resistanceLong, min, max, "+");
+		createStrongPotionTypes(event, CorePotions.absorptionLong, min, max, "+");
+		createStrongPotionTypes(event, CorePotions.luckLong, min, max, "+");
+		createStrongPotionTypes(event, CorePotions.unluckLong, min, max, "+");
+		createStrongPotionTypes(event, CorePotions.witherLong, min, max, "+");
 	}
 
 	/* HELPERS */
 	public void createStrongPotionTypes(RegistryEvent.Register<PotionType> event, PotionType type, int minAmplifier, int maxAmplifier) {
+
+		createStrongPotionTypes(event, type, minAmplifier, maxAmplifier, "");
+	}
+
+	public void createStrongPotionTypes(RegistryEvent.Register<PotionType> event, PotionType type, int minAmplifier, int maxAmplifier, String postfix) {
 
 		List<PotionEffect> baseEffects = type.getEffects();
 		String baseName = type.getNamePrefixed("");
@@ -124,7 +171,7 @@ public class CorePotions {
 				effects.add(new PotionEffect(effect.getPotion(), Math.max(1, effect.getDuration() / (1 + i)), i - 1));
 			}
 			PotionType potion = new PotionType(baseName, effects.toArray(new PotionEffect[effects.size()]));
-			potion.setRegistryName(baseName + i);
+			potion.setRegistryName(baseName + i + postfix);
 			event.getRegistry().register(potion);
 		}
 	}
@@ -144,6 +191,14 @@ public class CorePotions {
 	public static PotionType absorption;
 	public static PotionType absorptionLong;
 	public static PotionType absorptionStrong;
+
+	public static PotionType luck;
+	public static PotionType luckLong;
+	public static PotionType luckStrong;
+
+	public static PotionType unluck;
+	public static PotionType unluckLong;
+	public static PotionType unluckStrong;
 
 	public static PotionType wither;
 	public static PotionType witherLong;

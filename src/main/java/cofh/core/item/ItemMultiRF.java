@@ -1,6 +1,7 @@
 package cofh.core.item;
 
 import cofh.api.item.IMultiModeItem;
+import cofh.api.item.INBTCopyIngredient;
 import cofh.core.init.CoreEnchantments;
 import cofh.core.init.CoreProps;
 import cofh.core.util.helpers.EnergyHelper;
@@ -12,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, IEnergyContainerItem, IEnchantableItem {
+public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, IEnergyContainerItem, IEnchantableItem, INBTCopyIngredient {
 
 	public ItemMultiRF(String modName) {
 
@@ -33,7 +34,7 @@ public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, I
 	@Override
 	public boolean isEnchantable(ItemStack stack) {
 
-		return ItemHelper.getItemDamage(stack) != CREATIVE;
+		return true;
 	}
 
 	@Override
@@ -123,7 +124,7 @@ public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, I
 	@Override
 	public boolean canEnchant(ItemStack stack, Enchantment enchantment) {
 
-		return enchantment == CoreEnchantments.holding;
+		return ItemHelper.getItemDamage(stack) != CREATIVE && enchantment == CoreEnchantments.holding;
 	}
 
 	/* CAPABILITIES */
