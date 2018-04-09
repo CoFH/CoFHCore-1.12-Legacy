@@ -14,27 +14,36 @@ import net.minecraft.item.ItemStack;
  */
 public class ComparableItemStack {
 
-	public static ComparableItemStack fromItemStack(ItemStack stack) {
+	public static final OreValidator DEFAULT_VALIDATOR = new OreValidator();
 
-		return new ComparableItemStack(stack);
+	public static final String BLOCK = "block";
+	public static final String ORE = "ore";
+	public static final String DUST = "dust";
+	public static final String INGOT = "ingot";
+	public static final String NUGGET = "nugget";
+	public static final String GEM = "gem";
+	public static final String PLATE = "plate";
+
+	static {
+		DEFAULT_VALIDATOR.addPrefix(BLOCK);
+		DEFAULT_VALIDATOR.addPrefix(ORE);
+		DEFAULT_VALIDATOR.addPrefix(DUST);
+		DEFAULT_VALIDATOR.addPrefix(INGOT);
+		DEFAULT_VALIDATOR.addPrefix(NUGGET);
+		DEFAULT_VALIDATOR.addPrefix(GEM);
+		DEFAULT_VALIDATOR.addPrefix(PLATE);
 	}
 
 	public Item item = Items.AIR;
 	public int metadata = -1;
 	public int stackSize = -1;
+
 	public int oreID = -1;
-
-	protected static ItemStack getOre(String oreName) {
-
-		if (ItemHelper.oreNameExists(oreName)) {
-			return ItemHelper.oreProxy.getOre(oreName);
-		}
-		return ItemStack.EMPTY;
-	}
+	public String oreName = "Unknown";
 
 	public ComparableItemStack(String oreName) {
 
-		this(getOre(oreName));
+		this(ItemHelper.getOre(oreName));
 	}
 
 	public ComparableItemStack(ItemStack stack) {
@@ -45,6 +54,7 @@ public class ComparableItemStack {
 		if (!stack.isEmpty()) {
 			stackSize = stack.getCount();
 			oreID = ItemHelper.oreProxy.getOreID(stack);
+			oreName = ItemHelper.oreProxy.getOreName(oreID);
 		}
 	}
 
@@ -54,6 +64,7 @@ public class ComparableItemStack {
 		this.metadata = metadata;
 		this.stackSize = stackSize;
 		this.oreID = ItemHelper.oreProxy.getOreID(this.toItemStack());
+		this.oreName = ItemHelper.oreProxy.getOreName(oreID);
 	}
 
 	public ComparableItemStack(ComparableItemStack stack) {
@@ -62,6 +73,7 @@ public class ComparableItemStack {
 		this.metadata = stack.metadata;
 		this.stackSize = stack.stackSize;
 		this.oreID = stack.oreID;
+		this.oreName = stack.oreName;
 	}
 
 	public boolean isEqual(ComparableItemStack other) {
@@ -115,7 +127,7 @@ public class ComparableItemStack {
 	@Override
 	public int hashCode() {
 
-		return oreID != -1 ? oreID : (metadata & 65535) | getId() << 16;
+		return oreID != -1 ? oreName.hashCode() : (metadata & 65535) | getId() << 16;
 	}
 
 	@Override

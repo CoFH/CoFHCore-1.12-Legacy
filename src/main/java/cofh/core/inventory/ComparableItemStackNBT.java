@@ -70,7 +70,7 @@ public class ComparableItemStackNBT extends ComparableItemStack {
 	@Override
 	public int hashCode() {
 
-		return oreID != -1 ? oreID : tag != null ? 17 + tag.toString().hashCode() * 31 + (metadata & 65535) | getId() << 16 : (metadata & 65535) | getId() << 16;
+		return oreID != -1 ? oreName.hashCode() : tag != null ? 17 + tag.toString().hashCode() * 31 + (metadata & 65535) | getId() << 16 : (metadata & 65535) | getId() << 16;
 	}
 
 }
