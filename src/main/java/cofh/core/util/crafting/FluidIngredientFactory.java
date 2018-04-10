@@ -49,10 +49,7 @@ public class FluidIngredientFactory implements IIngredientFactory {
 			if (handler == null) {
 				return false;
 			}
-			if (fluid.isFluidStackIdentical(handler.drain(Fluid.BUCKET_VOLUME, false))) {
-				return true;
-			}
-			return false;
+			return fluid.isFluidStackIdentical(handler.drain(Fluid.BUCKET_VOLUME, false));
 		}
 
 		@Override

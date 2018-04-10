@@ -265,22 +265,6 @@ public class ThermalExpansionHelper {
 		FMLInterModComms.sendMessage(MOD_ID, ADD_COMPACTOR_PRESS_RECIPE, toSend);
 	}
 
-	public static void addCompactorStorageRecipe(int energy, ItemStack input, ItemStack output) {
-
-		if (input.isEmpty() || output.isEmpty()) {
-			return;
-		}
-		NBTTagCompound toSend = new NBTTagCompound();
-
-		toSend.setInteger(ENERGY, energy);
-		toSend.setTag(INPUT, new NBTTagCompound());
-		toSend.setTag(OUTPUT, new NBTTagCompound());
-
-		input.writeToNBT(toSend.getCompoundTag(INPUT));
-		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
-		FMLInterModComms.sendMessage(MOD_ID, ADD_COMPACTOR_STORAGE_RECIPE, toSend);
-	}
-
 	public static void addCompactorMintRecipe(int energy, ItemStack input, ItemStack output) {
 
 		if (input.isEmpty() || output.isEmpty()) {
@@ -308,19 +292,6 @@ public class ThermalExpansionHelper {
 
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_COMPACTOR_PRESS_RECIPE, toSend);
-	}
-
-	public static void removeCompactorStorageRecipe(ItemStack input) {
-
-		if (input.isEmpty()) {
-			return;
-		}
-		NBTTagCompound toSend = new NBTTagCompound();
-
-		toSend.setTag(INPUT, new NBTTagCompound());
-
-		input.writeToNBT(toSend.getCompoundTag(INPUT));
-		FMLInterModComms.sendMessage(MOD_ID, REMOVE_COMPACTOR_STORAGE_RECIPE, toSend);
 	}
 
 	public static void removeCompactorMintRecipe(ItemStack input) {
@@ -837,7 +808,6 @@ public class ThermalExpansionHelper {
 	public static final String ADD_SMELTER_RECIPE = "addsmelterrecipe";
 	public static final String ADD_INSOLATOR_RECIPE = "addinsolatorrecipe";
 	public static final String ADD_COMPACTOR_PRESS_RECIPE = "addcompactorpressrecipe";
-	public static final String ADD_COMPACTOR_STORAGE_RECIPE = "addcompactorstoragerecipe";
 	public static final String ADD_COMPACTOR_MINT_RECIPE = "addcompactormintrecipe";
 	public static final String ADD_CRUCIBLE_RECIPE = "addcruciblerecipe";
 	public static final String ADD_REFINERY_RECIPE = "addrefineryrecipe";
@@ -854,7 +824,6 @@ public class ThermalExpansionHelper {
 	public static final String REMOVE_SMELTER_RECIPE = "removesmelterrecipe";
 	public static final String REMOVE_INSOLATOR_RECIPE = "removeinsolatorrecipe";
 	public static final String REMOVE_COMPACTOR_PRESS_RECIPE = "removecompactorpressrecipe";
-	public static final String REMOVE_COMPACTOR_STORAGE_RECIPE = "removecompactorstoragerecipe";
 	public static final String REMOVE_COMPACTOR_MINT_RECIPE = "removecompactormintrecipe";
 	public static final String REMOVE_CRUCIBLE_RECIPE = "removecruciblerecipe";
 	public static final String REMOVE_REFINERY_RECIPE = "removerefineryrecipe";

@@ -163,6 +163,11 @@ public class CoFHCore {
 		OreDictionary.registerOre("seedMelon", Items.MELON_SEEDS);
 		OreDictionary.registerOre("seedPumpkin", Items.PUMPKIN_SEEDS);
 		OreDictionary.registerOre("seedWheat", Items.WHEAT_SEEDS);
+
+		OreDictionary.registerOre("cofh:potion", Items.POTIONITEM);
+		OreDictionary.registerOre("cofh:potion", Items.SPLASH_POTION);
+		OreDictionary.registerOre("cofh:potion", Items.LINGERING_POTION);
+
 	}
 
 }

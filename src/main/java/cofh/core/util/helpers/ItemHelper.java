@@ -69,6 +69,16 @@ public final class ItemHelper {
 		return stack;
 	}
 
+	public static ItemStack cloneStack(Item item) {
+
+		return cloneStack(item, 1);
+	}
+
+	public static ItemStack cloneStack(Block block) {
+
+		return cloneStack(block, 1);
+	}
+
 	public static ItemStack cloneStack(Item item, int stackSize) {
 
 		if (item == null) {
