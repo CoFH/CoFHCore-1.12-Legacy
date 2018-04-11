@@ -164,6 +164,16 @@ public class InventoryHelper {
 		return successful;
 	}
 
+	public static boolean isAccessibleInput(TileEntity tile, EnumFacing side) {
+
+		return hasItemHandlerCap(tile, side.getOpposite()) && getItemHandlerCap(tile, side.getOpposite()).getSlots() > 0;
+	}
+
+	public static boolean isAccessibleOutput(TileEntity tile, EnumFacing side) {
+
+		return hasItemHandlerCap(tile, side.getOpposite()) && getItemHandlerCap(tile, side.getOpposite()).getSlots() > 0;
+	}
+
 	/* HELPERS */
 	public static ItemStack addToInventory(TileEntity tile, EnumFacing side, ItemStack stack) {
 
