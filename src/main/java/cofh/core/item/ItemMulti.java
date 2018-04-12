@@ -2,6 +2,7 @@ package cofh.core.item;
 
 import cofh.core.render.IModelRegister;
 import cofh.core.util.helpers.ItemHelper;
+import com.google.common.collect.ImmutableList;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -82,6 +83,16 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 	public ItemStack addOreDictItem(int number, String name) {
 
 		return addOreDictItem(number, name, name);
+	}
+
+	public ImmutableList<ItemStack> getAllItems() {
+
+		ArrayList<ItemStack> items = new ArrayList<>();
+
+		for (int metadata : itemList) {
+			items.add(new ItemStack(this, 1, metadata));
+		}
+		return ImmutableList.copyOf(items);
 	}
 
 	/* STANDARD METHODS */

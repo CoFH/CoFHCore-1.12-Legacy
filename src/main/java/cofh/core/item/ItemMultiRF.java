@@ -46,7 +46,7 @@ public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, I
 	@Override
 	public boolean showDurabilityBar(ItemStack stack) {
 
-		return ItemHelper.getItemDamage(stack) != CREATIVE && stack.getTagCompound() != null && !stack.getTagCompound().getBoolean("CreativeTab");
+		return ItemHelper.getItemDamage(stack) != CREATIVE && (stack.getTagCompound() == null || !stack.getTagCompound().getBoolean("CreativeTab"));
 	}
 
 	@Override
