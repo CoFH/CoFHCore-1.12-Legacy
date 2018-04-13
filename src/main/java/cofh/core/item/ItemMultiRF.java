@@ -135,5 +135,10 @@ public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, I
 	}
 
 	public static final int CREATIVE = 32000;
+	public static final int CAPACITY_MIN = 10000;
+	public static final int CAPACITY_MAX = 10000000;
+
+	public static final int XFER_MIN = 100;
+	public static final int XFER_MAX = 1000000;
 
 }
