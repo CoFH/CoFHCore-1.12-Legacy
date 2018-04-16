@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
  *
  * @author King Lemming
  */
-@Deprecated//TODO, J8 Predicate
+@Deprecated //TODO: J8 Predicate
 public interface ISlotValidator {
 
 	/**

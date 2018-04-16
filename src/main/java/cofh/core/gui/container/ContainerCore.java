@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -111,8 +112,8 @@ public abstract class ContainerCore extends Container {
 			ItemStack itemstack1 = itemstack.isEmpty() ? ItemStack.EMPTY : itemstack.copy();
 			inventoryItemStacks.set(start, itemstack1);
 
-			for (int j = 0; j < this.listeners.size(); ++j) {
-				this.listeners.get(j).sendSlotContents(this, start, itemstack1);
+			for (IContainerListener listener : this.listeners) {
+				listener.sendSlotContents(this, start, itemstack1);
 			}
 		}
 	}

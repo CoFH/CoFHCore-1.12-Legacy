@@ -130,18 +130,15 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 	@Override
 	public Item setUnlocalizedName(String name) {
 
-		ForgeRegistries.ITEMS.register(setRegistryName(name));
 		this.name = name;
 		name = modName + "." + name;
 		return super.setUnlocalizedName(name);
 	}
 
-	public Item setUnlocalizedName(String name, String registrationName) {
+	public ItemMulti register(String registrationName) {
 
 		ForgeRegistries.ITEMS.register(setRegistryName(registrationName));
-		this.name = name;
-		name = modName + "." + name;
-		return super.setUnlocalizedName(name);
+		return this;
 	}
 
 	/* IModelRegister */
