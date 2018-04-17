@@ -2,7 +2,6 @@ package cofh.core.item.tool;
 
 import cofh.core.init.CoreEnchantments;
 import cofh.core.item.IEnchantableItem;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
@@ -57,8 +56,13 @@ public class ItemSickleCore extends ItemToolCore implements IEnchantableItem {
 		int z = pos.getZ();
 
 		int used = 0;
-		world.playEvent(2001, pos, Block.getStateId(state));
-
+		// world.playEvent(2001, pos, Block.getStateId(state));
+		if (player.isSneaking()) {
+			if (!player.capabilities.isCreativeMode) {
+				stack.damageItem(1, player);
+			}
+			return false;
+		}
 		for (int i = x - radius; i <= x + radius; i++) {
 			for (int k = z - radius; k <= z + radius; k++) {
 				if (harvestBlock(world, new BlockPos(i, y, k), player)) {

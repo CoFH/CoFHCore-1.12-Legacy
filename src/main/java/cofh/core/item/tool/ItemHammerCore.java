@@ -3,7 +3,6 @@ package cofh.core.item.tool;
 import cofh.core.item.IAOEBreakItem;
 import cofh.core.util.RayTracer;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -58,8 +57,13 @@ public class ItemHammerCore extends ItemToolCore implements IAOEBreakItem {
 			}
 			return false;
 		}
-		world.playEvent(2001, pos, Block.getStateId(state));
-
+		// world.playEvent(2001, pos, Block.getStateId(state));
+		if (player.isSneaking()) {
+			if (!player.capabilities.isCreativeMode) {
+				stack.damageItem(1, player);
+			}
+			return false;
+		}
 		float refStrength = state.getPlayerRelativeBlockHardness(player, world, pos);
 		if (refStrength != 0.0F) {
 			RayTraceResult traceResult = RayTracer.retrace(player, false);
@@ -148,7 +152,7 @@ public class ItemHammerCore extends ItemToolCore implements IAOEBreakItem {
 		World world = player.getEntityWorld();
 
 		RayTraceResult traceResult = RayTracer.retrace(player, false);
-		if (traceResult == null || traceResult.sideHit == null || !canHarvestBlock(world.getBlockState(pos), stack)) {
+		if (traceResult == null || traceResult.sideHit == null || !canHarvestBlock(world.getBlockState(pos), stack) || player.isSneaking()) {
 			return ImmutableList.copyOf(area);
 		}
 		BlockPos harvestPos;

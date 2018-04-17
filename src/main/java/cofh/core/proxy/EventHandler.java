@@ -395,9 +395,9 @@ public class EventHandler {
 		return getEnchantmentLevel(stack, CoreEnchantments.soulbound) > 0;
 	}
 
-	private static boolean addToPlayerInventory(EntityPlayer player, ItemStack stack) {
+	public static boolean addToPlayerInventory(EntityPlayer player, ItemStack stack) {
 
-		if (stack == null || player == null) {
+		if (stack.isEmpty() || player == null) {
 			return false;
 		}
 		if (stack.getItem() instanceof ItemArmor) {
