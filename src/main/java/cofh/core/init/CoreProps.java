@@ -157,6 +157,15 @@ public class CoreProps {
 	public static final int RGB_DURABILITY_ENDER = 0x14594D;
 	public static final int RGB_DURABILITY_EXP = 0x7AAC52;
 
+	/* STRING CONSTANTS */
+	public static final String ACTIVE = "Active";
+	public static final String AMOUNT = "Amount";
+	public static final String CREATIVE_TAB = "CreativeTab";
+	public static final String ENERGY = "Energy";
+	public static final String FLUID = "Fluid";
+	public static final String MODE = "Mode";
+	public static final String WATER = "Water";
+
 	/* INVENTORIES */
 	public static final int[] EMPTY_INVENTORY = new int[] {};
 	public static final int[] SINGLE_INVENTORY = { 0 };

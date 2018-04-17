@@ -24,6 +24,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,7 +38,7 @@ public class EventHandlerRender implements IResourceManagerReloadListener {
 
 	public static final EventHandlerRender INSTANCE = new EventHandlerRender();
 
-	@SubscribeEvent
+	@SubscribeEvent (priority = EventPriority.LOW)
 	public void renderExtraBlockBreak(RenderWorldLastEvent event) {
 
 		PlayerControllerMP controllerMP = Minecraft.getMinecraft().playerController;
