@@ -64,13 +64,19 @@ public class ItemCoreRF extends ItemCore implements IMultiModeItem, IEnergyConta
 	}
 
 	@Override
-	public boolean isFull3D() {
+	public boolean isDamageable() {
+
+		return false;
+	}
+
+	@Override
+	public boolean isEnchantable(ItemStack stack) {
 
 		return true;
 	}
 
 	@Override
-	public boolean isEnchantable(ItemStack stack) {
+	public boolean isFull3D() {
 
 		return true;
 	}

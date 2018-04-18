@@ -8,6 +8,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,6 +25,12 @@ public class ItemCore extends Item {
 	public ItemCore(String modName) {
 
 		this.modName = modName;
+	}
+
+	public ItemCore register(String registrationName) {
+
+		ForgeRegistries.ITEMS.register(setRegistryName(registrationName));
+		return this;
 	}
 
 	/* STANDARD METHODS */

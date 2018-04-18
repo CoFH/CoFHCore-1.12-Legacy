@@ -33,7 +33,7 @@ public abstract class ItemToolCore extends ItemTool {
 	protected THashSet<Block> effectiveBlocks = new THashSet<>();
 	protected THashSet<Material> effectiveMaterials = new THashSet<>();
 
-	protected int harvestLevel = -1;
+	protected int harvestLevel;
 
 	protected boolean showInCreative = true;
 

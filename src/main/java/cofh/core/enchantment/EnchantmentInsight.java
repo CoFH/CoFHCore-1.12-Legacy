@@ -5,10 +5,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.item.ItemTool;
+import net.minecraft.item.*;
 
 public class EnchantmentInsight extends Enchantment {
 
@@ -48,7 +45,7 @@ public class EnchantmentInsight extends Enchantment {
 	public boolean canApply(ItemStack stack) {
 
 		Item item = stack.getItem();
-		return enable && (item instanceof ItemSword || item instanceof ItemTool || item instanceof IEnchantableItem && ((IEnchantableItem) item).canEnchant(stack, this));
+		return enable && (item instanceof ItemSword || item instanceof ItemTool || item instanceof ItemBow || item instanceof IEnchantableItem && ((IEnchantableItem) item).canEnchant(stack, this));
 	}
 
 	@Override

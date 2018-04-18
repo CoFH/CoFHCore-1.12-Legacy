@@ -19,7 +19,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -140,6 +139,12 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 	}
 
 	@Override
+	public boolean isDamageable() {
+
+		return false;
+	}
+
+	@Override
 	public EnumRarity getRarity(ItemStack stack) {
 
 		int i = ItemHelper.getItemDamage(stack);
@@ -166,12 +171,6 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 		this.name = name;
 		name = modName + "." + name;
 		return super.setUnlocalizedName(name);
-	}
-
-	public ItemMulti register(String registrationName) {
-
-		ForgeRegistries.ITEMS.register(setRegistryName(registrationName));
-		return this;
 	}
 
 	/* IModelRegister */

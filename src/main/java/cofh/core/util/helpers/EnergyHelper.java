@@ -13,7 +13,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.energy.IEnergyStorage;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -81,7 +80,7 @@ public class EnergyHelper {
 	 * @param stack The ItemStack to check.
 	 * @return If the ItemStack has the Energy cap.
 	 */
-	public static boolean isEnergyHandler(@Nullable ItemStack stack) {
+	public static boolean isEnergyHandler(ItemStack stack) {
 
 		return !stack.isEmpty() && stack.hasCapability(ENERGY_HANDLER, null);
 	}
