@@ -90,7 +90,7 @@ public class ItemCoreRF extends ItemCore implements IMultiModeItem, IEnergyConta
 	@Override
 	public boolean showDurabilityBar(ItemStack stack) {
 
-		return stack.getTagCompound() != null && !stack.getTagCompound().getBoolean(CoreProps.CREATIVE_TAB);
+		return getEnergyStored(stack) > 0;
 	}
 
 	@Override

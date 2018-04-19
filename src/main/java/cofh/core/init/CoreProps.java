@@ -160,7 +160,10 @@ public class CoreProps {
 	/* STRING CONSTANTS */
 	public static final String ACTIVE = "Active";
 	public static final String AMOUNT = "Amount";
-	public static final String CREATIVE_TAB = "CreativeTab";
+	public static final String ARROWS = "Arrows";
+	public static final String COLOR_1 = "Color1";
+	public static final String COLOR_2 = "Color2";
+	// public static final String CREATIVE_TAB = "CreativeTab";
 	public static final String ENERGY = "Energy";
 	public static final String FLUID = "Fluid";
 	public static final String MODE = "Mode";
