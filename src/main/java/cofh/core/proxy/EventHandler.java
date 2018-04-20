@@ -78,6 +78,9 @@ public class EventHandler {
 		}
 		boolean flag = player.capabilities.isCreativeMode || (arrowStack.getItem() instanceof ItemArrow && ((ItemArrow) arrowStack.getItem()).isInfinite(arrowStack, stack, player));
 
+		if (arrowStack.isEmpty() && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0) {
+			flag = true;
+		}
 		if (!arrowStack.isEmpty() || flag) {
 			if (arrowStack.isEmpty()) {
 				arrowStack = new ItemStack(Items.ARROW);
