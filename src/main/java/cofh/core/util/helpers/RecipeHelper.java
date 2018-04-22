@@ -1,6 +1,8 @@
 package cofh.core.util.helpers;
 
+import cofh.core.util.crafting.ShapedColorRecipeFactory.ShapedColorRecipe;
 import cofh.core.util.crafting.ShapedUpgradeRecipeFactory.ShapedUpgradeRecipe;
+import cofh.core.util.crafting.ShapelessColorRemoveRecipeFactory.ShapelessColorRemoveRecipe;
 import cofh.core.util.crafting.ShapelessFluidRecipeFactory.ShapelessFluidRecipe;
 import cofh.core.util.crafting.ShapelessUpgradeKitRecipeFactory.ShapelessUpgradeKitRecipe;
 import net.minecraft.block.Block;
@@ -79,6 +81,23 @@ public class RecipeHelper {
 
 		ResourceLocation location = getNameForRecipe(output);
 		ShapelessUpgradeKitRecipe recipe = new ShapelessUpgradeKitRecipe(location, output, input);
+		recipe.setRegistryName(location);
+		GameData.register_impl(recipe);
+	}
+
+	public static void addShapedColorRecipe(ItemStack output, Object... input) {
+
+		ResourceLocation location = getNameForRecipe(output);
+		CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(input);
+		ShapedColorRecipe recipe = new ShapedColorRecipe(location, output, primer);
+		recipe.setRegistryName(location);
+		GameData.register_impl(recipe);
+	}
+
+	public static void addShapelessColorRemoveRecipe(ItemStack output, Object... input) {
+
+		ResourceLocation location = getNameForRecipe(output);
+		ShapelessColorRemoveRecipe recipe = new ShapelessColorRemoveRecipe(location, output, input);
 		recipe.setRegistryName(location);
 		GameData.register_impl(recipe);
 	}

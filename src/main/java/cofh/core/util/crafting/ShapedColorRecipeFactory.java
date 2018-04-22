@@ -1,8 +1,8 @@
 package cofh.core.util.crafting;
 
 import cofh.CoFHCore;
-import cofh.api.item.INBTCopyIngredient;
-import cofh.core.util.helpers.AugmentHelper;
+import cofh.api.item.IColorableItem;
+import cofh.core.util.helpers.ColorHelper;
 import cofh.core.util.helpers.ItemHelper;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.InventoryCrafting;
@@ -17,7 +17,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import javax.annotation.Nonnull;
 
-public class ShapedUpgradeRecipeFactory implements IRecipeFactory {
+public class ShapedColorRecipeFactory implements IRecipeFactory {
 
 	@Override
 	public IRecipe parse(JsonContext context, JsonObject json) {
@@ -30,13 +30,13 @@ public class ShapedUpgradeRecipeFactory implements IRecipeFactory {
 		primer.mirrored = JsonUtils.getBoolean(json, "mirrored", true);
 		primer.input = recipe.getIngredients();
 
-		return new ShapedUpgradeRecipe(new ResourceLocation(CoFHCore.MOD_ID, "upgrade_shaped"), recipe.getRecipeOutput(), primer);
+		return new ShapedColorRecipe(new ResourceLocation(CoFHCore.MOD_ID, "color_shaped"), recipe.getRecipeOutput(), primer);
 	}
 
 	/* RECIPE */
-	public static class ShapedUpgradeRecipe extends ShapedOreRecipe {
+	public static class ShapedColorRecipe extends ShapedOreRecipe {
 
-		public ShapedUpgradeRecipe(ResourceLocation group, ItemStack result, ShapedPrimer primer) {
+		public ShapedColorRecipe(ResourceLocation group, ItemStack result, ShapedPrimer primer) {
 
 			super(group, result, primer);
 		}
@@ -45,27 +45,32 @@ public class ShapedUpgradeRecipeFactory implements IRecipeFactory {
 		@Nonnull
 		public ItemStack getCraftingResult(@Nonnull InventoryCrafting inv) {
 
+			ItemStack dyeStack = ItemStack.EMPTY;
 			ItemStack inputStack = ItemStack.EMPTY;
 			ItemStack outputStack = output.copy();
 
+			int dyeIndex = 0;
+			int colorableIndex = 0;
+
 			for (int i = 0; i < inv.getSizeInventory(); ++i) {
 				ItemStack stack = inv.getStackInSlot(i);
-
 				if (!stack.isEmpty()) {
-					if (stack.getItem() instanceof INBTCopyIngredient) {
+					if (ColorHelper.isDye(stack)) {
+						dyeStack = stack.copy();
+						dyeIndex = i;
+					}
+					if (stack.getItem() instanceof IColorableItem) {
 						inputStack = stack;
+						colorableIndex = i;
 					}
 				}
 			}
-			if (inputStack.isEmpty()) {
+			if (dyeStack.isEmpty() || inputStack.isEmpty()) {
 				return ItemStack.EMPTY;
 			}
-			int outputLevel = AugmentHelper.getLevel(outputStack);
 			outputStack = ItemHelper.copyTag(outputStack, inputStack);
+			((IColorableItem) outputStack.getItem()).applyColor(outputStack, ColorHelper.getDyeColor(dyeStack), dyeIndex < colorableIndex ? 0 : 1);
 
-			if (outputLevel != -1) {
-				AugmentHelper.setLevel(outputStack, outputLevel);
-			}
 			return outputStack;
 		}
 

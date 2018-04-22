@@ -68,13 +68,13 @@ public class EventHandler {
 			return;
 		}
 		ItemStack stack = event.getBow();
-		IToolBow bowImproved = null;
+		IToolBow bow = null;
 		EntityPlayer player = event.getEntityPlayer();
 		ItemStack arrowStack = findAmmo(player);
 		World world = event.getWorld();
 
 		if (stack.getItem() instanceof IToolBow) {
-			bowImproved = (IToolBow) stack.getItem();
+			bow = (IToolBow) stack.getItem();
 		}
 		boolean flag = player.capabilities.isCreativeMode || (arrowStack.getItem() instanceof ItemArrow && ((ItemArrow) arrowStack.getItem()).isInfinite(arrowStack, stack, player));
 
@@ -86,7 +86,7 @@ public class EventHandler {
 				arrowStack = new ItemStack(Items.ARROW);
 			}
 			float f = ItemBow.getArrowVelocity(event.getCharge());
-			float speedMod = bowImproved != null ? 1.0F + bowImproved.getArrowSpeedMultiplier(stack) : 1.0F;
+			float speedMod = bow != null ? 1.0F + bow.getArrowSpeedMultiplier(stack) : 1.0F;
 
 			if ((double) f >= 0.1D) {
 				if (!world.isRemote) {
@@ -95,15 +95,15 @@ public class EventHandler {
 					int encPower = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
 					boolean encFlame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;
 
-					if (bowImproved != null) {
-						bowImproved.onBowFired(player, stack);
+					if (bow != null) {
+						bow.onBowFired(player, stack);
 					}
 					for (int shot = 0; shot <= encMultishot; shot++) {
 						EntityArrow arrow = createArrow(world, arrowStack, player);
 						arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F + (1.5F - f) * shot);
 
-						if (bowImproved != null) {
-							arrow.setDamage(arrow.getDamage() * (1 + bowImproved.getArrowDamageMultiplier(stack)));
+						if (bow != null) {
+							arrow.setDamage(arrow.getDamage() * (1 + bow.getArrowDamageMultiplier(stack)));
 						}
 						if (f >= 1.0F) {
 							arrow.setIsCritical(true);
