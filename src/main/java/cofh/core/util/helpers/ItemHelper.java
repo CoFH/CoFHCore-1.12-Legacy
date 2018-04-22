@@ -284,7 +284,7 @@ public final class ItemHelper {
 	/* ORE DICTIONARY FUNCTIONS */
 	public static ItemStack getOre(String oreName) {
 
-		return oreProxy.getOre(oreName);
+		return getOre(oreName, 1);
 	}
 
 	public static ItemStack getOre(String oreName, int amount) {
@@ -345,57 +345,6 @@ public final class ItemHelper {
 	public static boolean isLog(ItemStack stack) {
 
 		return getOreName(stack).startsWith(LOG);
-	}
-
-	/* CREATING ItemStacks */
-	public static ItemStack stack(Item t) {
-
-		return new ItemStack(t);
-	}
-
-	public static ItemStack stack(Item t, int s) {
-
-		return new ItemStack(t, s);
-	}
-
-	public static ItemStack stack(Item t, int s, int m) {
-
-		return new ItemStack(t, s, m);
-	}
-
-	public static ItemStack stack(Block t) {
-
-		return new ItemStack(t);
-	}
-
-	public static ItemStack stack(Block t, int s) {
-
-		return new ItemStack(t, s);
-	}
-
-	public static ItemStack stack(Block t, int s, int m) {
-
-		return new ItemStack(t, s, m);
-	}
-
-	public static ItemStack stack2(Item t) {
-
-		return new ItemStack(t, 1, WILDCARD_VALUE);
-	}
-
-	public static ItemStack stack2(Item t, int s) {
-
-		return new ItemStack(t, s, WILDCARD_VALUE);
-	}
-
-	public static ItemStack stack2(Block t) {
-
-		return new ItemStack(t, 1, WILDCARD_VALUE);
-	}
-
-	public static ItemStack stack2(Block t, int s) {
-
-		return new ItemStack(t, s, WILDCARD_VALUE);
 	}
 
 	public static void registerWithHandlers(String oreName, ItemStack stack) {
@@ -802,10 +751,7 @@ public final class ItemHelper {
 		if (stackA.getTagCompound() == null && stackB.getTagCompound() == null) {
 			return true;
 		}
-		if (stackA.getTagCompound() == null && stackB.getTagCompound() != null) {
-			return false;
-		}
-		if (stackA.getTagCompound() != null && stackB.getTagCompound() == null) {
+		if (stackA.getTagCompound() == null || stackB.getTagCompound() == null) {
 			return false;
 		}
 		int numberOfKeys = stackA.getTagCompound().getKeySet().size();

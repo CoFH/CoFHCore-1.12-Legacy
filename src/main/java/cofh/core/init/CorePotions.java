@@ -1,12 +1,17 @@
 package cofh.core.init;
 
+import cofh.CoFHCore;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +19,8 @@ import java.util.List;
 public class CorePotions {
 
 	public static final CorePotions INSTANCE = new CorePotions();
+	public static boolean disableAll = false;
+	private static boolean registered = false;
 
 	private CorePotions() {
 
@@ -79,40 +86,60 @@ public class CorePotions {
 		wither.setRegistryName("wither");
 		witherLong.setRegistryName("wither+");
 		witherStrong.setRegistryName("wither2");
+	}
 
+	/* MUST BE CALLED IN PRE-INIT BY SOMETHING */
+	public static void register() {
+
+		if (disableAll || registered) {
+			return;
+		}
+		ModContainer callingContainer = Loader.instance().activeModContainer();
+		ModContainer cofhContainer = FMLCommonHandler.instance().findContainerFor(CoFHCore.MOD_ID);
+
+		Loader.instance().setActiveModContainer(cofhContainer);
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
+		registered = true;
+		Loader.instance().setActiveModContainer(callingContainer);
+	}
+
+	public static boolean registered() {
+
+		return registered;
 	}
 
 	/* EVENT HANDLING */
 	@SubscribeEvent
 	public void registerPotionTypes(RegistryEvent.Register<PotionType> event) {
 
-		event.getRegistry().register(haste);
-		event.getRegistry().register(hasteLong);
-		event.getRegistry().register(hasteStrong);
+		IForgeRegistry<PotionType> registry = event.getRegistry();
 
-		event.getRegistry().register(resistance);
-		event.getRegistry().register(resistanceLong);
-		event.getRegistry().register(resistanceStrong);
+		registry.register(haste);
+		registry.register(hasteLong);
+		registry.register(hasteStrong);
 
-		event.getRegistry().register(levitation);
-		event.getRegistry().register(levitationLong);
+		registry.register(resistance);
+		registry.register(resistanceLong);
+		registry.register(resistanceStrong);
 
-		event.getRegistry().register(absorption);
-		event.getRegistry().register(absorptionLong);
-		event.getRegistry().register(absorptionStrong);
+		registry.register(levitation);
+		registry.register(levitationLong);
 
-		event.getRegistry().register(luck);
-		event.getRegistry().register(luckLong);
-		event.getRegistry().register(luckStrong);
+		registry.register(absorption);
+		registry.register(absorptionLong);
+		registry.register(absorptionStrong);
 
-		event.getRegistry().register(unluck);
-		event.getRegistry().register(unluckLong);
-		event.getRegistry().register(unluckStrong);
+		registry.register(luck);
+		registry.register(luckLong);
+		registry.register(luckStrong);
 
-		event.getRegistry().register(wither);
-		event.getRegistry().register(witherLong);
-		event.getRegistry().register(witherStrong);
+		registry.register(unluck);
+		registry.register(unluckLong);
+		registry.register(unluckStrong);
+
+		registry.register(wither);
+		registry.register(witherLong);
+		registry.register(witherStrong);
 
 		int min = CoreProps.POTION_MIN;
 		int max = CoreProps.POTION_MAX;

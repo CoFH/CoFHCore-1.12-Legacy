@@ -43,8 +43,11 @@ public class CoreProps {
 		comment = "Adjust this value to change the render update delay for most CoFH tiles. You should really only mess with this if you know what you're doing. This is a server-wide setting.";
 		tileUpdateDelay = CoFHCore.CONFIG_CORE.getConfiguration().getInt("TileUpdateDelay", category, tileUpdateDelay, 80, 1600, comment);
 
-		/* ENCHANTS */
+		/* ENCHANTMENTS */
 		category = "Enchantment";
+
+		comment = "If TRUE, CoFH Enchantments will be disabled and NOT REGISTERED. Only select this option if you understand the consequences. World backup is recommended.";
+		CoreEnchantments.disableAll = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("DisableAllEnchantments", category, CoreEnchantments.disableAll, comment);
 
 		comment = "If TRUE, the Holding Enchantment is available for various Storage Items.";
 		EnchantmentHolding.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableHoldingEnchant", category, EnchantmentHolding.enable, comment);
@@ -75,6 +78,12 @@ public class CoreProps {
 
 		comment = "If TRUE, Christmas cheer is disabled. Scrooge. :(";
 		holidayChristmas = !CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("HoHoNo", category, !holidayChristmas, comment);
+
+		/* POTIONS */
+		category = "Potion";
+
+		comment = "If TRUE, CoFH Potions will be disabled and NOT REGISTERED. Only select this option if you understand the consequences. World backup is recommended.";
+		CorePotions.disableAll = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("DisableAllPotions", category, CorePotions.disableAll, comment);
 
 		/* SECURITY */
 		category = "Security";

@@ -13,11 +13,6 @@ import net.minecraftforge.oredict.OreDictionary;
 @SuppressWarnings ("deprecation")
 public class OreDictionaryProxy {
 
-	public ItemStack getOre(String oreName) {
-
-		return getOre(oreName, 1);
-	}
-
 	public ItemStack getOre(String oreName, int amount) {
 
 		if (!oreNameExists(oreName)) {
@@ -65,7 +60,7 @@ public class OreDictionaryProxy {
 
 	public boolean oreNameExists(String oreName) {
 
-		return OreDictionary.doesOreNameExist(oreName);
+		return OreDictionary.doesOreNameExist(oreName) && OreDictionary.getOres(oreName, false).size() > 0;
 	}
 
 }

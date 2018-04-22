@@ -54,6 +54,12 @@ public class ConfigHandler {
 		modConfiguration.save();
 	}
 
+	@Override
+	public String toString() {
+
+		return modConfiguration.toString();
+	}
+
 	/* SHORTCUTS */
 	public double get(String category, String key, double defaultValue) {
 

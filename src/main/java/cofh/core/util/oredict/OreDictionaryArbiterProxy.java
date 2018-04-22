@@ -4,6 +4,8 @@ import cofh.core.util.OreDictionaryProxy;
 import cofh.core.util.helpers.ItemHelper;
 import net.minecraft.item.ItemStack;
 
+import java.util.ArrayList;
+
 /**
  * If CoFHCore is present, an instance of this class is initialized by the OreDictionaryArbiter and the functionality in ItemHelper is much improved.
  * <p>
@@ -61,7 +63,8 @@ public class OreDictionaryArbiterProxy extends OreDictionaryProxy {
 	@Override
 	public final boolean oreNameExists(String oreName) {
 
-		return OreDictionaryArbiter.getOres(oreName) != null;
+		ArrayList<ItemStack> ores = OreDictionaryArbiter.getOres(oreName);
+		return ores != null && ores.size() > 0;
 	}
 
 }

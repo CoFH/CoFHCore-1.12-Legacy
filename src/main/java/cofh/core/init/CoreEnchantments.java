@@ -1,5 +1,6 @@
 package cofh.core.init;
 
+import cofh.CoFHCore;
 import cofh.core.enchantment.*;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
@@ -7,11 +8,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.registries.IForgeRegistry;
 
 public class CoreEnchantments {
 
 	public static final CoreEnchantments INSTANCE = new CoreEnchantments();
+	public static boolean disableAll = false;
+	public static boolean registered = false;
 
 	private CoreEnchantments() {
 
@@ -31,17 +38,39 @@ public class CoreEnchantments {
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 	}
 
+	/* MUST BE CALLED IN PRE-INIT BY SOMETHING */
+	public static void register() {
+
+		if (disableAll || registered) {
+			return;
+		}
+		ModContainer callingContainer = Loader.instance().activeModContainer();
+		ModContainer cofhContainer = FMLCommonHandler.instance().findContainerFor(CoFHCore.MOD_ID);
+
+		Loader.instance().setActiveModContainer(cofhContainer);
+		MinecraftForge.EVENT_BUS.register(INSTANCE);
+		registered = true;
+		Loader.instance().setActiveModContainer(callingContainer);
+	}
+
+	public static boolean registered() {
+
+		return registered;
+	}
+
 	/* EVENT HANDLING */
 	@SubscribeEvent
 	public void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
 
-		event.getRegistry().register(holding);
-		event.getRegistry().register(insight);
-		event.getRegistry().register(leech);
-		event.getRegistry().register(multishot);
-		event.getRegistry().register(smelting);
-		event.getRegistry().register(soulbound);
-		event.getRegistry().register(vorpal);
+		IForgeRegistry<Enchantment> registry = event.getRegistry();
+
+		registry.register(holding);
+		registry.register(insight);
+		registry.register(leech);
+		registry.register(multishot);
+		registry.register(smelting);
+		registry.register(soulbound);
+		registry.register(vorpal);
 	}
 
 	/* HELPERS */
