@@ -23,8 +23,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.ArrayList;
 import java.util.List;
 
-import static net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE;
-
 /**
  * Contains various helper functions to assist with {@link Item} and {@link ItemStack} manipulation and interaction.
  *

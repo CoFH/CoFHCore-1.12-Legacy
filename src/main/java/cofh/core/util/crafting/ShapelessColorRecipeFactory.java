@@ -1,6 +1,5 @@
 package cofh.core.util.crafting;
 
-import cofh.CoFHCore;
 import cofh.api.item.IColorableItem;
 import cofh.core.util.helpers.ColorHelper;
 import cofh.core.util.helpers.ItemHelper;
@@ -8,37 +7,29 @@ import com.google.gson.JsonObject;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
 import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
-import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import javax.annotation.Nonnull;
 
-public class ShapedColorRecipeFactory implements IRecipeFactory {
+public class ShapelessColorRecipeFactory implements IRecipeFactory {
 
 	@Override
 	public IRecipe parse(JsonContext context, JsonObject json) {
 
-		ShapedOreRecipe recipe = ShapedOreRecipe.factory(context, json);
+		ShapelessOreRecipe recipe = ShapelessOreRecipe.factory(context, json);
 
-		ShapedPrimer primer = new ShapedPrimer();
-		primer.width = recipe.getRecipeWidth();
-		primer.height = recipe.getRecipeHeight();
-		primer.mirrored = JsonUtils.getBoolean(json, "mirrored", true);
-		primer.input = recipe.getIngredients();
-
-		return new ShapedColorRecipe(new ResourceLocation(CoFHCore.MOD_ID, "color_shaped"), recipe.getRecipeOutput(), primer);
+		return new ShapelessColorRecipe(new ResourceLocation("cofh", "color_shapeless"), recipe.getRecipeOutput(), recipe.getIngredients().toArray());
 	}
 
 	/* RECIPE */
-	public static class ShapedColorRecipe extends ShapedOreRecipe {
+	public static class ShapelessColorRecipe extends ShapelessOreRecipe {
 
-		public ShapedColorRecipe(ResourceLocation group, ItemStack result, ShapedPrimer primer) {
+		public ShapelessColorRecipe(ResourceLocation group, ItemStack result, Object... recipe) {
 
-			super(group, result, primer);
+			super(group, result, recipe);
 		}
 
 		@Override
@@ -46,6 +37,7 @@ public class ShapedColorRecipeFactory implements IRecipeFactory {
 		public ItemStack getCraftingResult(@Nonnull InventoryCrafting inv) {
 
 			ItemStack dyeStack = ItemStack.EMPTY;
+			ItemStack dyeStack2 = ItemStack.EMPTY;
 			ItemStack inputStack = ItemStack.EMPTY;
 			ItemStack outputStack = output.copy();
 
@@ -55,9 +47,11 @@ public class ShapedColorRecipeFactory implements IRecipeFactory {
 			for (int i = 0; i < inv.getSizeInventory(); ++i) {
 				ItemStack stack = inv.getStackInSlot(i);
 				if (!stack.isEmpty()) {
-					if (ColorHelper.isDye(stack)) {
+					if (ColorHelper.isDye(stack) && dyeStack.isEmpty()) {
 						dyeStack = stack.copy();
 						dyeIndex = i;
+					} else if (ColorHelper.isDye(stack)) {
+						dyeStack2 = stack.copy();
 					}
 					if (stack.getItem() instanceof IColorableItem) {
 						inputStack = stack;
@@ -69,8 +63,14 @@ public class ShapedColorRecipeFactory implements IRecipeFactory {
 				return ItemStack.EMPTY;
 			}
 			outputStack = ItemHelper.copyTag(outputStack, inputStack);
-			((IColorableItem) outputStack.getItem()).applyColor(outputStack, ColorHelper.getDyeColor(dyeStack), dyeIndex < colorableIndex ? 0 : 1);
+			IColorableItem colorableItem = ((IColorableItem) outputStack.getItem());
 
+			if (dyeStack2.isEmpty()) {
+				colorableItem.applyColor(outputStack, ColorHelper.getDyeColor(dyeStack), dyeIndex < colorableIndex ? 0 : 1);
+			} else {
+				colorableItem.applyColor(outputStack, ColorHelper.getDyeColor(dyeStack), 0);
+				colorableItem.applyColor(outputStack, ColorHelper.getDyeColor(dyeStack2), 1);
+			}
 			return outputStack;
 		}
 

@@ -30,7 +30,7 @@ import java.util.UUID;
 public class ItemMulti extends ItemCore implements IModelRegister {
 
 	protected TMap<Integer, ItemEntry> itemMap = new THashMap<>();
-	protected ArrayList<Integer> itemList = new ArrayList<>(); // This is actually more memory efficient than a LinkedHashMap
+	protected ArrayList<Integer> itemList = new ArrayList<>();
 
 	public ItemMulti() {
 

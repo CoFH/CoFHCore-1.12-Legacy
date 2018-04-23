@@ -1,9 +1,10 @@
 package cofh.core.item;
 
+import cofh.api.item.IColorableItem;
 import cofh.api.item.IMultiModeItem;
-import cofh.api.item.INBTCopyIngredient;
 import cofh.core.init.CoreEnchantments;
 import cofh.core.init.CoreProps;
+import cofh.core.util.helpers.ColorHelper;
 import cofh.core.util.helpers.EnergyHelper;
 import cofh.redstoneflux.api.IEnergyContainerItem;
 import cofh.redstoneflux.util.EnergyContainerItemWrapper;
@@ -12,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, IEnergyContainerItem, IEnchantableItem, INBTCopyIngredient {
+public abstract class ItemMultiRF extends ItemMulti implements IColorableItem, IEnchantableItem, IEnergyContainerItem, IMultiModeItem {
 
 	public ItemMultiRF(String modName) {
 
@@ -68,6 +69,27 @@ public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, I
 
 	protected abstract int getReceive(ItemStack stack);
 
+	protected int getTintIndex(ItemStack stack) {
+
+		return 2;
+	}
+
+	/* IItemColor */
+	public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+		if (ColorHelper.hasColor0(stack) && tintIndex == getTintIndex(stack)) {
+			return ColorHelper.getColor0(stack);
+		}
+		return 0xFFFFFF;
+	}
+
+	/* IEnchantableItem */
+	@Override
+	public boolean canEnchant(ItemStack stack, Enchantment enchantment) {
+
+		return !isCreative(stack) && enchantment == CoreEnchantments.holding;
+	}
+
 	/* IEnergyContainerItem */
 	@Override
 	public int receiveEnergy(ItemStack container, int maxReceive, boolean simulate) {
@@ -117,13 +139,6 @@ public abstract class ItemMultiRF extends ItemMulti implements IMultiModeItem, I
 	public int getMaxEnergyStored(ItemStack container) {
 
 		return getCapacity(container);
-	}
-
-	/* IEnchantableItem */
-	@Override
-	public boolean canEnchant(ItemStack stack, Enchantment enchantment) {
-
-		return !isCreative(stack) && enchantment == CoreEnchantments.holding;
 	}
 
 	/* CAPABILITIES */

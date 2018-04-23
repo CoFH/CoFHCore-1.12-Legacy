@@ -92,24 +92,24 @@ public final class ColorHelper {
 		return 0xFFFFFF;
 	}
 
+	public static boolean hasColor0(ItemStack stack) {
+
+		return stack.hasTagCompound() && stack.getTagCompound().hasKey(CoreProps.COLOR_0);
+	}
+
 	public static boolean hasColor1(ItemStack stack) {
 
 		return stack.hasTagCompound() && stack.getTagCompound().hasKey(CoreProps.COLOR_1);
 	}
 
-	public static boolean hasColor2(ItemStack stack) {
+	public static int getColor0(ItemStack stack) {
 
-		return stack.hasTagCompound() && stack.getTagCompound().hasKey(CoreProps.COLOR_2);
+		return !stack.hasTagCompound() ? 0xFFFFFF : stack.getTagCompound().getInteger(CoreProps.COLOR_0);
 	}
 
 	public static int getColor1(ItemStack stack) {
 
 		return !stack.hasTagCompound() ? 0xFFFFFF : stack.getTagCompound().getInteger(CoreProps.COLOR_1);
-	}
-
-	public static int getColor2(ItemStack stack) {
-
-		return !stack.hasTagCompound() ? 0xFFFFFF : stack.getTagCompound().getInteger(CoreProps.COLOR_2);
 	}
 
 }

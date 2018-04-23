@@ -1,7 +1,7 @@
 package cofh.core.util.helpers;
 
-import cofh.core.util.crafting.ShapedColorRecipeFactory.ShapedColorRecipe;
 import cofh.core.util.crafting.ShapedUpgradeRecipeFactory.ShapedUpgradeRecipe;
+import cofh.core.util.crafting.ShapelessColorRecipeFactory.ShapelessColorRecipe;
 import cofh.core.util.crafting.ShapelessColorRemoveRecipeFactory.ShapelessColorRemoveRecipe;
 import cofh.core.util.crafting.ShapelessFluidRecipeFactory.ShapelessFluidRecipe;
 import cofh.core.util.crafting.ShapelessUpgradeKitRecipeFactory.ShapelessUpgradeKitRecipe;
@@ -85,16 +85,15 @@ public class RecipeHelper {
 		GameData.register_impl(recipe);
 	}
 
-	public static void addShapedColorRecipe(ItemStack output, Object... input) {
+	public static void addColorRecipe(ItemStack output, Object... input) {
 
 		ResourceLocation location = getNameForRecipe(output);
-		CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(input);
-		ShapedColorRecipe recipe = new ShapedColorRecipe(location, output, primer);
+		ShapelessColorRecipe recipe = new ShapelessColorRecipe(location, output, input);
 		recipe.setRegistryName(location);
 		GameData.register_impl(recipe);
 	}
 
-	public static void addShapelessColorRemoveRecipe(ItemStack output, Object... input) {
+	public static void addColorRemoveRecipe(ItemStack output, Object... input) {
 
 		ResourceLocation location = getNameForRecipe(output);
 		ShapelessColorRemoveRecipe recipe = new ShapelessColorRemoveRecipe(location, output, input);
