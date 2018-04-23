@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
@@ -16,6 +17,9 @@ public class ItemFilterWrapper implements IInventory {
 
 	public ItemFilterWrapper(ItemStack stack, int size) {
 
+		if (stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
+		}
 		this.stack = stack;
 		this.filter = new ItemFilter(size);
 		filter.deserializeNBT(stack.getTagCompound().getCompoundTag("Filter"));

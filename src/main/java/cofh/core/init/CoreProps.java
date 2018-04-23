@@ -46,7 +46,7 @@ public class CoreProps {
 		/* ENCHANTMENTS */
 		category = "Enchantment";
 
-		comment = "If TRUE, CoFH Enchantments will be disabled and NOT REGISTERED. Only select this option if you understand the consequences. World backup is recommended.";
+		comment = "If TRUE, CoFH Enchantments will be disabled and NOT REGISTERED. Only do this if you fully understand the consequences. World backup is recommended.";
 		CoreEnchantments.disableAll = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("DisableAllEnchantments", category, CoreEnchantments.disableAll, comment);
 
 		comment = "If TRUE, the Holding Enchantment is available for various Storage Items.";
@@ -82,7 +82,7 @@ public class CoreProps {
 		/* POTIONS */
 		category = "Potion";
 
-		comment = "If TRUE, CoFH Potions will be disabled and NOT REGISTERED. Only select this option if you understand the consequences. World backup is recommended.";
+		comment = "If TRUE, CoFH Potions will be disabled and NOT REGISTERED. Only do this if you fully understand the consequences. World backup is recommended.";
 		CorePotions.disableAll = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("DisableAllPotions", category, CorePotions.disableAll, comment);
 
 		/* SECURITY */
