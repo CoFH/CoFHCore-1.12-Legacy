@@ -177,13 +177,13 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 
 	/* IInitializer */
 	@Override
-	public boolean initialize() {
+	public boolean preInit() {
 
 		return false;
 	}
 
 	@Override
-	public boolean register() {
+	public boolean initialize() {
 
 		return false;
 	}

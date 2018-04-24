@@ -23,10 +23,10 @@ public abstract class PluginCore implements IInitializer {
 
 	/* IInitializer */
 	@Override
-	public abstract boolean initialize();
+	public abstract boolean preInit();
 
 	@Override
-	public abstract boolean register();
+	public abstract boolean initialize();
 
 	/* HELPERS */
 	protected Block getBlock(String id, String name) {

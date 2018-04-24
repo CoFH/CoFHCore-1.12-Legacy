@@ -7,8 +7,8 @@ package cofh.core.util.core;
  */
 public interface IInitializer {
 
-	boolean initialize();
+	boolean preInit();
 
-	boolean register();
+	boolean initialize();
 
 }

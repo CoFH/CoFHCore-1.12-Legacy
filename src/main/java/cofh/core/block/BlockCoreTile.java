@@ -273,13 +273,13 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 
 	/* IInitializer */
 	@Override
-	public boolean initialize() {
+	public boolean preInit() {
 
 		return false;
 	}
 
 	@Override
-	public boolean register() {
+	public boolean initialize() {
 
 		return false;
 	}
