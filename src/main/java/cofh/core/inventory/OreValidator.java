@@ -8,11 +8,15 @@ public class OreValidator {
 
 	public Set<String> orePrefix = new THashSet<>();
 	public Set<String> oreExact = new THashSet<>();
+	public Set<String> oreBlacklist = new THashSet<>();
 
 	public boolean validate(String oreName) {
 
 		if (oreExact.contains(oreName)) {
 			return true;
+		}
+		if (oreBlacklist.contains(oreName)) {
+			return false;
 		}
 		for (String prefix : orePrefix) {
 			if (oreName.startsWith(prefix) && oreName.length() > prefix.length()) {
@@ -28,6 +32,11 @@ public class OreValidator {
 	}
 
 	public boolean addExact(String oreName) {
+
+		return oreExact.add(oreName);
+	}
+
+	public boolean addBlacklist(String oreName) {
 
 		return oreExact.add(oreName);
 	}
