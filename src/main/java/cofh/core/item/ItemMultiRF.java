@@ -4,7 +4,6 @@ import cofh.api.item.IColorableItem;
 import cofh.api.item.IMultiModeItem;
 import cofh.core.init.CoreEnchantments;
 import cofh.core.init.CoreProps;
-import cofh.core.util.helpers.ColorHelper;
 import cofh.core.util.helpers.EnergyHelper;
 import cofh.redstoneflux.api.IEnergyContainerItem;
 import cofh.redstoneflux.util.EnergyContainerItemWrapper;
@@ -68,20 +67,6 @@ public abstract class ItemMultiRF extends ItemMulti implements IColorableItem, I
 	protected abstract int getCapacity(ItemStack stack);
 
 	protected abstract int getReceive(ItemStack stack);
-
-	protected int getTintIndex(ItemStack stack) {
-
-		return 2;
-	}
-
-	/* IItemColor */
-	public int colorMultiplier(ItemStack stack, int tintIndex) {
-
-		if (ColorHelper.hasColor0(stack) && tintIndex == getTintIndex(stack)) {
-			return ColorHelper.getColor0(stack);
-		}
-		return 0xFFFFFF;
-	}
 
 	/* IEnchantableItem */
 	@Override
