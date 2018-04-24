@@ -2,6 +2,7 @@ package cofh.core.item;
 
 import cofh.core.init.CoreProps;
 import cofh.core.render.FontRendererCore;
+import cofh.core.util.helpers.ColorHelper;
 import cofh.core.util.helpers.SecurityHelper;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
@@ -49,6 +50,15 @@ public class ItemCore extends Item {
 	}
 
 	@Override
+	public String getHighlightTip(ItemStack stack, String displayName) {
+
+		if (isActive(stack)) {
+			return "";
+		}
+		return displayName;
+	}
+
+	@Override
 	public Entity createEntity(World world, Entity location, ItemStack stack) {
 
 		if (SecurityHelper.isSecure(stack)) {
@@ -64,6 +74,26 @@ public class ItemCore extends Item {
 	public FontRenderer getFontRenderer(ItemStack stack) {
 
 		return FontRendererCore.loadFontRendererStack(stack);
+	}
+
+	/* HELPERS */
+	public boolean isActive(ItemStack stack) {
+
+		return stack.getTagCompound() != null && stack.getTagCompound().getBoolean(CoreProps.ACTIVE);
+	}
+
+	protected int getTintIndex(ItemStack stack) {
+
+		return 2;
+	}
+
+	/* IItemColor */
+	public int colorMultiplier(ItemStack stack, int tintIndex) {
+
+		if (ColorHelper.hasColor0(stack) && tintIndex == getTintIndex(stack)) {
+			return ColorHelper.getColor0(stack);
+		}
+		return 0xFFFFFF;
 	}
 
 	/* IColorableItem */
