@@ -30,12 +30,6 @@ public class ItemCore extends Item {
 		this.modName = modName;
 	}
 
-	public ItemCore register(String registrationName) {
-
-		ForgeRegistries.ITEMS.register(setRegistryName(registrationName));
-		return this;
-	}
-
 	/* STANDARD METHODS */
 	@Override
 	public boolean hasCustomEntity(ItemStack stack) {

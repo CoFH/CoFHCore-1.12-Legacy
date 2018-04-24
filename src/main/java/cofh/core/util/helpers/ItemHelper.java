@@ -32,6 +32,7 @@ public final class ItemHelper {
 
 	public static final String BLOCK = "block";
 	public static final String ORE = "ore";
+	public static final String CLUSTER = "cluster";
 	public static final String DUST = "dust";
 	public static final String INGOT = "ingot";
 	public static final String NUGGET = "nugget";
@@ -323,6 +324,11 @@ public final class ItemHelper {
 	public static boolean isOre(ItemStack stack) {
 
 		return getOreName(stack).startsWith(ORE);
+	}
+
+	public static boolean isCluster(ItemStack stack) {
+
+		return getOreName(stack).startsWith(CLUSTER);
 	}
 
 	public static boolean isDust(ItemStack stack) {
