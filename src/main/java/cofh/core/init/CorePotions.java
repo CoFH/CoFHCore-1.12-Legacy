@@ -142,7 +142,7 @@ public class CorePotions {
 		registry.register(witherStrong);
 
 		int min = 3;
-		int max = 5;
+		int max = 4;
 
 		createStrongPotionTypes(event, PotionTypes.LEAPING, min, max);
 		createStrongPotionTypes(event, PotionTypes.SWIFTNESS, min, max);
