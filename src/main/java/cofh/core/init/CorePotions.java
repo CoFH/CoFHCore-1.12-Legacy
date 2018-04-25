@@ -141,8 +141,8 @@ public class CorePotions {
 		registry.register(witherLong);
 		registry.register(witherStrong);
 
-		int min = CoreProps.POTION_MIN;
-		int max = CoreProps.POTION_MAX;
+		int min = 3;
+		int max = 5;
 
 		createStrongPotionTypes(event, PotionTypes.LEAPING, min, max);
 		createStrongPotionTypes(event, PotionTypes.SWIFTNESS, min, max);
@@ -152,7 +152,7 @@ public class CorePotions {
 		createStrongPotionTypes(event, PotionTypes.REGENERATION, min, max);
 		createStrongPotionTypes(event, PotionTypes.STRENGTH, min, max);
 
-		createStrongPotionTypes(event, CorePotions.haste, min, Math.min(max, 4));
+		createStrongPotionTypes(event, CorePotions.haste, min, max);
 		createStrongPotionTypes(event, CorePotions.resistance, min, max);
 		createStrongPotionTypes(event, CorePotions.absorption, min, max);
 		createStrongPotionTypes(event, CorePotions.luck, min, max);
@@ -168,7 +168,7 @@ public class CorePotions {
 		createStrongPotionTypes(event, PotionTypes.LONG_REGENERATION, min, max, "+");
 		createStrongPotionTypes(event, PotionTypes.LONG_STRENGTH, min, max, "+");
 
-		createStrongPotionTypes(event, CorePotions.hasteLong, min, Math.min(max, 4), "+");
+		createStrongPotionTypes(event, CorePotions.hasteLong, min, max, "+");
 		createStrongPotionTypes(event, CorePotions.resistanceLong, min, max, "+");
 		createStrongPotionTypes(event, CorePotions.absorptionLong, min, max, "+");
 		createStrongPotionTypes(event, CorePotions.luckLong, min, max, "+");
