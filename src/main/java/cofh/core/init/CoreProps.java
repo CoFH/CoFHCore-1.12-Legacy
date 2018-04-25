@@ -164,7 +164,11 @@ public class CoreProps {
 	public static final int RGB_DURABILITY_ENDER = 0x14594D;
 	public static final int RGB_DURABILITY_EXP = 0x7AAC52;
 
-	/* STRING CONSTANTS */
+	/* FLUID STRING CONSTANTS */
+	public static final String ESSENCE = "essence";
+	public static final String XPJUICE = "xpjuice";
+
+	/* NBT STRING CONSTANTS */
 	public static final String ACTIVE = "Active";
 	public static final String AMOUNT = "Amount";
 	public static final String ARROWS = "Arrows";
