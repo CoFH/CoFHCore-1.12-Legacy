@@ -152,6 +152,7 @@ info.cofh.accessTeam=Командный
 info.cofh.amount=Количество
 info.cofh.anotherplayer=Другой игрок
 info.cofh.area=Зона
+info.cofh.arrows=Стрелы
 info.cofh.augmentation=Улучшение
 info.cofh.blank=Пусто
 info.cofh.capacity=Ёмкость
@@ -198,7 +199,6 @@ info.cofh.level=Уровень
 info.cofh.locked=Закрыто
 info.cofh.low=Низкий
 info.cofh.modeChange=чтобы изменить режим
-info.cofh.noAOE=Нет зоны эффекта (один блок)
 info.cofh.none=Нет
 info.cofh.output=Выход
 info.cofh.owner=Владелец
@@ -237,11 +237,13 @@ key.cofh.multimode=Режим прокрутки предметов
 lingering_potion.effect.absorption=Затяжное зелье поглощения
 lingering_potion.effect.haste=Затяжное зелье спешки
 lingering_potion.effect.resistance=Затяжное зелье сопротивления
+lingering_potion.effect.unluck=Затяжное зелье неудачи
 lingering_potion.effect.wither=Затяжное зелье распада
 
 potion.effect.absorption=Зелье поглощения
 potion.effect.haste=Зелье спешки
 potion.effect.resistance=Зелье сопротивления
+potion.effect.unluck=Зелье неудачи
 potion.effect.wither=Зелье распада
 
 potion.potency.3=IV
@@ -250,6 +252,7 @@ potion.potency.4=V
 splash_potion.effect.absorption=Всплеск зелья поглощения
 splash_potion.effect.haste=Всплеск зелья спешки
 splash_potion.effect.resistance=Всплеск зелья сопротивления
+splash_potion.effect.unluck=Всплеск зелья неудачи
 splash_potion.effect.wither=Всплеск зелья распада
 
 tab.cofh.friendList.0=Используйте этот список, чтобы добавлять и удалять друзей!
