@@ -9,4 +9,9 @@ public interface IAOEBreakItem {
 
 	ImmutableList<BlockPos> getAOEBlocks(ItemStack stack, BlockPos pos, EntityPlayer player);
 
+	default float getReachDistance(ItemStack stack) {
+
+		return 4.5F;
+	}
+
 }

@@ -19,7 +19,7 @@ public class OreValidator {
 			return false;
 		}
 		for (String prefix : orePrefix) {
-			if (oreName.startsWith(prefix) && oreName.length() > prefix.length()) {
+			if (oreName.startsWith(prefix) && oreName.length() > prefix.length() && Character.isUpperCase(oreName.codePointAt(prefix.length()))) {
 				return true;
 			}
 		}

@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class ItemBowCore extends ItemBow implements IEnchantableItem, IToolBow, IFOVUpdateItem {
+public class ItemBowCore extends ItemBow implements IEnchantableItem, IFOVUpdateItem, IToolBow {
 
 	protected String repairIngot = "";
 	protected ToolMaterial toolMaterial;
@@ -124,18 +124,18 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IToolBow, 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 
-		ItemStack itemStack = player.getHeldItem(hand);
+		ItemStack stack = player.getHeldItem(hand);
 		boolean flag = !this.findAmmo(player).isEmpty();
 
-		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemStack, world, player, hand, flag);
+		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(stack, world, player, hand, flag);
 		if (ret != null) {
 			return ret;
 		}
 		if (!player.capabilities.isCreativeMode && !flag) {
-			return !flag ? new ActionResult<>(EnumActionResult.FAIL, itemStack) : new ActionResult<>(EnumActionResult.PASS, itemStack);
+			return !flag ? new ActionResult<>(EnumActionResult.FAIL, stack) : new ActionResult<>(EnumActionResult.PASS, stack);
 		} else {
 			player.setActiveHand(hand);
-			return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
+			return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 		}
 	}
 
@@ -208,6 +208,21 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IToolBow, 
 		}
 	}
 
+	/* IEnchantableItem */
+	@Override
+	public boolean canEnchant(ItemStack stack, Enchantment enchantment) {
+
+		return enchantment == CoreEnchantments.multishot;
+	}
+
+	/* IFOVUpdateItem */
+	@Override
+	public float getFOVMod(ItemStack stack, EntityPlayer player) {
+
+		float progress = MathHelper.clamp((stack.getMaxItemUseDuration() - player.getItemInUseCount()) / 20.0F, 0, 1.0F);
+		return progress * progress * zoomMultiplier;
+	}
+
 	/* IToolBow */
 	@Override
 	public void onBowFired(EntityPlayer player, ItemStack item) {
@@ -224,21 +239,6 @@ public class ItemBowCore extends ItemBow implements IEnchantableItem, IToolBow, 
 	public float getArrowSpeedMultiplier(ItemStack item) {
 
 		return arrowSpeedMultiplier;
-	}
-
-	/* IEnchantableItem */
-	@Override
-	public boolean canEnchant(ItemStack stack, Enchantment enchantment) {
-
-		return enchantment == CoreEnchantments.multishot;
-	}
-
-	/* IFOVUpdateItem */
-	@Override
-	public float getFOVMod(ItemStack stack, EntityPlayer player) {
-
-		float progress = MathHelper.clamp((stack.getMaxItemUseDuration() - player.getItemInUseCount()) / 20.0F, 0, 1.0F);
-		return progress * progress * zoomMultiplier;
 	}
 
 }

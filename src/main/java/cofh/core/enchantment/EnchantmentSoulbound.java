@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 public class EnchantmentSoulbound extends Enchantment {
 
 	public static boolean enable = true;
+	public static boolean permanent = false;
 
 	public EnchantmentSoulbound(String id) {
 
@@ -31,7 +32,7 @@ public class EnchantmentSoulbound extends Enchantment {
 	@Override
 	public int getMaxLevel() {
 
-		return 3;
+		return permanent ? 1 : 3;
 	}
 
 	@Override

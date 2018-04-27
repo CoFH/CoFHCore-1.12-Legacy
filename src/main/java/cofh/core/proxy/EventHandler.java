@@ -3,6 +3,7 @@ package cofh.core.proxy;
 import cofh.CoFHCore;
 import cofh.api.item.IToolBow;
 import cofh.api.item.IToolQuiver;
+import cofh.core.enchantment.EnchantmentSoulbound;
 import cofh.core.enchantment.EnchantmentVorpal;
 import cofh.core.init.CoreEnchantments;
 import cofh.core.init.CoreProps;
@@ -37,6 +38,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.ITextComponent;
@@ -219,6 +221,11 @@ public class EventHandler {
 		if (entity instanceof IProjectile) {
 			return;
 		}
+		DamageSource source = event.getSource();
+
+		if (!source.damageType.equals("player")) {
+			return;
+		}
 		Entity attacker = event.getSource().getTrueSource();
 
 		if (attacker instanceof EntityPlayer) {
@@ -352,9 +359,14 @@ public class EventHandler {
 		}
 		for (int i = 0; i < oldPlayer.inventory.armorInventory.size(); i++) {
 			ItemStack stack = oldPlayer.inventory.armorInventory.get(i);
-			int encSoulbound = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.soulbound, stack), 0, CoreEnchantments.soulbound.getMaxLevel() + 1);
+			int encSoulbound = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.soulbound, stack);
 			if (encSoulbound > 0) {
-				if (MathHelper.RANDOM.nextInt(1 + encSoulbound) == 0) {
+				if (EnchantmentSoulbound.permanent) {
+					if (encSoulbound > 1) {
+						ItemHelper.removeEnchantment(stack, CoreEnchantments.soulbound);
+						ItemHelper.addEnchantment(stack, CoreEnchantments.soulbound, 1);
+					}
+				} else if (MathHelper.RANDOM.nextInt(1 + encSoulbound) == 0) {
 					ItemHelper.removeEnchantment(stack, CoreEnchantments.soulbound);
 					if (encSoulbound > 1) {
 						ItemHelper.addEnchantment(stack, CoreEnchantments.soulbound, encSoulbound - 1);

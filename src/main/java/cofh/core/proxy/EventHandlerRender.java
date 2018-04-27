@@ -47,26 +47,29 @@ public class EventHandlerRender implements IResourceManagerReloadListener {
 			return;
 		}
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		ItemStack tool = player.getHeldItemMainhand();
+		ItemStack stack = player.getHeldItemMainhand();
 
-		if (!tool.isEmpty() && tool.getItem() instanceof IAOEBreakItem) {
+		if (!stack.isEmpty() && stack.getItem() instanceof IAOEBreakItem) {
 			Entity renderEntity = Minecraft.getMinecraft().getRenderViewEntity();
 			if (renderEntity == null) {
 				return;
 			}
-			double distance = controllerMP.getBlockReachDistance();
+			IAOEBreakItem aoeTool = (IAOEBreakItem) stack.getItem();
+
+			double distance = Math.max(controllerMP.getBlockReachDistance(), aoeTool.getReachDistance(stack));
 			RayTraceResult traceResult = renderEntity.rayTrace(distance, event.getPartialTicks());
 			if (traceResult != null) {
-				ImmutableList<BlockPos> extraBlocks = ((IAOEBreakItem) tool.getItem()).getAOEBlocks(tool, traceResult.getBlockPos(), player);
+				ImmutableList<BlockPos> extraBlocks = aoeTool.getAOEBlocks(stack, traceResult.getBlockPos(), player);
 				for (BlockPos pos : extraBlocks) {
 					event.getContext().drawSelectionBox(player, new RayTraceResult(new Vec3d(0, 0, 0), null, pos), 0, event.getPartialTicks());
 				}
 			}
 		}
 		if (controllerMP.isHittingBlock) {
-			if (!tool.isEmpty() && tool.getItem() instanceof IAOEBreakItem) {
+			if (!stack.isEmpty() && stack.getItem() instanceof IAOEBreakItem) {
 				BlockPos pos = controllerMP.currentBlock;
-				drawBlockDamageTexture(Tessellator.getInstance(), Tessellator.getInstance().getBuffer(), player, event.getPartialTicks(), player.getEntityWorld(), ((IAOEBreakItem) tool.getItem()).getAOEBlocks(tool, pos, player));
+				IAOEBreakItem aoeTool = (IAOEBreakItem) stack.getItem();
+				drawBlockDamageTexture(Tessellator.getInstance(), Tessellator.getInstance().getBuffer(), player, event.getPartialTicks(), player.getEntityWorld(), aoeTool.getAOEBlocks(stack, pos, player));
 			}
 		}
 	}

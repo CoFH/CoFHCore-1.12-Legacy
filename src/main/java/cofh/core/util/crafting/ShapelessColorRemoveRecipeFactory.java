@@ -2,6 +2,7 @@ package cofh.core.util.crafting;
 
 import cofh.api.item.IColorableItem;
 import cofh.core.util.crafting.ShapelessFluidRecipeFactory.ShapelessFluidRecipe;
+import cofh.core.util.helpers.ItemHelper;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -35,10 +36,21 @@ public class ShapelessColorRemoveRecipeFactory implements IRecipeFactory {
 		@Nonnull
 		public ItemStack getCraftingResult(@Nonnull InventoryCrafting inv) {
 
-			if (!(output.getItem() instanceof IColorableItem)) {
+			ItemStack inputStack = ItemStack.EMPTY;
+			ItemStack outputStack = output.copy();
+
+			for (int i = 0; i < inv.getSizeInventory(); ++i) {
+				ItemStack stack = inv.getStackInSlot(i);
+				if (!stack.isEmpty()) {
+					if (stack.getItem() instanceof IColorableItem) {
+						inputStack = stack;
+					}
+				}
+			}
+			if (inputStack.isEmpty()) {
 				return ItemStack.EMPTY;
 			}
-			ItemStack outputStack = output.copy();
+			outputStack = ItemHelper.copyTag(outputStack, inputStack);
 			((IColorableItem) outputStack.getItem()).removeColor(outputStack);
 
 			return outputStack;

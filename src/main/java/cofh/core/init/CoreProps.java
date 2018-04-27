@@ -67,6 +67,9 @@ public class CoreProps {
 		comment = "If TRUE, the Soulbound Enchantment is available.";
 		EnchantmentSoulbound.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableSoulboundEnchant", category, EnchantmentSoulbound.enable, comment);
 
+		comment = "If TRUE, the Soulbound Enchantment is permanent.";
+		EnchantmentSoulbound.permanent = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("PermanentSoulboundEnchant", category, EnchantmentSoulbound.permanent, comment);
+
 		comment = "If TRUE, the Vorpal Enchantment is available for various Weapons.";
 		EnchantmentVorpal.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableVorpalEnchant", category, EnchantmentVorpal.enable, comment);
 
@@ -132,8 +135,8 @@ public class CoreProps {
 		enableOpSecureAccessWarning = CoFHCore.CONFIG_CLIENT.getConfiguration().getBoolean("OpsCanAccessSecureBlocksWarning", category, enableOpSecureAccessWarning, comment);
 	}
 
-	private static final String BUILD = "2611";
-	private static final String FORGE_REQ = "14.23.2." + BUILD;
+	private static final String BUILD = "2655";
+	private static final String FORGE_REQ = "14.23.3." + BUILD;
 	private static final String FORGE_REQ_MAX = "15.0.0.0";
 
 	public static final String FORGE_DEP = "required-after:forge@[" + FORGE_REQ + "," + FORGE_REQ_MAX + ");";
