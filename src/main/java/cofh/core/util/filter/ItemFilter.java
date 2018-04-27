@@ -2,7 +2,6 @@ package cofh.core.util.filter;
 
 import cofh.api.core.IFilterable;
 import cofh.core.util.helpers.ItemHelper;
-import cofh.core.util.oredict.OreDictionaryArbiter;
 import gnu.trove.set.hash.TIntHashSet;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -68,7 +67,7 @@ public class ItemFilter implements INBTSerializable<NBTTagCompound> {
 		boolean ret = flags[IFilterable.FLAG_WHITELIST];
 
 		if (flags[IFilterable.FLAG_ORE_DICT] && !oreIDs.isEmpty()) {
-			List<Integer> ids = OreDictionaryArbiter.getAllOreIDs(stack);
+			List<Integer> ids = ItemHelper.oreProxy.getAllOreIDs(stack);
 			for (Integer i : ids) {
 				if (oreIDs.contains(i)) {
 					return ret;
@@ -95,7 +94,7 @@ public class ItemFilter implements INBTSerializable<NBTTagCompound> {
 		oreIDs.clear();
 		for (ItemStack item : items) {
 			if (!item.isEmpty()) {
-				oreIDs.addAll(OreDictionaryArbiter.getAllOreIDs(item));
+				oreIDs.addAll(ItemHelper.oreProxy.getAllOreIDs(item));
 			}
 		}
 	}

@@ -15,8 +15,9 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 public class GuiHandler implements IGuiHandler {
 
 	public static final int TILE_ID = 0;
-	public static final int FRIENDS_ID = 1;
-	public static final int AUGMENTS_ID = 2;
+	public static final int TILE_CONFIG_ID = 1;
+	public static final int FRIENDS_ID = 2;
+	public static final int AUGMENTS_ID = 3;
 
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -26,6 +27,12 @@ public class GuiHandler implements IGuiHandler {
 				TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 				if (tile instanceof TileCore) {
 					return ((TileCore) tile).getGuiClient(player.inventory);
+				}
+				return null;
+			case TILE_CONFIG_ID:
+				tile = world.getTileEntity(new BlockPos(x, y, z));
+				if (tile instanceof TileCore) {
+					return ((TileCore) tile).getConfigGuiClient(player.inventory);
 				}
 				return null;
 			case FRIENDS_ID:
@@ -45,6 +52,12 @@ public class GuiHandler implements IGuiHandler {
 				TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 				if (tile instanceof TileCore) {
 					return ((TileCore) tile).getGuiServer(player.inventory);
+				}
+				return null;
+			case TILE_CONFIG_ID:
+				tile = world.getTileEntity(new BlockPos(x, y, z));
+				if (tile instanceof TileCore) {
+					return ((TileCore) tile).getConfigGuiServer(player.inventory);
 				}
 				return null;
 			case FRIENDS_ID:

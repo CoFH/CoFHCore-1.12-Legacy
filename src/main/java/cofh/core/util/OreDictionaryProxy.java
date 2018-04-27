@@ -2,8 +2,11 @@ package cofh.core.util;
 
 import cofh.core.util.helpers.ItemHelper;
 import com.google.common.base.Strings;
+import com.google.common.primitives.Ints;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.List;
 
 /**
  * Don't instantiate this or call these methods in any way. Use the methods in {@link ItemHelper}.
@@ -32,6 +35,11 @@ public class OreDictionaryProxy {
 			return -1;
 		}
 		return OreDictionary.getOreID(oreName);
+	}
+
+	public List<Integer> getAllOreIDs(ItemStack stack) {
+
+		return Ints.asList(OreDictionary.getOreIDs(stack));
 	}
 
 	public String getOreName(ItemStack stack) {

@@ -162,6 +162,9 @@ public class CoreProps {
 
 	public static final int BOTTLE_VOLUME = 250;
 
+	public static final byte LEVEL_MIN = 0;
+	public static final byte LEVEL_MAX = 4;
+
 	public static final int RGB_DURABILITY_FLUX = 0xD01010;
 	public static final int RGB_DURABILITY_WATER = 0x4060FF;
 	public static final int RGB_DURABILITY_ENDER = 0x14594D;

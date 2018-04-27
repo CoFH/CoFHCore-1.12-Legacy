@@ -138,9 +138,9 @@ public class OreDictionaryArbiter {
 	 *
 	 * Input is not validated - don't be dumb!
 	 */
-	public static ArrayList<Integer> getAllOreIDs(ItemStack stack) {
+	public static List<Integer> getAllOreIDs(ItemStack stack) {
 
-		ArrayList<Integer> ids = stackIDs.get(new ItemWrapper(stack));
+		List<Integer> ids = stackIDs.get(new ItemWrapper(stack));
 
 		if (ids == null) {
 			ids = stackIDs.get(new ItemWrapper(stack.getItem(), WILDCARD_VALUE));

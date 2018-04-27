@@ -1,11 +1,10 @@
 package cofh.core.inventory;
 
 import cofh.core.util.helpers.ItemHelper;
-import cofh.core.util.oredict.OreDictionaryArbiter;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is an implementation of a ComparableItemStackNBT - where the oreName/Id is constrained to an allowed subset, specified by the validator.
@@ -34,7 +33,7 @@ public class ComparableItemStackValidatedNBT extends ComparableItemStackNBT {
 
 	public int getOreID(ItemStack stack) {
 
-		ArrayList<Integer> ids = OreDictionaryArbiter.getAllOreIDs(stack);
+		List<Integer> ids = ItemHelper.oreProxy.getAllOreIDs(stack);
 		if (!ids.isEmpty()) {
 			for (Integer id : ids) {
 				if (id != -1 && validator.validate(ItemHelper.oreProxy.getOreName(id))) {

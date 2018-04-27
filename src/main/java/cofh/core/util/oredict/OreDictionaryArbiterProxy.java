@@ -5,6 +5,7 @@ import cofh.core.util.helpers.ItemHelper;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * If CoFHCore is present, an instance of this class is initialized by the OreDictionaryArbiter and the functionality in ItemHelper is much improved.
@@ -34,6 +35,12 @@ public class OreDictionaryArbiterProxy extends OreDictionaryProxy {
 	public final int getOreID(String oreName) {
 
 		return OreDictionaryArbiter.getOreID(oreName);
+	}
+
+	@Override
+	public List<Integer> getAllOreIDs(ItemStack stack) {
+
+		return OreDictionaryArbiter.getAllOreIDs(stack);
 	}
 
 	@Override
