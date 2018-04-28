@@ -35,6 +35,8 @@ public final class ItemHelper {
 	public static final String CLUSTER = "cluster";
 	public static final String DUST = "dust";
 	public static final String INGOT = "ingot";
+	public static final String PLATE = "plate";
+	public static final String COIN = "coin";
 	public static final String NUGGET = "nugget";
 	public static final String LOG = "log";
 
@@ -339,6 +341,16 @@ public final class ItemHelper {
 	public static boolean isIngot(ItemStack stack) {
 
 		return getOreName(stack).startsWith(INGOT);
+	}
+
+	public static boolean isPlate(ItemStack stack) {
+
+		return getOreName(stack).startsWith(PLATE);
+	}
+
+	public static boolean isCoin(ItemStack stack) {
+
+		return getOreName(stack).startsWith(COIN);
 	}
 
 	public static boolean isNugget(ItemStack stack) {

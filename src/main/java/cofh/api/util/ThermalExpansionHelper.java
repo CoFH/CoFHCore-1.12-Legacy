@@ -1,5 +1,7 @@
 package cofh.api.util;
 
+import cofh.CoFHCore;
+import cofh.core.util.helpers.ItemHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -255,6 +257,61 @@ public class ThermalExpansionHelper {
 		FMLInterModComms.sendMessage(MOD_ID, ADD_COMPACTOR_RECIPE, toSend);
 	}
 
+	@Deprecated
+	public static void addCompactorPressRecipe(int energy, ItemStack input, ItemStack output) {
+
+		if (ItemHelper.isPlate(input)) {
+			addCompactorPlateRecipe(energy, input, output);
+		} else {
+			addCompactorRecipe(energy, input, output);
+		}
+	}
+
+	public static void addCompactorPlateRecipe(int energy, ItemStack input, ItemStack output) {
+
+		if (input.isEmpty() || output.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(OUTPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
+		FMLInterModComms.sendMessage(MOD_ID, ADD_COMPACTOR_PLATE_RECIPE, toSend);
+	}
+
+	public static void addCompactorCoinRecipe(int energy, ItemStack input, ItemStack output) {
+
+		if (input.isEmpty() || output.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(OUTPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
+		FMLInterModComms.sendMessage(MOD_ID, ADD_COMPACTOR_COIN_RECIPE, toSend);
+	}
+
+	public static void addCompactorGearRecipe(int energy, ItemStack input, ItemStack output) {
+
+		if (input.isEmpty() || output.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+		toSend.setInteger(ENERGY, energy);
+		toSend.setTag(INPUT, new NBTTagCompound());
+		toSend.setTag(OUTPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		output.writeToNBT(toSend.getCompoundTag(OUTPUT));
+		FMLInterModComms.sendMessage(MOD_ID, ADD_COMPACTOR_GEAR_RECIPE, toSend);
+	}
+
 	public static void removeCompactorRecipe(ItemStack input) {
 
 		if (input.isEmpty()) {
@@ -265,6 +322,42 @@ public class ThermalExpansionHelper {
 
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_COMPACTOR_RECIPE, toSend);
+	}
+
+	public static void removeCompactorPlateRecipe(ItemStack input) {
+
+		if (input.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+		toSend.setTag(INPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, REMOVE_COMPACTOR_PLATE_RECIPE, toSend);
+	}
+
+	public static void removeCompactorCoinRecipe(ItemStack input) {
+
+		if (input.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+		toSend.setTag(INPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, REMOVE_COMPACTOR_COIN_RECIPE, toSend);
+	}
+
+	public static void removeCompactorGearRecipe(ItemStack input) {
+
+		if (input.isEmpty()) {
+			return;
+		}
+		NBTTagCompound toSend = new NBTTagCompound();
+		toSend.setTag(INPUT, new NBTTagCompound());
+
+		input.writeToNBT(toSend.getCompoundTag(INPUT));
+		FMLInterModComms.sendMessage(MOD_ID, REMOVE_COMPACTOR_GEAR_RECIPE, toSend);
 	}
 
 	/* CRUCIBLE */
@@ -735,6 +828,9 @@ public class ThermalExpansionHelper {
 	public static final String ADD_SMELTER_RECIPE = "addsmelterrecipe";
 	public static final String ADD_INSOLATOR_RECIPE = "addinsolatorrecipe";
 	public static final String ADD_COMPACTOR_RECIPE = "addcompactorrecipe";
+	public static final String ADD_COMPACTOR_PLATE_RECIPE = "addcompactorplaterecipe";
+	public static final String ADD_COMPACTOR_COIN_RECIPE = "addcompactorcoinrecipe";
+	public static final String ADD_COMPACTOR_GEAR_RECIPE = "addcompactorgearrecipe";
 	public static final String ADD_CRUCIBLE_RECIPE = "addcruciblerecipe";
 	public static final String ADD_REFINERY_RECIPE = "addrefineryrecipe";
 	public static final String ADD_TRANSPOSER_FILL_RECIPE = "addtransposerfillrecipe";
@@ -749,7 +845,10 @@ public class ThermalExpansionHelper {
 	public static final String REMOVE_SAWMILL_RECIPE = "removesawmillrecipe";
 	public static final String REMOVE_SMELTER_RECIPE = "removesmelterrecipe";
 	public static final String REMOVE_INSOLATOR_RECIPE = "removeinsolatorrecipe";
-	public static final String REMOVE_COMPACTOR_RECIPE = "removecompactorpressrecipe";
+	public static final String REMOVE_COMPACTOR_RECIPE = "removecompactorrecipe";
+	public static final String REMOVE_COMPACTOR_PLATE_RECIPE = "removecompactorplaterecipe";
+	public static final String REMOVE_COMPACTOR_COIN_RECIPE = "removecompactorcoinrecipe";
+	public static final String REMOVE_COMPACTOR_GEAR_RECIPE = "removecompactorgearrecipe";
 	public static final String REMOVE_CRUCIBLE_RECIPE = "removecruciblerecipe";
 	public static final String REMOVE_REFINERY_RECIPE = "removerefineryrecipe";
 	public static final String REMOVE_TRANSPOSER_FILL_RECIPE = "removetransposerfillrecipe";
