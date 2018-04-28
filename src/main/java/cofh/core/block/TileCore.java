@@ -28,10 +28,6 @@ import java.util.UUID;
 
 public abstract class TileCore extends TileEntity implements ITileInfoPacketHandler {
 
-	public abstract String getTileName();
-
-	public abstract int getType();
-
 	public void blockBroken() {
 
 	}

@@ -16,21 +16,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileTEBase extends TileCore implements ITilePacketHandler, IPortableData {
 
-	protected String tileName = "";
+	public String customName = "";
 
-	public boolean setTileName(String name) {
+	public void setCustomName(String name) {
 
-		if (name.isEmpty()) {
-			return false;
+		if (!name.isEmpty()) {
+			customName = name;
 		}
-		tileName = name;
-		return true;
 	}
 
-	public String getTileName() {
+	/* BASE METHODS */
+	protected abstract Object getMod();
 
-		return tileName;
-	}
+	protected abstract String getModVersion();
+
+	protected abstract String getTileName();
+
+	public abstract int getType();
 
 	protected boolean readPortableTagInternal(EntityPlayer player, NBTTagCompound tag) {
 
@@ -41,19 +43,6 @@ public abstract class TileTEBase extends TileCore implements ITilePacketHandler,
 
 		return true;
 	}
-
-	/* TO ABSTRACT */
-	protected abstract Object getMod();
-
-	protected abstract String getVersion();
-
-	protected abstract boolean enableSounds();
-
-	protected abstract int getLevelAutoInput();
-
-	protected abstract int getLevelAutoOutput();
-
-	protected abstract int getLevelRSControl();
 
 	/* GUI METHODS */
 	public int getScaledProgress(int scale) {
@@ -112,7 +101,7 @@ public abstract class TileTEBase extends TileCore implements ITilePacketHandler,
 		super.readFromNBT(nbt);
 
 		if (nbt.hasKey("Name")) {
-			tileName = nbt.getString("Name");
+			customName = nbt.getString("Name");
 		}
 	}
 
@@ -120,10 +109,10 @@ public abstract class TileTEBase extends TileCore implements ITilePacketHandler,
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 
 		super.writeToNBT(nbt);
-		nbt.setString("Version", getVersion());
+		nbt.setString("Version", getModVersion());
 
-		if (!tileName.isEmpty()) {
-			nbt.setString("Name", tileName);
+		if (!customName.isEmpty()) {
+			nbt.setString("Name", customName);
 		}
 		return nbt;
 	}
@@ -136,7 +125,7 @@ public abstract class TileTEBase extends TileCore implements ITilePacketHandler,
 
 		PacketBase payload = super.getTilePacket();
 
-		payload.addString(tileName);
+		payload.addString(customName);
 
 		return payload;
 	}
@@ -145,7 +134,7 @@ public abstract class TileTEBase extends TileCore implements ITilePacketHandler,
 	@SideOnly (Side.CLIENT)
 	public void handleTilePacket(PacketBase payload) {
 
-		tileName = payload.getString();
+		customName = payload.getString();
 		world.checkLight(pos);
 	}
 

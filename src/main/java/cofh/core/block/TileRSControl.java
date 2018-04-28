@@ -133,7 +133,7 @@ public abstract class TileRSControl extends TileTEBase implements IRedstoneContr
 		isActive = payload.getBool();
 
 		if (!curActive && isActive) {
-			if (getSoundEvent() != null && enableSounds()) {
+			if (getSoundEvent() != null) {
 				SoundHelper.playSound(getSound());
 			}
 		}

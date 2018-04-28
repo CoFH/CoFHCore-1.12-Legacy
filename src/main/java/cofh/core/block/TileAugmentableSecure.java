@@ -135,6 +135,21 @@ public abstract class TileAugmentableSecure extends TileRSControl implements IAu
 		}
 	}
 
+	protected int getLevelAutoInput() {
+
+		return 0;
+	}
+
+	protected int getLevelAutoOutput() {
+
+		return 0;
+	}
+
+	protected int getLevelRSControl() {
+
+		return 0;
+	}
+
 	/* GUI METHODS */
 	@Override
 	public void receiveGuiNetworkData(int id, int data) {
@@ -622,13 +637,13 @@ public abstract class TileAugmentableSecure extends TileRSControl implements IAu
 	@Override
 	public String getName() {
 
-		return tileName.isEmpty() ? getTileName() : tileName;
+		return customName.isEmpty() ? getTileName() : customName;
 	}
 
 	@Override
 	public boolean hasCustomName() {
 
-		return !tileName.isEmpty();
+		return !customName.isEmpty();
 	}
 
 	@Override
