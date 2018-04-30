@@ -31,6 +31,7 @@ public class CoreEnchantments {
 		insight = new EnchantmentInsight("cofhcore:insight");
 		leech = new EnchantmentLeech("cofhcore:leech");
 		multishot = new EnchantmentMultishot("cofhcore:multishot");
+		smashing = new EnchantmentSmashing("cofhcore:smashing");
 		smelting = new EnchantmentSmelting("cofhcore:smelting");
 		soulbound = new EnchantmentSoulbound("cofhcore:soulbound");
 		vorpal = new EnchantmentVorpal("cofhcore:vorpal");
@@ -68,6 +69,7 @@ public class CoreEnchantments {
 		registry.register(insight);
 		registry.register(leech);
 		registry.register(multishot);
+		registry.register(smashing);
 		registry.register(smelting);
 		registry.register(soulbound);
 		registry.register(vorpal);
@@ -124,6 +126,7 @@ public class CoreEnchantments {
 	public static Enchantment insight;
 	public static Enchantment leech;
 	public static Enchantment multishot;
+	public static Enchantment smashing;
 	public static Enchantment smelting;
 	public static Enchantment soulbound;
 	public static Enchantment vorpal;

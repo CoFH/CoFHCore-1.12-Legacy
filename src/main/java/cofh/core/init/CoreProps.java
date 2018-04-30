@@ -61,6 +61,9 @@ public class CoreProps {
 		comment = "If TRUE, the Multishot Enchantment is available for various Bows.";
 		EnchantmentMultishot.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableMultishotEnchant", category, EnchantmentMultishot.enable, comment);
 
+		comment = "If TRUE, the Smashing Enchantment is available for various Tools.";
+		EnchantmentSmashing.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableSmashingEnchant", category, EnchantmentSmashing.enable, comment);
+
 		comment = "If TRUE, the Smelting Enchantment is available for various Tools.";
 		EnchantmentSmelting.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableSmeltingEnchant", category, EnchantmentSmelting.enable, comment);
 

@@ -1,5 +1,6 @@
 package cofh.core.util.helpers;
 
+import cofh.core.util.crafting.ShapedFluidRecipeFactory.ShapedFluidRecipe;
 import cofh.core.util.crafting.ShapedUpgradeRecipeFactory.ShapedUpgradeRecipe;
 import cofh.core.util.crafting.ShapelessColorRecipeFactory.ShapelessColorRecipe;
 import cofh.core.util.crafting.ShapelessColorRemoveRecipeFactory.ShapelessColorRemoveRecipe;
@@ -18,8 +19,6 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 import net.minecraftforge.registries.GameData;
 
 import static cofh.core.util.helpers.ItemHelper.cloneStack;
@@ -36,10 +35,11 @@ public class RecipeHelper {
 		GameData.register_impl(recipe);
 	}
 
-	public static void addShapedOreRecipe(ItemStack output, Object... input) {
+	public static void addShapedFluidRecipe(ItemStack output, Object... input) {
 
 		ResourceLocation location = getNameForRecipe(output);
-		ShapedOreRecipe recipe = new ShapedOreRecipe(location, output, input);
+		CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(input);
+		ShapedFluidRecipe recipe = new ShapedFluidRecipe(location, output, primer);
 		recipe.setRegistryName(location);
 		GameData.register_impl(recipe);
 	}
@@ -65,14 +65,6 @@ public class RecipeHelper {
 
 		ResourceLocation location = getNameForRecipe(output);
 		ShapelessFluidRecipe recipe = new ShapelessFluidRecipe(location, output, input);
-		recipe.setRegistryName(location);
-		GameData.register_impl(recipe);
-	}
-
-	public static void addShapelessOreRecipe(ItemStack output, Object... input) {
-
-		ResourceLocation location = getNameForRecipe(output);
-		ShapelessOreRecipe recipe = new ShapelessOreRecipe(location, output, input);
 		recipe.setRegistryName(location);
 		GameData.register_impl(recipe);
 	}

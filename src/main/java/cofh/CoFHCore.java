@@ -1,6 +1,7 @@
 package cofh;
 
 import cofh.core.command.CommandHandler;
+import cofh.core.enchantment.EnchantmentSmashing;
 import cofh.core.energy.FurnaceFuelHandler;
 import cofh.core.gui.GuiHandler;
 import cofh.core.init.CoreEnchantments;
@@ -38,7 +39,7 @@ public class CoFHCore {
 	public static final String MOD_ID = "cofhcore";
 	public static final String MOD_NAME = "CoFH Core";
 
-	public static final String VERSION = "4.4.1";
+	public static final String VERSION = "4.4.2";
 	public static final String VERSION_MAX = "4.5.0";
 	public static final String VERSION_GROUP = "required-after:" + MOD_ID + "@[" + VERSION + "," + VERSION_MAX + ");";
 	public static final String UPDATE_URL = "https://raw.github.com/cofh/version/master/" + MOD_ID + "_update.json";
@@ -94,6 +95,8 @@ public class CoFHCore {
 	public void postInit(FMLPostInitializationEvent event) {
 
 		PacketHandler.postInit();
+
+		EnchantmentSmashing.initialize();
 
 		proxy.postInit(event);
 	}

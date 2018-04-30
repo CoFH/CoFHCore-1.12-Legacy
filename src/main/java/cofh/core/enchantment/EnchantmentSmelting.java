@@ -1,6 +1,7 @@
 package cofh.core.enchantment;
 
 import cofh.core.item.IEnchantableItem;
+import cofh.core.util.helpers.ItemHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.init.Enchantments;
@@ -8,6 +9,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
+import net.minecraft.item.crafting.FurnaceRecipes;
 
 public class EnchantmentSmelting extends Enchantment {
 
@@ -66,6 +68,13 @@ public class EnchantmentSmelting extends Enchantment {
 	public boolean isAllowedOnBooks() {
 
 		return enable;
+	}
+
+	/* CONVERSION */
+	public static ItemStack getItemStack(ItemStack stack) {
+
+		ItemStack result = FurnaceRecipes.instance().getSmeltingResult(stack);
+		return result.isEmpty() ? ItemStack.EMPTY : ItemHelper.cloneStack(result, stack.getCount());
 	}
 
 }

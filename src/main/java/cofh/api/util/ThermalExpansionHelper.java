@@ -1,6 +1,5 @@
 package cofh.api.util;
 
-import cofh.CoFHCore;
 import cofh.core.util.helpers.ItemHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

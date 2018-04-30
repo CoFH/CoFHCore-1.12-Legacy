@@ -3,6 +3,8 @@ package cofh.core.proxy;
 import cofh.CoFHCore;
 import cofh.api.item.IToolBow;
 import cofh.api.item.IToolQuiver;
+import cofh.core.enchantment.EnchantmentSmashing;
+import cofh.core.enchantment.EnchantmentSmelting;
 import cofh.core.enchantment.EnchantmentSoulbound;
 import cofh.core.enchantment.EnchantmentVorpal;
 import cofh.core.init.CoreEnchantments;
@@ -34,7 +36,6 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
@@ -262,13 +263,20 @@ public class EventHandler {
 		if (player == null || event.isSilkTouching() || event.isCanceled()) {
 			return;
 		}
-		int encSmelting = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.smelting, player.getHeldItemMainhand()), 0, CoreEnchantments.smelting.getMaxLevel());
-
-		if (encSmelting > 0) {
-			List<ItemStack> drops = event.getDrops();
-
+		int encSmashing = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.smashing, player.getHeldItemMainhand());
+		List<ItemStack> drops = event.getDrops();
+		if (encSmashing > 0) {
 			for (int i = 0; i < drops.size(); i++) {
-				ItemStack result = FurnaceRecipes.instance().getSmeltingResult(drops.get(i));
+				ItemStack result = EnchantmentSmashing.getItemStack(drops.get(i));
+				if (!result.isEmpty()) {
+					drops.set(i, result.copy());
+				}
+			}
+		}
+		int encSmelting = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.smelting, player.getHeldItemMainhand());
+		if (encSmelting > 0) {
+			for (int i = 0; i < drops.size(); i++) {
+				ItemStack result = EnchantmentSmelting.getItemStack(drops.get(i));
 				if (!result.isEmpty()) {
 					drops.set(i, result.copy());
 				}
