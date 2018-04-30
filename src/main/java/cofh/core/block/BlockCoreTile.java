@@ -2,17 +2,17 @@ package cofh.core.block;
 
 import cofh.api.block.IBlockInfo;
 import cofh.api.block.IDismantleable;
+import cofh.api.core.IAugmentable;
 import cofh.api.core.ISecurable;
 import cofh.api.tileentity.IInventoryRetainer;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IRedstoneControl;
 import cofh.api.tileentity.ITileInfo;
+import cofh.core.init.CoreProps;
 import cofh.core.util.CoreUtils;
 import cofh.core.util.core.IInitializer;
-import cofh.core.util.helpers.RedstoneControlHelper;
-import cofh.core.util.helpers.SecurityHelper;
-import cofh.core.util.helpers.ServerHelper;
-import cofh.core.util.helpers.StringHelper;
+import cofh.core.util.helpers.*;
+import cofh.redstoneflux.api.IEnergyHandler;
 import cofh.redstoneflux.api.IEnergyReceiver;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;
@@ -23,6 +23,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -43,7 +44,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BlockCoreTile extends BlockCore implements ITileEntityProvider, IBlockInfo, IDismantleable, IInitializer {
+public abstract class BlockCoreTile extends BlockCore implements IInitializer, ITileEntityProvider, IBlockInfo, IDismantleable {
 
 	public BlockCoreTile(Material material, String modName) {
 
@@ -225,12 +226,91 @@ public abstract class BlockCoreTile extends BlockCore implements ITileEntityProv
 	/* HELPERS */
 	public NBTTagCompound getItemStackTag(IBlockAccess world, BlockPos pos) {
 
-		return null;
+		TileEntity tile = world.getTileEntity(pos);
+		NBTTagCompound retTag = new NBTTagCompound();
+
+		if (tile instanceof TileNameable && (!((TileNameable) tile).customName.isEmpty())) {
+			retTag = ItemHelper.setItemStackTagName(retTag, ((TileNameable) tile).customName);
+		}
+		if (tile instanceof TileAugmentableSecure) {
+			retTag.setBoolean("Creative", ((TileAugmentableSecure) tile).isCreative);
+			retTag.setByte("Level", (byte) ((TileAugmentableSecure) tile).getLevel());
+			if (((TileAugmentableSecure) tile).isSecured()) {
+				retTag = SecurityHelper.setItemStackTagSecure(retTag, (ISecurable) tile);
+			}
+		}
+		if (tile instanceof IAugmentable) {
+			retTag = AugmentHelper.setItemStackTagAugments(retTag, (IAugmentable) tile);
+		}
+		if (tile instanceof IRedstoneControl) {
+			retTag = RedstoneControlHelper.setItemStackTagRS(retTag, (IRedstoneControl) tile);
+		}
+		if (tile instanceof TileReconfigurable) {
+			retTag = ReconfigurableHelper.setItemStackTagReconfig(retTag, (TileReconfigurable) tile);
+		}
+		if (tile instanceof IEnergyHandler) {
+			retTag.setInteger(CoreProps.ENERGY, ((IEnergyHandler) tile).getEnergyStored(null));
+		}
+		return retTag;
 	}
 
-	public abstract ArrayList<ItemStack> dropDelegate(NBTTagCompound nbt, IBlockAccess world, BlockPos pos, int fortune);
+	public ArrayList<ItemStack> dropDelegate(NBTTagCompound nbt, IBlockAccess world, BlockPos pos, int fortune) {
 
-	public abstract ArrayList<ItemStack> dismantleDelegate(NBTTagCompound nbt, World world, BlockPos pos, EntityPlayer player, boolean returnDrops, boolean simulate);
+		IBlockState state = world.getBlockState(pos);
+		int meta = state.getBlock().getMetaFromState(state);
+
+		ItemStack dropBlock = new ItemStack(this, 1, meta);
+
+		if (nbt != null) {
+			dropBlock.setTagCompound(nbt);
+		}
+		ArrayList<ItemStack> ret = new ArrayList<>();
+		ret.add(dropBlock);
+		return ret;
+	}
+
+	public ArrayList<ItemStack> dismantleDelegate(NBTTagCompound nbt, World world, BlockPos pos, EntityPlayer player, boolean returnDrops, boolean simulate) {
+
+		TileEntity tile = world.getTileEntity(pos);
+		IBlockState state = world.getBlockState(pos);
+		int meta = state.getBlock().getMetaFromState(state);
+		ArrayList<ItemStack> ret = new ArrayList<>();
+
+		if (state.getBlock() != this) {
+			return ret;
+		}
+		ItemStack dropBlock = new ItemStack(this, 1, meta);
+
+		if (nbt != null) {
+			dropBlock.setTagCompound(nbt);
+		}
+		if (!simulate) {
+			if (tile instanceof TileCore) {
+				((TileCore) tile).blockDismantled();
+			}
+			world.setBlockToAir(pos);
+
+			if (!returnDrops) {
+				float f = 0.3F;
+				double x2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+				double y2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+				double z2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+				EntityItem dropEntity = new EntityItem(world, pos.getX() + x2, pos.getY() + y2, pos.getZ() + z2, dropBlock);
+				dropEntity.setPickupDelay(10);
+				if (tile instanceof ISecurable && !((ISecurable) tile).getAccess().isPublic()) {
+					dropEntity.setOwner(player.getName());
+					// Set Owner - ensures dismantling player can pick it up first.
+				}
+				world.spawnEntity(dropEntity);
+
+				if (player != null) {
+					CoreUtils.dismantleLog(player.getName(), state.getBlock(), meta, pos);
+				}
+			}
+		}
+		ret.add(dropBlock);
+		return ret;
+	}
 
 	/* IBlockInfo */
 	@Override

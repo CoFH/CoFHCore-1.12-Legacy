@@ -5,6 +5,7 @@ import cofh.core.util.crafting.ShapedUpgradeRecipeFactory.ShapedUpgradeRecipe;
 import cofh.core.util.crafting.ShapelessColorRecipeFactory.ShapelessColorRecipe;
 import cofh.core.util.crafting.ShapelessColorRemoveRecipeFactory.ShapelessColorRemoveRecipe;
 import cofh.core.util.crafting.ShapelessFluidRecipeFactory.ShapelessFluidRecipe;
+import cofh.core.util.crafting.ShapelessSecureRecipeFactory.ShapelessSecureRecipe;
 import cofh.core.util.crafting.ShapelessUpgradeKitRecipeFactory.ShapelessUpgradeKitRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -65,6 +66,14 @@ public class RecipeHelper {
 
 		ResourceLocation location = getNameForRecipe(output);
 		ShapelessFluidRecipe recipe = new ShapelessFluidRecipe(location, output, input);
+		recipe.setRegistryName(location);
+		GameData.register_impl(recipe);
+	}
+
+	public static void addShapelessSecureRecipe(ItemStack output, Object... input) {
+
+		ResourceLocation location = getNameForRecipe(output);
+		ShapelessSecureRecipe recipe = new ShapelessSecureRecipe(location, output, input);
 		recipe.setRegistryName(location);
 		GameData.register_impl(recipe);
 	}

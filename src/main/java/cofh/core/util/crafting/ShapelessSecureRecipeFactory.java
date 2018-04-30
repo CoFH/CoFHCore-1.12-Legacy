@@ -4,7 +4,6 @@ import cofh.api.item.INBTCopyIngredient;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.helpers.SecurityHelper;
 import com.google.gson.JsonObject;
-import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -45,8 +44,6 @@ public class ShapelessSecureRecipeFactory implements IRecipeFactory {
 
 				if (!stack.isEmpty()) {
 					if (stack.getItem() instanceof INBTCopyIngredient) {
-						inputStack = stack;
-					} else if (Block.getBlockFromItem(stack.getItem()) instanceof INBTCopyIngredient) {
 						inputStack = stack;
 					}
 				}

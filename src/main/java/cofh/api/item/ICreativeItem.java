@@ -4,8 +4,21 @@ import net.minecraft.item.ItemStack;
 
 public interface ICreativeItem extends ILeveledItem {
 
-	boolean isCreative(ItemStack stack);
+	default boolean isCreative(ItemStack stack) {
 
-	ItemStack setCreativeTag(ItemStack stack);
+		if (stack.getTagCompound() == null) {
+			setDefaultTag(stack);
+		}
+		return stack.getTagCompound().getBoolean("Creative");
+	}
+
+	default ItemStack setCreativeTag(ItemStack stack) {
+
+		if (stack.getTagCompound() == null) {
+			setDefaultTag(stack, getMaxLevel(stack));
+		}
+		stack.getTagCompound().setBoolean("Creative", true);
+		return stack;
+	}
 
 }

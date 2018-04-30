@@ -17,7 +17,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class TileRSControl extends TileTEBase implements IRedstoneControl, ISoundSource {
+public abstract class TileRSControl extends TileNameable implements IRedstoneControl, ISoundSource {
 
 	public boolean isActive;
 	public boolean wasActive;

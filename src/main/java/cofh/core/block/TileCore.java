@@ -49,7 +49,7 @@ public abstract class TileCore extends TileEntity implements ITileInfoPacketHand
 
 	public void callNeighborStateChange() {
 
-		world.notifyNeighborsOfStateChange(pos, getBlockType(), false); //TODO: updateObservers?
+		world.notifyNeighborsOfStateChange(pos, getBlockType(), false); // TODO: updateObservers?
 	}
 
 	public void callNeighborTileChange() {

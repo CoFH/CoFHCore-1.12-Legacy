@@ -4,6 +4,8 @@ import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IReconfigurableSides;
 import cofh.core.network.PacketBase;
 import cofh.core.render.ISidedTexture;
+import cofh.core.util.core.SideConfig;
+import cofh.core.util.core.SlotConfig;
 import cofh.core.util.helpers.BlockHelper;
 import cofh.core.util.helpers.ReconfigurableHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -348,7 +350,7 @@ public abstract class TileReconfigurable extends TileInventory implements IRecon
 		if (side == null) {
 			return true;
 		}
-		return allowInsertion(sideConfig.sideTypes[sideCache[side.ordinal()]]) && slotConfig.allowInsertionSlot[slot] && isItemValidForSlot(slot, stack);
+		return SideConfig.allowInsertion(sideConfig.sideTypes[sideCache[side.ordinal()]]) && slotConfig.allowInsertionSlot[slot] && isItemValidForSlot(slot, stack);
 	}
 
 	@Override
@@ -357,7 +359,7 @@ public abstract class TileReconfigurable extends TileInventory implements IRecon
 		if (side == null) {
 			return true;
 		}
-		return allowExtraction(sideConfig.sideTypes[sideCache[side.ordinal()]]) && (sideConfig.sideTypes[sideCache[side.ordinal()]] == OPEN || slotConfig.allowExtractionSlot[slot]);
+		return SideConfig.allowExtraction(sideConfig.sideTypes[sideCache[side.ordinal()]]) && (sideConfig.sideTypes[sideCache[side.ordinal()]] == SideConfig.OPEN || slotConfig.allowExtractionSlot[slot]);
 	}
 
 	/* ISidedTexture */
