@@ -208,7 +208,6 @@ public abstract class TileInventory extends TileAugmentableSecure implements IIn
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 
 		inventory[slot] = stack;
-
 		//		if (!stack.isEmpty() && stack.getCount() > getInventoryStackLimit()) {
 		//			stack.setCount(getInventoryStackLimit());
 		//		}

@@ -185,9 +185,16 @@ public class CoreProps {
 	public static final String COLOR_1 = "Color1";
 	// public static final String CREATIVE_TAB = "CreativeTab";
 	public static final String ENERGY = "Energy";
+	public static final String FILTER = "Filter";
 	public static final String FLUID = "Fluid";
 	public static final String MODE = "Mode";
 	public static final String WATER = "Water";
+
+	public static final String TRACK_IN = "TrackIn";
+	public static final String TRACK_IN_2 = "TrackIn2";
+
+	public static final String TRACK_OUT = "TrackOut";
+	public static final String TRACK_OUT_2 = "TrackOut2";
 
 	/* INVENTORIES */
 	public static final int[] EMPTY_INVENTORY = new int[] {};

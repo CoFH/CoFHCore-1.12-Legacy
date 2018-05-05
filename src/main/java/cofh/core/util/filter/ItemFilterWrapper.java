@@ -1,5 +1,6 @@
 package cofh.core.util.filter;
 
+import cofh.core.init.CoreProps;
 import cofh.core.util.helpers.InventoryHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -22,7 +23,7 @@ public class ItemFilterWrapper implements IInventory {
 		}
 		this.stack = stack;
 		this.filter = new ItemFilter(size);
-		filter.deserializeNBT(stack.getTagCompound().getCompoundTag("Filter"));
+		filter.deserializeNBT(stack.getTagCompound().getCompoundTag(CoreProps.FILTER));
 		markDirty();
 	}
 
@@ -44,7 +45,7 @@ public class ItemFilterWrapper implements IInventory {
 	@Override
 	public void markDirty() {
 
-		stack.setTagInfo("Filter", filter.serializeNBT());
+		stack.setTagInfo(CoreProps.FILTER, filter.serializeNBT());
 		dirty = true;
 	}
 
