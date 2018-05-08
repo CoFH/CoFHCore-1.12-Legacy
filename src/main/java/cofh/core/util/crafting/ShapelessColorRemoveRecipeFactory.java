@@ -25,7 +25,7 @@ public class ShapelessColorRemoveRecipeFactory implements IRecipeFactory {
 	}
 
 	/* RECIPE */
-	public static class ShapelessColorRemoveRecipe extends ShapelessFluidRecipe {
+	public static class ShapelessColorRemoveRecipe extends ShapelessOreRecipe {
 
 		public ShapelessColorRemoveRecipe(ResourceLocation group, ItemStack result, Object... recipe) {
 
@@ -54,6 +54,12 @@ public class ShapelessColorRemoveRecipeFactory implements IRecipeFactory {
 			((IColorableItem) outputStack.getItem()).removeColor(outputStack);
 
 			return outputStack;
+		}
+
+		@Override
+		public boolean isDynamic() {
+
+			return true;
 		}
 	}
 

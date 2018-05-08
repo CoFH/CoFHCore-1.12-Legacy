@@ -36,8 +36,6 @@ public class ShapelessColorRecipeFactory implements IRecipeFactory {
 		@Nonnull
 		public ItemStack getCraftingResult(@Nonnull InventoryCrafting inv) {
 
-			System.out.println("here");
-
 			ItemStack dyeStack = ItemStack.EMPTY;
 			ItemStack dyeStack2 = ItemStack.EMPTY;
 			ItemStack inputStack = ItemStack.EMPTY;
