@@ -69,14 +69,6 @@ public final class ItemHelper {
         }
         return stack;
     }
-    public static ItemStack getHeldMultiModeStack(EntityPlayer player){
-
-        ItemStack stack = player.getHeldItemMainhand();
-        if (stack.isEmpty() || !(stack.getItem() instanceof IMultiModeItem)) {
-            stack = player.getHeldItemOffhand();
-        }
-        return stack;
-    }
 
     public static ItemStack cloneStack(Item item) {
 
@@ -404,6 +396,15 @@ public final class ItemHelper {
     }
 
     /* MULTIMODE ITEM HELPERS */
+    public static ItemStack getHeldMultiModeStack(EntityPlayer player){
+
+        ItemStack stack = player.getHeldItemMainhand();
+        if (stack.isEmpty() || !(stack.getItem() instanceof IMultiModeItem)) {
+            stack = player.getHeldItemOffhand();
+        }
+        return stack;
+    }
+
     public static boolean isPlayerHoldingMultiModeItem(EntityPlayer player) {
 
         if (!isPlayerHoldingSomething(player)) {
@@ -472,7 +473,6 @@ public final class ItemHelper {
             return multiModeItem.setMode(heldItem,mode);
         }
     }
-
     /**
      * Determine if a player is holding a Fluid Handler.
      */
