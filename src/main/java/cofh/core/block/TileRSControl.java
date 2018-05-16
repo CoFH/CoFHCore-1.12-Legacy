@@ -162,6 +162,8 @@ public abstract class TileRSControl extends TileNameable implements IRedstoneCon
 		rsMode = control;
 		if (ServerHelper.isClientWorld(world)) {
 			PacketCore.sendRSConfigUpdatePacketToServer(this, pos);
+		} else {
+			onRedstoneUpdate();
 		}
 		return true;
 	}

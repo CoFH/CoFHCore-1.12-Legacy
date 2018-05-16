@@ -1,7 +1,6 @@
 package cofh.core.util.crafting;
 
 import cofh.api.item.IColorableItem;
-import cofh.core.util.crafting.ShapelessFluidRecipeFactory.ShapelessFluidRecipe;
 import cofh.core.util.helpers.ItemHelper;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.InventoryCrafting;

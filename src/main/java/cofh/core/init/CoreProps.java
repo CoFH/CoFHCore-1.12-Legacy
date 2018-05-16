@@ -4,13 +4,10 @@ import cofh.CoFHCore;
 import cofh.core.enchantment.*;
 import cofh.core.util.helpers.StringHelper;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class CoreProps {
@@ -138,52 +135,51 @@ public class CoreProps {
 		enableOpSecureAccessWarning = CoFHCore.CONFIG_CLIENT.getConfiguration().getBoolean("OpsCanAccessSecureBlocksWarning", category, enableOpSecureAccessWarning, comment);
 	}
 
+	/* FORGE INFO */
 	private static final String BUILD = "2655";
 	private static final String FORGE_REQ = "14.23.3." + BUILD;
 	private static final String FORGE_REQ_MAX = "15.0.0.0";
 
 	public static final String FORGE_DEP = "required-after:forge@[" + FORGE_REQ + "," + FORGE_REQ_MAX + ");";
 
-	/* INSTANCE CONSTANTS */
-	public static File configDir;
-	public static MinecraftServer server;
-
 	/* GLOBAL CONSTANTS */
 	public static final GameProfile DEFAULT_OWNER = new GameProfile(UUID.fromString("1ef1a6f0-87bc-4e78-0a0b-c6824eb787ea"), "[None]");
+
+	public static final byte LEVEL_MIN = 0;
+	public static final byte LEVEL_MAX = 4;
+
+	public static final int ENTITY_TRACKING_DISTANCE = 64;
+	public static final int NETWORK_UPDATE_RANGE = 192;
 
 	public static final int TIME_CONSTANT = 32;
 	public static final int TIME_CONSTANT_HALF = TIME_CONSTANT / 2;
 	public static final int TIME_CONSTANT_QUARTER = TIME_CONSTANT / 4;
 	public static final int TIME_CONSTANT_EIGHTH = TIME_CONSTANT / 8;
-	public static final int MB_PER_XP = 20;
-	public static final int RF_PER_MJ = 10;
-	public static final int LAVA_RF = 200000;
-	public static final int MAGMATIC_TEMPERATURE = 1000;
-	public static final int ENTITY_TRACKING_DISTANCE = 64;
-
-	public static int tileUpdateDelay = 160;
-
-	public static final int BOTTLE_VOLUME = 250;
-
-	public static final byte LEVEL_MIN = 0;
-	public static final byte LEVEL_MAX = 4;
 
 	public static final int RGB_DURABILITY_FLUX = 0xD01010;
 	public static final int RGB_DURABILITY_WATER = 0x4060FF;
 	public static final int RGB_DURABILITY_ENDER = 0x14594D;
 	public static final int RGB_DURABILITY_EXP = 0x7AAC52;
 
-	/* FLUID STRING CONSTANTS */
+	/* ENERGY CONSTANTS */
+	public static final int RF_PER_MJ = 10;
+
+	/* FLUID CONSTANTS */
+	public static final int BOTTLE_VOLUME = 250;
+	public static final int LAVA_RF = 200000;
+	public static final int MAGMATIC_TEMPERATURE = 1000;
+	public static final int MB_PER_XP = 20;
+
 	public static final String ESSENCE = "essence";
 	public static final String XPJUICE = "xpjuice";
 
-	/* NBT STRING CONSTANTS */
+	/* NBT CONSTANTS */
 	public static final String ACTIVE = "Active";
 	public static final String AMOUNT = "Amount";
 	public static final String ARROWS = "Arrows";
 	public static final String COLOR_0 = "Color0";
 	public static final String COLOR_1 = "Color1";
-	// public static final String CREATIVE_TAB = "CreativeTab";
+	public static final String CREATIVE_TAB = "CreativeTab";
 	public static final String ENERGY = "Energy";
 	public static final String FILTER = "Filter";
 	public static final String FLUID = "Fluid";
@@ -199,7 +195,6 @@ public class CoreProps {
 	/* INVENTORIES */
 	public static final int[] EMPTY_INVENTORY = new int[] {};
 	public static final int[] SINGLE_INVENTORY = { 0 };
-	public static final List<ItemStack> EMPTY_DROPS = new ArrayList<>();
 
 	public static final int[] STORAGE_SIZE = { 1, 9, 18, 27, 36, 45, 54, 63, 72, 81, 90, 99, 108, 117, 126 };
 	public static final int[] FILTER_SIZE = { 3, 6, 9, 12, 15 };
@@ -233,21 +228,22 @@ public class CoreProps {
 		}
 	}
 
-	/* NETWORK */
-	public static final int NETWORK_UPDATE_RANGE = 192;
-
 	/* GLOBAL */
 	public static boolean disableParticles = false;
+	public static int tileUpdateDelay = 160;
 
 	/* GENERAL */
 	public static boolean enableDismantleLogging = false;
 	public static boolean enableLivingEntityDeathMessages = true;
 
-	/* GRAPHICS */
+	/* INSTANCE */
+	public static File configDir;
+	public static MinecraftServer server;
+
+	/* RENDER */
 	public static boolean enableColorBlindTextures = false;
 	public static boolean enableGUISlotBorders = true;
 	public static boolean enableShaderEffects = true;
-	public static boolean useAlternateStarfieldShader = false;
 
 	/* HOLIDAY */
 	public static boolean holidayAprilFools = true;

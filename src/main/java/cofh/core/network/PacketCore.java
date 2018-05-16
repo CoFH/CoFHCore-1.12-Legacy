@@ -81,11 +81,10 @@ public class PacketCore extends PacketBase {
 				case CONFIG_SYNC:
 					return;
 				default:
-					CoFHCore.LOG.error("Unknown Packet! Internal: COFH, ID: " + type);
+					CoFHCore.LOG.error("Unknown Packet! Internal: " + CoFHCore.MOD_ID + "; " + type);
 			}
 		} catch (Exception e) {
-			CoFHCore.LOG.error("Packet payload failure! Please check your config files!");
-			e.printStackTrace();
+			CoFHCore.LOG.error("Packet payload failure! Please check your config files!", e);
 		}
 
 	}
