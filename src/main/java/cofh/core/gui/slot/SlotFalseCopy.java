@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotFalseCopy extends Slot {
 
-	public int slotIndex = 0;
+	public int slotIndex;
 
 	public SlotFalseCopy(IInventory inventory, int index, int x, int y) {
 

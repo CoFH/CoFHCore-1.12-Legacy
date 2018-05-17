@@ -134,14 +134,14 @@ public class ItemFilter implements INBTSerializable<NBTTagCompound> {
 		updateOreIDs();
 	}
 
-	private void setFlagByte(int value) {
+	public void setFlagByte(int value) {
 
 		for (int i = 0; i < flags.length; i++) {
 			flags[i] = (value & (1 << i)) != 0;
 		}
 	}
 
-	private int getFlagByte() {
+	public int getFlagByte() {
 
 		int v = 0;
 		for (int i = 0; i < flags.length; i++) {
