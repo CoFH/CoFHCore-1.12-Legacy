@@ -4,6 +4,7 @@ import cofh.api.block.IBlockInfo;
 import cofh.api.block.IDismantleable;
 import cofh.api.core.IAugmentable;
 import cofh.api.core.ISecurable;
+import cofh.api.item.IPlacementUtilItem;
 import cofh.api.tileentity.IInventoryRetainer;
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IRedstoneControl;
@@ -135,6 +136,12 @@ public abstract class BlockCoreTile extends BlockCore implements IInitializer, I
 		}
 		if (tile instanceof TileCore) {
 			((TileCore) tile).blockPlaced();
+		}
+		if (ServerHelper.isServerWorld(world)) {
+			ItemStack offhand = placer.getHeldItemOffhand();
+			if (!offhand.isEmpty() && offhand.getItem() instanceof IPlacementUtilItem) {
+				((IPlacementUtilItem) offhand.getItem()).onBlockPlacement(offhand, world, pos, state, (EntityPlayer) placer);
+			}
 		}
 	}
 
