@@ -1,17 +1,18 @@
 package cofh.core.energy;
 
 import cofh.core.util.ItemWrapper;
-import gnu.trove.map.hash.THashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.IFuelHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class FurnaceFuelHandler implements IFuelHandler {
 
 	public static final FurnaceFuelHandler INSTANCE = new FurnaceFuelHandler();
-	private static THashMap<ItemWrapper, Integer> fuels = new THashMap<>();
+	private static Map<ItemWrapper, Integer> fuels = new Object2ObjectOpenHashMap<>();
 
 	public static void initialize() {
 
@@ -42,7 +43,7 @@ public class FurnaceFuelHandler implements IFuelHandler {
 
 	public static void refresh() {
 
-		THashMap<ItemWrapper, Integer> tempMap = new THashMap<>();
+		Map<ItemWrapper, Integer> tempMap = new Object2ObjectOpenHashMap<>();
 
 		for (Entry<ItemWrapper, Integer> entry : fuels.entrySet()) {
 			ItemWrapper tempItem = new ItemWrapper(entry.getKey().item, entry.getKey().metadata);

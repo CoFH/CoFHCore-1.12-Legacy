@@ -1,7 +1,6 @@
 package cofh.core.key;
 
-import gnu.trove.map.TMap;
-import gnu.trove.map.hash.THashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.MouseInputEvent;
@@ -11,13 +10,14 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class KeyHandlerCore {
 
 	public static final KeyHandlerCore INSTANCE = new KeyHandlerCore();
 
-	static TMap<String, IKeyBinding> clientBinds = new THashMap<>();
-	static TMap<String, IKeyBinding> serverBinds = new THashMap<>();
+	static Map<String, IKeyBinding> clientBinds = new Object2ObjectOpenHashMap<>();
+	static Map<String, IKeyBinding> serverBinds = new Object2ObjectOpenHashMap<>();
 	static ArrayList<IKeyBinding> keys = new ArrayList<>();
 
 	public static boolean isKeyDown(int key) {

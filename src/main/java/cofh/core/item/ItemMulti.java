@@ -9,8 +9,7 @@ import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.helpers.SecurityHelper;
 import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
-import gnu.trove.map.TMap;
-import gnu.trove.map.hash.THashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +28,7 @@ import java.util.UUID;
 
 public class ItemMulti extends ItemCore implements IModelRegister {
 
-	protected TMap<Integer, ItemEntry> itemMap = new THashMap<>();
+	protected Map<Integer, ItemEntry> itemMap = new Int2ObjectOpenHashMap<>();
 	protected ArrayList<Integer> itemList = new ArrayList<>();
 
 	public ItemMulti() {

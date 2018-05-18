@@ -1,7 +1,6 @@
 package cofh.core.command;
 
-import gnu.trove.map.TMap;
-import gnu.trove.map.hash.THashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.CommandNotFoundException;
@@ -12,12 +11,13 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class CommandHandler extends CommandBase {
 
 	public static final CommandHandler INSTANCE = new CommandHandler();
-	private static TMap<String, ISubCommand> commands = new THashMap<>();
+	private static Map<String, ISubCommand> commands = new Object2ObjectOpenHashMap<>();
 
 	public static void initialize() {
 

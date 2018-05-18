@@ -3,8 +3,10 @@ package cofh.core.util.helpers;
 import cofh.api.item.IToolDye;
 import cofh.core.init.CoreProps;
 import cofh.core.util.oredict.OreDictionaryArbiter;
-import gnu.trove.map.hash.THashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
+
+import java.util.Map;
 
 /**
  * Contains various helper functions to assist with colors.
@@ -40,7 +42,7 @@ public final class ColorHelper {
 	// and not strictly required.
 	public static final String[] WOOL_COLOR_CONFIG = { "White", "Orange", "Magenta", "LightBlue", "Yellow", "Lime", "Pink", "Gray", "LightGray", "Cyan", "Purple", "Blue", "Brown", "Green", "Red", "Black" };
 
-	public static final THashMap<String, Integer> COLOR_MAP = new THashMap<>();
+	public static final Map<String, Integer> COLOR_MAP = new Object2ObjectOpenHashMap<>();
 
 	static {
 		COLOR_MAP.put("dyeBlack", DYE_BLACK);

@@ -5,13 +5,13 @@ import cofh.core.util.helpers.ItemHelper;
 import com.google.common.base.Strings;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import gnu.trove.map.TMap;
-import gnu.trove.map.hash.THashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class exists to optimize OreDictionary functionality, as it is embarrassingly slow otherwise.
@@ -24,10 +24,10 @@ import java.util.List;
 public class OreDictionaryArbiter {
 
 	private static BiMap<String, Integer> oreIDs = HashBiMap.create(32);
-	private static TMap<Integer, ArrayList<ItemStack>> oreStacks = new THashMap<>(128);
+	private static Map<Integer, ArrayList<ItemStack>> oreStacks = new Object2ObjectOpenHashMap<>(128);
 
-	private static TMap<ItemWrapper, ArrayList<Integer>> stackIDs = new THashMap<>(128);
-	private static TMap<ItemWrapper, ArrayList<String>> stackNames = new THashMap<>(128);
+	private static Map<ItemWrapper, ArrayList<Integer>> stackIDs = new Object2ObjectOpenHashMap<>(128);
+	private static Map<ItemWrapper, ArrayList<String>> stackNames = new Object2ObjectOpenHashMap<>(128);
 
 	private static String[] oreNames = new String[] {};
 
@@ -41,10 +41,10 @@ public class OreDictionaryArbiter {
 	public static void initialize() {
 
 		oreIDs = HashBiMap.create(oreIDs.size());
-		oreStacks = new THashMap<>(oreStacks.size());
+		oreStacks = new Object2ObjectOpenHashMap<>(oreStacks.size());
 
-		stackIDs = new THashMap<>(stackIDs.size());
-		stackNames = new THashMap<>(stackNames.size());
+		stackIDs = new Object2ObjectOpenHashMap<>(stackIDs.size());
+		stackNames = new Object2ObjectOpenHashMap<>(stackNames.size());
 
 		oreNames = OreDictionary.getOreNames();
 

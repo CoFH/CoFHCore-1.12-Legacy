@@ -192,6 +192,9 @@ public class CoreProps {
 	public static final String TRACK_OUT = "TrackOut";
 	public static final String TRACK_OUT_2 = "TrackOut2";
 
+	/* OTHER CONSTANTS */
+	public static final String CONVEYOR_COMPAT = "PreventRemoteMovement";
+
 	/* INVENTORIES */
 	public static final int[] EMPTY_INVENTORY = new int[] {};
 	public static final int[] SINGLE_INVENTORY = { 0 };

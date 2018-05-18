@@ -3,7 +3,7 @@ package cofh.core.enchantment;
 import cofh.core.item.IEnchantableItem;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.helpers.StringHelper;
-import gnu.trove.map.hash.THashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.init.Enchantments;
@@ -11,6 +11,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.Map;
 
 public class EnchantmentSmashing extends Enchantment {
 
@@ -74,7 +76,7 @@ public class EnchantmentSmashing extends Enchantment {
 	/* CONVERSION */
 	public static final int ORE_MULTIPLIER = 2;
 	public static final int ORE_MULTIPLIER_SPECIAL = 3;
-	public static THashMap<String, SmashConversion> smashList = new THashMap<>();
+	public static Map<String, SmashConversion> smashList = new Object2ObjectOpenHashMap<>();
 
 	public static class SmashConversion {
 
