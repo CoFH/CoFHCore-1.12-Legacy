@@ -13,8 +13,10 @@ public abstract class TabScrolledText extends TabBase {
 
 	protected List<String> myText;
 	protected int firstLine = 0;
-	protected int maxFirstLine = 0;
-	protected int numLines = 0;
+	protected int maxFirstLine;
+	protected int numLines;
+
+	protected boolean scrollable;
 
 	public TabScrolledText(GuiContainerCore gui, int side, String infoString) {
 
@@ -37,15 +39,17 @@ public abstract class TabScrolledText extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		if (firstLine > 0) {
-			gui.drawIcon(CoreTextures.ICON_ARROW_UP, posXOffset() + maxWidth - 20, posY + 16);
-		} else {
-			gui.drawIcon(CoreTextures.ICON_ARROW_UP_INACTIVE, posXOffset() + maxWidth - 20, posY + 16);
-		}
-		if (firstLine < maxFirstLine) {
-			gui.drawIcon(CoreTextures.ICON_ARROW_DOWN, posXOffset() + maxWidth - 20, posY + 76);
-		} else {
-			gui.drawIcon(CoreTextures.ICON_ARROW_DOWN_INACTIVE, posXOffset() + maxWidth - 20, posY + 76);
+		if (maxFirstLine > 0) {
+			if (firstLine > 0) {
+				gui.drawIcon(CoreTextures.ICON_ARROW_UP, posXOffset() + maxWidth - 20, posY + 16);
+			} else {
+				gui.drawIcon(CoreTextures.ICON_ARROW_UP_INACTIVE, posXOffset() + maxWidth - 20, posY + 16);
+			}
+			if (firstLine < maxFirstLine) {
+				gui.drawIcon(CoreTextures.ICON_ARROW_DOWN, posXOffset() + maxWidth - 20, posY + 76);
+			} else {
+				gui.drawIcon(CoreTextures.ICON_ARROW_DOWN_INACTIVE, posXOffset() + maxWidth - 20, posY + 76);
+			}
 		}
 		getFontRenderer().drawStringWithShadow(getTitle(), posXOffset() + 18, posY + 6, headerColor);
 		for (int i = firstLine; i < firstLine + numLines; i++) {
