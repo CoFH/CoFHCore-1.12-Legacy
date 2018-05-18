@@ -184,7 +184,7 @@ public final class StringHelper {
 
 	public static String getFlavorText(String key) {
 
-		return WHITE + localize(key) + END;
+		return LIGHT_GRAY + ITALIC + localize(key) + END;
 	}
 
 	public static String getRarity(int level) {

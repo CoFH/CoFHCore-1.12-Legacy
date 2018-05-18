@@ -17,6 +17,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -103,7 +104,7 @@ public class EventHandler {
 					}
 					for (int shot = 0; shot <= encMultishot; shot++) {
 						EntityArrow arrow = createArrow(world, arrowStack, player);
-						arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F + (1.5F - f) * shot);
+						arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F + (1.5F - f) * (shot * 2));
 
 						if (bow != null) {
 							arrow.setDamage(arrow.getDamage() * (1 + bow.getArrowDamageMultiplier(stack)));
@@ -223,15 +224,18 @@ public class EventHandler {
 			return;
 		}
 		DamageSource source = event.getSource();
-
-		if (!source.damageType.equals("player")) {
-			return;
-		}
 		Entity attacker = event.getSource().getTrueSource();
 
-		if (attacker instanceof EntityPlayer) {
-			int encVorpal = getHeldEnchantmentLevel((EntityPlayer) attacker, CoreEnchantments.vorpal);
-
+		if (!(attacker instanceof EntityLivingBase)) {
+			return;
+		}
+		if (source.damageType.equals("arrow")) {
+			int encMultishot = MathHelper.clamp(getHeldEnchantmentLevel((EntityLivingBase) attacker, CoreEnchantments.multishot), 0, CoreEnchantments.multishot.getMaxLevel() + 1);
+			if (encMultishot > 0) {
+				entity.hurtResistantTime = 0;
+			}
+		} else if (source.damageType.equals("player")) {
+			int encVorpal = getHeldEnchantmentLevel((EntityLivingBase) attacker, CoreEnchantments.vorpal);
 			if (encVorpal > 0 && entity.world.rand.nextInt(100) < EnchantmentVorpal.CRIT_CHANCE * encVorpal) {
 				event.setAmount(event.getAmount() * EnchantmentVorpal.CRIT_DAMAGE);
 			}
@@ -471,7 +475,7 @@ public class EventHandler {
 		return ItemStack.EMPTY;
 	}
 
-	public int getHeldEnchantmentLevel(EntityPlayer player, Enchantment enc) {
+	public int getHeldEnchantmentLevel(EntityLivingBase player, Enchantment enc) {
 
 		return Math.max(EnchantmentHelper.getEnchantmentLevel(enc, player.getHeldItemMainhand()), EnchantmentHelper.getEnchantmentLevel(enc, player.getHeldItemOffhand()));
 	}
