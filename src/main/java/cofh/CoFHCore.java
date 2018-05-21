@@ -163,6 +163,11 @@ public class CoFHCore {
 		OreDictionary.registerOre("dustBlaze", new ItemStack(Items.BLAZE_POWDER));
 		OreDictionary.registerOre("rodBlaze", new ItemStack(Items.BLAZE_ROD));
 
+		OreDictionary.registerOre("cropBeetroot", Items.BEETROOT);
+		OreDictionary.registerOre("cropMelon", Blocks.MELON_BLOCK);
+		OreDictionary.registerOre("cropPumpkin", Blocks.PUMPKIN);
+		OreDictionary.registerOre("cropWheat", Items.WHEAT);
+
 		OreDictionary.registerOre("seedBeetroot", Items.BEETROOT_SEEDS);
 		OreDictionary.registerOre("seedMelon", Items.MELON_SEEDS);
 		OreDictionary.registerOre("seedPumpkin", Items.PUMPKIN_SEEDS);
