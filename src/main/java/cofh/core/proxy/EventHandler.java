@@ -71,18 +71,19 @@ public class EventHandler {
 		if (!(event.getBow().getItem() == Items.BOW) && !(event.getBow().getItem() instanceof IToolBow)) {
 			return;
 		}
-		ItemStack stack = event.getBow();
+		ItemStack bowStack = event.getBow();
 		IToolBow bow = null;
 		EntityPlayer player = event.getEntityPlayer();
 		ItemStack arrowStack = findAmmo(player);
 		World world = event.getWorld();
+		boolean customArrow = false;
 
-		if (stack.getItem() instanceof IToolBow) {
-			bow = (IToolBow) stack.getItem();
+		if (bowStack.getItem() instanceof IToolBow) {
+			bow = (IToolBow) bowStack.getItem();
 		}
-		boolean flag = player.capabilities.isCreativeMode || (arrowStack.getItem() instanceof ItemArrow && ((ItemArrow) arrowStack.getItem()).isInfinite(arrowStack, stack, player));
+		boolean flag = player.capabilities.isCreativeMode || (arrowStack.getItem() instanceof ItemArrow && ((ItemArrow) arrowStack.getItem()).isInfinite(arrowStack, bowStack, player));
 
-		if (arrowStack.isEmpty() && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0) {
+		if (arrowStack.isEmpty() && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bowStack) > 0) {
 			flag = true;
 		}
 		if (!arrowStack.isEmpty() || flag) {
@@ -90,24 +91,29 @@ public class EventHandler {
 				arrowStack = new ItemStack(Items.ARROW);
 			}
 			float f = ItemBow.getArrowVelocity(event.getCharge());
-			float speedMod = bow != null ? 1.0F + bow.getArrowSpeedMultiplier(stack) : 1.0F;
+			float speedMod = bow != null ? bow.getArrowSpeedMultiplier(bowStack) : 1.0F;
 
 			if ((double) f >= 0.1D) {
 				if (!world.isRemote) {
-					int encMultishot = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, stack), 0, CoreEnchantments.multishot.getMaxLevel() + 1);
-					int encPunch = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
-					int encPower = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
-					boolean encFlame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0;
+					int encMultishot = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, bowStack), 0, CoreEnchantments.multishot.getMaxLevel() + 1);
+					int encPunch = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, bowStack);
+					int encPower = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, bowStack);
+					int encFlame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, bowStack);
 
 					if (bow != null) {
-						bow.onBowFired(player, stack);
+						bow.onBowFired(player, bowStack);
+						if (isQuiver(arrowStack) && !((IToolQuiver) arrowStack.getItem()).allowCustomArrow(arrowStack)) {
+							customArrow = false;
+						} else {
+							customArrow = bow.hasCustomArrow(bowStack);
+						}
 					}
 					for (int shot = 0; shot <= encMultishot; shot++) {
-						EntityArrow arrow = createArrow(world, arrowStack, player);
+						EntityArrow arrow = createArrow(world, arrowStack, bowStack, customArrow, player);
 						arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, f * 3.0F * speedMod, 1.0F + (1.5F - f) * (shot * 2));
 
 						if (bow != null) {
-							arrow.setDamage(arrow.getDamage() * (1 + bow.getArrowDamageMultiplier(stack)));
+							arrow.setDamage(arrow.getDamage() * (1 + bow.getArrowDamageMultiplier(bowStack)));
 						}
 						if (f >= 1.0F) {
 							arrow.setIsCritical(true);
@@ -118,7 +124,7 @@ public class EventHandler {
 						if (encPunch > 0) {
 							arrow.setKnockbackStrength(encPunch);
 						}
-						if (encFlame) {
+						if (encFlame > 0) {
 							arrow.setFire(100);
 						}
 						if (flag || shot > 0) {
@@ -126,7 +132,7 @@ public class EventHandler {
 						}
 						world.spawnEntity(arrow);
 					}
-					stack.damageItem(1, player);
+					bowStack.damageItem(1, player);
 				}
 				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (world.rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 
@@ -140,7 +146,7 @@ public class EventHandler {
 						}
 					}
 				}
-				player.addStat(StatList.getObjectUseStats(stack.getItem()));
+				player.addStat(StatList.getObjectUseStats(bowStack.getItem()));
 			}
 			event.setCanceled(true);
 		}
@@ -445,15 +451,18 @@ public class EventHandler {
 		return false;
 	}
 
-	public EntityArrow createArrow(World world, ItemStack stack, EntityPlayer player) {
+	public EntityArrow createArrow(World world, ItemStack arrowStack, ItemStack bowStack, boolean customArrow, EntityPlayer player) {
 
-		if (isArrow(stack)) {
-			return ((ItemArrow) stack.getItem()).createArrow(world, stack, player);
+		if (customArrow) {
+			return ((IToolBow) bowStack.getItem()).createEntityArrow(world, bowStack, player);
 		}
-		if (isQuiver(stack)) {
-			return ((IToolQuiver) stack.getItem()).createEntityArrow(world, stack, player);
+		if (isArrow(arrowStack)) {
+			return ((ItemArrow) arrowStack.getItem()).createArrow(world, arrowStack, player);
 		}
-		return ((ItemArrow) Items.ARROW).createArrow(world, stack, player);
+		if (isQuiver(arrowStack)) {
+			return ((IToolQuiver) arrowStack.getItem()).createEntityArrow(world, arrowStack, player);
+		}
+		return ((ItemArrow) Items.ARROW).createArrow(world, arrowStack, player);
 	}
 
 	public ItemStack findAmmo(EntityPlayer player) {

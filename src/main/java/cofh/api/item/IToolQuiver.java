@@ -7,10 +7,22 @@ import net.minecraft.world.World;
 
 /**
  * Implement this interface on subclasses of Item to have that item work as a quiver for CoFH mods.
+ * Technically, this can be arrows, if you're clever. ;)
  */
 public interface IToolQuiver {
 
 	EntityArrow createEntityArrow(World world, ItemStack item, EntityLivingBase shooter);
+
+	/**
+	 * Determine if the Quiver will allow a bow to override its arrow. The quiver will still deplete even if it defers.
+	 *
+	 * @param item ItemStack representing the quiver.
+	 * @return If the bow is allowed to generate a custom ArrowEntity using the ammo provided by this quiver.
+	 */
+	default boolean allowCustomArrow(ItemStack item) {
+
+		return true;
+	}
 
 	boolean isEmpty(ItemStack item, EntityLivingBase shooter);
 

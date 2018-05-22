@@ -556,10 +556,24 @@ public abstract class GuiContainerCore extends GuiContainer {
 		mc.renderEngine.bindTexture(texture);
 	}
 
-	/**
-	 * Essentially a placeholder method for tabs to use should they need to draw a button.
-	 */
+	// Essentially a placeholder method for tabs to use should they need to draw a button.
 	public void drawButton(TextureAtlasSprite icon, int x, int y, int mode) {
+
+		switch (mode) {
+			case 0:
+				drawIcon(CoreTextures.ICON_BUTTON, x, y);
+				break;
+			case 1:
+				drawIcon(CoreTextures.ICON_BUTTON_HIGHLIGHT, x, y);
+				break;
+			default:
+				drawIcon(CoreTextures.ICON_BUTTON_INACTIVE, x, y);
+				break;
+		}
+		drawIcon(icon, x, y);
+	}
+
+	public void drawGuiLabel(TextureAtlasSprite icon, int x, int y, int mode) {
 
 		switch (mode) {
 			case 0:

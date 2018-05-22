@@ -21,10 +21,13 @@ import java.util.List;
  */
 public abstract class TabBase extends ElementBase {
 
-	public static int tabExpandSpeed = 8;
+	public static final ResourceLocation DEFAULT_TEXTURE_LEFT = new ResourceLocation(CoreProps.PATH_ELEMENTS + "tab_left.png");
+	public static final ResourceLocation DEFAULT_TEXTURE_RIGHT = new ResourceLocation(CoreProps.PATH_ELEMENTS + "tab_right.png");
 
 	public static final int LEFT = 0;
 	public static final int RIGHT = 1;
+
+	public static int tabExpandSpeed = 8;
 
 	protected int offsetX = 0;
 	protected int offsetY = 0;
@@ -50,9 +53,6 @@ public abstract class TabBase extends ElementBase {
 	public int currentHeight = minHeight;
 
 	protected ArrayList<ElementBase> elements = new ArrayList<>();
-
-	public static final ResourceLocation DEFAULT_TEXTURE_LEFT = new ResourceLocation(CoreProps.PATH_ELEMENTS + "tab_left.png");
-	public static final ResourceLocation DEFAULT_TEXTURE_RIGHT = new ResourceLocation(CoreProps.PATH_ELEMENTS + "tab_right.png");
 
 	public TabBase(GuiContainerCore gui) {
 
@@ -129,8 +129,7 @@ public abstract class TabBase extends ElementBase {
 
 		GlStateManager.translate(this.posX(), this.posY, 0.0F);
 
-		for (int i = 0; i < elements.size(); i++) {
-			ElementBase element = elements.get(i);
+		for (ElementBase element : elements) {
 			if (element.isVisible()) {
 				element.drawBackground(mouseX, mouseY, gameTicks);
 			}
@@ -150,8 +149,7 @@ public abstract class TabBase extends ElementBase {
 
 		GlStateManager.translate(this.posX(), this.posY, 0.0F);
 
-		for (int i = 0; i < elements.size(); i++) {
-			ElementBase element = elements.get(i);
+		for (ElementBase element : elements) {
 			if (element.isVisible()) {
 				element.drawForeground(mouseX, mouseY);
 			}
