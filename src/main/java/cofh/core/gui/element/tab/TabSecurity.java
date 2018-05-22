@@ -109,7 +109,7 @@ public class TabSecurity extends TabBase {
 		float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
 		float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
 		GlStateManager.color(colorR, colorG, colorB, 1.0F);
-		gui.drawTexturedModalRect(posX() + 24, posY + 16, 16, 20, 64, 24);
+		gui.drawTexturedModalRect(24, 16, 16, 20, 64, 24);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
@@ -126,24 +126,24 @@ public class TabSecurity extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.security"), posXOffset() + 18, posY + 6, headerColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.access") + ":", posXOffset() + 6, posY + 42, subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.security"), sideOffset() + 18, 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.access") + ":", sideOffset() + 6, 42, subheaderColor);
 
 		if (myContainer.getAccess().isPublic()) {
-			gui.drawButton(CoreTextures.ICON_ACCESS_PUBLIC, posX() + 28, posY + 20, 1);
-			gui.drawButton(CoreTextures.ICON_ACCESS_FRIENDS, posX() + 48, posY + 20, 0);
-			gui.drawButton(CoreTextures.ICON_ACCESS_PRIVATE, posX() + 68, posY + 20, 0);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPublic"), posXOffset() + 14, posY + 54, textColor);
+			gui.drawButton(CoreTextures.ICON_ACCESS_PUBLIC, 28, 20, 1);
+			gui.drawButton(CoreTextures.ICON_ACCESS_FRIENDS, 48, 20, 0);
+			gui.drawButton(CoreTextures.ICON_ACCESS_PRIVATE, 68, 20, 0);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPublic"), sideOffset() + 14, 54, textColor);
 		} else if (myContainer.getAccess().isFriendsOnly()) {
-			gui.drawButton(CoreTextures.ICON_ACCESS_PUBLIC, posX() + 28, posY + 20, 0);
-			gui.drawButton(CoreTextures.ICON_ACCESS_FRIENDS, posX() + 48, posY + 20, 1);
-			gui.drawButton(CoreTextures.ICON_ACCESS_PRIVATE, posX() + 68, posY + 20, 0);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessRestricted"), posXOffset() + 14, posY + 54, textColor);
+			gui.drawButton(CoreTextures.ICON_ACCESS_PUBLIC, 28, 20, 0);
+			gui.drawButton(CoreTextures.ICON_ACCESS_FRIENDS, 48, 20, 1);
+			gui.drawButton(CoreTextures.ICON_ACCESS_PRIVATE, 68, 20, 0);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessRestricted"), sideOffset() + 14, 54, textColor);
 		} else if (myContainer.getAccess().isPrivate()) {
-			gui.drawButton(CoreTextures.ICON_ACCESS_PUBLIC, posX() + 28, posY + 20, 0);
-			gui.drawButton(CoreTextures.ICON_ACCESS_FRIENDS, posX() + 48, posY + 20, 0);
-			gui.drawButton(CoreTextures.ICON_ACCESS_PRIVATE, posX() + 68, posY + 20, 1);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPrivate"), posXOffset() + 14, posY + 54, textColor);
+			gui.drawButton(CoreTextures.ICON_ACCESS_PUBLIC, 28, 20, 0);
+			gui.drawButton(CoreTextures.ICON_ACCESS_FRIENDS, 48, 20, 0);
+			gui.drawButton(CoreTextures.ICON_ACCESS_PRIVATE, 68, 20, 1);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.accessPrivate"), sideOffset() + 14, 54, textColor);
 		}
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}

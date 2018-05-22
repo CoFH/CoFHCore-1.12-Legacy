@@ -123,8 +123,8 @@ public class TabConfigurationTransfer extends TabBase {
 		float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
 		float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
 		GlStateManager.color(colorR, colorG, colorB, 1.0F);
-		gui.drawTexturedModalRect(posX() + 28, posY + 20, 16, 20, 64, 64);
-		gui.drawTexturedModalRect(posX() + 6, posY + 32, 16, 20, 20, 40);
+		gui.drawTexturedModalRect(28, 20, 16, 20, 64, 64);
+		gui.drawTexturedModalRect(6, 32, 16, 20, 20, 40);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
@@ -135,29 +135,29 @@ public class TabConfigurationTransfer extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), posXOffset() + 18, posY + 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.configuration"), sideOffset() + 18, 6, headerColor);
 		RenderHelper.setBlockTextureSheet();
 
 		if (myTileControl.hasTransferIn()) {
-			gui.drawButton(CoreTextures.ICON_INPUT, posX() + 8, posY + 34, myTileControl.getTransferIn() ? 1 : 0);
+			gui.drawButton(CoreTextures.ICON_INPUT, 8, 34, myTileControl.getTransferIn() ? 1 : 0);
 		} else {
-			gui.drawButton(CoreTextures.ICON_INPUT, posX() + 8, posY + 34, 2);
+			gui.drawButton(CoreTextures.ICON_INPUT, 8, 34, 2);
 		}
 		if (myTileControl.hasTransferOut()) {
-			gui.drawButton(CoreTextures.ICON_OUTPUT, posX() + 8, posY + 54, myTileControl.getTransferOut() ? 1 : 0);
+			gui.drawButton(CoreTextures.ICON_OUTPUT, 8, 54, myTileControl.getTransferOut() ? 1 : 0);
 		} else {
-			gui.drawButton(CoreTextures.ICON_OUTPUT, posX() + 8, posY + 54, 2);
+			gui.drawButton(CoreTextures.ICON_OUTPUT, 8, 54, 2);
 		}
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		for (int pass = 0; pass < myTileTexture.getNumPasses(); pass++) {
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_ABOVE[myTileFacing.getFacing()], pass), posX() + 52, posY + 24);
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_LEFT[myTileFacing.getFacing()], pass), posX() + 32, posY + 44);
-			gui.drawIcon(myTileTexture.getTexture(myTileFacing.getFacing(), pass), posX() + 52, posY + 44);
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_RIGHT[myTileFacing.getFacing()], pass), posX() + 72, posY + 44);
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_BELOW[myTileFacing.getFacing()], pass), posX() + 52, posY + 64);
-			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_OPPOSITE[myTileFacing.getFacing()], pass), posX() + 72, posY + 64);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_ABOVE[myTileFacing.getFacing()], pass), 52, 24);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_LEFT[myTileFacing.getFacing()], pass), 32, 44);
+			gui.drawIcon(myTileTexture.getTexture(myTileFacing.getFacing(), pass), 52, 44);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_RIGHT[myTileFacing.getFacing()], pass), 72, 44);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_BELOW[myTileFacing.getFacing()], pass), 52, 64);
+			gui.drawIcon(myTileTexture.getTexture(BlockHelper.SIDE_OPPOSITE[myTileFacing.getFacing()], pass), 72, 64);
 		}
 		GlStateManager.disableBlend();
 		RenderHelper.setDefaultFontTextureSheet();

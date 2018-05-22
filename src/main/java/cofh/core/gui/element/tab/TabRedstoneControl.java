@@ -109,7 +109,7 @@ public class TabRedstoneControl extends TabBase {
 		float colorG = (backgroundColor >> 8 & 255) / 255.0F * 0.6F;
 		float colorB = (backgroundColor & 255) / 255.0F * 0.6F;
 		GlStateManager.color(colorR, colorG, colorB, 1.0F);
-		gui.drawTexturedModalRect(posX() + 24, posY + 16, 16, 20, 64, 24);
+		gui.drawTexturedModalRect(24, 16, 16, 20, 64, 24);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
@@ -120,27 +120,27 @@ public class TabRedstoneControl extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.redstoneControl"), posXOffset() + 18, posY + 6, headerColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.controlStatus") + ":", posXOffset() + 6, posY + 42, subheaderColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", posXOffset() + 6, posY + 66, subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.redstoneControl"), sideOffset() + 18, 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.controlStatus") + ":", sideOffset() + 6, 42, subheaderColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.signalRequired") + ":", sideOffset() + 6, 66, subheaderColor);
 
 		if (myContainer.getControl().isDisabled()) {
-			gui.drawButton(CoreTextures.ICON_REDSTONE_OFF, posX() + 28, posY + 20, 1);
-			gui.drawButton(CoreTextures.ICON_RS_TORCH_OFF, posX() + 48, posY + 20, 0);
-			gui.drawButton(CoreTextures.ICON_RS_TORCH_ON, posX() + 68, posY + 20, 0);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.disabled"), posXOffset() + 14, posY + 54, textColor);
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.ignored"), posXOffset() + 14, posY + 78, textColor);
+			gui.drawButton(CoreTextures.ICON_REDSTONE_OFF, 28, 20, 1);
+			gui.drawButton(CoreTextures.ICON_RS_TORCH_OFF, 48, 20, 0);
+			gui.drawButton(CoreTextures.ICON_RS_TORCH_ON, 68, 20, 0);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.disabled"), sideOffset() + 14, 54, textColor);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.ignored"), sideOffset() + 14, 78, textColor);
 		} else {
-			getFontRenderer().drawString(StringHelper.localize("info.cofh.enabled"), posXOffset() + 14, posY + 54, textColor);
-			gui.drawButton(CoreTextures.ICON_REDSTONE_OFF, posX() + 28, posY + 20, 0);
+			getFontRenderer().drawString(StringHelper.localize("info.cofh.enabled"), sideOffset() + 14, 54, textColor);
+			gui.drawButton(CoreTextures.ICON_REDSTONE_OFF, 28, 20, 0);
 			if (myContainer.getControl().isLow()) {
-				gui.drawButton(CoreTextures.ICON_RS_TORCH_OFF, posX() + 48, posY + 20, 1);
-				gui.drawButton(CoreTextures.ICON_RS_TORCH_ON, posX() + 68, posY + 20, 0);
-				getFontRenderer().drawString(StringHelper.localize("info.cofh.low"), posXOffset() + 14, posY + 78, textColor);
+				gui.drawButton(CoreTextures.ICON_RS_TORCH_OFF, 48, 20, 1);
+				gui.drawButton(CoreTextures.ICON_RS_TORCH_ON, 68, 20, 0);
+				getFontRenderer().drawString(StringHelper.localize("info.cofh.low"), sideOffset() + 14, 78, textColor);
 			} else {
-				gui.drawButton(CoreTextures.ICON_RS_TORCH_OFF, posX() + 48, posY + 20, 0);
-				gui.drawButton(CoreTextures.ICON_RS_TORCH_ON, posX() + 68, posY + 20, 1);
-				getFontRenderer().drawString(StringHelper.localize("info.cofh.high"), posXOffset() + 14, posY + 78, textColor);
+				gui.drawButton(CoreTextures.ICON_RS_TORCH_OFF, 48, 20, 0);
+				gui.drawButton(CoreTextures.ICON_RS_TORCH_ON, 68, 20, 1);
+				getFontRenderer().drawString(StringHelper.localize("info.cofh.high"), sideOffset() + 14, 78, textColor);
 			}
 		}
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

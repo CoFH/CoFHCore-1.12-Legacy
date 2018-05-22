@@ -96,10 +96,7 @@ public class TabAugment extends TabBase {
 		mouseX -= currentShiftX;
 		mouseY -= currentShiftY;
 
-		if (mouseX < slotsBorderX1 + sideOffset() || mouseX >= slotsBorderX2 + sideOffset() || mouseY < slotsBorderY1 || mouseY >= slotsBorderY2) {
-			return false;
-		}
-		return true;
+		return mouseX >= slotsBorderX1 + sideOffset() && mouseX < slotsBorderX2 + sideOffset() && mouseY >= slotsBorderY1 && mouseY < slotsBorderY2;
 	}
 
 	@Override
@@ -117,9 +114,9 @@ public class TabAugment extends TabBase {
 
 		if (numAugments > 0) {
 			if (numAugments > 3) {
-				gui.drawTexturedModalRect(posXOffset() + slotsBorderX1, posY + slotsBorderY1, 16, 20, (numAugments > 4 ? 18 * 3 : 18 * 2) + 6, 24 + 18);
+				gui.drawTexturedModalRect(sideOffset() + slotsBorderX1, slotsBorderY1, 16, 20, (numAugments > 4 ? 18 * 3 : 18 * 2) + 6, 24 + 18);
 			} else {
-				gui.drawTexturedModalRect(posXOffset() + slotsBorderX1, posY + slotsBorderY1, 16, 20, 18 * numAugments + 6, 24);
+				gui.drawTexturedModalRect(sideOffset() + slotsBorderX1, slotsBorderY1, 16, 20, 18 * numAugments + 6, 24);
 			}
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			RenderHelper.bindTexture(GRID_TEXTURE);
@@ -151,7 +148,7 @@ public class TabAugment extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.augmentation"), posXOffset() + 18, posY + 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.augmentation"), sideOffset() + 18, 6, headerColor);
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
@@ -201,7 +198,7 @@ public class TabAugment extends TabBase {
 
 	private void drawSlots(int xOffset, int yOffset, int slots) {
 
-		gui.drawSizedTexturedModalRect(posXOffset() + slotsBorderX1 + 3 + 9 * xOffset, posY + slotsBorderY1 + 3 + 18 * yOffset, 0, 0, 18 * slots, 18, 96, 32);
+		gui.drawSizedTexturedModalRect(sideOffset() + slotsBorderX1 + 3 + 9 * xOffset, slotsBorderY1 + 3 + 18 * yOffset, 0, 0, 18 * slots, 18, 96, 32);
 	}
 
 }

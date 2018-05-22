@@ -71,11 +71,11 @@ public class TabSteam extends TabBase {
 		}
 		String flowDirection = isProducer ? "info.cofh.steamProduce" : "info.cofh.steamConsume";
 
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.steam"), posXOffset() + 20, posY + 6, headerColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize(flowDirection) + ":", posXOffset() + 6, posY + 18, subheaderColor);
-		getFontRenderer().drawString(myContainer.getInfoSteamPerTick() + UNIT_INSTANT, posXOffset() + 14, posY + 30, textColor);
-		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.steamMax") + ":", posXOffset() + 6, posY + 42, subheaderColor);
-		getFontRenderer().drawString(myContainer.getInfoMaxSteamPerTick() + UNIT_INSTANT, posXOffset() + 14, posY + 54, textColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.steam"), sideOffset() + 20, 6, headerColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize(flowDirection) + ":", sideOffset() + 6, 18, subheaderColor);
+		getFontRenderer().drawString(myContainer.getInfoSteamPerTick() + UNIT_INSTANT, sideOffset() + 14, 30, textColor);
+		getFontRenderer().drawStringWithShadow(StringHelper.localize("info.cofh.steamMax") + ":", sideOffset() + 6, 42, subheaderColor);
+		getFontRenderer().drawString(myContainer.getInfoMaxSteamPerTick() + UNIT_INSTANT, sideOffset() + 14, 54, textColor);
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}

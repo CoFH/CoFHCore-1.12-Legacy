@@ -41,19 +41,19 @@ public abstract class TabScrolledText extends TabBase {
 		}
 		if (maxFirstLine > 0) {
 			if (firstLine > 0) {
-				gui.drawIcon(CoreTextures.ICON_ARROW_UP, posXOffset() + maxWidth - 20, posY + 16);
+				gui.drawIcon(CoreTextures.ICON_ARROW_UP, sideOffset() + maxWidth - 20, 16);
 			} else {
-				gui.drawIcon(CoreTextures.ICON_ARROW_UP_INACTIVE, posXOffset() + maxWidth - 20, posY + 16);
+				gui.drawIcon(CoreTextures.ICON_ARROW_UP_INACTIVE, sideOffset() + maxWidth - 20, 16);
 			}
 			if (firstLine < maxFirstLine) {
-				gui.drawIcon(CoreTextures.ICON_ARROW_DOWN, posXOffset() + maxWidth - 20, posY + 76);
+				gui.drawIcon(CoreTextures.ICON_ARROW_DOWN, sideOffset() + maxWidth - 20, 76);
 			} else {
-				gui.drawIcon(CoreTextures.ICON_ARROW_DOWN_INACTIVE, posXOffset() + maxWidth - 20, posY + 76);
+				gui.drawIcon(CoreTextures.ICON_ARROW_DOWN_INACTIVE, sideOffset() + maxWidth - 20, 76);
 			}
 		}
-		getFontRenderer().drawStringWithShadow(getTitle(), posXOffset() + 18, posY + 6, headerColor);
+		getFontRenderer().drawStringWithShadow(getTitle(), sideOffset() + 18, 6, headerColor);
 		for (int i = firstLine; i < firstLine + numLines; i++) {
-			getFontRenderer().drawString(myText.get(i), posXOffset() + 2, posY + 20 + (i - firstLine) * getFontRenderer().FONT_HEIGHT, textColor);
+			getFontRenderer().drawString(myText.get(i), sideOffset() + 2, 20 + (i - firstLine) * getFontRenderer().FONT_HEIGHT, textColor);
 		}
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}

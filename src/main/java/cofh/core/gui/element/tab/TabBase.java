@@ -94,7 +94,6 @@ public abstract class TabBase extends ElementBase {
 
 	protected void drawForeground() {
 
-		// TODO: this and drawBackground() need to be called after the matrix translation (not for back compat)
 	}
 
 	protected void drawBackground() {
@@ -107,12 +106,10 @@ public abstract class TabBase extends ElementBase {
 
 		RenderHelper.bindTexture(texture);
 
-		int xPosition = posX();
-
-		gui.drawTexturedModalRect(xPosition, posY + 4, 0, 256 - currentHeight + 4, 4, currentHeight - 4);
-		gui.drawTexturedModalRect(xPosition + 4, posY, 256 - currentWidth + 4, 0, currentWidth - 4, 4);
-		gui.drawTexturedModalRect(xPosition, posY, 0, 0, 4, 4);
-		gui.drawTexturedModalRect(xPosition + 4, posY + 4, 256 - currentWidth + 4, 256 - currentHeight + 4, currentWidth - 4, currentHeight - 4);
+		gui.drawTexturedModalRect(0, 4, 0, 256 - currentHeight + 4, 4, currentHeight - 4);
+		gui.drawTexturedModalRect(4, 0, 256 - currentWidth + 4, 0, currentWidth - 4, 4);
+		gui.drawTexturedModalRect(0, 0, 0, 0, 4, 4);
+		gui.drawTexturedModalRect(4, 4, 256 - currentWidth + 4, 256 - currentHeight + 4, currentWidth - 4, currentHeight - 4);
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
@@ -124,10 +121,9 @@ public abstract class TabBase extends ElementBase {
 		mouseY -= this.posY;
 
 		GlStateManager.pushMatrix();
+		GlStateManager.translate(this.posX(), this.posY, 0.0F);
 
 		drawBackground();
-
-		GlStateManager.translate(this.posX(), this.posY, 0.0F);
 
 		for (ElementBase element : elements) {
 			if (element.isVisible()) {
@@ -144,10 +140,9 @@ public abstract class TabBase extends ElementBase {
 		mouseY -= this.posY;
 
 		GlStateManager.pushMatrix();
+		GlStateManager.translate(this.posX(), this.posY, 0.0F);
 
 		drawForeground();
-
-		GlStateManager.translate(this.posX(), this.posY, 0.0F);
 
 		for (ElementBase element : elements) {
 			if (element.isVisible()) {
@@ -203,7 +198,7 @@ public abstract class TabBase extends ElementBase {
 
 	protected void drawTabIcon(TextureAtlasSprite iconName) {
 
-		gui.drawIcon(iconName, posXOffset(), posY + 3);
+		gui.drawIcon(iconName, sideOffset(), 3);
 	}
 
 	/**
