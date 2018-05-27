@@ -12,7 +12,11 @@ public class ElementPageMarker extends ElementBase {
 	public static final int TOP = 0;
 	public static final int BOTTOM = 1;
 
+	public static final int INACTIVE = 0;
+	public static final int ACTIVE = 1;
+
 	public int side = TOP;
+	public int style = ACTIVE;
 
 	public ElementPageMarker(GuiContainerCore gui) {
 
