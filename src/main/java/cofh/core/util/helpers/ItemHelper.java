@@ -411,8 +411,7 @@ public final class ItemHelper {
 			return false;
 		}
 		ItemStack heldItem = getMainhandStack(player);
-		Item equipped = heldItem.getItem();
-		if (equipped instanceof IMultiModeItem) {
+		if (heldItem.getItem() instanceof IMultiModeItem) {
 			return true;
 		} else {
 			heldItem = getOffhandStack(player);

@@ -44,7 +44,6 @@ public class KeyBindingItemMultiMode implements IKeyBinding {
 			((IMultiModeItem) heldItem.getItem()).onModeChange(player, heldItem);
 			return true;
 		}
-
 		return false;
 	}
 
