@@ -102,7 +102,7 @@ public class EventHandler {
 
 					if (bow != null) {
 						bow.onBowFired(player, bowStack);
-						if (isQuiver(arrowStack) && !((IToolQuiver) arrowStack.getItem()).allowCustomArrow(arrowStack)) {
+						if (isQuiver(arrowStack) && !((IToolQuiver) arrowStack.getItem()).allowCustomArrowOverride(arrowStack)) {
 							customArrow = false;
 						} else {
 							customArrow = bow.hasCustomArrow(bowStack);
