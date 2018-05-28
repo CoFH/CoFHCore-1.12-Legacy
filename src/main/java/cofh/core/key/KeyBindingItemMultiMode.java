@@ -40,10 +40,11 @@ public class KeyBindingItemMultiMode implements IKeyBinding {
 	public boolean keyPressServer(EntityPlayer player) {
 
 		if (ItemHelper.isPlayerHoldingMultiModeItem(player) && ItemHelper.incrHeldMultiModeItemState(player)) {
-			ItemStack heldItem = ItemHelper.getHeldStack(player);
+			ItemStack heldItem = ItemHelper.getHeldMultiModeStack(player);
 			((IMultiModeItem) heldItem.getItem()).onModeChange(player, heldItem);
 			return true;
 		}
+
 		return false;
 	}
 
