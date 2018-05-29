@@ -60,6 +60,11 @@ public class TabAugment extends TabBase {
 				case 5:
 				case 6:
 					break;
+				case 7:
+				case 8:
+				case 9:
+					slotsBorderY2 += 18;
+					break;
 				default:
 					slotsBorderX1 += 9 * (3 - numAugments);
 					slotsBorderX2 = slotsBorderX1 + 18 * numAugments + 6;
@@ -113,11 +118,7 @@ public class TabAugment extends TabBase {
 		GlStateManager.color(colorR, colorG, colorB, 1.0F);
 
 		if (numAugments > 0) {
-			if (numAugments > 3) {
-				gui.drawTexturedModalRect(sideOffset() + slotsBorderX1, slotsBorderY1, 16, 20, (numAugments > 4 ? 18 * 3 : 18 * 2) + 6, 24 + 18);
-			} else {
-				gui.drawTexturedModalRect(sideOffset() + slotsBorderX1, slotsBorderY1, 16, 20, 18 * numAugments + 6, 24);
-			}
+			gui.drawTexturedModalRect(sideOffset() + slotsBorderX1, slotsBorderY1, 16, 20, slotsBorderX2 - slotsBorderX1, slotsBorderY2 - slotsBorderY1);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			RenderHelper.bindTexture(GRID_TEXTURE);
 
@@ -133,6 +134,21 @@ public class TabAugment extends TabBase {
 				case 6:
 					drawSlots(0, 0, 3);
 					drawSlots(0, 1, 3);
+					break;
+				case 7:
+					drawSlots(1, 0, 2);
+					drawSlots(0, 1, 3);
+					drawSlots(1, 2, 2);
+					break;
+				case 8:
+					drawSlots(0, 0, 3);
+					drawSlots(0, 1, 3);
+					drawSlots(1, 2, 2);
+					break;
+				case 9:
+					drawSlots(0, 0, 3);
+					drawSlots(0, 1, 3);
+					drawSlots(0, 2, 3);
 					break;
 				default:
 					drawSlots(0, 0, numAugments);
@@ -172,6 +188,30 @@ public class TabAugment extends TabBase {
 				for (int i = 0; i < numAugments; i++) {
 					myContainer.getAugmentSlots()[i].xPos = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 3) + 9 * (i / 3);
 					myContainer.getAugmentSlots()[i].yPos = posY + slotsBorderY1 + 4 + 18 * (i / 3);
+				}
+				break;
+			case 7:
+				for (int i = 0; i < 2; i++) {
+					myContainer.getAugmentSlots()[i].xPos = posXOffset() + slotsBorderX1 + 4 + 9 + 18 * (i % 2);
+					myContainer.getAugmentSlots()[i].yPos = posY + slotsBorderY1 + 4;
+				}
+				for (int i = 2; i < 5; i++) {
+					myContainer.getAugmentSlots()[i].xPos = posXOffset() + slotsBorderX1 + 4 + 18 * (i - 2);
+					myContainer.getAugmentSlots()[i].yPos = posY + slotsBorderY1 + 4 + 18;
+				}
+				for (int i = 5; i < numAugments; i++) {
+					myContainer.getAugmentSlots()[i].xPos = posXOffset() + slotsBorderX1 + 4 + 9 + 18 * (i % 2);
+					myContainer.getAugmentSlots()[i].yPos = posY + slotsBorderY1 + 4 + 18 * 2;
+				}
+				break;
+			case 8:
+				for (int i = 0; i < 6; i++) {
+					myContainer.getAugmentSlots()[i].xPos = posXOffset() + slotsBorderX1 + 4 + 18 * (i % 3);
+					myContainer.getAugmentSlots()[i].yPos = posY + slotsBorderY1 + 4 + 18 * (i / 3);
+				}
+				for (int i = 6; i < numAugments; i++) {
+					myContainer.getAugmentSlots()[i].xPos = posXOffset() + slotsBorderX1 + 4 + 9 + 18 * (i % 2);
+					myContainer.getAugmentSlots()[i].yPos = posY + slotsBorderY1 + 4 + 18 * 2;
 				}
 				break;
 			default:

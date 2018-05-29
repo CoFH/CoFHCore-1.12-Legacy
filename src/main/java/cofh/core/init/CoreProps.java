@@ -147,6 +147,8 @@ public class CoreProps {
 
 	public static final byte LEVEL_MIN = 0;
 	public static final byte LEVEL_MAX = 4;
+	public static final byte AUGMENT_MIN = 0;
+	public static final byte AUGMENT_MAX = 9;
 
 	public static final int ENTITY_TRACKING_DISTANCE = 64;
 	public static final int NETWORK_UPDATE_RANGE = 192;

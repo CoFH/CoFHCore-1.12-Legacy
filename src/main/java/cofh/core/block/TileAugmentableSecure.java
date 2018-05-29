@@ -82,8 +82,8 @@ public abstract class TileAugmentableSecure extends TileRSControl implements IAu
 	protected boolean setLevel(int level) {
 
 		if (level >= 0) {
-			if (level > 4) {
-				level = 4;
+			if (level > CoreProps.LEVEL_MAX) {
+				level = CoreProps.LEVEL_MAX;
 			}
 			this.level = (byte) level;
 		}
