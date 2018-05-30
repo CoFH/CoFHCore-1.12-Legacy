@@ -91,8 +91,11 @@ public class EventHandler {
 				arrowStack = new ItemStack(Items.ARROW);
 			}
 			float f = ItemBow.getArrowVelocity(event.getCharge());
-			float speedMod = bow != null ? bow.getArrowSpeedMultiplier(bowStack) : 1.0F;
+			float speedMod = 1.0F;
 
+			if (bow != null) {
+				speedMod += bow.getArrowSpeedMultiplier(bowStack);
+			}
 			if ((double) f >= 0.1D) {
 				if (!world.isRemote) {
 					int encMultishot = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, bowStack), 0, CoreEnchantments.multishot.getMaxLevel() + 1);

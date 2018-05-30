@@ -57,6 +57,7 @@ public class TabAugment extends TabBase {
 			switch (numAugments) {
 				case 4:
 					slotsBorderX1 += 9;
+					slotsBorderX2 -= 9;
 				case 5:
 				case 6:
 					break;
