@@ -3,10 +3,10 @@ package cofh.core.block;
 import cofh.core.render.FontRendererCore;
 import cofh.core.util.helpers.SecurityHelper;
 import cofh.core.util.helpers.StringHelper;
-import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -15,12 +15,28 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockCore extends ItemBlock {
 
-	public ItemBlockCore(Block block) {
+	protected BlockCore blockCore;
+
+	public ItemBlockCore(BlockCore block) {
 
 		super(block);
 		setHasSubtypes(true);
 		setMaxDamage(0);
 		setNoRepair();
+
+		blockCore = block;
+	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+
+		return blockCore.getUnlocalizedName(stack);
+	}
+
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+
+		return blockCore.getRarity(stack);
 	}
 
 	@Override

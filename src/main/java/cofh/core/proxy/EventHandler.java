@@ -278,6 +278,8 @@ public class EventHandler {
 		if (player == null || event.isSilkTouching() || event.isCanceled()) {
 			return;
 		}
+		// ItemStack tool = ItemHelper.getMainhandStack(player);
+
 		int encSmashing = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.smashing, player.getHeldItemMainhand());
 		List<ItemStack> drops = event.getDrops();
 		if (encSmashing > 0) {
@@ -287,7 +289,11 @@ public class EventHandler {
 					drops.set(i, result.copy());
 				}
 			}
+			//			if (!tool.isEmpty()) {
+			//				tool.damageItem(1, player);
+			//			}
 		}
+
 		int encSmelting = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.smelting, player.getHeldItemMainhand());
 		if (encSmelting > 0) {
 			for (int i = 0; i < drops.size(); i++) {
@@ -296,6 +302,9 @@ public class EventHandler {
 					drops.set(i, result.copy());
 				}
 			}
+			//			if (!tool.isEmpty()) {
+			//				tool.damageItem(1, player);
+			//			}
 		}
 	}
 
