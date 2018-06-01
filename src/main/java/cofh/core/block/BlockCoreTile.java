@@ -240,8 +240,8 @@ public abstract class BlockCoreTile extends BlockCore implements IInitializer, I
 			retTag = ItemHelper.setItemStackTagName(retTag, ((TileNameable) tile).customName);
 		}
 		if (tile instanceof TileAugmentableSecure) {
-			retTag.setBoolean("Creative", ((TileAugmentableSecure) tile).isCreative);
-			retTag.setByte("Level", (byte) ((TileAugmentableSecure) tile).getLevel());
+			retTag.setBoolean(CoreProps.CREATIVE, ((TileAugmentableSecure) tile).isCreative);
+			retTag.setByte(CoreProps.LEVEL, (byte) ((TileAugmentableSecure) tile).getLevel());
 			if (((TileAugmentableSecure) tile).isSecured()) {
 				retTag = SecurityHelper.setItemStackTagSecure(retTag, (ISecurable) tile);
 			}

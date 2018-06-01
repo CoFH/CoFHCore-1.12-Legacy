@@ -181,10 +181,12 @@ public class CoreProps {
 	public static final String ARROWS = "Arrows";
 	public static final String COLOR_0 = "Color0";
 	public static final String COLOR_1 = "Color1";
+	public static final String CREATIVE = "Creative";
 	public static final String CREATIVE_TAB = "CreativeTab";
 	public static final String ENERGY = "Energy";
 	public static final String FILTER = "Filter";
 	public static final String FLUID = "Fluid";
+	public static final String LEVEL = "Level";
 	public static final String MODE = "Mode";
 	public static final String WATER = "Water";
 
