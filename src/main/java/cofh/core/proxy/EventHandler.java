@@ -39,10 +39,7 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
@@ -184,11 +181,16 @@ public class EventHandler {
 		if (!(entity instanceof EntityPlayer)) {
 			return;
 		}
+		DamageSource source = event.getSource();
+
+		if (source instanceof EntityDamageSourceIndirect || source.isUnblockable() || source.isProjectile()) {
+			return;
+		}
 		EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 		ItemStack stack = player.getActiveItemStack();
 
 		if (!stack.isEmpty() && stack.getItem() instanceof ItemShieldCore) {
-			((ItemShieldCore) stack.getItem()).onHit(stack, player, event.getSource().getTrueSource());
+			((ItemShieldCore) stack.getItem()).onHit(stack, player, source.getTrueSource());
 		}
 	}
 
