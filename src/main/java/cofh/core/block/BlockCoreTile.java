@@ -41,7 +41,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,17 +93,19 @@ public abstract class BlockCoreTile extends BlockCore implements IInitializer, I
 	}
 
 	@Override
-	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 
+		if (willHarvest) {
+			return true; // If it will harvest, delay deletion of the block until after getDrops
+		}
+		return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
 
 	@Override
-	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
 
-		if (!player.capabilities.isCreativeMode) {
-			dropBlockAsItem(world, pos, state, 0);
-			world.setBlockToAir(pos);
-		}
+		super.harvestBlock(world, player, pos, state, te, stack);
+		world.setBlockToAir(pos);
 	}
 
 	@Override
@@ -211,7 +212,7 @@ public abstract class BlockCoreTile extends BlockCore implements IInitializer, I
 
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-
+		
 		drops.addAll(dropDelegate(getItemStackTag(world, pos), world, pos, fortune));
 	}
 
