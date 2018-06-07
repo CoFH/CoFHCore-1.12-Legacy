@@ -55,9 +55,9 @@ public class Proxy {
 
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		playerName = playerName.trim();
-		for (String a : server.getPlayerList().getOppedPlayerNames()) {
-			if (playerName.equalsIgnoreCase(a)) {
-				return true; // TODO: this is completely horrible. needs improvement. will probably still be horrible.
+		for (String opName : server.getPlayerList().getOppedPlayerNames()) {
+			if (playerName.equalsIgnoreCase(opName)) {
+				return true;
 			}
 		}
 		return false;

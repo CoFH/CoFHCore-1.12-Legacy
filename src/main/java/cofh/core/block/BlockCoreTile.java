@@ -212,7 +212,7 @@ public abstract class BlockCoreTile extends BlockCore implements IInitializer, I
 
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		
+
 		drops.addAll(dropDelegate(getItemStackTag(world, pos), world, pos, fortune));
 	}
 

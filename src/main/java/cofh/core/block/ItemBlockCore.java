@@ -3,6 +3,7 @@ package cofh.core.block;
 import cofh.core.render.FontRendererCore;
 import cofh.core.util.helpers.SecurityHelper;
 import cofh.core.util.helpers.StringHelper;
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -16,6 +17,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemBlockCore extends ItemBlock {
 
 	protected BlockCore blockCore;
+
+	// TODO: Remove in 4.6.0.
+	public ItemBlockCore(Block block) {
+
+		this((BlockCore) block);
+	}
 
 	public ItemBlockCore(BlockCore block) {
 
