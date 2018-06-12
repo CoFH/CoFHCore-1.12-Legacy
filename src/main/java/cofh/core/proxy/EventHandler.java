@@ -55,7 +55,6 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.List;
 import java.util.ListIterator;
 
 public class EventHandler {
@@ -270,50 +269,49 @@ public class EventHandler {
 		}
 	}
 
-	@SubscribeEvent (priority = EventPriority.LOW)
-	public void handleHarvestDropsEvent(BlockEvent.HarvestDropsEvent event) {
+	@SubscribeEvent (priority = EventPriority.LOW, receiveCanceled = false)
+	public void handleHarvestDropsEvent(final BlockEvent.HarvestDropsEvent event) {
 
-		EntityPlayer player = event.getHarvester();
+		final EntityPlayer player = event.getHarvester();
 
-		if (player == null || event.isSilkTouching() || event.isCanceled()) {
+		if (player == null || event.isSilkTouching()) {
 			return;
 		}
-		// ItemStack tool = ItemHelper.getMainhandStack(player);
+		final ItemStack tool = ItemHelper.getMainhandStack(player);
 
-		int encSmashing = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.smashing, player.getHeldItemMainhand());
-		List<ItemStack> drops = event.getDrops();
-		if (encSmashing > 0) {
-			for (int i = 0; i < drops.size(); i++) {
-				ItemStack result = EnchantmentSmashing.getItemStack(drops.get(i));
-				if (!result.isEmpty()) {
-					drops.set(i, result.copy());
-				}
-			}
-			//			if (!tool.isEmpty()) {
-			//				tool.damageItem(1, player);
-			//			}
-		}
+		final int encSmashing = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.smashing, tool);
+		final int encSmelting = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.smelting, tool);
 
-		int encSmelting = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.smelting, player.getHeldItemMainhand());
-		if (encSmelting > 0) {
-			for (int i = 0; i < drops.size(); i++) {
-				ItemStack result = EnchantmentSmelting.getItemStack(drops.get(i));
-				if (!result.isEmpty()) {
-					drops.set(i, result.copy());
-				}
+		event.getDrops().replaceAll(stack -> {
+			if (stack.isEmpty()) {
+				return stack; // nope. processing on this sometimes results in ... results.
 			}
-			//			if (!tool.isEmpty()) {
-			//				tool.damageItem(1, player);
-			//			}
-		}
+			ItemStack result = stack;
+			if (encSmashing > 0) {
+				ItemStack smashed = EnchantmentSmashing.getItemStack(result);
+				if (!smashed.isEmpty())
+					result = smashed;
+			}
+			if (encSmelting > 0) {
+				ItemStack smelted = EnchantmentSmelting.getItemStack(result);
+				if (!smelted.isEmpty())
+					result = smelted;
+			}
+			// if (result != stack) {
+			//	result.grow(event.getWorld().rand.nextInt(15) < event.getFortuneLevel() ? 1 : 0);
+			//	if (!tool.isEmpty())
+			//		tool.damageItem(1, player);
+			// }
+			return result;
+		});
 	}
 
-	@SubscribeEvent (priority = EventPriority.HIGHEST)
+	@SubscribeEvent (priority = EventPriority.HIGHEST, receiveCanceled = false)
 	public void handleLivingDropsEvent(LivingDropsEvent event) {
 
 		Entity source = event.getSource().getTrueSource();
 
-		if (!(source instanceof EntityPlayer) || !event.isRecentlyHit() || event.isCanceled()) {
+		if (!(source instanceof EntityPlayer) || !event.isRecentlyHit()) {
 			return;
 		}
 		EntityPlayer player = (EntityPlayer) source;
