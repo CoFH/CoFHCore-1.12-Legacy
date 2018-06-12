@@ -98,7 +98,12 @@ public class EnchantmentSmashing extends Enchantment {
 	public static ItemStack getItemStack(ItemStack stack) {
 
 		SmashConversion result = smashList.get(ItemHelper.getOreName(stack));
-		return result == null ? ItemStack.EMPTY : result.toItemStack();
+		if (result == null) {
+			return ItemStack.EMPTY;
+		}
+		ItemStack ret = result.toItemStack();
+		// TODO this may make a stack that's >maxStackSize
+		return ret.isEmpty() ? ItemStack.EMPTY : ItemHelper.cloneStack(ret, ret.getCount() * stack.getCount());
 	}
 
 	public static void initialize() {
