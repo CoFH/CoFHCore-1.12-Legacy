@@ -102,7 +102,6 @@ public class EnchantmentSmashing extends Enchantment {
 			return ItemStack.EMPTY;
 		}
 		ItemStack ret = result.toItemStack();
-		// TODO this may make a stack that's >maxStackSize
 		return ret.isEmpty() ? ItemStack.EMPTY : ItemHelper.cloneStack(ret, ret.getCount() * stack.getCount());
 	}
 

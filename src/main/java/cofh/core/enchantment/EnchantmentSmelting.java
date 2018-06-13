@@ -74,7 +74,6 @@ public class EnchantmentSmelting extends Enchantment {
 	public static ItemStack getItemStack(ItemStack stack) {
 
 		ItemStack result = FurnaceRecipes.instance().getSmeltingResult(stack);
-		// TODO this may make a stack that's >maxStackSize
 		return result.isEmpty() ? ItemStack.EMPTY : ItemHelper.cloneStack(result, result.getCount() * stack.getCount());
 	}
 

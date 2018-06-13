@@ -269,7 +269,7 @@ public class EventHandler {
 		}
 	}
 
-	@SubscribeEvent (priority = EventPriority.LOW, receiveCanceled = false)
+	@SubscribeEvent (priority = EventPriority.LOW)
 	public void handleHarvestDropsEvent(final BlockEvent.HarvestDropsEvent event) {
 
 		final EntityPlayer player = event.getHarvester();
@@ -284,18 +284,20 @@ public class EventHandler {
 
 		event.getDrops().replaceAll(stack -> {
 			if (stack.isEmpty()) {
-				return stack; // nope. processing on this sometimes results in ... results.
+				return stack; // Nope, processing on this sometimes results in...results.
 			}
 			ItemStack result = stack;
 			if (encSmashing > 0) {
 				ItemStack smashed = EnchantmentSmashing.getItemStack(result);
-				if (!smashed.isEmpty())
+				if (!smashed.isEmpty()) {
 					result = smashed;
+				}
 			}
 			if (encSmelting > 0) {
 				ItemStack smelted = EnchantmentSmelting.getItemStack(result);
-				if (!smelted.isEmpty())
+				if (!smelted.isEmpty()) {
 					result = smelted;
+				}
 			}
 			// if (result != stack) {
 			//	result.grow(event.getWorld().rand.nextInt(15) < event.getFortuneLevel() ? 1 : 0);
@@ -348,9 +350,6 @@ public class EventHandler {
 	@SubscribeEvent (priority = EventPriority.HIGH)
 	public void handlePlayerDropsEvent(PlayerDropsEvent event) {
 
-		if (event.isCanceled()) {
-			return;
-		}
 		EntityPlayer player = event.getEntityPlayer();
 
 		if (player instanceof FakePlayer) {
@@ -375,7 +374,7 @@ public class EventHandler {
 	@SubscribeEvent (priority = EventPriority.HIGH)
 	public void handlePlayerCloneEvent(PlayerEvent.Clone event) {
 
-		if (event.isCanceled() || !event.isWasDeath()) {
+		if (!event.isWasDeath()) {
 			return;
 		}
 		EntityPlayer player = event.getEntityPlayer();
