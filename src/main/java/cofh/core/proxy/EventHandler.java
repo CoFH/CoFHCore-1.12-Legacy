@@ -94,7 +94,7 @@ public class EventHandler {
 			}
 			if ((double) f >= 0.1D) {
 				if (!world.isRemote) {
-					int encMultishot = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, bowStack), 0, CoreEnchantments.multishot.getMaxLevel() + 1);
+					int encMultishot = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.multishot, bowStack), 0, CoreEnchantments.multishot.getMaxLevel() * 2);
 					int encPunch = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, bowStack);
 					int encPower = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, bowStack);
 					int encFlame = EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, bowStack);
@@ -240,7 +240,7 @@ public class EventHandler {
 			return;
 		}
 		if (source.damageType.equals("arrow")) {
-			int encMultishot = MathHelper.clamp(getHeldEnchantmentLevel((EntityLivingBase) attacker, CoreEnchantments.multishot), 0, CoreEnchantments.multishot.getMaxLevel() + 1);
+			int encMultishot = MathHelper.clamp(getHeldEnchantmentLevel((EntityLivingBase) attacker, CoreEnchantments.multishot), 0, CoreEnchantments.multishot.getMaxLevel() * 2);
 			if (encMultishot > 0) {
 				entity.hurtResistantTime = 0;
 			}
@@ -261,7 +261,7 @@ public class EventHandler {
 			return;
 		}
 		if (event.getExpToDrop() > 0) {
-			int encInsight = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.insight, player.getHeldItemMainhand()), 0, CoreEnchantments.insight.getMaxLevel() + 1);
+			int encInsight = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.insight, player.getHeldItemMainhand()), 0, CoreEnchantments.insight.getMaxLevel() * 2);
 
 			if (encInsight > 0) {
 				event.setExpToDrop(event.getExpToDrop() + encInsight + player.world.rand.nextInt(1 + encInsight * 3));
@@ -317,7 +317,7 @@ public class EventHandler {
 			return;
 		}
 		EntityPlayer player = (EntityPlayer) source;
-		int encVorpal = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.vorpal, player.getHeldItemMainhand()), 0, CoreEnchantments.vorpal.getMaxLevel() + 1);
+		int encVorpal = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.vorpal, player.getHeldItemMainhand()), 0, CoreEnchantments.vorpal.getMaxLevel() * 2);
 
 		if (encVorpal > 0) {
 			Entity entity = event.getEntity();
@@ -408,7 +408,7 @@ public class EventHandler {
 		}
 		for (int i = 0; i < oldPlayer.inventory.mainInventory.size(); i++) {
 			ItemStack stack = oldPlayer.inventory.mainInventory.get(i);
-			int encSoulbound = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.soulbound, stack), 0, CoreEnchantments.soulbound.getMaxLevel() + 1);
+			int encSoulbound = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.soulbound, stack), 0, CoreEnchantments.soulbound.getMaxLevel() * 2);
 			if (encSoulbound > 0) {
 				if (MathHelper.RANDOM.nextInt(1 + encSoulbound) == 0) {
 					ItemHelper.removeEnchantment(stack, CoreEnchantments.soulbound);
