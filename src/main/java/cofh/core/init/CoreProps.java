@@ -241,6 +241,7 @@ public class CoreProps {
 	/* GLOBAL */
 	public static boolean disableParticles = false;
 	public static int tileUpdateDelay = 160;
+	public static final int AOE_BREAK_FACTOR = 8;
 
 	/* GENERAL */
 	public static boolean enableDismantleLogging = false;
