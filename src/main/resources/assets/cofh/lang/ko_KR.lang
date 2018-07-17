@@ -1,13 +1,13 @@
 #ko_KR
 
-chat.cofh.command.clearblocks.failure=블럭을 제거할 수 없습니다.
-chat.cofh.command.clearblocks.start=%s:%s:%s에서 %s:%s:%s까지의 %s 블럭을 제거합니다.
-chat.cofh.command.clearblocks.success=%s:%s:%s에서 %s:%s:%s까지의 %s 블럭이 제거되었습니다.
+chat.cofh.command.clearblocks.failure=블록을 제거할 수 없습니다.
+chat.cofh.command.clearblocks.start=%s:%s:%s에서 %s:%s:%s까지의 %s 블록을 제거합니다.
+chat.cofh.command.clearblocks.success=%s:%s:%s에서 %s:%s:%s까지의 %s 블록이 제거되었습니다.
 chat.cofh.command.clearblocks.syntax=/cofh clearblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} [block#meta] [block#meta] ...
 chat.cofh.command.clearblocks=지정된 영역에서 지정된 블록을 지웁니다.
 
-chat.cofh.command.countblocks.failure=이 구역에는 블럭이 존재하지 않습니다.
-chat.cofh.command.countblocks.start=%s:%s:%s에서 %s:%s:%s까지의 %s 블럭을 세고 있습니다.
+chat.cofh.command.countblocks.failure=이 구역에는 블록이 존재하지 않습니다.
+chat.cofh.command.countblocks.start=%s:%s:%s에서 %s:%s:%s까지의 %s 블록을 세고 있습니다.
 chat.cofh.command.countblocks.success=%s:%s:%s에서 %s:%s:%s까지의 %s블럭이 발견되었습니다.
 chat.cofh.command.countblocks.syntax=/cofh countblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} [block#meta] [block#meta] ...
 chat.cofh.command.countblocks=지정된 영역에서 지정된 블록을 셉니다.
@@ -45,7 +45,7 @@ chat.cofh.command.reloadworldgen.success=월드 생성을 다시 로드했습니
 chat.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
 chat.cofh.command.reloadworldgen=디스크에서 월드 생성을 다시 로드합니다.
 
-chat.cofh.command.replaceblocks.failure=대체할 블럭이 없습니다.
+chat.cofh.command.replaceblocks.failure=대체할 블록이 없습니다.
 chat.cofh.command.replaceblocks.start=%s:%s:%s에서 %s:%s:%s까지 %s과 함께 블록 %s개를 대체합니다.
 chat.cofh.command.replaceblocks.success=%s:%s:%s에서 %s:%s:%s까지 %s과 함께 블록 %s개가 대체되었습니다.
 chat.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} <replaceBlock#meta> [block#meta] [block#meta] ...
