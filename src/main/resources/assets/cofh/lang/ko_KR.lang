@@ -1,88 +1,268 @@
 #ko_KR
 
-config.Client.tooltip=클라이언트 전용 옵션
-config.Common.tooltip=일반 옵션
-config.Core.tooltip=코어 모듈 옵션
-config.Loot.tooltip=루트 모듈 옵션
+chat.cofh.command.clearblocks.failure=블럭을 제거할 수 없습니다.
+chat.cofh.command.clearblocks.start=%s:%s:%s에서 %s:%s:%s까지의 %s 블럭을 제거합니다.
+chat.cofh.command.clearblocks.success=%s:%s:%s에서 %s:%s:%s까지의 %s 블럭이 제거되었습니다.
+chat.cofh.command.clearblocks.syntax=/cofh clearblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} [block#meta] [block#meta] ...
+chat.cofh.command.clearblocks=지정된 영역에서 지정된 블록을 지웁니다.
 
-enchantment.cofhcore.holding=수송량증가
-enchantment.cofhcore.multishot=다중슬롯
+chat.cofh.command.countblocks.failure=이 구역에는 블럭이 존재하지 않습니다.
+chat.cofh.command.countblocks.start=%s:%s:%s에서 %s:%s:%s까지의 %s 블럭을 세고 있습니다.
+chat.cofh.command.countblocks.success=%s:%s:%s에서 %s:%s:%s까지의 %s블럭이 발견되었습니다.
+chat.cofh.command.countblocks.syntax=/cofh countblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} [block#meta] [block#meta] ...
+chat.cofh.command.countblocks=지정된 영역에서 지정된 블록을 셉니다.
 
+chat.cofh.command.enchant.syntax=/cofh enchant [player] <enchantment ID> [level]
+chat.cofh.command.enchant=강화된 /enchant 명령어는 한계가 없습니다.
+
+chat.cofh.command.friend.0=친구 목록에 추가했습니다.
+chat.cofh.command.friend.1=추가하는데 문제가 발생했습니다.
+chat.cofh.command.friend.2=목록에 추가합니다.
+chat.cofh.command.friend.3=유효하지 않는 이름입니다.
+chat.cofh.command.friend.4=친구를 제거했습니다.
+chat.cofh.command.friend.5=친구가 존재하지 않습니다.
+chat.cofh.command.friend.syntax=/cofh friend {gui | add <username> | remove <username>}
+chat.cofh.command.friend=이 명령어는 친구 추가/제거를 할 수 있습니다.
+
+chat.cofh.command.help.0=사용가능한 명령어:
+chat.cofh.command.help.syntax=/cofh help [command]
+chat.cofh.command.help=이 명령어는 다른 명령어를 사용하는데 도움을 줄 것입니다.
+
+chat.cofh.command.killall.noHostile=적대적인 몹을 찾지 못했습니다!
+chat.cofh.command.killall.noMatch=엔티티를 찾지 못했습니다!
+chat.cofh.command.killall.success=엔티티 %d개를 없앴습니다.. (%s)
+chat.cofh.command.killall.successHostile=적대적인 몹 %d마리를 죽였습니다. (%s)
+chat.cofh.command.killall.syntax=/cofh killall [partial name]
+chat.cofh.command.killall=지정된 이름의 모든 엔티티를 없애고 기본적으로 모든 적대적인 몹를 죽입니다.
+
+chat.cofh.command.notFound=없는 명령어입니다. /cofh help를 입력하세요.
+
+chat.cofh.command.pregen.start=%s %s:%s에서 %s:%s까지 %s를 미리 생성합니다.
+chat.cofh.command.pregen.syntax=/cofh pregen {<user> <x chunk radius> <z chunk radius> | <x chunk start> <z chunk start> <x chunk end> <z chunk end>}
+chat.cofh.command.pregen=세계에서 지정된 영역에 미리 생성된 청크가 있습니다.
+
+chat.cofh.command.reloadworldgen.success=월드 생성을 다시 로드했습니다.
+chat.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
+chat.cofh.command.reloadworldgen=디스크에서 월드 생성을 다시 로드합니다.
+
+chat.cofh.command.replaceblocks.failure=대체할 블럭이 없습니다.
+chat.cofh.command.replaceblocks.start=%s:%s:%s에서 %s:%s:%s까지 %s과 함께 블록 %s개를 대체합니다.
+chat.cofh.command.replaceblocks.success=%s:%s:%s에서 %s:%s:%s까지 %s과 함께 블록 %s개가 대체되었습니다.
+chat.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} <replaceBlock#meta> [block#meta] [block#meta] ...
+chat.cofh.command.replaceblocks=지정된 블록을 월드의 지정된 영역에서 대치합니다.
+
+chat.cofh.command.syntax.syntax=/cofh syntax [command]
+chat.cofh.command.syntax=다른 명령어 구문을 사용하는 데 도움이 되는 명령어입니다!
+chat.cofh.command.syntaxError=구문이 잘못되었습니다.
+
+chat.cofh.command.tps.syntax=/cofh tps [{o | a | <dim ID>}]
+chat.cofh.command.tps=서버에서 초당 눈금을 가져옵니다. 완벽한 서버에서는 20개여야 합니다.
+
+chat.cofh.command.tpx.dimensionOther=%s이 %3$.2f %4$.2f %5$.2f에 있는 %2$s로 무사히 이동했습니다.
+chat.cofh.command.tpx.dimensionOtherTo=%s이 to %3$s에 있는 %s에게 %4$.2f %5$.2f %6$.2f로 무사히 이동했습니다.
+chat.cofh.command.tpx.dimensionOtherToSelf=%s이 %2$s에 있는 그들 스스로에게 %3$.2f %4$.2f %5$.2f로 무사히 이동했습니다.
+chat.cofh.command.tpx.dimensionSelf=%1$s이 %2$.2f %3$.2f %4$.2f로 무사히 이동했습니다.
+chat.cofh.command.tpx.other=%s를 %.2f %.2f %.2f로 무사히 이동했습니다.
+chat.cofh.command.tpx.otherTo=%s을 %s에게 %.2f %.2f %.2f로 무사히 이동했습니다.
+chat.cofh.command.tpx.otherToSelf=%s이 그들 스스로에게 %.2f %.2f %.2f로 무사히 이동했습니다.
+chat.cofh.command.tpx.self=%.2f %.2f %.2f로 무사히 이동했습니다.
+chat.cofh.command.tpx.snark.0=당신이 당신 스스로에게 무사히 이동했습니다!
+chat.cofh.command.tpx.snark.1=%s이 그들 스스로에게 무사히 이동했습니다!
+chat.cofh.command.tpx.syntax=/cofh tpx [player] {(<player> | <dimension>) | <x> <y> <z> [dimension]}
+chat.cofh.command.tpx=/tp 명령의 향상된 버전은 차원 사이에서 작동합니다.
+
+chat.cofh.command.unloadchunk.success=청크 확장 %s:%s
+chat.cofh.command.unloadchunk.syntax=/cofh unloadchunk
+chat.cofh.command.unloadchunk=플레이어가 보고 있는 청크를 확장합니다.
+
+chat.cofh.command.version.0=이 모드는 버전에 있습니다.
+chat.cofh.command.version.syntax=/cofh version
+chat.cofh.command.version=이 모델의 버전을 제공합니다.
+
+chat.cofh.command.world.notFound=세계가 존재하지 않습니다.
+
+chat.cofh.secure.block.success=이제 이 블럭은 당신의 것입니다.
+chat.cofh.secure.item.success=이제 이 아이템은 당신의 것입니다.
+chat.cofh.secure.notice=주의사항: 서버 운영자는 이 서버의 보안 블록에 자유롭게 액세스할 수 있습니다.
+chat.cofh.secure.warning=이것은 사유물이고 %s에 속합니다! 당신의 손을 잃었을 수도 있습니다!
+
+enchantment.cofhcore.holding=보유
+enchantment.cofhcore.insight=시야
+enchantment.cofhcore.leech=거머리
+enchantment.cofhcore.multishot=다중공격
+enchantment.cofhcore.smashing=충격
+enchantment.cofhcore.smelting=제련
+enchantment.cofhcore.soulbound=소보드
+enchantment.cofhcore.vorpal=포팔
+
+enchantment.cofhcore.holding.desc=특정 아이템의 저장 용량을 늘립니다.
+enchantment.cofhcore.insight.desc=아이템을 사용하면 경험치가 증가합니다.
+enchantment.cofhcore.leech.desc=몹을 죽였을 때 건강을 회복합니다
+enchantment.cofhcore.multishot.desc=활은 추가적인 화살을 발사시킬 것입니다. 화살 한개 만 사용됩니다.
+enchantment.cofhcore.smashing.desc=채굴된 광석은 산산조각이 나서 수확량이 향상될 것입니다.
+enchantment.cofhcore.smelting.desc=처리된 블록은 용광로에 의해 자동으로 용해됩니다.
+enchantment.cofhcore.soulbound.desc=아이템은 소유주와 함께 죽어서도 남을 것입니다.
+enchantment.cofhcore.vorpal.desc=강력한 공격과 참수를 무작위로 수행합니다.
+
+fluid.tconstruct.alubrass=녹은 알루미늄 황동
+fluid.tconstruct.aluminum=녹은 알루미늄
+fluid.tconstruct.ardite=녹은 아다이트
+fluid.tconstruct.blood=피
+fluid.tconstruct.blueslime=액체 파란 슬라임
+fluid.tconstruct.brass=녹은 황동
+fluid.tconstruct.bronze=녹은 청동
+fluid.tconstruct.clay=녹은 점토
+fluid.tconstruct.cobalt=녹은 코발트
+fluid.tconstruct.copper=녹은 구리
+fluid.tconstruct.dirt=액체 흙
+fluid.tconstruct.electrum=녹은 일렉트륨
+fluid.tconstruct.emerald=녹은 에메랄드
+fluid.tconstruct.glass=녹은 유리
+fluid.tconstruct.gold=녹은 금
+fluid.tconstruct.iron=녹은 철
+fluid.tconstruct.knightslime=녹은 나이트 슬라임
+fluid.tconstruct.lead=녹은 납
+fluid.tconstruct.manyullyn=녹은 마눌린
+fluid.tconstruct.milk=우유
+fluid.tconstruct.nickel=녹은 니켈
+fluid.tconstruct.obsidian=녹은 흑요석
+fluid.tconstruct.pigiron=녹은 선철
+fluid.tconstruct.purpleslime=액체 보라 슬라임
+fluid.tconstruct.silver=녹은 은
+fluid.tconstruct.steel=녹은 강철
+fluid.tconstruct.stone=불탄 돌
+fluid.tconstruct.tin=녹은 주석
+fluid.tconstruct.zinc=녹은 아연
 fluid.tile.lava=용암
 fluid.tile.water=물
 
+gui.cofh.friendList=친구 목록
+
+gui.cofh.transferInDisabled=자동 입력 없음
+gui.cofh.transferInEnabled=자동 입력 있음
+gui.cofh.transferInUnavailable=자동 입력 사용안함
+
+gui.cofh.transferOutDisabled=자동 출력 없음
+gui.cofh.transferOutEnabled=자동 출력 있음
+gui.cofh.transferOutUnavailable=자동 출력 사용안함
+
 info.cofh.access=보안
-info.cofh.accessMode=보안 설정
 info.cofh.accessPrivate=비공개
 info.cofh.accessPublic=공개
 info.cofh.accessRestricted=한정됨
-info.cofh.addFrequency=주파수 추가
-info.cofh.all=모두
-info.cofh.amount=수량
-info.cofh.angle=각도
+info.cofh.accessTeam=팀 한정
+info.cofh.amount=양
 info.cofh.anotherplayer=다른 플레이어
+info.cofh.area=구역
+info.cofh.arrows=화살
 info.cofh.augmentation=강화
-info.cofh.blank=비어있음
+info.cofh.blank=공백
 info.cofh.capacity=용량
+info.cofh.chance=교체
 info.cofh.charge=충전량
+info.cofh.configuration=설정
 info.cofh.contents=내용
 info.cofh.controlStatus=활성화 상태
 info.cofh.damageAttack=공격 피해
 info.cofh.damageFlux=플럭스 피해
-info.cofh.disable=비활성화
 info.cofh.disabled=비활성화
-info.cofh.distance=거리
-info.cofh.dry=마른
 info.cofh.duration=지속 시간
 info.cofh.empty=비어있음
-info.cofh.enable=활성화
 info.cofh.enabled=활성화
 info.cofh.energy=에너지
 info.cofh.energyConsume=현재 소모량
 info.cofh.energyMax=최대 전력
 info.cofh.energyProduce=현재 발전량
 info.cofh.energyStored=에너지 저장량
+info.cofh.experience=경험
+info.cofh.filter.list.off=금지 항목
+info.cofh.filter.list.on=허용 항목
+info.cofh.filter.metadata.off=메타 데이터 무시
+info.cofh.filter.metadata.on=메타 데이터 사용
+info.cofh.filter.nbt.off=NBT 무시
+info.cofh.filter.nbt.on=NBT 사용
+info.cofh.filter.oreDict.off=오어 딕셔너리 무시
+info.cofh.filter.oreDict.on=오어 딕셔너리 사용
+info.cofh.filter=필터
 info.cofh.fluid=액체
 info.cofh.fluids=액체
-info.cofh.force=세기
-info.cofh.forDetails=로 자세한 정보 보기
-info.cofh.frequency=주파수
-info.cofh.hasInfo=가지고 있는 정보
 info.cofh.high=높음
+info.cofh.holdShiftForDetails=자세히 보고 싶으면 §e§oShift§r§7 을 누르세요.§r
 info.cofh.ignored=신호 무시
 info.cofh.infinite=무한
+info.cofh.infiniteEnergy=무한 RF
+info.cofh.infiniteFluid=무한 액체
+info.cofh.infiniteSource=무한 요소
 info.cofh.information=정보
 info.cofh.item=아이템
 info.cofh.items=아이템
-info.cofh.level=단계
+info.cofh.input=입력
+info.cofh.level=레벨
 info.cofh.locked=잠김
 info.cofh.low=낮음
 info.cofh.modeChange=로 모드 변경
 info.cofh.none=없음
+info.cofh.output=출력
 info.cofh.owner=소유주
 info.cofh.perUse=소모
+info.cofh.potency=효능
+info.cofh.radius=반지름
 info.cofh.receive=출력량
-info.cofh.receiving=받기
-info.cofh.redstoneControl=레드스톤 제어
-info.cofh.removeFrequency=주파수 제거
+info.cofh.redstoneControl=레드스톤 조절
 info.cofh.security=보안
 info.cofh.send=입력량
-info.cofh.sending=보내기
-info.cofh.setFrequency=주파수 설정
-info.cofh.signal=신호
-info.cofh.signalRequired=요구 신호 세기
-info.cofh.soaked=빨아들임
-info.cofh.source=소스
-info.cofh.strength=신호 세기
-info.cofh.success=성공!
-info.cofh.transfer=전송
+info.cofh.signalDisabled=신호: §4없음§r
+info.cofh.signalEnabledHigh=신호: §a있음§7, 높음§r
+info.cofh.signalEnabledLow=신호: §a있음§7, 낮음§r
+info.cofh.signalRequired=신호 요청됨
+info.cofh.steam=증기
+info.cofh.steamConsume=증기 사용
+info.cofh.steamMax=최대 증기
+info.cofh.steamProduce=증기 출력
+info.cofh.steamStored=증기 저장
+info.cofh.stored=저장
 info.cofh.tutorial.fluxRequired=기계가 동작하는데 RF가 필요합니다.
 info.cofh.tutorial.tabAugment=강화 탭에서 모듈을 통해서 기기를 업그레이드 할 수있습니다.
-info.cofh.tutorial.tabRedstone=레드스톤 제어 탭에서 레드스톤 신호 세기에따른 동작 여부를 설정할 수 있습니다.
+info.cofh.tutorial.tabConfiguration=설정 탭은 블록의 입·출력 변수를 결정합니다.
+info.cofh.tutorial.tabRedstone=레드스톤 제어 탭에서 레드스톤 신호 세기에 따른 동작 여부를 설정할 수 있습니다.
 info.cofh.tutorial.tabSecurity=보안 탭에서 블록에 접근 가능한 사용자를 설정할 수 있습니다.
 info.cofh.tutorial=도움말
-info.cofh.unlocked=잠김해제
+info.cofh.unlocked=잠금 해제
+info.cofh.upgradeRequired=업그레이드 요청
 
 item.invalid.name=사용불가 아이템
 
-key.cofh.multimode=아이템 모드 전환
+key.cofh.augments=플레이어 확장 GUI 열기
+key.cofh.category=CoFH 카테고리
+key.cofh.multimode=순환 아이템 모드
+
+lingering_potion.effect.absorption=잔류형 흡수의 물약
+lingering_potion.effect.haste=잔류형 급함의 물약
+lingering_potion.effect.resistance=잔류형 저항의 물약
+lingering_potion.effect.unluck=잔류형 불행의 물약
+lingering_potion.effect.wither=잔류형 부패의 물약
+
+potion.effect.absorption=흡수의 물약
+potion.effect.haste=급합의 물약
+potion.effect.resistance=저항의 물약
+potion.effect.unluck=불행의 물약
+potion.effect.wither=부패의 물약
+
+potion.potency.3=IV
+potion.potency.4=V
+
+splash_potion.effect.absorption=투척용 흡수의 물약
+splash_potion.effect.haste=투척용 급함의 물약
+splash_potion.effect.resistance=투척용 저항의 물약
+splash_potion.effect.unluck=투척용 불행의 물약
+splash_potion.effect.wither=투척용 부패의 물약
+
+tab.cofh.friendList.0=친구를 추가 또는 제거하고 싶으면 친구 목록를 사용하세요.
+tab.cofh.friendList.1=허용할 경우 친구가 보안 블록 및 아이템에 접속할 수 있습니다.
+tab.cofh.friendList.2=친구를 받지 않습니다.
+
+tipped_arrow.effect.absorption=흡수의 화살
+tipped_arrow.effect.haste=급함의 화살
+tipped_arrow.effect.resistance=저항의 화살
+tipped_arrow.effect.unluck=불행의 화살
+tipped_arrow.effect.wither=부패의 화살
