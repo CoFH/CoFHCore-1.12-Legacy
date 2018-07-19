@@ -83,8 +83,8 @@ public abstract class TileRSControl extends TileNameable implements IRedstoneCon
 		super.readFromNBT(nbt);
 
 		isActive = nbt.getBoolean(CoreProps.ACTIVE);
-		NBTTagCompound rsTag = nbt.getCompoundTag("RS");
 
+		NBTTagCompound rsTag = nbt.getCompoundTag("RS");
 		isPowered = rsTag.getBoolean("Power");
 		powerLevel = rsTag.getByte("Level");
 		rsMode = ControlMode.values()[rsTag.getByte(CoreProps.MODE)];
@@ -96,12 +96,13 @@ public abstract class TileRSControl extends TileNameable implements IRedstoneCon
 		super.writeToNBT(nbt);
 
 		nbt.setBoolean(CoreProps.ACTIVE, isActive);
-		NBTTagCompound rsTag = new NBTTagCompound();
 
+		NBTTagCompound rsTag = new NBTTagCompound();
 		rsTag.setBoolean("Power", isPowered);
 		rsTag.setByte("Level", (byte) powerLevel);
 		rsTag.setByte(CoreProps.MODE, (byte) rsMode.ordinal());
 		nbt.setTag("RS", rsTag);
+
 		return nbt;
 	}
 

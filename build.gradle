@@ -45,7 +45,7 @@ repositories {
 }
 
 dependencies {
-	compile "cofh:RedstoneFlux:${config.rf_mc_version}-${config.rf_version}:deobf"
+	deobfCompile "cofh:RedstoneFlux:${config.rf_mc_version}-${config.rf_version}:universal"
 
 	compile "mezz.jei:jei_${config.jei_mc_version}:${config.jei_version}"
 }

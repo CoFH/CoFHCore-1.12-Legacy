@@ -2,6 +2,7 @@ package cofh.core.block;
 
 import cofh.api.tileentity.IReconfigurableFacing;
 import cofh.api.tileentity.IReconfigurableSides;
+import cofh.core.init.CoreProps;
 import cofh.core.network.PacketBase;
 import cofh.core.render.ISidedTexture;
 import cofh.core.util.core.SideConfig;
@@ -124,8 +125,8 @@ public abstract class TileReconfigurable extends TileInventory implements IRecon
 
 		super.writeToNBT(nbt);
 
-		nbt.setByte("Facing", facing);
-		nbt.setByteArray("SideCache", sideCache);
+		nbt.setByte(CoreProps.FACING, facing);
+		nbt.setByteArray(CoreProps.SIDE_CACHE, sideCache);
 		return nbt;
 	}
 
