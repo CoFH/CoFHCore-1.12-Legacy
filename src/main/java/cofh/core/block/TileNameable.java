@@ -32,7 +32,10 @@ public abstract class TileNameable extends TileCore implements ITilePacketHandle
 
 	protected abstract String getTileName();
 
-	public abstract int getType();
+	public int getType() {
+
+		return 0;
+	}
 
 	protected boolean readPortableTagInternal(EntityPlayer player, NBTTagCompound tag) {
 

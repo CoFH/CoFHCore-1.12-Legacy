@@ -16,7 +16,7 @@ public abstract class TabScrolledText extends TabBase {
 	protected int maxFirstLine;
 	protected int numLines;
 
-	protected boolean scrollable;
+	protected boolean scrollable = false;
 
 	public TabScrolledText(GuiContainerCore gui, int side, String infoString) {
 
@@ -26,6 +26,7 @@ public abstract class TabScrolledText extends TabBase {
 		myText = getFontRenderer().listFormattedStringToWidth(infoString, maxWidth - 16);
 		numLines = Math.min(myText.size(), (maxHeight - 24) / getFontRenderer().FONT_HEIGHT);
 		maxFirstLine = myText.size() - numLines;
+		scrollable = maxFirstLine > 0;
 	}
 
 	public abstract TextureAtlasSprite getIcon();
@@ -39,7 +40,7 @@ public abstract class TabScrolledText extends TabBase {
 		if (!isFullyOpened()) {
 			return;
 		}
-		if (maxFirstLine > 0) {
+		if (scrollable) {
 			if (firstLine > 0) {
 				gui.drawIcon(CoreTextures.ICON_ARROW_UP, sideOffset() + maxWidth - 20, 16);
 			} else {
@@ -75,7 +76,7 @@ public abstract class TabScrolledText extends TabBase {
 		if (!isFullyOpened()) {
 			return false;
 		}
-		if (shiftedMouseX < 108) {
+		if (!scrollable || shiftedMouseY < 16 || shiftedMouseX < 108) {
 			return super.onMousePressed(mouseX, mouseY, mouseButton);
 		}
 		if (shiftedMouseY < 52) {

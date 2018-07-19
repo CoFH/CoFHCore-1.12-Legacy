@@ -1,6 +1,7 @@
 package cofh.core.util.helpers;
 
 import cofh.core.block.TileReconfigurable;
+import cofh.core.init.CoreProps;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -22,14 +23,14 @@ public class ReconfigurableHelper {
 		if (tag == null) {
 			tag = new NBTTagCompound();
 		}
-		tag.setByte("Facing", (byte) tile.getFacing());
-		tag.setByteArray("SideCache", tile.sideCache);
+		tag.setByte(CoreProps.FACING, (byte) tile.getFacing());
+		tag.setByteArray(CoreProps.SIDE_CACHE, tile.sideCache);
 		return tag;
 	}
 
 	public static byte getFacingFromNBT(NBTTagCompound tag) {
 
-		return !tag.hasKey("Facing") ? DEFAULT_FACING : tag.getByte("Facing");
+		return !tag.hasKey(CoreProps.FACING) ? DEFAULT_FACING : tag.getByte(CoreProps.FACING);
 	}
 
 	public static byte[] getSideCacheFromNBT(NBTTagCompound tag, byte[] defaultSides) {
@@ -37,14 +38,14 @@ public class ReconfigurableHelper {
 		if (tag == null) {
 			return defaultSides.clone();
 		}
-		byte[] retSides = tag.getByteArray("SideCache");
+		byte[] retSides = tag.getByteArray(CoreProps.SIDE_CACHE);
 		return retSides.length < 6 ? defaultSides.clone() : retSides;
 	}
 
 	/* ITEM HELPERS */
 	public static boolean hasReconfigInfo(ItemStack stack) {
 
-		return stack.getTagCompound() != null && (stack.getTagCompound().hasKey("Facing") && stack.getTagCompound().hasKey("SideCache"));
+		return stack.getTagCompound() != null && (stack.getTagCompound().hasKey(CoreProps.FACING) && stack.getTagCompound().hasKey(CoreProps.SIDE_CACHE));
 	}
 
 	public static boolean setFacing(ItemStack stack, int facing) {
@@ -55,7 +56,7 @@ public class ReconfigurableHelper {
 		if (stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
-		stack.getTagCompound().setByte("Facing", (byte) facing);
+		stack.getTagCompound().setByte(CoreProps.FACING, (byte) facing);
 		return true;
 	}
 
@@ -67,13 +68,13 @@ public class ReconfigurableHelper {
 		if (stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
-		stack.getTagCompound().setByteArray("SideCache", sideCache);
+		stack.getTagCompound().setByteArray(CoreProps.SIDE_CACHE, sideCache);
 		return true;
 	}
 
 	public static byte getFacing(ItemStack stack) {
 
-		return stack.getTagCompound() == null || !stack.getTagCompound().hasKey("Facing") ? DEFAULT_FACING : stack.getTagCompound().getByte("Facing");
+		return stack.getTagCompound() == null || !stack.getTagCompound().hasKey(CoreProps.FACING) ? DEFAULT_FACING : stack.getTagCompound().getByte(CoreProps.FACING);
 	}
 
 	public static byte[] getSideCache(ItemStack stack) {
@@ -81,7 +82,7 @@ public class ReconfigurableHelper {
 		if (stack.getTagCompound() == null) {
 			return DEFAULT_SIDES.clone();
 		}
-		byte[] retSides = stack.getTagCompound().getByteArray("SideCache");
+		byte[] retSides = stack.getTagCompound().getByteArray(CoreProps.SIDE_CACHE);
 		return retSides.length < 6 ? DEFAULT_SIDES.clone() : retSides;
 	}
 
@@ -90,7 +91,7 @@ public class ReconfigurableHelper {
 		if (stack.getTagCompound() == null) {
 			return defaultSides.clone();
 		}
-		byte[] retSides = stack.getTagCompound().getByteArray("SideCache");
+		byte[] retSides = stack.getTagCompound().getByteArray(CoreProps.SIDE_CACHE);
 		return retSides.length < 6 ? defaultSides.clone() : retSides;
 	}
 

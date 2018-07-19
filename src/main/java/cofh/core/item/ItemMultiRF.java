@@ -5,6 +5,7 @@ import cofh.api.item.IMultiModeItem;
 import cofh.core.init.CoreEnchantments;
 import cofh.core.init.CoreProps;
 import cofh.core.util.helpers.EnergyHelper;
+import cofh.core.util.helpers.MathHelper;
 import cofh.redstoneflux.api.IEnergyContainerItem;
 import cofh.redstoneflux.util.EnergyContainerItemWrapper;
 import net.minecraft.enchantment.Enchantment;
@@ -73,7 +74,7 @@ public abstract class ItemMultiRF extends ItemMulti implements IColorableItem, I
 		if (stack.getTagCompound() == null) {
 			setDefaultTag(stack, 0);
 		}
-		return 1.0D - ((double) stack.getTagCompound().getInteger(CoreProps.ENERGY) / (double) getMaxEnergyStored(stack));
+		return MathHelper.clamp(1.0D - ((double) stack.getTagCompound().getInteger(CoreProps.ENERGY) / (double) getMaxEnergyStored(stack)), 0.0D, 1.0D);
 	}
 
 	/* HELPERS */

@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -15,12 +16,34 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockCore extends ItemBlock {
 
+	protected BlockCore blockCore;
+
+	// TODO: Remove in 4.6.0.
 	public ItemBlockCore(Block block) {
+
+		this((BlockCore) block);
+	}
+
+	public ItemBlockCore(BlockCore block) {
 
 		super(block);
 		setHasSubtypes(true);
 		setMaxDamage(0);
 		setNoRepair();
+
+		blockCore = block;
+	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+
+		return blockCore.getUnlocalizedName(stack);
+	}
+
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+
+		return blockCore.getRarity(stack);
 	}
 
 	@Override

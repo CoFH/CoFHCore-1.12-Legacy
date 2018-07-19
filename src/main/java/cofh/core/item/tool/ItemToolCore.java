@@ -97,7 +97,6 @@ public abstract class ItemToolCore extends ItemTool {
 		if (!world.isRemote) {
 			if (block.removedByPlayer(state, world, pos, player, !player.capabilities.isCreativeMode)) {
 				block.onBlockDestroyedByPlayer(world, pos, state);
-
 				if (!player.capabilities.isCreativeMode) {
 					block.harvestBlock(world, player, pos, state, world.getTileEntity(pos), player.getHeldItemMainhand());
 					if (xpToDrop > 0) {

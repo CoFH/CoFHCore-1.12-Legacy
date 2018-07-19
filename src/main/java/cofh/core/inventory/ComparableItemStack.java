@@ -133,7 +133,24 @@ public class ComparableItemStack {
 	@Override
 	public String toString() {
 
-		return getClass().getName() + '@' + System.identityHashCode(this) + '{' + "m:" + metadata + ", i:" + (item == null ? null : item.getClass().getName()) + '@' + System.identityHashCode(item) + ", v:" + getId() + '}';
+		StringBuilder builder = new StringBuilder(768);
+
+		builder.append(getClass().getName()).append('@');
+		builder.append(System.identityHashCode(this)).append('{');
+		builder.append("ID:").append(getId()).append(", ");
+		builder.append("DMG:").append(metadata).append(", ");
+		builder.append("ORE:").append(oreID).append('|').append(oreName).append(", ");
+		builder.append("ITM:");
+		if (item == null) {
+			builder.append("null");
+		} else {
+			builder.append(item.getClass().getName()).append('@');
+			builder.append(System.identityHashCode(item)).append(' ');
+			builder.append('[').append(item.getRegistryName()).append(']');
+		}
+		builder.append('}');
+
+		return builder.toString();
 	}
 
 }
