@@ -136,8 +136,8 @@ public class CoreProps {
 	}
 
 	/* FORGE INFO */
-	private static final String BUILD = "2655";
-	private static final String FORGE_REQ = "14.23.3." + BUILD;
+	private static final String BUILD = "2739";
+	private static final String FORGE_REQ = "14.23.4." + BUILD;
 	private static final String FORGE_REQ_MAX = "15.0.0.0";
 
 	public static final String FORGE_DEP = "required-after:forge@[" + FORGE_REQ + "," + FORGE_REQ_MAX + ");";
