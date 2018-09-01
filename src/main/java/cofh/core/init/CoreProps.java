@@ -113,6 +113,9 @@ public class CoreProps {
 		comment = "If TRUE, Color Blind Textures will be enabled in CoFH Mods, where applicable.";
 		enableColorBlindTextures = CoFHCore.CONFIG_CLIENT.getConfiguration().getBoolean("EnableColorBlindTextures", category, enableColorBlindTextures, comment);
 
+		comment = "If TRUE, the standard Enchant Effects will be shown for enchanted items in CoFH Mods, where applicable.";
+		enableEnchantEffects = CoFHCore.CONFIG_CLIENT.getConfiguration().getBoolean("EnableEnchantEffects", category, enableEnchantEffects, comment);
+
 		comment = "If TRUE, borders will be drawn on GUI slots in CoFH Mods, where applicable.";
 		enableGUISlotBorders = CoFHCore.CONFIG_CLIENT.getConfiguration().getBoolean("EnableGUISlotBorders", category, enableGUISlotBorders, comment);
 
@@ -200,6 +203,7 @@ public class CoreProps {
 	public static final String TRACK_OUT_2 = "TrackOut2";
 
 	/* OTHER CONSTANTS */
+	public static final String DEMAGNETIZE_COMPAT = "AllowMachineRemoteMovement";
 	public static final String CONVEYOR_COMPAT = "PreventRemoteMovement";
 
 	/* INVENTORIES */
@@ -253,6 +257,7 @@ public class CoreProps {
 
 	/* RENDER */
 	public static boolean enableColorBlindTextures = false;
+	public static boolean enableEnchantEffects = true;
 	public static boolean enableGUISlotBorders = true;
 	public static boolean enableShaderEffects = true;
 

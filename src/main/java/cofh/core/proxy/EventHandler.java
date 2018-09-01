@@ -42,6 +42,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -182,7 +183,7 @@ public class EventHandler {
 		}
 		DamageSource source = event.getSource();
 
-		if (source instanceof EntityDamageSourceIndirect || source.isUnblockable() || source.isProjectile()) {
+		if (source instanceof EntityDamageSourceIndirect || source.isUnblockable() || source.isProjectile() || source.isMagicDamage()) {
 			return;
 		}
 		EntityPlayer player = (EntityPlayer) event.getEntityLiving();
@@ -248,6 +249,11 @@ public class EventHandler {
 			int encVorpal = getHeldEnchantmentLevel((EntityLivingBase) attacker, CoreEnchantments.vorpal);
 			if (encVorpal > 0 && entity.world.rand.nextInt(100) < EnchantmentVorpal.CRIT_CHANCE * encVorpal) {
 				event.setAmount(event.getAmount() * EnchantmentVorpal.CRIT_DAMAGE);
+				attacker.world.playSound(null, attacker.getPosition(), SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				for (int i = 0; i < encVorpal * 2; i++) {
+					((WorldServer) entity.world).spawnParticle(EnumParticleTypes.CRIT, entity.posX + entity.world.rand.nextDouble(), entity.posY + 1.5D, entity.posZ + entity.world.rand.nextDouble(), 1, 0, 0, 0, 0.0, 0);
+					((WorldServer) entity.world).spawnParticle(EnumParticleTypes.CRIT_MAGIC, entity.posX + entity.world.rand.nextDouble(), entity.posY + 1.5D, entity.posZ + entity.world.rand.nextDouble(), 1, 0, 0, 0, 0.0, 0);
+				}
 			}
 		}
 	}

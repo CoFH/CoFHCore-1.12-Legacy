@@ -36,6 +36,7 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 		this("cofh");
 		setMaxDamage(0);
 		setHasSubtypes(true);
+		setNoRepair();
 	}
 
 	public ItemMulti(String modName) {
@@ -43,6 +44,7 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 		super(modName);
 		setMaxDamage(0);
 		setHasSubtypes(true);
+		setNoRepair();
 	}
 
 	/* HELPERS */
@@ -143,6 +145,12 @@ public class ItemMulti extends ItemCore implements IModelRegister {
 	public boolean isDamageable() {
 
 		return false;
+	}
+
+	@Override
+	public boolean hasEffect(ItemStack stack) {
+
+		return CoreProps.enableEnchantEffects && stack.isItemEnchanted();
 	}
 
 	@Override
