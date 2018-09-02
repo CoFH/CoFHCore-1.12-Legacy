@@ -256,16 +256,6 @@ public class ThermalExpansionHelper {
 		FMLInterModComms.sendMessage(MOD_ID, ADD_COMPACTOR_RECIPE, toSend);
 	}
 
-	@Deprecated
-	public static void addCompactorPressRecipe(int energy, ItemStack input, ItemStack output) {
-
-		if (ItemHelper.isPlate(input)) {
-			addCompactorPlateRecipe(energy, input, output);
-		} else {
-			addCompactorRecipe(energy, input, output);
-		}
-	}
-
 	public static void addCompactorPlateRecipe(int energy, ItemStack input, ItemStack output) {
 
 		if (input.isEmpty() || output.isEmpty()) {
@@ -357,6 +347,44 @@ public class ThermalExpansionHelper {
 
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_COMPACTOR_GEAR_RECIPE, toSend);
+	}
+
+	/* COMPACTOR - DEPRECATED */
+	@Deprecated
+	public static void addCompactorPressRecipe(int energy, ItemStack input, ItemStack output) {
+
+		if (ItemHelper.isPlate(input)) {
+			addCompactorPlateRecipe(energy, input, output);
+		} else {
+			addCompactorRecipe(energy, input, output);
+		}
+	}
+
+	@Deprecated
+	public static void addCompactorStorageRecipe(int energy, ItemStack input, ItemStack output) {
+		// Do nothing. This functionality has been completely removed.
+	}
+
+	@Deprecated
+	public static void addCompactorMintRecipe(int energy, ItemStack input, ItemStack output) {
+
+		addCompactorCoinRecipe(energy, input, output);
+	}
+
+	@Deprecated
+	public static void removeCompactorPressRecipe(ItemStack input) {
+		// Do nothing. Ambiguous.
+	}
+
+	@Deprecated
+	public static void removeCompactorStorageRecipe(ItemStack input) {
+		// Do nothing. This functionality has been completely removed.
+	}
+
+	@Deprecated
+	public static void removeCompactorMintRecipe(ItemStack input) {
+
+		removeCompactorCoinRecipe(input);
 	}
 
 	/* CRUCIBLE */
