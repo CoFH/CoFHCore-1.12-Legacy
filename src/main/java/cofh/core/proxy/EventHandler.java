@@ -183,7 +183,10 @@ public class EventHandler {
 		}
 		DamageSource source = event.getSource();
 
-		if (source instanceof EntityDamageSourceIndirect || source.isUnblockable() || source.isProjectile() || source.isMagicDamage()) {
+		if (source instanceof EntityDamageSourceIndirect || source.isUnblockable() || source.isProjectile()) {
+			return;
+		}
+		if (source instanceof EntityDamageSource && ((EntityDamageSource) source).getIsThornsDamage()) {
 			return;
 		}
 		EntityPlayer player = (EntityPlayer) event.getEntityLiving();
