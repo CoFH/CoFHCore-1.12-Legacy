@@ -17,7 +17,6 @@ import cofh.redstoneflux.api.IEnergyHandler;
 import cofh.redstoneflux.api.IEnergyReceiver;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -44,7 +43,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BlockCoreTile extends BlockCore implements IInitializer, ITileEntityProvider, IBlockInfo, IDismantleable {
+public abstract class BlockCoreTile extends BlockCore implements IInitializer, IBlockInfo, IDismantleable {
 
 	public BlockCoreTile(Material material, String modName) {
 
@@ -53,11 +52,10 @@ public abstract class BlockCoreTile extends BlockCore implements IInitializer, I
 		setSoundType(SoundType.STONE);
 	}
 
-	/* ITileEntityProvider */
 	@Override
-	public TileEntity createTileEntity(World world, IBlockState state) {
+	public boolean hasTileEntity(IBlockState state) {
 
-		return createNewTileEntity(world, state.getBlock().getMetaFromState(state));
+		return true;
 	}
 
 	@Override

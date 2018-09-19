@@ -1,5 +1,6 @@
 package cofh.core.block;
 
+import cofh.core.init.CoreProps;
 import cofh.core.render.FontRendererCore;
 import cofh.core.util.helpers.SecurityHelper;
 import cofh.core.util.helpers.StringHelper;
@@ -62,6 +63,12 @@ public class ItemBlockCore extends ItemBlock {
 	public boolean hasCustomEntity(ItemStack stack) {
 
 		return SecurityHelper.isSecure(stack);
+	}
+
+	@Override
+	public boolean hasEffect(ItemStack stack) {
+
+		return CoreProps.enableEnchantEffects && stack.isItemEnchanted();
 	}
 
 	@Override

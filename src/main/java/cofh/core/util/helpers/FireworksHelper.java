@@ -36,16 +36,20 @@ public final class FireworksHelper {
 			/**
 			 * Small ball (default)
 			 */
-			BALL, /**
+			BALL,
+			/**
 			 * Large ball (made with Fire Charge)
 			 */
-			LARGE_BALL, /**
+			LARGE_BALL,
+			/**
 			 * Star-shaped (made with Gold Nugget)
 			 */
-			STAR, /**
+			STAR,
+			/**
 			 * Creeper face (made with any Head)
 			 */
-			CREEPER, /**
+			CREEPER,
+			/**
 			 * Burst (made with Feather)
 			 */
 			BURST

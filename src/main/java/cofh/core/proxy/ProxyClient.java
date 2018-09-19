@@ -45,17 +45,17 @@ public class ProxyClient extends Proxy {
 
 		Minecraft.memoryReserve = null;
 		ShaderHelper.initShaders();
-
-		if (CoreProps.disableParticles) {
-			CoFHCore.LOG.info("Replacing EffectRenderer - Particles have been disabled.");
-			Minecraft.getMinecraft().effectRenderer = new CustomEffectRenderer();
-		}
 	}
 
 	@Override
 	public void initialize(FMLInitializationEvent event) {
 
 		super.initialize(event);
+
+		if (CoreProps.disableParticles) {
+			CoFHCore.LOG.info("Replacing EffectRenderer - Particles have been disabled.");
+			Minecraft.getMinecraft().effectRenderer = new CustomEffectRenderer();
+		}
 	}
 
 	@Override

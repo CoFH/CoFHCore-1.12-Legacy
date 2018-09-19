@@ -667,7 +667,7 @@ public final class ItemHelper {
 				continue;
 			}
 			containedItems.add(curStack);
-			for (int j = 0; j < nbtList.tagCount(); j++) {
+			for (int j = i; j < nbtList.tagCount(); j++) {
 				NBTTagCompound tag2 = nbtList.getCompoundTagAt(j);
 				int slot2 = tag.getInteger("Slot");
 
@@ -731,7 +731,7 @@ public final class ItemHelper {
 				continue;
 			}
 			containedItems.add(curStack);
-			for (int j = minSlot; j < Math.min(invSize, maxSlot); j++) {
+			for (int j = i; j < Math.min(invSize, maxSlot); j++) {
 				if (visited[j]) {
 					continue;
 				}
