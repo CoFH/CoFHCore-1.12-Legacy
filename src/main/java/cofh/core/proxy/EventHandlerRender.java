@@ -1,13 +1,19 @@
 package cofh.core.proxy;
 
+import cofh.core.fluid.BlockFluidCore;
 import cofh.core.item.IAOEBreakItem;
+import cofh.core.util.RayTracer;
+import cofh.core.util.helpers.RenderHelper;
 import com.google.common.collect.ImmutableList;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -19,10 +25,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderBlockOverlayEvent;
+import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -37,6 +46,8 @@ import java.util.List;
 public class EventHandlerRender implements IResourceManagerReloadListener {
 
 	public static final EventHandlerRender INSTANCE = new EventHandlerRender();
+
+	private static final ResourceLocation UNDERWATER_GRAYSCALE = new ResourceLocation("cofh:textures/misc/underwater_grayscale.png");
 
 	@SubscribeEvent (priority = EventPriority.LOW)
 	public void renderExtraBlockBreak(RenderWorldLastEvent event) {
@@ -70,6 +81,47 @@ public class EventHandlerRender implements IResourceManagerReloadListener {
 				BlockPos pos = controllerMP.currentBlock;
 				IAOEBreakItem aoeTool = (IAOEBreakItem) stack.getItem();
 				drawBlockDamageTexture(Tessellator.getInstance(), Tessellator.getInstance().getBuffer(), player, event.getPartialTicks(), player.getEntityWorld(), aoeTool.getAOEBlocks(stack, pos, player));
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void handleFluidBlockOverlayEvent(RenderBlockOverlayEvent event) {
+
+		if (event.getOverlayType() == OverlayType.WATER) {
+			EntityPlayer player = event.getPlayer();
+			Vec3d playerEyePos = RayTracer.getCorrectedHeadVec(player);
+			BlockPos pos = new BlockPos(playerEyePos);
+			IBlockState state = player.world.getBlockState(pos);
+			Block block = state.getBlock();
+
+			if (block instanceof BlockFluidCore) {
+				RenderHelper.bindTexture(UNDERWATER_GRAYSCALE);
+				float brightness = player.getBrightness();
+				Vec3d color = block.getFogColor(player.world, pos, state, player, new Vec3d(1, 1, 1), 0.0F).scale(brightness);
+
+				GlStateManager.color((float) color.x, (float) color.y, (float) color.z, 0.5F);
+				GlStateManager.enableBlend();
+				GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
+				GlStateManager.pushMatrix();
+
+				float yaw = -player.rotationYaw / 64.0F;
+				float pitch = player.rotationPitch / 64.0F;
+
+				Tessellator t = Tessellator.getInstance();
+				BufferBuilder buffer = t.getBuffer();
+
+				buffer.begin(0x07, DefaultVertexFormats.POSITION_TEX);
+				buffer.pos(-1.0D, -1.0D, -0.5D).tex(4.0F + yaw, 4.0F + pitch).endVertex();
+				buffer.pos(1.0D, -1.0D, -0.5D).tex(0.0F + yaw, 4.0F + pitch).endVertex();
+				buffer.pos(1.0D, 1.0D, -0.5D).tex(0.0F + yaw, 0.0F + pitch).endVertex();
+				buffer.pos(-1.0D, 1.0D, -0.5D).tex(4.0F + yaw, 0.0F + pitch).endVertex();
+				t.draw();
+
+				GlStateManager.popMatrix();
+				GlStateManager.disableBlend();
+				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				event.setCanceled(true);
 			}
 		}
 	}
