@@ -30,6 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -81,6 +82,20 @@ public class EventHandlerRender implements IResourceManagerReloadListener {
 				BlockPos pos = controllerMP.currentBlock;
 				IAOEBreakItem aoeTool = (IAOEBreakItem) stack.getItem();
 				drawBlockDamageTexture(Tessellator.getInstance(), Tessellator.getInstance().getBuffer(), player, event.getPartialTicks(), player.getEntityWorld(), aoeTool.getAOEBlocks(stack, pos, player));
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void handleFogDensityEvent(EntityViewRenderEvent.FogDensity event) {
+
+		if (event.getEntity() instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) event.getEntity();
+			Vec3d playerEyePos = RayTracer.getCorrectedHeadVec(player);
+			BlockPos pos = new BlockPos(playerEyePos);
+			if (player.world.getBlockState(pos).getBlock() instanceof BlockFluidCore) {
+				event.setCanceled(true);
+				GlStateManager.setFog(GlStateManager.FogMode.EXP);
 			}
 		}
 	}

@@ -129,7 +129,12 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 	}
 
 	/* ACCESSORS */
-	public int getDensityDir() {
+	public int getDensitySafe() {
+
+		return density;
+	}
+
+	public int getDensityDirSafe() {
 
 		return densityDir;
 	}
