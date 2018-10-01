@@ -4,7 +4,6 @@ import cofh.core.render.IModelRegister;
 import cofh.core.render.particle.EntityDropParticleFX;
 import cofh.core.util.StateMapper;
 import cofh.core.util.core.IInitializer;
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
@@ -75,14 +74,16 @@ public abstract class BlockFluidCore extends BlockFluidClassic implements IIniti
 	public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState iblockstate, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
 
 		if (this.density < 0) {
-			return null;
+			return false;
 		}
-		if (iblockstate.getMaterial().isLiquid()) {
-			double fluidHeight = (double) ((float) (blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(iblockstate.getValue(BlockLiquid.LEVEL)));
-			if (yToTest >= fluidHeight) {
-				return true;
-			}
+		if (testingHead) {
+			return true;
 		}
+		//		if (iblockstate.getMaterial().equals(this.blockMaterial)) {
+		//			if (yToTest <= blockpos.getY() + 1 + getQuantaPercentage(world, blockpos)) {
+		//				return true;
+		//			}
+		//		}
 		return super.isEntityInsideMaterial(world, blockpos, iblockstate, entity, yToTest, materialIn, testingHead);
 	}
 

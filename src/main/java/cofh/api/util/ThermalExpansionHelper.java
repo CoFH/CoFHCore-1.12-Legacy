@@ -27,7 +27,7 @@ public class ThermalExpansionHelper {
 	 * MACHINES
 	 */
 
-	/* FURNACE */
+	// region FURNACE
 	public static void addFurnaceRecipe(int energy, ItemStack input, ItemStack output) {
 
 		if (input.isEmpty() || output.isEmpty()) {
@@ -54,8 +54,9 @@ public class ThermalExpansionHelper {
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_FURNACE_RECIPE, toSend);
 	}
+	// endregion
 
-	/* PULVERIZER */
+	// region PULVERIZER
 	public static void addPulverizerRecipe(int energy, ItemStack input, ItemStack output) {
 
 		addPulverizerRecipe(energy, input, output, ItemStack.EMPTY, 0);
@@ -98,8 +99,9 @@ public class ThermalExpansionHelper {
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_PULVERIZER_RECIPE, toSend);
 	}
+	// endregion
 
-	/* SAWMILL */
+	// region SAWMILL
 	public static void addSawmillRecipe(int energy, ItemStack input, ItemStack output) {
 
 		addSawmillRecipe(energy, input, output, ItemStack.EMPTY, 0);
@@ -143,8 +145,9 @@ public class ThermalExpansionHelper {
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_SAWMILL_RECIPE, toSend);
 	}
+	// endregion
 
-	/* SMELTER */
+	// region SMELTER
 	public static void addSmelterRecipe(int energy, ItemStack input, ItemStack input2, ItemStack output) {
 
 		addSmelterRecipe(energy, input, input2, output, ItemStack.EMPTY, 0);
@@ -191,8 +194,9 @@ public class ThermalExpansionHelper {
 		input2.writeToNBT(toSend.getCompoundTag(INPUT_2));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_SMELTER_RECIPE, toSend);
 	}
+	// endregion
 
-	/* INSOLATOR */
+	// region INSOLATOR
 	public static void addInsolatorRecipe(int energy, ItemStack input, ItemStack input2, ItemStack output) {
 
 		addInsolatorRecipe(energy, input, input2, output, ItemStack.EMPTY, 0);
@@ -239,8 +243,9 @@ public class ThermalExpansionHelper {
 		input2.writeToNBT(toSend.getCompoundTag(INPUT_2));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_INSOLATOR_RECIPE, toSend);
 	}
+	// endregion
 
-	/* COMPACTOR */
+	// region COMPACTOR
 	public static void addCompactorRecipe(int energy, ItemStack input, ItemStack output) {
 
 		if (input.isEmpty() || output.isEmpty()) {
@@ -348,8 +353,9 @@ public class ThermalExpansionHelper {
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_COMPACTOR_GEAR_RECIPE, toSend);
 	}
+	// endregion
 
-	/* COMPACTOR - DEPRECATED */
+	// region COMPACTOR - DEPRECATED
 	@Deprecated
 	public static void addCompactorPressRecipe(int energy, ItemStack input, ItemStack output) {
 
@@ -386,8 +392,9 @@ public class ThermalExpansionHelper {
 
 		removeCompactorCoinRecipe(input);
 	}
+	// endregion
 
-	/* CRUCIBLE */
+	// region CRUCIBLE
 	public static void addCrucibleRecipe(int energy, ItemStack input, FluidStack output) {
 
 		if (input.isEmpty() || output == null) {
@@ -415,8 +422,9 @@ public class ThermalExpansionHelper {
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_CRUCIBLE_RECIPE, toSend);
 	}
+	// endregion
 
-	/* REFINERY */
+	// region REFINERY
 	public static void addRefineryRecipe(int energy, FluidStack input, FluidStack output, ItemStack outputItem) {
 
 		if (input == null || output == null) {
@@ -448,8 +456,9 @@ public class ThermalExpansionHelper {
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_REFINERY_RECIPE, toSend);
 	}
+	// endregion
 
-	/* TRANSPOSER */
+	// region TRANSPOSER
 	public static void addTransposerFill(int energy, ItemStack input, ItemStack output, FluidStack fluid, boolean reversible) {
 
 		if (input.isEmpty() || output.isEmpty() || fluid == null) {
@@ -514,8 +523,9 @@ public class ThermalExpansionHelper {
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_TRANSPOSER_EXTRACT_RECIPE, toSend);
 	}
+	// endregion
 
-	/* CHARGER */
+	// region CHARGER
 	public static void addChargerRecipe(int energy, ItemStack input, ItemStack output) {
 
 		if (input.isEmpty() || output.isEmpty()) {
@@ -542,8 +552,9 @@ public class ThermalExpansionHelper {
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_CHARGER_RECIPE, toSend);
 	}
+	// endregion
 
-	/* CENTRIFUGE */
+	// region CENTRIFUGE
 	public static void addCentrifugeRecipe(int energy, ItemStack input, List<ItemStack> output) {
 
 		addCentrifugeRecipe(energy, input, output, new ArrayList<>(), null);
@@ -601,8 +612,9 @@ public class ThermalExpansionHelper {
 		input.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_CENTRIFUGE_RECIPE, toSend);
 	}
+	// endregion
 
-	/* BREWER */
+	// region BREWER
 	public static void addBrewerRecipe(int energy, ItemStack input, FluidStack inputFluid, FluidStack outputFluid) {
 
 		if (input.isEmpty() || inputFluid == null || outputFluid == null) {
@@ -634,8 +646,9 @@ public class ThermalExpansionHelper {
 		fluid.writeToNBT(toSend.getCompoundTag(FLUID));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_BREWER_RECIPE, toSend);
 	}
+	// endregion
 
-	/* ENCHANTER */
+	// region ENCHANTER
 	public static void addEnchanterRecipe(int energy, ItemStack input, ItemStack input2, ItemStack output, int fluidExp) {
 
 		if (input.isEmpty() || input2.isEmpty() || output.isEmpty() || fluidExp < 0) {
@@ -668,12 +681,13 @@ public class ThermalExpansionHelper {
 		input2.writeToNBT(toSend.getCompoundTag(INPUT_2));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_ENCHANTER_RECIPE, toSend);
 	}
+	// endregion
 
 	/**
 	 * DYNAMOS
 	 */
 
-	/* STEAM */
+	// region STEAM
 	public static void addSteamFuel(ItemStack fuel, int energy) {
 
 		if (fuel.isEmpty()) {
@@ -698,8 +712,9 @@ public class ThermalExpansionHelper {
 		fuel.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_STEAM_FUEL, toSend);
 	}
+	// endregion
 
-	/* MAGMATIC */
+	// region MAGMATIC
 	public static void addMagmaticFuel(String fluidName, int energy) {
 
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -716,8 +731,9 @@ public class ThermalExpansionHelper {
 
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_MAGMATIC_FUEL, toSend);
 	}
+	// endregion
 
-	/* COMPRESSION */
+	// region COMPRESSION
 	public static void addCompressionFuel(String fluidName, int energy) {
 
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -734,8 +750,9 @@ public class ThermalExpansionHelper {
 
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_COMPRESSION_FUEL, toSend);
 	}
+	// endregion
 
-	/* REACTANT */
+	// region REACTANT
 	public static void addReactantFuel(ItemStack reactant, String fluidName, int energy) {
 
 		if (reactant.isEmpty()) {
@@ -762,8 +779,9 @@ public class ThermalExpansionHelper {
 		reactant.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_REACTANT_FUEL, toSend);
 	}
+	// endregion
 
-	/* ENERVATION */
+	// region ENERVATION
 	public static void addEnervationFuel(ItemStack fuel, int energy) {
 
 		if (fuel.isEmpty()) {
@@ -788,8 +806,9 @@ public class ThermalExpansionHelper {
 		fuel.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_ENERVATION_FUEL, toSend);
 	}
+	// endregion
 
-	/* NUMISMATIC */
+	// region NUMISMATIC
 	public static void addNumismaticFuel(ItemStack fuel, int energy) {
 
 		if (fuel.isEmpty()) {
@@ -814,8 +833,9 @@ public class ThermalExpansionHelper {
 		fuel.writeToNBT(toSend.getCompoundTag(INPUT));
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_NUMISMATIC_FUEL, toSend);
 	}
+	// endregion
 
-	/* COOLANT */
+	// region COOLANT
 	public static void addCoolant(String fluidName, int energy, int factor) {
 
 		NBTTagCompound toSend = new NBTTagCompound();
@@ -833,8 +853,9 @@ public class ThermalExpansionHelper {
 
 		FMLInterModComms.sendMessage(MOD_ID, REMOVE_COOLANT, toSend);
 	}
+	// endregion
 
-	/* IMC STRINGS */
+	// region IMC STRINGS
 	static final String MOD_ID = "thermalexpansion";
 
 	static final String ENERGY = "energy";
@@ -901,5 +922,5 @@ public class ThermalExpansionHelper {
 
 	public static final String ADD_COOLANT = "addcoolant";
 	public static final String REMOVE_COOLANT = "removecoolant";
-
+	// endregion
 }

@@ -274,9 +274,7 @@ public abstract class GuiContainerCore extends GuiContainer {
 
 		TabBase tab = getTabAtPosition(mX, mY);
 		if (tab != null) {
-			int tMx = mX;
-
-			if (!tab.onMousePressed(tMx, mY, mouseButton)) {
+			if (!tab.onMousePressed(mX, mY, mouseButton)) {
 				for (int i = tabs.size(); i-- > 0; ) {
 					TabBase other = tabs.get(i);
 					if (other != tab && other.open && other.side == tab.side) {
@@ -832,14 +830,6 @@ public abstract class GuiContainerCore extends GuiContainer {
 		GlStateManager.enableRescaleNormal();
 	}
 
-	/**
-	 * Passthrough method for tab use.
-	 */
-	public void mouseClicked(int mouseButton) throws IOException {
-
-		super.mouseClicked(guiLeft + mouseX, guiTop + mouseY, mouseButton);
-	}
-
 	public FontRenderer getFontRenderer() {
 
 		return fontRenderer;
@@ -853,16 +843,6 @@ public abstract class GuiContainerCore extends GuiContainer {
 	protected int getCenteredOffset(String string, int xPos) {
 
 		return ((xPos * 2) - fontRenderer.getStringWidth(string)) / 2;
-	}
-
-	public int getGuiLeft() {
-
-		return guiLeft;
-	}
-
-	public int getGuiTop() {
-
-		return guiTop;
 	}
 
 	public int getMouseX() {

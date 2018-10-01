@@ -14,6 +14,7 @@ import cofh.core.proxy.Proxy;
 import cofh.core.util.ConfigHandler;
 import cofh.core.util.RegistrySocial;
 import cofh.core.util.oredict.OreDictionaryArbiter;
+import cofh.redstoneflux.RedstoneFluxProps;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -43,7 +44,7 @@ public class CoFHCore {
 	public static final String VERSION_GROUP = "required-after:" + MOD_ID + "@[" + VERSION + "," + VERSION_MAX + ");";
 	public static final String UPDATE_URL = "https://raw.github.com/cofh/version/master/" + MOD_ID + "_update.json";
 
-	public static final String DEPENDENCIES = CoreProps.FORGE_DEP;
+	public static final String DEPENDENCIES = CoreProps.FORGE_DEP + RedstoneFluxProps.VERSION_GROUP;
 	public static final String MOD_GUI_FACTORY = "cofh.core.gui.GuiConfigCoreFactory";
 
 	@Instance (MOD_ID)

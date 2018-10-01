@@ -77,7 +77,7 @@ public final class BlockHelper {
 		}
 	}
 
-	static { // TODO: review which of these can be removed in favor of the vanilla handler
+	static {
 
 		rotateType[Block.getIdFromBlock(Blocks.STONE_SLAB)] = RotationType.SLAB;
 		rotateType[Block.getIdFromBlock(Blocks.WOODEN_SLAB)] = RotationType.SLAB;

@@ -100,7 +100,7 @@ public class EventHandlerRender implements IResourceManagerReloadListener {
 				float brightness = player.getBrightness();
 				Vec3d color = block.getFogColor(player.world, pos, state, player, new Vec3d(1, 1, 1), 0.0F).scale(brightness);
 
-				GlStateManager.color((float) color.x, (float) color.y, (float) color.z, 0.5F);
+				GlStateManager.color((float) color.x, (float) color.y, (float) color.z, 1.0F);
 				GlStateManager.enableBlend();
 				GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
 				GlStateManager.pushMatrix();
