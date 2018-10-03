@@ -105,7 +105,7 @@ public class RecipeHelper {
 	/* GEARS */
 	public static void addGearRecipe(ItemStack gear, String ingot) {
 
-		addShapedRecipe(gear, " X ", "XIX", " X ", 'X', ingot, 'I', "ingotIron");
+		addShapedRecipe(gear, " X ", "X X", " X ", 'X', ingot);
 	}
 
 	public static void addGearRecipe(ItemStack gear, String ingot, String center) {

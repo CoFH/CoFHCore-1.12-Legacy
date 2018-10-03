@@ -291,30 +291,34 @@ public class EventHandler {
 		final int encSmashing = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.smashing, tool);
 		final int encSmelting = EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.smelting, tool);
 
-		event.getDrops().replaceAll(stack -> {
-			if (stack.isEmpty()) {
-				return stack; // Nope, processing on this sometimes results in...results.
-			}
-			ItemStack result = stack;
-			if (encSmashing > 0) {
-				ItemStack smashed = EnchantmentSmashing.getItemStack(result);
-				if (!smashed.isEmpty()) {
-					result = smashed;
+		try {
+			event.getDrops().replaceAll(stack -> {
+				if (stack.isEmpty()) {
+					return stack; // Nope, processing on this sometimes results in...results.
 				}
-			}
-			if (encSmelting > 0) {
-				ItemStack smelted = EnchantmentSmelting.getItemStack(result);
-				if (!smelted.isEmpty()) {
-					result = smelted;
+				ItemStack result = stack;
+				if (encSmashing > 0) {
+					ItemStack smashed = EnchantmentSmashing.getItemStack(result);
+					if (!smashed.isEmpty()) {
+						result = smashed;
+					}
 				}
-			}
-			// if (result != stack) {
-			//	result.grow(event.getWorld().rand.nextInt(15) < event.getFortuneLevel() ? 1 : 0);
-			//	if (!tool.isEmpty())
-			//		tool.damageItem(1, player);
-			// }
-			return result;
-		});
+				if (encSmelting > 0) {
+					ItemStack smelted = EnchantmentSmelting.getItemStack(result);
+					if (!smelted.isEmpty()) {
+						result = smelted;
+					}
+				}
+				// if (result != stack) {
+				//	result.grow(event.getWorld().rand.nextInt(15) < event.getFortuneLevel() ? 1 : 0);
+				//	if (!tool.isEmpty())
+				//		tool.damageItem(1, player);
+				// }
+				return result;
+			});
+		} catch (Throwable t) {
+			// pokemon!
+		}
 	}
 
 	@SubscribeEvent (priority = EventPriority.HIGHEST, receiveCanceled = false)
