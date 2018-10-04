@@ -46,6 +46,9 @@ public class CoreProps {
 		comment = "If TRUE, CoFH Enchantments will be disabled and NOT REGISTERED. Only do this if you fully understand the consequences. World backup is recommended.";
 		CoreEnchantments.disableAll = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("DisableAllEnchantments", category, CoreEnchantments.disableAll, comment);
 
+		comment = "If TRUE, the disabled CoFH Enchantments will NOT BE REGISTERED. Only do this if you fully understand the consequences. World backup is recommended.";
+		CoreEnchantments.disableHard = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("HardDisableEnchantments", category, CoreEnchantments.disableHard, comment);
+
 		comment = "If TRUE, the Holding Enchantment is available for various Storage Items.";
 		EnchantmentHolding.enable = CoFHCore.CONFIG_CORE.getConfiguration().getBoolean("EnableHoldingEnchant", category, EnchantmentHolding.enable, comment);
 

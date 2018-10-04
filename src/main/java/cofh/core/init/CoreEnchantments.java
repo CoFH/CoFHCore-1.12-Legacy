@@ -18,6 +18,7 @@ public class CoreEnchantments {
 
 	public static final CoreEnchantments INSTANCE = new CoreEnchantments();
 	public static boolean disableAll = false;
+	public static boolean disableHard = false;
 	public static boolean registered = false;
 
 	private CoreEnchantments() {
@@ -63,19 +64,47 @@ public class CoreEnchantments {
 	@SubscribeEvent
 	public void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
 
+		if (disableAll && disableHard) {
+			return;
+		}
+
 		IForgeRegistry<Enchantment> registry = event.getRegistry();
 
-		registry.register(holding);
-		registry.register(insight);
-		registry.register(leech);
-		registry.register(multishot);
-		registry.register(smashing);
-		registry.register(smelting);
-		registry.register(soulbound);
-		registry.register(vorpal);
+		if (shouldRegisterEnchant(EnchantmentHolding.enable))
+			registry.register(holding);
+
+		if (shouldRegisterEnchant(EnchantmentInsight.enable))
+			registry.register(insight);
+
+		if (shouldRegisterEnchant(EnchantmentLeech.enable))
+			registry.register(leech);
+
+		if (shouldRegisterEnchant(EnchantmentMultishot.enable))
+			registry.register(multishot);
+
+		if (shouldRegisterEnchant(EnchantmentSmashing.enable))
+			registry.register(smashing);
+
+		if (shouldRegisterEnchant(EnchantmentSmelting.enable))
+			registry.register(smelting);
+
+		if (shouldRegisterEnchant(EnchantmentSoulbound.enable))
+			registry.register(soulbound);
+
+		if (shouldRegisterEnchant(EnchantmentVorpal.enable))
+			registry.register(vorpal);
 	}
 
 	/* HELPERS */
+	public static boolean shouldRegisterEnchant(boolean enabled) {
+
+		if (disableHard) {
+			return enabled;
+		}
+
+		return true;
+	}
+
 	public static void addEnchantment(ItemStack stack, Enchantment ench, int level) {
 
 		addEnchantment(stack.getTagCompound(), Enchantment.getEnchantmentID(ench), level);
