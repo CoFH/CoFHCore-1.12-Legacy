@@ -53,8 +53,8 @@ public abstract class TileAugmentableSecure extends TileRSControl implements IAu
 	protected boolean hasRedstoneControl = false;
 
 	public boolean isCreative = false;
-	public boolean enableAutoInput = false;
-	public boolean enableAutoOutput = false;
+	protected boolean enableAutoInput = false;
+	protected boolean enableAutoOutput = false;
 
 	protected static final int FLUID_TRANSFER[] = new int[] { 1000, 1000, 3000, 6000, 10000 };
 	protected static final int ITEM_TRANSFER[] = new int[] { 16, 16, 28, 44, 64 };

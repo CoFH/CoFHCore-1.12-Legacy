@@ -248,9 +248,6 @@ public abstract class TileReconfigurable extends TileInventory implements IRecon
 			sendTilePacket(Side.CLIENT);
 			return true;
 		}
-		if (isActive) {
-			return false;
-		}
 		byte[] tempCache = new byte[6];
 		for (int i = 0; i < 6; i++) {
 			tempCache[i] = sideCache[BlockHelper.ROTATE_CLOCK_Y[i]];

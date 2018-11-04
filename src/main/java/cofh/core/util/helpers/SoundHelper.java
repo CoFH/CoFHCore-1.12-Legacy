@@ -3,6 +3,7 @@ package cofh.core.util.helpers;
 import cofh.core.audio.SoundBase;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
@@ -34,14 +35,19 @@ public class SoundHelper {
 		soundManager.playSound(sound);
 	}
 
-	@Deprecated
-	public static void playSound(String soundName, float x, float y, float z, float volume, float pitch) {
-
-		playSound(soundName, SoundCategory.MASTER, x, y, z, volume, pitch);
-	}
-
 	public static void playSound(String soundName, SoundCategory category, float x, float y, float z, float volume, float pitch) {
 
 		soundManager.playSound(new SoundBase(soundName, category, volume, pitch, x, y, z));
 	}
+
+	public static void playClickSound(float pitch) {
+
+		playClickSound(0.3F, pitch);
+	}
+
+	public static void playClickSound(float volume, float pitch) {
+
+		soundManager.playSound(new SoundBase(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.3F, pitch));
+	}
+
 }

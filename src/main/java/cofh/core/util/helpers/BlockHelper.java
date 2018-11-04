@@ -31,7 +31,7 @@ public final class BlockHelper {
 
 	}
 
-	public static int MAX_ID = 1024;
+	public static int MAX_ID = 4096;
 	public static byte[] rotateType = new byte[MAX_ID];
 	public static final int[][] SIDE_COORD_MOD = { { 0, -1, 0 }, { 0, 1, 0 }, { 0, 0, -1 }, { 0, 0, 1 }, { -1, 0, 0 }, { 1, 0, 0 } };
 	public static float[][] SIDE_COORD_AABB = { { 1, -2, 1 }, { 1, 2, 1 }, { 1, 1, 1 }, { 1, 1, 2 }, { 1, 1, 1 }, { 2, 1, 1 } };

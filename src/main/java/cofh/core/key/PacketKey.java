@@ -37,10 +37,4 @@ public class PacketKey extends PacketBase {
 		}
 	}
 
-	public void sendKeyPacket(String uuid) {
-
-		addString(uuid);
-		PacketHandler.sendToServer(this);
-	}
-
 }
