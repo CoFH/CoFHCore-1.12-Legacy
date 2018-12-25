@@ -423,7 +423,12 @@ public class EventHandler {
 			ItemStack stack = oldPlayer.inventory.mainInventory.get(i);
 			int encSoulbound = MathHelper.clamp(EnchantmentHelper.getEnchantmentLevel(CoreEnchantments.soulbound, stack), 0, CoreEnchantments.soulbound.getMaxLevel() * 2);
 			if (encSoulbound > 0) {
-				if (MathHelper.RANDOM.nextInt(1 + encSoulbound) == 0) {
+				if (EnchantmentSoulbound.permanent) {
+					if (encSoulbound > 1) {
+						ItemHelper.removeEnchantment(stack, CoreEnchantments.soulbound);
+						ItemHelper.addEnchantment(stack, CoreEnchantments.soulbound, 1);
+					}
+				} else if (MathHelper.RANDOM.nextInt(1 + encSoulbound) == 0) {
 					ItemHelper.removeEnchantment(stack, CoreEnchantments.soulbound);
 					if (encSoulbound > 1) {
 						ItemHelper.addEnchantment(stack, CoreEnchantments.soulbound, encSoulbound - 1);
