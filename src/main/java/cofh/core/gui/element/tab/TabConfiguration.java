@@ -26,12 +26,14 @@ public class TabConfiguration extends TabBase {
 	private IReconfigurableSides myTileSides;
 	private ISidedTexture myTileTexture;
 
-	public TabConfiguration(GuiContainerCore gui, IReconfigurableSides theTile) {
+	public <TReconfigurableSides extends IReconfigurableSides & IReconfigurableFacing & ISidedTexture>
+		TabConfiguration(GuiContainerCore gui, TReconfigurableSides theTile) {
 
 		this(gui, defaultSide, theTile);
 	}
 
-	public TabConfiguration(GuiContainerCore gui, int side, IReconfigurableSides theTile) {
+	public <TReconfigurableSides extends IReconfigurableSides & IReconfigurableFacing & ISidedTexture>
+		TabConfiguration(GuiContainerCore gui, int side, TReconfigurableSides theTile) {
 
 		super(gui, side);
 
@@ -43,8 +45,8 @@ public class TabConfiguration extends TabBase {
 		maxHeight = 92;
 		maxWidth = 100;
 		myTileSides = theTile;
-		myTileFacing = (IReconfigurableFacing) theTile;
-		myTileTexture = (ISidedTexture) theTile;
+		myTileFacing = theTile;
+		myTileTexture = theTile;
 	}
 
 	@Override
