@@ -50,7 +50,7 @@ public class TabConfigurationTransfer extends TabBase {
 		myTileSides = theTile;
 		myTileFacing = theTile;
 		myTileTexture = theTile;
-		myTileControl = (ITransferControl) theTile;
+		myTileControl = theTile;
 	}
 
 	@Override
