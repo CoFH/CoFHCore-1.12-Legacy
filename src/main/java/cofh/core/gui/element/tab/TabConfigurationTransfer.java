@@ -29,12 +29,14 @@ public class TabConfigurationTransfer extends TabBase {
 	private ISidedTexture myTileTexture;
 	private ITransferControl myTileControl;
 
-	public TabConfigurationTransfer(GuiContainerCore gui, IReconfigurableSides theTile) {
+	public <TReconfigurableSides extends IReconfigurableSides & IReconfigurableFacing & ITransferControl & ISidedTexture>
+		TabConfigurationTransfer(GuiContainerCore gui, TReconfigurableSides theTile) {
 
 		this(gui, defaultSide, theTile);
 	}
 
-	public TabConfigurationTransfer(GuiContainerCore gui, int side, IReconfigurableSides theTile) {
+	public <TReconfigurableSides extends IReconfigurableSides & IReconfigurableFacing & ITransferControl & ISidedTexture>
+		TabConfigurationTransfer(GuiContainerCore gui, int side, TReconfigurableSides theTile) {
 
 		super(gui, side);
 
@@ -46,8 +48,8 @@ public class TabConfigurationTransfer extends TabBase {
 		maxHeight = 92;
 		maxWidth = 100;
 		myTileSides = theTile;
-		myTileFacing = (IReconfigurableFacing) theTile;
-		myTileTexture = (ISidedTexture) theTile;
+		myTileFacing = theTile;
+		myTileTexture = theTile;
 		myTileControl = (ITransferControl) theTile;
 	}
 
