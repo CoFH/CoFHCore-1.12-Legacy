@@ -39,7 +39,7 @@ public class ItemFishingRodCore extends ItemFishingRod {
 			@SideOnly (Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 
-				return entityIn == null ? 0.0F : (entityIn.getHeldItemMainhand() == stack && entityIn instanceof EntityPlayer && ((EntityPlayer) entityIn).fishEntity != null ? 1.0F : 0.0F);
+				return entityIn == null ? 0.0F : (entityIn.getHeldItemMainhand() == stack || entityIn.getHeldItemOffhand() == stack) && entityIn instanceof EntityPlayer && ((EntityPlayer) entityIn).fishEntity != null ? 1.0F : 0.0F;
 			}
 		});
 	}
