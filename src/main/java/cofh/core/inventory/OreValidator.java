@@ -38,7 +38,7 @@ public class OreValidator {
 
 	public boolean addBlacklist(String oreName) {
 
-		return oreExact.add(oreName);
+		return oreBlacklist.add(oreName);
 	}
 
 }
