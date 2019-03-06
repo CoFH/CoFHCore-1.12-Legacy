@@ -214,7 +214,7 @@ public class EventHandler {
 				entity.world.spawnEntity(new EntityXPOrb(entity.world, entity.posX, entity.posY + 0.5D, entity.posZ, encInsight + entity.world.rand.nextInt(1 + encInsight * 3)));
 			}
 		}
-		if (!CoreProps.enableLivingEntityDeathMessages || entity.world.isRemote || !(entity instanceof EntityLiving) || !event.getEntityLiving().hasCustomName()) {
+		if (!CoreProps.enableLivingEntityDeathMessages || entity.world.isRemote || !(entity instanceof EntityLiving) || !event.getEntityLiving().hasCustomName() || !entity.world.getGameRules().getBoolean("showDeathMessages")) {
 			return;
 		}
 		PlayerList playerList = entity.world.getMinecraftServer().getPlayerList();

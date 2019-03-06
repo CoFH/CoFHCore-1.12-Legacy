@@ -35,8 +35,6 @@ public class CoreEnchantments {
 		smelting = new EnchantmentSmelting("cofhcore:smelting");
 		soulbound = new EnchantmentSoulbound("cofhcore:soulbound");
 		vorpal = new EnchantmentVorpal("cofhcore:vorpal");
-
-		MinecraftForge.EVENT_BUS.register(INSTANCE);
 	}
 
 	/* MUST BE CALLED IN PRE-INIT BY SOMETHING */
