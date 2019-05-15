@@ -1,48 +1,268 @@
-#fr_FR
+#en_US
 
-info.cofh.access=Accès
-info.cofh.accessMode=Mode d'accès
-info.cofh.accessPrivate=Propriétaire Seulement
+chat.cofh.command.clearblocks.failure=Aucun bloc à supprimer.
+chat.cofh.command.clearblocks.start=Suppression de %s blocs de %s:%s:%s to %s:%s:%s.
+chat.cofh.command.clearblocks.success=Suppression avec succès de %s blocs de %s:%s:%s to %s:%s:%s.
+chat.cofh.command.clearblocks.syntax=/cofh clearblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} [block#meta] [block#meta] ...
+chat.cofh.command.clearblocks=Supprime des blocs spécifiques dans une zone précise de la carte.
+
+chat.cofh.command.countblocks.failure=Aucun bloc n'existe dans cette zone.
+chat.cofh.command.countblocks.start=Comptage de %s blocs de %s:%s:%s to %s:%s:%s.
+chat.cofh.command.countblocks.success=Découverte de %s blocs de %s:%s:%s to %s:%s:%s.
+chat.cofh.command.countblocks.syntax=/cofh countblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} [block#meta] [block#meta] ...
+chat.cofh.command.countblocks=Compte des blocs spécifiques dans une zone précise de la carte.
+
+chat.cofh.command.enchant.syntax=/cofh enchant [player] <enchantment ID> [level]
+chat.cofh.command.enchant=Commande /enchant améliorée. N'a pas de limite de niveaux ou d'applicabilité.
+
+chat.cofh.command.friend.0=a été ajouté avec succès à votre liste d'amis.
+chat.cofh.command.friend.1=Désolé, il y a eu un problème pour ajouter
+chat.cofh.command.friend.2=dans votre liste.
+chat.cofh.command.friend.3=Désolé, ce n'est pas un pseudo valide.
+chat.cofh.command.friend.4=a été supprimé avec succès de votre liste d'amis.
+chat.cofh.command.friend.5=n'est pas votre ami.
+chat.cofh.command.friend.syntax=/cofh friend {gui | add <username> | remove <username>}
+chat.cofh.command.friend=Cette commande ajoute ou supprime des joueurs de votre liste d'amis.
+
+chat.cofh.command.help.0=Les commandes disponibles sont :
+chat.cofh.command.help.syntax=/cofh help [command]
+chat.cofh.command.help=La commande qui vous aide avec les autres commandes !
+
+chat.cofh.command.killall.noHostile=Aucune entité hostile n'a été trouvée !
+chat.cofh.command.killall.noMatch=Aucune entité correspondante n'a été trouvée !
+chat.cofh.command.killall.success=Suppresion de %d entités. (%s)
+chat.cofh.command.killall.successHostile=Suppresion de %d entités hostiles. (%s)
+chat.cofh.command.killall.syntax=/cofh killall [partial name]
+chat.cofh.command.killall=Tue toutes les entités avec le nom donné, et tue toutes les entités hostiles par défaut.
+
+chat.cofh.command.notFound=Commande inconnue. Essayez /cofh help pour afficher la liste des commandes.
+
+chat.cofh.command.pregen.start=Pré-génération des tronçons %s de %s:%s to %s:%s.
+chat.cofh.command.pregen.syntax=/cofh pregen {<user> <x chunk radius> <z chunk radius> | <x chunk start> <z chunk start> <x chunk end> <z chunk end>}
+chat.cofh.command.pregen=Pré-génère des tronçons dans une zone précise dans le monde.
+
+chat.cofh.command.reloadworldgen.success=Rechargement de la génération du monde effectuée avec succès.
+chat.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
+chat.cofh.command.reloadworldgen=Recharge la génération du monde depuis le disque.
+
+chat.cofh.command.replaceblocks.failure=Aucun bloc à remplacer.
+chat.cofh.command.replaceblocks.start=Remplacement de %s blocs de %s:%s:%s to %s:%s:%s with %s.
+chat.cofh.command.replaceblocks.success=Remplacement avec succès de %s blocs de %s:%s:%s to %s:%s:%s with %s.
+chat.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<user> <x radius> <y radius> <z radius> | <x start> <y start> <z start> <x end> <y end> <z end>} <replaceBlock#meta> [block#meta] [block#meta] ...
+chat.cofh.command.replaceblocks=Remplace les blocs spécifiés depuis une zone précise du monde.
+
+chat.cofh.command.syntax.syntax=/cofh syntax [command]
+chat.cofh.command.syntax=La commande pour vous aider avec la syntaxe des autres commandes !
+chat.cofh.command.syntaxError=Syntaxe invalide.
+
+chat.cofh.command.tps.syntax=/cofh tps [{o | a | <dim ID>}]
+chat.cofh.command.tps=Obtient le nombre de ticks par seconde sur un serveur. Sur un serveur parfaitement stable, il devrait être autour de 20.
+
+chat.cofh.command.tpx.dimensionOther=Téléportation avec succès de %s vers %2$s en %3$.2f %4$.2f %5$.2f
+chat.cofh.command.tpx.dimensionOtherTo=Téléportation avec succès de %s vers %s dans %3$s en %4$.2f %5$.2f %6$.2f
+chat.cofh.command.tpx.dimensionOtherToSelf=Téléportation avec succès de %s vers lui(elle)-même dans %2$s en %3$.2f %4$.2f %5$.2f
+chat.cofh.command.tpx.dimensionSelf=Téléportation avec succès vers %1$s en %2$.2f %3$.2f %4$.2f
+chat.cofh.command.tpx.other=Téléportation avec succès de %s en %.2f %.2f %.2f
+chat.cofh.command.tpx.otherTo=Téléportation avec succès de %s vers %s en %.2f %.2f %.2f
+chat.cofh.command.tpx.otherToSelf=Téléportation avec succès de %s vers lui(elle)-même en %.2f %.2f %.2f
+chat.cofh.command.tpx.self=Téléportation avec succès en %.2f %.2f %.2f
+chat.cofh.command.tpx.snark.0=Téléportation avec succès vers vous-même !
+chat.cofh.command.tpx.snark.1=Téléportation avec succès de %s vers lui(elle)-même !
+chat.cofh.command.tpx.syntax=/cofh tpx [player] {(<player> | <dimension>) | <x> <y> <z> [dimension]}
+chat.cofh.command.tpx=Une version améliorée de la commande /tp qui fontionne entre les dimensions.
+
+chat.cofh.command.unloadchunk.success=Déchargement des tronçons en %s:%s
+chat.cofh.command.unloadchunk.syntax=/cofh unloadchunk
+chat.cofh.command.unloadchunk=Décharge les tronçons que le joueur regarde.
+
+chat.cofh.command.version.0=Ce mod est en version
+chat.cofh.command.version.syntax=/cofh version
+chat.cofh.command.version=Vous donne la version du mod.
+
+chat.cofh.command.world.notFound=Ce monde n'existe pas.
+
+chat.cofh.secure.block.success=Ce bloc vous appartient désormais.
+chat.cofh.secure.item.success=Cet objet vous appartient désormais.
+chat.cofh.secure.notice=Attention : les administrateurs de serveurs peuvent utiliser librement les blocs 'sécurisés' sur ce serveur.
+chat.cofh.secure.warning=Ceci est privé est appartient à %s ! Vous auriez pu y perdre votre main !
+
+enchantment.cofhcore.holding=Maintient
+enchantment.cofhcore.insight=Perspicacité
+enchantment.cofhcore.leech=Sangsue
+enchantment.cofhcore.multishot=Tir multiple
+enchantment.cofhcore.smashing=Fracassant
+enchantment.cofhcore.smelting=Fonte
+enchantment.cofhcore.soulbound=Lié à l'âme
+enchantment.cofhcore.vorpal=Vorpal
+
+enchantment.cofhcore.holding.desc=Augmente la capacité de stockage de certains objets.
+enchantment.cofhcore.insight.desc=Augmente l'expérience obtenue lors de l'utilisation d'un objet enchanté.
+enchantment.cofhcore.leech.desc=Restaure la vie lorsqu'une entité est tuée.
+enchantment.cofhcore.multishot.desc=L'arc tirera des flèches additionnelles pour chaque coup. Seule une flèche est consommée.
+enchantment.cofhcore.smashing.desc=Les minerais minés seront fracassés en morceaux, améliorant le rendement.
+enchantment.cofhcore.smelting.desc=Les blocs minés seront automatiquement fondus, comme le ferait un fourneau.
+enchantment.cofhcore.soulbound.desc=L'objet reste dans l'inventaire du propriétaire même après la mort.
+enchantment.cofhcore.vorpal.desc=Effectue des attaques et décapitations aléatoires.
+
+fluid.tconstruct.alubrass=Aluminum cuivré en fusion
+fluid.tconstruct.aluminum=Aluminium en fusion 
+fluid.tconstruct.ardite=Ardite en fusion
+fluid.tconstruct.blood=Sang
+fluid.tconstruct.blueslime=Slime bleu liquide
+fluid.tconstruct.brass=Laiton en fusion
+fluid.tconstruct.bronze=Bronze en fusion
+fluid.tconstruct.clay=Argile en fusion
+fluid.tconstruct.cobalt=Cobalt en fusion
+fluid.tconstruct.copper=Cuivre en fusion
+fluid.tconstruct.dirt=Terre liquide
+fluid.tconstruct.electrum=Électrum en fusion
+fluid.tconstruct.emerald=Émeraude en fusion
+fluid.tconstruct.glass=Verre en fusion
+fluid.tconstruct.gold=Or en fusion
+fluid.tconstruct.iron=Fer en fusion
+fluid.tconstruct.knightslime=Knightslime en fusion
+fluid.tconstruct.lead=Plomb en fusion
+fluid.tconstruct.manyullyn=Manyullyn en fusion
+fluid.tconstruct.milk=Lait
+fluid.tconstruct.nickel=Nickel en fusion
+fluid.tconstruct.obsidian=Obsidienne en fusion
+fluid.tconstruct.pigiron=Fonte brute en fusion
+fluid.tconstruct.purpleslime=Slime violet liquide
+fluid.tconstruct.silver=Argent en fusion
+fluid.tconstruct.steel=Acier en fusion
+fluid.tconstruct.stone=Pierre brûlée
+fluid.tconstruct.tin=Étain en fusion
+fluid.tconstruct.zinc=Zinc en fusion
+fluid.tile.lava=Lave
+fluid.tile.water=Eau
+
+gui.cofh.friendList=Liste d'amis
+
+gui.cofh.transferInDisabled=Entrée automatique désactivée
+gui.cofh.transferInEnabled=Entrée automatique activée
+gui.cofh.transferInUnavailable=Entrée automatique indisponible
+
+gui.cofh.transferOutDisabled=Sortie automatique désactivée
+gui.cofh.transferOutEnabled=Sortie automatique activée
+gui.cofh.transferOutUnavailable=Sortie automatique indisponible
+
+info.cofh.access=Accès 
+info.cofh.accessPrivate=Propriétaire seul.
 info.cofh.accessPublic=Public
 info.cofh.accessRestricted=Restreint
-info.cofh.all=Tous
+info.cofh.accessTeam=Équipe seul.
 info.cofh.amount=Montant
-info.cofh.blank=Vierge
-info.cofh.contents=Contenu
-info.cofh.controlStatus=Statut de Control
-info.cofh.damageAttack=Dommage d'attaque
-info.cofh.damageFlux=Dommage de Flux
+info.cofh.anotherplayer=Autre joueur
+info.cofh.area=Zone
+info.cofh.arrows=Flèches
+info.cofh.augmentation=Amélioration
+info.cofh.blank=Vide
+info.cofh.capacity=Capacité
+info.cofh.chance=Chance
+info.cofh.charge=Charge
+info.cofh.configuration=Configuration
+info.cofh.contents=Contenus
+info.cofh.controlStatus=Contrôle de statut 
+info.cofh.damageAttack=Dégâts
+info.cofh.damageFlux=Dégâts fluxés
 info.cofh.disabled=Désactivé
+info.cofh.duration=Durée
 info.cofh.empty=Vide
 info.cofh.enabled=Activé
 info.cofh.energy=Énergie
-info.cofh.energyConsume=Consommation d'énergie
-info.cofh.energyMax=Énergie Maximale
-info.cofh.energyProduce=Énergie produite
-info.cofh.energyStored=Énergie Stockée
+info.cofh.energyConsume=Consomm. éner.  
+info.cofh.energyMax=Énergie maximum 
+info.cofh.energyProduce=Énergie créée 
+info.cofh.energyStored=Énergie stockée 
+info.cofh.experience=Expérience 
+info.cofh.filter.list.off=Liste noire
+info.cofh.filter.list.on=Liste blanche
+info.cofh.filter.metadata.off=Ignorer les metadatas
+info.cofh.filter.metadata.on=Utiliser les metadatas
+info.cofh.filter.nbt.off=Ignorer les NBT
+info.cofh.filter.nbt.on=Utiliser les NBT
+info.cofh.filter.oreDict.off=Ignorer le dictionnaire de minerais
+info.cofh.filter.oreDict.on=Utiliser le dictionnaire de minerais
+info.cofh.filter=Filtrer
 info.cofh.fluid=Fluide
-info.cofh.frequency=Fréquence
-info.cofh.high=État Haut
+info.cofh.fluids=Fluides
+info.cofh.high=Haut
+info.cofh.holdShiftForDetails=Maintenir §e§oShift§r§7 pour plus de détails§r
 info.cofh.ignored=Ignoré
 info.cofh.infinite=Infini
+info.cofh.infiniteEnergy=RF infini
+info.cofh.infiniteFluid=Fluide infini
+info.cofh.infiniteSource=Source infinie
+info.cofh.information=Information
 info.cofh.item=Objet
 info.cofh.items=Objets
+info.cofh.input=Entrée
 info.cofh.level=Niveau
-info.cofh.locked=Fermé
-info.cofh.low=État Bas
-info.cofh.none=Aucune
-info.cofh.owner=Propriétaire
-info.cofh.press=Presser
+info.cofh.locked=Verrouillé
+info.cofh.low=Bas
+info.cofh.modeChange=pour changer de mode
+info.cofh.none=Aucun
+info.cofh.output=Sortie
+info.cofh.owner=Propriétaire 
+info.cofh.perUse=Par utilisation
+info.cofh.potency=Potence
+info.cofh.radius=Radius
 info.cofh.receive=Recevoir
-info.cofh.receiving=Reçoit
-info.cofh.redstoneControl=Contrôle de Redstone
+info.cofh.redstoneControl=Contrô. redstone
 info.cofh.security=Sécurité
 info.cofh.send=Envoyer
-info.cofh.sending=Envoie
-info.cofh.signalRequired=Signal nécessaire
-info.cofh.tutorial.fluxRequired=A besoin d'un signal de redstone pour fonctionner.
-info.cofh.tutorial.tabRedstone=L'onglet de Contrôle Redstone configure la façon dont cette machine réagit à la Redstone.
+info.cofh.signalDisabled=Signal : §4Désactivé§r
+info.cofh.signalEnabledHigh=Signal : §aActivé§7, Haut§r
+info.cofh.signalEnabledLow=Signal : §aActivé§7, Bas§r
+info.cofh.signalRequired=Signal requis 
+info.cofh.steam=Vapeur
+info.cofh.steamConsume=Consommation de vapeur
+info.cofh.steamMax=Vapeur maximum
+info.cofh.steamProduce=Sortie de vapeur
+info.cofh.steamStored=Vapeur stockée
+info.cofh.stored=Stocké
+info.cofh.tutorial.fluxRequired=Requiert du Redstone Flux (RF) pour fonctionner.
+info.cofh.tutorial.tabAugment=L'onglet Amélioration permet d'ajouter des modules.
+info.cofh.tutorial.tabConfiguration=L'onglet Configuration détermine les paramètres d'entrée et sortie de ce bloc.
+info.cofh.tutorial.tabRedstone=L'onglet de Contrôle redstone configure la manière dont ce bloc réagit aux signaux redstone.
+info.cofh.tutorial.tabSecurity=L'onglet Sécurité permet au propriétaire de contrôler qui a accès à ce bloc.
 info.cofh.tutorial=Tutoriel
 info.cofh.unlocked=Déverrouillé
+info.cofh.upgradeRequired=Amélioration requise
 
-item.invalid.name=Objet Invalide (Détruire)
+item.invalid.name=Objet invalide (Détruire)
+
+key.cofh.augments=Ouvrir l'interface d'améliorations
+key.cofh.category=Contrôles de CoFH
+key.cofh.multimode=Mode d'objet de cycle
+
+lingering_potion.effect.absorption=Potion d'absorption persistante
+lingering_potion.effect.haste=Potion de célérité persistante
+lingering_potion.effect.resistance=Potion de résistance persistante
+lingering_potion.effect.unluck=Potion de malchance persistante
+lingering_potion.effect.wither=Potion de Wither persistante
+
+potion.effect.absorption=Potion d'absorption
+potion.effect.haste=Potion de célérité
+potion.effect.resistance=Potion de résistance
+potion.effect.unluck=Potion de malchance
+potion.effect.wither=Potion de Wither
+
+potion.potency.3=IV
+potion.potency.4=V
+
+splash_potion.effect.absorption=Potion d'absorption jetable
+splash_potion.effect.haste=Potion de célérité jetable
+splash_potion.effect.resistance=Potion de résistance jetable
+splash_potion.effect.unluck=Potion de malchance jetable
+splash_potion.effect.wither=Potion de Wither jetable
+
+tab.cofh.friendList.0=Utilisez cette liste pour ajouter ou supprimer des amis !
+tab.cofh.friendList.1=Les amis peuvent accéder à vos blocs et objets sécurisés, si vous les en autorisez.
+tab.cofh.friendList.2=Les amis ne sont pas fournis.
+
+tipped_arrow.effect.absorption=Flèche d'absorption
+tipped_arrow.effect.haste=Flèche de célérité
+tipped_arrow.effect.resistance=Flèche de résistance
+tipped_arrow.effect.unluck=Flèche de malchance
+tipped_arrow.effect.wither=Flèche de Wither
