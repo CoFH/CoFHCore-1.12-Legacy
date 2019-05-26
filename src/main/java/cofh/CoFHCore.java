@@ -79,6 +79,8 @@ public class CoFHCore {
 		PacketHandler.preInit();
 		addOreDictionaryEntries();
 
+		CoreEnchantments.register();
+
 		/* Register Handlers */
 		registerHandlers();
 
