@@ -42,6 +42,7 @@ public class ProxyClient extends Proxy {
 
 		MinecraftForge.EVENT_BUS.register(EventHandlerClient.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(EventHandlerRender.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(EventHandlerPartitionedModel.INSTANCE);
 
 		Minecraft.memoryReserve = null;
 		ShaderHelper.initShaders();
