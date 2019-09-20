@@ -649,7 +649,7 @@ public abstract class TileAugmentableSecure extends TileRSControl implements IAu
 	@Override
 	public ITextComponent getDisplayName() {
 
-		return new TextComponentString(getName());
+		return (hasCustomName() ? new TextComponentString(getName()) : new TextComponentTranslation(getName()));
 	}
 
 }
