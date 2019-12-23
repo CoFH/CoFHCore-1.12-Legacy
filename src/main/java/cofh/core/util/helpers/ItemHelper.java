@@ -263,7 +263,7 @@ public final class ItemHelper {
 	 */
 	public static int getItemDamage(ItemStack stack) {
 
-		return Items.DIAMOND.getDamage(stack);
+		return Items.DIAMOND.getMetadata(stack);
 	}
 
 	/**
