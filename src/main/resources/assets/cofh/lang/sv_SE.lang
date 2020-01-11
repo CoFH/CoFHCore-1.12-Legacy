@@ -1,0 +1,268 @@
+#sv_SE
+
+chat.cofh.command.clearblocks.failure=Det finns inga block att rensa.
+chat.cofh.command.clearblocks.start=Rensade %s block från %s:%s:%s till %s:%s:%s.
+chat.cofh.command.clearblocks.success=Rensade %s block från %s:%s:%s till %s:%s:%s.
+chat.cofh.command.clearblocks.syntax=/cofh clearblocks {<användare> <x-radie> <y-radie> <z-radie> | <x-start> <y-start> <z-start> <x-slut> <y-slut> <z-slut>} [block#metadata] [block#metadata] ...
+chat.cofh.command.clearblocks=Rensar angivna block från ett specifikt område i världen.
+
+chat.cofh.command.countblocks.failure=Det finns inga block i området.
+chat.cofh.command.countblocks.start=Räknar %s block från %s:%s:%s till %s:%s:%s.
+chat.cofh.command.countblocks.success=Hittade %s block från %s:%s:%s till %s:%s:%s.
+chat.cofh.command.countblocks.syntax=/cofh countblocks {<användare> <x-radie> <y-radie> <z-radie> | <x-start> <y-start> <z-start> <x-slut> <y-slut> <z-slut>} [block#metadata] [block#metadata] ...
+chat.cofh.command.countblocks=Räknar angivna block från ett specifikt område i världen.
+
+chat.cofh.command.enchant.syntax=/cofh enchant [spelare] <förtrollnings-ID> [nivå]
+chat.cofh.command.enchant=En förbättrad version av /enchant. Har inga gränser för antalet nivåer eller hur förtrollningar kan läggas på föremål.
+
+chat.cofh.command.friend.0=lades till i din vänlista.
+chat.cofh.command.friend.1=Tyvärr, ett fel uppstod när
+chat.cofh.command.friend.2=skulle läggas till i din lista.
+chat.cofh.command.friend.3=Tyvärr, detta är inte ett giltigt användarnamn.
+chat.cofh.command.friend.4=togs bort från din vänlista.
+chat.cofh.command.friend.5=finns inte i din vänlista.
+chat.cofh.command.friend.syntax=/cofh friend {gui | add <användarnamn> | remove <användarnamn>}
+chat.cofh.command.friend=Kommandot för att ta bort vänner från din vänlista.
+
+chat.cofh.command.help.0=Tillgängliga kommandon är:
+chat.cofh.command.help.syntax=/cofh help [kommando]
+chat.cofh.command.help=Kommandot för att hjälpa dig med andra kommandon!
+
+chat.cofh.command.killall.noHostile=Inga fientliga varelser hittades!
+chat.cofh.command.killall.noMatch=Inga matchande entiteter hittades!
+chat.cofh.command.killall.success=Tog bort %d entiteter. (%s)
+chat.cofh.command.killall.successHostile=Tog bort %d fientliga varelser. (%s)
+chat.cofh.command.killall.syntax=/cofh killall [ofullständigt namn]
+chat.cofh.command.killall=Dödar alla entiteter med angivet namn och dödar alla fientliga monster som standard.
+
+chat.cofh.command.notFound=Okänt kommando. Prova /cofh help för en lista över kommandon
+
+chat.cofh.command.pregen.start=Förhandsgenererar från %s:%s till %s:%s.
+chat.cofh.command.pregen.syntax=/cofh pregen {<användare> <datablockets x-radie> <datablockets z-radie> | <datablockets start-x> <datablockets start-z> <datablockets slut-x> <datablockets slut-z>}
+chat.cofh.command.pregen=Förhandsgenererar datablock inom ett specifikt område i världen.
+
+chat.cofh.command.reloadworldgen.success=Laddade om världsgenereringen.
+chat.cofh.command.reloadworldgen.syntax=/cofh reloadworldgen
+chat.cofh.command.reloadworldgen=Uppdaterade världsgenereringen från hårddisken.
+
+chat.cofh.command.replaceblocks.failure=Inga block att ersätta.
+chat.cofh.command.replaceblocks.start=Ersatte %s block från %s:%s:%s till %s:%s:%s med %s.
+chat.cofh.command.replaceblocks.success=Ersatte %s block från %s:%s:%s till %s:%s:%s med %s.
+chat.cofh.command.replaceblocks.syntax=/cofh replaceblocks {<användare> <x-radie> <y-radie> <z-radie> | <x-start> <y-start> <z-start> <x-slut> <y-slut> <z-slut>} <ersättningsblock#metadata> [block#metadata] [block#metadata] ...
+chat.cofh.command.replaceblocks=Ersätter angivna block från ett specifikt område i världen.
+
+chat.cofh.command.syntax.syntax=/cofh syntax [kommando]
+chat.cofh.command.syntax=Kommandot som hjälper dig med syntaxen för andra kommandon!
+chat.cofh.command.syntaxError=Ogiltig syntax.
+
+chat.cofh.command.tps.syntax=/cofh tps [{o | a | <dimensionens ID>}]
+chat.cofh.command.tps=Hämtar antalet tick per sekunder på servern. På en perfekt server bär detta vara 20.
+
+chat.cofh.command.tpx.dimensionOther=Teleporterade %s till %2$s vid %3$.2f %4$.2f %5$.2f
+chat.cofh.command.tpx.dimensionOtherTo=Teleporterade %s till %s i %3$s vid %4$.2f %5$.2f %6$.2f
+chat.cofh.command.tpx.dimensionOtherToSelf=Teleporterade %s till sig själv i %2$s vid %3$.2f %4$.2f %5$.2f
+chat.cofh.command.tpx.dimensionSelf=Teleporterade till %1$s vid %2$.2f %3$.2f %4$.2f
+chat.cofh.command.tpx.other=Teleporterade %s till %.2f %.2f %.2f
+chat.cofh.command.tpx.otherTo=Teleporterade %s till %s vid %.2f %.2f %.2f
+chat.cofh.command.tpx.otherToSelf=Teleporterade %s till sig själv vid %.2f %.2f %.2f
+chat.cofh.command.tpx.self=Teleporterade till %.2f %.2f %.2f
+chat.cofh.command.tpx.snark.0=Teleporterade dig till dig själv!
+chat.cofh.command.tpx.snark.1=Teleporterade %s till sig själv!
+chat.cofh.command.tpx.syntax=/cofh tpx [spelare] {(<spelare> | <dimension>) | <x> <y> <z> [dimension]}
+chat.cofh.command.tpx=En förbättrad version av kommandot /tp som fungerar mellan dimensioner.
+
+chat.cofh.command.unloadchunk.success=Slutade hålla datablocket vid %s:%s inläst
+chat.cofh.command.unloadchunk.syntax=/cofh unloadchunk
+chat.cofh.command.unloadchunk=Slutade hålla datablocket som spelaren tittar på inläst.
+
+chat.cofh.command.version.0=Denna mod har versionen
+chat.cofh.command.version.syntax=/cofh version
+chat.cofh.command.version=Ger dig versionen för denna mod.
+
+chat.cofh.command.world.notFound=Världen finns inte.
+
+chat.cofh.secure.block.success=Detta block tillhör dig nu.
+chat.cofh.secure.item.success=Detta föremål tillhör nu dig.
+chat.cofh.secure.notice=OBS: Serveroperatörer kan komma åt säkrade block på denna server.
+chat.cofh.secure.warning=Detta är privat och tillhör %s! Du kunde ha förlorat din hand!
+
+enchantment.cofhcore.holding=Packåsna
+enchantment.cofhcore.insight=Skarpsinnighet
+enchantment.cofhcore.leech=Livstöld
+enchantment.cofhcore.multishot=Multiskott
+enchantment.cofhcore.smashing=Krossande
+enchantment.cofhcore.smelting=Smältande
+enchantment.cofhcore.soulbound=Själbunden
+enchantment.cofhcore.vorpal=Avhuggande
+
+enchantment.cofhcore.holding.desc=Ökar lagringskapaciteten för vissa föremål.
+enchantment.cofhcore.insight.desc=Ökar mängden erfarenhet när föremålet används.
+enchantment.cofhcore.leech.desc=Återställer hälsa när en varelse dör.
+enchantment.cofhcore.multishot.desc=Pilbågen avfyrar flera pilar varje gång den avfyras. Endast en pil kommer att används.
+enchantment.cofhcore.smashing.desc=Krossar bruten malm och ökar mängden som samlas in.
+enchantment.cofhcore.smelting.desc=Smälter ned brutna block som om de kom direkt från en ugn.
+enchantment.cofhcore.soulbound.desc=Föremålet stannar kvar med ägaren efter olägliga dödsfall.
+enchantment.cofhcore.vorpal.desc=Utför kraftfulla attacker och hugger emellanåt huvudet av monster.
+
+fluid.tconstruct.alubrass=Nedsmält aluminiummässing
+fluid.tconstruct.aluminum=Nedsmält aluminum
+fluid.tconstruct.ardite=Nedsmält ardite
+fluid.tconstruct.blood=Blod
+fluid.tconstruct.blueslime=Flytande blått slem
+fluid.tconstruct.brass=Nedsmält mässing
+fluid.tconstruct.bronze=Nedsmält brons
+fluid.tconstruct.clay=Nedsmält lera
+fluid.tconstruct.cobalt=Nedsmält kobolt
+fluid.tconstruct.copper=Nedsmält koppar
+fluid.tconstruct.dirt=Flytande jord
+fluid.tconstruct.electrum=Nedsmält elektrum
+fluid.tconstruct.emerald=Nedsmält smaragd
+fluid.tconstruct.glass=Nedsmält glas
+fluid.tconstruct.gold=Nedsmält guld
+fluid.tconstruct.iron=Nedsmält järn
+fluid.tconstruct.knightslime=Nedsmält riddarslem
+fluid.tconstruct.lead=Nedsmält bly
+fluid.tconstruct.manyullyn=Nedsmält manyullyn
+fluid.tconstruct.milk=Mjölk
+fluid.tconstruct.nickel=Nedsmält nickel
+fluid.tconstruct.obsidian=Nedsmält obsidian
+fluid.tconstruct.pigiron=Nedsmält grisjärn
+fluid.tconstruct.purpleslime=Flytande lila slem
+fluid.tconstruct.silver=Nedsmält silver
+fluid.tconstruct.steel=Nedsmält stål
+fluid.tconstruct.stone=Bränd sten
+fluid.tconstruct.tin=Nedsmält tenn
+fluid.tconstruct.zinc=Nedsmält zink
+fluid.tile.lava=Lava
+fluid.tile.water=Vatten
+
+gui.cofh.friendList=Vänlista
+
+gui.cofh.transferInDisabled=Autoinmatning är inaktiverad
+gui.cofh.transferInEnabled=Autoinmatning är aktiverad
+gui.cofh.transferInUnavailable=Autoinmatning är otillgänglig
+
+gui.cofh.transferOutDisabled=Autoutmatning är inaktiverad
+gui.cofh.transferOutEnabled=Autoutmatning är aktiverad
+gui.cofh.transferOutUnavailable=Autoutmatning är otillgänglig
+
+info.cofh.access=Åtkomst
+info.cofh.accessPrivate=Endast ägare
+info.cofh.accessPublic=Offentlig åtkomst
+info.cofh.accessRestricted=Begränsad
+info.cofh.accessTeam=Endast lag
+info.cofh.amount=Mängd
+info.cofh.anotherplayer=En annan spelare
+info.cofh.area=Område
+info.cofh.arrows=Pilar
+info.cofh.augmentation=Förbättring
+info.cofh.blank=Blank
+info.cofh.capacity=Kapacitet
+info.cofh.chance=Chans
+info.cofh.charge=Ladda upp
+info.cofh.configuration=Konfigurering
+info.cofh.contents=Innehåll
+info.cofh.controlStatus=Kontrolstatus
+info.cofh.damageAttack=Attackskada
+info.cofh.damageFlux=Fluxskada
+info.cofh.disabled=Inaktiverad
+info.cofh.duration=Varaktighet
+info.cofh.empty=Tom
+info.cofh.enabled=Aktiverad
+info.cofh.energy=Energi
+info.cofh.energyConsume=Strömanvändning
+info.cofh.energyMax=Maximal ström
+info.cofh.energyProduce=Strömutmatning
+info.cofh.energyStored=Lagrad energi
+info.cofh.experience=Erfarenhet
+info.cofh.filter.list.off=Svartlista
+info.cofh.filter.list.on=Vitlista
+info.cofh.filter.metadata.off=Ignorera metadata
+info.cofh.filter.metadata.on=Använd metadata
+info.cofh.filter.nbt.off=Ignorera NBT
+info.cofh.filter.nbt.on=Använd NBT
+info.cofh.filter.oreDict.off=Ignorera Ore Dictionary
+info.cofh.filter.oreDict.on=Använd Ore Dictionary
+info.cofh.filter=Filter
+info.cofh.fluid=Vätska
+info.cofh.fluids=Vätskor
+info.cofh.high=Hög
+info.cofh.holdShiftForDetails=Håll ned §e§oShift§r§7 för information§r
+info.cofh.ignored=Ignorerad
+info.cofh.infinite=Oändlig
+info.cofh.infiniteEnergy=Oändlig RF
+info.cofh.infiniteFluid=Oändlig vätska
+info.cofh.infiniteSource=Oändlig källa
+info.cofh.information=Information
+info.cofh.item=Föremål
+info.cofh.items=Föremål
+info.cofh.input=Inmatning
+info.cofh.level=Nivå
+info.cofh.locked=Låst
+info.cofh.low=Låg
+info.cofh.modeChange=för att ändra läge
+info.cofh.none=Ingen
+info.cofh.output=Utmatning
+info.cofh.owner=Ägare
+info.cofh.perUse=Per användning
+info.cofh.potency=Potens
+info.cofh.radius=Radie
+info.cofh.receive=Hämta
+info.cofh.redstoneControl=Redstonekontroll
+info.cofh.security=Säkerhet
+info.cofh.send=Skicka
+info.cofh.signalDisabled=Signal: §4Inaktiverad§r
+info.cofh.signalEnabledHigh=Signal: §aAktiverad§7, hög§r
+info.cofh.signalEnabledLow=Signal: §aAktiverad§7, låg§r
+info.cofh.signalRequired=Signal krävs
+info.cofh.steam=Ånga
+info.cofh.steamConsume=Ånganvändning
+info.cofh.steamMax=Maximal ånga
+info.cofh.steamProduce=Ångutmatning
+info.cofh.steamStored=Lagrad ånga
+info.cofh.stored=Lagrad
+info.cofh.tutorial.fluxRequired=Kräver Redstone Flux för att fungera.
+info.cofh.tutorial.tabAugment=Förbättringsfliken gör det möjligt att lägga till moduler.
+info.cofh.tutorial.tabConfiguration=Konfigureringsfliken bestämmer inmatning- och utmatningsparametrarna för detta block.
+info.cofh.tutorial.tabRedstone=Redstonekontrollsfliken konfigurerar hur detta block reagerar på redstonesignaler.
+info.cofh.tutorial.tabSecurity=Säkerhetsfliken låter ägaren kontrollera vem som kan komma åt detta block.
+info.cofh.tutorial=Handledning
+info.cofh.unlocked=Upplåst
+info.cofh.upgradeRequired=Uppgradering krävs
+
+item.invalid.name=Ogiltigt föremål (förstör)
+
+key.cofh.augments=Öppna gränssnittet för Spelarförbättringar
+key.cofh.category=Kontroller för CoFH
+key.cofh.multimode=Växla föremålsläge
+
+lingering_potion.effect.absorption=Kvardröjande absorberingsbrygd
+lingering_potion.effect.haste=Kvardröjande skyndsamhetsbrygd
+lingering_potion.effect.resistance=Kvardröjande resistansbrygd
+lingering_potion.effect.unluck=Kvardröjande otursbrygd
+lingering_potion.effect.wither=Kvardröjande vissningsbrygd
+
+potion.effect.absorption=Absorberingsbrygd
+potion.effect.haste=Skyndsamhetsbrygd
+potion.effect.resistance=Resistansbrygd
+potion.effect.unluck=Otursbrygd
+potion.effect.wither=Vissningsbrygd
+
+potion.potency.3=IV
+potion.potency.4=V
+
+splash_potion.effect.absorption=Kastbar absorberingsbrygd
+splash_potion.effect.haste=Kastbar skyndsamhetsbrygd
+splash_potion.effect.resistance=Kastbar resistansbrygd
+splash_potion.effect.unluck=Kastbar otursbrygd
+splash_potion.effect.wither=Kastbar vissningsbrygd
+
+tab.cofh.friendList.0=Använd detta för att lägga till och ta bort vänner!
+tab.cofh.friendList.1=Vänner kan komma åt dina säkrade block och föremål, om du tillåter dem att göra det.
+tab.cofh.friendList.2=Vänner ingår inte.
+
+tipped_arrow.effect.absorption=Absorberingspil
+tipped_arrow.effect.haste=Skyndsamhetspil
+tipped_arrow.effect.resistance=Resistanspil
+tipped_arrow.effect.unluck=Oturspil
+tipped_arrow.effect.wither=Vissningspil
