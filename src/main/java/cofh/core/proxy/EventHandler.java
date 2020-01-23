@@ -10,6 +10,7 @@ import cofh.core.enchantment.EnchantmentVorpal;
 import cofh.core.init.CoreEnchantments;
 import cofh.core.init.CoreProps;
 import cofh.core.item.tool.ItemShieldCore;
+import cofh.core.util.helpers.BaublesHelper;
 import cofh.core.util.helpers.ItemHelper;
 import cofh.core.util.helpers.MathHelper;
 import cofh.core.util.helpers.NBTHelper;
@@ -507,6 +508,12 @@ public class EventHandler {
 		for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 			ItemStack stack = player.inventory.getStackInSlot(i);
 			if (isQuiver(stack) && !((IToolQuiver) stack.getItem()).isEmpty(stack, player) || isArrow(stack)) {
+				return stack;
+			}
+		}
+		Iterable<ItemStack> baubles = BaublesHelper.getBaubles(player);
+		for(ItemStack stack: baubles) {
+			if (isQuiver(stack) && !((IToolQuiver) stack.getItem()).isEmpty(stack, player)) {
 				return stack;
 			}
 		}
