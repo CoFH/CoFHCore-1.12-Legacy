@@ -86,12 +86,12 @@ chat.cofh.secure.item.success=このアイテムはあなたの物となりま�
 chat.cofh.secure.notice=注意: サーバー管理者はサーバー上のセキュリティの設定されたアイテムであっても、自由にアクセスできます
 chat.cofh.secure.warning=これは %s のみにアクセスが限定されています
 
-enchantment.cofhcore.holding=容量拡張
+enchantment.cofhcore.holding=容量アップ
 enchantment.cofhcore.insight=経験値アップ
 enchantment.cofhcore.leech=体力吸収
 enchantment.cofhcore.multishot=マルチショット
 enchantment.cofhcore.smashing=粉砕
-enchantment.cofhcore.smelting=自動精錬
+enchantment.cofhcore.smelting=精錬
 enchantment.cofhcore.soulbound=ソウルバウンド
 enchantment.cofhcore.vorpal=首狩り
 
