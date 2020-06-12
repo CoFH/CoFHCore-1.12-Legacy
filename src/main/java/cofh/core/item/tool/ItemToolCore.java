@@ -234,7 +234,7 @@ public abstract class ItemToolCore extends ItemTool {
 	@Override
 	public float getDestroySpeed(ItemStack stack, IBlockState state) {
 
-		return (getEffectiveMaterials(stack).contains(state.getMaterial()) || getEffectiveBlocks(stack).contains(state)) ? getEfficiency(stack) : 1.0F;
+		return (getEffectiveMaterials(stack).contains(state.getMaterial()) || getEffectiveBlocks(stack).contains(state.getBlock())) ? getEfficiency(stack) : 1.0F;
 	}
 
 	@Override
