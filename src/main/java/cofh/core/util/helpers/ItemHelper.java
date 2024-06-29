@@ -313,6 +313,26 @@ public final class ItemHelper {
 		return oreProxy.oreNameExists(oreName);
 	}
 
+	public static boolean doesMultiOreStartWith(ItemStack stack, String prefix) {
+		List<Integer> oreIds = oreProxy.getAllOreIDs(stack);
+		for(int id : oreIds) {
+			if(OreDictionary.getOreName(id).startsWith(prefix)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean doesMultiOreMatch(ItemStack stack, String oreName) {
+		List<Integer> oreIds = oreProxy.getAllOreIDs(stack);
+		for(int id : oreIds) {
+			if(OreDictionary.getOreName(id).equals(oreName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static boolean hasOreName(ItemStack stack) {
 
 		return !getOreName(stack).equals("Unknown");
@@ -320,47 +340,47 @@ public final class ItemHelper {
 
 	public static boolean isBlock(ItemStack stack) {
 
-		return getOreName(stack).startsWith(BLOCK);
+		return doesMultiOreStartWith(stack, BLOCK);
 	}
-
+	
 	public static boolean isOre(ItemStack stack) {
 
-		return getOreName(stack).startsWith(ORE);
+		return doesMultiOreStartWith(stack, ORE);
 	}
 
 	public static boolean isCluster(ItemStack stack) {
 
-		return getOreName(stack).startsWith(CLUSTER);
+		return doesMultiOreStartWith(stack, CLUSTER);
 	}
 
 	public static boolean isDust(ItemStack stack) {
 
-		return getOreName(stack).startsWith(DUST);
+		return doesMultiOreStartWith(stack, DUST);
 	}
 
 	public static boolean isIngot(ItemStack stack) {
 
-		return getOreName(stack).startsWith(INGOT);
+		return doesMultiOreStartWith(stack, INGOT);
 	}
 
 	public static boolean isPlate(ItemStack stack) {
 
-		return getOreName(stack).startsWith(PLATE);
+		return doesMultiOreStartWith(stack, PLATE);
 	}
 
 	public static boolean isCoin(ItemStack stack) {
 
-		return getOreName(stack).startsWith(COIN);
+		return doesMultiOreStartWith(stack, COIN);
 	}
 
 	public static boolean isNugget(ItemStack stack) {
 
-		return getOreName(stack).startsWith(NUGGET);
+		return doesMultiOreStartWith(stack, NUGGET);
 	}
 
 	public static boolean isLog(ItemStack stack) {
 
-		return getOreName(stack).startsWith(LOG);
+		return doesMultiOreStartWith(stack, LOG);
 	}
 
 	public static void registerWithHandlers(String oreName, ItemStack stack) {
