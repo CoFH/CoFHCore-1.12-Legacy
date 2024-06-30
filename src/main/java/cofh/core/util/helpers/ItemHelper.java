@@ -1,9 +1,16 @@
 package cofh.core.util.helpers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.base.Strings;
+
 import cofh.api.item.IInventoryContainerItem;
 import cofh.api.item.IMultiModeItem;
+import cofh.core.inventory.ComparableItemStack;
 import cofh.core.util.OreDictionaryProxy;
-import com.google.common.base.Strings;
+import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,9 +26,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.oredict.OreDictionary;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Contains various helper functions to assist with {@link Item} and {@link ItemStack} manipulation and interaction.
@@ -317,51 +321,137 @@ public final class ItemHelper {
 
 		return !getOreName(stack).equals("Unknown");
 	}
+	
+	private static Map<ComparableItemStack, Boolean> blockOverride 		= new Object2BooleanOpenHashMap<ComparableItemStack>();
+	private static Map<ComparableItemStack, Boolean> oreOverride 		= new Object2BooleanOpenHashMap<ComparableItemStack>();
+	private static Map<ComparableItemStack, Boolean> clusterOverride 	= new Object2BooleanOpenHashMap<ComparableItemStack>();
+	private static Map<ComparableItemStack, Boolean> dustOverride		= new Object2BooleanOpenHashMap<ComparableItemStack>();
+	private static Map<ComparableItemStack, Boolean> ingotOverride  	= new Object2BooleanOpenHashMap<ComparableItemStack>();
+	private static Map<ComparableItemStack, Boolean> plateOverride 		= new Object2BooleanOpenHashMap<ComparableItemStack>();
+	private static Map<ComparableItemStack, Boolean> coinOverride  		= new Object2BooleanOpenHashMap<ComparableItemStack>();
+	private static Map<ComparableItemStack, Boolean> nuggetOverride 	= new Object2BooleanOpenHashMap<ComparableItemStack>();
+	private static Map<ComparableItemStack, Boolean> logOverride	 	= new Object2BooleanOpenHashMap<ComparableItemStack>();
+	
 
+	public static void setIsBlockOverride(ItemStack stack, boolean value) {
+		blockOverride.put(new ComparableItemStack(stack), value);
+	}
+	
+	public static void setIsOreOverride(ItemStack stack, boolean value) {
+		oreOverride.put(new ComparableItemStack(stack), value);
+	}
+	
+	public static void setIsClusterOverride(ItemStack stack, boolean value) {
+		clusterOverride.put(new ComparableItemStack(stack), value);
+	}
+	
+	public static void setIsDustOverride(ItemStack stack, boolean value) {
+		dustOverride.put(new ComparableItemStack(stack), value);
+	}
+	
+	public static void setIsIngotOverride(ItemStack stack, boolean value) {
+		ingotOverride.put(new ComparableItemStack(stack), value);
+	}
+	
+	public static void setIsPlateOverride(ItemStack stack, boolean value) {
+		plateOverride.put(new ComparableItemStack(stack), value);
+	}
+	
+	public static void setIsCoinOverride(ItemStack stack, boolean value) {
+		coinOverride.put(new ComparableItemStack(stack), value);
+	}
+	
+	public static void setIsNuggetOverride(ItemStack stack, boolean value) {
+		nuggetOverride.put(new ComparableItemStack(stack), value);
+	}
+	
+	public static void setIsLogOverride(ItemStack stack, boolean value) {
+		logOverride.put(new ComparableItemStack(stack), value);
+	}
+	
+	
+	public static Boolean deleteIsBlockOverride(ItemStack stack) {
+		return blockOverride.remove(new ComparableItemStack(stack));
+	}
+	
+	public static Boolean deleteIsOreOverride(ItemStack stack) {
+		return oreOverride.remove(new ComparableItemStack(stack));
+	}
+	
+	public static Boolean deleteIsClusterOverride(ItemStack stack) {
+		return clusterOverride.remove(new ComparableItemStack(stack));
+	}
+	
+	public static Boolean deleteIsDustOverride(ItemStack stack) {
+		return dustOverride.remove(new ComparableItemStack(stack));
+	}
+	
+	public static Boolean deleteIsIngotOverride(ItemStack stack) {
+		return ingotOverride.remove(new ComparableItemStack(stack));
+	}
+	
+	public static Boolean deleteIsPlateOverride(ItemStack stack) {
+		return plateOverride.remove(new ComparableItemStack(stack));
+	}
+	
+	public static Boolean deleteIsCoinOverride(ItemStack stack) {
+		return coinOverride.remove(new ComparableItemStack(stack));
+	}
+	
+	public static Boolean deleteIsNuggetOverride(ItemStack stack) {
+		return nuggetOverride.remove(new ComparableItemStack(stack));
+	}
+	
+	public static Boolean deleteIsLogOverride(ItemStack stack) {
+		return logOverride.remove(new ComparableItemStack(stack));
+	}
+	
+	private static boolean checkAndCompareOrePrefixWithOverride(ItemStack stack, String prefix, Map<ComparableItemStack, Boolean> overrideMap) {
+		ComparableItemStack query = new ComparableItemStack(stack);
+		if(overrideMap.containsKey(query)) return overrideMap.get(query);
+		query.metadata = OreDictionary.WILDCARD_VALUE;
+		if(overrideMap.containsKey(query)) return overrideMap.get(query);
+		// Fun Fact: The OreDictionary.getOreIDs() call inside this is much heavier than the above statements
+		return getOreName(stack).startsWith(prefix);
+	}
+	
 	public static boolean isBlock(ItemStack stack) {
-
-		return getOreName(stack).startsWith(BLOCK);
+		return checkAndCompareOrePrefixWithOverride(stack, BLOCK, blockOverride);
 	}
-
+	
 	public static boolean isOre(ItemStack stack) {
-
-		return getOreName(stack).startsWith(ORE);
+		return checkAndCompareOrePrefixWithOverride(stack, ORE, oreOverride);
 	}
-
+	
 	public static boolean isCluster(ItemStack stack) {
-
-		return getOreName(stack).startsWith(CLUSTER);
+		return checkAndCompareOrePrefixWithOverride(stack, CLUSTER, clusterOverride);
 	}
-
+	
 	public static boolean isDust(ItemStack stack) {
-
-		return getOreName(stack).startsWith(DUST);
+		return checkAndCompareOrePrefixWithOverride(stack, DUST, dustOverride);
 	}
-
+	
 	public static boolean isIngot(ItemStack stack) {
-
-		return getOreName(stack).startsWith(INGOT);
+		return checkAndCompareOrePrefixWithOverride(stack, INGOT, ingotOverride);
 	}
-
+	
 	public static boolean isPlate(ItemStack stack) {
-
-		return getOreName(stack).startsWith(PLATE);
+		return checkAndCompareOrePrefixWithOverride(stack, PLATE, plateOverride);
 	}
-
+	
 	public static boolean isCoin(ItemStack stack) {
-
-		return getOreName(stack).startsWith(COIN);
+		return checkAndCompareOrePrefixWithOverride(stack, COIN, coinOverride);
 	}
-
+	
 	public static boolean isNugget(ItemStack stack) {
-
-		return getOreName(stack).startsWith(NUGGET);
+		return checkAndCompareOrePrefixWithOverride(stack, NUGGET, nuggetOverride);
 	}
-
+	
 	public static boolean isLog(ItemStack stack) {
-
-		return getOreName(stack).startsWith(LOG);
+		return checkAndCompareOrePrefixWithOverride(stack, LOG, logOverride);
 	}
+
+	
 
 	public static void registerWithHandlers(String oreName, ItemStack stack) {
 
