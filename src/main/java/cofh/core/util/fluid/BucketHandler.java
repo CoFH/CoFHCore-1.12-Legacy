@@ -183,7 +183,7 @@ public class BucketHandler {
 		return r;
 	}
 
-	public static void refreshMap() {
+	public static synchronized void refreshMap() {
 
 		BiMap<BlockWrapper, ItemWrapper> tempMap = HashBiMap.create(buckets.size());
 

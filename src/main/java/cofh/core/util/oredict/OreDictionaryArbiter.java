@@ -8,8 +8,10 @@ import com.google.common.collect.HashBiMap;
 
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
+import lombok.val;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -40,7 +42,7 @@ public class OreDictionaryArbiter {
 	/**
 	 * Initializes all of the entries. Called on server start to make sure everything is in sync.
 	 */
-	public static void initialize() {
+	public static synchronized void initialize() {
 
 		oreIDs = HashBiMap.create(oreIDs == null ? 32 : oreIDs.size());
 		oreStacks = new THashMap<Integer, ArrayList<ItemStack>>(oreStacks == null ? 32 : oreStacks.size());
@@ -57,15 +59,23 @@ public class OreDictionaryArbiter {
 				registerOreDictionaryEntry(ores.get(j), oreNames[i]);
 			}
 		}
-		for (ItemWrapper wrapper : stackIDs.keySet()) {
-			if (wrapper.metadata != WILDCARD_VALUE) {
-				ItemWrapper wildItem = new ItemWrapper(wrapper.item, WILDCARD_VALUE);
-				if (stackIDs.containsKey(wildItem)) {
-					stackIDs.get(wrapper).addAll(stackIDs.get(wildItem));
-					stackNames.get(wrapper).addAll(stackNames.get(wildItem));
+		val stackKeys = new HashSet<ItemWrapper>();
+		do {
+			val currentKeys = new HashSet<>(stackIDs.keySet());
+			currentKeys.removeAll(stackKeys);
+			if (currentKeys.isEmpty())
+				break;
+			for (ItemWrapper wrapper : currentKeys) {
+				if (wrapper.metadata != WILDCARD_VALUE) {
+					ItemWrapper wildItem = new ItemWrapper(wrapper.item, WILDCARD_VALUE);
+					if (stackIDs.containsKey(wildItem)) {
+						stackIDs.get(wrapper).addAll(stackIDs.get(wildItem));
+						stackNames.get(wrapper).addAll(stackNames.get(wildItem));
+					}
 				}
 			}
-		}
+			stackKeys.addAll(currentKeys);
+		} while(true);
 		ItemHelper.oreProxy = new OreDictionaryArbiterProxy();
 	}
 

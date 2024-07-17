@@ -1,12 +1,12 @@
 [
     {
-        "modid": "CoFHCore",
-        "name": "CoFH Core",
+        "modid": "${modId}",
+        "name": "${modName}",
         "description": "Required for all CoFH Mods. Also provides some customization options for Minecraft.",
-        "version": "${version}",
+        "version": "${modVersion}",
         "credits": "Team CoFH",
         "logoFile": "assets/cofh/textures/logo.png",
-        "mcversion": "${mcversion}",
+        "mcversion": "${minecraftVersion}",
         "url": "http://www.teamcofh.com",
         "updateUrl": "",
         "authorList": [ "Team CoFH" ],

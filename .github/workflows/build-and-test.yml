@@ -1,0 +1,17 @@
+name: Build and test
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-test:
+    uses: FalsePattern/fpgradle-workflows/.github/workflows/build-and-test.yml@master
+    with:
+      timeout: 90
+      workspace: setupCIWorkspace
+      client-only: false

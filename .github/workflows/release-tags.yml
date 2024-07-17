@@ -1,0 +1,21 @@
+name: Release Tags
+
+on:
+  push:
+    tags:
+      - '*'
+
+permissions:
+  contents: write
+
+jobs:
+  release-tags:
+    uses: FalsePattern/fpgradle-workflows/.github/workflows/release-tags.yml@master
+    with:
+      workspace: "setupCIWorkspace"
+    secrets:
+      MAVEN_DEPLOY_USER: ${{ secrets.MAVEN_DEPLOY_USER }}
+      MAVEN_DEPLOY_PASSWORD: ${{ secrets.MAVEN_DEPLOY_PASSWORD }}
+      MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+      CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+

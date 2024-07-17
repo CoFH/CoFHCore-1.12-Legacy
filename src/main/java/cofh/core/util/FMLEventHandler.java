@@ -39,7 +39,7 @@ public class FMLEventHandler {
 	}
 
 	@EventHandler
-	public void handleIdMappingEvent(FMLModIdMappingEvent event) {
+	public synchronized void handleIdMappingEvent(FMLModIdMappingEvent event) {
 
 		BucketHandler.refreshMap();
 		FurnaceFuelHandler.refreshMap();

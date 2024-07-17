@@ -48,8 +48,6 @@ public class CoFHAccessTransformer implements IClassTransformer {
 
 		superClasses.put(null, null);
 
-		// file names are case sensitive. do not alter.
-		mapFileList.add("CoFH_at.cfg");
 		// CoFH_at.cfg must also contain all entries from cofhlib_at.cfg
 
 		for (String file : mapFileList) {
